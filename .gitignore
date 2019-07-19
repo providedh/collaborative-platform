@@ -1,0 +1,13 @@
+# PyCharm IDE settings files
+.idea/
+
+# Testing framework temporary files
+.pytest_cache/
+__pycache__/
+.coverage
+
+# Django default database file
+*.sqlite3
+
+# Logs
+*.log
