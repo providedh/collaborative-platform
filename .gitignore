@@ -1,9 +1,11 @@
 # PyCharm IDE settings files
 .idea/
 
+# Pyhon cache files
+__pycache__/
+
 # Testing framework temporary files
 .pytest_cache/
-__pycache__/
 .coverage
 
 # Django default database file
