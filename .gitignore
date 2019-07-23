@@ -1,6 +1,9 @@
 # PyCharm IDE settings files
 .idea/
 
+# Vietualenv files
+venv/
+
 # Pyhon cache files
 __pycache__/
 
