@@ -1,0 +1,1 @@
+Catalogue for project's global static files

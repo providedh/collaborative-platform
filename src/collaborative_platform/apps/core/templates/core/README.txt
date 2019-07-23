@@ -1,0 +1,1 @@
+Catalogue for app's specific templates
