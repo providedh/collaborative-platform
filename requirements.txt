@@ -1,4 +1,6 @@
 Django==2.2.3
+psycopg2 # for postgres
+
 
 # For tests
 pytest==5.0.1
