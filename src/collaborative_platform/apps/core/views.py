@@ -51,8 +51,8 @@ def signup(request):  # type: (HttpRequest) -> HttpResponse
 
 def login(request):  # type: (HttpRequest) -> HttpResponse
     if request.method == 'POST':
-        # form = SignUpForm(request.POST)
         form = AuthenticationForm(data=request.POST)
+
         if form.is_valid():
             username = form.cleaned_data.get('username')
             raw_password = form.cleaned_data.get('password')
@@ -70,3 +70,21 @@ def login(request):  # type: (HttpRequest) -> HttpResponse
     }
 
     return render(request, 'core/login.html', context)
+
+
+def logout(request):  # type: (HttpRequest) -> HttpResponse
+    auth.logout(request)
+
+    alerts = [
+        {
+            'type': 'success',
+            'message': 'You are successfully logged out.',
+        }
+    ]
+
+    context = {
+        'title': 'Log Out',
+        'alerts': alerts,
+    }
+
+    return render(request, 'core/index.html', context)
