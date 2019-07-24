@@ -3,7 +3,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render, redirect
 
-from .forms import SignUpForm
+from .forms import SignUpForm, LogInForm
 
 
 def index(request):  # type: (HttpRequest) -> HttpResponse
@@ -61,7 +61,7 @@ def login(request):  # type: (HttpRequest) -> HttpResponse
 
             return redirect('index')
     else:
-        form = AuthenticationForm()
+        form = LogInForm()
 
     context = {
         'title': 'Log In',
@@ -78,12 +78,12 @@ def logout(request):  # type: (HttpRequest) -> HttpResponse
     alerts = [
         {
             'type': 'success',
-            'message': 'You are successfully logged out.',
+            'message': 'You successfully logged out.',
         }
     ]
 
     context = {
-        'title': 'Log Out',
+        'title': 'Home',
         'alerts': alerts,
     }
 
