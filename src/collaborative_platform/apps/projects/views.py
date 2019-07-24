@@ -16,7 +16,7 @@ def create(request):  # type: (HttpRequest) -> HttpResponse
             return HttpResponseBadRequest("Invalid JSON")
 
         try:
-            project = Project(description=data["description"])
+            project = Project(title=data['title'], description=data["description"])
             project.save()
 
             contributor = Contributor(project=project, user=request.user, permissions="AD")
