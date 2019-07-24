@@ -7,7 +7,7 @@ class Project(models.Model):
     description = models.CharField(max_length=150, null=True, blank=True)
     creation_date = models.DateTimeField(auto_now_add=True)
     modification_date = models.DateTimeField(auto_now_add=True)
-    license = models.CharField(max_length=16, null=True, blank=True)
+    license = models.CharField(max_length=16, null=True, blank=True, default='GPL')
     public = models.BooleanField(default=False)
 
 

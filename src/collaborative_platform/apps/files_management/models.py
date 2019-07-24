@@ -1,8 +1,6 @@
 from django.db import models
 
-
-class Project(models.Model):  # TODO remove this when full project model is implemented
-    name = models.CharField(max_length=10)
+from ..projects.models import Project
 
 
 class FileNode(models.Model):
