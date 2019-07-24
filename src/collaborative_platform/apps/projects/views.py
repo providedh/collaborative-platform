@@ -19,5 +19,6 @@ def create(request):  # type: (HttpRequest) -> HttpResponse
 
         contributor = Contributor(project=project, user=request.user, permissions="AD")
         contributor.save()
+        return HttpResponse("Success")
 
     return HttpResponseBadRequest("Invalid request type or empty request")
