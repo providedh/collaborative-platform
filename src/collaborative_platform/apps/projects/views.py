@@ -7,7 +7,7 @@ from json import loads, JSONDecodeError
 from .models import Project, Contributor
 
 
-@login_required(login_url="/login/")
+# @login_required(login_url="/login/")
 def create(request):  # type: (HttpRequest) -> HttpResponse
     if request.method == "POST" and request.body:
         try:
@@ -16,6 +16,9 @@ def create(request):  # type: (HttpRequest) -> HttpResponse
             return HttpResponseBadRequest("Invalid JSON")
 
         try:
+            if not data['title']:
+                raise ValidationError
+
             project = Project(title=data['title'], description=data["description"])
             project.save()
 
