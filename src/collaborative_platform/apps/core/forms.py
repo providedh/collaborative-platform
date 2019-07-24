@@ -34,6 +34,9 @@ class SignUpForm(UserCreationForm):
         self.fields['password1'].widget.attrs.update({'class': 'form-control'})
         self.fields['password2'].widget.attrs.update({'class': 'form-control'})
 
+        self.fields['username'].help_text = ''
+        self.fields['password2'].help_text = ''
+
 
 class LogInForm(AuthenticationForm):
     # Modify arguments for form fields declared in parent form declaration
