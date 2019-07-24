@@ -15,7 +15,8 @@ class FileNode(models.Model):
 
 
 class Folder(FileNode):
-    pass
+    class Meta:
+        unique_together = ("parent_dir", "name")
 
 
 class File(FileNode):

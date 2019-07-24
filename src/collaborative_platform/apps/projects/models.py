@@ -1,3 +1,26 @@
+from django.contrib.auth.models import User
 from django.db import models
 
-# Create your models here.
+
+class Project(models.Model):
+    title = models.CharField(max_length=150)
+    description = models.CharField(max_length=150, null=True, blank=True)
+    creation_date = models.DateTimeField(auto_now_add=True)
+    modification_date = models.DateTimeField(auto_now_add=True)
+    license = models.CharField(max_length=16, null=True, blank=True)
+    public = models.BooleanField(default=False)
+
+
+class Contributor(models.Model):
+    permissions_levels = (
+        ("AD", "Administrator"),
+        ("RW", "Read+Write"),
+        ("RE", "Read")
+    )
+
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    permissions = models.CharField(max_length=2, choices=permissions_levels, default="RE")
+
+    class Meta:
+        unique_together = ("project", "user")
