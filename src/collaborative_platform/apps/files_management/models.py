@@ -19,7 +19,7 @@ class Folder(FileNode):
 
 
 class File(FileNode):
-    version_number = models.IntegerField()
+    version_number = models.PositiveIntegerField()
 
     class Meta:
         unique_together = ("parent_dir", "name", "version_number")
@@ -29,5 +29,5 @@ class FileVersion(models.Model):
     upload = models.FileField(upload_to='files/')
     hash = models.CharField(max_length=40, primary_key=True, unique=True)
     file = models.ForeignKey(File, on_delete=models.CASCADE)
-    number = models.IntegerField()
+    number = models.PositiveIntegerField()
     creation_date = models.DateTimeField(auto_now_add=True)
