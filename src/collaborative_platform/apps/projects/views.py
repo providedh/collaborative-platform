@@ -38,8 +38,8 @@ def get_public(request):  # type: (HttpRequest) -> HttpResponse
     if request.method != "GET":
         return HttpResponseBadRequest("Invalid request method")
 
-    page = request.GET.get("page", 1)
-    per_page = request.GET.get("per_page", 5)
+    page = int(request.GET.get("page", 1))
+    per_page = int(request.GET.get("per_page", 5))
     per_page = min(per_page, 50)  # limited for safety reasons
 
     start = (page - 1) * per_page
