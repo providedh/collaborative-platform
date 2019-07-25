@@ -130,3 +130,5 @@ RECAPTCHA_PRIVATE_KEY = 'put_private_key_here'
 # Uncomment this setting for local testing
 # https://pypi.org/project/django-recaptcha/#local-development-and-functional-testing
 # SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
+
+LOGIN_URL = '/login/'
