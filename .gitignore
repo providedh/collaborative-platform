@@ -7,6 +7,9 @@ venv/
 # Pyhon cache files
 __pycache__/
 
+# Uploaded files
+uploaded_files/
+
 # Testing framework temporary files
 .pytest_cache/
 .coverage
