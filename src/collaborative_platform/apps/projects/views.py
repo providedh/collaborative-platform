@@ -54,7 +54,7 @@ def get_public(request):  # type: (HttpRequest) -> HttpResponse
 
 
 @login_required(login_url="/login/")
-def get_yours(request):  # type: (HttpRequest) -> HttpResponse
+def get_mine(request):  # type: (HttpRequest) -> HttpResponse
     if request.method != "GET":
         return HttpResponseBadRequest("Invalid request method")
 
