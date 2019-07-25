@@ -1,9 +1,9 @@
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError, FieldError
 from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, JsonResponse
-from django.shortcuts import render
 from json import loads, JSONDecodeError
 
+from .helpers import prepare_order_and_limits
 from .models import Project, Contributor
 
 
@@ -38,18 +38,30 @@ def get_public(request):  # type: (HttpRequest) -> HttpResponse
     if request.method != "GET":
         return HttpResponseBadRequest("Invalid request method")
 
-    page = int(request.GET.get("page", 1))
-    per_page = int(request.GET.get("per_page", 5))
-    per_page = min(per_page, 50)  # limited for safety reasons
-
-    start = (page - 1) * per_page
-    end = start + per_page + 1
-
-    order = request.GET.get("order")
-    if order is not None:
-        order = tuple(map(str.strip, order.split(',')))
+    order, start, end = prepare_order_and_limits(request)
 
     projects = Project.objects.filter(public=True)
+
+    if order is not None:
+        try:
+            projects = projects.order_by(*order)
+        except FieldError:
+            return HttpResponseBadRequest("Invalid order_by arguments")
+
+    projects = list(projects[start:end].values())
+
+    return JsonResponse(projects, safe=False)
+
+
+@login_required(login_url="/login/")
+def get_yours(request):  # type: (HttpRequest) -> HttpResponse
+    if request.method != "GET":
+        return HttpResponseBadRequest("Invalid request method")
+
+    order, start, end = prepare_order_and_limits(request)
+
+    projects_ids = Contributor.objects.filter(user=request.user).values_list('project', flat=True)
+    projects = Project.objects.filter(pk__in=projects_ids)
 
     if order is not None:
         try:
