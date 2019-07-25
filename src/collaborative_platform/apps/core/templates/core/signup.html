@@ -1,19 +1,46 @@
-{% extends 'base.html' %}
+{% extends 'page.html' %}
 {%  load static %}
 
 {% block head %}
 {% endblock %}
 
 {% block content %}
-  <h2>Sign up</h2>
 
-  <form method="post">
-    {% csrf_token %}
+<div class="container">
+  <div class="signup mb-5">
+    <div class="signup-logo">
+      <img src="{% static 'img/logo/providedh/logo.svg' %}" class="img-fluid"/>
+    </div>
 
-    <ul>
-      {{ form.as_ul }}
-    </ul>
+    <h2>Register</h2>
+    <p>Create a free account</p>
 
-    <button type="submit">Sign up</button>
-  </form>
+    <div class="signup-container">
+      <form method="post">
+        {% csrf_token %}
+
+        <ul class="signup-form list-unstyled">
+          {{ form.as_ul }}
+        </ul>
+
+        <div class="signup-buttons d-flex justify-content-end align-items-baseline pt-3">
+          <button type="submit" class="btn btn-info text-uppercase">Sign up</button>
+        </div>
+
+
+
+      </form>
+    </div>
+    <div class="signup-bottom d-flex flex-column flex-md-row mt-3 justify-content-between">
+      <div>
+        <a href="{% url 'login' %}" class="text-black-50 small">Already have an account?</a>
+      </div>
+      <div>
+        <a href="{% url 'index' %}" class="text-black-50 small">Back to PROVIDEDH</a>
+      </div>
+    </div>
+
+
+  </div>
+</div>
 {% endblock %}

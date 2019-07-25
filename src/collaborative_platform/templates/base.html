@@ -15,25 +15,27 @@
   </head>
 
   <body class="body--flex">
-    <nav class="navbar fixed-top navbar-dark bg-dark navbar-expand-lg">
-      <div class="container">
-        <a class="navbar-brand d-flex align-items-center" href="{% url 'index' %}">
-          <img src="{% static 'img/logo/providedh/logo-text.png' %}" class="header-logo__img" />
-          <span class="d-none d-md-inline pl-2">Home</span>
-        </a>
+    <header class="header">
+      <nav class="navbar fixed-top navbar-dark bg-dark navbar-expand-lg">
+        <div class="container">
+          <a class="navbar-brand d-flex align-items-center" href="{% url 'index' %}">
+            <img src="{% static 'img/logo/providedh/logo-text.png' %}" class="header-logo__img" />
+            <span class="d-none d-md-inline pl-2">Home</span>
+          </a>
 
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-list" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-list" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
 
-        <div class="collapse navbar-collapse" id="navbar-list">
+          <div class="collapse navbar-collapse" id="navbar-list">
 
-          {% include "partials/menu.html" %}
+            {% include "partials/menu.html" %}
 
+          </div>
         </div>
-      </div>
 
-    </nav>
+      </nav>
+    </header>
 
     <div class="alerts">
       <div class="container">
@@ -46,7 +48,7 @@
       </div>
     </div>
 
-    <main class="sections">
+    <main class="sections sections--hasnavbar">
       {% block content %}
       {% endblock %}
     </main>

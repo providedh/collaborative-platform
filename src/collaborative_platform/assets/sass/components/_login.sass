@@ -1,0 +1,27 @@
+.login
+  max-width: 400px
+  width: 100%
+  margin: 0 auto
+
+  &-logo
+    max-width: 300px
+    margin: 0 auto
+
+  &-container
+    @extend .gradientbg
+    border-bottom: 5px solid #988c87
+    padding: 25px
+    +box-shadow(0 0 8px 0 rgba(0,0,0,0.15))
+
+    label
+      @extend .text-white
+      @extend .small
+      @extend .text-uppercase
+      margin-bottom: 5px
+
+    li
+      &:not(:last-child)
+        margin-bottom: 15px
+
+  &-providers
+    border-top: 1px solid rgba(255,255,255, 0.3)
