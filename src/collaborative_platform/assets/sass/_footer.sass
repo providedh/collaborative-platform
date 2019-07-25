@@ -1,0 +1,30 @@
+.footer
+  border-bottom: 25px solid #34c1b0
+
+  &-menu
+    &__item
+      &:not(:last-child)
+        position: relative
+        &:after
+          position: absolute
+          right: -0.8em
+          top: 0
+          content: "|"
+          display: inline
+          color: #e6eae9
+
+  &-copyright
+    +media-breakpoint-up(md)
+      border-left: 1px solid #e6eae9
+      padding: 0 15px
+
+  &-cooperate
+    max-width: 1140px
+    margin: 0 auto
+
+    &__logo
+      max-height: 36px
+
+
+      &--pcss
+        height: 35px

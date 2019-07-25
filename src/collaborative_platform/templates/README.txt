@@ -1,1 +1,0 @@
-Catalogue for project's global templates

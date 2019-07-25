@@ -1,0 +1,43 @@
+/* set the overriding variables */
+$grid-breakpoints: (
+        xxxs: 0,
+        xxs: 320px,
+        xs: 568px,
+        sm: 667px,
+        md: 768px,
+        lg: 992px,
+        xl: 1200px,
+        xxl: 1440px,
+        xxxl: 1600px
+);
+$container-max-widths: (
+        xxxs: 0,
+        xxs: 320px,
+        xs: 568px,
+        sm: 667px,
+        md: 768px,
+        lg: 992px,
+        xl: 1200px,
+        xxl: 1440px,
+        xxxl: 1600px
+);
+
+
+$font-family-base: 'Open Sans';
+$font-weight-base: 300;
+$headings-font-weight: 300;
+
+$dark: #263947;
+
+$primary: #00b3b0;
+$info: #1b6d85;
+$success: #5cb85c;
+
+$brand-primary: #00b3b0;
+$brand-info: #1b6d85;
+$brand-success: #5cb85c;
+
+$link-color: #00b3b0;
+$text-color: #515157;
+
+$enable-rounded: false;
