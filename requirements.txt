@@ -1,8 +1,12 @@
 Django==2.2.3
-psycopg2 # for postgres
 
+# For database
+psycopg2
 
 # For tests
 pytest==5.0.1
 pytest-cov==2.7.1
 pytest-django==3.5.1
+
+# For bots protection
+django-recaptcha==2.0.4
