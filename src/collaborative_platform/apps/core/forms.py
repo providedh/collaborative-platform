@@ -1,6 +1,8 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
+from captcha.fields import ReCaptchaField
+from captcha.widgets import ReCaptchaV2Invisible
 
 
 class SignUpForm(UserCreationForm):
@@ -8,6 +10,7 @@ class SignUpForm(UserCreationForm):
     last_name = forms.CharField(max_length=30)
     email = forms.EmailField(max_length=255)
     agree_to_terms = forms.BooleanField()
+    captcha = ReCaptchaField(widget=ReCaptchaV2Invisible)
 
     class Meta:
         model = User
@@ -33,6 +36,9 @@ class SignUpForm(UserCreationForm):
         self.fields['username'].widget.attrs.update({'class': 'form-control'})
         self.fields['password1'].widget.attrs.update({'class': 'form-control'})
         self.fields['password2'].widget.attrs.update({'class': 'form-control'})
+
+        self.fields['username'].help_text = ''
+        self.fields['password2'].help_text = ''
 
 
 class LogInForm(AuthenticationForm):
