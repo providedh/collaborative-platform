@@ -27,7 +27,7 @@ def create(request):  # type: (HttpRequest) -> HttpResponse
             return HttpResponse("Success")
         except ValueError:
             return HttpResponseBadRequest("Possibly not logged in")
-        except ValidationError:
+        except (ValidationError, KeyError):
             return HttpResponseBadRequest("Invalid value")
 
     return HttpResponseBadRequest("Invalid request type or empty request")
