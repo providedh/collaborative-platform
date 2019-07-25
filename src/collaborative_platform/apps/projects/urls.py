@@ -1,8 +1,8 @@
 from django.urls import path
-from . import views
+from . import api
 
 urlpatterns = [
-    path('create/', views.create, name='create'),
-    path('get_public/', views.get_public, name='get_public'),
-    path('get_mine/', views.get_mine, name='get_mine'),
+    path('create/', api.create, name='create'),
+    path('get_public/', api.get_public, name='get_public'),
+    path('get_mine/', api.get_mine, name='get_mine'),
 ]
