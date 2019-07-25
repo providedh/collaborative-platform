@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, FieldError
 from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import render
 from json import loads, JSONDecodeError
@@ -45,6 +45,18 @@ def get_public(request):  # type: (HttpRequest) -> HttpResponse
     start = (page - 1) * per_page
     end = start + per_page + 1
 
-    projects = list(Project.objects.filter(public=True)[start:end].values())
+    order = request.GET.get("order")
+    if order is not None:
+        order = tuple(map(str.strip, order.split(',')))
+
+    projects = Project.objects.filter(public=True)
+
+    if order is not None:
+        try:
+            projects = projects.order_by(*order)
+        except FieldError:
+            return HttpResponseBadRequest("Invalid order_by arguments")
+
+    projects = list(projects[start:end].values())
 
     return JsonResponse(projects, safe=False)
