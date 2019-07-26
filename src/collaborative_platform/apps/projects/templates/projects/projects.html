@@ -5,6 +5,98 @@
 {% endblock %}
 
 {% block content %}
-  <p>List of user projects</p>
-  <p>List of public projects</p>
+  <div class="projects d-flex flex-column flex-fill">
+    <div class="projects-private flex-fill">
+      <div class="container">
+        <div class="row">
+          <div class="col p-5">
+            <div class="d-md-flex justify-content-between align-items-center mb-3 mb-md-0">
+              <h1>Dashboard</h1>
+              <div>
+                <a href="#" class="btn btn-success">Create new project</a>
+              </div>
+            </div>
+            <p><span class="d-md-block">You have no projects yet. Create a project with the button on the top right.</span><span class="d-md-block"> This feature allows you to search and quickly access your projects.</span></p>
+            <div class="projects-table flex-fill p-md-5 pt-md-0">
+              <div class="table-responsive projects-table__container">
+                <table class="table m-0 table-hover table-striped">
+                  <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">First</th>
+                    <th scope="col">Last</th>
+                    <th scope="col">Handle</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr>
+                    <th scope="row">1</th>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>@mdo</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">2</th>
+                    <td>Jacob</td>
+                    <td>Thornton</td>
+                    <td>@fat</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">3</th>
+                    <td>Larry</td>
+                    <td>the Bird</td>
+                    <td>@twitter</td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="projects-public flex-fill">
+      <div class="container">
+        <div class="row">
+          <div class="col p-5 d-flex flex-column">
+            <h2>Discover Public Projects</h2>
+            <div class="projects-table flex-fill p-md-5 pt-md-0">
+              <div class="table-responsive projects-table__container">
+                <table class="table m-0 table-hover table-striped">
+                  <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">First</th>
+                    <th scope="col">Last</th>
+                    <th scope="col">Handle</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr>
+                    <th scope="row">1</th>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>@mdo</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">2</th>
+                    <td>Jacob</td>
+                    <td>Thornton</td>
+                    <td>@fat</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">3</th>
+                    <td>Larry</td>
+                    <td>the Bird</td>
+                    <td>@twitter</td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock %}

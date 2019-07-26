@@ -1,0 +1,75 @@
+.projects
+  &-private
+    background-image: url('../img/bg/bg.jpg')
+    background-size: cover
+
+    .projects-table
+      &__container
+        background: rgba(255,255,255,0.3)
+
+      table td, table th
+        border-top: 3px solid #d2e2ee
+
+  &-public
+    color: white
+    background-color: #34495e
+
+    .projects-table
+      &__container
+        background: #243647
+
+        .table
+          thead
+            tr
+              color: white
+
+          tbody
+            background: #1d2f42
+            color: white
+
+      table td, table th
+        border-top: 3px solid #243647
+
+      .table-striped tbody tr:nth-of-type(odd)
+        background: rgba(255,255,255,0.05)
+
+      .table-hover tbody tr:hover
+        background: rgba(255,255,255,0.1)
+        color: white
+
+  .container
+    max-width: 1140px
+
+  &-table
+
+    &__container
+      background: white
+      +media-breakpoint-up(md)
+        padding: 5px 25px 25px 25px
+
+      +box-shadow(0 0 8px 0 rgba(0,0,0,0.15))
+      border-radius: $border-radius
+
+      .table
+        thead
+          tr
+            background: transparent
+
+            th
+              border: 0
+              font-weight: 300
+              font-size: 0.7em
+
+        tbody
+          background: white
+          font-size: 0.9em
+
+          tr:first-child
+            td, th
+              border-top: 0 !important
+
+      .table-striped tbody tr:nth-of-type(odd)
+        background: rgba(0,0,0,0.02)
+
+      .table-hover tbody tr:hover
+        background: rgba(0,0,0,0.05)
