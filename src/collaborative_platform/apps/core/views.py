@@ -6,19 +6,22 @@ from .forms import SignUpForm, LogInForm
 
 
 def index(request):  # type: (HttpRequest) -> HttpResponse
-    alerts = [
-        {
-            'type': 'success',
-            'message': 'Alert test',
+    if request.user.is_authenticated:
+        return redirect('projects', request.user.pk)
+    else:
+        alerts = [
+            {
+                'type': 'success',
+                'message': 'Alert test',
+            }
+        ]
+
+        context = {
+            'title': 'Home',
+            'alerts': alerts,
         }
-    ]
 
-    context = {
-        'title': 'Home',
-        'alerts': alerts,
-    }
-
-    return render(request, 'core/index.html', context)
+        return render(request, 'core/index.html', context)
 
 
 def signup(request):  # type: (HttpRequest) -> HttpResponse

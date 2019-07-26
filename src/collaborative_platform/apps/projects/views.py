@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render, redirect
 from .models import Project, Contributor
+from django.contrib.auth.models import User
 
 
 @login_required()
@@ -67,9 +68,20 @@ def project(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
 
         return render(request, 'core/index.html', context)
 
+    contributors = Contributor.objects.filter(project_id=project_id)
+
+    contributors_ids = []
+
+    for contributor in contributors:
+        contributors_ids.append(contributor.user_id)
+
+    users = User.objects.filter(id__in=contributors_ids)
+
     context = {
         'title': project.title,
         'alerts': None,
+        'project': project,
+        'contributors': users,
     }
 
     return render(request, 'projects/project.html', context)

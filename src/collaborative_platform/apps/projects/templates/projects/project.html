@@ -6,4 +6,22 @@
 
 {% block content %}
   <p>Project details</p>
+  <p>Contributors:
+    <ul>
+      {% for contributor in contributors %}
+        <li>{{ contributor.first_name }} {{ contributor.last_name }}</li>
+      {% endfor %}
+    </ul>
+  </p>
+  <p>
+    Date created: {{ project.creation_date }}
+  </p>
+  <p>
+    Last updated: {{ project.modification_date }}
+  </p>
+  <p>
+    Description: {{ project.description }}
+  </p>
+  <p>Files</p>
+  <p>Recent Activity</p>
 {% endblock %}
