@@ -1,0 +1,23 @@
+.body
+  &--flex
+    +flex
+    +flex-direction(column)
+    min-height: 100vh
+
+
+
+.sections
+  +flex-value(1)
+  background-color: #fafafa
+  background-image: url('../img/misc/circles.png')
+  background-position: bottom right
+  background-repeat: no-repeat
+
+  &--hasnavbar
+    padding-top: 60px
+
+  &--center
+    +flex
+    +flex-justify-content(center)
+    +flex-align-items(center)
+    padding: 15px 0

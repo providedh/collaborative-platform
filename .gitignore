@@ -1,3 +1,6 @@
+# frontend files
+node_modules
+
 # PyCharm IDE settings files
 .idea/
 

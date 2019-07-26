@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+
+{% load static %}
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+
+    {% block head %}
+    {% endblock %}
+
+    <title>PROVIDEDH | {{ title }}</title>
+  </head>
+
+  <body class="body--flex">
+
+    <div class="alerts">
+      <div class="container">
+        {% for alert in alerts %}
+        <div class="alert alert-{{ alert.type }} alert-dismissible">
+          <button type="button" class="close" data-dismiss="alert">&times;</button>
+          {{ alert.message }}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <main class="sections sections--center">
+      {% block content %}
+      {% endblock %}
+    </main>
+
+{% include "partials/cookies.html" %}
+{% include "partials/footer.html" %}
