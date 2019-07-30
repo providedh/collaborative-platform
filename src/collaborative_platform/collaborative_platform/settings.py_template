@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'apps.core',
     'apps.files_management',
     'apps.projects',
+    'apps.close_reading',
 ]
 
 MIDDLEWARE = [
