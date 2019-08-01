@@ -102,6 +102,68 @@
 //     CloseReadingWidget: CloseReadingWidget
 // };
 
+
+
+self.loaded = false;
 self.content = '';
 
-setup(self.content.xml_content);
+self.socket = null;
+self.first_entry = true;
+
+createWebSocket();
+
+function createWebSocket()
+{
+    let wsPrefix = (window.location.protocol === 'https:') ? 'wss://' : 'ws://';
+
+    self.socket = new WebSocket(wsPrefix + window.location.host.split(':')[0] + ':8005' + '/websocket/' + self.project_id + '_' + self.file_id + '/');
+
+    if (self.socket.readyState === WebSocket.OPEN) {
+        self.socket.onopen();
+    }
+
+    self.socket.onopen = function open() {
+        console.log("WebSockets connection created.");
+    };
+
+    self.socket.onmessage = function message(event) {
+        console.log("data from socket:" + event.data);
+
+        if (self.first_entry)
+        {
+            // m.startComputation();
+            self.loaded = true;
+            self.content = JSON.parse(event.data);
+            // m.endComputation();
+
+            if (self.content.status === 200)
+            {
+                setup(self.content.xml_content);
+                self.first_entry = false;
+            }
+        }
+        else
+        {
+            self.content = JSON.parse(event.data);
+
+            if (self.content.status === 200)
+            {
+                console.log('annotate - success < ', self.content);
+                window.updateFile(self.content.xml_content);
+            }
+            else
+            {
+                console.log('annotate - failed < ', self.content);
+            }
+        }
+    };
+
+    setInterval(function () {
+    self.socket.send(JSON.stringify('heartbeat'));
+    }, 30000);
+}
+
+window.send = function (json)
+{
+    self.socket.send(json);
+};

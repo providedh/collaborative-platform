@@ -41,7 +41,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='FileVersion',
             fields=[
-                ('upload', models.FileField(upload_to='files/')),
+                ('upload', models.FileField(upload_to='uploaded_files/')),
                 ('hash', models.CharField(max_length=128, primary_key=True, serialize=False)),
                 ('number', models.PositiveIntegerField()),
                 ('creation_date', models.DateTimeField(auto_now_add=True)),

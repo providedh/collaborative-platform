@@ -1,3 +1,6 @@
 from django.db import models
 
-# Create your models here.
+
+class AnnotatingXmlContent(models.Model):
+    file_symbol = models.CharField(max_length=255)
+    xml_content = models.TextField()

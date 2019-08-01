@@ -2,8 +2,8 @@ from django.contrib import auth
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from ..files_management.models import File
-from ..projects.models import Project, Contributor
+from apps.files_management.models import File
+from apps.projects.models import Project, Contributor
 
 
 @login_required()

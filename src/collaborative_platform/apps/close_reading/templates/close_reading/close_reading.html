@@ -6,35 +6,6 @@
 {#    <link rel="stylesheet" href="/static/css/pages/teiclose-page.css">#}
 {#  <script src="https://requirejs.org/docs/release/2.3.5/minified/require.js"></script>#}
   <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-
-  <script>
-    var socket = new WebSocket('ws://' + window.location.host + '/stocks/');
-
-    socket.onopen = function open() {
-      console.log('WebSockets connection created.');
-    };
-
-    socket.onmessage = function message(event) {
-      console.log("data from socket:" + event.data);
-      lbl.innerText = event.data;
-    };
-
-    if (socket.readyState === WebSocket.OPEN) {
-      socket.onopen();
-    }
-    function start()
-    {
-        var zawartosc = document.getElementById("pole_tekstu").value;
-        socket.send(zawartosc);
-    }
-    function stop() {
-        socket.send('stop');
-    }
-
-    setInterval(function () {
-        socket.send(JSON.stringify("heartbeat"));
-    }, 30000);
-  </script>
 {% endblock %}
 
 {% block content %}
@@ -307,9 +278,9 @@
   </div>
 
   <script type="text/javascript">
-    window.project = "{{ project_id }}";
-    window.file = "{{ file_id }}";
-    window.version = "{{ file.version_number }}";
+    window.project_id = "{{ project_id }}";
+    window.file_id = "{{ file_id }}";
+    window.file_version = "{{ file.version_number }}";
   </script>
 
   <script src="{% static 'close_reading/js/teicloseAnnotator.js' %}"></script>

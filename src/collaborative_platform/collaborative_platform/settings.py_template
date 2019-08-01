@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'captcha',
+    'channels',
+    'channels_presence',
     'apps.core',
     'apps.files_management',
     'apps.projects',
@@ -97,7 +99,7 @@ DATABASES = {
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Warsaw'
 
 USE_I18N = True
 
@@ -118,8 +120,8 @@ STATICFILES_DIRS = [
 
 
 # File storage
-MEDIA_ROOT = os.path.join(BASE_DIR, '..', '..', 'uploaded_files')
-MEDIA_URL = "/files/"
+MEDIA_ROOT = os.path.join(BASE_DIR, '..', '..', 'media')
+MEDIA_URL = "/media/"
 
 
 # ReCaptcha keys
@@ -132,4 +134,35 @@ RECAPTCHA_PRIVATE_KEY = 'put_private_key_here'
 # https://pypi.org/project/django-recaptcha/#local-development-and-functional-testing
 # SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
 
+
 LOGIN_URL = '/login/'
+
+
+# For WebSockets
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'asgi_redis.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [('localhost', 6379)],
+        },
+        'ROUTING': 'collaborative_platform.routing.channel_routing',
+    }
+}
+
+
+# For periodic tasks
+CELERY_BROKER_URL = 'redis://localhost:6379'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_BEAT_SCHEDULE = {
+    'prune-presence': {
+        'task': 'channels_presence.tasks.prune_presence',
+        'schedule': timedelta(seconds=5)
+    },
+    'prune-rooms': {
+        'task': 'channels_presence.tasks.prune_rooms',
+        'schedule': timedelta(seconds=15)
+    }
+}

@@ -1,14 +1,23 @@
 from channels import Group
 from channels.sessions import channel_session
 from channels.auth import channel_session_user, channel_session_user_from_http
+import json
+# from src.collaborative_platform.apps.close_reading.models import AnnotatingXmlContent
+# from ..files_management.models import File
+
 
 # from models import ZawartoscXml
 #
-# from channels_presence.models import Room
-# from channels_presence.decorators import touch_presence
+from channels_presence.models import Room
+from channels_presence.decorators import touch_presence
 
 from channels.asgi import get_channel_layer
-from django.db import models
+# from django.db import models
+# from ..close_reading.models import AnnotatingXmlContent
+from apps.close_reading.models import AnnotatingXmlContent
+from apps.files_management.models import FileVersion
+from apps.projects.models import Contributor, Project
+from .annotator import Annotator, NotModifiedException
 
 
 # class RoomWithXML(Room):
@@ -17,60 +26,140 @@ from django.db import models
 
 @channel_session_user_from_http
 def ws_connect(message):
-    Group('stocks').add(message.reply_channel)
+    room_symbol = get_room_symbol(message)
+    project_id, file_id = room_symbol.split('_')
 
-    # Room.objects.add('stocks', message.reply_channel.name, message.user)
+    try:
+        project = Project.objects.get(id=project_id)
+    except Project.DoesNotExist:
+        response = {
+            'status': 404,
+            'message': "Project with id: {} doesn't exist.".format(project_id),
+            'xml_content': None,
+        }
 
-    Group('stocks').send({'text': 'connected'})
+        response = json.dumps(response)
+        message.reply_channel.send({'text': response})
+
+    contributor = Contributor.objects.filter(project_id=project_id, user_id=message.user.pk)
+    if not contributor:
+        response = {
+            'status': 403,
+            'message': "You aren't contributor in project with id: {}.".format(project_id),
+            'xml_content': None,
+        }
+
+        response = json.dumps(response)
+        message.reply_channel.send({'text': response})
+
+    try:
+        annotating_xml_content = AnnotatingXmlContent.objects.get(file_symbol=room_symbol)
+
+    except AnnotatingXmlContent.DoesNotExist:
+        try:
+            file = FileVersion.objects.filter(file_id=file_id).order_by('-number')[0]
+        except FileVersion.DoesNotExist:
+            response = {
+                'status': 404,
+                'message': 'File not foud.',
+                'xml_content': None,
+            }
+
+            response = json.dumps(response)
+            message.reply_channel.send({'text': response})
+            return
+
+        with open(file.upload.path) as file:
+            xml_content = file.read()
+
+            annotating_xml_content = AnnotatingXmlContent(file_symbol=room_symbol, xml_content=xml_content)
+            annotating_xml_content.save()
+
+    Group(room_symbol).add(message.reply_channel)
+    Room.objects.add(room_symbol, message.reply_channel.name, message.user)
+
+    response = {
+        'status': 200,
+        'message': 'OK',
+        'xml_content': annotating_xml_content.xml_content,
+    }
+
+    response = json.dumps(response)
+    message.reply_channel.send({'text': response})
 
 
-# @touch_presence
+@touch_presence
 @channel_session_user
 def ws_message(message):
-    # obiekt_w_bazie = ZawartoscXml.objects.get(moje_id='1234')
+    room_symbol = get_room_symbol(message)
+    request_json = message.content['text']
 
-    grupa = Group('stocks')
-    grupa.moje_pole = 'lalala'
+    annotating_xml_content = AnnotatingXmlContent.objects.get(file_symbol=room_symbol)
+    xml_content = annotating_xml_content.xml_content
+    request_json = json.loads(request_json)
+    user_id = message.user.pk
 
-    # if not obiekt_w_bazie:
-    #     obiekt_w_bazie = ZawartoscXml(moje_id='1234', tresc='lalala')
-    #     obiekt_w_bazie.save()
+    print("REQUEST JSON:\n{}".format(request_json))
 
-    wyslany_tekst = message.content['text']
-    Group('stocks').send({'text': wyslany_tekst})
+    try:
+        annotator = Annotator()
+        xml_content = annotator.add_annotation(xml_content, request_json, user_id)
 
-    # message.channel_session.myobject = {'test': True}
+        annotating_xml_content.xml_content = xml_content
+        annotating_xml_content.save()
 
-    # if 'klucz' not in message.channel_session:
-    #     message.channel_session['klucz'] = ''
+        print("ODPOWIEDZ:\n{}".format(annotating_xml_content.xml_content))
 
-    print(wyslany_tekst)
-    # print(message.channel_session['klucz'])
+        response = {
+            'status': 200,
+            'message': 'OK',
+            'xml_content': annotating_xml_content.xml_content,
+        }
 
-    # stary_tekst = obiekt_w_bazie.tresc
-    #
-    # nowy_tekst = stary_tekst + wyslany_tekst
-    #
-    # obiekt_w_bazie.tresc = nowy_tekst
-    # obiekt_w_bazie.save()
+        response = json.dumps(response)
+        Group(room_symbol).send({'text': response})
 
-    # Group('stocks').send({'text': obiekt_w_bazie.tresc})
-    #
-    # room = Room.objects.get(channel_name='stocks')
-    # userzy = room.get_anonymous_count()
+    except NotModifiedException as exception:
+        response = {
+            'status': 304,
+            'message': str(exception),
+            'xml_content': None,
+        }
 
-    # room.
+        print("ODPOWIEDZ:\n{}".format(response))
 
-    # channel_layer = get_channel_layer()
-    # userzy_2 = channel_layer.group_channels('stocks')
+        response = json.dumps(response)
+        message.reply_channel.send({'text': response})
 
+    except (ValueError, TypeError) as error:
+        response = {
+            'status': 400,
+            'message': error.message,
+            'xml_content': None,
+        }
 
-    do_testow = 0
-    pass
+        print("ODPOWIEDZ:\n{}".format(response))
+
+        response = json.dumps(response)
+        message.reply_channel.send({'text': response})
 
 
 @channel_session_user
 def ws_disconnect(message):
-    Group('stocks').send({'text': 'disconnected'})
-    Group('stocks').discard(message.reply_channel)
-    # Room.objects.remove('stocks', message.reply_channel.name)
+    room_symbol = get_room_symbol(message)
+
+    room = Room.objects.get(channel_name=room_symbol)
+    users_connected = room.get_anonymous_count()
+
+    if users_connected < 2:
+        annotating_xml_content = AnnotatingXmlContent.objects.get(file_symbol=room_symbol)
+        annotating_xml_content.delete()
+
+    Group(room_symbol).discard(message.reply_channel)
+    Room.objects.remove(room_symbol, message.reply_channel.name)
+
+
+def get_room_symbol(message):
+    room_symbol = message['path'].strip('/').split('/')[-1]
+
+    return room_symbol
