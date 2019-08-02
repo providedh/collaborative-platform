@@ -159,10 +159,14 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_BEAT_SCHEDULE = {
     'prune-presence': {
         'task': 'channels_presence.tasks.prune_presence',
-        'schedule': timedelta(seconds=5)
+        'schedule': timedelta(seconds=60),
     },
     'prune-rooms': {
         'task': 'channels_presence.tasks.prune_rooms',
-        'schedule': timedelta(seconds=15)
-    }
+        'schedule': timedelta(seconds=300),
+    },
+    'prune-orphaned-annotating-xml-contents': {
+        'task': 'close_reading.prune_orphaned_annotating_xml_contents',
+        'schedule': timedelta(seconds=300),
+    },
 }

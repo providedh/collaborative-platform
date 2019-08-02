@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 import re
 from lxml import etree
+from django.contrib.auth.models import User
 
-from osf.models import Guid, OSFUser
+# from osf.models import Guid, OSFUser
 
 import logging
 logger = logging.getLogger(__name__)
@@ -82,7 +83,7 @@ class Annotator:
         positions_to_check = position_params_v1 if position_v1 else position_params_v2
 
         for position in positions_to_check:
-            if not isinstance(json[position], (int, long)):
+            if not isinstance(json[position], int):
                 raise TypeError("Value of '{}' is not a integer.".format(position))
 
             if json[position] <= 0:
@@ -481,15 +482,15 @@ class Annotator:
 
         return annotator_xml
 
-    def __get_user_data_from_db(self, user_guid):
-        guid = Guid.objects.get(_id=user_guid)
-        osf_user = OSFUser.objects.get(id=guid.object_id)
+    def __get_user_data_from_db(self, user_id):
+        # guid = Guid.objects.get(_id=user_guid)
+        user = User.objects.get(id=user_id)
 
         data = {
-            'forename': osf_user.given_name,
-            'surname': osf_user.family_name,
-            'email': osf_user.username,
-            'link': 'https://providedh.ehum.psnc.pl/' + user_guid + '/',
+            'forename': user.first_name,
+            'surname': user.last_name,
+            'email': user.email,
+            'link': 'https://providedh.ehum.psnc.pl/' + user_id + '/',
         }
 
         return data

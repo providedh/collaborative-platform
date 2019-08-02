@@ -12,12 +12,19 @@ pytest-django==3.5.1
 django-recaptcha==2.0.4
 
 # For message broker (for Celery and WebSockets)
-redis==3.3.4
-asgi_redis==1.4.3
+# redis==3.2.0
+# redis==2.10.6 # this redis not work with
+# asgi_redis==1.4.3
+
 
 # For WebSockets
 channels==1.1.8
 django-channels-presence==0.0.9
 
 # For periodic tasks
-celery==4.3.0
+#celery==4.3.0
+# celery==3.1.26.post2
+celery[redis]
+
+# For xml processing
+lxml==4.4.0

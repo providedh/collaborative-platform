@@ -24,6 +24,7 @@ from .annotator import Annotator, NotModifiedException
 #     tresc = models.TextField()
 
 
+
 @channel_session_user_from_http
 def ws_connect(message):
     room_symbol = get_room_symbol(message)
@@ -149,7 +150,8 @@ def ws_disconnect(message):
     room_symbol = get_room_symbol(message)
 
     room = Room.objects.get(channel_name=room_symbol)
-    users_connected = room.get_anonymous_count()
+    users_connected = len(room.get_users())
+    # users_connected = room.get_anonymous_count()
 
     if users_connected < 2:
         annotating_xml_content = AnnotatingXmlContent.objects.get(file_symbol=room_symbol)
