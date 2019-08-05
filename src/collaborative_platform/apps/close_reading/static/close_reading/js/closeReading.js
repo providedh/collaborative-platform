@@ -167,3 +167,15 @@ window.send = function (json)
 {
     self.socket.send(json);
 };
+
+function start()
+{
+    var zawartosc = document.getElementById("pole_tekstu").value;
+    let content = {message: zawartosc};
+
+    self.socket.send(JSON.stringify(content));
+}
+
+function stop() {
+    self.socket.send('stop');
+}
