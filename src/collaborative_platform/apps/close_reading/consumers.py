@@ -1,15 +1,17 @@
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 import json
+from datetime import datetime, timezone
 
 from apps.projects.models import Contributor, Project
 from apps.files_management.models import FileVersion
-from .models import AnnotatingXmlContent
+from .models import AnnotatingXmlContent, RoomPresence
+
 
 
 class AnnotatorConsumer(WebsocketConsumer):
     def connect(self):
-        room_symbol = get_room_symbol(self.scope)
+        room_symbol = self.scope['url_route']['kwargs']['room_name']
         project_id, file_id = room_symbol.split('_')
 
         try:
@@ -25,17 +27,18 @@ class AnnotatorConsumer(WebsocketConsumer):
             self.send(text_data=response)
             return
 
-        contributor = Contributor.objects.filter(project_id=project_id, user_id=self.scope['user'].pk)
-        if not contributor:
-            response = {
-                'status': 403,
-                'message': "You aren't contributor in project with id: {}.".format(project_id),
-                'xml_content': None,
-            }
-
-            response = json.dumps(response)
-            self.send(text_data=response)
-            return
+        # COMMENTED FOR SIMPLE WEBSOCKET CLIENT (TO BYPASS NOT WORKING JS IN CLOSE READING APP)
+        # contributor = Contributor.objects.filter(project_id=project_id, user_id=self.scope['user'].pk)
+        # if not contributor:
+        #     response = {
+        #         'status': 403,
+        #         'message': "You aren't contributor in project with id: {}.".format(project_id),
+        #         'xml_content': None,
+        #     }
+        #
+        #     response = json.dumps(response)
+        #     self.send(text_data=response)
+        #     return
 
         try:
             annotating_xml_content = AnnotatingXmlContent.objects.get(file_symbol=room_symbol)
@@ -71,6 +74,13 @@ class AnnotatorConsumer(WebsocketConsumer):
 
         self.accept()
 
+        room_presence, created = RoomPresence.objects.get_or_create(
+            room_symbol=room_symbol,
+            user=self.scope['user'],
+        )
+
+        room_presence.save()
+
         response = {
             'status': 200,
             'message': 'OK',
@@ -88,11 +98,33 @@ class AnnotatorConsumer(WebsocketConsumer):
             self.channel_name
         )
 
+        room_symbol = self.scope['url_route']['kwargs']['room_name']
+
+        room_presence = RoomPresence.objects.get(
+            room_symbol=room_symbol,
+            user=self.scope['user'],
+        )
+
+        room_presence.delete()
+
+        remain_users = RoomPresence.objects.filter(room_symbol=room_symbol)
+
+        if not remain_users:
+            AnnotatingXmlContent.objects.get(file_symbol=room_symbol).delete()
+
+
     # Recieve message from WebSocket
     def receive(self, text_data=None, bytes_data=None):
+        room_symbol = self.scope['url_route']['kwargs']['room_name']
+
         if text_data == '"heartbeat"':
-            # TODO: Put user presence code here
-            print(text_data)
+            room_presence = RoomPresence.objects.get(
+                room_symbol=room_symbol,
+                user=self.scope['user'],
+            )
+
+            room_presence.save()
+
         else:
             text_data_json = json.loads(text_data)
             message = text_data_json['message']
@@ -114,9 +146,3 @@ class AnnotatorConsumer(WebsocketConsumer):
         self.send(text_data=json.dumps({
             'message': message
         }))
-
-
-def get_room_symbol(scope):
-    room_symbol = scope['path'].strip('/').split('/')[-1]
-
-    return room_symbol

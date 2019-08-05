@@ -13,12 +13,10 @@ app = Celery('collaborative_platform')
 # the configuration object to child processes.
 # - namespace='CELERY' means all celery-related configuration keys
 #   should have a `CELERY_` prefix.
-# app.config_from_object('django.conf:settings', namespace='CELERY') # for celery 4.3
-app.config_from_object('django.conf:settings') # for celery 3.x
+app.config_from_object('django.conf:settings', namespace='CELERY') # for celery 4.3
 
 # Load task modules from all registered Django app configs.
-# app.autodiscover_tasks() # for celery 4.3
-app.autodiscover_tasks(lambda: settings.INSTALLED_APPS) # for celery 3.x
+app.autodiscover_tasks() # for celery 4.3
 
 
 @app.task(bind=True)
