@@ -12,12 +12,13 @@
 from channels.auth import AuthMiddlewareStack
 from channels.routing import ProtocolTypeRouter, URLRouter
 import apps.close_reading.routing
+from django.conf.urls import url
 
 application = ProtocolTypeRouter({
     # (http->django views is added by default)
     'websocket': AuthMiddlewareStack(
-        URLRouter(
-            apps.close_reading.routing.websocket_urlpatterns
-        )
+        URLRouter([
+            url(r"^close_reading/", apps.close_reading.routing.url_router),
+        ])
     )
 })
