@@ -10,6 +10,9 @@ venv/
 # Pyhon cache files
 __pycache__/
 
+# Python eggs
+*.egg-info/
+
 # Uploaded files
 media/
 

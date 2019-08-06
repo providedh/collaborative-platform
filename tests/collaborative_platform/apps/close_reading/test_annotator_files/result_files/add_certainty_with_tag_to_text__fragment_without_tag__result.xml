@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xmlns:xi="http://www.w3.org/2001/XInclude">
+  <!--<TEI>-->
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title> Deposition of Ellen Adams&#13;</title>
+      </titleStmt>
+      <editionStmt>
+        <edition>Transcribed Version of Deposition
+        </edition>
+        <respStmt>
+          <resp xmlns="">Edited</resp>
+          <include xmlns="" href="responsiblePeople.xml" xpointer="RP3"/>
+        </respStmt>
+        <respStmt>
+          <resp xmlns="">Edited</resp>
+          <include xmlns="" href="responsiblePeople.xml" xpointer="RP4"/>
+        </respStmt>
+      </editionStmt>
+      <publicationStmt>
+        <publisher>Trinity College Dublin</publisher>
+        <pubPlace>Dublin, Ireland</pubPlace>
+      </publicationStmt>
+      <sourceDesc>
+        <include href="manuscriptDescription_tei.xml" xpointer="ms835"/>
+      </sourceDesc>
+    </fileDesc>
+    <encodingDesc>
+      <charDecl>
+      </charDecl>
+      <xi:include href="projectDesc.xml" xpointer="id1641-projectDesc"/>
+      <xi:include href="editorialDecl.xml" xpointer="id1641-editorialDecl"/>
+    </encodingDesc>
+    <profileDesc>
+      <creation>
+        <date when="1647_8_23"/>
+        <placeName>
+          <country>Ireland</country>
+        </placeName>
+      </creation>
+      <particDesc>
+        <listPerson type="PROVIDEDH Annotators">
+          <person xml:id="personercfd">
+            <persName>
+              <forename>Michał</forename>
+              <surname>Kozak</surname>
+              <email>mkozak@man.poznan.pl</email>
+            </persName>
+            <link>https://providedh.ehum.psnc.pl/ercfd/</link>
+          </person>
+          <person xml:id="personzuay9">
+            <persName>
+              <forename>Alejandro</forename>
+              <surname>Benito</surname>
+              <email>abenito@usal.es</email>
+            </persName>
+            <link>https://providedh.ehum.psnc.pl/zuay9/</link>
+          </person>
+          <person xml:id="personabcde">
+            <persName>
+              <forename>Tony</forename>
+              <surname>Stark</surname>
+              <email>tony.stark@zmyslonymail.com</email>
+            </persName>
+            <link>https://providedh.ehum.psnc.pl/abcde/</link>
+          </person>
+        </listPerson>
+      </particDesc>
+      <textClass>
+        <classCode scheme="http://providedh.eu/uncertainty/ns/1.0">
+          <certainty category="credibility" locus="value" cert="medium" resp="#personercfd" target="#ab000001"/>
+          <certainty category="imprecision" locus="value" cert="medium" resp="#personzuay9" target="#country000004">
+            <desc>should be better</desc>
+          </certainty>
+          <certainty category="imprecision" locus="value" cert="medium" resp="#personercfd" target="#country000004" assertedValue="Dublin"/>
+          <certainty category="imprecision" locus="value" cert="unknown" resp="#personzuay9" target="#date000005" assertedValue="1998"/>
+          <certainty category="credibility" locus="name" cert="high" resp="#personzuay9" target="#date000006"/>
+          <!-- in API also tag date -->
+          <certainty category="imprecision" locus="value" cert="unknown" resp="#personzuay9" target="#name000007" assertedValue="Maggie"/>
+          <certainty category="imprecision" locus="name" cert="high" resp="#personercfd" target="#name000007" assertedValue="surname"/>
+          <certainty category="credibility" locus="value" cert="low" resp="#personercfd" target="#ab000008"/>
+          <certainty category="imprecision" locus="value" cert="high" resp="#personercfd" target="#ab000009" assertedValue="on"/>
+          <certainty category="variation" locus="sameAs" cert="medium" resp="#personercfd" target="#person000010" assertedValue="dep_835104r162_tei#person835104r162_1"/>
+          <certainty category="variation" locus="sameAs" cert="medium" resp="#personercfd" target="#person000011" assertedValue="dep_835104r162_tei#person835104r162_2"/>
+          <certainty category="credibility" locus="value" cert="medium" resp="#personercfd" target="#desc000002"/>
+          <certainty category="credibility" locus="value" cert="medium" resp="#personercfd" target="#ab000003 #ab000004"/>
+          <certainty category="ignorance" locus="sex" cert="high" resp="#personercfd" target="#person000010" assertedValue="male"/>
+          <certainty category="ignorance" locus="value" cert="high" resp="#personabcde" target="#test000001"/>
+        </classCode>
+        <keywords scheme="1641">
+          <list type="deposition_type">
+            <xi:include href="keywords.xml" xpointer="dt4"/>
+          </list>
+        </keywords>
+        <keywords scheme="1641">
+          <list type="nature_of_deposition">
+            <xi:include href="keywords.xml" xpointer="nod8"/>
+            <xi:include href="keywords.xml" xpointer="nod1"/>
+            <xi:include href="keywords.xml" xpointer="nod101"/>
+            <xi:include href="keywords.xml" xpointer="nod5"/>
+            <xi:include href="keywords.xml" xpointer="nod14"/>
+          </list>
+        </keywords>
+      </textClass>
+      <langUsage>
+        <language ident="en" usage="100"/>
+      </langUsage>
+      <particDesc>
+        <listPerson>
+          <person xml:id="a835257r280-1" sex="2">
+            <persName>
+              <roleName type="Deponent"/>
+              <forename>Ellen</forename>
+              <surname>Adams</surname>
+            </persName>
+            <residence>
+              <placeName type="Placename">Waterdrum</placeName>
+              <region type="County">Fermanagh</region>
+              <country key="IRL">Ireland</country>
+            </residence>
+            <occupation>Widow</occupation>
+          </person>
+          <person xml:id="a835257r280-2" sex="1">
+            <persName>
+              <roleName type="Victim"/>
+              <forename>Thomas</forename>
+              <surname>Adams</surname>
+            </persName>
+            <occupation>Clergy</occupation>
+          </person>
+          <person xml:id="a835257r280-3" sex="3">
+            <persName>
+              <roleName type="Victim"/>
+              <forename>John</forename>
+              <surname>Adams</surname>
+            </persName>
+          </person>
+          <person xml:id="a835257r280-4" sex="3">
+            <persName>
+              <roleName type="Victim"/>
+              <forename>Joseph</forename>
+              <surname>Berry</surname>
+            </persName>
+          </person>
+          <person xml:id="a835257r280-5" sex="3">
+            <persName>
+              <roleName type="Victim"/>
+              <forename>William</forename>
+              <surname>Berry</surname>
+            </persName>
+          </person>
+          <person xml:id="a835257r280-6" sex="3">
+            <persName>
+              <roleName type="Victim"/>
+              <forename>Tary</forename>
+              <surname>Brunt</surname>
+            </persName>
+          </person>
+          <person xml:id="a835257r280-7" sex="3">
+            <persName>
+              <roleName type="Victim"/>
+              <forename>Richard</forename>
+              <surname>Cary</surname>
+            </persName>
+          </person>
+          <person xml:id="a835257r280-8" sex="3">
+            <persName>
+              <roleName type="Victim"/>
+              <forename>Ellen</forename>
+              <surname>Adams</surname>
+            </persName>
+          </person>
+          <person xml:id="a835257r280-9" sex="1">
+            <persName>
+              <roleName type="Mentioned"/>
+              <forename>Geo:</forename>
+              <surname>Brunt</surname>
+            </persName>
+          </person>
+          <person xml:id="a835257r280-10" sex="1">
+            <persName>
+              <roleName type="Rebel"/>
+              <forename>Rory</forename>
+              <surname>Magwire</surname>
+            </persName>
+          </person>
+          <person xml:id="a835257r280-11" sex="3">
+            <persName>
+              <roleName type="Rebel"/>
+              <forename>Donnogh</forename>
+              <surname>Magwire</surname>
+            </persName>
+          </person>
+          <person xml:id="a835257r280-12" sex="1">
+            <persName>
+              <roleName type="Mentioned"/>
+              <forename>Lord</forename>
+              <surname>Magwire</surname>
+            </persName>
+          </person>
+        </listPerson>
+      </particDesc>
+      <particDesc>
+        <listPlace/>
+      </particDesc>
+    </profileDesc>
+    <revisionDesc>
+      <change when="2008-10-24T16:33:31" who="responsiblePeople.xml#RP4"/>
+    </revisionDesc>
+  </teiHeader>
+  <div type="deposition">
+    <closer>
+      <signed>
+        <rolename type="Commissioner"/>
+        <name>Henry Brereton</name>
+      </signed>
+      <signed>
+        <rolename type="Commissioner"/>
+        <name>Henry Jones</name>
+      </signed>
+    </closer>
+    <pb n="fol. 257r" pagenum="613"/>
+    <p>
+
+613
+Ellen <test xml:id="test000001">Adams</test> (the Relict of Thomas Adams late of Waterdrum in the <place>County of ffermanagh</place> preacher of Gods word) being duely sworne &amp; examined before vs by vertue of a Comission to us and others directed for the enquiry &amp; examination of the Losses &amp; <ab xml:id="ab000001">that is not really    true<desc> sufferings</desc></ab><test> of the Brittish &amp; protestantes within this </test><country xml:id="country000004">Kingdome of Ireland</country><country/>; deposeth &amp; saith That about the <date xml:id="date000005">24 th day of October 1641</date><date/> the deponents said husband lost &amp; was forceably dispoiled of his <object>Catle, Corne and Chatles</object> to the value of Two hundred pounds &amp; vpwards
+This examinant being further examined saith That uppon the foure &amp; twentieth day of <date xml:id="date000006">October</date> aforesaid, the deponents said husband Thomas Adams &amp; her sonn John Adams together with seuerall other protestants liveing in or neere Waterdrum aforesaid, were suddenly surprised aboute <time>Twelue a clocke at night</time>, by <person xml:id="person000010"><name>Rory Magwire</name></person> the late <person>Lord <name xml:id="name000007">Magwires</name><name/></person> brother, accompanyed with <person xml:id="person000011">Donnogh Magwire of Rossbegg</person> in the said County gent, and a number of armed Rebells, who with swords drawen in a Cruell &amp; barbarous manner, murthered the said Thomas &amp; <person><name>John Adams</name></person>, and not therewith satisfied but then and there inhumanely murthered <person><name>Joseph</name> Berry</person> an ancient adged man, past foure scoure yeres of adge takeing noe Compassion of his weaknes nor gray haires, &amp; together with him they massacred his sonn William Berry The deponent further saith that the said <org>Rory Magwires Confederates</org>, or some of them (whose names she doth not remember) finding one Tary Brunt the wife of Geo: Brunt at <place>Waterdrum</place> aforesaid, she being bigg with child and at the very last of her time, did barbarously murther the said Tary, first stripping of her naked and then seriously examining where her mony was, one of the said Rebells draweing his skyne swore a greate oath that vnles she confessed where her cash Lay, he would with his said skyne ripp vpp her belly, which he accordingly performed, for he presently vppon that ran the skyne into her body and the child dropped from her gasping Twice or thrice vppon the ground This examinant further saith That (<ab xml:id="ab000008">as she is credibly informed</ab>) one Richard Cary &amp; his wife together with many other stripped protestants to the
+
+</p>
+    <pb n="fol. 257v" pagenum="614"/>
+    <p>
+
+614
+<desc xml:id="desc000002">that is not really true</desc> sufferings 
+Number of         persons were all murthered at or neere Ballyshanon being thither Conveyed by the Rebells and that this deponents daughter <person><name>Ellen Adams</name></person> was then soe pittifully cut &amp; mangled that for a longe time after she was not able to goe or stirr, this examinant her selfe through the wounds &amp; the extreame vsage <ab xml:id="ab000009">of</ab> the Rebells then towardes her, wilbe weake and Impotent while she liues, for besides seuerall wounds she receaved in her hands, sides &amp; skull (searching for mony as they pretended) one of them gave this examinant a deepe wounde with his skynie vnder one of her jaw bones, threatening there to pull downe this examinants tongue. And further deposeth not 
+<desc>that is not <ab xml:id="ab000003">really true</ab></desc> <ab xml:id="ab000004">sufferings </ab> 
+      
+Ellen [mark] Adams
+marke
+Jurat coram nobis
+23o Aug 1647                                                                                                                                                                                                          
+Hen: Clogher
+Hen: Brereton
+
+</p>
+    <pb n="fol. 258r" pagenum="615"/>
+    <p>
+
+615
+
+</p>
+    <pb n="fol. 258v" pagenum="616"/>
+    <p>
+
+616
+
+The examination of 
+Ellen Adams taken 23o
+August 1647
+C. ffarmanagh
+
+</p>
+  </div>
+  <back/>
+</TEI>
