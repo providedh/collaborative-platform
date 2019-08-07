@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError, FieldError
-from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, JsonResponse
+from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, JsonResponse, HttpResponseNotFound, \
+    HttpResponseForbidden
 from json import loads, JSONDecodeError, dumps
 
 from .helpers import prepare_order_and_limits
@@ -72,3 +73,23 @@ def get_mine(request):  # type: (HttpRequest) -> HttpResponse
     projects = list(projects[start:end].values())
 
     return JsonResponse(projects, safe=False)
+
+
+@login_required()
+def get_activities(request, project_id):
+    if request.method != "GET":
+        return HttpResponseBadRequest("Invalid request method")
+
+    try:
+        project = Project.objects.filter(id=project_id).get()
+    except Project.DoesNotExist:
+        return HttpResponseNotFound("Project with given id does not exist")
+
+    if not project.public:
+        try:
+            project.contributors.filter(user_id=request.user.id).get()
+        except Contributor.DoesNotExist:
+            return HttpResponseForbidden("User has no access to a project")
+
+    from django.core.paginator import Paginator
+    # Paginator # TODO finish
