@@ -13,7 +13,7 @@ def create(request):  # type: (HttpRequest) -> HttpResponse
         try:
             data = loads(request.body)
         except JSONDecodeError:
-            return HttpResponseBadRequest("Invalid JSON")
+            return HttpResponseBadRequest(dumps({"message": "Invalid JSON"}))
 
         try:
             if not data['title']:
@@ -24,13 +24,13 @@ def create(request):  # type: (HttpRequest) -> HttpResponse
 
             contributor = Contributor(project=project, user=request.user, permissions="AD")
             contributor.save()
-            return HttpResponse("Success")
+            return HttpResponse(dumps({"id": project.id}))
         except ValueError:
-            return HttpResponseBadRequest("Possibly not logged in")
+            return HttpResponseBadRequest(dumps({"message": "Possibly not logged in"}))
         except (ValidationError, KeyError):
-            return HttpResponseBadRequest("Invalid value")
+            return HttpResponseBadRequest(dumps({"message": "Invalid value"}))
 
-    return HttpResponseBadRequest("Invalid request type or empty request")
+    return HttpResponseBadRequest(dumps({"message": "Invalid request type or empty request"}))
 
 
 @login_required()
