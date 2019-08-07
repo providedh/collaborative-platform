@@ -139,18 +139,6 @@ LOGIN_URL = '/login/'
 
 
 # For WebSockets
-CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'asgi_redis.RedisChannelLayer',
-        'CONFIG': {
-            'hosts': [('localhost', 6379)],
-        },
-        'ROUTING': 'collaborative_platform.routing.channel_routing',
-    }
-}
-
-
-# For WebSockets
 ASGI_APPLICATION = 'collaborative_platform.routing.application'
 CHANNEL_LAYERS = {
     'default': {
