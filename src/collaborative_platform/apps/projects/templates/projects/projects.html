@@ -13,41 +13,19 @@
             <div class="d-md-flex justify-content-between align-items-center mb-3 mb-md-0">
               <h1>Dashboard</h1>
               <div>
-                <a href="#" class="btn btn-success">Create new project</a>
+                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#createNewProject">Create new project</a>
               </div>
             </div>
             <p><span class="d-md-block">You have no projects yet. Create a project with the button on the top right.</span><span class="d-md-block"> This feature allows you to search and quickly access your projects.</span></p>
             <div class="projects-table flex-fill p-md-5 pt-md-0">
               <div class="table-responsive projects-table__container">
-                <table class="table m-0 table-hover table-striped">
+                <table id="listProjectsMine" class="table m-0 table-hover table-striped">
                   <thead>
                   <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">First</th>
-                    <th scope="col">Last</th>
-                    <th scope="col">Handle</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Modification date</th>
                   </tr>
                   </thead>
-                  <tbody>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">2</th>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>@fat</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">3</th>
-                    <td>Larry</td>
-                    <td>the Bird</td>
-                    <td>@twitter</td>
-                  </tr>
-                  </tbody>
                 </table>
               </div>
             </div>
@@ -62,35 +40,13 @@
             <h2>Discover Public Projects</h2>
             <div class="projects-table flex-fill p-md-5 pt-md-0">
               <div class="table-responsive projects-table__container">
-                <table class="table m-0 table-hover table-striped">
+                <table id="listProjectsPublic" class="table m-0 table-hover table-striped">
                   <thead>
                   <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">First</th>
-                    <th scope="col">Last</th>
-                    <th scope="col">Handle</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Modification date</th>
                   </tr>
                   </thead>
-                  <tbody>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">2</th>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>@fat</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">3</th>
-                    <td>Larry</td>
-                    <td>the Bird</td>
-                    <td>@twitter</td>
-                  </tr>
-                  </tbody>
                 </table>
               </div>
             </div>
@@ -99,4 +55,52 @@
       </div>
     </div>
   </div>
+
+<div class="modal fade" id="createNewProject" tabindex="-1" role="dialog" aria-labelledby="createNewProject" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Create new project</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        {% csrf_token %}
+        <form id="formCreateNewProject">
+
+          <div class="form-group">
+            <label for="projectTitle">Project title</label>
+            <input type="text" class="form-control" name="title" id="projectTitle" placeholder="Enter project title">
+          </div>
+          <div class="form-group">
+            <label for="projectDescription">Project description</label>
+            <textarea class="form-control" name="description" id="projectDescription" rows="3" placeholder="Enter project description"></textarea>
+          </div>
+        </form>
+
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-light" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-success" js-createNewProject>Create project</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="createNewProjectInfo" tabindex="-1" role="dialog" aria-labelledby="createNewProjectInfo" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <span js-createNewProjectInfo></span>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-light" data-dismiss="modal">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 {% endblock %}
