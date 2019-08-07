@@ -1,15 +1,4 @@
 import pytest
-from collaborative_platform.apps.close_reading.lalala import turbo_function
-
-
-def test_passing():
-    result = turbo_function()
-
-    assert result == 'lalala'
-
-
-
-
 
 # import os
 # import mock

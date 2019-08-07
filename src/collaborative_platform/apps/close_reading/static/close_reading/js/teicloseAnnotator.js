@@ -555,7 +555,7 @@ Panel.prototype.createAnnotation = function(){
 
     const annotation = (new Annotation()).fromDict(values);
     
-    const url = API_urls.get_add_annotation_url(window.project, window.file);
+    // const url = API_urls.get_add_annotation_url(window.project, window.file);
     const data = {
             "start_pos": this.selection.abs_positions.start,
             "end_pos": this.selection.abs_positions.end,
