@@ -20,12 +20,12 @@ class Contributor(models.Model):
     permissions_levels = (
         ("AD", "Administrator"),
         ("RW", "Read+Write"),
-        ("RE", "Read")
+        ("RO", "Read")
     )
 
-    project = models.ForeignKey(Project, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    permissions = models.CharField(max_length=2, choices=permissions_levels, default="RE")
+    project = models.ForeignKey(Project, related_name='contributors', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name='contributions', on_delete=models.CASCADE)
+    permissions = models.CharField(max_length=2, choices=permissions_levels, default="RO")
 
     class Meta:
         unique_together = ("project", "user")

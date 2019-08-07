@@ -60,7 +60,7 @@ def get_mine(request):  # type: (HttpRequest) -> HttpResponse
 
     order, start, end = prepare_order_and_limits(request)
 
-    projects_ids = Contributor.objects.filter(user=request.user).values_list('project', flat=True)
+    projects_ids = request.user.contributions.values_list('project', flat=True)
     projects = Project.objects.filter(pk__in=projects_ids)
 
     if order is not None:
