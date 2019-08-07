@@ -31,3 +31,6 @@ settings.py
 
 # Celery schedule
 celerybeat-schedule
+
+# migrations
+*migrations/
