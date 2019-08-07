@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
+from datetime import timedelta
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -31,15 +32,14 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
+    'captcha',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'captcha',
-    'channels',
-    'channels_presence',
     'apps.core',
     'apps.files_management',
     'apps.projects',
@@ -99,7 +99,7 @@ DATABASES = {
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'Europe/Warsaw'
+TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
@@ -150,6 +150,18 @@ CHANNEL_LAYERS = {
 }
 
 
+# For WebSockets
+ASGI_APPLICATION = 'collaborative_platform.routing.application'
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [('localhost', 6379)],
+        }
+    }
+}
+
+
 # For periodic tasks
 CELERY_BROKER_URL = 'redis://localhost:6379'
 CELERY_RESULT_BACKEND = 'redis://localhost:6379'
@@ -158,15 +170,11 @@ CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_BEAT_SCHEDULE = {
     'prune-presence': {
-        'task': 'channels_presence.tasks.prune_presence',
+        'task': 'close_reading.tasks.prune_presence',
         'schedule': timedelta(seconds=60),
     },
-    'prune-rooms': {
-        'task': 'channels_presence.tasks.prune_rooms',
-        'schedule': timedelta(seconds=300),
-    },
     'prune-orphaned-annotating-xml-contents': {
-        'task': 'close_reading.prune_orphaned_annotating_xml_contents',
-        'schedule': timedelta(seconds=300),
+        'task': 'close_reading.tasks.prune_orphaned_annotating_xml_contents',
+        'schedule': timedelta(seconds=120),
     },
 }
