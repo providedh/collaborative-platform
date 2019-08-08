@@ -1,11 +1,12 @@
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError, FieldError
-from django.core.paginator import Paginator, InvalidPage
+from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, JsonResponse, HttpResponseNotFound, \
     HttpResponseForbidden
 from json import loads, JSONDecodeError, dumps
 
-from .helpers import prepare_order_and_limits
+from apps.projects.helpers import page_to_json_response
+from .helpers import paginate, order_queryset
 from .models import Project, Contributor
 
 
@@ -40,19 +41,19 @@ def get_public(request):  # type: (HttpRequest) -> HttpResponse
     if request.method != "GET":
         return HttpResponseBadRequest("Invalid request method")
 
-    order, start, end = prepare_order_and_limits(request)
-
     projects = Project.objects.filter(public=True)
 
-    if order is not None:
-        try:
-            projects = projects.order_by(*order)
-        except FieldError:
-            return HttpResponseBadRequest("Invalid order_by arguments")
+    try:
+        projects = order_queryset(request, projects)
+    except FieldError:
+        return HttpResponseBadRequest(dumps({"message": "Invalid order_by argument"}))
 
-    projects = list(projects[start:end].values())
+    try:
+        page = paginate(request, projects)
+    except (ZeroDivisionError, InvalidPage, EmptyPage):
+        return HttpResponseNotFound(dumps({"message": "Invalid page number"}))
 
-    return JsonResponse(projects, safe=False)
+    return page_to_json_response(page)
 
 
 @login_required()
@@ -60,20 +61,16 @@ def get_mine(request):  # type: (HttpRequest) -> HttpResponse
     if request.method != "GET":
         return HttpResponseBadRequest("Invalid request method")
 
-    order, start, end = prepare_order_and_limits(request)
-
     projects_ids = request.user.contributions.values_list('project', flat=True)
     projects = Project.objects.filter(pk__in=projects_ids)
 
-    if order is not None:
-        try:
-            projects = projects.order_by(*order)
-        except FieldError:
-            return HttpResponseBadRequest("Invalid order_by arguments")
+    projects = order_queryset(request, projects)
+    try:
+        page = paginate(request, projects)
+    except (ZeroDivisionError, InvalidPage, EmptyPage):
+        return HttpResponseNotFound(dumps({"message": "Invalid page number"}))
 
-    projects = list(projects[start:end].values())
-
-    return JsonResponse(projects, safe=False)
+    return page_to_json_response(page)
 
 
 @login_required()
@@ -93,34 +90,9 @@ def get_activities(request, project_id):
             return HttpResponseForbidden("User has no access to a project")
 
     activities = project.activities.order_by("-date")
-    per_page = request.GET.get("per_page")
-    per_page = int(per_page) if per_page is not None else None
-    page = request.GET.get("page")
-    page = int(page) if page is not None else None
+    try:
+        page = paginate(request, activities)
+    except (ZeroDivisionError, InvalidPage, EmptyPage):
+        return HttpResponseNotFound(dumps({"message": "Invalid page number"}))
 
-    if per_page is not None or page is not None:
-        per_page = per_page or 10
-        page = page or 1
-        paginator = Paginator(activities, per_page=per_page)
-        try:
-            page = paginator.page(page)
-        except (InvalidPage, ZeroDivisionError):
-            return HttpResponseNotFound(dumps({"message": "Page number invalid"}))
-
-        response = {
-            "pages": paginator.num_pages,
-            "per_page": per_page,
-            "current_page": page.number,
-            "entries": len(page),
-            "data": list(page.object_list.values())
-        }
-    else:
-        response = {
-            "pages": 1,
-            "per_page": len(activities),
-            "current_page": 1,
-            "entries": len(activities),
-            "data": list(activities.values())
-        }
-
-    return JsonResponse(response)
+    return page_to_json_response(page)
