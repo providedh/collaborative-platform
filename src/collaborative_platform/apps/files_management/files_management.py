@@ -1,14 +1,16 @@
 import hashlib
 
+from django.contrib.auth.models import User
 from django.core.files.uploadedfile import UploadedFile
 
+from apps.projects.helpers import log_activity
 from .models import File, FileVersion, Project
 
 
-def upload_new_file(uploaded_file, project, parent_dir):  # type: (UploadedFile, int, int) -> File
+def upload_new_file(uploaded_file, project, parent_dir, user):  # type: (UploadedFile, int, int, User) -> File
     # I assume that the project exists, bc few level above we checked if user has permissions to write to it.
 
-    dbfile = File(name=uploaded_file.name, parent_dir_id=parent_dir, project_id=project, version_number=1)
+    dbfile = File(name=uploaded_file.name, parent_dir_id=parent_dir, project=project, version_number=1)
     dbfile.save()
 
     try:
@@ -20,12 +22,13 @@ def upload_new_file(uploaded_file, project, parent_dir):  # type: (UploadedFile,
         dbfile.delete()
         raise e
     else:
+        log_activity(project, user, "created", file=dbfile)
         return dbfile
 
 
-def overwrite_existing_file(dbfile, uploaded_file):  # type: (File, UploadedFile) -> File
+def overwrite_existing_file(dbfile, uploaded_file, user):  # type: (File, UploadedFile, User) -> File
     hash = hash_file(dbfile, uploaded_file)
-    latest_file_version = dbfile.fileversion_set.filter(number=dbfile.version_number).get()  # type: FileVersion
+    latest_file_version = dbfile.versions.filter(number=dbfile.version_number).get()  # type: FileVersion
     if latest_file_version.hash == hash:
         return dbfile  # current file is the same as uploaded one
 
@@ -36,6 +39,8 @@ def overwrite_existing_file(dbfile, uploaded_file):  # type: (File, UploadedFile
 
     dbfile.version_number = new_version_number
     dbfile.save()
+
+    log_activity(dbfile.project, user, action_text="created new version", file=dbfile)
     return dbfile
 
 
@@ -49,10 +54,10 @@ def hash_file(dbfile, uploaded_file):  # type: (File, UploadedFile) -> str
 
 
 # TODO check perrmissions by decorator
-def upload_file(uploaded_file, project, parent_dir=None):  # type: (UploadedFile, int, int) -> File
+def upload_file(uploaded_file, project, user, parent_dir=None):  # type: (UploadedFile, int, User, int) -> File
     try:
         dbfile = File.objects.filter(name=uploaded_file.name, parent_dir_id=parent_dir).get()
     except File.DoesNotExist:
-        return upload_new_file(uploaded_file, project, parent_dir)
+        return upload_new_file(uploaded_file, project, parent_dir, user)
     else:
-        return overwrite_existing_file(dbfile, uploaded_file)
+        return overwrite_existing_file(dbfile, uploaded_file, user)

@@ -1,9 +1,13 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
+
+from apps.projects.models import Project
 from .forms import UploadFileForm
 from .files_management import upload_file
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest
 
 
+@login_required()
 def upload(request):  # type: (HttpRequest) -> HttpResponse
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
@@ -13,7 +17,12 @@ def upload(request):  # type: (HttpRequest) -> HttpResponse
         except:
             parent_dir_id = None
 
-        upload_file(request.FILES['file'], request.POST.get("project"), parent_dir_id)
+        try:
+            project = Project.objects.filter(id=request.POST.get("project")).get()
+        except Project.DoesNotExist:
+            return HttpResponseBadRequest("Invalid project id")
+
+        upload_file(request.FILES['file'], project, request.user, parent_dir_id)
         return HttpResponse('OK')
     else:
         form = UploadFileForm()

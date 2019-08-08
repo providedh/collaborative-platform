@@ -1,10 +1,12 @@
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError, FieldError
+from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, JsonResponse, HttpResponseNotFound, \
     HttpResponseForbidden
 from json import loads, JSONDecodeError, dumps
 
-from .helpers import prepare_order_and_limits
+from apps.projects.helpers import page_to_json_response, include_contributors, log_activity
+from .helpers import paginate, order_queryset
 from .models import Project, Contributor
 
 
@@ -25,6 +27,8 @@ def create(request):  # type: (HttpRequest) -> HttpResponse
 
             contributor = Contributor(project=project, user=request.user, permissions="AD")
             contributor.save()
+
+            log_activity(project, request.user, "created")
             return HttpResponse(dumps({"id": project.id}))
         except ValueError:
             return HttpResponseBadRequest(dumps({"message": "Possibly not logged in"}))
@@ -39,19 +43,19 @@ def get_public(request):  # type: (HttpRequest) -> HttpResponse
     if request.method != "GET":
         return HttpResponseBadRequest("Invalid request method")
 
-    order, start, end = prepare_order_and_limits(request)
-
     projects = Project.objects.filter(public=True)
 
-    if order is not None:
-        try:
-            projects = projects.order_by(*order)
-        except FieldError:
-            return HttpResponseBadRequest("Invalid order_by arguments")
+    try:
+        projects = order_queryset(request, projects)
+    except FieldError:
+        return HttpResponseBadRequest(dumps({"message": "Invalid order_by argument"}))
 
-    projects = list(projects[start:end].values())
+    try:
+        page = paginate(request, projects)
+    except (ZeroDivisionError, InvalidPage, EmptyPage):
+        return HttpResponseNotFound(dumps({"message": "Invalid page number"}))
 
-    return JsonResponse(projects, safe=False)
+    return include_contributors(page_to_json_response(page))
 
 
 @login_required()
@@ -59,20 +63,16 @@ def get_mine(request):  # type: (HttpRequest) -> HttpResponse
     if request.method != "GET":
         return HttpResponseBadRequest("Invalid request method")
 
-    order, start, end = prepare_order_and_limits(request)
-
     projects_ids = request.user.contributions.values_list('project', flat=True)
     projects = Project.objects.filter(pk__in=projects_ids)
 
-    if order is not None:
-        try:
-            projects = projects.order_by(*order)
-        except FieldError:
-            return HttpResponseBadRequest("Invalid order_by arguments")
+    projects = order_queryset(request, projects)
+    try:
+        page = paginate(request, projects)
+    except (ZeroDivisionError, InvalidPage, EmptyPage):
+        return HttpResponseNotFound(dumps({"message": "Invalid page number"}))
 
-    projects = list(projects[start:end].values())
-
-    return JsonResponse(projects, safe=False)
+    return include_contributors(page_to_json_response(page))
 
 
 @login_required()
@@ -91,5 +91,10 @@ def get_activities(request, project_id):
         except Contributor.DoesNotExist:
             return HttpResponseForbidden("User has no access to a project")
 
-    from django.core.paginator import Paginator
-    # Paginator # TODO finish
+    activities = project.activities.order_by("-date")
+    try:
+        page = paginate(request, activities)
+    except (ZeroDivisionError, InvalidPage, EmptyPage):
+        return HttpResponseNotFound(dumps({"message": "Invalid page number"}))
+
+    return page_to_json_response(page)

@@ -7,7 +7,7 @@ from apps.projects.models import Contributor
 from .files_management import upload_file
 
 
-# TODO secure this with permisision checkiing decorator
+@login_required()
 def upload(request):  # type: (HttpRequest) -> HttpResponse
     if request.method == "POST" and request.FILES:
         files_list = request.FILES.getlist("files")
@@ -15,7 +15,7 @@ def upload(request):  # type: (HttpRequest) -> HttpResponse
             return HttpResponseBadRequest("File not attached properly")
         try:
             project = int(request.POST.get("project"))
-        except:
+        except:  # TODO check level of contribution to authorize user to upload files
             return HttpResponseBadRequest("Invalid project id")
         try:
             parent_dir = int(request.POST.get("parent_dir"))
@@ -24,7 +24,7 @@ def upload(request):  # type: (HttpRequest) -> HttpResponse
 
         try:
             for file in files_list:
-                upload_file(file, project, parent_dir)
+                upload_file(file, project, request.user, parent_dir)
         except:
             return HttpResponseServerError("Unknown error while uploading")
         return HttpResponse("OK")
