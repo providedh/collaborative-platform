@@ -20,12 +20,24 @@ class Contributor(models.Model):
     permissions_levels = (
         ("AD", "Administrator"),
         ("RW", "Read+Write"),
-        ("RE", "Read")
+        ("RO", "Read")
     )
 
-    project = models.ForeignKey(Project, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    permissions = models.CharField(max_length=2, choices=permissions_levels, default="RE")
+    project = models.ForeignKey(Project, related_name='contributors', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name='contributions', on_delete=models.CASCADE)
+    permissions = models.CharField(max_length=2, choices=permissions_levels, default="RO")
 
     class Meta:
         unique_together = ("project", "user")
+
+
+class Activity(models.Model):
+    project = models.ForeignKey(Project, related_name='activities', on_delete=models.CASCADE)
+    date = models.DateTimeField(auto_now_add=True)
+    related_file = models.ForeignKey("files_management.File", related_name='activities', on_delete=models.DO_NOTHING,
+                                     null=True, blank=True)
+    related_dir = models.ForeignKey("files_management.Directory", related_name='activities',
+                                    on_delete=models.DO_NOTHING,
+                                    null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='activities')
+    action_text = models.CharField(max_length=255)

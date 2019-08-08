@@ -1,4 +1,9 @@
-from django.http import HttpRequest, HttpResponse, HttpResponseServerError, HttpResponseBadRequest
+from django.contrib.auth.decorators import login_required
+from django.http import HttpRequest, HttpResponse, HttpResponseServerError, HttpResponseBadRequest, \
+    HttpResponseNotFound, HttpResponseForbidden, JsonResponse
+
+from apps.files_management.models import File
+from apps.projects.models import Contributor
 from .files_management import upload_file
 
 
@@ -26,3 +31,20 @@ def upload(request):  # type: (HttpRequest) -> HttpResponse
     return HttpResponseBadRequest("Invalid request method or files not attached")
 
 
+@login_required()
+def get_file_versions(request, file_id):  # type: (HttpRequest, int) -> HttpResponse
+    if request.method != "GET":
+        return HttpResponseBadRequest("Invalid request method")
+
+    try:
+        file = File.objects.filter(id=file_id).get()
+    except File.DoesNotExist:
+        return HttpResponseNotFound()
+
+    if not file.project.public:
+        try:
+            Contributor.objects.filter(project_id=file.project.id, user_id=request.user.id).get()
+        except Contributor.DoesNotExist:
+            return HttpResponseForbidden("User does not have access to this file")
+
+    return JsonResponse(list(file.versions.all().values()), safe=False)

@@ -27,7 +27,7 @@ class File(FileNode):
 class FileVersion(models.Model):
     upload = models.FileField(upload_to='uploaded_files/')
     hash = models.CharField(max_length=128, primary_key=True)
-    file = models.ForeignKey(File, on_delete=models.CASCADE)
+    file = models.ForeignKey(File, related_name='versions', on_delete=models.CASCADE)
     number = models.PositiveIntegerField()
     creation_date = models.DateTimeField(auto_now_add=True)
 
