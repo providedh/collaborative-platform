@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError, FieldError
+from django.core.paginator import Paginator, InvalidPage
 from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, JsonResponse, HttpResponseNotFound, \
     HttpResponseForbidden
 from json import loads, JSONDecodeError, dumps
@@ -91,5 +92,35 @@ def get_activities(request, project_id):
         except Contributor.DoesNotExist:
             return HttpResponseForbidden("User has no access to a project")
 
-    from django.core.paginator import Paginator
-    # Paginator # TODO finish
+    activities = project.activities.order_by("-date")
+    per_page = request.GET.get("per_page")
+    per_page = int(per_page) if per_page is not None else None
+    page = request.GET.get("page")
+    page = int(page) if page is not None else None
+
+    if per_page is not None or page is not None:
+        per_page = per_page or 10
+        page = page or 1
+        paginator = Paginator(activities, per_page=per_page)
+        try:
+            page = paginator.page(page)
+        except (InvalidPage, ZeroDivisionError):
+            return HttpResponseNotFound(dumps({"message": "Page number invalid"}))
+
+        response = {
+            "pages": paginator.num_pages,
+            "per_page": per_page,
+            "current_page": page.number,
+            "entries": len(page),
+            "data": list(page.object_list.values())
+        }
+    else:
+        response = {
+            "pages": 1,
+            "per_page": len(activities),
+            "current_page": 1,
+            "entries": len(activities),
+            "data": list(activities.values())
+        }
+
+    return JsonResponse(response)
