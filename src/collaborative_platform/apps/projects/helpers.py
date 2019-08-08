@@ -1,8 +1,11 @@
+from json import loads
+
+from django.contrib.auth.models import User
 from django.core.paginator import Paginator, Page
 from django.db.models import QuerySet
 from django.http import HttpRequest, JsonResponse
 
-from apps.projects.models import Activity
+from apps.projects.models import Activity, Project
 
 
 def paginate(request, queryset):  # type: (HttpRequest, QuerySet) -> Page
@@ -35,3 +38,16 @@ def page_to_json_response(page):  # type: (Page) -> JsonResponse
         "data": list(page.object_list)
     }
     return JsonResponse(response, safe=False)
+
+
+def get_project_contributors(project_id):  # type: (int) -> QuerySet
+    ids = Project.objects.filter(id=project_id).get().contributors.values_list('user', flat=True)
+    return User.objects.filter(id__in=ids)
+
+
+def include_contributors(response):  # type: (JsonResponse) -> JsonResponse
+    json = loads(response.content)
+    for project in json['data']:
+        project['contributors'] = list(get_project_contributors(project['id']).values('id', 'first_name', 'last_name'))
+
+    return JsonResponse(json)

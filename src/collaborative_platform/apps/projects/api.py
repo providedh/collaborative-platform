@@ -5,7 +5,7 @@ from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, JsonR
     HttpResponseForbidden
 from json import loads, JSONDecodeError, dumps
 
-from apps.projects.helpers import page_to_json_response
+from apps.projects.helpers import page_to_json_response, include_contributors
 from .helpers import paginate, order_queryset
 from .models import Project, Contributor
 
@@ -53,7 +53,7 @@ def get_public(request):  # type: (HttpRequest) -> HttpResponse
     except (ZeroDivisionError, InvalidPage, EmptyPage):
         return HttpResponseNotFound(dumps({"message": "Invalid page number"}))
 
-    return page_to_json_response(page)
+    return include_contributors(page_to_json_response(page))
 
 
 @login_required()
@@ -70,7 +70,7 @@ def get_mine(request):  # type: (HttpRequest) -> HttpResponse
     except (ZeroDivisionError, InvalidPage, EmptyPage):
         return HttpResponseNotFound(dumps({"message": "Invalid page number"}))
 
-    return page_to_json_response(page)
+    return include_contributors(page_to_json_response(page))
 
 
 @login_required()
