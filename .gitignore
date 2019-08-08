@@ -1,4 +1,4 @@
-# frontend files
+# Frontend files
 node_modules
 
 # PyCharm IDE settings files
@@ -32,5 +32,5 @@ settings.py
 # Celery schedule
 celerybeat-schedule
 
-# migrations
+# Migrations
 *migrations/

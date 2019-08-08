@@ -1,4 +1,5 @@
 from django.contrib import auth
+from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render, redirect
 
@@ -90,3 +91,31 @@ def logout(request):  # type: (HttpRequest) -> HttpResponse
     }
 
     return render(request, 'core/index.html', context)
+
+
+def user(request, user_id): # type: (HttpRequest, int) -> HttpResponse
+    if request.user.is_authenticated:
+        user = User.objects.get(id=user_id)
+
+        context = {
+            'title': '{0} {1} - User details'.format(request.user.first_name, request.user.last_name),
+            'alerts': None,
+            'user': user
+        }
+
+        return render(request, 'core/user.html', context)
+
+    else:
+        alerts = [
+            {
+                'type': 'warning',
+                'message': "You can't see another user details if you're not logged in."
+            }
+        ]
+
+        context = {
+            'title': 'Home',
+            'alerts': alerts,
+        }
+
+        return render(request, 'core/index.html', context)
