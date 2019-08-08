@@ -143,7 +143,7 @@ class AnnotatorConsumer(WebsocketConsumer):
             if self.scope['user'].pk is not None:
                 user_id = self.scope['user'].pk
             else:
-                user_id = 999999
+                user_id = 6
 
             request_json = json.loads(request_json)
 

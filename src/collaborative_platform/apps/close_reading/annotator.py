@@ -483,14 +483,13 @@ class Annotator:
         return annotator_xml
 
     def __get_user_data_from_db(self, user_id):
-        # guid = Guid.objects.get(_id=user_guid)
         user = User.objects.get(id=user_id)
 
         data = {
             'forename': user.first_name,
             'surname': user.last_name,
             'email': user.email,
-            'link': 'https://providedh.ehum.psnc.pl/' + user_id + '/',
+            'link': 'https://providedh.ehum.psnc.pl/user/' + user_id + '/',
         }
 
         return data
