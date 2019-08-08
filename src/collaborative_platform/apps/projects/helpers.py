@@ -5,6 +5,7 @@ from django.core.paginator import Paginator, Page
 from django.db.models import QuerySet
 from django.http import HttpRequest, JsonResponse
 
+from apps.files_management.models import File, Directory
 from apps.projects.models import Activity, Project
 
 
@@ -51,3 +52,14 @@ def include_contributors(response):  # type: (JsonResponse) -> JsonResponse
         project['contributors'] = list(get_project_contributors(project['id']).values('id', 'first_name', 'last_name'))
 
     return JsonResponse(json)
+
+
+def log_activity(project, user, action_text="", file=None,
+                 related_dir=None):  # type: (Project, User, str, File, Directory) -> Activity
+    a = Activity(project=project, user=user, action_text=action_text)
+    if file is not None:
+        a.related_file = file
+    if related_dir is not None:
+        a.related_dir = related_dir
+    a.save()
+    return a

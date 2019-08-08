@@ -5,7 +5,7 @@ from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, JsonR
     HttpResponseForbidden
 from json import loads, JSONDecodeError, dumps
 
-from apps.projects.helpers import page_to_json_response, include_contributors
+from apps.projects.helpers import page_to_json_response, include_contributors, log_activity
 from .helpers import paginate, order_queryset
 from .models import Project, Contributor
 
@@ -27,6 +27,8 @@ def create(request):  # type: (HttpRequest) -> HttpResponse
 
             contributor = Contributor(project=project, user=request.user, permissions="AD")
             contributor.save()
+
+            log_activity(project, request.user, "created")
             return HttpResponse(dumps({"id": project.id}))
         except ValueError:
             return HttpResponseBadRequest(dumps({"message": "Possibly not logged in"}))
