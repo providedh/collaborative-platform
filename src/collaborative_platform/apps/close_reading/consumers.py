@@ -4,7 +4,7 @@ from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 
 from apps.projects.models import Contributor, Project
-from apps.files_management.models import FileVersion
+from apps.files_management.models import FileVersion, File
 from .models import AnnotatingXmlContent, RoomPresence
 from .annotator import Annotator, NotModifiedException
 
@@ -46,7 +46,7 @@ class AnnotatorConsumer(WebsocketConsumer):
 
         except AnnotatingXmlContent.DoesNotExist:
             try:
-                file = FileVersion.objects.filter(file_id=file_id).order_by('-number')[0]
+                file_version = FileVersion.objects.filter(file_id=file_id).order_by('-number')[0]
             except FileVersion.DoesNotExist:
                 response = {
                     'status': 404,
@@ -58,10 +58,14 @@ class AnnotatorConsumer(WebsocketConsumer):
                 self.send(text_data=response)
                 return
 
-            with open(file.upload.path) as file:
-                xml_content = file.read()
+            file = File.objects.get(id=file_version.file_id)
 
-                annotating_xml_content = AnnotatingXmlContent(file_symbol=room_symbol, xml_content=xml_content)
+            with open(file_version.upload.path) as file_version:
+                xml_content = file_version.read()
+                file_name = file.name
+
+                annotating_xml_content = AnnotatingXmlContent(file_symbol=room_symbol, file_name=file_name,
+                                                              xml_content=xml_content)
                 annotating_xml_content.save()
 
         self.room_name = self.scope['url_route']['kwargs']['room_name']

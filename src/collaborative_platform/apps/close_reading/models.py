@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 
 class AnnotatingXmlContent(models.Model):
     file_symbol = models.CharField(max_length=255)
+    file_name = models.CharField(max_length=255)
     xml_content = models.TextField()
 
 
