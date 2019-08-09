@@ -46,8 +46,8 @@ class Directory(FileNode):
     def get_subdirectories(self):  # type: (Directory) -> QuerySet
         return self.subdirs.values()
 
-    def get_content(self):  # type: (Directory) -> QuerySet
-        return self.subdirs.values()
+    def get_content(self):  # type: (Directory) -> list
+        return list(self.subdirs.order_by('name').values()) + list(self.files.order_by('name').values())
 
 
 class File(FileNode):
