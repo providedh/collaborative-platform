@@ -58,6 +58,8 @@
 
 <div class="modal fade" id="createNewProject" tabindex="-1" role="dialog" aria-labelledby="createNewProject" aria-hidden="true">
   <div class="modal-dialog" role="document">
+    {% csrf_token %}
+    <form id="formCreateNewProject">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">Create new project</h5>
@@ -66,8 +68,7 @@
         </button>
       </div>
       <div class="modal-body">
-        {% csrf_token %}
-        <form id="formCreateNewProject">
+
 
           <div class="form-group">
             <label for="projectTitle">Project title</label>
@@ -77,15 +78,16 @@
             <label for="projectDescription">Project description</label>
             <textarea class="form-control" name="description" id="projectDescription" rows="3" placeholder="Enter project description"></textarea>
           </div>
-        </form>
+
 
 
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-light" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-success" js-createNewProject>Create project</button>
+        <button type="submit" class="btn btn-success" js-createNewProject>Create project</button>
       </div>
     </div>
+    </form>
   </div>
 </div>
 

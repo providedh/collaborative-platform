@@ -1,7 +1,7 @@
 $('#listProjectsMine').DataTable( {
     "ajax": {
         "url": "/api/projects/get_mine/",
-        "dataSrc": ""
+        "dataSrc": "data"
     },
     "columns": [
         { "data": "title" },
@@ -15,7 +15,7 @@ $('#listProjectsMine').DataTable( {
 $('#listProjectsPublic').DataTable( {
     "ajax": {
         "url": "/api/projects/get_public/",
-        "dataSrc": ""
+        "dataSrc": "data"
     },
     "columns": [
         { "data": "title" },
