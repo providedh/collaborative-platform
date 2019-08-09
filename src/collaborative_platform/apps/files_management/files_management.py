@@ -16,7 +16,7 @@ def upload_new_file(uploaded_file, project, parent_dir, user):  # type: (Uploade
     try:
         hash = hash_file(dbfile, uploaded_file)
         uploaded_file.name = hash
-        file_version = FileVersion(upload=uploaded_file, number=1, hash=hash, file=dbfile)
+        file_version = FileVersion(upload=uploaded_file, number=1, hash=hash, file=dbfile, created_by=user)
         file_version.save()
     except Exception as e:
         dbfile.delete()
@@ -34,7 +34,8 @@ def overwrite_existing_file(dbfile, uploaded_file, user):  # type: (File, Upload
 
     uploaded_file.name = hash
     new_version_number = latest_file_version.number + 1
-    new_file_version = FileVersion(upload=uploaded_file, hash=hash, file=dbfile, number=new_version_number)
+    new_file_version = FileVersion(upload=uploaded_file, hash=hash, file=dbfile, number=new_version_number,
+                                   created_by=user)
     new_file_version.save()
 
     dbfile.version_number = new_version_number
