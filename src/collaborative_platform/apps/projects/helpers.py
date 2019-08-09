@@ -13,12 +13,12 @@ def paginate(request, queryset):  # type: (HttpRequest, QuerySet) -> Page
     queryset = queryset.values()
     page = request.GET.get("page")
     if page is None:
-        return Paginator(queryset, len(queryset), allow_empty_first_page=True).page(1)
+        return Paginator(queryset, len(queryset) or 1, allow_empty_first_page=True).page(1)
 
     page = int(page)
     per_page = int(request.GET.get("per_page", 10))
 
-    return Paginator(queryset, per_page, allow_empty_first_page=True).page(page)
+    return Paginator(queryset, per_page or 1, allow_empty_first_page=True).page(page)
 
 
 def order_queryset(request, queryset):  # type: (HttpRequest, QuerySet) -> QuerySet
