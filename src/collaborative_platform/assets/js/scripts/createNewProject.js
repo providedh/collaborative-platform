@@ -19,7 +19,7 @@ $('#formCreateNewProject').on('submit', function(e){
         },
         error: function (xhr, ajaxOptions, thrownError) {
             $('#createNewProject').modal('hide');
-            $('[js-createNewProjectInfo]').text(thrownError)
+            $('[js-createNewProjectInfo]').text(xhr.responseJSON.message)
             $('#createNewProjectInfo').modal('show');
         }
     });
