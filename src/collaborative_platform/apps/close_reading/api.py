@@ -2,9 +2,8 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, HttpResponse, HttpResponseServerError, HttpResponseBadRequest, \
     HttpResponseNotFound, HttpResponseForbidden, JsonResponse
 
-from apps.files_management.models import File
+from apps.files_management.models import File, FileVersion
 from apps.projects.models import Contributor
-# from .files_management import upload_file
 from .models import AnnotatingXmlContent
 import json
 from io import StringIO, BytesIO
@@ -24,7 +23,7 @@ def save(request, project_id, file_id):  # type: (HttpRequest, int, int) -> Http
         except AnnotatingXmlContent.DoesNotExist:
             response = {
                 'status': 304,
-                'message': 'There is no file to save with id: {0} for project: {1}'.format(file_id, project_id),
+                'message': 'There is no file to save with id: {0} for project: {1}.'.format(file_id, project_id),
             }
 
             response = json.dumps(response)
@@ -34,41 +33,31 @@ def save(request, project_id, file_id):  # type: (HttpRequest, int, int) -> Http
         file = BytesIO(annotating_xml_content.xml_content.encode('utf-8'))
         file_name = annotating_xml_content.file_name
 
+        file_version_old = File.objects.get(id=file_id).version_number
+
         uploaded_file = UploadedFile(file=file, name=file_name)
+        upload_response = upload_file(uploaded_file, project_id, request.user)
 
-        upload_response = upload_file(uploaded_file, project_id)
+        file_version_new = upload_response.version_number
 
-        a = 'asd'
+        if file_version_old == file_version_new:
+            response = {
+                'status': 304,
+                'message': 'There is no changes to save in file with id: {0}.'.format(file_id),
+            }
 
+            response = json.dumps(response)
 
+            return HttpResponse(response, status=304, content_type='application/json')
+        else:
+            response = {
+                'status': 200,
+                'message': 'File with id: {0} was saved.'.format(file_id),
+            }
 
+            response = json.dumps(response)
 
-
-
-
-
-
-
-
-    #     files_list = request.FILES.getlist("files")
-    #     if not files_list:
-    #         return HttpResponseBadRequest("File not attached properly")
-    #     try:
-    #         project = int(request.POST.get("project"))
-    #     except:
-    #         return HttpResponseBadRequest("Invalid project id")
-    #     try:
-    #         parent_dir = int(request.POST.get("parent_dir"))
-    #     except:
-    #         parent_dir = None
-    #
-    #     try:
-    #         for file in files_list:
-    #             upload_file(file, project, parent_dir)
-    #     except:
-    #         return HttpResponseServerError("Unknown error while uploading")
-    #     return HttpResponse("OK")
-    # return HttpResponseBadRequest("Invalid request method or files not attached")
+            return HttpResponse(response, status=200, content_type='application/json')
 
 
 def annotation_history(request, project_id, file_if, file_version):
