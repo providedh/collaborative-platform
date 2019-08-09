@@ -90,3 +90,9 @@ class FileVersion(models.Model):
 
     class Meta:
         unique_together = ("file", "number")
+
+    def get_content(self):
+        self.upload.open(mode='r')
+        content = self.upload.read()
+        self.upload.close()
+        return content
