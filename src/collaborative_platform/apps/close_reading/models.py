@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib.postgres.fields import JSONField
 
 
 class AnnotatingXmlContent(models.Model):
@@ -12,3 +13,9 @@ class RoomPresence(models.Model):
     room_symbol = models.CharField(max_length=255)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now=True)
+
+
+class AnnotationHistory(models.Model):
+    project_id = models.CharField(max_length=255)
+    file_id = models.CharField(max_length=255)
+    history = JSONField(blank=True, default=list)

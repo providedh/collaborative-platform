@@ -1,15 +1,14 @@
 import json
 
-from django.contrib.auth.decorators import login_required
 from django.core.files.uploadedfile import UploadedFile
-from django.http import HttpRequest, HttpResponse, HttpResponseServerError, HttpResponseBadRequest, \
-    HttpResponseNotFound, HttpResponseForbidden, JsonResponse
+from django.http import HttpRequest, HttpResponse
 from io import BytesIO
 
 from apps.files_management.models import File
 from apps.files_management.files_management import upload_file
-from apps.projects.models import Contributor, Project
+from apps.projects.models import Project
 
+from .annotation_history_handler import AnnotationHistoryHandler, NoVersionException
 from .models import AnnotatingXmlContent
 
 
@@ -25,6 +24,7 @@ def save(request, project_id, file_id):  # type: (HttpRequest, int, int) -> Http
             response = {
                 'status': 304,
                 'message': 'There is no file to save with id: {0} for project: {1}.'.format(file_id, project_id),
+                'data': None,
             }
 
             response = json.dumps(response)
@@ -46,6 +46,7 @@ def save(request, project_id, file_id):  # type: (HttpRequest, int, int) -> Http
             response = {
                 'status': 304,
                 'message': 'There is no changes to save in file with id: {0}.'.format(file_id),
+                'data': None,
             }
 
             response = json.dumps(response)
@@ -55,6 +56,7 @@ def save(request, project_id, file_id):  # type: (HttpRequest, int, int) -> Http
             response = {
                 'status': 200,
                 'message': 'File with id: {0} was saved.'.format(file_id),
+                'data': None
             }
 
             response = json.dumps(response)
@@ -62,23 +64,30 @@ def save(request, project_id, file_id):  # type: (HttpRequest, int, int) -> Http
             return HttpResponse(response, status=200, content_type='application/json')
 
 
-def annotation_history(request, project_id, file_if, file_version):
-    pass
-
-@login_required()
-def get_file_versions(request, file_id):  # type: (HttpRequest, int) -> HttpResponse
-    if request.method != "GET":
-        return HttpResponseBadRequest("Invalid request method")
-
-    try:
-        file = File.objects.filter(id=file_id).get()
-    except File.DoesNotExist:
-        return HttpResponseNotFound()
-
-    if not file.project.public:
+# TODO secure this with permisision checkiing decorator
+# @login_required()
+def history(request, project_id, file_id, file_version):  # type: (HttpRequest, int, int, int) -> HttpResponse
+    if request.method == 'GET':
         try:
-            Contributor.objects.filter(project_id=file.project.id, user_id=request.user.id).get()
-        except Contributor.DoesNotExist:
-            return HttpResponseForbidden("User does not have access to this file")
+            annotation_history_handler = AnnotationHistoryHandler(project_id, file_id)
+            history = annotation_history_handler.get_history(file_version)
+        except NoVersionException as exception:
+            response = {
+                'status': 400,
+                'message': str(exception),
+                'data': None,
+            }
 
-    return JsonResponse(list(file.versions.all().values()), safe=False)
+            response = json.dumps(response)
+
+            return HttpResponse(response, status=400, content_type='application/json')
+
+        response = {
+            'status': 200,
+            'message': 'OK',
+            'data': history,
+        }
+
+        response = json.dumps(response)
+
+        return HttpResponse(response, status=200, content_type='application/json')
