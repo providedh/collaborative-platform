@@ -46,8 +46,8 @@ class Directory(FileNode):
     def get_subdirectories(self):  # type: (Directory) -> QuerySet
         return self.subdirs.values()
 
-    def get_content(self):  # type: (Directory) -> QuerySet
-        return self.subdirs.values()
+    def get_content(self):  # type: (Directory) -> list
+        return list(self.subdirs.order_by('name').values()) + list(self.files.order_by('name').values())
 
 
 class File(FileNode):
@@ -85,8 +85,14 @@ class FileVersion(models.Model):
     file = models.ForeignKey(File, related_name='versions', on_delete=models.CASCADE)
     number = models.PositiveIntegerField()
     creation_date = models.DateTimeField(auto_now_add=True)
-    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='created_fileversions', null=True,
+    created_by = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='created_fileversions', null=True,
                                    blank=True)
 
     class Meta:
         unique_together = ("file", "number")
+
+    def get_content(self):
+        self.upload.open(mode='r')
+        content = self.upload.read()
+        self.upload.close()
+        return content

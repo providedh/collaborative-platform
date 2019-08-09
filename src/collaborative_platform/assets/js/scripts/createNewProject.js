@@ -1,5 +1,6 @@
-$('[js-createNewProject]').on('click', function(){
-    var form = $('#formCreateNewProject').serializeObject()
+$('#formCreateNewProject').on('submit', function(e){
+    e.preventDefault()
+    var form = $(this).serializeObject()
     var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
     $.ajaxSetup({
         beforeSend: function(xhr, settings) {
@@ -11,16 +12,14 @@ $('[js-createNewProject]').on('click', function(){
         type: "POST",
         url: "/api/projects/create/",
         data: JSON.stringify(form),
-        dataType: "text",
+        dataType: "json",
         contentType : 'application/json',
         success: function(resultData){
-            $('#createNewProject').modal('hide');
-            $('[js-createNewProjectInfo]').text(resultData)
-            $('#createNewProjectInfo').modal('show');
+            window.location.href = '/projects/' + resultData.id
         },
         error: function (xhr, ajaxOptions, thrownError) {
             $('#createNewProject').modal('hide');
-            $('[js-createNewProjectInfo]').text(thrownError)
+            $('[js-createNewProjectInfo]').text(xhr.responseJSON.message)
             $('#createNewProjectInfo').modal('show');
         }
     });
