@@ -83,7 +83,7 @@ def get_file_version(request, file_id, version):
         "filename": file.name,
         "version_number": fv.number,
         "creator": creator,
-        "body": fv.upload.read()
+        "data": fv.upload.read()
     }
     fv.upload.close()
 

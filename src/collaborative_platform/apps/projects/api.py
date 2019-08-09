@@ -20,7 +20,7 @@ def create(request):  # type: (HttpRequest) -> HttpResponse
 
         try:
             if not data['title']:
-                raise ValidationError
+                return HttpResponseBadRequest(dumps({"message": "Title cannot be empty"}))
 
             project = Project(title=data['title'], description=data["description"])
             project.save()
