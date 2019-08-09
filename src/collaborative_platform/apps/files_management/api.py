@@ -20,11 +20,11 @@ def upload(request):  # type: (HttpRequest) -> HttpResponse
         try:
             project = int(request.POST.get("project"))
             project = Project.objects.filter(id=project).get()
-        except:  # TODO check level of contribution to authorize user to upload files
+        except (ValueError, Project.DoesNotExist):  # TODO check level of contribution to authorize user to upload files
             return HttpResponseBadRequest("Invalid project id")
         try:
             parent_dir = int(request.POST.get("parent_dir"))
-        except:
+        except ValueError:
             parent_dir = None
 
         try:
