@@ -7,7 +7,7 @@ from apps.projects.helpers import log_activity
 from .models import File, FileVersion, Project
 
 
-def upload_new_file(uploaded_file, project, parent_dir, user):  # type: (UploadedFile, int, int, User) -> File
+def upload_new_file(uploaded_file, project, parent_dir, user):  # type: (UploadedFile, Project, int, User) -> File
     # I assume that the project exists, bc few level above we checked if user has permissions to write to it.
 
     dbfile = File(name=uploaded_file.name, parent_dir_id=parent_dir, project=project, version_number=1)
@@ -54,7 +54,7 @@ def hash_file(dbfile, uploaded_file):  # type: (File, UploadedFile) -> str
 
 
 # TODO check perrmissions by decorator
-def upload_file(uploaded_file, project, user, parent_dir=None):  # type: (UploadedFile, int, User, int) -> File
+def upload_file(uploaded_file, project, user, parent_dir=None):  # type: (UploadedFile, Project, User, int) -> File
     try:
         dbfile = File.objects.filter(name=uploaded_file.name, parent_dir_id=parent_dir).get()
     except File.DoesNotExist:
