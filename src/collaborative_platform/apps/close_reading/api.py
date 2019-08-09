@@ -1,15 +1,16 @@
+import json
+
 from django.contrib.auth.decorators import login_required
+from django.core.files.uploadedfile import UploadedFile
 from django.http import HttpRequest, HttpResponse, HttpResponseServerError, HttpResponseBadRequest, \
     HttpResponseNotFound, HttpResponseForbidden, JsonResponse
+from io import BytesIO
 
-from apps.files_management.models import File, FileVersion
-from apps.projects.models import Contributor
-from .models import AnnotatingXmlContent
-import json
-from io import StringIO, BytesIO
-
+from apps.files_management.models import File
 from apps.files_management.files_management import upload_file
-from django.core.files.uploadedfile import UploadedFile
+from apps.projects.models import Contributor, Project
+
+from .models import AnnotatingXmlContent
 
 
 # TODO secure this with permisision checkiing decorator
@@ -36,7 +37,8 @@ def save(request, project_id, file_id):  # type: (HttpRequest, int, int) -> Http
         file_version_old = File.objects.get(id=file_id).version_number
 
         uploaded_file = UploadedFile(file=file, name=file_name)
-        upload_response = upload_file(uploaded_file, project_id, request.user)
+        project = Project.objects.get(id=project_id)
+        upload_response = upload_file(uploaded_file, project, request.user)
 
         file_version_new = upload_response.version_number
 
