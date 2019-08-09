@@ -22,6 +22,7 @@ urlpatterns = [
     path('files/', include('apps.files_management.urls')),
     path('api/projects/', include('apps.projects.urls_api')),
     path('projects/', include('apps.projects.urls')),
+    path('api/close_reading/', include('apps.close_reading.urls_api')),
     path('close_reading/', include('apps.close_reading.urls')),
     path('', include('apps.core.urls')),
 ]
