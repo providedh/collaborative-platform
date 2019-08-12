@@ -8,7 +8,9 @@ from django.http import HttpRequest, HttpResponse, HttpResponseServerError, Http
 
 from apps.files_management.models import File, FileVersion
 from apps.projects.models import Contributor, Project
-from .files_management import upload_file
+from .helpers import upload_file
+from.file_conversions.tei_handler import TeiHandler
+from .helpers import uploaded_file_object_from_string
 
 
 @login_required()
@@ -27,12 +29,46 @@ def upload(request):  # type: (HttpRequest) -> HttpResponse
         except ValueError:
             parent_dir = None
 
-        try:
-            for file in files_list:
-                upload_file(file, project, request.user, parent_dir)
-        except:
-            return HttpResponseServerError("Unknown error while uploading")
-        return HttpResponse("OK")
+        upload_statuses = {}
+
+        for file in files_list:
+            file_name = file.name
+
+            upload_status = {file_name: {'uploaded': False, 'migrated': False, 'message': None}}
+            upload_statuses.update(upload_status)
+
+            try:
+                dbfile = upload_file(file, project, request.user, parent_dir)
+
+                upload_status = {'uploaded': True}
+                upload_statuses[file_name].update(upload_status)
+
+                file_version = FileVersion.objects.get(file_id=dbfile.id, number=dbfile.version_number)
+                path_to_file = file_version.upload.path
+
+                tei_handler = TeiHandler(path_to_file)
+                migration, is_tei_p5_prefixed = tei_handler.recognize()
+
+                if migration:
+                    tei_handler.migrate()
+
+                    migrated_string = tei_handler.text.read()
+
+                    uploaded_file = uploaded_file_object_from_string(migrated_string, file_name)
+
+                    upload_file(uploaded_file, project, request.user, parent_dir)
+
+                    migration_status = {'migrated': True, 'message': tei_handler.get_message()}
+                    upload_statuses[file_name].update(migration_status)
+
+            except Exception as exception:
+                upload_status = {'message': str(exception)}
+                upload_statuses[file_name].update(upload_status)
+
+        response = dumps(upload_statuses)
+
+        return HttpResponse(response, status=200, content_type='application/json')
+
     return HttpResponseBadRequest("Invalid request method or files not attached")
 
 

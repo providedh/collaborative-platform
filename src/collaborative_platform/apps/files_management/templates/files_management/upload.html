@@ -5,7 +5,7 @@
 {% block content %}
   <form enctype="multipart/form-data" method="post">
     {% csrf_token %}
-    <input name="file" type="file">
+    <input name="file" type="file" multiple>
     <span>project id</span>
     <input name="project" type="text">
     <span>parent directory</span>

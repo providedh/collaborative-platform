@@ -23,3 +23,6 @@ celery==4.3.0
 
 # For xml processing
 lxml==4.4.0
+
+# For file conversions
+beautifulsoup4==4.8.0

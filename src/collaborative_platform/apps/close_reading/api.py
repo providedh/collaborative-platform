@@ -1,11 +1,10 @@
 import json
 
-from django.core.files.uploadedfile import UploadedFile
 from django.http import HttpRequest, HttpResponse
-from io import BytesIO
 
 from apps.files_management.models import File
-from apps.files_management.files_management import upload_file
+from apps.files_management.helpers import upload_file
+from apps.files_management.helpers import uploaded_file_object_from_string
 from apps.projects.models import Project
 
 from .annotation_history_handler import AnnotationHistoryHandler, NoVersionException
@@ -31,12 +30,12 @@ def save(request, project_id, file_id):  # type: (HttpRequest, int, int) -> Http
 
             return HttpResponse(response, status=304, content_type='application/json')
 
-        file = BytesIO(annotating_xml_content.xml_content.encode('utf-8'))
-        file_name = annotating_xml_content.file_name
-
         file_version_old = File.objects.get(id=file_id).version_number
 
-        uploaded_file = UploadedFile(file=file, name=file_name)
+        xml_content = annotating_xml_content.xml_content
+        file_name = annotating_xml_content.file_name
+        uploaded_file = uploaded_file_object_from_string(xml_content, file_name)
+
         project = Project.objects.get(id=project_id)
         upload_response = upload_file(uploaded_file, project, request.user)
 

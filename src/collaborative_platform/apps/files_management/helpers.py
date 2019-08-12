@@ -1,4 +1,5 @@
 import hashlib
+from io import BytesIO
 
 from django.contrib.auth.models import User
 from django.core.files.uploadedfile import UploadedFile
@@ -62,3 +63,11 @@ def upload_file(uploaded_file, project, user, parent_dir=None):  # type: (Upload
         return upload_new_file(uploaded_file, project, parent_dir, user)
     else:
         return overwrite_existing_file(dbfile, uploaded_file, user)
+
+
+def uploaded_file_object_from_string(string, file_name):  # type: (str, str) -> UploadedFile
+    file = BytesIO(string.encode('utf-8'))
+
+    uploaded_file = UploadedFile(file=file, name=file_name)
+
+    return uploaded_file
