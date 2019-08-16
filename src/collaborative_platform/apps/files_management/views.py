@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
 from apps.projects.models import Project
-from apps.files_management.helpers import uploaded_file_object_from_string
+from apps.files_management.helpers import uploaded_file_object_from_string, extract_text_and_entities, index_entities
 from .forms import UploadFileForm
 from .helpers import upload_file
 from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest
@@ -39,6 +39,11 @@ def upload(request):  # type: (HttpRequest) -> HttpResponse
             try:
                 dbfile = upload_file(file, project, request.user, parent_dir_id)
 
+                file.seek(0)
+                text, entities = extract_text_and_entities(file.read(), project.id, dbfile.id)
+
+                index_entities(entities)
+
                 upload_status = {'uploaded': True}
                 upload_statuses[file_name].update(upload_status)
 
@@ -60,7 +65,7 @@ def upload(request):  # type: (HttpRequest) -> HttpResponse
                     migration_status = {'migrated': True, 'message': tei_handler.get_message()}
                     upload_statuses[file_name].update(migration_status)
 
-            except Exception as exception:
+            except ValueError as exception:
                 upload_status = {'message': str(exception)}
                 upload_statuses[file_name].update(upload_status)
 

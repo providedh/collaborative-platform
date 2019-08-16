@@ -7,6 +7,8 @@ from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, JsonR
 
 from apps.views_decorators import file_exist, file_version_exist, has_access
 from apps.files_management.models import File, FileVersion
+from apps.projects.models import Contributor, Project
+from .helpers import upload_file, extract_text_and_entities, index_entities
 from apps.projects.models import Project
 from .file_conversions.tei_handler import TeiHandler
 from .helpers import upload_file,  uploaded_file_object_from_string
@@ -38,6 +40,11 @@ def upload(request):  # type: (HttpRequest) -> HttpResponse
 
             try:
                 dbfile = upload_file(file, project, request.user, parent_dir)
+
+                file.seek(0)
+                text, entities = extract_text_and_entities(file.read(), project.id, dbfile.id)
+
+                index_entities(entities)
 
                 upload_status = {'uploaded': True}
                 upload_statuses[file_name].update(upload_status)

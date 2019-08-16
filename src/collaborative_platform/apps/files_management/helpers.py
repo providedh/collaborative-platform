@@ -1,9 +1,14 @@
 import hashlib
 from io import BytesIO
+from typing import List
 
 from django.contrib.auth.models import User
 from django.core.files.uploadedfile import UploadedFile
+from django.utils import timezone
 
+from apps.index_and_search.content_extractor import ContentExtractor
+from apps.index_and_search.entities_extractor import EntitiesExtractor
+from apps.index_and_search.models import Person, Organization, Event, Place
 from apps.projects.helpers import log_activity
 from .models import File, FileVersion, Project
 
@@ -35,8 +40,8 @@ def overwrite_existing_file(dbfile, uploaded_file, user):  # type: (File, Upload
 
     uploaded_file.name = hash
     new_version_number = latest_file_version.number + 1
-    new_file_version = FileVersion(upload=uploaded_file, hash=hash, file=dbfile, number=new_version_number,
-                                   created_by=user)
+    new_file_version = FileVersion(upload=uploaded_file, number=new_version_number, hash=hash, file=dbfile,
+                                   created_by=user, creation_date=timezone.now())
     new_file_version.save()
 
     dbfile.version_number = new_version_number
@@ -47,6 +52,7 @@ def overwrite_existing_file(dbfile, uploaded_file, user):  # type: (File, Upload
 
 
 def hash_file(dbfile, uploaded_file):  # type: (File, UploadedFile) -> str
+    uploaded_file.seek(0)
     hashed = bytes(uploaded_file.name, encoding='utf8') + \
              bytes(str(dbfile.project_id), encoding='utf8') + \
              bytes(str(dbfile.parent_dir_id), encoding='utf8') + \
@@ -55,10 +61,10 @@ def hash_file(dbfile, uploaded_file):  # type: (File, UploadedFile) -> str
     return hash
 
 
-# TODO check perrmissions by decorator
+# TODO check permissions by decorator
 def upload_file(uploaded_file, project, user, parent_dir=None):  # type: (UploadedFile, Project, User, int) -> File
     try:
-        dbfile = File.objects.filter(name=uploaded_file.name, parent_dir_id=parent_dir).get()
+        dbfile = File.objects.filter(name=uploaded_file.name, parent_dir_id=parent_dir, project=project).get()
     except File.DoesNotExist:
         return upload_new_file(uploaded_file, project, parent_dir, user)
     else:
@@ -71,3 +77,27 @@ def uploaded_file_object_from_string(string, file_name):  # type: (str, str) -> 
     uploaded_file = UploadedFile(file=file, name=file_name)
 
     return uploaded_file
+
+
+def extract_text_and_entities(contents, project_id, file_id):  # type: (str, int, int) -> (str, List[dict])
+    if len(contents) == 0:
+        return "", []
+    text = ContentExtractor.tei_contents_to_text(contents)
+    entities = EntitiesExtractor.extract_entities(contents)
+    entities = EntitiesExtractor.extend_entities(entities, project_id, file_id)
+    return text, entities
+
+
+def index_entities(entities):  # type: (List[dict]) -> None
+    classes = {
+        'person': Person,
+        'org': Organization,
+        'event': Event,
+        'place': Place
+    }
+
+    for entity in entities:
+        tag = entity.pop('tag')
+        es_entity = classes[tag](**entity)
+        es_entity.save()
+    pass
