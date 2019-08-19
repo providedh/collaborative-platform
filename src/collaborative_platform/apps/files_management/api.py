@@ -3,17 +3,16 @@ from json import dumps
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.forms import model_to_dict
-from django.http import HttpRequest, HttpResponse, HttpResponseServerError, HttpResponseBadRequest, \
-    HttpResponseNotFound, HttpResponseForbidden, JsonResponse
+from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, JsonResponse
 
+from apps.views_decorators import file_exist, file_version_exist, has_access
 from apps.files_management.models import File, FileVersion
-from apps.projects.models import Contributor, Project
-from .helpers import upload_file
-from.file_conversions.tei_handler import TeiHandler
-from .helpers import uploaded_file_object_from_string
+from apps.projects.models import Project
+from .file_conversions.tei_handler import TeiHandler
+from .helpers import upload_file,  uploaded_file_object_from_string
 
 
-@login_required()
+@login_required
 def upload(request):  # type: (HttpRequest) -> HttpResponse
     if request.method == "POST" and request.FILES:
         files_list = request.FILES.getlist("files")
@@ -72,55 +71,43 @@ def upload(request):  # type: (HttpRequest) -> HttpResponse
     return HttpResponseBadRequest("Invalid request method or files not attached")
 
 
-@login_required()
+@login_required
+@file_exist
+@has_access()
 def get_file_versions(request, file_id):  # type: (HttpRequest, int) -> HttpResponse
-    if request.method != "GET":
+    if request.method == 'GET':
+        file = File.objects.filter(id=file_id).get()
+
+        return JsonResponse(list(file.versions.all().values()), safe=False)
+
+    else:
         return HttpResponseBadRequest("Invalid request method")
 
-    try:
-        file = File.objects.filter(id=file_id).get()
-    except File.DoesNotExist:
-        return HttpResponseNotFound()
 
-    if not file.project.public:
-        try:
-            Contributor.objects.filter(project_id=file.project.id, user_id=request.user.id).get()
-        except Contributor.DoesNotExist:
-            return HttpResponseForbidden("User does not have access to this file")
-
-    return JsonResponse(list(file.versions.all().values()), safe=False)
-
-
-@login_required()
+@login_required
+@file_exist
+@file_version_exist
+@has_access()
 def get_file_version(request, file_id, version):
-    try:
+    if request.method == 'GET':
         file = File.objects.filter(id=file_id).get()
-    except File.DoesNotExist:
-        return HttpResponseNotFound(dumps({"message": "File with this id does not exist"}))
-
-    if not file.project.public:
-        try:
-            Contributor.objects.filter(project=file.project, user=request.user).get()
-        except Contributor.DoesNotExist:
-            return HttpResponseForbidden(dumps({"message": "User has no access to this project"}))
-
-    try:
         fv = file.versions.filter(number=version).get()  # type: FileVersion
-    except FileVersion.DoesNotExist:
-        return HttpResponseNotFound(dumps({"message": "Invalid version number for this file"}))
 
-    try:
-        creator = model_to_dict(fv.created_by, fields=('id', 'first_name', 'last_name'))
-    except (AttributeError, User.DoesNotExist):
-        creator = fv.created_by_id
+        try:
+            creator = model_to_dict(fv.created_by, fields=('id', 'first_name', 'last_name'))
+        except (AttributeError, User.DoesNotExist):
+            creator = fv.created_by_id
 
-    fv.upload.open('r')
-    response = {
-        "filename": file.name,
-        "version_number": fv.number,
-        "creator": creator,
-        "data": fv.upload.read()
-    }
-    fv.upload.close()
+        fv.upload.open('r')
+        response = {
+            "filename": file.name,
+            "version_number": fv.number,
+            "creator": creator,
+            "data": fv.upload.read()
+        }
+        fv.upload.close()
 
-    return JsonResponse(response)
+        return JsonResponse(response)
+
+    else:
+        return HttpResponseBadRequest("Invalid request method")
