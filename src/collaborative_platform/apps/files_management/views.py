@@ -78,24 +78,16 @@ def upload(request):  # type: (HttpRequest) -> HttpResponse
 @file_version_exist
 @has_access()
 def file(request, file_id, version=None):  # type: (HttpRequest, int, int) -> HttpResponse
+
+    file = File.objects.get(id=file_id)
+
     if version is None:
-        file = File.objects.get(id=file_id)
+        version = file.version_number
 
-        content = {
-            'title': file.name,
-            'file': file,
-            'version': file.version_number,
-        }
+    content = {
+        'title': file.name,
+        'file': file,
+        'version': version,
+    }
 
-        return render(request, 'files_management/file.html', content)
-
-    else:
-        file = File.objects.get(id=file_id)
-
-        content = {
-            'title': file.name,
-            'file': file,
-            'version': version,
-        }
-
-        return render(request, 'files_management/file.html', content)
+    return render(request, 'files_management/file.html', content)

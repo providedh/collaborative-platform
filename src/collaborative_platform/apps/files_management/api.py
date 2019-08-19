@@ -88,9 +88,13 @@ def get_file_versions(request, file_id):  # type: (HttpRequest, int) -> HttpResp
 @file_exist
 @file_version_exist
 @has_access()
-def get_file_version(request, file_id, version):
+def get_file_version(request, file_id, version=None):
     if request.method == 'GET':
         file = File.objects.filter(id=file_id).get()
+
+        if version is None:
+            version = file.version_number
+
         fv = file.versions.filter(number=version).get()  # type: FileVersion
 
         try:
