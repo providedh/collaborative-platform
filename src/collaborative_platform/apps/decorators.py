@@ -4,7 +4,7 @@ from typing import Callable
 from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, HttpResponseForbidden, JsonResponse
 from django.shortcuts import render
 
-from apps.files_management.models import File
+from apps.files_management.models import File, FileVersion
 from apps.projects.models import Contributor, Project
 
 
@@ -58,12 +58,38 @@ def file_exist(view):  # type: (Callable) -> Callable
     return decorator
 
 
+def file_version_exist(view):  # type: (Callable) -> Callable
+    """Requirements:
+        - file must exist ('@file_exist' from apps.decorators)
+        - decorated function must take 'version_nr' argument
+    """
+
+    def decorator(*args, **kwargs):
+        version_nr = kwargs['version_nr']
+        file_id = kwargs['file_id']
+
+        try:
+            _ = FileVersion.objects.get(file_id=file_id, number=version_nr)
+        except FileVersion.DoesNotExist:
+            request = args[0]
+            status = HttpResponseBadRequest.status_code
+            message = "Version {} for file with id: {} doesn't exist.".format(version_nr, file_id)
+            bootstrap_alert_type = 'danger'
+
+            response = __get_response(request, status, bootstrap_alert_type, message)
+
+            return response
+
+        return view(*args, **kwargs)
+
+    return decorator
+
+
 def has_access(permissions_level=None):
     """Requirements:
         - user must be logged in ('@login_required' from django.contrib.auth.decorators)
         - decorated function must take 'project_id' or 'file_id' argument
-        - project or file must exist ('@project_exist' from apps.projects.decorators or '@file_exist' from
-          apps.files_management.decorators)
+        - project or file must exist ('@project_exist' or '@file_exist' from apps.decorators)
     """
 
     def decorator(func):
