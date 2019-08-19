@@ -1,16 +1,18 @@
-from django.contrib.auth.decorators import login_required
-from django.core.exceptions import ValidationError, FieldError
-from django.core.paginator import Paginator, InvalidPage, EmptyPage
-from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, JsonResponse, HttpResponseNotFound, \
-    HttpResponseForbidden
 from json import loads, JSONDecodeError, dumps
 
+from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ValidationError, FieldError
+from django.core.paginator import InvalidPage, EmptyPage
+from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, HttpResponseNotFound
+
 from apps.projects.helpers import page_to_json_response, include_contributors, log_activity
+from apps.views_decorators import project_exist, has_access
+
 from .helpers import paginate, order_queryset
 from .models import Project, Contributor
 
 
-@login_required()
+@login_required
 def create(request):  # type: (HttpRequest) -> HttpResponse
     if request.method == "POST" and request.body:
         try:
@@ -30,15 +32,13 @@ def create(request):  # type: (HttpRequest) -> HttpResponse
 
             log_activity(project, request.user, "created")
             return HttpResponse(dumps({"id": project.id}))
-        except ValueError:
-            return HttpResponseBadRequest(dumps({"message": "Possibly not logged in"}))
         except (ValidationError, KeyError):
             return HttpResponseBadRequest(dumps({"message": "Invalid value"}))
 
     return HttpResponseBadRequest(dumps({"message": "Invalid request type or empty request"}))
 
 
-@login_required()
+@login_required
 def get_public(request):  # type: (HttpRequest) -> HttpResponse
     if request.method != "GET":
         return HttpResponseBadRequest("Invalid request method")
@@ -58,7 +58,7 @@ def get_public(request):  # type: (HttpRequest) -> HttpResponse
     return include_contributors(page_to_json_response(page))
 
 
-@login_required()
+@login_required
 def get_mine(request):  # type: (HttpRequest) -> HttpResponse
     if request.method != "GET":
         return HttpResponseBadRequest("Invalid request method")
@@ -75,21 +75,14 @@ def get_mine(request):  # type: (HttpRequest) -> HttpResponse
     return include_contributors(page_to_json_response(page))
 
 
-@login_required()
+@login_required
+@project_exist
+@has_access()
 def get_activities(request, project_id):
     if request.method != "GET":
         return HttpResponseBadRequest("Invalid request method")
 
-    try:
-        project = Project.objects.filter(id=project_id).get()
-    except Project.DoesNotExist:
-        return HttpResponseNotFound("Project with given id does not exist")
-
-    if not project.public:
-        try:
-            project.contributors.filter(user_id=request.user.id).get()
-        except Contributor.DoesNotExist:
-            return HttpResponseForbidden("User has no access to a project")
+    project = Project.objects.filter(id=project_id).get()
 
     activities = project.activities.order_by("-date")
     try:
