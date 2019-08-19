@@ -51,7 +51,7 @@ def upload(request):  # type: (HttpRequest) -> HttpResponse
 
                 if migration:
                     tei_handler.migrate()
-                tei_handler = IDsFiller(tei_handler, file.name)
+                tei_handler = IDsFiller(tei_handler, file_name)
                 is_id_filled = tei_handler.process()
 
                 if migration or is_id_filled:
