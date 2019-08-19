@@ -43,7 +43,6 @@ def upload(request):  # type: (HttpRequest) -> HttpResponse
 
                 file.seek(0)
                 text, entities = extract_text_and_entities(file.read(), project.id, dbfile.id)
-
                 index_entities(entities)
 
                 upload_status = {'uploaded': True}
@@ -59,6 +58,9 @@ def upload(request):  # type: (HttpRequest) -> HttpResponse
                     tei_handler.migrate()
 
                     migrated_string = tei_handler.text.read()
+
+                    text, entities = extract_text_and_entities(migrated_string, project.id, dbfile.id)
+                    index_entities(entities)
 
                     uploaded_file = uploaded_file_object_from_string(migrated_string, file_name)
 
