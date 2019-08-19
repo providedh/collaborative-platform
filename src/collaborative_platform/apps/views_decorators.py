@@ -61,10 +61,13 @@ def file_exist(view):  # type: (Callable) -> Callable
 def file_version_exist(view):  # type: (Callable) -> Callable
     """Requirements:
         - file must exist ('@file_exist' from apps.decorators)
-        - decorated function must take 'version_nr' argument
+        - decorated function must take 'version' argument
     """
 
     def decorator(*args, **kwargs):
+        if 'version' not in kwargs:
+            return view(*args, **kwargs)
+
         version = kwargs['version']
         file_id = kwargs['file_id']
 
