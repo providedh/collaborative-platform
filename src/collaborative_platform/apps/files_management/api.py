@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.forms import model_to_dict
 from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, JsonResponse
 
+from apps.files_management.file_conversions.ids_filler import IDsFiller
 from apps.views_decorators import file_exist, file_version_exist, has_access
 from apps.files_management.models import File, FileVersion
 from apps.projects.models import Contributor, Project
@@ -53,6 +54,10 @@ def upload(request):  # type: (HttpRequest) -> HttpResponse
                 if migration:
                     tei_handler.migrate()
 
+                tei_handler = IDsFiller(tei_handler, file.name)
+                is_id_filled = tei_handler.process()
+
+                if migration or is_id_filled:
                     migrated_string = tei_handler.text.read()
 
                     text, entities = extract_text_and_entities(migrated_string, project.id, dbfile.id)
