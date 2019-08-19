@@ -65,15 +65,15 @@ def file_version_exist(view):  # type: (Callable) -> Callable
     """
 
     def decorator(*args, **kwargs):
-        version_nr = kwargs['version_nr']
+        version = kwargs['version']
         file_id = kwargs['file_id']
 
         try:
-            _ = FileVersion.objects.get(file_id=file_id, number=version_nr)
+            _ = FileVersion.objects.get(file_id=file_id, number=version)
         except FileVersion.DoesNotExist:
             request = args[0]
             status = HttpResponseBadRequest.status_code
-            message = "Version {} for file with id: {} doesn't exist.".format(version_nr, file_id)
+            message = "Version {} for file with id: {} doesn't exist.".format(version, file_id)
             bootstrap_alert_type = 'danger'
 
             response = __get_response(request, status, bootstrap_alert_type, message)
@@ -168,4 +168,4 @@ def __get_response(request, status, bootstrap_alert_type, message, data=None):
 
 
 def __from_api(request):  # type: (HttpRequest) -> bool
-    return request.path.split('/')[0] == 'api'
+    return request.path.split('/')[1] == 'api'

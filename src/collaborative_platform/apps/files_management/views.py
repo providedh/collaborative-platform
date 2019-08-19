@@ -8,7 +8,7 @@ from .helpers import upload_file
 from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest
 from .file_conversions.tei_handler import TeiHandler
 from .models import FileVersion, File
-from apps.decorators import file_exist, file_version_exist, has_access
+from apps.views_decorators import file_exist, file_version_exist, has_access
 import json
 
 
@@ -77,13 +77,13 @@ def upload(request):  # type: (HttpRequest) -> HttpResponse
 @file_exist
 @file_version_exist
 @has_access()
-def file(request, file_id, version_nr):  # type: (HttpRequest, int, int) -> HttpResponse
+def file(request, file_id, version):  # type: (HttpRequest, int, int) -> HttpResponse
     file = File.objects.get(id=file_id)
 
     content = {
         'title': file.name,
         'file': file,
-        'version': version_nr,
+        'version': version,
     }
 
     return render(request, 'files_management/file.html', content)
