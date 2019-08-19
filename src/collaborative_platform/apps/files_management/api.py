@@ -41,10 +41,6 @@ def upload(request):  # type: (HttpRequest) -> HttpResponse
             try:
                 dbfile = upload_file(file, project, request.user, parent_dir)
 
-                file.seek(0)
-                text, entities = extract_text_and_entities(file.read(), project.id, dbfile.id)
-                index_entities(entities)
-
                 upload_status = {'uploaded': True}
                 upload_statuses[file_name].update(upload_status)
 
@@ -68,6 +64,10 @@ def upload(request):  # type: (HttpRequest) -> HttpResponse
 
                     migration_status = {'migrated': True, 'message': tei_handler.get_message()}
                     upload_statuses[file_name].update(migration_status)
+                else:
+                    file.seek(0)
+                    text, entities = extract_text_and_entities(file.read(), project.id, dbfile.id)
+                    index_entities(entities)
 
             except Exception as exception:
                 upload_status = {'message': str(exception)}
