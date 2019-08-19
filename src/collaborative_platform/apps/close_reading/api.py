@@ -1,18 +1,20 @@
-import json
-
-from django.http import HttpRequest, HttpResponse
+from django.contrib.auth.decorators import login_required
+from django.http import HttpRequest, HttpResponse, JsonResponse, HttpResponseNotModified
 
 from apps.files_management.models import File
 from apps.files_management.helpers import upload_file
 from apps.files_management.helpers import uploaded_file_object_from_string
 from apps.projects.models import Project
+from apps.views_decorators import file_exist, file_version_exist, project_exist, has_access
 
-from .annotation_history_handler import AnnotationHistoryHandler, NoVersionException
+from .annotation_history_handler import AnnotationHistoryHandler
 from .models import AnnotatingXmlContent
 
 
-# TODO secure this with permisision checkiing decorator
-# @login_required()
+@login_required
+@project_exist
+@file_exist
+@has_access('RW')
 def save(request, project_id, file_id):  # type: (HttpRequest, int, int) -> HttpResponse
     if request.method == "PUT":
         file_symbol = '{0}_{1}'.format(project_id, file_id)
@@ -20,15 +22,15 @@ def save(request, project_id, file_id):  # type: (HttpRequest, int, int) -> Http
         try:
             annotating_xml_content = AnnotatingXmlContent.objects.get(file_symbol=file_symbol)
         except AnnotatingXmlContent.DoesNotExist:
+            status = HttpResponseNotModified.status_code
+
             response = {
-                'status': 304,
+                'status': status,
                 'message': 'There is no file to save with id: {0} for project: {1}.'.format(file_id, project_id),
                 'data': None,
             }
 
-            response = json.dumps(response)
-
-            return HttpResponse(response, status=304, content_type='application/json')
+            return JsonResponse(response, status=status)
 
         file_version_old = File.objects.get(id=file_id).version_number
 
@@ -42,51 +44,44 @@ def save(request, project_id, file_id):  # type: (HttpRequest, int, int) -> Http
         file_version_new = upload_response.version_number
 
         if file_version_old == file_version_new:
+            status = HttpResponseNotModified.status_code
+
             response = {
-                'status': 304,
+                'status': status,
                 'message': 'There is no changes to save in file with id: {0}.'.format(file_id),
                 'data': None,
             }
 
-            response = json.dumps(response)
+            return JsonResponse(response, status=status)
 
-            return HttpResponse(response, status=304, content_type='application/json')
         else:
+            status = HttpResponse.status_code
+
             response = {
-                'status': 200,
+                'status': status,
                 'message': 'File with id: {0} was saved.'.format(file_id),
                 'data': None
             }
 
-            response = json.dumps(response)
-
-            return HttpResponse(response, status=200, content_type='application/json')
+            return JsonResponse(response, status=status)
 
 
-# TODO secure this with permisision checkiing decorator
-# @login_required()
-def history(request, project_id, file_id, file_version):  # type: (HttpRequest, int, int, int) -> HttpResponse
+@login_required
+@project_exist
+@file_exist
+@file_version_exist
+@has_access()
+def history(request, project_id, file_id, version):  # type: (HttpRequest, int, int, int) -> HttpResponse
     if request.method == 'GET':
-        try:
-            annotation_history_handler = AnnotationHistoryHandler(project_id, file_id)
-            history = annotation_history_handler.get_history(file_version)
-        except NoVersionException as exception:
-            response = {
-                'status': 400,
-                'message': str(exception),
-                'data': None,
-            }
+        annotation_history_handler = AnnotationHistoryHandler(project_id, file_id)
+        history = annotation_history_handler.get_history(version)
 
-            response = json.dumps(response)
-
-            return HttpResponse(response, status=400, content_type='application/json')
+        status = HttpResponse.status_code
 
         response = {
-            'status': 200,
+            'status': status,
             'message': 'OK',
             'data': history,
         }
 
-        response = json.dumps(response)
-
-        return HttpResponse(response, status=200, content_type='application/json')
+        return JsonResponse(response, status=status)

@@ -115,7 +115,7 @@ class AnnotationHistoryHandler:
             'version': version,
             'contributor': version_metadata['author_email'],
             'timestamp': str(version_metadata['created']),
-            'url': site.domain + '/files/' + str(self.__project_id) + '/' + str(self.__file_id) + '/' + str(version) + '/',
+            'url': 'https://' + site.domain + '/files/' + str(self.__file_id) + '/version/' + str(version) + '/',
             'credibility': uncertainties['credibility'],
             'ignorance': uncertainties['ignorance'],
             'imprecision': uncertainties['imprecision'],
