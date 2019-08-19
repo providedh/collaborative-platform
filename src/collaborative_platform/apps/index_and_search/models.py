@@ -1,6 +1,6 @@
 from itertools import permutations
 
-from elasticsearch_dsl import Document, Integer, Text, Keyword, Completion, analyzer, token_filter, GeoPoint, Date, Long
+from elasticsearch_dsl import Document, Integer, Text, Keyword, Completion, analyzer, token_filter, GeoPoint, Date
 
 # custom analyzer for names
 ascii_fold = analyzer(
