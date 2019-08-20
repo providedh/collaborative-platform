@@ -4,7 +4,7 @@ from typing import Callable
 from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, HttpResponseForbidden, JsonResponse
 from django.shortcuts import render
 
-from apps.files_management.models import File, FileVersion
+from apps.files_management.models import File, FileVersion, Directory
 from apps.projects.models import Contributor, Project
 
 
@@ -58,6 +58,31 @@ def file_exist(view):  # type: (Callable) -> Callable
     return decorator
 
 
+def directory_exist(view):  # type: (Callable) -> Callable
+    """Requirements:
+        - decorated function must take 'directory_id' argument
+    """
+
+    def decorator(*args, **kwargs):
+        directory_id = kwargs['directory_id']
+
+        try:
+            _ = Directory.objects.get(id=directory_id)
+        except Directory.DoesNotExist:
+            request = args[0]
+            status = HttpResponseBadRequest.status_code
+            message = "Directory with id: {} doesn't exist.".format(directory_id)
+            bootstrap_alert_type = 'danger'
+
+            response = __get_response(request, status, bootstrap_alert_type, message)
+
+            return response
+
+        return view(*args, **kwargs)
+
+    return decorator
+
+
 def file_version_exist(view):  # type: (Callable) -> Callable
     """Requirements:
         - file must exist ('@file_exist' from apps.decorators)
@@ -91,8 +116,8 @@ def file_version_exist(view):  # type: (Callable) -> Callable
 def has_access(permissions_level=None):
     """Requirements:
         - user must be logged in ('@login_required' from django.contrib.auth.decorators)
-        - decorated function must take 'project_id' or 'file_id' argument
-        - project or file must exist ('@project_exist' or '@file_exist' from apps.decorators)
+        - decorated function must take 'project_id', 'file_id' or 'directory_id' argument
+        - project, file or directory must exist ('@project_exist', '@file_exist' or '@directory_exist' from apps.decorators)
     """
 
     def decorator(func):
@@ -139,8 +164,12 @@ def __get_project_id(**kwargs):
         file_id = kwargs['file_id']
         file = File.objects.get(id=file_id)
         project_id = file.project_id
+    elif 'directory_id' in kwargs:
+        directory_id = kwargs['directory_id']
+        directory = Directory.objects.get(id=directory_id)
+        project_id = directory.project_id
     else:
-        raise KeyError("Not found required 'project_id' or 'file_id' in given arguments")
+        raise KeyError("Not found required 'project_id', 'file_id' or 'directory_id' in given arguments")
 
     return project_id
 
