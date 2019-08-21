@@ -1,15 +1,15 @@
 from json import dumps
+from elasticsearch_dsl import Search
 
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, HttpResponseBadRequest, JsonResponse, HttpResponse
-from elasticsearch_dsl import connections, Search
 
-from apps.views_decorators import project_exist, has_access
+from apps.views_decorators import objects_exists, user_has_access
 
 
 @login_required
-@project_exist
-@has_access()
+@objects_exists
+@user_has_access()
 def entity_completion(request, project_id, entity_type, query):  # type: (HttpRequest, int, str, str) -> HttpResponse
     if entity_type not in ('person', 'event', 'place', 'organization'):
         return HttpResponseBadRequest(dumps({"message": "Invalid entity type"}))

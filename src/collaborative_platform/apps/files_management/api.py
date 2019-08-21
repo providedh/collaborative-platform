@@ -6,12 +6,11 @@ from django.forms import model_to_dict
 from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, JsonResponse
 
 from apps.files_management.file_conversions.ids_filler import IDsFiller
-from apps.views_decorators import file_exist, file_version_exist, has_access
 from apps.files_management.models import File, FileVersion
-from .helpers import extract_text_and_entities, index_entities
 from apps.projects.models import Project
+from apps.views_decorators import objects_exists, user_has_access
 from .file_conversions.tei_handler import TeiHandler
-from .helpers import upload_file,  uploaded_file_object_from_string
+from .helpers import extract_text_and_entities, index_entities, upload_file,  uploaded_file_object_from_string
 
 
 @login_required
@@ -85,8 +84,8 @@ def upload(request):  # type: (HttpRequest) -> HttpResponse
 
 
 @login_required
-@file_exist
-@has_access()
+@objects_exists
+@user_has_access()
 def get_file_versions(request, file_id):  # type: (HttpRequest, int) -> HttpResponse
     if request.method == 'GET':
         file = File.objects.filter(id=file_id).get()
@@ -98,9 +97,8 @@ def get_file_versions(request, file_id):  # type: (HttpRequest, int) -> HttpResp
 
 
 @login_required
-@file_exist
-@file_version_exist
-@has_access()
+@objects_exists
+@user_has_access()
 def get_file_version(request, file_id, version=None):
     if request.method == 'GET':
         file = File.objects.filter(id=file_id).get()

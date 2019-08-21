@@ -6,7 +6,7 @@ from django.core.paginator import InvalidPage, EmptyPage
 from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, HttpResponseNotFound
 
 from apps.projects.helpers import page_to_json_response, include_contributors, log_activity
-from apps.views_decorators import project_exist, has_access
+from apps.views_decorators import objects_exists, user_has_access
 
 from .helpers import paginate, order_queryset
 from .models import Project, Contributor
@@ -76,8 +76,8 @@ def get_mine(request):  # type: (HttpRequest) -> HttpResponse
 
 
 @login_required
-@project_exist
-@has_access()
+@objects_exists
+@user_has_access()
 def get_activities(request, project_id):
     if request.method != "GET":
         return HttpResponseBadRequest("Invalid request method")
