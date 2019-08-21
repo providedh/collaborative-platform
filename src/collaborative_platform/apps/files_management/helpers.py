@@ -10,7 +10,7 @@ from apps.index_and_search.content_extractor import ContentExtractor
 from apps.index_and_search.entities_extractor import EntitiesExtractor
 from apps.index_and_search.models import Person, Organization, Event, Place
 from apps.projects.helpers import log_activity
-from .models import File, FileVersion, Project
+from apps.files_management.models import File, FileVersion, Project
 
 
 def upload_new_file(uploaded_file, project, parent_dir, user):  # type: (UploadedFile, Project, int, User) -> File

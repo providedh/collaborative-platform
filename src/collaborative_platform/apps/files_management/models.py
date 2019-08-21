@@ -1,13 +1,10 @@
 import hashlib
-from os.path import join
-from shutil import copyfile
 
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import QuerySet
 
 from apps.projects.models import Project
-from collaborative_platform.settings import MEDIA_ROOT
 
 UPLOADED_FILES_PATH = 'uploaded_files/'
 
@@ -31,9 +28,12 @@ class Directory(FileNode):
     class Meta:
         unique_together = ("parent_dir", "name")
 
-    def create_subdirectory(self, name):  # type: (Directory, str) -> Directory
+    def create_subdirectory(self, name, user):  # type: (Directory, str, User) -> Directory
+        from apps.projects.helpers import log_activity
+
         d = Directory(name=name, project=self.project, parent_dir=self)
         d.save()
+        log_activity(project=d.project, user=user, related_dir=d, action_text="created")
         return d
 
     def rename(self, new_name):  # type: (Directory, str) -> Directory
@@ -57,26 +57,32 @@ class File(FileNode):
     class Meta:
         unique_together = ("parent_dir", "name")
 
-    def rename(self, new_name):  # type: (File, str) -> File
+    def rename(self, new_name, user):  # type: (File, str, User) -> File
+        from apps.files_management.helpers import uploaded_file_object_from_string
+        from apps.projects.helpers import log_activity
+
+        old_name = self.name
+        if old_name == new_name:
+            return
+
         current_version = self.versions.filter(number=self.version_number).get()
-        old_path = join(MEDIA_ROOT, UPLOADED_FILES_PATH, current_version.hash)
-        with open(old_path) as F:
-            contents = F.read()
+        contents = current_version.get_content()
+
         hashed = bytes(new_name, encoding='utf8') + \
                  bytes(str(self.project_id), encoding='utf8') + \
                  bytes(str(self.parent_dir_id), encoding='utf8') + \
                  bytes(contents, encoding='utf-8')
         hash = hashlib.sha512(hashed).hexdigest()
 
-        new_path = join(MEDIA_ROOT, UPLOADED_FILES_PATH, hash)
-        copyfile(old_path, new_path)
-
-        fv = FileVersion(upload=new_path, hash=hash, file=self, number=current_version.number + 1)
+        uf = uploaded_file_object_from_string(contents, hash)
+        fv = FileVersion(upload=uf, hash=hash, file=self, number=current_version.number + 1, created_by=user)
         fv.save()
 
         self.version_number += 1
         self.name = new_name
         self.save()
+        log_activity(project=self.project, user=user, file=self,
+                     action_text="renamed {} to {}".format(old_name, new_name))
 
 
 class FileVersion(models.Model):

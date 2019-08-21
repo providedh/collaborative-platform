@@ -6,12 +6,13 @@ from django.forms import model_to_dict
 from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, JsonResponse
 
 from apps.files_management.file_conversions.ids_filler import IDsFiller
+from apps.projects.helpers import log_activity
 from apps.views_decorators import file_exist, file_version_exist, has_access
-from apps.files_management.models import File, FileVersion
+from apps.files_management.models import File, FileVersion, Directory
 from .helpers import extract_text_and_entities, index_entities
 from apps.projects.models import Project
 from .file_conversions.tei_handler import TeiHandler
-from .helpers import upload_file,  uploaded_file_object_from_string
+from .helpers import upload_file, uploaded_file_object_from_string
 
 
 @login_required
@@ -101,7 +102,7 @@ def get_file_versions(request, file_id):  # type: (HttpRequest, int) -> HttpResp
 @file_exist
 @file_version_exist
 @has_access()
-def get_file_version(request, file_id, version=None):
+def get_file_version(request, file_id, version=None):  # type: (HttpRequest, int, int) -> HttpResponse
     if request.method == 'GET':
         file = File.objects.filter(id=file_id).get()
 
@@ -128,3 +129,53 @@ def get_file_version(request, file_id, version=None):
 
     else:
         return HttpResponseBadRequest("Invalid request method")
+
+
+@login_required
+# @file_exist       # TODO uncomment and change to exists
+# @has_access()
+def move(request, **kwargs):
+    if 'direcotry_id' in kwargs:
+        file = Directory.objects.filter(id=kwargs['directory_id']).get()
+        log_activity(project=file.project, user=request.user, related_dir=file, action_text="moved to")
+    else:
+        file = File.objects.filter(id=kwargs['file_id']).get()
+        log_activity(project=file.project, user=request.user, file=file, action_text="moved to")
+
+    file.move_to(kwargs['move_to'])
+    return HttpResponse("OK")
+
+
+@login_required
+# @exists TODO uncomment
+def create_directory(request, directory_id, name):  # type: (HttpRequest, int, str) -> HttpResponse
+    dir = Directory.objects.filter(id=directory_id).get()  # type: Directory
+    dir.create_subdirectory(name)
+    return HttpResponse("OK")
+
+
+@login_required
+# @exists TODO uncomment
+def delete(request, **kwargs):
+    if request.method != 'DELETE':
+        return HttpResponseBadRequest("Only delete method is allowed here")
+    if 'directory_id' in kwargs:
+        dir = Directory.objects.filter(id=kwargs['directory_id']).get()
+        log_activity(project=dir.project, user=request.user, related_dir=dir, action_text="deleted")
+        dir.delete()
+    else:
+        file = File.objects.filter(id=kwargs['file_id']).get()
+        log_activity(project=file.project, user=request.user, file=file, action_text="deleted")
+        file.delete()
+    return HttpResponse("OK")
+
+
+@login_required
+# @exists TODO uncomment
+def rename(request, **kwargs):
+    if 'directory_id' in kwargs:
+        file = Directory.objects.filter(id=kwargs['directory_id']).get()
+    else:
+        file = File.objects.filter(id=kwargs['file_id']).get()
+    file.rename(kwargs['new_name'], request.user)
+    return HttpResponse("OK")
