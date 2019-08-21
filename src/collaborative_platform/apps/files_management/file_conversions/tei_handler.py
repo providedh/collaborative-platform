@@ -260,7 +260,7 @@ class TeiHandler:
         pass
 
     def get_text(self):
-        return self.text.getvalue()
+        return self.text.getvalue() or self.__text_utf_8
 
     def is_migrated(self):
         return self.__migrated
