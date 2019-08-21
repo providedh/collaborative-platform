@@ -3,7 +3,7 @@ from json import dumps
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.forms import model_to_dict
-from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, JsonResponse
+from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, JsonResponse, HttpResponseServerError
 
 from apps.files_management.file_conversions.ids_filler import IDsFiller
 from apps.projects.helpers import log_activity
@@ -11,7 +11,8 @@ from apps.files_management.models import File, FileVersion, Directory
 from apps.projects.models import Project
 from apps.views_decorators import objects_exists, user_has_access
 from .file_conversions.tei_handler import TeiHandler
-from .helpers import extract_text_and_entities, index_entities, upload_file,  uploaded_file_object_from_string
+from .helpers import extract_text_and_entities, index_entities, upload_file, uploaded_file_object_from_string, \
+    get_directory_content
 
 
 @login_required
@@ -149,7 +150,7 @@ def move(request, **kwargs):
 @user_has_access()
 def create_directory(request, directory_id, name):  # type: (HttpRequest, int, str) -> HttpResponse
     dir = Directory.objects.filter(id=directory_id).get()  # type: Directory
-    dir.create_subdirectory(name)
+    dir.create_subdirectory(name, request.user)
     return HttpResponse("OK")
 
 
@@ -180,3 +181,16 @@ def rename(request, **kwargs):
         file = File.objects.filter(id=kwargs['file_id']).get()
     file.rename(kwargs['new_name'], request.user)
     return HttpResponse("OK")
+
+
+@login_required
+@objects_exists
+@user_has_access()
+def get_project_tree(request, project_id):
+    try:
+        base_dir = Directory.objects.filter(project_id=project_id, parent_dir=None).get()
+    except:
+        return HttpResponseServerError(dumps({'message': "Invalid data in database"}))
+
+    result = get_directory_content(base_dir)
+    return JsonResponse(result)

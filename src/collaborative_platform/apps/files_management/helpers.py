@@ -4,13 +4,14 @@ from typing import List
 
 from django.contrib.auth.models import User
 from django.core.files.uploadedfile import UploadedFile
+from django.forms import model_to_dict
 from django.utils import timezone
 
 from apps.index_and_search.content_extractor import ContentExtractor
 from apps.index_and_search.entities_extractor import EntitiesExtractor
 from apps.index_and_search.models import Person, Organization, Event, Place
 from apps.projects.helpers import log_activity
-from apps.files_management.models import File, FileVersion, Project
+from apps.files_management.models import File, FileVersion, Project, Directory
 
 
 def upload_new_file(uploaded_file, project, parent_dir, user):  # type: (UploadedFile, Project, int, User) -> File
@@ -100,4 +101,14 @@ def index_entities(entities):  # type: (List[dict]) -> None
         tag = entity.pop('tag')
         es_entity = classes[tag](**entity)
         es_entity.save()
-    pass
+
+
+def get_directory_content(dir):  # type: (Directory) -> dict
+    files = list(map(model_to_dict, dir.files.all()))
+    subdirs = [get_directory_content(subdir) for subdir in dir.subdirs.all()]
+
+    result = model_to_dict(dir)
+    result['files'] = files
+    result['subdirs'] = subdirs
+
+    return result

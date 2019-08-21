@@ -13,5 +13,5 @@ urlpatterns = [
     path('directory/<int:directory_id>', api.delete, name='delete_directory'),
     path('rename/file/<int:file_id>/<str:new_name>', api.rename, name='rename_file'),
     path('rename/directory/<int:directory_id>/<str:new_name>', api.rename, name='rename_directory'),
-
+    path('get_tree/<int:project_id>', api.get_project_tree, name='get_project_tree')
 ]
