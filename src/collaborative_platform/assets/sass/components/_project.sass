@@ -1,0 +1,78 @@
+.project
+  padding-top: 30px
+  padding-bottom: 50px
+
+  &__header
+
+  &__content
+    margin-bottom: 15px
+
+  &__columns
+
+  &__buttons
+    margin-bottom: 15px
+
+  &__contributors
+    padding-bottom: 5px
+    &--list
+      list-style-type: none
+      margin: 0
+      padding: 0
+      +flex
+
+    &--item
+      &:first-child
+        font-weight: 600
+      &:not(:last-child)
+        &:after
+          content: ","
+          margin-right: 3px
+
+  &__date
+    padding-bottom: 5px
+
+  &__description, &__license, &__category
+    padding-bottom: 5px
+
+  &__text
+    &--label
+      color: #666666
+      &:after
+        content: ":"
+        margin-right: 5px
+
+    &--divider
+      &:before
+        content: "|"
+        color: #cccccc
+        margin: 0 5px
+
+    &--placeholder
+      color: #aaaaaa
+
+    &--description, &--license, &--category
+      padding: 0
+      margin: 0
+
+  &__link
+    &--contributors
+      color: #337ab7
+
+a.project__text--label-contributors
+  color: #337ab7
+  position: relative
+  &:hover
+    text-decoration: none
+    &:before
+      border-bottom: 1px solid #337ab7
+
+  &:before
+    height: 1.3em
+    position: absolute
+    width: calc(100% - 5px)
+    content: ""
+    border-bottom: 1px dashed #337ab7
+
+
+
+
