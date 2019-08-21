@@ -76,3 +76,26 @@ class Place(Entity):
             'number_of_shards': 1,
             'number_of_replicas': 0
         }
+
+
+class User(Document):
+    id = Integer()
+    name = Text(fields={'keywords': Keyword()})
+    suggest = Completion(analyzer=ascii_fold)
+
+    class Index:
+        name = 'user'
+        settings = {
+            'number_of_shards': 1,
+            'number_of_replicas': 0
+        }
+
+    def clean(self):
+        """
+        Automatically construct the suggestion input and weight by taking all
+        possible permutation of Person's name as ``input`` and taking their
+        popularity as ``weight``.
+        """
+        self.suggest = {
+            'input': [' '.join(p) for p in permutations(self.name.split())],
+        }

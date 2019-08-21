@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, HttpResponseBadRequest, JsonResponse, HttpResponse
 from elasticsearch_dsl import connections, Search
 
+from .models import User
 from apps.views_decorators import project_exist, has_access
 
 
@@ -17,5 +18,14 @@ def entity_completion(request, project_id, entity_type, query):  # type: (HttpRe
     result = {
         'data': [entity.to_dict() for entity in r.suggest.ac[0].options if
                  entity['_source']['project_id'] == project_id]
+    }
+    return JsonResponse(result)
+
+
+@login_required
+def search_user(request, query):  # type: (HttpRequest, str) -> HttpResponse
+    r = User.search().suggest('ac', query, completion={'field': 'suggest', 'fuzzy': True}).execute()
+    result = {
+        'data': [user.to_dict() for user in r.suggest.ac[0].options]
     }
     return JsonResponse(result)

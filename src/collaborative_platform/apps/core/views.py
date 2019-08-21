@@ -5,6 +5,7 @@ from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render, redirect
 
 from .forms import SignUpForm, LogInForm
+from apps.index_and_search.models import User as ESUser
 
 
 def index(request):  # type: (HttpRequest) -> HttpResponse
@@ -39,6 +40,10 @@ def signup(request):  # type: (HttpRequest) -> HttpResponse
             raw_password = form.cleaned_data.get('password1')
             user = auth.authenticate(username=user.username, password=raw_password)
             auth.login(request, user)
+
+            name = "{} {}".format(user.first_name, user.last_name)
+            es_user = ESUser(id=user.id, name=name)
+            es_user.save()
 
             return redirect('index')
     else:
