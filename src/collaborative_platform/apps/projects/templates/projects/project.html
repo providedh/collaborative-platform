@@ -4,24 +4,111 @@
 {% block head %}
 {% endblock %}
 
+{% block submenu %}
+<ul class="submenu__list">
+  <li class="submenu__item">
+    <h4>{{ project.title }}</h4>
+  </li>
+  <li class="submenu__item">
+    <a href="#" class="submenu__link">Files</a>
+  </li>
+  <li class="submenu__item  submenu__item--active">
+    <a href="#" class="submenu__link">Contributors</a>
+  </li>
+  <li class="submenu__item">
+    <a href="#" class="submenu__link">Settings</a>
+  </li>
+</ul>
+{% endblock %}
+
 {% block content %}
-  <p>Project details</p>
-  <p>Contributors:
-    <ul>
-      {% for contributor in contributors %}
-        <li>{{ contributor.first_name }} {{ contributor.last_name }}</li>
-      {% endfor %}
+<div class="submenu">
+  <div class="container">
+    <ul class="submenu__list d-flex">
+      <li class="submenu__iteme">
+        <h4 class="submenu__item--title">{{ project.title }}</h4>
+      </li>
+      <li class="submenu__item submenu__item--active">
+        <a href="#" class="submenu__link">Files</a>
+      </li>
+      <li class="submenu__item">
+        <a href="#" class="submenu__link">Contributors</a>
+      </li>
+      <li class="submenu__item">
+        <a href="#" class="submenu__link">Settings</a>
+      </li>
     </ul>
-  </p>
-  <p>
-    Date created: {{ project.creation_date }}
-  </p>
-  <p>
-    Last updated: {{ project.modification_date }}
-  </p>
-  <p>
-    Description: {{ project.description }}
-  </p>
-  <p>Files</p>
-  <p>Recent Activity</p>
+  </div>
+</div>
+<div class="container project">
+  <div class="d-flex flex-column-reverse flex-md-row project__header">
+    <div class=" project__content">
+      <h1>{{ project.title }}</h1>
+      <div class="d-md-flex project__contributors">
+        <a href="#" class="project__text--label project__text--label-contributors">Contributors</a>
+        <ul class="project__contributors--list d-flex flex-wrap">
+          {% for contributor in contributors %}
+          <li class="project__contributors--item"><a href="#" class="project__link--contributors">{{ contributor.first_name }} {{ contributor.last_name }}</a></li>
+          <li class="project__contributors--item"><a href="#" class="project__link--contributors">{{ contributor.first_name }} {{ contributor.last_name }}</a></li>
+          <li class="project__contributors--item"><a href="#" class="project__link--contributors">{{ contributor.first_name }} {{ contributor.last_name }}</a></li>
+          <li class="project__contributors--item"><a href="#" class="project__link--contributors">{{ contributor.first_name }} {{ contributor.last_name }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="project__date">
+        <span class="project__text--label">Date created</span>
+        <span class="project__text--date">{{ project.creation_date|date:'Y-m-d, H:i' }}</span>
+        <span class="project__text--divider"></span>
+        <span class="project__text--label">Last updated</span>
+        <span class="project__text--date">{{ project.modification_date|date:'Y-m-d, H:i' }}</span>
+      </div>
+      <div class="d-md-flex project__category">
+        <span class="project__text--label">Category</span>
+        <p class="project__text--category">{% if project.category %}{{ project.category }}{% else %}<span class="project__text--placeholder">Add a category to your project</span>{% endif %}</p>
+      </div>
+      <div class="d-md-flex project__description">
+        <span class="project__text--label">Description</span>
+        <p class="project__text--description">{% if project.description %}{{ project.description }}{% else %}<span class="project__text--placeholder">Add a brief description to your project</span>{% endif %}</p>
+      </div>
+      <div class="d-md-flex project__license">
+        <span class="project__text--label">License</span>
+        <p class="project__text--license">{% if project.license %}{{ project.license }}{% else %}<span class="project__text--placeholder">Add a license</span>{% endif %}</p>
+      </div>
+    </div>
+    <div class="ml-auto project__buttons d-flex flex-nowrap">
+      <div><a href="#" class="btn btn-light btn-disabled">Private</a></div>
+      <div><a href="#" class="btn btn-outline-info">Make Public</a></div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-6">
+
+      <div class="box">
+        <div class="box__header">
+          <h3 class="box__text--title">Files</h3>
+        </div>
+        <div class="box__content">
+          <div id="grid1" class="container-fluid m-t-md">
+            <p style="font-size: 24px;text-align:center; margin-top:20px"> Loading <i class="fa fa-spinner fa-spin"></i>        </p>
+            <p style="text-align: center;">            <img src="./ctxrf.jpg" alt="meme" />
+            </p>
+          </div>
+        </div>
+      </div>
+
+
+
+    </div>
+    <div class="col-lg-6">
+      <div class="box">
+        <div class="box__header">
+          <h3 class="box__text--title">Recent Activity</h3>
+        </div>
+        <div class="box__content">
+          recent box
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}
