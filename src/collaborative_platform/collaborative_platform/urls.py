@@ -25,5 +25,6 @@ urlpatterns = [
     path('api/close_reading/', include('apps.close_reading.urls_api')),
     path('close_reading/', include('apps.close_reading.urls')),
     path('api/search/', include('apps.index_and_search.urls_api')),
+    path('social_auth/', include('social_django.urls', namespace='social')),
     path('', include('apps.core.urls')),
 ]

@@ -27,5 +27,8 @@ lxml==4.4.0
 # For file conversions
 beautifulsoup4==4.8.0
 
-# for Searching and entities indexing
+# For Searching and entities indexing
 elasticsearch-dsl>=7.0.0,<8.0.0
+
+# For social medias authentication
+social-auth-app-django==3.1.0
