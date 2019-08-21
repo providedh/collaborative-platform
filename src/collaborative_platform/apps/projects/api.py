@@ -5,6 +5,7 @@ from django.core.exceptions import ValidationError, FieldError
 from django.core.paginator import InvalidPage, EmptyPage
 from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, HttpResponseNotFound
 
+from apps.files_management.models import Directory
 from apps.projects.helpers import page_to_json_response, include_contributors, log_activity
 from apps.views_decorators import objects_exists, user_has_access
 
@@ -29,6 +30,9 @@ def create(request):  # type: (HttpRequest) -> HttpResponse
 
             contributor = Contributor(project=project, user=request.user, permissions="AD")
             contributor.save()
+
+            base_dir = Directory(name=data['title'], project=project)
+            base_dir.save()
 
             log_activity(project, request.user, "created")
             return HttpResponse(dumps({"id": project.id}))
