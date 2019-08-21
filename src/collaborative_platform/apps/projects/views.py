@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render
 
-from apps.views_decorators import project_exist, has_access
+from apps.views_decorators import objects_exists, user_has_access
 
 from .models import Project, Contributor
 
@@ -35,8 +35,8 @@ def projects(request, user_id):  # type: (HttpRequest, int) -> HttpResponse
 
 
 @login_required
-@project_exist
-@has_access()
+@objects_exists
+@user_has_access()
 def project(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
     project = Project.objects.get(id=project_id)
     contributors = Contributor.objects.filter(project_id=project_id)

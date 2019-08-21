@@ -7,12 +7,11 @@ from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, JsonR
 
 from apps.files_management.file_conversions.ids_filler import IDsFiller
 from apps.projects.helpers import log_activity
-from apps.views_decorators import file_exist, file_version_exist, has_access
 from apps.files_management.models import File, FileVersion, Directory
-from .helpers import extract_text_and_entities, index_entities
 from apps.projects.models import Project
+from apps.views_decorators import objects_exists, user_has_access
 from .file_conversions.tei_handler import TeiHandler
-from .helpers import upload_file, uploaded_file_object_from_string
+from .helpers import extract_text_and_entities, index_entities, upload_file,  uploaded_file_object_from_string
 
 
 @login_required
@@ -86,8 +85,8 @@ def upload(request):  # type: (HttpRequest) -> HttpResponse
 
 
 @login_required
-@file_exist
-@has_access()
+@objects_exists
+@user_has_access()
 def get_file_versions(request, file_id):  # type: (HttpRequest, int) -> HttpResponse
     if request.method == 'GET':
         file = File.objects.filter(id=file_id).get()
@@ -99,9 +98,8 @@ def get_file_versions(request, file_id):  # type: (HttpRequest, int) -> HttpResp
 
 
 @login_required
-@file_exist
-@file_version_exist
-@has_access()
+@objects_exists
+@user_has_access()
 def get_file_version(request, file_id, version=None):  # type: (HttpRequest, int, int) -> HttpResponse
     if request.method == 'GET':
         file = File.objects.filter(id=file_id).get()
@@ -132,10 +130,10 @@ def get_file_version(request, file_id, version=None):  # type: (HttpRequest, int
 
 
 @login_required
-# @file_exist       # TODO uncomment and change to exists
-# @has_access()
+@objects_exists
+@user_has_access()
 def move(request, **kwargs):
-    if 'direcotry_id' in kwargs:
+    if 'directory_id' in kwargs:
         file = Directory.objects.filter(id=kwargs['directory_id']).get()
         log_activity(project=file.project, user=request.user, related_dir=file, action_text="moved to")
     else:
@@ -147,7 +145,8 @@ def move(request, **kwargs):
 
 
 @login_required
-# @exists TODO uncomment
+@objects_exists
+@user_has_access()
 def create_directory(request, directory_id, name):  # type: (HttpRequest, int, str) -> HttpResponse
     dir = Directory.objects.filter(id=directory_id).get()  # type: Directory
     dir.create_subdirectory(name)
@@ -155,7 +154,8 @@ def create_directory(request, directory_id, name):  # type: (HttpRequest, int, s
 
 
 @login_required
-# @exists TODO uncomment
+@objects_exists
+@user_has_access()
 def delete(request, **kwargs):
     if request.method != 'DELETE':
         return HttpResponseBadRequest("Only delete method is allowed here")
@@ -171,7 +171,8 @@ def delete(request, **kwargs):
 
 
 @login_required
-# @exists TODO uncomment
+@objects_exists
+@user_has_access()
 def rename(request, **kwargs):
     if 'directory_id' in kwargs:
         file = Directory.objects.filter(id=kwargs['directory_id']).get()

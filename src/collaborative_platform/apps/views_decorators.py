@@ -8,116 +8,82 @@ from apps.files_management.models import File, FileVersion, Directory
 from apps.projects.models import Contributor, Project
 
 
-def project_exist(view):  # type: (Callable) -> Callable
+def objects_exists(view):  # type: (Callable) -> Callable
     """Requirements:
-        - decorated function must take 'project_id' argument
+        - decorated view must take 'project_id', 'directory_id', 'file_id' or 'version' argument
     """
 
     def decorator(*args, **kwargs):
-        project_id = kwargs['project_id']
+        wanted_kwargs = {
+            'project_id': {
+                'model': Project,
+                'name': 'Project',
+            },
+            'directory_id': {
+                'model': Directory,
+                'name': 'Directory',
+            },
+            'file_id': {
+                'model': File,
+                'name': 'File',
+            }
+        }
 
-        try:
-            _ = Project.objects.get(id=project_id)
-        except Project.DoesNotExist:
-            request = args[0]
-            status = HttpResponseBadRequest.status_code
-            message = "Project with id: {} doesn't exist.".format(project_id)
-            bootstrap_alert_type = 'danger'
+        for kwarg in wanted_kwargs:
+            if kwarg in kwargs:
+                model = wanted_kwargs[kwarg]['model']
+                model_name = wanted_kwargs[kwarg]['name']
+                model_id = kwargs[kwarg]
 
-            response = __get_response(request, status, bootstrap_alert_type, message)
+                try:
+                    _ = model.objects.get(id=model_id)
+                except model.DoesNotExist:
+                    request = args[0]
+                    status = HttpResponseBadRequest.status_code
+                    message = "{0} with id: {1} doesn't exist.".format(model_name, model_id)
+                    bootstrap_alert_type = 'danger'
 
-            return response
+                    response = __get_response(request, status, bootstrap_alert_type, message)
+
+                    return response
+
+        if 'version' in kwargs:
+            if 'file_id' not in kwargs:
+                request = args[0]
+                status = HttpResponseBadRequest.status_code
+                message = "Not found required 'project_id' in given arguments."
+                bootstrap_alert_type = 'danger'
+
+                response = __get_response(request, status, bootstrap_alert_type, message)
+
+                return response
+
+            else:
+                version = kwargs['version']
+                file_id = kwargs['file_id']
+
+                try:
+                    _ = FileVersion.objects.get(file_id=file_id, number=version)
+                except FileVersion.DoesNotExist:
+                    request = args[0]
+                    status = HttpResponseBadRequest.status_code
+                    message = "Version {} for file with id: {} doesn't exist.".format(version, file_id)
+                    bootstrap_alert_type = 'danger'
+
+                    response = __get_response(request, status, bootstrap_alert_type, message)
+
+                    return response
 
         return view(*args, **kwargs)
 
     return decorator
 
 
-def file_exist(view):  # type: (Callable) -> Callable
-    """Requirements:
-        - decorated function must take 'file_id' argument
-    """
-
-    def decorator(*args, **kwargs):
-        file_id = kwargs['file_id']
-
-        try:
-            _ = File.objects.get(id=file_id)
-        except File.DoesNotExist:
-            request = args[0]
-            status = HttpResponseBadRequest.status_code
-            message = "File with id: {} doesn't exist.".format(file_id)
-            bootstrap_alert_type = 'danger'
-
-            response = __get_response(request, status, bootstrap_alert_type, message)
-
-            return response
-
-        return view(*args, **kwargs)
-
-    return decorator
-
-
-def directory_exist(view):  # type: (Callable) -> Callable
-    """Requirements:
-        - decorated function must take 'directory_id' argument
-    """
-
-    def decorator(*args, **kwargs):
-        directory_id = kwargs['directory_id']
-
-        try:
-            _ = Directory.objects.get(id=directory_id)
-        except Directory.DoesNotExist:
-            request = args[0]
-            status = HttpResponseBadRequest.status_code
-            message = "Directory with id: {} doesn't exist.".format(directory_id)
-            bootstrap_alert_type = 'danger'
-
-            response = __get_response(request, status, bootstrap_alert_type, message)
-
-            return response
-
-        return view(*args, **kwargs)
-
-    return decorator
-
-
-def file_version_exist(view):  # type: (Callable) -> Callable
-    """Requirements:
-        - file must exist ('@file_exist' from apps.decorators)
-        - decorated function must take 'version' argument
-    """
-
-    def decorator(*args, **kwargs):
-        if 'version' not in kwargs:
-            return view(*args, **kwargs)
-
-        version = kwargs['version']
-        file_id = kwargs['file_id']
-
-        try:
-            _ = FileVersion.objects.get(file_id=file_id, number=version)
-        except FileVersion.DoesNotExist:
-            request = args[0]
-            status = HttpResponseBadRequest.status_code
-            message = "Version {} for file with id: {} doesn't exist.".format(version, file_id)
-            bootstrap_alert_type = 'danger'
-
-            response = __get_response(request, status, bootstrap_alert_type, message)
-
-            return response
-
-        return view(*args, **kwargs)
-
-    return decorator
-
-
-def has_access(permissions_level=None):
+def user_has_access(permissions_level=None):
     """Requirements:
         - user must be logged in ('@login_required' from django.contrib.auth.decorators)
-        - decorated function must take 'project_id', 'file_id' or 'directory_id' argument
-        - project, file or directory must exist ('@project_exist', '@file_exist' or '@directory_exist' from apps.decorators)
+        - decorated view must take 'project_id', 'file_id' or 'directory_id' argument
+        - project, file or directory must exist ('@exists' from apps.decorators)
     """
 
     def decorator(func):

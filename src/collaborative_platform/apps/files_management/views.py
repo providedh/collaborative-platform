@@ -1,16 +1,18 @@
+import json
+
 from django.contrib.auth.decorators import login_required
+from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest
 from django.shortcuts import render
 
 from apps.files_management.file_conversions.ids_filler import IDsFiller
-from apps.projects.models import Project
 from apps.files_management.helpers import uploaded_file_object_from_string, extract_text_and_entities, index_entities
+from apps.projects.models import Project
+from apps.views_decorators import objects_exists, user_has_access
+
+from .file_conversions.tei_handler import TeiHandler
 from .forms import UploadFileForm
 from .helpers import upload_file
-from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest
-from .file_conversions.tei_handler import TeiHandler
 from .models import FileVersion, File
-from apps.views_decorators import file_exist, file_version_exist, has_access
-import json
 
 
 @login_required
@@ -85,9 +87,8 @@ def upload(request):  # type: (HttpRequest) -> HttpResponse
 
 
 @login_required
-@file_exist
-@file_version_exist
-@has_access()
+@objects_exists
+@user_has_access()
 def file(request, file_id, version=None):  # type: (HttpRequest, int, int) -> HttpResponse
 
     file = File.objects.get(id=file_id)

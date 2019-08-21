@@ -5,16 +5,15 @@ from apps.files_management.models import File
 from apps.files_management.helpers import upload_file
 from apps.files_management.helpers import uploaded_file_object_from_string
 from apps.projects.models import Project
-from apps.views_decorators import file_exist, file_version_exist, project_exist, has_access
+from apps.views_decorators import objects_exists, user_has_access
 
 from .annotation_history_handler import AnnotationHistoryHandler
 from .models import AnnotatingXmlContent
 
 
 @login_required
-@project_exist
-@file_exist
-@has_access('RW')
+@objects_exists
+@user_has_access('RW')
 def save(request, project_id, file_id):  # type: (HttpRequest, int, int) -> HttpResponse
     if request.method == "PUT":
         file_symbol = '{0}_{1}'.format(project_id, file_id)
@@ -67,10 +66,8 @@ def save(request, project_id, file_id):  # type: (HttpRequest, int, int) -> Http
 
 
 @login_required
-@project_exist
-@file_exist
-@file_version_exist
-@has_access()
+@objects_exists
+@user_has_access()
 def history(request, project_id, file_id, version):  # type: (HttpRequest, int, int, int) -> HttpResponse
     if request.method == 'GET':
         annotation_history_handler = AnnotationHistoryHandler(project_id, file_id)
