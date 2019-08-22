@@ -3,6 +3,7 @@ import json
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest
 from django.shortcuts import render
+from lxml.etree import XMLSyntaxError
 
 from apps.files_management.file_conversions.ids_filler import IDsFiller
 from apps.files_management.helpers import uploaded_file_object_from_string, extract_text_and_entities, index_entities
@@ -49,12 +50,24 @@ def upload(request):  # type: (HttpRequest) -> HttpResponse
                 path_to_file = file_version.upload.path
 
                 tei_handler = TeiHandler(path_to_file)
-                migration, is_tei_p5_prefixed = tei_handler.recognize()
+                migration, is_tei_p5_unprefixed = tei_handler.recognize()
+
+                if not migration and not is_tei_p5_unprefixed:
+                    upload_status = {"message": "Invalid filetype, please provide TEI file or compatible ones.",
+                                     "uploaded": False}
+                    upload_statuses[file_name].update(upload_status)
+                    dbfile.delete()
+                    continue
 
                 if migration:
                     tei_handler.migrate()
-                tei_handler = IDsFiller(tei_handler, file_name)
-                is_id_filled = tei_handler.process()
+
+                try:
+                    tei_handler = IDsFiller(tei_handler, file_name)
+                except XMLSyntaxError:
+                    is_id_filled = False
+                else:
+                    is_id_filled = tei_handler.process()
 
                 if migration or is_id_filled:
                     migrated_string = tei_handler.text.read()

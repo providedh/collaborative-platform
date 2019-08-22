@@ -34,10 +34,10 @@ class Contributor(models.Model):
 class Activity(models.Model):
     project = models.ForeignKey(Project, related_name='activities', on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)
-    related_file = models.ForeignKey("files_management.File", related_name='activities', on_delete=models.DO_NOTHING,
+    related_file = models.ForeignKey("files_management.File", related_name='activities', on_delete=models.CASCADE,
                                      null=True, blank=True)
     related_dir = models.ForeignKey("files_management.Directory", related_name='activities',
-                                    on_delete=models.DO_NOTHING,
+                                    on_delete=models.CASCADE,
                                     null=True, blank=True)
-    user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='activities')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='activities')
     action_text = models.CharField(max_length=255)

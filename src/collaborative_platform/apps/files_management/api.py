@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.forms import model_to_dict
 from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, JsonResponse, HttpResponseServerError
+from lxml.etree import XMLSyntaxError
 
 from apps.files_management.file_conversions.ids_filler import IDsFiller
 from apps.projects.helpers import log_activity
@@ -49,13 +50,24 @@ def upload(request):  # type: (HttpRequest) -> HttpResponse
                 path_to_file = file_version.upload.path
 
                 tei_handler = TeiHandler(path_to_file)
-                migration, is_tei_p5_prefixed = tei_handler.recognize()
+                migration, is_tei_p5_unprefixed = tei_handler.recognize()
+
+                if not migration and not is_tei_p5_unprefixed:
+                    upload_status = {"message": "Invalid filetype, please provide TEI file or compatible ones.",
+                                     "uploaded": False}
+                    upload_statuses[file_name].update(upload_status)
+                    dbfile.delete()
+                    continue
 
                 if migration:
                     tei_handler.migrate()
 
-                tei_handler = IDsFiller(tei_handler, file_name)
-                is_id_filled = tei_handler.process()
+                try:
+                    tei_handler = IDsFiller(tei_handler, file_name)
+                except XMLSyntaxError:
+                    is_id_filled = False
+                else:
+                    is_id_filled = tei_handler.process()
 
                 if migration or is_id_filled:
                     migrated_string = tei_handler.text.read()
@@ -132,7 +144,7 @@ def get_file_version(request, file_id, version=None):  # type: (HttpRequest, int
 
 @login_required
 @objects_exists
-@user_has_access()
+@user_has_access('RW')
 def move(request, **kwargs):
     if 'directory_id' in kwargs:
         file = Directory.objects.filter(id=kwargs['directory_id']).get()
@@ -147,7 +159,7 @@ def move(request, **kwargs):
 
 @login_required
 @objects_exists
-@user_has_access()
+@user_has_access('RW')
 def create_directory(request, directory_id, name):  # type: (HttpRequest, int, str) -> HttpResponse
     dir = Directory.objects.filter(id=directory_id).get()  # type: Directory
     dir.create_subdirectory(name, request.user)
@@ -156,7 +168,7 @@ def create_directory(request, directory_id, name):  # type: (HttpRequest, int, s
 
 @login_required
 @objects_exists
-@user_has_access()
+@user_has_access('RW')
 def delete(request, **kwargs):
     if request.method != 'DELETE':
         return HttpResponseBadRequest("Only delete method is allowed here")
@@ -173,7 +185,7 @@ def delete(request, **kwargs):
 
 @login_required
 @objects_exists
-@user_has_access()
+@user_has_access('RW')
 def rename(request, **kwargs):
     if 'directory_id' in kwargs:
         file = Directory.objects.filter(id=kwargs['directory_id']).get()
