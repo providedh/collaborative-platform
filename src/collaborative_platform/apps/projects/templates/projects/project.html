@@ -48,10 +48,7 @@
         <a href="#" class="project__text--label project__text--label-contributors">Contributors</a>
         <ul class="project__contributors--list d-flex flex-wrap">
           {% for contributor in contributors %}
-          <li class="project__contributors--item"><a href="#" class="project__link--contributors">{{ contributor.first_name }} {{ contributor.last_name }}</a></li>
-          <li class="project__contributors--item"><a href="#" class="project__link--contributors">{{ contributor.first_name }} {{ contributor.last_name }}</a></li>
-          <li class="project__contributors--item"><a href="#" class="project__link--contributors">{{ contributor.first_name }} {{ contributor.last_name }}</a></li>
-          <li class="project__contributors--item"><a href="#" class="project__link--contributors">{{ contributor.first_name }} {{ contributor.last_name }}</a></li>
+          <li class="project__contributors--item"><a href="{% url 'user' contributor.id %}" class="project__link--contributors">{{ contributor.first_name }} {{ contributor.last_name }}</a></li>
           {% endfor %}
         </ul>
       </div>

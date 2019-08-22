@@ -19,10 +19,11 @@
             <p><span class="d-md-block">You have no projects yet. Create a project with the button on the top right.</span><span class="d-md-block"> This feature allows you to search and quickly access your projects.</span></p>
             <div class="projects-table flex-fill p-md-5 pt-md-0">
               <div class="table-responsive projects-table__container">
-                <table id="listProjectsMine" class="table m-0 table-hover table-striped">
+                <table id="listProjectsMine" data-link-project="{% url 'project_template' %}"  data-link-contributor="{% url 'user_template' %}" class="table m-0 table-hover table-striped">
                   <thead>
                   <tr>
                     <th scope="col">Title</th>
+                    <th scope="col">Contributors</th>
                     <th scope="col">Modification date</th>
                   </tr>
                   </thead>
@@ -40,10 +41,11 @@
             <h2>Discover Public Projects</h2>
             <div class="projects-table flex-fill p-md-5 pt-md-0">
               <div class="table-responsive projects-table__container">
-                <table id="listProjectsPublic" class="table m-0 table-hover table-striped">
+                <table id="listProjectsPublic" data-link-project="{% url 'project_template' %}"  data-link-contributor="{% url 'user_template' %}" class="table m-0 table-hover table-striped">
                   <thead>
                   <tr>
                     <th scope="col">Title</th>
+                    <th scope="col">Contributors</th>
                     <th scope="col">Modification date</th>
                   </tr>
                   </thead>
