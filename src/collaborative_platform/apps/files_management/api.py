@@ -219,6 +219,6 @@ def download_file(request, file_id):  # type: (HttpRequest, int) -> HttpResponse
 @login_required
 @objects_exists
 @user_has_access()
-def download_fileversion(request, file_id, version_number):  # type: (HttpRequest, int) -> HttpResponse
+def download_fileversion(request, file_id, version_number):  # type: (HttpRequest, int, int) -> HttpResponse
     fileversion = FileVersion.objects.filter(file_id=file_id, number=version_number).get()
     return fileversion.download()

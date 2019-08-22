@@ -112,8 +112,8 @@ class FileVersion(models.Model):
 
     def download(self):
         content = self.get_content()
-        response = HttpResponse(content, content_type='text/xml')
-        response['Content-Disposition'] = 'attachment; filename="{}"'.format(self.file.name)
+        response = HttpResponse(content, content_type='application/xml')
+        response['Content-Disposition'] = bytes('attachment; filename="{}"'.format(self.file.name), 'utf-8')
         return response
 
 
