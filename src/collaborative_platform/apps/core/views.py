@@ -1,11 +1,15 @@
-from django.contrib import auth
-from django.contrib.auth.models import User
+from django.contrib import auth, messages
+from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import AdminPasswordChangeForm, PasswordChangeForm
+from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render, redirect
+from social_django.models import UserSocialAuth
+
+from apps.index_and_search.models import User as ESUser
 
 from .forms import SignUpForm, LogInForm
-from apps.index_and_search.models import User as ESUser
 
 
 def index(request):  # type: (HttpRequest) -> HttpResponse
@@ -99,7 +103,7 @@ def logout(request):  # type: (HttpRequest) -> HttpResponse
     return render(request, 'core/index.html', context)
 
 
-@login_required()
+@login_required
 def user(request, user_id): # type: (HttpRequest, int) -> HttpResponse
     user = User.objects.get(id=user_id)
 
@@ -110,3 +114,50 @@ def user(request, user_id): # type: (HttpRequest, int) -> HttpResponse
     }
 
     return render(request, 'core/user.html', context)
+
+
+@login_required
+def settings(request):  # type: (HttpRequest) -> HttpResponse
+    user = request.user
+
+    try:
+        google_login = user.social_auth.get(provider='google-oauth2')
+    except UserSocialAuth.DoesNotExist:
+        google_login = None
+
+    can_disconnect = (user.social_auth.count() > 1 or user.has_usable_password())
+
+    context = {
+        'google_login': google_login,
+        'can_disconnect': can_disconnect
+    }
+
+    return render(request, 'core/settings.html', context)
+
+
+@login_required
+def password(request):  # type: (HttpRequest) -> HttpResponse
+    if request.user.has_usable_password():
+        PasswordForm = PasswordChangeForm
+    else:
+        PasswordForm = AdminPasswordChangeForm
+
+    if request.method == 'POST':
+        form = PasswordForm(request.user, request.POST)
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request, form.user)
+            messages.success(request, 'Your password was successfully updated.')
+
+            return redirect('password')
+        else:
+            messages.error(request, 'please correct the error below.')
+
+    else:
+        form = PasswordForm(request.user)
+
+    context = {
+        'form': form
+    }
+
+    return render(request, 'core/password.html', context)

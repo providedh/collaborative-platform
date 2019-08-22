@@ -1,0 +1,25 @@
+{% extends 'page.html' %}
+{%  load static %}
+
+{% block head %}
+{% endblock %}
+
+{% block content %}
+  <h4>Settings</h4>
+
+  <h5>Google</h5>
+  {% if google_login %}
+    <p>Connected as <a href="https://google.com" target="_blank">{{ google_login.extra_data_login }}</a></p>
+    {% if can_disconnect %}
+      <form method="post" action="{% url 'social:disconnect' 'google-oauth2' %}">
+        {% csrf_token %}
+        <button type="submit">Disconnect form Google</button>
+      </form>
+    {% else %}
+      <button type="button" disabled>Disconnect from Google</button>
+      <p>You must <a href="{% url 'password' %}">define a password</a> for your account before disconnecting from Google.</p>
+    {% endif %}
+  {% else %}
+    <a href="{% url 'social:begin' 'google-oauth2' %}">Connect to Google</a>
+  {% endif %}
+{% endblock %}
