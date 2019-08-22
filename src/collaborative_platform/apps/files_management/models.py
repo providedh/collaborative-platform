@@ -3,6 +3,8 @@ import hashlib
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import QuerySet
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
 
 from apps.projects.models import Project
 
@@ -102,3 +104,8 @@ class FileVersion(models.Model):
         content = self.upload.read()
         self.upload.close()
         return content
+
+
+@receiver(post_delete, sender=FileVersion)
+def submission_delete(sender, instance, **kwargs):
+    instance.file.delete(False)
