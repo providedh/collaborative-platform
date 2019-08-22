@@ -95,3 +95,23 @@ def get_activities(request, project_id):
         return HttpResponseNotFound(dumps({"message": "Invalid page number"}))
 
     return page_to_json_response(page)
+
+
+@login_required
+@objects_exists
+@user_has_access('RW')
+def make_public(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
+    p = Project.objects.filter(id=project_id).get()
+    p.public = True
+    p.save()
+    return HttpResponse("OK")
+
+
+@login_required
+@objects_exists
+@user_has_access('RW')
+def make_private(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
+    p = Project.objects.filter(id=project_id).get()
+    p.public = False
+    p.save()
+    return HttpResponse("OK")
