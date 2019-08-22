@@ -1,4 +1,6 @@
 from json import dumps
+from os.path import basename
+from zipfile import ZipFile
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -201,7 +203,7 @@ def rename(request, **kwargs):
 def get_project_tree(request, project_id):
     try:
         base_dir = Directory.objects.filter(project_id=project_id, parent_dir=None).get()
-    except:
+    except Directory.DoesNotExist:
         return HttpResponseServerError(dumps({'message': "Invalid data in database"}))
 
     result = get_directory_content(base_dir)
@@ -219,6 +221,30 @@ def download_file(request, file_id):  # type: (HttpRequest, int) -> HttpResponse
 @login_required
 @objects_exists
 @user_has_access()
-def download_fileversion(request, file_id, version_number):  # type: (HttpRequest, int, int) -> HttpResponse
-    fileversion = FileVersion.objects.filter(file_id=file_id, number=version_number).get()
+def download_fileversion(request, file_id, version):  # type: (HttpRequest, int, int) -> HttpResponse
+    fileversion = FileVersion.objects.filter(file_id=file_id, number=version).get()
     return fileversion.download()
+
+
+@login_required
+@objects_exists
+@user_has_access()
+def download_directory(request, directory_id):  # type: (HttpRequest, int) -> HttpResponse
+    dir = Directory.objects.filter(id=directory_id).get()
+    files = dir.files.all()
+
+    zf = ZipFile(dir.name + ".zip", 'w')
+
+    for file in files:
+        last_version = file.versions.filter(number=file.version_number).get()
+        path = last_version.upload.path
+        zf.write(path, file.name)
+
+    zf.close()
+
+    with open(zf.filename, "rb") as F:
+        content = F.read()
+
+    response = HttpResponse(content, content_type="application/zip")
+    response['Content-Disposition'] = bytes('attachment; filename="{}.zip"'.format(dir.name), 'utf-8')
+    return response
