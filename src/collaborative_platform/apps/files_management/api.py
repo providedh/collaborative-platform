@@ -206,3 +206,19 @@ def get_project_tree(request, project_id):
 
     result = get_directory_content(base_dir)
     return JsonResponse(result)
+
+
+@login_required
+@objects_exists
+@user_has_access()
+def download_file(request, file_id):  # type: (HttpRequest, int) -> HttpResponse
+    file = File.objects.filter(id=file_id).get()
+    return file.download()
+
+
+@login_required
+@objects_exists
+@user_has_access()
+def download_fileversion(request, file_id, version_number):  # type: (HttpRequest, int) -> HttpResponse
+    fileversion = FileVersion.objects.filter(file_id=file_id, number=version_number).get()
+    return fileversion.download()

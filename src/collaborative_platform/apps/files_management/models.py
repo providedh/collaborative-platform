@@ -5,6 +5,7 @@ from django.db import models
 from django.db.models import QuerySet
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
+from django.http import HttpResponse
 
 from apps.projects.models import Project
 
@@ -86,6 +87,10 @@ class File(FileNode):
         log_activity(project=self.project, user=user, file=self,
                      action_text="renamed {} to {}".format(old_name, new_name))
 
+    def download(self):
+        fv = self.versions.filter(number=self.version_number).get()
+        return fv.download()
+
 
 class FileVersion(models.Model):
     upload = models.FileField(upload_to=UPLOADED_FILES_PATH)
@@ -104,6 +109,12 @@ class FileVersion(models.Model):
         content = self.upload.read()
         self.upload.close()
         return content
+
+    def download(self):
+        content = self.get_content()
+        response = HttpResponse(content, content_type='text/xml')
+        response['Content-Disposition'] = 'attachment; filename="{}"'.format(self.file.name)
+        return response
 
 
 @receiver(post_delete, sender=FileVersion)
