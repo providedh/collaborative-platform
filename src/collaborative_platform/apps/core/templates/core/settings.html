@@ -7,9 +7,25 @@
 {% block content %}
   <h4>Settings</h4>
 
+  <h5>ORCID</h5>
+  {% if orcid_login %}
+    <p>Connected as <a href="https://orcid.org/{{ orcid_login.uid }}/" target="_blank">{{ orcid_login.uid }}</a></p>
+    {% if can_disconnect %}
+      <form method="post" action="{% url 'social:disconnect' 'orcid' %}">
+        {% csrf_token %}
+        <button type="submit">Disconnect from ORCID</button>
+      </form>
+    {% else %}
+      <button type="button" disabled>Disconnect from ORCID</button>
+      <p>You must <a href="{% url 'password' %}">define a password</a> for your account before disconnecting from Facebook.</p>
+    {% endif %}
+  {% else %}
+    <a href="{% url 'social:begin' 'orcid' %}">Connect to ORCID</a>
+  {% endif %}
+
   <h5>Facebook</h5>
   {% if facebook_login %}
-    <p>Connected as <a href="https://facebook.com/{{ facebook_login.extra_data.id }}/" target="_blank">{{ facebook_login.extra_data.id }}</a></p>
+    <p>Connected as <a href="https://facebook.com/{{ facebook_login.uid }}/" target="_blank">{{ facebook_login.uid }}</a></p>
     {% if can_disconnect %}
       <form method="post" action="{% url 'social:disconnect' 'facebook' %}">
         {% csrf_token %}

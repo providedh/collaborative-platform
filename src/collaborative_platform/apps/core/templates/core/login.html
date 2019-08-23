@@ -28,7 +28,7 @@
           </div>
 
           <div class="login-providers d-flex flex-column mt-5 pt-4">
-            <a href="#" class="btn btn-orcid btn-sm btn-block d-flex align-items-center justify-content-center"><img src="{% static 'img/misc/orcid-logo.png' %}" class="mr-2 login-providers__logo"/> <span>Sign in with ORCID</span></a>
+            <a href="{% url 'social:begin' 'orcid' %}" class="btn btn-orcid btn-sm btn-block d-flex align-items-center justify-content-center"><img src="{% static 'img/misc/orcid-logo.png' %}" class="mr-2 login-providers__logo"/> <span>Sign in with ORCID</span></a>
             <a href="{% url 'social:begin' 'facebook' %}" class="btn btn-facebook btn-sm btn-block d-flex align-items-center justify-content-center"><img src="{% static 'img/misc/facebook-logo.png' %}" class="mr-2 login-providers__logo"/> <span>Sign in with Facebook</span></a>
             <a href="{% url 'social:begin' 'google-oauth2' %}" class="btn btn-google btn-sm btn-block d-flex align-items-center justify-content-center"><img src="{% static 'img/misc/google-logo.png' %}" class="mr-2 login-providers__logo"/> <span>Sign in with Google</span></a>
           </div>
