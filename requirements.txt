@@ -18,7 +18,7 @@ redis==3.3.4
 channels==2.2.0
 channels-redis==2.4.0
 
-# For periodic tasks
+# For periodical tasks
 celery==4.3.0
 
 # For xml processing
@@ -27,5 +27,14 @@ lxml==4.4.0
 # For file conversions
 beautifulsoup4==4.8.0
 
-# for Searching and entities indexing
+# For Searching and entities indexing
 elasticsearch-dsl>=7.0.0,<8.0.0
+
+# For social medias authentication
+social-auth-app-django==3.1.0
+
+# For SSL on localhost
+# django-extensions==2.2.1
+# Werkzeug==0.15.5
+# pyOpenSSL==19.0.0
+# service_identity==18.1.0
