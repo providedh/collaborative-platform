@@ -121,6 +121,11 @@ def settings(request):  # type: (HttpRequest) -> HttpResponse
     user = request.user
 
     try:
+        facebook_login = user.social_auth.get(provider='facebook')
+    except UserSocialAuth.DoesNotExist:
+        facebook_login = None
+
+    try:
         google_login = user.social_auth.get(provider='google-oauth2')
     except UserSocialAuth.DoesNotExist:
         google_login = None
@@ -128,8 +133,9 @@ def settings(request):  # type: (HttpRequest) -> HttpResponse
     can_disconnect = (user.social_auth.count() > 1 or user.has_usable_password())
 
     context = {
+        'facebook_login': facebook_login,
         'google_login': google_login,
-        'can_disconnect': can_disconnect
+        'can_disconnect': can_disconnect,
     }
 
     return render(request, 'core/settings.html', context)
