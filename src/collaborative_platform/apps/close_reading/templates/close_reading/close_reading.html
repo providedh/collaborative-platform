@@ -55,15 +55,84 @@
               </div>
               <div class="collapse" id="example">
                 <hr>
-                controls
+                <div class="toolbarRow" id="toolbar-controls">
+                  <div class="d-flex justify-content-center">
+                    <span class="toolbar-control" id="annotation-options">
+                      <input type="radio" name="annotation" value="uncertainty" checked> Annotate Uncertainty
+                      <input type="radio" name="annotation" value="tei"> Annotate TEI
+                    </span>
+                  </div>
+                  <div class="row">
+                    <span class="toolbar-control" id="">
+                          Category of uncertainty <a title="help : category of the uncertainty" class='help'>?</a>
+                          <select name="" id='category'>
+                              <option class="ignorance" value="ignorance">Ignorance</option>
+                              <option class="credibility" value="credibility">Credibility</option>
+                              <option class="imprecision" value="imprecision">Imprecision</option>
+                              <option class="incompleteness" value="incompleteness">Incompleteness</option>
+                          </select>
+                          Locus <a title="help : locus" class='help'>?</a>
+                          <select name="" id='locus'>
+                              <option value="value">Value</option>
+                              <option value="name">Name</option>
+                              <option value="attribute">Attribute</option>
+                          </select>
+                            Tag name <a title="help : tag name" class='help'>?</a>
+                            <select locus="name" id='tag-name'>
+                              <option value="date">Date</option>
+                              <option value="event">Event</option>
+                              <option value="geolocation">geolocation</option>
+                              <option value="name">Name</option>
+                              <option value="occupation">Occupation</option>
+                              <option value="object">Object</option>
+                              <option value="org">Org</option>
+                              <option value="person">Person</option>
+                              <option value="country">country</option>
+                              <option value="time">Time</option>
+                            </select>
+                          <span id="attribute-name-input">
+                            Attribute name <a title="help : attribute name" class='help'>?</a> <input type="text" id="attribute-name">
+                          </span>
+                    </span>
+                  </div>
+                  <div class="row">
+                    <span class="toolbar-control" id="">
+                      Text selection <a title="help : text selection" class='help'>?</a> <input type="text" name="" id="value" readonly>
+                      Asserted value <a title="help : asserted value" class='help'>?</a> <span id="asserted-value-container"></span>
+                      <span id="cert-input">
+                      Certainty <a title="help : certainty" class='help'>?</a> <select name="" id='cert'>
+                          <option value="unknown">Unknown</option>
+                          <option value="high">High</option>
+                          <option value="medium">Medium</option>
+                          <option value="low">Low</option>
+                          </select>
+                      </span>
+                    </span>
+                    <span>
+                      <button id="create-annotation">Create</button>
+                    </span>
+                  </div>
+                  <div class="row">
+                    <span class="toolbar-control" id="">
+                      <span id="references-container">
+                        References <a title="help : references" class='help'>?</a>
+                        <div class="autocomplete">
+                          <input type="text" id="references-autocomplete">
+                          <input type="text" id="references">
+                        </div>
+                      </span>
+                      Description <a title="help : description" class='help'>?</a> <input type="text" id="desc">
+                    </span>
+                  </div>
+                </div>
               </div>
               <div class="d-flex justify-content-center toogle-button">
                 <div class="relative-group">
-                <a class="btn btn-primary btn-sm" data-toggle="collapse" href="#example" role="button" aria-expanded="false" aria-controls="example">
-                  <span class="collapsed-show">
+                <a class="btn btn-primary btn-sm collapsed" data-toggle="collapse" href="#example" role="button" aria-expanded="false" aria-controls="example">
+                  <span class="collapse-show">
                     Hide controls
                   </span>
-                  <span class="collapse-show">
+                  <span class="collapsed-show">
                     Show controls
                   </span>
                 </a> 
