@@ -14,7 +14,12 @@ from .forms import SignUpForm, LogInForm
 
 def index(request):  # type: (HttpRequest) -> HttpResponse
     if request.user.is_authenticated:
-        return redirect('projects', request.user.pk)
+        context = {
+            'title': 'Projects',
+            'alerts': None,
+        }
+
+        return render(request, 'projects/projects.html', context)
     else:
         alerts = [
             {
@@ -138,6 +143,7 @@ def settings(request):  # type: (HttpRequest) -> HttpResponse
     can_disconnect = (user.social_auth.count() > 1 or user.has_usable_password())
 
     context = {
+        'title': 'Settings',
         'orcid_login': orcid_login,
         'facebook_login': facebook_login,
         'google_login': google_login,
