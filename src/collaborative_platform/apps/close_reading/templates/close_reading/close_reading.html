@@ -264,7 +264,6 @@
     </div>
     <section id="editor">
     </section>
-       <div id="close-reading-widget"></div>
   </div>
   </div>
 
@@ -274,6 +273,5 @@
     window.file_version = "{{ file.version_number }}";
   </script>
 
-  <script src="{% static 'close_reading/js/teicloseAnnotator.js' %}"></script>
-  <script src="{%  static 'close_reading/js/closeReading.js' %}"></script>
+  <script type="module" src="{% static 'close_reading/js/app.js' %}"></script>
 {% endblock %}
