@@ -1,0 +1,30 @@
+#annotator{max-width: 23.7cm;}
+#versionLink:first-of-type{font-size: 0.7em;}
+.break-word {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+}
+page {
+  padding: 16px 16px;
+  background: white;
+  display: block;
+  margin-bottom: 0.5cm;
+  box-shadow: 0 1px 3px 1px rgba(60,64,67,.15);
+  width: 21cm;
+}
+.toogle-button{
+	position: relative;
+	bottom: 15px;
+}
+.toogle-button.collapsed .collapse-show{display: none;}
+.toogle-button .collapsed-show{display: none;}
+.toogle-button.collapsed .collapsed-show{display: initial;}
+#toolbar{
+	width: 23cm; 
+	position:relative;
+}
+#toolbar > .card:first-of-type{padding: 0.1em 0.6em;}
+.relative-group{position: relative;}
+.relative-group:nth-of-type(2){z-index: 1;}
+.relative-group:nth-of-type(3){top: -31px;}
