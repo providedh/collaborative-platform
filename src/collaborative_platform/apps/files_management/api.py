@@ -233,7 +233,7 @@ def download_directory(request, directory_id):  # type: (HttpRequest, int) -> Ht
     dir = Directory.objects.filter(id=directory_id).get()
     files = dir.files.all()
 
-    zf = ZipFile(dir.name + ".zip", 'w')
+    zf = ZipFile("/tmp/" + dir.name + ".zip", 'w')
 
     for file in files:
         last_version = file.versions.filter(number=file.version_number).get()
