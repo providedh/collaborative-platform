@@ -33,7 +33,19 @@ var PanelView = function(args){
 		obj.suscribe('panel/autocomplete_options', _handleAutocompleteOptions);
 
 		Object.assign(values, _getCurrentValues());
-		console.log(values);
+
+		document.getElementById('visual-options').getElementsByTagName('a');
+
+		// Add event listeners for form value changes
+		const formInputs = document.getElementById('annotation-form').getElementsByTagName('input');
+		const formSelects = document.getElementById('annotation-form').getElementsByTagName('select');
+
+		Array.from(formInputs)
+			.map(e=>e.addEventListener('change',
+				()=>_handleValueChange(e.attributes['id'].value, e.value))); // 
+		Array.from(formSelects)
+			.map(e=>e.addEventListener('change',
+				()=>_handleValueChange(e.attributes['id'].value, e.value))); // 
 
 		//obj.publish('parameter/change', {});
 		//obj.publish('annotator/create', {});
@@ -47,12 +59,19 @@ var PanelView = function(args){
 			.getElementById('in')
 			.addEventListener('change', e=>_handleInputChange(e));*/
 
+		obj.getValues = ()=>_getValues;
+
 		self = obj;
 		return obj;
 	}
 
 	function _handleValueChange(id, value){
 		Object.assign(values, {id, value});
+		console.log(id,value);
+	}
+
+	function _getValues(){
+		return values;
 	}
 
 	function _getCurrentValues(args){
@@ -85,7 +104,7 @@ var PanelView = function(args){
 	}
 
 	function _handlePanelReset(args){
-		_notimplemented('_handlePanelReset')();
+		Object.assign(values, _getCurrentValues());
 	}
 
 	function _handleAutocompleteOptions(args){
