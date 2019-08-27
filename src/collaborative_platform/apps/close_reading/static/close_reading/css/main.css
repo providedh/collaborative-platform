@@ -31,6 +31,17 @@ page {
 #toolbar .relative-group:nth-of-type(1){z-index: 1;}
 #toolbar .card:nth-of-type(2){padding: 1rem 1.25rem 0rem 1.25rem;}
 
+#toolbar label{
+	margin-bottom: 2px;
+	font-size: 0.7em;
+}
+
+#toolbar input{
+	padding: 0;
+	font-size: 0.9em;
+	width: 100%; 
+}
+
 div#legend{
     /*display: none;*/
     font-size: small;
