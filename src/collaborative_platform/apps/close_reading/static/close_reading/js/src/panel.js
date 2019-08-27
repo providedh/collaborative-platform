@@ -16,6 +16,7 @@
  * */
 var PanelView = function(args){
 	let self = null;
+	let values = {};
 
 	function _init(args){
 		const obj = {
@@ -31,6 +32,9 @@ var PanelView = function(args){
 		obj.suscribe('panel/reset', _handlePanelReset);
 		obj.suscribe('panel/autocomplete_options', _handleAutocompleteOptions);
 
+		Object.assign(values, _getCurrentValues());
+		console.log(values);
+
 		//obj.publish('parameter/change', {});
 		//obj.publish('annotator/create', {});
 		//obj.publish('annotator/save', {});
@@ -45,6 +49,35 @@ var PanelView = function(args){
 
 		self = obj;
 		return obj;
+	}
+
+	function _handleValueChange(id, value){
+		Object.assign(values, {id, value});
+	}
+
+	function _getCurrentValues(args){
+		const options = {
+			'annotating-uncertainty': document
+				.getElementById('annotating-uncertainty')
+				.attributes['class']
+				.value
+				.includes('active'),
+			'annotating-tei': document
+				.getElementById('annotating-tei')
+				.attributes['class']
+				.value
+				.includes('active'),
+			'category': document.getElementById('category').value,
+			'locus': document.getElementById('locus').value,
+			'tag-name': document.getElementById('tag-name').value,
+			'attribute-name': document.getElementById('attribute-name').value,
+			'category': document.getElementById('category').value,
+			'asserted-value': document.getElementById('asserted-value').value,
+			'references': document.getElementById('references').value,
+			'description': document.getElementById('description').value,
+			'tei-tag-name': document.getElementById('tei-tag-name').value,
+		};
+		return options;
 	}
 
 	function _handleLoadHistory(args){
