@@ -33,6 +33,7 @@ var PanelView = function(args){
 		obj.suscribe('panel/autocomplete_options', _handleAutocompleteOptions);
 
 		Object.assign(values, _getCurrentValues());
+		_updatePanelControls();
 
 		document.getElementById('visual-options').getElementsByTagName('a');
 
@@ -65,8 +66,27 @@ var PanelView = function(args){
 		return obj;
 	}
 
+	function _updatePanelControls(){
+        const input = $('#asserted-value-input-options [locus='+values['locus']+']')[0];
+        $("#asserted-value-container").html(input.outerHTML);
+        $("#asserted-value-container .input").attr('id','proposedValue');
+        if(values['locus'] == 'attribute')
+        	document.getElementById('attribute-name-input').style.setProperty('display','initial');
+        else
+        	document.getElementById('attribute-name-input').style.setProperty('display','none');
+
+		if(values['locus'] == 'attribute' 
+				&& ['person', 'event', 'org', 'place'].includes(values['tag-name'])
+				&& values['attribute-name'] == 'sameAs'){
+			document.getElementById('references-container').style.setProperty('display','initial');
+		}else{
+			document.getElementById('references-container').style.setProperty('display','none');
+		}
+	}
+
 	function _handleValueChange(id, value){
-		Object.assign(values, {id, value});
+		values[id] = value;
+		_updatePanelControls();
 		console.log(id,value);
 	}
 

@@ -11,6 +11,22 @@
 
 {% block content %}
   <div id="annotator-root" class="container container-xxl">
+    <section id="asserted-value-input-options">
+      <input id="asserted-value" locus="attribute" type="text" class="input">
+      <input id="asserted-value" locus="value" type="text" class="input">
+      <select locus="name" class="form-control form-control-sm" id='asserted-value'>
+        <option value="date">Date</option>
+        <option value="event">Event</option>
+        <option value="geolocation">geolocation</option>
+        <option value="name">Name</option>
+        <option value="occupation">Occupation</option>
+        <option value="object">Object</option>
+        <option value="org">Org</option>
+        <option value="person">Person</option>
+        <option value="country">country</option>
+        <option value="time">Time</option>
+      </select>
+    </section>
     <div class="row justify-content-center">
       <div class="col-auto">
         <section id="toolbar">
@@ -101,8 +117,10 @@
                               </select>
                             </div>
                             <div class="col">
-                              <label for="attribute-name">Attribute name </label>
-                              <input type="text" id="attribute-name">
+                              <div id="attribute-name-input">
+                                <label for="attribute-name">Attribute name </label>
+                                <input type="text" id="attribute-name">
+                              </div>
                             </div>
                           </div>
                           <div class="form-row">
@@ -112,7 +130,9 @@
                             </div>
                             <div class="col">
                               <label for="asserted-value">Asserted value</label>
-                              <input id="asserted-value">
+                              <div id="asserted-value-container">
+                                <input id="asserted-value">
+                              </div>
                             </div>
                             <div class="col">
                               <label for="cert-level">Certainty</label>
@@ -126,6 +146,10 @@
                           </div>
                           <div class="form-row">
                             <div class="col">
+                              <label for="description">Description</label>
+                              <input readonly type="text" id="description">
+                            </div>
+                            <div class="col">
                               <span id="references-container">
                                 <label for="references-autocomplete">References</label>
                                 <div class="autocomplete">
@@ -133,10 +157,6 @@
                                   <input type="text" id="references">
                                 </div>
                               </span>
-                            </div>
-                            <div class="col">
-                              <label for="description">Description</label>
-                              <input readonly type="text" id="description">
                             </div>
                             <div class="col d-flex justify-content-end align-items-end">
                               <button class="btn btn-outline-success" id="create-annotation">Create</button>
