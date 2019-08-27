@@ -1,10 +1,12 @@
 import PubSubChannel from './src/aux/pubsub.js';
 import AnnotatorWebSocket from './src/aux/websocket.js';
 import DocumentView from './src/document_view.js';
+import PanelView from './src/panel.js';
 
 // Load all components
 const channel = PubSubChannel.create();
 const document_view = DocumentView({channel});
+const panel_view = PanelView({channel});
 
 // Create suscriber for sending messages using
 // the websocket
