@@ -1,12 +1,13 @@
-from json import loads
+from json import loads, dumps
+from typing import Iterable, Dict, Union
 
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator, Page
 from django.db.models import QuerySet
-from django.http import HttpRequest, JsonResponse
+from django.http import HttpRequest, JsonResponse, HttpResponse, HttpResponseBadRequest
 
 from apps.files_management.models import File, Directory
-from apps.projects.models import Activity, Project
+from apps.projects.models import Activity, Project, Contributor
 
 
 def paginate(request, queryset):  # type: (HttpRequest, QuerySet) -> Page
@@ -63,3 +64,29 @@ def log_activity(project, user, action_text="", file=None,
         a.related_dir = related_dir
     a.save()
     return a
+
+
+def update_contributor(project_id, user_id, level, delete=False):  # type: (int, int, str, bool) -> None
+    try:
+        c = Contributor.objects.filter(project_id=project_id, user_id=user_id).get()
+        if delete:
+            c.delete()
+            return
+    except Contributor.DoesNotExist():
+        c = Contributor(project_id=project_id, user_id=user_id, level=level)
+        c.save()
+        return
+    else:
+        c.level = level
+        c.save()
+
+
+def update_contributors(project_id, contributors):
+    # type: (int, Iterable[Dict[str, Union[int, str, bool]]]) -> HttpResponse
+    if 'AD' not in (c['level'] for c in contributors):
+        return HttpResponseBadRequest(dumps({"message": "There must be at least one administrator in a project."}))
+
+    for contrib in contributors:
+        update_contributor(project_id, **contrib)
+
+    return HttpResponse("OK")
