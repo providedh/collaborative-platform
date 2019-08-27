@@ -59,14 +59,14 @@
                     <span class="toolbar-control" id="annotation-options">
                       <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item">
-                          <a class="nav-link active" id="uncertainty-a" data-toggle="tab" href="#uncertainty-tab" role="tab" aria-controls="uncertainty-tab" aria-selected="true">Add uncertainty annotations</a>
+                          <a class="nav-link active" id="annotating-uncertainty" data-toggle="tab" href="#uncertainty-tab" role="tab" aria-controls="uncertainty-tab" aria-selected="true">Add uncertainty annotations</a>
                         </li>
                         <li class="nav-item">
-                          <a class="nav-link" id="tei-a" data-toggle="tab" href="#tei-tab" role="tab" aria-controls="tei-tab" aria-selected="false">Add TEI annotations</a>
+                          <a class="nav-link" id="annotating-tei" data-toggle="tab" href="#tei-tab" role="tab" aria-controls="tei-tab" aria-selected="false">Add TEI annotations</a>
                         </li>
                       </ul>
                       <div class="tab-content" id="myTabContent">
-                        <div class="tab-pane show active" id="uncertainty-tab" role="tabpanel" aria-labelledby="home-a">
+                        <div class="tab-pane show active" id="uncertainty-tab" role="tabpanel" aria-labelledby="annotating-uncertainty">
                           <div class="form-row">
                             <div class="col">
                               <label for="category">Category of uncertainty</label>
@@ -111,7 +111,8 @@
                               <input readonly type="text" id="selection">
                             </div>
                             <div class="col">
-                              <label>Asserted value</label>
+                              <label for="asserted-value">Asserted value</label>
+                              <input id="asserted-value">
                             </div>
                             <div class="col">
                               <label for="cert-level">Certainty</label>
@@ -142,20 +143,30 @@
                             </div>
                           </div>
                         </div>
-                        <div class="tab-pane" id="tei-tab" role="tabpanel" aria-labelledby="profile-a">
-                          <label for="tei-tag-name">Tag name</label>
-                            <select class="form-control form-control-sm" id='tei-tag-name'>
-                              <option value="date">Date</option>
-                              <option value="event">Event</option>
-                              <option value="geolocation">geolocation</option>
-                              <option value="name">Name</option>
-                              <option value="occupation">Occupation</option>
-                              <option value="object">Object</option>
-                              <option value="org">Org</option>
-                              <option value="person">Person</option>
-                              <option value="country">country</option>
-                              <option value="time">Time</option>
-                            </select>
+                        <div class="tab-pane" id="tei-tab" role="tabpanel" aria-labelledby="annotating-tei">
+                          <div class="form-row">
+                            <div class="col">
+                              <label for="tei-tag-name">Tag name</label>
+                                <select class="form-control form-control-sm" id='tei-tag-name'>
+                                  <option value="date">Date</option>
+                                  <option value="event">Event</option>
+                                  <option value="geolocation">geolocation</option>
+                                  <option value="name">Name</option>
+                                  <option value="occupation">Occupation</option>
+                                  <option value="object">Object</option>
+                                  <option value="org">Org</option>
+                                  <option value="person">Person</option>
+                                  <option value="country">country</option>
+                                  <option value="time">Time</option>
+                                </select>
+                            </div>
+                            <div class="col">
+                              <p><br>Annotate TEI</p>
+                            </div>
+                            <div class="col d-flex justify-content-end align-items-end">
+                              <button class="btn btn-outline-success" id="create-annotation">Create</button>
+                            </div>
+                          </div>
                         </div>
                       </div>
                       <!-- 
