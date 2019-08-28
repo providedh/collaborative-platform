@@ -3,7 +3,8 @@
  *
  * Publishes:
  * - parameter/change
- * - annotator/create
+ * - annotator/create-tei
+ * - annotator/create-uncertainty
  * - annotator/save
  * - popup/render
  * - annotator/load
@@ -48,6 +49,11 @@ var PanelView = function(args){
 			.map(e=>e.addEventListener('change',
 				()=>_handleValueChange(e.attributes['id'].value, e.value))); // 
 
+		document.getElementById('create-uncertainty-annotation')
+			.addEventListener('click', _handleCreateUncertaintyAnnotation);
+		document.getElementById('create-tei-annotation')
+			.addEventListener('click', _handleCreateTEIannotation);
+
 		obj.getValues = ()=>_getValues;
 
 		self = obj;
@@ -55,7 +61,12 @@ var PanelView = function(args){
 	}
 
 	function _updatePanelControls(){
-        const input = document
+		_updateAssertedValueControl();
+		_updateReferencesControl();
+	}
+
+	function _updateAssertedValueControl(){
+		const input = document
         	.getElementById('asserted-value-input-options')
         	.getElementsByClassName('locus-' + values['locus'])[0]
         	.cloneNode(true);
@@ -70,7 +81,9 @@ var PanelView = function(args){
         	document.getElementById('attribute-name-input').style.setProperty('display','initial');
         else
         	document.getElementById('attribute-name-input').style.setProperty('display','none');
+	}
 
+	function _updateReferencesControl(){
 		if(values['locus'] == 'attribute' 
 				&& ['person', 'event', 'org', 'place'].includes(values['tag-name'])
 				&& values['attribute-name'] == 'sameAs'){
@@ -78,12 +91,6 @@ var PanelView = function(args){
 		}else{
 			document.getElementById('references-container').style.setProperty('display','none');
 		}
-	}
-
-	function _handleValueChange(id, value){
-		values[id] = value;
-		_updatePanelControls();
-		console.log(id,value);
 	}
 
 	function _getValues(){
@@ -113,6 +120,24 @@ var PanelView = function(args){
 			'tei-tag-name': document.getElementById('tei-tag-name').value,
 		};
 		return options;
+	}
+
+	function _handleCreateTEIannotation(){
+		self.publish('annotator/create-tei', _getCurrentValues());
+	}
+
+	function _handleCreateUncertaintyAnnotation(){
+		self.publish('annotator/create-uncertainty', _getCurrentValues());
+	}
+
+	function _handleValueChange(id, value){
+		values[id] = value;
+		if(id == 'locus')
+			_updateReferencesControl();
+		if(['locus', 'attribute-name', 'tei-tag-name'].includes(id))
+			_updateAssertedValueControl();
+		
+		console.log(id,value);
 	}
 
 	function _handleLoadHistory(args){
