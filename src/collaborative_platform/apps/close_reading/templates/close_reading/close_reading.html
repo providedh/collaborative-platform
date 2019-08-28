@@ -12,9 +12,9 @@
 {% block content %}
   <div id="annotator-root" class="container container-xxl">
     <section id="asserted-value-input-options">
-      <input id="asserted-value" locus="attribute" type="text" class="input">
-      <input id="asserted-value" locus="value" type="text" class="input">
-      <select locus="name" class="form-control form-control-sm" id='asserted-value'>
+      <input id="asserted-value" type="text" class="input locus-attribute">
+      <input id="asserted-value" type="text" class="input locus-value">
+      <select class="form-control form-control-sm locus-name" id='asserted-value'>
         <option value="date">Date</option>
         <option value="event">Event</option>
         <option value="geolocation">geolocation</option>

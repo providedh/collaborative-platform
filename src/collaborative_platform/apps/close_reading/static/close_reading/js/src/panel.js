@@ -48,18 +48,6 @@ var PanelView = function(args){
 			.map(e=>e.addEventListener('change',
 				()=>_handleValueChange(e.attributes['id'].value, e.value))); // 
 
-		//obj.publish('parameter/change', {});
-		//obj.publish('annotator/create', {});
-		//obj.publish('annotator/save', {});
-		//obj.publish('popup/render  ', {});
-		//obj.publish('annotator/load', {});
-		//obj.publish('panel/display_options', {});
-		//
-		// Add listener for input updates
-		/*document
-			.getElementById('in')
-			.addEventListener('change', e=>_handleInputChange(e));*/
-
 		obj.getValues = ()=>_getValues;
 
 		self = obj;
@@ -67,9 +55,17 @@ var PanelView = function(args){
 	}
 
 	function _updatePanelControls(){
-        const input = $('#asserted-value-input-options [locus='+values['locus']+']')[0];
-        $("#asserted-value-container").html(input.outerHTML);
-        $("#asserted-value-container .input").attr('id','proposedValue');
+        const input = document
+        	.getElementById('asserted-value-input-options')
+        	.getElementsByClassName('locus-' + values['locus'])[0]
+        	.cloneNode(true);
+
+        input.addEventListener('change', ()=>_handleValueChange('asserted-value', input.value));
+
+        const asserted_value_container = document.getElementById('asserted-value-container');
+        asserted_value_container.removeChild(asserted_value_container.children[0]);
+        asserted_value_container.appendChild(input);
+
         if(values['locus'] == 'attribute')
         	document.getElementById('attribute-name-input').style.setProperty('display','initial');
         else
