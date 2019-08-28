@@ -41,6 +41,7 @@ var PanelView = function(args){
 		// Add event listeners for form value changes
 		const formInputs = document.getElementById('annotation-form').getElementsByTagName('input');
 		const formSelects = document.getElementById('annotation-form').getElementsByTagName('select');
+		const visualOptions = document.getElementById('visual-options').getElementsByTagName('button');
 
 		Array.from(formInputs)
 			.map(e=>e.addEventListener('change',
@@ -48,6 +49,8 @@ var PanelView = function(args){
 		Array.from(formSelects)
 			.map(e=>e.addEventListener('change',
 				()=>_handleValueChange(e.attributes['id'].value, e.value))); // 
+		Array.from(visualOptions)
+			.map(e=>e.addEventListener('click', event=>_handleVisualOptionsClick(event)));
 
 		document.getElementById('create-uncertainty-annotation')
 			.addEventListener('click', _handleCreateUncertaintyAnnotation);
@@ -150,6 +153,27 @@ var PanelView = function(args){
 
 	function _handleAutocompleteOptions(args){
 		_notimplemented('_handleAutocompleteOptions')();
+	}
+
+	function _handleVisualOptionsClick(event){
+		const type = event.target.attributes['data-toggle'].value;
+		const attribute = event.target.attributes['id'].value;
+
+		if(type == 'collapse'){
+			const value = event.target.attributes['aria-expanded'].value;
+
+			document.getElementById('annotator-root').setAttribute(attribute, value);
+
+			if(value == 'true')
+				event.target.classList.add('active');
+			else
+				event.target.classList.remove('active');
+		}
+		else if(type == 'button'){
+			const value = event.target.attributes['aria-pressed'].value;
+
+			document.getElementById('annotator-root').setAttribute(attribute, value=='true'?'false':'true');
+		}
 	}
 
 	function _notimplemented(method){
