@@ -152,7 +152,7 @@ var DocumentView = function(args){
 
 	    selection = {text:text, range:selection_range, abs_positions:abs_positions};
 		
-		self.publish('document/selection', selection)
+		self.publish('document/selection', selection);
 	}
 
 	function _handleDocumentLoad(file){
