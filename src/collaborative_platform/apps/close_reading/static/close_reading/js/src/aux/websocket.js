@@ -6,7 +6,7 @@
  * produces : onopen, onload, onreload, onsend
  * */
 
-const AnnotatorWebSocket = (function(){
+const AnnotatorWebSocket = function(){
     let loaded = false;
     let content = '';
 
@@ -38,7 +38,7 @@ const AnnotatorWebSocket = (function(){
         }
 
         socket.onopen = function open() {
-            console.log("WebSockets connection created.");
+            console.info("WebSockets connection created.");
 
             // Run any callbacks if any
             for(let callback of callbacks.onopen)
@@ -46,8 +46,7 @@ const AnnotatorWebSocket = (function(){
         };
 
         socket.onmessage = function message(event) {
-            console.log("data from socket:" + event.data);
-
+            //console.log("data from socket:" + event.data);
             if (first_entry)
             {
                 // m.startComputation();
@@ -70,10 +69,10 @@ const AnnotatorWebSocket = (function(){
 
                 if (content.status === 200)
                 {
-                    console.log('annotate - success < ', content);
+                    //console.log('annotate - success < ', content);
 
                     // Run any callbacks if any, with the contents retrieved
-                    for(let callback of callbacks.onupdate)
+                    for(let callback of callbacks.onreload)
                         callback(content.xml_content);
                 }
                 else
@@ -103,6 +102,6 @@ const AnnotatorWebSocket = (function(){
         addCallback:_addCallback,
         create: _createWebSocket
     }
-})()
+}
 
 export default AnnotatorWebSocket;
