@@ -52,26 +52,21 @@
           </div>
             <div class="card card-body">
               <div id="visual-options" class="d-flex justify-content-between">
-                <a class="btn btn-outline-primary btn-sm" data-toggle="collapse" href="#legend" role="button" aria-expanded="false" aria-controls="legend">
-                  Show annotations
-                </a>
-                <a class="btn btn-outline-primary btn-sm" data-toggle="collapse" href="#legend" role="button" aria-expanded="false" aria-controls="legend">
-                  Show uncertainty
-                </a>
-                <a class="btn btn-outline-primary btn-sm" data-toggle="collapse" href="#legend" role="button" aria-expanded="false" aria-controls="legend">
-                  Use color for annotations
-                </a>
-                <a class="btn btn-outline-primary btn-sm" data-toggle="collapse" href="#legend" role="button" aria-expanded="false" aria-controls="legend">
-                  Use color for uncertainty
-                </a>
-                <a class="btn btn-outline-primary btn-sm collapsed" data-toggle="collapse" href="#legend" role="button" aria-expanded="false" aria-controls="legend">
-                  <span class="collapse-show">
-                    Hide legend
-                  </span>
-                  <span class="collapsed-show">
-                    Show legend
-                  </span>
-                </a> 
+                <button id="display-annotations" class="btn btn-outline-primary btn-sm" data-toggle="button" aria-pressed="false" autocomplete="false">
+                  <span class="active-hide">Show</span><span class="active-show">Hide</span> annotations
+                </button>
+                <button id="display-uncertainty" class="btn btn-outline-primary btn-sm" data-toggle="button" aria-pressed="false" autocomplete="false">
+                  <span class="active-hide">Show</span><span class="active-show">Hide</span> uncertainty
+                </button>
+                <button id="color-annotations" class="btn btn-outline-primary btn-sm" data-toggle="button" aria-pressed="false" autocomplete="false">
+                  <span class="active-hide">Show</span><span class="active-show">Hide</span> color for annotations
+                </button>
+                <button id="color-uncertainty" class="btn btn-outline-primary btn-sm" data-toggle="button" aria-pressed="false" autocomplete="false">
+                  <span class="active-hide">Show</span><span class="active-show">Hide</span> color for uncertainty
+                </button>
+                <button id="show-legend" class="btn btn-outline-primary btn-sm collapsed" data-toggle="collapse" href="#legend" role="button" aria-expanded="false" aria-controls="legend">
+                  <span class="collapse-show">Hide</span><span class="collapsed-show">Show</span> legend
+                </button> 
               </div>
               <div class="collapse show" id="example">
                 <hr>
