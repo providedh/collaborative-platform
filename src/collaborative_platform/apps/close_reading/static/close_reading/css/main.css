@@ -1,3 +1,6 @@
+button span{
+    pointer-events: none;
+}
 #annotator-root{max-width: 23.7cm;}
 #versionLink:first-of-type{font-size: 0.7em;}
 .break-word {
@@ -21,6 +24,11 @@ page {
 .btn.collapsed .collapse-show{display: none;}
 .btn .collapsed-show{display: none;}
 .btn.collapsed .collapsed-show{display: initial;}
+
+.btn .active-show{display: none;}
+.btn.active .active-show{display: initial;}
+.btn.active .active-hide{display: none;}
+
 #toolbar{
 	width: 23cm; 
 	position:relative;
