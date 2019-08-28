@@ -15,7 +15,6 @@ const annotator = Annotator({channel});
 // the websocket
 const sub = {};
 channel.addToChannel(sub);
-sub.subscribe('websocket/send', json=>console.log(json));
 sub.subscribe('websocket/send', json=>websocket.send(json));
 sub.subscribe('document/render', selection=>console.info('Document rendered.'));
 
