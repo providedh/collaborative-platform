@@ -164,7 +164,7 @@ var PanelView = function(args){
 
 			document.getElementById('annotator-root').setAttribute(attribute, value);
 
-			if(value == 'true')
+			if(value == 'false')
 				event.target.classList.add('active');
 			else
 				event.target.classList.remove('active');
