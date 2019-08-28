@@ -32,7 +32,7 @@ var Channel = function(){
 
 	function _getSubscribers(){
 		for(let event of Object.entries(subscribers))
-			console.info(`Event: ${event[0]} Subscribed: ${len(event[1])}`);
+			console.info(`Event: ${event[0]} Subscribed: ${event[1].length}`);
 	}
 
 	return {
