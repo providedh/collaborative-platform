@@ -16,13 +16,11 @@ var AjaxCalls = function(args){
 	const search_url = (project, entity_type, query) => ['fuzzysearch', project, entity_type, query].join('/');
 
 	function _init(args){
-		base_url = '';
-
 		const obj = {
-			get_save_url: base_url + '/' + save_url,
-			get_add_annotation_url: base_url + '/' + annotate_url,
-			get_history_url: base_url + '/' + history_url,
-			get_autocomplete_url: base_url + '/' + search_url
+			get_save_url: (project, file) => base_url + '/' + save_url(project, file),
+			get_add_annotation_url: (project, file) => base_url + '/' + annotate_url(project, file),
+			get_history_url: (project, file, version) => base_url + '/' + history_url(project, file, version),
+			get_autocomplete_url: (project, entity_type, query) => base_url + '/' + search_url(project, entity_type, query)
 		};
 
 		return obj;
