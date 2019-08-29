@@ -70,16 +70,18 @@ var DocumentView = function(args){
 		        + '#'+id
 		        + `{background-color: ${ColorScheme.calculate(category,cert)};}`;
 
-		    document.styleSheets[0].insertRule(greyRule);
-		    document.styleSheets[0].insertRule(colorRule);
+		    document.getElementById('style').innerText += (greyRule);
+    		document.getElementById('style').innerText += (colorRule);
 		}
+
+		document.getElementById('style').innerText = '';
 
 		Array.from(file.getElementsByTagName('teiHeader')[0].getElementsByTagName('certainty'), a=>a)
             .forEach(annotation=>{
                 annotation.attributes['target'].value.trim().split(" ").forEach(target=>{
                     const node = document.getElementById(XML_EXTRA_CHAR_SPACER+target.slice(1));
                     if(node != null){   
-                        addStyles(
+                        addStyle(
                             XML_EXTRA_CHAR_SPACER+target.slice(1), 
                             annotation.attributes['category'].value, 
                             annotation.attributes['cert'].value
