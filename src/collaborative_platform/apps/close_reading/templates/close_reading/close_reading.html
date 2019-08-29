@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/static/close_reading/css/main.css">
 {#  <script src="https://requirejs.org/docs/release/2.3.5/minified/require.js"></script>#}
   <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <style type="text/css" id="style"></style>
 {% endblock %}
 
 {% block content %}
@@ -18,7 +19,7 @@
     <section id="asserted-value-input-options">
       <input id="asserted-value" type="text" class="input locus-attribute">
       <input id="asserted-value" type="text" class="input locus-value">
-      <select class="form-control form-control-sm locus-name" id='asserted-value'>
+      <select class="form-control form-control-sm locus-name input" id='asserted-value'>
         <option value="date">Date</option>
         <option value="event">Event</option>
         <option value="geolocation">geolocation</option>
@@ -44,7 +45,7 @@
 {#                <small>&nbsp;${file_revision | h}</small>#}
 {#              % endif#}
             </span>
-            <a class="btn btn-outline-primary btn-sm" href="" id="saveFile">Save current file</a>
+            <button class="btn btn-outline-primary btn-sm" href="" id="saveFile">Save current file</button>
           </h2>
           <p>
             <hr>
@@ -101,19 +102,21 @@
                               </select>
                             </div>
                             <div class="col">
-                              <label for="tag-name">Tag name</label>
-                              <select class="form-control form-control-sm" id='tag-name'>
-                                <option value="date">Date</option>
-                                <option value="event">Event</option>
-                                <option value="geolocation">geolocation</option>
-                                <option value="name">Name</option>
-                                <option value="occupation">Occupation</option>
-                                <option value="object">Object</option>
-                                <option value="org">Org</option>
-                                <option value="person">Person</option>
-                                <option value="country">country</option>
-                                <option value="time">Time</option>
-                              </select>
+                              <div id="tag-name-input">
+                                <label for="tag-name">Tag name</label>
+                                <select class="form-control form-control-sm" id='tag-name'>
+                                  <option value="date">Date</option>
+                                  <option value="event">Event</option>
+                                  <option value="geolocation">geolocation</option>
+                                  <option value="name">Name</option>
+                                  <option value="occupation">Occupation</option>
+                                  <option value="object">Object</option>
+                                  <option value="org">Org</option>
+                                  <option value="person">Person</option>
+                                  <option value="country">country</option>
+                                  <option value="time">Time</option>
+                                </select>
+                              </div>
                             </div>
                             <div class="col">
                               <div id="attribute-name-input">
@@ -130,7 +133,7 @@
                             <div class="col">
                               <label for="asserted-value">Asserted value</label>
                               <div id="asserted-value-container">
-                                <input id="asserted-value">
+                                <input id="asserted-value" class="input">
                               </div>
                             </div>
                             <div class="col">
@@ -146,7 +149,7 @@
                           <div class="form-row">
                             <div class="col">
                               <label for="description">Description</label>
-                              <input readonly type="text" id="description">
+                              <input type="text" id="description">
                             </div>
                             <div class="col">
                               <span id="references-container">
