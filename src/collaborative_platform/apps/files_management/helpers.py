@@ -105,10 +105,19 @@ def index_entities(entities):  # type: (List[dict]) -> None
 
 def get_directory_content(dir):  # type: (Directory) -> dict
     files = list(map(model_to_dict, dir.files.all()))
+    for file in files:
+        file['kind'] = 'file'
+        file['icon'] = 'fa-file-xml-o'
+        file['open'] = False
+        file['parent'] = dir.id
+
     subdirs = [get_directory_content(subdir) for subdir in dir.subdirs.all()]
 
     result = model_to_dict(dir)
-    result['files'] = files
-    result['subdirs'] = subdirs
+    result['parent'] = dir.parent_dir_id
+    result['children'] = files + subdirs
+    result['kind'] = "folder"
+    result['icon'] = 'fa-file-folder-o'
+    result['open'] = False
 
     return result
