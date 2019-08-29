@@ -5524,7 +5524,7 @@ if (typeof exports == "object") {
         };
         this.filterTemplate = function () {
             var tb = this;
-            return m("input.pull-right.form-control[placeholder='" + tb.options.filterPlaceholder + "'][type='text']", {
+            return m("input.pull-right.form-control.tb-input[placeholder='" + tb.options.filterPlaceholder + "'][type='text']", {
                 style: "width:100%;display:inline;",
                 onkeyup: tb.filter,
                 value: tb.filterText()
@@ -5534,15 +5534,25 @@ if (typeof exports == "object") {
         this.headerTemplate = function () {
             var ctrl = this;
             var titleContent = functionOrString(ctrl.options.title);
+			var createFolder = m("button.tb-button-createfolder", {
+					onclick: function _createFolderClick(e) {
+						var mithrilContent = m('div', [
+							m('h3.break-word', 'Create folder'),
+							m('p', 'Name:'),
+							m('input')
+						]);
+						var mithrilButtons = m('div', [
+							m('button', { 'class' : 'btn btn-default m-r-md', onclick : function() { ctrl.modal.dismiss(); } }, 'Cancel'),
+							m('button', { 'class' : 'btn btn-success', onclick : function() { ctrl.modal.dismiss(); }  }, 'OK')
+						]);
+						ctrl.modal.update(mithrilContent, mithrilButtons);
+					}
+				}, [ m("i", {'class': "fa fa-folder"}), m("span", "Create folder") ]);
+
             if (ctrl.options.showFilter || titleContent) {
-                var filterWidth;
-                var title = m('.tb-head-title.col-xs-12.col-sm-6', {}, titleContent);
-                if (ctrl.options.filterFullWidth) {
-                    filterWidth = '';
-                } else {
-                    filterWidth = ctrl.options.title ? '.col-sm-6' : '.col-sm-6.col-sm-offset-6';
-                }
-                var filter = m(".tb-head-filter.col-xs-12" + filterWidth, {}, [
+                var title = m('.tb-head-title', {}, titleContent);
+
+                var filter = m(".tb-head-filter", {}, [
                     (function showFilterA() {
                         if (ctrl.options.showFilter) {
                             return ctrl.options.filterTemplate.call(ctrl);
@@ -5552,10 +5562,13 @@ if (typeof exports == "object") {
                 if (ctrl.options.title) {
                     return m('.tb-head', [
                         title,
-                        filter
+						createFolder,
+                        filter,
+
                     ]);
                 } else {
                     return m('.tb-head', [
+						createFolder,
                         filter
                     ]);
                 }

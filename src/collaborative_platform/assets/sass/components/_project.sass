@@ -12,6 +12,17 @@
   &__buttons
     margin-bottom: 15px
 
+  &__button
+    &--makeprivate, &--makepublic
+      @extend .btn
+      @extend .btn-light
+      @extend .btn-disabled
+
+      &-active
+        @extend .btn
+        @extend .btn-outline-info
+
+
   &__contributors
     padding-bottom: 5px
     &--list

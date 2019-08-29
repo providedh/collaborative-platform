@@ -591,10 +591,11 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  padding-left: 5px;
+  padding-left: 20px;
   height: inherit;
   padding-top: 8px;
   vertical-align: top;
+  font-size: 0.9em;
 }
 .tb-th {
   display: inline-block;
@@ -603,7 +604,8 @@
   white-space: nowrap;
   font-weight: bold;
   border-left: 1px solid #CCC;
-  padding: 10px 0px 7px 5px;
+  padding: 7px 0px 7px 7px;
+  font-size: 0.8em;
 }
 .tb-th:first-of-type {
   border-left: none;
@@ -630,9 +632,14 @@
   padding: 5px;
 }
 .tb-head {
-  padding: 10px;
-  display: inline-block;
-  width: 100%;
+  padding: 5px 0;
+  margin: 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.tb-head-filter {
+
 }
 .tb-sort-inactive {
   color: #999;
@@ -688,7 +695,7 @@
   text-align: right;
 }
 .tb-multiselect {
-  background-color: lightcoral;
+  background-color: #efefef;
 }
 .tb-unselectable {
   -webkit-user-select: none;
@@ -699,11 +706,37 @@
 }
 .tb-button {
   border: 1px solid #CCC;
+  background: white;
   border-radius: 5px;
+  margin-top: -2px;
 }
+
+.tb-button-createfolder {
+  border: 1px solid #ced4da;
+  background: white;
+  border-radius: 3px;
+
+  span {
+    font-size: 0.8em;
+    margin-left: 5px;
+  }
+}
+
+.tb-input {
+  font-size: 0.8em;
+}
+
 .asc-btn,
 .desc-btn {
   cursor: pointer;
+  position: relative
+}
+
+.asc-btn {
+  top: 3px
+}
+.desc-btn {
+  top: -3px
 }
 .tb-no-results {
   padding: 20px;
