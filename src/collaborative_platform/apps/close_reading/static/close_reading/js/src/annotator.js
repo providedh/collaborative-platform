@@ -44,63 +44,59 @@ var Annotator = function(args){
 	    self.publish('websocket/send', JSON.stringify({
 	    	'start_pos': _selection.abs_positions.start,
 	    	'end_pos': _selection.abs_positions.end,
-	    	'asserted_value': args['tei-tag-name'],
 	    	'tag': args['tei-tag-name']
 	    }));
 	}
 
 	function _handleCreateUncertaintyAnnotation(args){
-		console.log(ajax_urls.get_add_annotation_url(window.project_id, window.file_id), args, _selection);
-
-		const values = {};
-	    Array.from($("#top-panel input"), x=>x).map(i=>values[i.id]=i.value);
-	    Array.from($("#top-panel select"), x=>x).map(i=>values[i.id]=i.value);
-	    if(values['locus'] == 'value')
-	        values['value'] = values['value'];
-
-	    const annotation = (new Annotation()).fromDict(values);
-	    
-	    // const url = API_urls.get_add_annotation_url(window.project, window.file);
+		if(_selection == null)
+	        return
+	    console.log(args)
 	    const data = {
-	            "start_pos": this.selection.abs_positions.start,
-	            "end_pos": this.selection.abs_positions.end,
-	            "asserted_value": values.proposedValue,
-	            "category": "",
-	            "locus": "",
-	            "certainty": "",
-	            "description": "",
-	            "tag": values.proposedValue
-	        }
+	    	'start_pos': _selection.abs_positions.start,
+	    	'end_pos': _selection.abs_positions.end,
+	    	"category": args.category,
+            "locus": args.locus,
+            "certainty": args['cert-level'],
+            "description": args.desc,
+            "tag": args['tag-name'],
+	    };
 
-	    if(getAnnotatorAttribute('annotation') == 'uncertainty'){
-	        Object.assign(data, {
-	            "category": values.category,
-	            "locus": values.locus,
-	            "certainty": values.cert,
-	            "asserted_value": values.proposedValue,
-	            "description": values.desc,
-	            "tag": values['tag-name'],
-	            "tag-name": values['tag-name']
-	        });
+        if(args['locus'] == 'value'){
+	    	data['asserted_value'] = args['asserted-value'];
+        }
 
-	        if(values['locus'] == 'attribute')
-	            data['attribute_name'] = values.attribute_name;
+        if(args['locus'] == 'name'){
+            data['tag'] = args['asserted-value'];
+        }
 
-	        if(values['locus'] == 'attribute' && ['person', 'event', 'org', 'place'].includes(values['tag-name']) && values['references'] != ''){
-	            data['references'] = values.references
-	        }
+        if(args['locus'] == 'attribute'){
+            data['attribute_name'] = args['attribute-name'];
+            data['asserted_value'] = args['asserted-value'];
+        }
 
-	        if(values['locus'] == 'name')
-	            data['tag'] = values.proposedValue;
-	    }
+        if(args['locus'] == 'attribute' && ['person', 'event', 'org', 'place'].includes(args['tag-name']) && args['references'] != ''){
+            data['references'] = args.references
+        }
 
-	    console.log(JSON.stringify(data))
 
-	    window.send(JSON.stringify(data));
+        console.log(data)
+
+	    self.publish('websocket/send', JSON.stringify(data));
 	}
 
 	function _handleFileSave(args){
-		console.log(ajax_urls.get_save_url(window.project_id, window.file_id));
+		$.ajax({
+	        url:ajax_urls.get_save_url(window.project_id, window.file_id),
+	        type: 'PUT',   //type is any HTTP method
+	        data: {},      //Data as js object
+	        success: function (a) {
+	            console.log('save - success < ',ajax_urls.get_save_url(window.project_id, window.file_id),' < ',a);
+	        },
+	        error: function (a) {
+	            console.log('save - error < ',ajax_urls.get_save_url(window.project_id, window.file_id),' < ',a)
+	        }
+	    })
 	}
 
 	function _handleDocumentSelection(selection){
