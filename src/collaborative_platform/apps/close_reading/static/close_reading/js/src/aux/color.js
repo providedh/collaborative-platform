@@ -3,7 +3,7 @@
  * or calculating the color for a specific annotation
  *
  * */
-var ColorScheme = function(args){
+var ColorScheme = (function(args){
 	let self = null;
 
 	const _colorScheme = {
@@ -49,6 +49,6 @@ var ColorScheme = function(args){
 		schemes: _colorScheme,
 		calculate: _applyColorScheme
 	};
-};
+})();
 
 export default ColorScheme;
