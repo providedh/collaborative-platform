@@ -695,7 +695,7 @@
   text-align: right;
 }
 .tb-multiselect {
-  background-color: #efefef;
+  background: rgba(0,0,0,0.05);
 }
 .tb-unselectable {
   -webkit-user-select: none;
@@ -708,7 +708,13 @@
   border: 1px solid #CCC;
   background: white;
   border-radius: 5px;
-  margin-top: -2px;
+  margin: -2px 1px 0 1px;
+
+  &:hover, &:focus {
+    background: black;
+    border-color: black;
+    color: white;
+  }
 }
 
 .tb-button-createfolder {
@@ -719,6 +725,26 @@
   span {
     font-size: 0.8em;
     margin-left: 5px;
+  }
+}
+
+.tb-actions {
+  .tb-button {
+    display: none
+  }
+}
+
+.tb-hover {
+  background: rgba(0,0,0,0.025);
+
+  &.tb-multiselect {
+    background: rgba(0,0,0,0.065);
+  }
+
+  .tb-actions {
+    .tb-button {
+      display: inline-block
+    }
   }
 }
 
@@ -742,4 +768,10 @@
   padding: 20px;
   text-align: center;
   color: #666;
+}
+
+.ui-droppable {
+  &-hover {
+    background: rgba(0,0,0,0.05);
+  }
 }

@@ -3653,6 +3653,10 @@ if (typeof exports == "object") {
             self.flatten(self.treeData.children, self.visibleTop);
         };
 
+		this.refreshData = function _refreshData() {
+			_loadData(self.options.filesData);
+		}
+
         this.mredraw = function _mredraw() {
             m.redraw();
         }
@@ -5095,7 +5099,7 @@ if (typeof exports == "object") {
      * @param {Object} ctrl The entire Treebeard.controller object with its values and methods. Refer to as ctrl.
      */
     Treebeard.view = function treebeardView(ctrl) {
-        return m('.gridWrapper', { style : 'overflow-x: auto' }, [
+        return m('.gridWrapper', [ //, { style : 'overflow-x: auto' }
                 m(".tb-table", { style : 'width:' + ctrl.tableWidth() }, [
                     /**
                      * Template for the head row, includes whether filter or title should be shown.
@@ -5534,20 +5538,6 @@ if (typeof exports == "object") {
         this.headerTemplate = function () {
             var ctrl = this;
             var titleContent = functionOrString(ctrl.options.title);
-			var createFolder = m("button.tb-button-createfolder", {
-					onclick: function _createFolderClick(e) {
-						var mithrilContent = m('div', [
-							m('h3.break-word', 'Create folder'),
-							m('p', 'Name:'),
-							m('input')
-						]);
-						var mithrilButtons = m('div', [
-							m('button', { 'class' : 'btn btn-default m-r-md', onclick : function() { ctrl.modal.dismiss(); } }, 'Cancel'),
-							m('button', { 'class' : 'btn btn-success', onclick : function() { ctrl.modal.dismiss(); }  }, 'OK')
-						]);
-						ctrl.modal.update(mithrilContent, mithrilButtons);
-					}
-				}, [ m("i", {'class': "fa fa-folder"}), m("span", "Create folder") ]);
 
             if (ctrl.options.showFilter || titleContent) {
                 var title = m('.tb-head-title', {}, titleContent);
@@ -5562,13 +5552,11 @@ if (typeof exports == "object") {
                 if (ctrl.options.title) {
                     return m('.tb-head', [
                         title,
-						createFolder,
-                        filter,
+                        filter
 
                     ]);
                 } else {
                     return m('.tb-head', [
-						createFolder,
                         filter
                     ]);
                 }
