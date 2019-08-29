@@ -32,6 +32,7 @@ var PanelView = function(args){
 		obj.suscribe('panel/load_history', _handleLoadHistory);
 		obj.suscribe('panel/reset', _handlePanelReset);
 		obj.suscribe('panel/autocomplete_options', _handleAutocompleteOptions);
+		obj.subscribe('document/selection', _handleDocumentSelection);
 
 		Object.assign(values, _getCurrentValues());
 		_updatePanelControls();
@@ -56,6 +57,8 @@ var PanelView = function(args){
 			.addEventListener('click', _handleCreateUncertaintyAnnotation);
 		document.getElementById('create-tei-annotation')
 			.addEventListener('click', _handleCreateTEIannotation);
+		document.getElementById('saveFile')
+			.addEventListener('click', ()=>obj.publish('annotator/save',{}));
 
 		obj.getValues = ()=>_getValues;
 
@@ -79,6 +82,11 @@ var PanelView = function(args){
         const asserted_value_container = document.getElementById('asserted-value-container');
         asserted_value_container.removeChild(asserted_value_container.children[0]);
         asserted_value_container.appendChild(input);
+
+        if(values['locus'] == 'name')
+        	document.getElementById('tag-name-input').style.setProperty('display','none');
+        else
+        	document.getElementById('tag-name-input').style.setProperty('display','initial');
 
         if(values['locus'] == 'attribute')
         	document.getElementById('attribute-name-input').style.setProperty('display','initial');
@@ -112,12 +120,13 @@ var PanelView = function(args){
 				.attributes['class']
 				.value
 				.includes('active'),
+			'cert-level': document.getElementById('cert-level').value,
 			'category': document.getElementById('category').value,
 			'locus': document.getElementById('locus').value,
 			'tag-name': document.getElementById('tag-name').value,
 			'attribute-name': document.getElementById('attribute-name').value,
 			'category': document.getElementById('category').value,
-			'asserted-value': document.getElementById('asserted-value').value,
+			'asserted-value': document.getElementById('asserted-value-container').getElementsByClassName('input')[0].value,
 			'references': document.getElementById('references').value,
 			'description': document.getElementById('description').value,
 			'tei-tag-name': document.getElementById('tei-tag-name').value,
@@ -174,6 +183,10 @@ var PanelView = function(args){
 
 			document.getElementById('annotator-root').setAttribute(attribute, value=='true'?'false':'true');
 		}
+	}
+
+	function _handleDocumentSelection(selection){
+		document.getElementById('selection').value = selection.text;
 	}
 
 	function _notimplemented(method){
