@@ -127,6 +127,78 @@ input#references-autocomplete {
 
 #references{display: none;}
 
+#history{
+    height: 20px;
+    position: relative;
+}
+
+#history.hovered{
+    height: 60px;
+}
+
+#history canvas{
+    height: 60px;
+    width: 100%;
+    display: none;
+    opacity: 0;
+}
+
+#history.hovered canvas{
+    display: initial;
+    opacity: 1;
+}
+
+#history hr {
+    position: absolute;
+    bottom: 50%;
+    width: 100%;
+    margin: 0;
+}
+
+#versions {
+    position: absolute;
+    bottom: 50%;
+    width: 100%;
+    height: 20px;
+}
+
+.version {
+    position: absolute;
+    height: 10px;
+    width: 10px;
+    background-color: gray;
+    display: inline-block;
+    bottom: -5px;
+}
+
+div#history-popup{
+    display:none;
+    position:absolute;
+    z-index:500;
+    width:22em;
+    line-height: 1.4em;
+    padding: 7px;
+    background-color:white;
+    box-shadow:0 1px 3px 1px rgba(60,64,67,.15);
+}
+
+div#history-popup div.content{
+    width:100%;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+div#history-popup span{
+    display: inline-block;
+}
+
+div#history-popup span.color{
+    display: inline-block;
+    height: 1em;
+}
+
 /* ------------------ annotations.css ------------------ */
 /* ----------------------------------------------------- */
 

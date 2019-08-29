@@ -3,6 +3,7 @@ import AnnotatorWebSocket from './src/aux/websocket.js';
 import DocumentView from './src/document_view.js';
 import PanelView from './src/panel.js';
 import Annotator from './src/annotator.js';
+import HistoryView from './src/history.js';
 
 // Load all components
 const websocket = AnnotatorWebSocket();
@@ -10,6 +11,7 @@ const channel = PubSubChannel.create();
 const document_view = DocumentView({channel});
 const panel_view = PanelView({channel});
 const annotator = Annotator({channel});
+const history_view = HistoryView({channel});
 
 // Create suscriber for sending messages using
 // the websocket
