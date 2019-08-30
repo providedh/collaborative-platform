@@ -3653,6 +3653,10 @@ if (typeof exports == "object") {
             self.flatten(self.treeData.children, self.visibleTop);
         };
 
+		this.refreshData = function _refreshData() {
+			_loadData(self.options.filesData);
+		}
+
         this.mredraw = function _mredraw() {
             m.redraw();
         }
@@ -5095,7 +5099,7 @@ if (typeof exports == "object") {
      * @param {Object} ctrl The entire Treebeard.controller object with its values and methods. Refer to as ctrl.
      */
     Treebeard.view = function treebeardView(ctrl) {
-        return m('.gridWrapper', { style : 'overflow-x: auto' }, [
+        return m('.gridWrapper', [ //, { style : 'overflow-x: auto' }
                 m(".tb-table", { style : 'width:' + ctrl.tableWidth() }, [
                     /**
                      * Template for the head row, includes whether filter or title should be shown.
@@ -5524,7 +5528,7 @@ if (typeof exports == "object") {
         };
         this.filterTemplate = function () {
             var tb = this;
-            return m("input.pull-right.form-control[placeholder='" + tb.options.filterPlaceholder + "'][type='text']", {
+            return m("input.pull-right.form-control.tb-input[placeholder='" + tb.options.filterPlaceholder + "'][type='text']", {
                 style: "width:100%;display:inline;",
                 onkeyup: tb.filter,
                 value: tb.filterText()
@@ -5534,15 +5538,11 @@ if (typeof exports == "object") {
         this.headerTemplate = function () {
             var ctrl = this;
             var titleContent = functionOrString(ctrl.options.title);
+
             if (ctrl.options.showFilter || titleContent) {
-                var filterWidth;
-                var title = m('.tb-head-title.col-xs-12.col-sm-6', {}, titleContent);
-                if (ctrl.options.filterFullWidth) {
-                    filterWidth = '';
-                } else {
-                    filterWidth = ctrl.options.title ? '.col-sm-6' : '.col-sm-6.col-sm-offset-6';
-                }
-                var filter = m(".tb-head-filter.col-xs-12" + filterWidth, {}, [
+                var title = m('.tb-head-title', {}, titleContent);
+
+                var filter = m(".tb-head-filter", {}, [
                     (function showFilterA() {
                         if (ctrl.options.showFilter) {
                             return ctrl.options.filterTemplate.call(ctrl);
@@ -5553,6 +5553,7 @@ if (typeof exports == "object") {
                     return m('.tb-head', [
                         title,
                         filter
+
                     ]);
                 } else {
                     return m('.tb-head', [

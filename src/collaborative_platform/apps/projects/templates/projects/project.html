@@ -22,6 +22,7 @@
 {% endblock %}
 
 {% block content %}
+{% csrf_token %}
 <div class="submenu">
   <div class="container">
     <ul class="submenu__list d-flex">
@@ -59,10 +60,6 @@
         <span class="project__text--label">Last updated</span>
         <span class="project__text--date">{{ project.modification_date|date:'Y-m-d, H:i' }}</span>
       </div>
-      <div class="d-md-flex project__category">
-        <span class="project__text--label">Category</span>
-        <p class="project__text--category">{% if project.category %}{{ project.category }}{% else %}<span class="project__text--placeholder">Add a category to your project</span>{% endif %}</p>
-      </div>
       <div class="d-md-flex project__description">
         <span class="project__text--label">Description</span>
         <p class="project__text--description">{% if project.description %}{{ project.description }}{% else %}<span class="project__text--placeholder">Add a brief description to your project</span>{% endif %}</p>
@@ -73,8 +70,8 @@
       </div>
     </div>
     <div class="ml-auto project__buttons d-flex flex-nowrap">
-      <div><a href="#" class="btn btn-light btn-disabled">Private</a></div>
-      <div><a href="#" class="btn btn-outline-info">Make Public</a></div>
+      <div><button type="button" class="{% if not project.public %}project__button--makeprivate{% else %}project__button--makeprivate-active{% endif %}" js-makePrivateProject="{{ project.id }}">Private</button></div>
+      <div><button type="button" class="{% if project.public %}project__button--makepublic{% else %}project__button--makepublic-active{% endif %}" js-makePublicProject="{{ project.id }}">Make Public</button></div>
     </div>
   </div>
   <div class="row">
@@ -85,9 +82,8 @@
           <h3 class="box__text--title">Files</h3>
         </div>
         <div class="box__content">
-          <div id="grid1" class="container-fluid m-t-md">
-            <p style="font-size: 24px;text-align:center; margin-top:20px"> Loading <i class="fa fa-spinner fa-spin"></i>        </p>
-            <p style="text-align: center;">            <img src="./ctxrf.jpg" alt="meme" />
+          <div id="files" class="container-fluid m-t-md">
+            <p style="font-size: 24px;text-align:center; margin-top:20px"> Loading <i class="fa fa-spinner fa-spin"></i></p>
             </p>
           </div>
         </div>

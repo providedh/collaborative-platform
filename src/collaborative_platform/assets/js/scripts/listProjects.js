@@ -1,4 +1,4 @@
-$('#listProjectsMine').DataTable( {
+$('[js-listProjectsMine]').DataTable( {
     "ajax": {
         "url": "/api/projects/get_mine/",
         "dataSrc": "data"
@@ -7,7 +7,7 @@ $('#listProjectsMine').DataTable( {
         {
             "data": "title",
             "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
-                $(nTd).html('<a href="'+ $('#listProjectsMine').attr('data-link-project') + '' + oData.id +'">' + sData + '</a>');
+                $(nTd).html('<a href="'+ $('[js-listProjectsMine]').attr('data-link-project') + '' + oData.id +'">' + sData + '</a>');
             }
         },
         {
@@ -16,7 +16,7 @@ $('#listProjectsMine').DataTable( {
                 var html = '';
 
                 for (item in sData) {
-                    html += '<a href="'+ $('#listProjectsMine').attr('data-link-contributor') + '' + sData[item].id +'">' + sData[item].first_name + ' ' + sData[item].last_name + '</a>';
+                    html += '<a href="'+ $('[js-listProjectsMine]').attr('data-link-contributor') + '' + sData[item].id +'">' + sData[item].first_name + ' ' + sData[item].last_name + '</a>';
                     if (item != sData.length - 1 ) {
                         html += ', '
                     }
@@ -38,7 +38,7 @@ $('#listProjectsMine').DataTable( {
     }
 } );
 
-$('#listProjectsPublic').DataTable( {
+$('[js-listProjectsPublic]').DataTable( {
     "ajax": {
         "url": "/api/projects/get_public/",
         "dataSrc": "data"
@@ -47,7 +47,7 @@ $('#listProjectsPublic').DataTable( {
         {
             "data": "title",
             "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
-                $(nTd).html('<a href="'+ $('#listProjectsMine').attr('data-link-project') + '' + oData.id +'">' + sData + '</a>');
+                $(nTd).html('<a href="'+ $('[js-listProjectsPublic]').attr('data-link-project') + '' + oData.id +'">' + sData + '</a>');
             }
         },
         {
@@ -56,7 +56,7 @@ $('#listProjectsPublic').DataTable( {
                 var html = '';
 
                 for (item in sData) {
-                    html += '<a href="'+ $('#listProjectsMine').attr('data-link-contributor') + '' + sData[item].id +'">' + sData[item].first_name + ' ' + sData[item].last_name + '</a>';
+                    html += '<a href="'+ $('[js-listProjectsPublic]').attr('data-link-contributor') + '' + sData[item].id +'">' + sData[item].first_name + ' ' + sData[item].last_name + '</a>';
                     if (item != sData.length - 1 ) {
                         html += ', '
                     }
