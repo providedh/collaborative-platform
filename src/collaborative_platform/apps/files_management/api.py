@@ -206,9 +206,9 @@ def get_project_tree(request, project_id):
     except Directory.DoesNotExist:
         return HttpResponseServerError(dumps({'message': "Invalid data in database"}))
 
-    result = get_directory_content(base_dir, 0)
+    result = [get_directory_content(base_dir, 0)]
 
-    return JsonResponse(result)
+    return JsonResponse(result, safe=False)
 
 
 @login_required
