@@ -103,7 +103,7 @@ def index_entities(entities):  # type: (List[dict]) -> None
         es_entity.save()
 
 
-def get_directory_content(dir, indent):  # type: (Directory) -> dict
+def get_directory_content(dir, indent):  # type: (Directory, int) -> dict
     files = list(map(model_to_dict, dir.files.all()))
     for file in files:
         file['kind'] = 'file'
