@@ -115,7 +115,7 @@ def get_directory_content(dir, indent):  # type: (Directory, int) -> dict
     subdirs = [get_directory_content(subdir, indent + 1) for subdir in dir.subdirs.all()]
 
     result = model_to_dict(dir)
-    result['parent'] = dir.parent_dir_id
+    result['parent'] = dir.parent_dir_id or 0
     result['children'] = files + subdirs
     result['kind'] = "folder"
     result['icon'] = 'fa-file-folder-o'
