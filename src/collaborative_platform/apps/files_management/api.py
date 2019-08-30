@@ -1,4 +1,4 @@
-from json import dumps
+from json import dumps, loads
 from os.path import basename
 from zipfile import ZipFile
 
@@ -147,15 +147,19 @@ def get_file_version(request, file_id, version=None):  # type: (HttpRequest, int
 @login_required
 @objects_exists
 @user_has_access('RW')
-def move(request, **kwargs):
-    if 'directory_id' in kwargs:
-        file = Directory.objects.filter(id=kwargs['directory_id']).get()
-        log_activity(project=file.project, user=request.user, related_dir=file, action_text="moved to")
-    else:
-        file = File.objects.filter(id=kwargs['file_id']).get()
+def move(request, move_to):  # type: (HttpRequest, int) -> HttpResponse
+    data = request.POST.get("data")
+    data = loads(data)
+
+    for directory_id in data['directories']:
+        dir = Directory.objects.filter(id=directory_id).get()
+        dir.move_to(move_to)
+        log_activity(project=dir.project, user=request.user, related_dir=dir, action_text="moved to")
+    for file_id in data['files']:
+        file = File.objects.filter(id=file_id).get()
+        file.move_to(move_to)
         log_activity(project=file.project, user=request.user, file=file, action_text="moved to")
 
-    file.move_to(kwargs['move_to'])
     return HttpResponse("OK")
 
 
