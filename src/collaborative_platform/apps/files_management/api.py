@@ -207,6 +207,8 @@ def get_project_tree(request, project_id):
         return HttpResponseServerError(dumps({'message': "Invalid data in database"}))
 
     result = get_directory_content(base_dir)
+    result['parent'] = 0
+
     return JsonResponse(result)
 
 
