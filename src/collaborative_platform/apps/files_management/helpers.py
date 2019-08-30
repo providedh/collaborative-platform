@@ -103,15 +103,16 @@ def index_entities(entities):  # type: (List[dict]) -> None
         es_entity.save()
 
 
-def get_directory_content(dir):  # type: (Directory) -> dict
+def get_directory_content(dir, indent):  # type: (Directory) -> dict
     files = list(map(model_to_dict, dir.files.all()))
     for file in files:
         file['kind'] = 'file'
         file['icon'] = 'fa-file-xml-o'
         file['open'] = False
         file['parent'] = dir.id
+        file['indent'] = indent + 1
 
-    subdirs = [get_directory_content(subdir) for subdir in dir.subdirs.all()]
+    subdirs = [get_directory_content(subdir, indent + 1) for subdir in dir.subdirs.all()]
 
     result = model_to_dict(dir)
     result['parent'] = dir.parent_dir_id
@@ -119,5 +120,6 @@ def get_directory_content(dir):  # type: (Directory) -> dict
     result['kind'] = "folder"
     result['icon'] = 'fa-file-folder-o'
     result['open'] = False
+    result['indent'] = indent
 
     return result
