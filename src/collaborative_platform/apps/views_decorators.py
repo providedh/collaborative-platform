@@ -1,7 +1,8 @@
+import json
 from functools import wraps
 from typing import Callable
 
-from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, HttpResponseForbidden, JsonResponse
+from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, HttpResponseForbidden, JsonResponse, Http404
 from django.shortcuts import render
 
 from apps.files_management.models import File, FileVersion, Directory
@@ -89,7 +90,7 @@ def user_has_access(permissions_level=None):
     def decorator(func):
         @wraps(func)
         def inner(request, *args, **kwargs):
-            project_id = __get_project_id(**kwargs)
+            project_id = __get_project_id(request, **kwargs)
             user_id = request.user.id
 
             contributor = Contributor.objects.filter(project_id=project_id, user_id=user_id)
@@ -119,11 +120,13 @@ def user_has_access(permissions_level=None):
             response = __get_response(request, status, bootstrap_alert_type, message)
 
             return response
+
         return inner
+
     return decorator
 
 
-def __get_project_id(**kwargs):
+def __get_project_id(request, **kwargs):
     if 'project_id' in kwargs:
         project_id = kwargs['project_id']
     elif 'file_id' in kwargs:
@@ -134,6 +137,41 @@ def __get_project_id(**kwargs):
         directory_id = kwargs['directory_id']
         directory = Directory.objects.get(id=directory_id)
         project_id = directory.project_id
+    elif request.method == "POST" and request.POST.get("data", False):
+        data = json.loads(request.POST.get("data"))
+        project_id_files, project_id_dirs = None, None
+
+        if 'files' in data:
+            ids = set()
+            for file_id in data['files']:
+                file = File.objects.get(id=file_id)
+                ids.add(file.project_id)
+            if len(ids) > 1:
+                raise Exception("Not all of given files ids in the same project.")
+            else:
+                project_id_files = ids.pop()
+
+        if 'directories' in data:
+            ids = set()
+            for dir_id in data['directories']:
+                dir = Directory.objects.get(id=dir_id)
+                ids.add(dir.project_id)
+            if len(ids) > 1:
+                raise Exception("Not all of given directories ids in the same project.")
+            else:
+                project_id_dirs = ids.pop()
+
+        if project_id_files is not None and project_id_dirs is not None:
+            if project_id_dirs == project_id_files:
+                project_id = project_id_files
+            else:
+                raise KeyError("Files and dirs from different projects")
+
+        elif project_id_files is not None or project_id_dirs is not None:
+            project_id = project_id_files or project_id_dirs
+        else:
+            raise KeyError("Not found required 'project_id', 'file_id' or 'directory_id' in given arguments")
+
     else:
         raise KeyError("Not found required 'project_id', 'file_id' or 'directory_id' in given arguments")
 
