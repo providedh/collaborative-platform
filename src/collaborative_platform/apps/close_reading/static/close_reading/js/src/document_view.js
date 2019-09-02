@@ -154,7 +154,7 @@ var DocumentView = function(args){
 
 	    selection = {text:text, range:selection_range, abs_positions:abs_positions};
 		
-		self.publish('document/selection', selection);
+		self.publish('document/selection', {selection});
 	}
 
 	function _handleDocumentLoad(file){
@@ -162,7 +162,7 @@ var DocumentView = function(args){
 		document.getElementById('editor').innerHTML='';
 		document.getElementById('editor').appendChild(body);
 		_styleAnnotatedTags(parsed_tei);
-		self.publish('document/render', {});
+		self.publish('document/render', {XML_EXTRA_CHAR_SPACER, document: parsed_tei});
 	}
 
 	function _handleDisplayOptions(args){
