@@ -199,6 +199,22 @@ div#history-popup span.color{
     height: 1em;
 }
 
+#popup{
+    z-index: 20;
+    position: absolute;
+    display: none;}
+
+#popup-arrow{
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    left: 8.5rem;
+    transform: rotate(45deg);
+    border-bottom: none;
+    border-right: none;
+    top: -10px;
+}
+
 /* ------------------ annotations.css ------------------ */
 /* ----------------------------------------------------- */
 
