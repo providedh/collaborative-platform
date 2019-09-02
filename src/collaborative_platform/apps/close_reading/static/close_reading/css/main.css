@@ -297,6 +297,8 @@ org,pb,rolename {
     min-height: 4px;
     margin: 2px 0;
     border-bottom: solid 2px white;
+    cursor: default;
+    background-color: white;
 }
 
 /* Locations : 
@@ -350,6 +352,7 @@ div#annotator-root[color-annotations="true"] geogName::before{
     color: #ff6464;
 }
 
+span.teiLegendElement#geolocation span.color,
 span.teiLegendElement#geogName span.color,
 span.teiLegendElement#location span.color{
     background-color: #ff6464;
