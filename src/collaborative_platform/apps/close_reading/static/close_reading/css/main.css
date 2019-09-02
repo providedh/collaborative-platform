@@ -16,10 +16,29 @@ page {
   box-shadow: 0 1px 3px 1px rgba(60,64,67,.15);
   width: 21cm;
 }
-.toogle-button{
+#toolbar .toogle-button{
 	position: relative;
 	bottom: -15px;
 	z-index: 1;
+}
+#toolbar .toogle-button .btn-primary{
+    box-shadow: rgba(60, 64, 67, 0.15) 0px 2px 14px 2px;
+}
+#toolbar .nav-link{
+    background-color: #f7f7f7;
+    border-color: #dee2e6 #dee2e6 #f7f7f7;
+    border-bottom: solid 1px #dee2e6;
+}
+#toolbar .nav-link.active{
+    background-color: #fff;
+    border-color: #dee2e6 #dee2e6 #fff;
+}
+#toolbar .tab-content{
+    background-color: white;
+    padding: 8px;
+    border-left: solid 1px #dee2e6;
+    border-right: solid 1px #dee2e6;
+    border-bottom: solid 1px #dee2e6;
 }
 .btn.collapsed .collapse-show{display: none;}
 .btn .collapsed-show{display: none;}
@@ -33,11 +52,19 @@ page {
 	width: 23cm; 
 	position:relative;
 	margin-bottom: 2em;
+    box-shadow: 0px 0px 5px -3px #acc5d7, 0px 0px 9px 3px #dfdede;
 }
 #toolbar > .card:first-of-type{padding: 0.1em 0.6em;}
 #toolbar .relative-group{position: relative;}
 #toolbar .relative-group:nth-of-type(1){z-index: 1;}
-#toolbar .card:nth-of-type(2){padding: 1rem 1.25rem 0rem 1.25rem;}
+#toolbar .card:nth-of-type(2){
+    background-color: #f7f7f7;
+    padding: 1rem 1.25rem 0rem 1.25rem;
+}
+
+#toolbar div.card{
+  border: none;
+}
 
 #toolbar label{
 	margin-bottom: 2px;
@@ -45,7 +72,6 @@ page {
 }
 
 #toolbar input{
-	padding: 0;
 	font-size: 0.9em;
 	width: 100%; 
 }
