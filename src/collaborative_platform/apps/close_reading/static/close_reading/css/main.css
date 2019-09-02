@@ -241,6 +241,15 @@ div#history-popup span.color{
     top: -10px;
 }
 
+.help-tooltip:before{
+    content:"\f059";
+    color:#00b3b0;
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    font-size: 1.2em;
+    margin-left: 3px;
+}
+
 /* ------------------ annotations.css ------------------ */
 /* ----------------------------------------------------- */
 

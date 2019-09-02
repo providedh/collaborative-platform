@@ -101,6 +101,17 @@ var Tooltips = function(args){
 		if(args.hasOwnProperty('channel'))
 			args.channel.addToChannel(obj);
 
+		Array.from(document.getElementsByClassName('help-tooltip')).forEach(node=>{
+				node.addEventListener('mouseenter', e=>self.publish('popup/render',{
+					title: '',
+					subtitle: '',
+					body: node.attributes['help'].value,
+					x: (e.clientX - 150)+'px', 
+					y: (e.clientY+20)+'px'
+				}));
+				node.addEventListener('mouseout', ()=>self.publish('popup/hide',{}));
+			});
+
 		obj.subscribe('document/render', _handleDocumentLoad);
 
 		self = obj;

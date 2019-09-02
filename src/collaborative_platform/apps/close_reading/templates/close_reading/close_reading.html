@@ -98,7 +98,9 @@
                         <div class="tab-pane show active" id="uncertainty-tab" role="tabpanel" aria-labelledby="annotating-uncertainty">
                           <div class="form-row">
                             <div class="col">
-                              <label for="category">Category of uncertainty</label>
+                              <label for="category">Category of uncertainty 
+                                <span class="help-tooltip" help="This is the category." />
+                              </label>
                               <select class="form-control form-control-sm" id='category'>
                                 <option class="ignorance" value="ignorance">Ignorance</option>
                                 <option class="credibility" value="credibility">Credibility</option>
@@ -107,7 +109,9 @@
                               </select>
                             </div>
                             <div class="col">
-                              <label for="locus">Locus</label>
+                              <label for="locus">Locus
+                                <span class="help-tooltip" help="This is the locus." />
+                              </label>
                               <select class="form-control form-control-sm" id='locus'>
                                 <option value="value">Value</option>
                                 <option value="name">Name</option>
@@ -116,7 +120,9 @@
                             </div>
                             <div class="col">
                               <div id="tag-name-input">
-                                <label for="tag-name">Tag name</label>
+                                <label for="tag-name">Tag name
+                                  <span class="help-tooltip" help="This is the type of tag to which the annotation refers." />
+                                </label>
                                 <select class="form-control form-control-sm" id='tag-name'>
                                   <option value="date">Date</option>
                                   <option value="event">Event</option>
@@ -133,24 +139,32 @@
                             </div>
                             <div class="col">
                               <div id="attribute-name-input">
-                                <label for="attribute-name">Attribute name </label>
+                                <label for="attribute-name">Attribute name 
+                                  <span class="help-tooltip" help="This is the attribute's name." />
+                                </label>
                                 <input type="text" id="attribute-name">
                               </div>
                             </div>
                           </div>
                           <div class="form-row">
                             <div class="col">
-                              <label for="selection">Text selection</label>
+                              <label for="selection">Text selection
+                                <span class="help-tooltip" help="This is the selected text." />
+                              </label>
                               <input readonly type="text" id="selection">
                             </div>
                             <div class="col">
-                              <label for="asserted-value">Asserted value</label>
+                              <label for="asserted-value">Asserted value
+                                <span class="help-tooltip" help="This is the proposed value." />
+                              </label>
                               <div id="asserted-value-container">
                                 <input id="asserted-value" class="input">
                               </div>
                             </div>
                             <div class="col">
-                              <label for="cert-level">Certainty</label>
+                              <label for="cert-level">Certainty
+                                <span class="help-tooltip" help="This is the level of certainty on the proposed value." />
+                              </label>
                               <select class="form-control form-control-sm" id='cert-level'>
                                 <option value="unknown">Unknown</option>
                                 <option value="high">High</option>
@@ -161,12 +175,16 @@
                           </div>
                           <div class="form-row">
                             <div class="col">
-                              <label for="description">Description</label>
+                              <label for="description">Description
+                                <span class="help-tooltip" help="This is an optional description." />
+                              </label>
                               <input type="text" id="description">
                             </div>
                             <div class="col">
                               <span id="references-container">
-                                <label for="references-autocomplete">References</label>
+                                <label for="references-autocomplete">References
+                                  <span class="help-tooltip" help="This is the referenced tag." />
+                                </label>
                                 <div class="autocomplete">
                                   <input type="text" id="references-autocomplete">
                                   <input type="text" id="references">
@@ -181,7 +199,9 @@
                         <div class="tab-pane" id="tei-tab" role="tabpanel" aria-labelledby="annotating-tei">
                           <div class="form-row">
                             <div class="col">
-                              <label for="tei-tag-name">Tag name</label>
+                              <label for="tei-tag-name">Tag name
+                                <span class="help-tooltip" help="This is the type TEI tag to use for annotating." />
+                              </label>
                                 <select class="form-control form-control-sm" id='tei-tag-name'>
                                   <option value="date">Date</option>
                                   <option value="event">Event</option>
@@ -196,7 +216,7 @@
                                 </select>
                             </div>
                             <div class="col">
-                              <p><br>Annotate TEI</p>
+                              <p><br>Annotate TEI without a sense of certainty attached to it.</p>
                             </div>
                             <div class="col d-flex justify-content-end align-items-end">
                               <button class="btn btn-outline-success" id="create-tei-annotation">Create</button>
