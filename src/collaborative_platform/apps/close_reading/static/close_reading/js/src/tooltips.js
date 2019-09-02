@@ -160,16 +160,14 @@ var Tooltips = function(args){
 					.from(attributes.values())
 					.map(e=>e.name+' : '+e.value).join(', <br>');
 
-				console.log(tag_id, attributes)
-
-				node.addEventListener('mouseenter', ()=>self.publish('popup/render',{
+				node.addEventListener('mouseenter', e=>self.publish('popup/render',{
 					title: (`<span class="teiLegendElement" id="${tag_name}">
 							<span class="color" id=""></span></span>`
 							+ node.textContent),
 					subtitle: `( ${tag_name} )`,
 					body: body,
-					x: (node.getBoundingClientRect().x+node.getBoundingClientRect().width/2 -150)+'px', 
-					y: (node.getBoundingClientRect().y+40)+'px'
+					x: (e.clientX - 150)+'px',//(node.getBoundingClientRect().x+node.getBoundingClientRect().width/2 -150)+'px', 
+					y: (e.clientY + 40) +'px'
 				}));
 				node.addEventListener('mouseout', ()=>self.publish('popup/hide',{}));
 			});
