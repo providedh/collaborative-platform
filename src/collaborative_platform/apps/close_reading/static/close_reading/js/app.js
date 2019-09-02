@@ -4,7 +4,7 @@ import DocumentView from './src/document_view.js';
 import PanelView from './src/panel.js';
 import Annotator from './src/annotator.js';
 import HistoryView from './src/history.js';
-import Popup from './src/tooltips.js';
+import {Popup, Tooltips} from './src/tooltips.js';
 
 // Load all components
 const websocket = AnnotatorWebSocket();
@@ -14,6 +14,7 @@ const panel_view = PanelView({channel});
 const annotator = Annotator({channel});
 const history_view = HistoryView({channel});
 const popup = Popup({channel});
+const tooltips = Tooltips({channel});
 
 // Create suscriber for sending messages using
 // the websocket
@@ -30,11 +31,11 @@ websocket.addCallback('onreload', file=>sub.publish('document/load', file));
 // Create websocket
 websocket.create();
 
-sub.publish('popup/render', {
+/*sub.publish('popup/render', {
 	title: 'alex',
 	subtitle: 'holaaaaaa',
 	body: 'ajdjasjd asjd as dsv j esrdfvkj re adsvcneroijvdv eñdskfnv',
 	x: '300px',
 	y: '150px'
 })
-setTimeout(()=>sub.publish('popup/hide', {}), 3000);
+setTimeout(()=>sub.publish('popup/hide', {}), 3000);*/

@@ -74,4 +74,61 @@ var Popup = function(args){
 	return _init(args);
 };
 
-export default Popup;
+/* Module: Tooltips
+ * Module for displaying customizable tooltips on document elements.
+ *
+ * Publishes:
+ * - none
+ *
+ * Listens:
+ * - document/load
+ * */
+var Tooltips = function(args){
+	let self = null;
+	const tags = [
+		'placeName','place','country','location','geogName',
+		'geolocation','person','name','persName','occupation',
+		'event','object','date','time','org','pb','rolename'
+		]
+
+	function _init(args){
+		const obj = {
+			suscribe: ()=>_notimplemented('suscribe'),
+			publish: ()=>_notimplemented('publish'),
+		};
+
+		// Add instance to the pub/sub channel
+		if(args.hasOwnProperty('channel'))
+			args.channel.addToChannel(obj);
+
+		obj.subscribe('document/render', _handleDocumentLoad);
+
+		self = obj;
+		return obj;
+	}
+
+	function _handleDocumentLoad(args){
+		for(let tag of tags){
+			Array.from(document.getElementsByTagName(tag)).forEach(node=>{
+				node.addEventListener('mouseenter', ()=>self.publish('popup/render',{
+					title: (`<span class="teiLegendElement" id="${tag}">
+							<span class="color" id=""></span></span>`
+							+ node.textContent),
+					subtitle: `( ${tag} )`,
+					body: '',
+					x: (node.getBoundingClientRect().x+node.getBoundingClientRect().width/2 -150)+'px', 
+					y: (node.getBoundingClientRect().y+40)+'px'
+				}));
+				node.addEventListener('mouseout', ()=>self.publish('popup/hide',{}));
+			});
+		}
+	}
+
+	function _notimplemented(method){
+		return function(){throw(new Error('Not implemented : '+method))};
+	}
+
+	return _init(args);
+};
+
+export {Popup, Tooltips};
