@@ -108,14 +108,55 @@ var Tooltips = function(args){
 	}
 
 	function _handleDocumentLoad(args){
-		for(let tag of tags){
-			Array.from(document.getElementsByTagName(tag)).forEach(node=>{
+		const certaintyAnnotations = {};
+
+		Array.from(args.document.getElementsByTagName('teiHeader')[0].getElementsByTagName('certainty'), a=>a)
+            .forEach(annotation=>{
+                annotation.attributes['target'].value.trim().split(" ").forEach(target=>{
+                    const id = args.XML_EXTRA_CHAR_SPACER+target.slice(1);
+                    if(id != args.XML_EXTRA_CHAR_SPACER && document.getElementById(id) != null){   
+                    	certaintyAnnotations[id] = annotation.attributes;
+                    }
+                })
+            });
+
+		for(let tag_name of tags){
+			const headerTags = {};
+
+			Array.from(args.document.getElementsByTagName('teiHeader')[0].getElementsByTagName(tag_name), a=>a)
+	            .forEach(headerTag=>{
+	            	if(headerTag.hasOwnProperty('target'))
+		                headerTag.attributes['target'].value.trim().split(" ").forEach(target=>{
+		                    const id = args.XML_EXTRA_CHAR_SPACER+target.slice(1);
+		                    if(id != args.XML_EXTRA_CHAR_SPACER && document.getElementById(id) != null){   
+		                    	certaintyAnnotations[id] = headerTag.attributes;
+		                    }
+		                })
+	            });
+
+			Array.from(document.getElementsByTagName(tag_name)).forEach(node=>{
+				const attributes = [], tag_id = node.id;
+
+				attributes.push(...node.attributes);
+
+				if(tag_id != '' && certaintyAnnotations.hasOwnProperty(tag_id))
+					attributes.push(...certaintyAnnotations[tag_id]);
+
+				if(tag_id != '' && headerTags.hasOwnProperty(tag_id))
+					attributes.push(...headerTags[tag_id]);
+
+				const body = Array
+					.from(attributes.values())
+					.map(e=>e.name+' : '+e.value).join(', <br>');
+
+				console.log(tag_id, attributes)
+
 				node.addEventListener('mouseenter', ()=>self.publish('popup/render',{
-					title: (`<span class="teiLegendElement" id="${tag}">
+					title: (`<span class="teiLegendElement" id="${tag_name}">
 							<span class="color" id=""></span></span>`
 							+ node.textContent),
-					subtitle: `( ${tag} )`,
-					body: '',
+					subtitle: `( ${tag_name} )`,
+					body: body,
 					x: (node.getBoundingClientRect().x+node.getBoundingClientRect().width/2 -150)+'px', 
 					y: (node.getBoundingClientRect().y+40)+'px'
 				}));
