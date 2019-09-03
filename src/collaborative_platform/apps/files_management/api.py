@@ -115,33 +115,39 @@ def get_file_versions(request, file_id):  # type: (HttpRequest, int) -> HttpResp
 @login_required
 @objects_exists
 @user_has_access()
+def file(request, *args, **kwargs):
+    if request.method == "DELETE":
+        return delete(request, *args, **kwargs)
+    elif request.method == "GET":
+        return get_file_version(request, *args, **kwargs)
+
+
+@login_required
+@objects_exists
+@user_has_access()
 def get_file_version(request, file_id, version=None):  # type: (HttpRequest, int, int) -> HttpResponse
-    if request.method == 'GET':
-        file = File.objects.filter(id=file_id).get()
+    file = File.objects.filter(id=file_id).get()
 
-        if version is None:
-            version = file.version_number
+    if version is None:
+        version = file.version_number
 
-        fv = file.versions.filter(number=version).get()  # type: FileVersion
+    fv = file.versions.filter(number=version).get()  # type: FileVersion
 
-        try:
-            creator = model_to_dict(fv.created_by, fields=('id', 'first_name', 'last_name'))
-        except (AttributeError, User.DoesNotExist):
-            creator = fv.created_by_id
+    try:
+        creator = model_to_dict(fv.created_by, fields=('id', 'first_name', 'last_name'))
+    except (AttributeError, User.DoesNotExist):
+        creator = fv.created_by_id
 
-        fv.upload.open('r')
-        response = {
-            "filename": file.name,
-            "version_number": fv.number,
-            "creator": creator,
-            "data": fv.upload.read()
-        }
-        fv.upload.close()
+    fv.upload.open('r')
+    response = {
+        "filename": file.name,
+        "version_number": fv.number,
+        "creator": creator,
+        "data": fv.upload.read()
+    }
+    fv.upload.close()
 
-        return JsonResponse(response)
-
-    else:
-        return HttpResponseBadRequest("Invalid request method")
+    return JsonResponse(response)
 
 
 @login_required

@@ -4,11 +4,10 @@ from . import api
 urlpatterns = [
     path('upload/', api.upload, name='upload'),
     path('<int:file_id>/versions/', api.get_file_versions, name='get_file_versions'),
-    path('<int:file_id>/', api.get_file_version, name='get_file'),
+    path('<int:file_id>', api.file, name='ile'),
     path('<int:file_id>/version/<int:version>/', api.get_file_version, name='get_file_version'),
     path('move/<int:move_to>', api.move, name='move'),
     path('directory/<int:directory_id>/create_subdir/<str:name>', api.create_directory, name='create_directory'),
-    path('<int:file_id>', api.delete, name='delete_file'),
     path('directory/<int:directory_id>', api.delete, name='delete_directory'),
     path('<int:file_id>/rename/<str:new_name>', api.rename, name='rename_file'),
     path('directory/<int:directory_id>/rename/<str:new_name>', api.rename, name='rename_directory'),
