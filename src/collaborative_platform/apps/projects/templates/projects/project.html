@@ -71,7 +71,11 @@
     </div>
     <div class="ml-auto project__buttons d-flex flex-nowrap">
       <div><button type="button" class="{% if not project.public %}project__button--makeprivate{% else %}project__button--makeprivate-active{% endif %}" js-makePrivateProject="{{ project.id }}">Private</button></div>
-      <div><button type="button" class="{% if project.public %}project__button--makepublic{% else %}project__button--makepublic-active{% endif %}" js-makePublicProject="{{ project.id }}">Make Public</button></div>
+      <div>
+        <button class="{% if project.public %}project__button--makepublic{% else %}project__button--makepublic-active{% endif %}"
+                js-makePublicProject="{{ project.id }}" type="button">Public
+        </button>
+      </div>
     </div>
   </div>
   <div class="row">
