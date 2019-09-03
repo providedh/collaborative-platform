@@ -181,6 +181,7 @@ SOCIAL_AUTH_POSTGRES_JSONFIELD = True
 AUTHENTICATION_BACKENDS = (
     'social_core.backends.google.GoogleOAuth2',
     'social_core.backends.facebook.FacebookOAuth2',
+    'social_core.backends.orcid.ORCIDOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
 
@@ -201,6 +202,9 @@ LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
 LOGIN_REDIRECT_URL = 'index'
 
+SOCIAL_AUTH_ORCID_KEY = 'put client ID here'
+SOCIAL_AUTH_ORCID_SECRET = 'put secret key here'
+
 SOCIAL_AUTH_FACEBOOK_KEY = 'put client ID here'
 SOCIAL_AUTH_FACEBOOK_SECRET = 'put secret key here'
 SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
@@ -212,5 +216,5 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = 'put client ID here'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'put secret key here'
 
 SOCIAL_AUTH_LOGIN_ERROR_URL = 'settings'
-SOCIAL_AUTH_LOGIN_REDIRECT_URL = 'index'
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = 'settings'
 SOCIAL_AUTH_RAISE_EXCEPTIONS = False
