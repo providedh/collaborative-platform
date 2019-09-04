@@ -709,6 +709,9 @@
   background: white;
   border-radius: 5px;
   margin: -2px 1px 0 1px;
+  display: inline-block;
+  padding: 1px 6px;
+
 
   &:hover, &:focus {
     background: black;

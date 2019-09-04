@@ -6,7 +6,10 @@ $.ajaxSetup({
 });
 
 var id = $('#files').attr('data-project-id');
-var draggableElements;
+
+var draggableElements = {};
+
+
 
 var options = {
     divID : 'files',
@@ -17,6 +20,21 @@ var options = {
     paginateToggle : false,
     lazyLoad : true,
     useDropzone : true,
+    uploads: true,
+    resolveUploadUrl: function(item) { // Allows the user to calculate the url of each individual row
+        // this = treebeard object;
+        // Item = item acted on return item.data.ursl.upload
+        return "/uploadssssss";
+    },
+    dropzone: {
+        url: "http://www.torrentplease.com/dropzone.php",
+        dragstart: function (treebeard, event) {
+            // this = dropzone object
+            // treebeard = treebeard object
+            // event = event passed in
+            window.console.log("dragstart", this, treebeard, event);
+        },
+    },
     uploadURL : "",
     allowMove : true,
     allowArrows : true,
@@ -31,7 +49,7 @@ var options = {
                 filter : true,
                 css : 'tb-draggable',
                 custom : function (row) {
-                    return  (row.data.kind !== "folder") ? m("a[href='/projects/']", row.data.name) : m("span", row.data.name)
+                    return  (row.data.kind !== "folder") ? m("a[href='/projects/' data-id='" + row.data.id + "']", row.data.name) : m("span[data-file-id='" + row.data.id + "']", row.data.name)
                 }
             },
             {
@@ -48,6 +66,11 @@ var options = {
                 css : 'tb-actions',
                 custom : function (row) {
                     var that = this;
+
+                    var buttons = []
+
+                    var downloadDirectoryButton = m("a.tb-button[href='/api/files/directory/" + row.data.id +  "/download']", {}, m("i", {'class': "fa fa-download"}));
+                    var downloadFileButton = m("a.tb-button[href='/api/files/" + row.data.id +  "/download']", m("i", {'class': "fa fa-edit"}));
 
                     var editButton = m("button.tb-button", {
                             onclick: function _editClick(e) {
@@ -148,11 +171,25 @@ var options = {
                         }
                     }, m("i", {'class': "fa fa-trash"}));
 
-                    if (row.data.parent) {
-                        return (row.data.kind !== "folder") ? [editButton, deleteButton] : [editButton, createFolderButton, deleteButton];
+                    if (row.data.kind === "folder") {
+                        buttons.push(downloadDirectoryButton);
                     } else {
-                        return createFolderButton;
+                        buttons.push(downloadFileButton);
                     }
+
+                    if (row.data.parent) {
+                        buttons.push(editButton);
+                    }
+
+                    if (row.data.kind === "folder") {
+                        buttons.push(createFolderButton);
+                    }
+
+                    if (row.data.parent) {
+                        buttons.push(deleteButton);
+                    }
+
+                    return buttons;
 
 
                 }
@@ -160,37 +197,51 @@ var options = {
         ];
     },
     dragEvents : {
-        start : function(event, ui) {
-            console.log('start')
+        start : function() {
+            var folders = [];
+            var files = [];
+
+            console.log(this)
+
             $('.tb-multiselect').each(function(index) {
-                console.log(this)
+                if ($(this).find('[data-file-id]').prop("tagName") === 'SPAN') {
+                    folders.push($(this).find('[data-file-id]').attr('data-file-id'))
+                } else {
+                    files.push($(this).find('[data-file-id]').attr('data-file-id'))
+                }
             })
+
+            draggableElements['directories'] = folders;
+            draggableElements['files'] = files;
+
         },
     },
     dropEvents : {
-
-        over : function(event, ui) {
-            //console.log(ui)
-        },
         drop : function(event, ui) {
-            //console.log(ui)
-            //console.log(event)
-            //var obj = ui.draggable
-            //console.log(obj)
-
-            //for (var i = 0, len = obj.length; i < len; i++) {
-            //    console.log(obj[i].dataset.id);
-            //}
+            var payload = { data: draggableElements }
+            if ($(event.target).find('[data-file-id]').prop("tagName") === 'SPAN') {
+                console.log('eee')
+                $.ajax({
+                    type: "PUT",
+                    url: '/api/files/move/' + $(event.target).find('[data-file-id]').attr('data-file-id'),
+                    contentType : 'application/json',
+                    data: JSON.stringify(payload),
+                    success: function(resultData){
+                        that.refreshData();
+                    }
+                });
+            }
         }
     },
     hScroll : null,
+
     onselectrow : function (row){
-        //console.log(row);
+        console.log(row);
     },
     columnTitles : function() {
         return [{
             title: "Name",
-            width: "65%",
+            width: "62%",
             sortType: "text",
             sort: true
         }, {
@@ -200,7 +251,7 @@ var options = {
             sort: true
         }, {
             title: "",
-            width: "17%",
+            width: "20%",
             //sortType: "date",
             sort: false
         }]
