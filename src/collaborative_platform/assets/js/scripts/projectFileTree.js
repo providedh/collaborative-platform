@@ -6,10 +6,7 @@ $.ajaxSetup({
 });
 
 var id = $('#files').attr('data-project-id');
-
 var draggableElements = {};
-
-
 
 var options = {
     divID : 'files',
@@ -197,35 +194,51 @@ var options = {
         ];
     },
     dragEvents : {
-        start : function() {
+        start : function(event, ui) {
             var folders = [];
             var files = [];
 
-            console.log(this)
+            if ($(event.target).parent().hasClass('tb-multiselect')) {
+                $('.tb-multiselect').each(function(index) {
+                    if ($(this).find('[data-file-id]').prop("tagName") === 'SPAN') {
+                        folders.push($(this).find('[data-file-id]').attr('data-file-id'))
+                    } else {
+                        files.push($(this).find('[data-file-id]').attr('data-file-id'))
+                    }
+                })
 
-            $('.tb-multiselect').each(function(index) {
-                if ($(this).find('[data-file-id]').prop("tagName") === 'SPAN') {
-                    folders.push($(this).find('[data-file-id]').attr('data-file-id'))
+            } else {
+                if ($(event.target).find('[data-file-id]').prop("tagName") === 'SPAN') {
+                    folders.push($(event.target).find('[data-file-id]').attr('data-file-id'))
                 } else {
-                    files.push($(this).find('[data-file-id]').attr('data-file-id'))
+                    files.push($(event.target).find('[data-file-id]').attr('data-file-id'))
                 }
-            })
+            }
 
-            draggableElements['directories'] = folders;
-            draggableElements['files'] = files;
+            if (folders.length) {
+                draggableElements['directories'] = folders;
+            }
+
+            if (files.length) {
+                draggableElements['files'] = files;
+            }
+
+            
+
+
+
 
         },
     },
     dropEvents : {
-        drop : function(event, ui) {
-            var payload = { data: draggableElements }
+        drop : function(event) {
+            var that = this;
             if ($(event.target).find('[data-file-id]').prop("tagName") === 'SPAN') {
-                console.log('eee')
                 $.ajax({
-                    type: "PUT",
+                    type: "POST",
                     url: '/api/files/move/' + $(event.target).find('[data-file-id]').attr('data-file-id'),
                     contentType : 'application/json',
-                    data: JSON.stringify(payload),
+                    data: JSON.stringify(draggableElements),
                     success: function(resultData){
                         that.refreshData();
                     }
@@ -236,7 +249,7 @@ var options = {
     hScroll : null,
 
     onselectrow : function (row){
-        console.log(row);
+        // console.log(row);
     },
     columnTitles : function() {
         return [{
@@ -252,7 +265,6 @@ var options = {
         }, {
             title: "",
             width: "20%",
-            //sortType: "date",
             sort: false
         }]
     }
