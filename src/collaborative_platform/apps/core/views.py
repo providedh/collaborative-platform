@@ -21,16 +21,8 @@ def index(request):  # type: (HttpRequest) -> HttpResponse
 
         return render(request, 'projects/projects.html', context)
     else:
-        alerts = [
-            {
-                'type': 'success',
-                'message': 'Alert test',
-            }
-        ]
-
         context = {
             'title': 'Home',
-            'alerts': alerts,
         }
 
         return render(request, 'core/index.html', context)
