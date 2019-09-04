@@ -36,8 +36,6 @@ var Popup = function(args){
 			y: '25%'
 		},args);
 
-		console.log(values)
-
 		document
         	.getElementById('popup')
         	.getElementsByClassName('card-title')[0]
