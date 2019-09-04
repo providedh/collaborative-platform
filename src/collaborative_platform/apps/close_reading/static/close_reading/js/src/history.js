@@ -7,36 +7,13 @@
  * Listens:
  * - panel/display_options
  * */
+import AjaxCalls from './aux/ajax.js';
+
 var HistoryView = function(args){
 	let self = null;
+	let ajaxCalls = AjaxCalls();
+
 	let versions = [
-		{
-			timestamp: 'Thu Aug 23 2019 13:14:13 GMT+0200',
-			credibility: 0,
-			incompleteness: 0,
-			ignorance: 0,
-			imprecision: 0,
-			variation: 0,
-			url: '',
-		},
-		{
-			timestamp: 'Thu Aug 29 2019 13:14:13 GMT+0200',
-			credibility: 0,
-			incompleteness: 2,
-			ignorance: 0,
-			imprecision: 1,
-			variation: 1,
-			url: '',
-		},
-		{
-			timestamp: 'Thu Sep 12 2019 13:14:13 GMT+0200',
-			credibility: 1,
-			incompleteness: 3,
-			ignorance: 2,
-			imprecision: 1,
-			variation: 2,
-			url: '',
-		},
 	];
 
 	function _init(args){
@@ -57,7 +34,13 @@ var HistoryView = function(args){
 		history_div.addEventListener('mouseout', 
 			e=>history_div.classList.remove('hovered'));
 
-		_updateVersions();
+		ajaxCalls.getHistory(window.project_id, window.file_id, window.file_version).then(response=>{
+			if(response.success === true){
+				versions = response.content.data;
+				_updateVersions();
+			}
+		});
+
 
 		//obj.suscribe('popup/render', _handleRenderPopup);
 
@@ -70,28 +53,31 @@ var HistoryView = function(args){
 			.getElementById('versions')
 			.getBoundingClientRect().width - 10;
 
-		const dates = versions.map(t=>(new Date(t.timestamp)).getTime()),
+		const getTimestamp = date=>date.getTime()+10000*date.getHours()+100*date.getMinutes();
+
+		const dates = versions.map(t=>getTimestamp(new Date(t.timestamp))),
 			min = Math.min(...dates),
 			max = Math.max(1, Math.max(...dates) - min);
 
-		for(let version = 0; version < versions.length; version ++){
-			const date = (new Date(versions[version].timestamp)).getTime(),
-				offset = client_width * (date-min) / max;
+		for(let version of versions){
+			const date = new Date(version.timestamp),
+				timestamp = getTimestamp(date),
+				offset = client_width * (timestamp-min) / max;
 
 			const element = document.createElement('a');
 	        element.setAttribute('class','version');
-	        element.setAttribute('href',versions[version].url);
+	        element.setAttribute('href',version.url);
 	        element.style.setProperty('left', `${offset}px`);
 
-	        if((version +1) == +window.file_version)
+	        if(version.version == +window.file_version)
 	        	element.style.setProperty('background-color', '#00b3b0');
 
 	        element.addEventListener('mouseenter', 
-	        	evt=>_handleVersionHoverIn(evt,versions[version]));
+	        	evt=>_handleVersionHoverIn(evt,version));
 	        element.addEventListener('mouseout', 
-	        	evt=>_handleVersionHoverOut(evt,versions[version]));
+	        	evt=>_handleVersionHoverOut(evt,version));
 
-	        console.log(element, offset, date, max, min)
+	        console.info('Retrieved version', version.timestamp)
 
 	        document.getElementById('versions').appendChild(element);
 		}
@@ -103,7 +89,9 @@ var HistoryView = function(args){
 	        timestamp.ignorance,timestamp.credibility, timestamp.variation),
 	        xScale = d=>6*d/max;
 
-	    popup.innerHTML=`${timestamp.timestamp}<br>
+	    popup.innerHTML=`
+	      Version ${timestamp.version}<br>
+	      ${(new Date(timestamp.timestamp)).toUTCString()}<br>
 	      Contributor : ${timestamp.contributor}<br>
 	      <div class="content">
 	      <span>
