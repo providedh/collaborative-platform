@@ -16,6 +16,20 @@ page {
   box-shadow: 0 1px 3px 1px rgba(60,64,67,.15);
   width: 21cm;
 }
+
+#alert{
+    position: absolute;
+    top: 0;
+    width: 40%;
+    left: 30%;
+    z-index: 200;
+    transition: opacity 1s;
+    transition-timing-function: ease;
+}
+
+#alert.hide{opacity: 0;}
+#alert.show{opacity: 1;}
+
 #toolbar .toogle-button{
 	position: relative;
 	bottom: -15px;
