@@ -157,11 +157,11 @@ def move(request, move_to):  # type: (HttpRequest, int) -> HttpResponse
     data = request.body
     data = loads(data)
 
-    for directory_id in data['directories']:
+    for directory_id in data.get('directories', ()):
         dir = Directory.objects.filter(id=directory_id).get()
         dir.move_to(move_to)
         log_activity(project=dir.project, user=request.user, related_dir=dir, action_text="moved to")
-    for file_id in data['files']:
+    for file_id in data.get('files', ()):
         file = File.objects.filter(id=file_id).get()
         file.move_to(move_to)
         log_activity(project=file.project, user=request.user, file=file, action_text="moved to")
