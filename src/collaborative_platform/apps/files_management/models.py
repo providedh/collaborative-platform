@@ -19,8 +19,8 @@ class FileNode(models.Model):
     class Meta:
         abstract = True
 
-    def move_to(self, directory):  # type: (FileNode, Directory) -> FileNode
-        self.parent_dir = directory
+    def move_to(self, directory_id):  # type: (FileNode, int) -> FileNode
+        self.parent_dir_id = directory_id
         self.save()
         return self
 
