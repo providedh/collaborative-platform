@@ -57,11 +57,14 @@ def include_contributors(response):  # type: (JsonResponse) -> JsonResponse
 
 def log_activity(project, user, action_text="", file=None,
                  related_dir=None):  # type: (Project, User, str, File, Directory) -> Activity
-    a = Activity(project=project, user=user, action_text=action_text)
+    a = Activity(project=project, user=user, user_name="{} {}".format(user.first_name, user.last_name),
+                 action_text=action_text)
     if file is not None:
         a.related_file = file
+        a.related_file_name = file.name
     if related_dir is not None:
         a.related_dir = related_dir
+        a.related_dir_name = related_dir.name
     a.save()
     return a
 
