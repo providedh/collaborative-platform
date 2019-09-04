@@ -14,7 +14,7 @@ UPLOADED_FILES_PATH = 'uploaded_files/'
 
 class FileNode(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
-    name = models.CharField(max_length=150)
+    name = models.CharField(max_length=255)
 
     class Meta:
         abstract = True
