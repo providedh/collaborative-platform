@@ -36,11 +36,11 @@ class Activity(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     related_file = models.ForeignKey("files_management.File", related_name='activities', on_delete=models.SET_NULL,
                                      null=True, blank=True)
-    related_file_name = models.CharField(max_length=255)
+    related_file_name = models.CharField(max_length=255, null=True, blank=True)
     related_dir = models.ForeignKey("files_management.Directory", related_name='activities',
                                     on_delete=models.SET_NULL,
                                     null=True, blank=True)
-    related_dir_name = models.CharField(max_length=255)
+    related_dir_name = models.CharField(max_length=255, null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='activities', null=True)
     user_name = models.CharField(max_length=255)
     action_text = models.CharField(max_length=255)
