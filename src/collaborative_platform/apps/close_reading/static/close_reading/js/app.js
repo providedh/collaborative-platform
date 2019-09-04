@@ -5,6 +5,7 @@ import PanelView from './src/panel.js';
 import Annotator from './src/annotator.js';
 import HistoryView from './src/history.js';
 import {Popup, Tooltips} from './src/tooltips.js';
+import Alert from './src/aux/alert.js';
 
 // Load all components
 const websocket = AnnotatorWebSocket();
@@ -25,8 +26,10 @@ sub.subscribe('document/render', selection=>console.info('Document rendered.'));
 
 // Publish websocket updates
 websocket.addCallback('onload', file=>sub.publish('document/load', file));
+websocket.addCallback('onload', ()=>Alert.alert('success','Document successfully loaded.'));
 //AnnotatorWebSocket.addCallback('onload', file=>console.log(file));
 websocket.addCallback('onreload', file=>sub.publish('document/load', file));
+websocket.addCallback('onreload', ()=>Alert.alert('success','Changes successfully loaded.'));
 
 // Create websocket
 websocket.create();
