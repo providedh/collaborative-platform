@@ -185,8 +185,8 @@ var PanelView = function(args){
 		}
 	}
 
-	function _handleDocumentSelection(selection){
-		document.getElementById('selection').value = selection.text;
+	function _handleDocumentSelection(args){
+		document.getElementById('selection').value = args.selection.text;
 	}
 
 	function _notimplemented(method){
