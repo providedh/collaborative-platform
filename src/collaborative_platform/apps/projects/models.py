@@ -41,6 +41,6 @@ class Activity(models.Model):
                                     on_delete=models.SET_NULL,
                                     null=True, blank=True)
     related_dir_name = models.CharField(max_length=255)
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='activities')
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='activities', null=True)
     user_name = models.CharField(max_length=255)
     action_text = models.CharField(max_length=255)
