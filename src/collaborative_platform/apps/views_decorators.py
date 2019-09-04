@@ -137,8 +137,13 @@ def __get_project_id(request, **kwargs):
         directory_id = kwargs['directory_id']
         directory = Directory.objects.get(id=directory_id)
         project_id = directory.project_id
-    elif request.method == "POST" and request.POST.get("data", False):
-        data = json.loads(request.POST.get("data"))
+    elif request.method == "POST" and request.body:
+        try:
+            data = json.loads(request.body)
+        except TypeError:
+            raise KeyError("Not found required 'project_id', 'file_id' or 'directory_id' "
+                           "in given arguments and POST body is empty")
+
         project_id_files, project_id_dirs = None, None
 
         if 'files' in data:

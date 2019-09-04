@@ -154,7 +154,7 @@ def get_file_version(request, file_id, version=None):  # type: (HttpRequest, int
 @objects_exists
 @user_has_access('RW')
 def move(request, move_to):  # type: (HttpRequest, int) -> HttpResponse
-    data = request.POST.get("data")
+    data = request.body
     data = loads(data)
 
     for directory_id in data['directories']:

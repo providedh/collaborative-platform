@@ -119,7 +119,7 @@ def get_directory_content(dir, indent):  # type: (Directory, int) -> dict
     result['children'] = files + subdirs
     result['kind'] = "folder"
     result['icon'] = 'fa-file-folder-o'
-    result['open'] = False
+    result['open'] = not indent
     result['indent'] = indent
 
     return result
