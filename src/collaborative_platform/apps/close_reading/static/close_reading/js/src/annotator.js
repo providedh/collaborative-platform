@@ -12,11 +12,12 @@
  * */
 
 import AjaxCalls from './aux/ajax.js';
+import Alert from './aux/alert.js';
 
 var Annotator = function(args){
 	let self = null;
 	let _selection = null;
-	let ajax_urls = AjaxCalls();
+	let ajaxCalls = AjaxCalls();
 
 	function _init(args){
 		const obj = {
@@ -51,7 +52,7 @@ var Annotator = function(args){
 	function _handleCreateUncertaintyAnnotation(args){
 		if(_selection == null)
 	        return
-	    console.log(args)
+
 	    const data = {
 	    	'start_pos': _selection.abs_positions.start,
 	    	'end_pos': _selection.abs_positions.end,
@@ -79,28 +80,23 @@ var Annotator = function(args){
             data['references'] = args.references
         }
 
-
         console.log(data)
 
 	    self.publish('websocket/send', JSON.stringify(data));
 	}
 
 	function _handleFileSave(args){
-		$.ajax({
-	        url:ajax_urls.get_save_url(window.project_id, window.file_id),
-	        type: 'PUT',   //type is any HTTP method
-	        data: {},      //Data as js object
-	        success: function (a) {
-	            console.log('save - success < ',ajax_urls.get_save_url(window.project_id, window.file_id),' < ',a);
-	        },
-	        error: function (a) {
-	            console.log('save - error < ',ajax_urls.get_save_url(window.project_id, window.file_id),' < ',a)
-	        }
-	    })
+		ajaxCalls.safeFile(window.project_id, window.file_id).then(response=>{
+			if(response.success === true)
+				Alert.alert('success','Changes successfully saved.');
+			else
+				Alert.alert('success','Error saving the changes.');
+			console.info('Changes '+(response.success === true)?'saved':'not saved');
+		});
 	}
 
-	function _handleDocumentSelection(selection){
-		_selection = selection;
+	function _handleDocumentSelection(args){
+		_selection = args.selection;
 	}
 
 	function _notimplemented(method){
