@@ -48,7 +48,8 @@ def overwrite_existing_file(dbfile, uploaded_file, user):  # type: (File, Upload
     dbfile.version_number = new_version_number
     dbfile.save()
 
-    log_activity(dbfile.project, user, action_text="created new version", file=dbfile)
+    log_activity(dbfile.project, user, action_text="created version number () of".format(new_version_number),
+                 file=dbfile)
     return dbfile
 
 

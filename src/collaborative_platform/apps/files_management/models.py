@@ -36,7 +36,8 @@ class Directory(FileNode):
 
         d = Directory(name=name, project=self.project, parent_dir=self)
         d.save()
-        log_activity(project=d.project, user=user, related_dir=d, action_text="created")
+        log_activity(project=d.project, user=user, related_dir=d,
+                     action_text="created directory {} in {}".format(d.name, self.name))
         return d
 
     def rename(self, new_name, user):  # type: (Directory, str, User) -> Directory
@@ -89,7 +90,7 @@ class File(FileNode):
         self.name = new_name
         self.save()
         log_activity(project=self.project, user=user, file=self,
-                     action_text="renamed {} to {}".format(old_name, new_name))
+                     action_text="renamed {} to".format(old_name))
 
     def download(self):
         fv = self.versions.filter(number=self.version_number).get()

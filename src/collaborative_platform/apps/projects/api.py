@@ -34,7 +34,7 @@ def create(request):  # type: (HttpRequest) -> HttpResponse
             base_dir = Directory(name=data['title'], project=project)
             base_dir.save()
 
-            log_activity(project, request.user, "created")
+            log_activity(project, request.user, "created project")
             return HttpResponse(dumps({"id": project.id}))
         except (ValidationError, KeyError):
             return HttpResponseBadRequest(dumps({"message": "Invalid value"}))
