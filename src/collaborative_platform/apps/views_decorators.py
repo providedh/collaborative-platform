@@ -137,7 +137,7 @@ def __get_project_id(request, **kwargs):
         directory_id = kwargs['directory_id']
         directory = Directory.objects.get(id=directory_id)
         project_id = directory.project_id
-    elif request.method == "POST" and request.body:
+    elif request.method in ("POST", "PUT") and request.body:
         try:
             data = json.loads(request.body)
         except TypeError:
