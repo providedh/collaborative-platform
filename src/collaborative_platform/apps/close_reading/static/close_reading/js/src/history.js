@@ -85,11 +85,15 @@ var HistoryView = function(args){
 		const history_div = document.getElementById('history'),
 			history_container = document.getElementById('history-container');
 
-		history_div.addEventListener('mouseover', 
-			e=>history_div.classList.add('hovered'));
+		history_div.addEventListener('mouseover', e=>{
+			history_div.classList.add('hovered');
+			document.getElementById('editor').classList.add('lowered');
+		});
 
-		history_container.addEventListener('mouseleave', 
-			e=>history_div.classList.remove('hovered'));
+		history_container.addEventListener('mouseleave', e=>{
+			history_div.classList.remove('hovered')
+			document.getElementById('editor').classList.remove('lowered');
+		});
 
 
 		ajaxCalls.getHistory(window.project_id, window.file_id, window.file_version).then(response=>{
