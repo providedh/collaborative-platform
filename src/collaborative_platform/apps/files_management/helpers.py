@@ -63,7 +63,6 @@ def hash_file(dbfile, uploaded_file):  # type: (File, UploadedFile) -> str
     return hash
 
 
-# TODO check permissions by decorator
 def upload_file(uploaded_file, project, user, parent_dir=None):  # type: (UploadedFile, Project, User, int) -> File
     try:
         dbfile = File.objects.filter(name=uploaded_file.name, parent_dir_id=parent_dir, project=project).get()
