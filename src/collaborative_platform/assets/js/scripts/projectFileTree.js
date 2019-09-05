@@ -46,7 +46,7 @@ var options = {
                 filter : true,
                 css : 'tb-draggable',
                 custom : function (row) {
-                    return  (row.data.kind !== "folder") ? m("a[href='/projects/' data-id='" + row.data.id + "']", row.data.name) : m("span[data-file-id='" + row.data.id + "']", row.data.name)
+                    return  (row.data.kind !== "folder") ? m("a[href='/files/" + row.data.id + "/']", { 'data-file-id' : row.data.id }, row.data.name) : m("span", { 'data-file-id' : row.data.id }, row.data.name)
                 }
             },
             {

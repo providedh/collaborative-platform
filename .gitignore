@@ -34,3 +34,7 @@ celerybeat-schedule
 
 # Migrations
 *migrations/
+
+#uploaded file
+
+uploaded_file
