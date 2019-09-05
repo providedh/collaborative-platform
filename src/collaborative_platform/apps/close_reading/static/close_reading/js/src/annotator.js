@@ -11,8 +11,8 @@
  * - annotator/load
  * */
 
-import AjaxCalls from './aux/ajax.js';
-import Alert from './aux/alert.js';
+import AjaxCalls from './utilities/ajax.js';
+import Alert from './utilities/alert.js';
 
 var Annotator = function(args){
 	let self = null;

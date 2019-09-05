@@ -9,7 +9,7 @@
  * Listens:
  * - panel/display_options
  * */
-import ColorScheme from './aux/color.js';
+import ColorScheme from './utilities/color.js';
 
 var DocumentView = function(args){
 	let self = null;
