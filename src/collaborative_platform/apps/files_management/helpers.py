@@ -130,7 +130,7 @@ def get_all_child_dirs(directory):  # type: (Directory) -> Set[int]
 
     for child in directory.subdirs.all():
         children.add(child.id)
-        children.union(get_all_child_dirs(child))
+        children.update(get_all_child_dirs(child))
 
     return children
 
