@@ -4,6 +4,7 @@ from zipfile import ZipFile
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.db import IntegrityError
 from django.forms import model_to_dict
 from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, JsonResponse, HttpResponseServerError
 from lxml.etree import XMLSyntaxError
@@ -161,7 +162,7 @@ def move(request, move_to):  # type: (HttpRequest, int) -> HttpResponse
         dir = Directory.objects.filter(id=directory_id).get()
         try:
             dir.move_to(move_to)
-        except ReferenceError as e:
+        except (ReferenceError, IntegrityError) as e:
             statuses += [str(e)]
         else:
             log_activity(project=dir.project, user=request.user, related_dir=dir,
