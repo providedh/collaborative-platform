@@ -116,3 +116,19 @@ def file(request, file_id, version=None):  # type: (HttpRequest, int, int) -> Ht
     }
 
     return render(request, 'files_management/file.html', content)
+
+
+@login_required
+@objects_exists
+@user_has_access()
+def fileversions(request, file_id):  # type: (HttpRequest, int) -> HttpResponse
+
+    file = File.objects.get(id=file_id)
+
+    content = {
+        'title': file.name,
+        'file': file,
+        'versions': file.version_number
+    }
+
+    return render(request, 'files_management/fileversions.html', content)
