@@ -64,7 +64,7 @@ class Directory(FileNode):
         from apps.files_management.helpers import is_child
         if is_child(self.id, directory_id):
             raise ReferenceError("Moving parent dir to child dir is not allowed.")
-        super().move_to(directory_id)
+        return super().move_to(directory_id)
 
 
 class File(FileNode):
