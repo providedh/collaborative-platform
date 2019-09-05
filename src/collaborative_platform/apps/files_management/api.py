@@ -155,18 +155,25 @@ def move(request, move_to):  # type: (HttpRequest, int) -> HttpResponse
 
     move_to_dir = Directory.objects.filter(id=move_to).get()
 
+    statuses = []
+
     for directory_id in data.get('directories', ()):
         dir = Directory.objects.filter(id=directory_id).get()
-        dir.move_to(move_to)
-        log_activity(project=dir.project, user=request.user, related_dir=dir,
-                     action_text="moved {} to {}".format(dir.name, move_to_dir.name))
+        try:
+            dir.move_to(move_to)
+        except ReferenceError as e:
+            statuses += [str(e)]
+        else:
+            log_activity(project=dir.project, user=request.user, related_dir=dir,
+                         action_text="moved {} to {}".format(dir.name, move_to_dir.name))
+            statuses += ["OK"]
     for file_id in data.get('files', ()):
         file = File.objects.filter(id=file_id).get()
         file.move_to(move_to)
         log_activity(project=file.project, user=request.user, file=file,
                      action_text="moved {} to {}".format(file.name, move_to_dir.name))
 
-    return HttpResponse("OK")
+    return JsonResponse(statuses, safe=False)
 
 
 @login_required
