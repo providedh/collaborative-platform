@@ -1,6 +1,6 @@
 import hashlib
 from io import BytesIO
-from typing import List
+from typing import List, Set
 
 from django.contrib.auth.models import User
 from django.core.files.uploadedfile import UploadedFile
@@ -123,3 +123,19 @@ def get_directory_content(dir, indent):  # type: (Directory, int) -> dict
     result['indent'] = indent
 
     return result
+
+
+def get_all_child_dirs(directory):  # type: (Directory) -> Set[int]
+    children = set()
+
+    for child in directory.subdirs:
+        children.add(child.id)
+        children.union(get_all_child_dirs(child))
+
+    return children
+
+
+def if_child(parent, child):  # type: (int, int) -> bool
+    parent_dir = Directory.objects.get(id=parent)
+    children = get_all_child_dirs(parent_dir)
+    return child in children
