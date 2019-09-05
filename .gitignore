@@ -35,6 +35,6 @@ celerybeat-schedule
 # Migrations
 *migrations/
 
-#uploaded file
+#uploaded files
 
-uploaded_file
+*uploaded_files/
