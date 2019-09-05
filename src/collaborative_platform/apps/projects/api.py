@@ -104,6 +104,7 @@ def make_public(request, project_id):  # type: (HttpRequest, int) -> HttpRespons
     p = Project.objects.filter(id=project_id).get()
     p.public = True
     p.save()
+    log_activity(project=p, user=request.user, action_text="made project public")
     return HttpResponse("OK")
 
 
@@ -114,4 +115,5 @@ def make_private(request, project_id):  # type: (HttpRequest, int) -> HttpRespon
     p = Project.objects.filter(id=project_id).get()
     p.public = False
     p.save()
+    log_activity(project=p, user=request.user, action_text="made project private")
     return HttpResponse("OK")
