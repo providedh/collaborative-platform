@@ -10,7 +10,7 @@ from apps.files_management.models import File, Directory
 from apps.projects.models import Activity, Project, Contributor
 
 
-def paginate(request, queryset):  # type: (HttpRequest, QuerySet) -> Page
+def paginate_page_perpage(request, queryset):  # type: (HttpRequest, QuerySet) -> Page
     queryset = queryset.values()
     page = request.GET.get("page")
     if page is None:
@@ -20,6 +20,14 @@ def paginate(request, queryset):  # type: (HttpRequest, QuerySet) -> Page
     per_page = int(request.GET.get("per_page", 10))
 
     return Paginator(queryset, per_page or 1, allow_empty_first_page=True).page(page)
+
+
+# TODO: checking if those arguiments are given
+def paginate_start_length(request, queryset):  # type: (HttpRequest, QuerySet) -> Page
+    start = int(request.GET.get("start"))
+    length = int(request.GET.get("length"))
+    queryset = queryset[start:length + 1].values()
+    return Paginator(queryset, length, allow_empty_first_page=True).page(1)
 
 
 def order_queryset(request, queryset):  # type: (HttpRequest, QuerySet) -> QuerySet

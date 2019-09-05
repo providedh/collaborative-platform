@@ -6,10 +6,10 @@ from django.core.paginator import InvalidPage, EmptyPage
 from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, HttpResponseNotFound
 
 from apps.files_management.models import Directory
-from apps.projects.helpers import page_to_json_response, include_contributors, log_activity
+from apps.projects.helpers import page_to_json_response, include_contributors, log_activity, paginate_start_length
 from apps.views_decorators import objects_exists, user_has_access
 
-from .helpers import paginate, order_queryset
+from .helpers import paginate_page_perpage, order_queryset
 from .models import Project, Contributor
 
 
@@ -55,7 +55,7 @@ def get_public(request):  # type: (HttpRequest) -> HttpResponse
         return HttpResponseBadRequest(dumps({"message": "Invalid order_by argument"}))
 
     try:
-        page = paginate(request, projects)
+        page = paginate_page_perpage(request, projects)
     except (ZeroDivisionError, InvalidPage, EmptyPage):
         return HttpResponseNotFound(dumps({"message": "Invalid page number"}))
 
@@ -72,7 +72,7 @@ def get_mine(request):  # type: (HttpRequest) -> HttpResponse
 
     projects = order_queryset(request, projects)
     try:
-        page = paginate(request, projects)
+        page = paginate_page_perpage(request, projects)
     except (ZeroDivisionError, InvalidPage, EmptyPage):
         return HttpResponseNotFound(dumps({"message": "Invalid page number"}))
 
@@ -90,7 +90,7 @@ def get_activities(request, project_id):
 
     activities = project.activities.order_by("-date")
     try:
-        page = paginate(request, activities)
+        page = paginate_start_length(request, activities)
     except (ZeroDivisionError, InvalidPage, EmptyPage):
         return HttpResponseNotFound(dumps({"message": "Invalid page number"}))
 
