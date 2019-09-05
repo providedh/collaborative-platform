@@ -128,14 +128,14 @@ def get_directory_content(dir, indent):  # type: (Directory, int) -> dict
 def get_all_child_dirs(directory):  # type: (Directory) -> Set[int]
     children = set()
 
-    for child in directory.subdirs:
+    for child in directory.subdirs.all():
         children.add(child.id)
         children.union(get_all_child_dirs(child))
 
     return children
 
 
-def if_child(parent, child):  # type: (int, int) -> bool
+def is_child(parent, child):  # type: (int, int) -> bool
     parent_dir = Directory.objects.get(id=parent)
     children = get_all_child_dirs(parent_dir)
     return child in children
