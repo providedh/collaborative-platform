@@ -19,6 +19,8 @@ from .helpers import extract_text_and_entities, index_entities, upload_file, upl
 
 
 @login_required
+@objects_exists
+@user_has_access("RW")
 def upload(request, directory_id):  # type: (HttpRequest, int) -> HttpResponse
     if request.method == "POST" and request.FILES:
         files_list = request.FILES.getlist("files")
