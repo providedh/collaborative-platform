@@ -26,12 +26,13 @@ var HistoryView = function(args){
 		if(args.hasOwnProperty('channel'))
 			args.channel.addToChannel(obj);
 
-		const history_div = document.getElementById('history');
+		const history_div = document.getElementById('history'),
+			history_container = document.getElementById('history-container');
 
 		history_div.addEventListener('mouseover', 
 			e=>history_div.classList.add('hovered'));
 
-		history_div.addEventListener('mouseout', 
+		history_container.addEventListener('mouseleave', 
 			e=>history_div.classList.remove('hovered'));
 
 		ajaxCalls.getHistory(window.project_id, window.file_id, window.file_version).then(response=>{

@@ -172,6 +172,11 @@ input#references-autocomplete {
     position: relative;
 }
 
+#history-container{
+    padding-top:10px;
+    padding-bottom:8px;
+}
+
 #history.hovered{
     height: 60px;
 }
