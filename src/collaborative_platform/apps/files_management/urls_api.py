@@ -2,7 +2,7 @@ from django.urls import path
 from . import api
 
 urlpatterns = [
-    path('upload/parent_dir/<int:directory_id>', api.upload, name='upload'),
+    path('upload/<int:directory_id>', api.upload, name='upload'),
     path('<int:file_id>/versions/', api.get_file_versions, name='get_file_versions'),
     path('<int:file_id>', api.file, name='file'),
     path('<int:file_id>/version/<int:version>/', api.get_file_version, name='get_file_version'),
