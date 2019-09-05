@@ -152,7 +152,7 @@ class AnnotationHistoryHandler:
         for key, value in uncertainties.items():
             number_of_uncertainties = len(
                 tree.xpath("//default:classCode[@scheme=\"http://providedh.eu/uncertainty/ns/1.0\"]/"
-                           "default:certainty[@source='" + key + "']", namespaces=namespaces))
+                           "default:certainty[@category='" + key + "']", namespaces=namespaces))
 
             uncertainties[key] = number_of_uncertainties
 
