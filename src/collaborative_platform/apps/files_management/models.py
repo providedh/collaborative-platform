@@ -58,6 +58,9 @@ class Directory(FileNode):
         return list(self.subdirs.order_by('name').values()) + list(self.files.order_by('name').values())
 
     def move_to(self, directory_id):  # type: (FileNode, int) -> FileNode
+        if self.parent_dir_id is None:
+            raise ReferenceError("Cannot move parent dir!")
+
         from apps.files_management.helpers import is_child
         if is_child(self.id, directory_id):
             raise ReferenceError("Moving parent dir to child dir is not allowed.")
