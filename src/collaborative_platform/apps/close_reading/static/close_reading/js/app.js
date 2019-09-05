@@ -1,11 +1,11 @@
-import PubSubChannel from './src/aux/pubsub.js';
-import AnnotatorWebSocket from './src/aux/websocket.js';
+import PubSubChannel from './src/utilities/pubsub.js';
+import AnnotatorWebSocket from './src/utilities/websocket.js';
 import DocumentView from './src/document_view.js';
 import PanelView from './src/panel.js';
 import Annotator from './src/annotator.js';
 import HistoryView from './src/history.js';
 import {Popup, Tooltips} from './src/tooltips.js';
-import Alert from './src/aux/alert.js';
+import Alert from './src/utilities/alert.js';
 
 // Load all components
 const websocket = AnnotatorWebSocket();

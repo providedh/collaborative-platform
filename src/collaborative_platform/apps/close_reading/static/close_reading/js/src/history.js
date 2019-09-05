@@ -7,7 +7,7 @@
  * Listens:
  * - panel/display_options
  * */
-import AjaxCalls from './aux/ajax.js';
+import AjaxCalls from './utilities/ajax.js';
 
 var HistoryView = function(args){
 	let self = null;
