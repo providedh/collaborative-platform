@@ -172,6 +172,19 @@ input#references-autocomplete {
     position: relative;
 }
 
+#history-legend{
+    color: rgb(49, 130, 154);
+    position: absolute;
+    right: 0;
+    top: -1.3em;
+    font-size: .9em;
+    display: none;
+}
+
+#history.hovered #history-legend{
+    display: initial;
+}
+
 #history-container{
     padding-top:10px;
     padding-bottom:8px;
