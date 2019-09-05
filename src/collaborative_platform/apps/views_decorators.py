@@ -127,17 +127,19 @@ def user_has_access(permissions_level=None):
 
 
 def __get_project_id(request, **kwargs):
+    project_id, file_project_id, directory_project_id, post_project_id = None, None, None, None
+
     if 'project_id' in kwargs:
         project_id = kwargs['project_id']
-    elif 'file_id' in kwargs:
+    if 'file_id' in kwargs:
         file_id = kwargs['file_id']
         file = File.objects.get(id=file_id)
-        project_id = file.project_id
-    elif 'directory_id' in kwargs:
+        file_project_id = file.project_id
+    if 'directory_id' in kwargs:
         directory_id = kwargs['directory_id']
         directory = Directory.objects.get(id=directory_id)
-        project_id = directory.project_id
-    elif request.method in ("POST", "PUT") and request.body:
+        directory_project_id = directory.project_id
+    if request.method in ("POST", "PUT") and request.body:
         try:
             data = json.loads(request.body)
         except TypeError:
@@ -168,19 +170,23 @@ def __get_project_id(request, **kwargs):
 
         if project_id_files is not None and project_id_dirs is not None:
             if project_id_dirs == project_id_files:
-                project_id = project_id_files
+                post_project_id = project_id_files
             else:
                 raise KeyError("Files and dirs from different projects")
 
         elif project_id_files is not None or project_id_dirs is not None:
-            project_id = project_id_files or project_id_dirs
+            post_project_id = project_id_files or project_id_dirs
         else:
             raise KeyError("Not found required 'project_id', 'file_id' or 'directory_id' in given arguments")
 
-    else:
+    any_id = project_id or file_project_id or directory_project_id or post_project_id
+    if any_id is None:
         raise KeyError("Not found required 'project_id', 'file_id' or 'directory_id' in given arguments")
 
-    return project_id
+    if all(map(lambda x: x in (any_id, None), (project_id, file_project_id, directory_project_id, post_project_id))):
+        return any_id
+    else:
+        raise Exception("Not all parameters are parts of the same project or none parameters given!")
 
 
 def __get_response(request, status, bootstrap_alert_type, message, data=None):
