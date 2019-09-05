@@ -102,7 +102,14 @@
           <h3 class="box__text--title">Recent Activity</h3>
         </div>
         <div class="box__content">
-          recent box
+          <table js-listRecentActivities data-project-id="{{ project.id }}"   class="table m-0 table-hover table-striped">
+            <thead>
+            <tr>
+              <th scope="col">Action</th>
+              <th scope="col">Date</th>
+            </tr>
+            </thead>
+          </table>
         </div>
       </div>
     </div>
