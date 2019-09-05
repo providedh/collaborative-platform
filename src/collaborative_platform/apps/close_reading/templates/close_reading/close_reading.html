@@ -58,6 +58,7 @@
           </h2>
           <div id="history-container">
             <div id="history">
+              <span id="history-legend">Uncertainty</span>
               <div>
                 <canvas></canvas>
                 <hr/>
@@ -340,6 +341,6 @@
     window.file_id = "{{ file_id }}";
     window.file_version = "{{ file.version_number }}";
   </script>
-
+  <script src="https://d3js.org/d3.v5.min.js"></script>
   <script type="module" src="{% static 'close_reading/js/app.js' %}"></script>
 {% endblock %}
