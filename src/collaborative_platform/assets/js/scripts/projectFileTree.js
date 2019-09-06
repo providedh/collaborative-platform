@@ -21,7 +21,9 @@ var options = {
     resolveUploadUrl: function(item) { // Allows the user to calculate the url of each individual row
         // this = treebeard object;
         // Item = item acted on return item.data.ursl.upload
-        return "/uploadssssss";
+        console.log(item)
+        console.log(this)
+        return "api/files/upload/" + item.data.id + "/";
     },
     dropzone: {
         url: "http://www.torrentplease.com/dropzone.php",
