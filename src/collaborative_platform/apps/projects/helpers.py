@@ -22,16 +22,11 @@ def paginate_page_perpage(request, queryset):  # type: (HttpRequest, QuerySet) -
     return Paginator(queryset, per_page or 1, allow_empty_first_page=True).page(page)
 
 
-# TODO: checking if those arguiments are given
 def paginate_start_length(request, queryset):  # type: (HttpRequest, QuerySet) -> Page
     start = int(request.GET.get("start") or 0)
-    length = int(request.GET.get("length") or 0)
-    if length:
-        queryset = queryset[start: start + length + 1].values()
-    else:
-        queryset = queryset.values()
-        length = len(queryset)
-    return Paginator(queryset, length, allow_empty_first_page=True).page(1)
+    length = int(request.GET.get("length") or 10)
+    page_nr = start / length + 1
+    return Paginator(queryset.values(), length, allow_empty_first_page=True).page(page_nr)
 
 
 def order_queryset(request, queryset):  # type: (HttpRequest, QuerySet) -> QuerySet
@@ -49,6 +44,8 @@ def page_to_json_response(page):  # type: (Page) -> JsonResponse
         "per_page": page.paginator.per_page,
         "current_page": page.number,
         "entries": len(page),
+        "recordsTotal": page.paginator.count,
+        "recordsFiltered": page.paginator.count,
         "data": list(page.object_list)
     }
     return JsonResponse(response, safe=False)
