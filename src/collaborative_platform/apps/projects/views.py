@@ -53,3 +53,10 @@ def project(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
     }
 
     return render(request, 'projects/project.html', context)
+
+
+def contributors(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
+
+    context = {}
+
+    return render(request, 'projects/contributors.html', context)
