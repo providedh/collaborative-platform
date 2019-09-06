@@ -17,7 +17,7 @@ var options = {
     paginateToggle : false,
     lazyLoad : true,
     useDropzone : true,
-    uploads: true,
+    uploads: false,
     resolveUploadUrl: function(item) { // Allows the user to calculate the url of each individual row
         // this = treebeard object;
         // Item = item acted on return item.data.ursl.upload
@@ -26,7 +26,7 @@ var options = {
         return "/api/files/upload/" + item.data.id + "/";
     },
     dropzone: {
-        url: "http://www.torrentplease.com/dropzone.php",
+        url: "p",
         dragstart: function (treebeard, event) {
             // this = dropzone object
             // treebeard = treebeard object

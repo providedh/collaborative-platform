@@ -22,6 +22,12 @@ $('[js-listRecentActivities]').DataTable( {
 
                 html += '<span>' + oData.action_text + '</span>';
 
+                if (oData.related_file_id && oData.related_file_name) {
+                    html += ' <a href="/user/' + oData.related_file_id + '/">' + oData.related_file_name + '</a>';
+                } else if (oData.related_file_name) {
+                    html += ' <span>' + oData.related_file_name + '</span>';
+                }
+
                 $(nTd).html(html);
             }
         },
