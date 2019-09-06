@@ -23,7 +23,7 @@ var options = {
         // Item = item acted on return item.data.ursl.upload
         console.log(item)
         console.log(this)
-        return "api/files/upload/" + item.data.id + "/";
+        return "/api/files/upload/" + item.data.id + "/";
     },
     dropzone: {
         url: "http://www.torrentplease.com/dropzone.php",
