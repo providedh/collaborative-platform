@@ -172,7 +172,7 @@ def move(request, move_to):  # type: (HttpRequest, int) -> HttpResponse
         file = File.objects.filter(id=file_id).get()
         file.move_to(move_to)
         log_activity(project=file.project, user=request.user, file=file,
-                     action_text="moved {} to {}".format(file.name, move_to_dir.name))
+                     action_text="moved file to {}: ".format(move_to_dir.name))
 
     return JsonResponse(statuses, safe=False)
 
