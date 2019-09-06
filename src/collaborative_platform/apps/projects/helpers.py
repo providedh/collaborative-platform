@@ -24,7 +24,7 @@ def paginate_page_perpage(request, queryset):  # type: (HttpRequest, QuerySet) -
 
 # TODO: checking if those arguiments are given
 def paginate_start_length(request, queryset):  # type: (HttpRequest, QuerySet) -> Page
-    start = int(request.GET.get("start") or 1) - 1
+    start = int(request.GET.get("start") or 0)
     length = int(request.GET.get("length") or 0)
     if length:
         queryset = queryset[start: start + length + 1].values()
