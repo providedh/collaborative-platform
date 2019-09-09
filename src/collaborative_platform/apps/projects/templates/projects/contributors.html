@@ -6,6 +6,11 @@
 
 {% block content %}
 
-  <p>test</p>
+  <form method="post">
+    {% csrf_token %}
+    {{ formset.as_p }}
+
+    <button type="submit">Update</button>
+  </form>
 
 {% endblock %}
