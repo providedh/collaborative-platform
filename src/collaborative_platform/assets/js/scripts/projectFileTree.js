@@ -16,25 +16,28 @@ var options = {
     paginate : false,
     paginateToggle : false,
     lazyLoad : true,
-    useDropzone : true,
-    uploads: false,
-    resolveUploadUrl: function(item) { // Allows the user to calculate the url of each individual row
-        // this = treebeard object;
-        // Item = item acted on return item.data.ursl.upload
-        console.log(item)
-        console.log(this)
+    // useDropzone : true,
+    uploads: true,
+    resolveUploadUrl: function(item) { 
         return "/api/files/upload/" + item.data.id + "/";
     },
     dropzone: {
         url: "p",
+        headers: {
+            'X-CSRFToken': csrftoken
+        },
         dragstart: function (treebeard, event) {
             // this = dropzone object
             // treebeard = treebeard object
             // event = event passed in
             window.console.log("dragstart", this, treebeard, event);
         },
+
+        dragend: function(event) {
+            console.log(event)
+        }
     },
-    uploadURL : "",
+    uploadURL : "eee",
     allowMove : true,
     allowArrows : true,
     multiselect : true,

@@ -4560,6 +4560,9 @@ if (typeof exports == "object") {
             if (self.dropzone) {
                 _destroyDropzone();
             } // Destroy existing dropzone setup
+
+            console.log('lol')
+
             var options = $.extend({
                 clickable: false,
                 counter: 0,
@@ -4685,16 +4688,29 @@ if (typeof exports == "object") {
             }, self.options.dropzone); // Extend default options
             // Add Dropzone with different scenarios of library inclusion, should work for most installations
             var Dropzone;
+
+            console.log(self.options.dropzone)
+            console.log(typeof Dropzone === 'undefined')
+
             if (typeof module === 'object') {
                 Dropzone = require('dropzone');
             } else {
                 Dropzone = window.Dropzone;
             }
+
+            console.log(options)
+
+
             if (typeof Dropzone === 'undefined') {
                 throw new Error('To enable uploads Treebeard needs "Dropzone" to be installed.');
             }
+            if (typeof Dropzone === 'undefined') {
+              console.log('To enable uploads Treebeard needs "Dropzone" to be installed.');
+            }
             // apply dropzone to the Treebeard object
             self.dropzone = new Dropzone('#' + self.options.divID, options); // Initialize dropzone
+
+            console.log(self.dropzone)
         }
 
         /**
