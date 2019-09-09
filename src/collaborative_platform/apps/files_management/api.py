@@ -24,7 +24,7 @@ from .helpers import extract_text_and_entities, index_entities, upload_file, upl
 @user_has_access("RW")
 def upload(request, directory_id):  # type: (HttpRequest, int) -> HttpResponse
     if request.method == "POST" and request.FILES:
-        files_list = request.FILES.getlist("files")
+        files_list = request.FILES.getlist("file")
         if not files_list:
             return HttpResponseBadRequest("File not attached properly")
 
