@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render, redirect
-from django.forms import inlineformset_factory, modelformset_factory
+from django.forms import inlineformset_factory
 
 from apps.views_decorators import objects_exists, user_has_access
 
@@ -56,23 +56,21 @@ def project(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
     return render(request, 'projects/project.html', context)
 
 
+@login_required
+@objects_exists
+@user_has_access('AD')
 def contributors(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
-
     project = Project.objects.get(pk=project_id)
-    ContributorFormset = modelformset_factory(Contributor, fields=('user', 'permissions'))
+    ContributorFormset = inlineformset_factory(Project, Contributor, fields=('user', 'permissions'), extra=1)
 
     if request.method == 'POST':
-        formset = ContributorFormset(request.POST, queryset=Contributor.objects.filter(project__id=project.id))  # a może 'project_id' zamiast 'project__id'?
+        formset = ContributorFormset(request.POST, instance=project)
 
         if formset.is_valid():
-            instances = formset.save(commit=False)
-
-            for instance in instances:
-                instance.project = project
-                instance.save()
+            formset.save()
 
             return redirect('contributors', project_id=project.id)
 
-    formset = ContributorFormset(queryset=Contributor.objects.filter(project__id=project.id))  # a może 'project_id' zamiast 'project__id'?
+    formset = ContributorFormset(instance=project)
 
     return render(request, 'projects/contributors.html', {'formset': formset})
