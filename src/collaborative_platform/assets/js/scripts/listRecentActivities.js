@@ -11,7 +11,6 @@ $('[js-listRecentActivities]').DataTable( {
         {
             "data": "id",
             "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
-                console.log(oData)
                 var html = '';
 
                 if (oData.user_id) {
@@ -23,7 +22,7 @@ $('[js-listRecentActivities]').DataTable( {
                 html += '<span>' + oData.action_text + '</span>';
 
                 if (oData.related_file_id && oData.related_file_name) {
-                    html += ' <a href="/user/' + oData.related_file_id + '/">' + oData.related_file_name + '</a>';
+                    html += ' <a href="/files/' + oData.related_file_id + '/">' + oData.related_file_name + '</a>';
                 } else if (oData.related_file_name) {
                     html += ' <span>' + oData.related_file_name + '</span>';
                 }

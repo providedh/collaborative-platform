@@ -29,7 +29,16 @@ gulp.task('sass', function () {
 });
 
 gulp.task('libs', function () {
-    gulp.src(['./node_modules/jquery/dist/jquery.js', './node_modules/moment/min/moment.min.js', './node_modules/bootstrap/dist/js/bootstrap.js', './node_modules/datatables.net/js/jquery.dataTables.js', './node_modules/datatables.net-bs4/js/dataTables.bootstrap4.js', './node_modules/bootstrap-cookie-alert/cookiealert.js', 'js/libs/*.js'])
+    gulp.src([
+        './node_modules/jquery/dist/jquery.js', 
+        './node_modules/moment/min/moment.min.js', 
+        './node_modules/bootstrap/dist/js/bootstrap.js', 
+        './node_modules/datatables.net/js/jquery.dataTables.js', 
+        './node_modules/datatables.net-bs4/js/dataTables.bootstrap4.js', 
+        './node_modules/bootstrap-cookie-alert/cookiealert.js', 
+        './node_modules/prismjs/prism.js', 
+        'js/libs/*.js'
+        ])
         .pipe(jshint())
         .pipe(jshint.reporter('default'))
         .pipe(concat('main-libs.js'))

@@ -6,6 +6,7 @@ $.ajaxSetup({
 });
 
 var id = $('#files').attr('data-project-id');
+var idFile = $('#filep').attr('data-project-id');
 var draggableElements = {};
 
 var options = {
@@ -276,4 +277,46 @@ var options = {
 
 };
 
-var tb = Treebeard(options);
+var optionsFile = {
+    divID : 'filep',
+    filesData : '/api/files/get_tree/' + idFile,
+    rowHeight : 35,
+    showTotal : 15,
+    paginate : false,
+    paginateToggle : false,
+    lazyLoad : true,
+    uploads: false,
+    showFilter : false,
+    allowMove : false,
+    allowArrows : true,
+    multiselect : false,
+    hoverClass : 'tb-hover',
+    moveClass : 'tb-draggable',
+    hScroll : null,
+    resolveRows : function () {
+        return [
+            {
+                data : "title",
+                folderIcons : true,
+                filter : true,
+                css : 'tb-draggable',
+                custom : function (row) {
+                    return  (row.data.kind !== "folder") ? m("a[href='/files/" + row.data.id + "/']", { 'js-contentFileTree' : row.data.id }, row.data.name) : m("span", row.data.name)
+                }
+            }
+        ];
+    },
+
+    columnTitles : function() {
+        return [{
+            title: "Name",
+            width: "100%",
+            sortType: "text",
+            sort: false
+        }]
+    }
+
+};
+
+// var tb = Treebeard(options);
+var tb2 = Treebeard(optionsFile);

@@ -4561,8 +4561,6 @@ if (typeof exports == "object") {
                 _destroyDropzone();
             } // Destroy existing dropzone setup
 
-            console.log('lol')
-
             var options = $.extend({
                 clickable: false,
                 counter: 0,
