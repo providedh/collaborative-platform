@@ -17,7 +17,7 @@
       </form>
     {% else %}
       <button type="button" disabled>Disconnect from ORCID</button>
-      <p>You must <a href="{% url 'password' %}">define a password</a> for your account before disconnecting from Facebook.</p>
+<p>You must <a href="{% url 'password' %}">define a password</a> for your account before disconnecting from ORCID.</p>
     {% endif %}
   {% else %}
     <a href="{% url 'social:begin' 'orcid' %}">Connect to ORCID</a>
