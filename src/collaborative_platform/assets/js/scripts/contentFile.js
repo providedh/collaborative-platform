@@ -51,7 +51,18 @@ $(document).on('click', '[js-contentFileTree]', function(e) {
 $(document).on('click', '[js-contentFileCheckout]', function(e) {
     e.preventDefault()
     var id = $(this).attr('js-contentFileCheckout')
-    console.log(id)
+
+    //TODO BACKEND
+    
+    // $.ajax({
+    //     type: "DELETE",
+    //     url: "/api/files/" + id,
+    //     contentType : 'application/json',
+    //     success: function(){
+    //         $('#contentFileDelete').modal('hide');
+    //         window.location = "/projects/" + projectId + "/"
+    //     }
+    // });
 })
 
 $(document).on('click', '[js-contentFileDelete]', function(e) {

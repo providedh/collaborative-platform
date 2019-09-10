@@ -36,6 +36,12 @@ var options = {
 
         dragend: function(event) {
             console.log(event)
+        },
+
+        complete: function(treebeard) {
+            console.log(this)
+            console.log(treebeard)
+            // treebeard.refreshData();
         }
     },
     uploadURL : "eee",
