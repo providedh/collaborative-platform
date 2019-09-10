@@ -4,8 +4,116 @@
 {% block head %}
 {% endblock %}
 
+{% block submenu %}
+<ul class="submenu__list">
+  <li class="submenu__item">
+    <h4>{{ project.title }}</h4>
+  </li>
+  <li class="submenu__item">
+    <a href="#" class="submenu__link">Files</a>
+  </li>
+  <li class="submenu__item  submenu__item--active">
+    <a href="#" class="submenu__link">Contributors</a>
+  </li>
+  <li class="submenu__item">
+    <a href="#" class="submenu__link">Settings</a>
+  </li>
+</ul>
+{% endblock %}
+
 {% block content %}
-<p>{{ file.name }} (versions: {{ versions }})</p>
-<p>Files</p>
-<p>File versions</p>
+{% csrf_token %}
+<div class="submenu">
+  <div class="container">
+    <ul class="submenu__list d-flex">
+      <li class="submenu__iteme">
+        <h4 class="submenu__item--title">{{ file.project.title }}</h4>
+      </li>
+      <li class="submenu__item submenu__item--active">
+        <a href="#" class="submenu__link">Files</a>
+      </li>
+      <li class="submenu__item">
+        <a href="#" class="submenu__link">Contributors</a>
+      </li>
+      <li class="submenu__item">
+        <a href="#" class="submenu__link">Settings</a>
+      </li>
+    </ul>
+  </div>
+</div>
+<div class="container project">
+  <div class="d-flex flex-column project__header">
+    <div class="project__content">
+      <h1 js-contentFileName>{{ file.name }}</h1>
+      <div class="d-md-flex project__contributors">
+        <div class="project__date">
+          <span class="project__text--label">Version</span>
+          <span class="project__text--date" js-contentFileVersion>{{ versions }}</span>
+          <span class="project__text--divider"></span>
+          <span class="project__text--label">Creator</span>
+          <span class="project__text--date" js-contentFileCreator></span>
+        </div>
+      </div>
+    </div>
+    <div class="ml-auto project__buttons d-flex flex-nowrap">
+      <div>
+        <div class="btn-group" role="group" aria-label="Basic example">
+          <button type="button" class="btn btn-outline-primary btn-sm" js-contentFileCheckout="">Check out</button>
+          <button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#contentFileDelete">Delete</button>
+          <button type="button" class="btn btn-outline-primary btn-sm" js-contentFileDownload="">Download</button>
+          <button type="button" class="btn btn-outline-primary btn-sm" js-contentFileCloseReading="">Close reading</button>
+          <button type="button" class="btn btn-outline-primary btn-sm active" js-contentFileRevisions="">Revisions</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-4">
+
+      <div class="box">
+        <div class="box__header">
+          <h3 class="box__text--title">Files</h3>
+        </div>
+        <div class="box__content">
+          <div id="filep" data-project-id="{{ file.project.id }}">
+            <p style="font-size: 24px;text-align:center; margin-top:20px"> Loading <i class="fa fa-spinner fa-spin"></i></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-8">
+      <div class="box">
+        <div class="box__header">
+            <h3 class="box__text--title">File versions</h3>
+        </div>
+        <div class="box__content">
+          ???
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<div class="modal fade" id="contentFileDelete" tabindex="-1" role="dialog" aria-labelledby="contentFileDelete" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Confirm delete action</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <span>This action is irreversible.</span>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-light" data-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-success"  js-contentFileDelete="">Confirm</button>
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock %}

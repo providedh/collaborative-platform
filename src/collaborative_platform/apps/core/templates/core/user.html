@@ -1,3 +1,5 @@
+
+
 {% extends 'base.html' %}
 {%  load static %}
 
@@ -5,17 +7,20 @@
 {% endblock %}
 
 {% block content %}
-  <p>User details</p>
-  <p>
-    First name: {{ user.first_name }}
-  </p>
-  <p>
-    Last name: {{ user.last_name }}
-  </p>
-  <p>
-    Date joined: {{ user.date_joined }}
-  </p>
-  <p>
-    Last login: {{ user.last_login }}
-  </p>
+<div class="container project">
+  <div class="d-flex flex-column project__header">
+      <div class=" project__content">
+          <h1>{{ user.first_name }} {{ user.last_name }}</h1>
+          
+          <div class="project__date">
+            <span class="project__text--label">Date joined</span>
+            <span class="project__text--date">{{ user.date_joined|date:'Y-m-d, H:i' }}</span>
+            <span class="project__text--divider"></span>
+            <span class="project__text--label">Last login</span>
+            <span class="project__text--date">{{ user.last_login|date:'Y-m-d, H:i' }}</span>
+          </div>
+  
+      </div>
+  </div>
+</div>
 {% endblock %}

@@ -79,12 +79,15 @@ $(document).on('click', '[js-contentFileDownload]', function(e) {
 $(document).on('click', '[js-contentFileRevisions]', function(e) {
     e.preventDefault()
     var id = $(this).attr('js-contentFileRevisions')
-    console.log(id)
+
+    window.location = "/files/" + id + "/versions"
 })
 
 $(document).on('click', '[js-contentFileCloseReading]', function(e) {
     e.preventDefault()
     var id = $(this).attr('js-contentFileCloseReading')
-    console.log(id)
+    var projectId = $('#filep').attr('data-project-id')
+
+    window.location = "/close_reading/project/" + projectId + "/file/" + id + "/"
 })
 
