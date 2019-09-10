@@ -1,8 +1,10 @@
 from json import loads, JSONDecodeError, dumps
 
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import AnonymousUser, User
 from django.core.exceptions import ValidationError, FieldError
 from django.core.paginator import InvalidPage, EmptyPage
+from django.db.models import QuerySet, Q
 from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, HttpResponseNotFound
 
 from apps.files_management.models import Directory
@@ -67,8 +69,7 @@ def get_mine(request):  # type: (HttpRequest) -> HttpResponse
     if request.method != "GET":
         return HttpResponseBadRequest("Invalid request method")
 
-    projects_ids = request.user.contributions.values_list('project', flat=True)
-    projects = Project.objects.filter(pk__in=projects_ids)
+    projects = get_user_projects(request.user)
 
     projects = order_queryset(request, projects)
     try:
@@ -117,3 +118,26 @@ def make_private(request, project_id):  # type: (HttpRequest, int) -> HttpRespon
     p.save()
     log_activity(project=p, user=request.user, action_text="made project private")
     return HttpResponse("OK")
+
+
+def get_user_projects(user):  # type: (User) -> QuerySet
+    projects_ids = user.contributions.values_list('project', flat=True)
+    projects = Project.objects.filter(pk__in=projects_ids)
+    return projects
+
+
+def get_users(request, user_id):  # type: (HttpRequest, int) -> HttpResponse
+    try:
+        user = User.objects.get(id=user_id)
+    except User.DoesNotExist:
+        return HttpResponseBadRequest("Invalid user ID")
+
+    if type(request.user) == AnonymousUser:
+        projects = get_user_projects(user).filter(public=True)
+    else:
+        requestor_projects = get_user_projects(request.user).values_list('id', flat=True)
+        projects = get_user_projects(user).filter(Q(public=True) | Q(id__in=requestor_projects))
+
+    projects = order_queryset(request, projects)
+    page = paginate_start_length(request, projects)
+    return include_contributors(page_to_json_response(page))
