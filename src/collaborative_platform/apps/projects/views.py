@@ -7,6 +7,8 @@ from django.forms import inlineformset_factory
 from apps.views_decorators import objects_exists, user_has_access
 
 from .models import Project, Contributor
+from dal import autocomplete
+from .forms import ContributorForm
 
 
 @login_required()
@@ -61,7 +63,7 @@ def project(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
 @user_has_access('AD')
 def contributors(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
     project = Project.objects.get(pk=project_id)
-    ContributorFormset = inlineformset_factory(Project, Contributor, fields=('user', 'permissions'), extra=1)
+    ContributorFormset = inlineformset_factory(Project, Contributor, fields=('user', 'permissions'), extra=1, widgets={'user': autocomplete.ModelSelect2(url='user_autocomplete')})
 
     if request.method == 'POST':
         formset = ContributorFormset(request.POST, instance=project)
@@ -73,4 +75,18 @@ def contributors(request, project_id):  # type: (HttpRequest, int) -> HttpRespon
 
     formset = ContributorFormset(instance=project)
 
-    return render(request, 'projects/contributors.html', {'formset': formset})
+    # without this form autocomplete widget is not visible in formset
+    form = ContributorForm
+
+    return render(request, 'projects/contributors.html', {'formset': formset, 'form': form})
+
+
+class UserAutocomplete(autocomplete.Select2QuerySetView):
+    # TODO: View decorators not working for class based views. Secure this view manually
+    def get_queryset(self):
+        qs = User.objects.all()
+
+        if self.q:
+            qs = qs.filter(username__istartswith=self.q)
+
+        return qs
