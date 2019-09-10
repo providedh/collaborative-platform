@@ -128,8 +128,8 @@ class EntitiesExtractor:
     @staticmethod
     def extend_entities(entites, project_id, file_id):  # type: (List[Dict[str, str]], int, int) -> List[dict]
         for entity in entites:
-            entity['project_id'] = project_id
-            entity['file_id'] = file_id
+            entity['project_id'] = str(project_id)
+            entity['file_id'] = str(file_id)
             entity['_id'] = "{}/{}/{}".format(project_id, file_id, entity['id'])
         return entites
 

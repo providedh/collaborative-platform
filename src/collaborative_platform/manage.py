@@ -4,6 +4,7 @@ import os
 import sys
 from elasticsearch_dsl import connections
 
+
 def main():
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'collaborative_platform.settings')
     try:

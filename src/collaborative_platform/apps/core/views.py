@@ -101,7 +101,7 @@ def logout(request):  # type: (HttpRequest) -> HttpResponse
 
 
 @login_required
-def user(request, user_id): # type: (HttpRequest, int) -> HttpResponse
+def user(request, user_id):  # type: (HttpRequest, int) -> HttpResponse
     user = User.objects.get(id=user_id)
 
     context = {
