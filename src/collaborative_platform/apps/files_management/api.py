@@ -10,7 +10,7 @@ from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, JsonR
 from lxml.etree import XMLSyntaxError
 
 from apps.files_management.file_conversions.ids_filler import IDsFiller
-from apps.projects.helpers import log_activity
+from apps.projects.helpers import log_activity, paginate_start_length, page_to_json_response
 from apps.files_management.models import File, FileVersion, Directory
 from apps.projects.models import Project
 from apps.views_decorators import objects_exists, user_has_access
@@ -103,7 +103,8 @@ def get_file_versions(request, file_id):  # type: (HttpRequest, int) -> HttpResp
     if request.method == 'GET':
         file = File.objects.filter(id=file_id).get()
 
-        return JsonResponse(list(file.versions.all().values()), safe=False)
+        page = paginate_start_length(request, file.versions.all())
+        return page_to_json_response(page)
 
     else:
         return HttpResponseBadRequest("Invalid request method")

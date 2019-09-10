@@ -25,7 +25,7 @@ def paginate_page_perpage(request, queryset):  # type: (HttpRequest, QuerySet) -
 def paginate_start_length(request, queryset):  # type: (HttpRequest, QuerySet) -> Page
     start = int(request.GET.get("start") or 0)
     length = int(request.GET.get("length") or 10)
-    page_nr = start / length + 1
+    page_nr = int(start / length) + 1
     return Paginator(queryset.values(), length, allow_empty_first_page=True).page(page_nr)
 
 
