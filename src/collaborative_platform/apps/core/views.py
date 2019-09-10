@@ -5,9 +5,11 @@ from django.contrib.auth.forms import AdminPasswordChangeForm, PasswordChangeFor
 from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from social_django.models import UserSocialAuth
 
 from apps.index_and_search.models import User as ESUser
+from apps.views_decorators import objects_exists
 
 from .forms import SignUpForm, LogInForm
 
@@ -100,14 +102,15 @@ def logout(request):  # type: (HttpRequest) -> HttpResponse
     return render(request, 'core/index.html', context)
 
 
-@login_required
+@objects_exists
 def user(request, user_id):  # type: (HttpRequest, int) -> HttpResponse
     user = User.objects.get(id=user_id)
 
     context = {
-        'title': '{0} {1} - User details'.format(request.user.first_name, request.user.last_name),
+        'title': '{0} {1} - User details'.format(user.first_name, user.last_name),
         'alerts': None,
-        'user': user
+        'user': user,
+        'user_url': request.get_raw_uri()
     }
 
     return render(request, 'core/user.html', context)

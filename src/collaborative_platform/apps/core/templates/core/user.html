@@ -19,7 +19,11 @@
             <span class="project__text--label">Last login</span>
             <span class="project__text--date">{{ user.last_login|date:'Y-m-d, H:i' }}</span>
           </div>
-  
+          Username: {{user.username}}
+          Email: {{user.email}}
+          Link to this profile: <a href>{{user_url}}</a>
+
+          <p>This users available projects:</p>
       </div>
   </div>
 </div>
