@@ -69,9 +69,45 @@ def contributors(request, project_id):  # type: (HttpRequest, int) -> HttpRespon
         formset = ContributorFormset(request.POST, instance=project)
 
         if formset.is_valid():
-            formset.save()
+            cleaned_forms = [form.cleaned_data for form in formset.forms]
 
-            return redirect('contributors', project_id=project.id)
+            alerts = []
+
+            for form in cleaned_forms:
+                if 'user' not in form:
+                    continue
+
+                try:
+                    contributor = Contributor.objects.get(user=form['user'], project_id=project_id)
+                except Contributor.DoesNotExist:
+                    contributor = Contributor(user=form['user'], project_id=project_id, permissions='RO')
+
+                if form['DELETE'] == True:
+                    if contributor.permissions == 'AD':
+                        admins = Contributor.objects.filter(project_id=project_id, permissions='AD')
+
+                        if len(admins) > 1 and contributor.id is not None:
+                            contributor.delete()
+                        else:
+                            alert = {
+                                'type': 'warning',
+                                'message': "Can't remove contributor: {0}. There must be at least one administrator in a project.".format(contributor.user.username),
+                            }
+
+                            alerts.append(alert)
+                    elif contributor.id is not None:
+                        contributor.delete()
+
+                elif contributor.permissions != form['permissions']:
+                    contributor.permissions = form['permissions']
+                    contributor.save()
+
+            formset = ContributorFormset(instance=project)
+
+            # without this form autocomplete widget is not visible in formset
+            form = ContributorForm
+
+            return render(request, 'projects/contributors.html', {'formset': formset, 'form': form, 'alerts': alerts})
 
     formset = ContributorFormset(instance=project)
 
