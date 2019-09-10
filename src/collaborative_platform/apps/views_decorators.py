@@ -178,17 +178,19 @@ def __get_project_id(request, **kwargs):
 
 
 def check_if_all_in_one_project(data, key):
-    project_id_dirs = None
+    E = {'files': File,
+         'directories': Directory}[key]
+    project_id = None
     if key in data:
         ids = set()
-        for dir_id in data[key]:
-            dir = Directory.objects.get(id=dir_id)
-            ids.add(dir.project_id)
+        for id in data[key]:
+            entity = E.objects.get(id=id)
+            ids.add(entity.project_id)
         if len(ids) > 1:
             raise Exception("Not all of given {} ids in the same project.".format(key))
         else:
-            project_id_dirs = ids.pop()
-    return project_id_dirs
+            project_id = ids.pop()
+    return project_id
 
 
 def __get_response(request, status, bootstrap_alert_type, message, data=None):
