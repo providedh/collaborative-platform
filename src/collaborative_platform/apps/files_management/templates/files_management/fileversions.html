@@ -58,7 +58,7 @@
     <div class="ml-auto project__buttons d-flex flex-nowrap">
       <div>
         <div class="btn-group" role="group" aria-label="Basic example">
-          <button type="button" class="btn btn-outline-primary btn-sm" js-contentFileCheckout="">Check out</button>
+          <button type="button" class="btn btn-outline-primary btn-sm btn-disabled" data-toggle="modal" data-target="#contentFileCheckout">Check out</button>
           <button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#contentFileDelete">Delete</button>
           <button type="button" class="btn btn-outline-primary btn-sm" js-contentFileDownload="">Download</button>
           <button type="button" class="btn btn-outline-primary btn-sm" js-contentFileCloseReading="">Close reading</button>
@@ -95,7 +95,25 @@
 </div>
 
 
-
+<div class="modal fade" id="contentFileCheckout" tabindex="-1" role="dialog" aria-labelledby="contentFileCheckout" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Confirm checkout action</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <span>This action is irreversible.</span>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-light" data-dismiss="modal">Cancel</button>
+              <button type="button" class="btn btn-success" js-contentFileCheckout="">Confirm</button>
+            </div>
+          </div>
+        </div>
+      </div>
 
 <div class="modal fade" id="contentFileDelete" tabindex="-1" role="dialog" aria-labelledby="contentFileDelete" aria-hidden="true">
     <div class="modal-dialog" role="document">
