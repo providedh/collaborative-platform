@@ -318,5 +318,12 @@ var optionsFile = {
 
 };
 
-// var tb = Treebeard(options);
-var tb2 = Treebeard(optionsFile);
+if ($('#files').length) {
+    var tb = Treebeard(options);
+}
+
+if ($('#filep').length) {
+    var tb2 = Treebeard(optionsFile);
+}
+
+

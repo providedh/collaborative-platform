@@ -13,6 +13,8 @@ function contentFile(id) {
         }
     });
 
+    window.history.replaceState(null, null, "/files/" + id);
+
     $.ajax({
         type: "GET",
         url: "/api/files/" + id,
