@@ -176,40 +176,26 @@ class AnnotatorConsumer(WebsocketConsumer):
                 )
 
             except NotModifiedException as exception:
-                response = {
-                    'status': 304,
-                    'message': str(exception),
-                    'xml_content': None,
-                }
-
-                response = json.dumps(response)
-
-                # Send message to room group
-                async_to_sync(self.channel_layer.group_send)(
-                    self.room_group_name,
-                    {
-                        'type': 'xml_modification',
-                        'message': response,
-                    }
-                )
+                self.send_response(304, exception)
 
             except (ValueError, TypeError) as error:
-                response = {
-                    'status': 400,
-                    'message': str(error),
-                    'xml_content': None,
-                }
+                self.send_response(400, error)
 
-                response = json.dumps(response)
-
-                # Send message to room group
-                async_to_sync(self.channel_layer.group_send)(
-                    self.room_group_name,
-                    {
-                        'type': 'xml_modification',
-                        'message': response,
-                    }
-                )
+    def send_response(self, code, message):
+        response = {
+            'status': code,
+            'message': str(message),
+            'xml_content': None,
+        }
+        response = json.dumps(response)
+        # Send message to room group
+        async_to_sync(self.channel_layer.group_send)(
+            self.room_group_name,
+            {
+                'type': 'xml_modification',
+                'message': response,
+            }
+        )
 
     # Receive message from room group
     def xml_modification(self, event):
