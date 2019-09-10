@@ -151,27 +151,8 @@ def __get_project_id(request, **kwargs):
             except JSONDecodeError:
                 pass
             else:
-                project_id_files, project_id_dirs = None, None
-
-                if 'files' in data:
-                    ids = set()
-                    for file_id in data['files']:
-                        file = File.objects.get(id=file_id)
-                        ids.add(file.project_id)
-                    if len(ids) > 1:
-                        raise Exception("Not all of given files ids in the same project.")
-                    else:
-                        project_id_files = ids.pop()
-
-                if 'directories' in data:
-                    ids = set()
-                    for dir_id in data['directories']:
-                        dir = Directory.objects.get(id=dir_id)
-                        ids.add(dir.project_id)
-                    if len(ids) > 1:
-                        raise Exception("Not all of given directories ids in the same project.")
-                    else:
-                        project_id_dirs = ids.pop()
+                project_id_files = check_if_all_in_one_project(data, 'files')
+                project_id_dirs = check_if_all_in_one_project(data, 'directories')
 
                 if project_id_files is not None and project_id_dirs is not None:
                     if project_id_dirs == project_id_files:
@@ -194,6 +175,20 @@ def __get_project_id(request, **kwargs):
         return any_id
     else:
         raise Exception("Not all parameters are parts of the same project or none parameters given!")
+
+
+def check_if_all_in_one_project(data, key):
+    project_id_dirs = None
+    if key in data:
+        ids = set()
+        for dir_id in data[key]:
+            dir = Directory.objects.get(id=dir_id)
+            ids.add(dir.project_id)
+        if len(ids) > 1:
+            raise Exception("Not all of given {} ids in the same project.".format(key))
+        else:
+            project_id_dirs = ids.pop()
+    return project_id_dirs
 
 
 def __get_response(request, status, bootstrap_alert_type, message, data=None):
