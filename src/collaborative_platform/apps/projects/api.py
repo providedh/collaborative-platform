@@ -8,7 +8,8 @@ from django.db.models import QuerySet, Q
 from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, HttpResponseNotFound
 
 from apps.files_management.models import Directory
-from apps.projects.helpers import page_to_json_response, include_contributors, log_activity, paginate_start_length
+from apps.projects.helpers import page_to_json_response, include_contributors, log_activity, paginate_start_length, \
+    change_public
 from apps.views_decorators import objects_exists, user_has_access
 
 from .helpers import paginate_page_perpage, order_queryset
@@ -102,22 +103,14 @@ def get_activities(request, project_id):
 @objects_exists
 @user_has_access('RW')
 def make_public(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
-    p = Project.objects.filter(id=project_id).get()
-    p.public = True
-    p.save()
-    log_activity(project=p, user=request.user, action_text="made project public")
-    return HttpResponse("OK")
+    return change_public(request, project_id, True)
 
 
 @login_required
 @objects_exists
 @user_has_access('RW')
 def make_private(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
-    p = Project.objects.filter(id=project_id).get()
-    p.public = False
-    p.save()
-    log_activity(project=p, user=request.user, action_text="made project private")
-    return HttpResponse("OK")
+    return change_public(request, project_id, False)
 
 
 def get_user_projects(user):  # type: (User) -> QuerySet
