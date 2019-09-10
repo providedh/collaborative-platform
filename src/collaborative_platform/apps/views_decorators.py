@@ -3,6 +3,7 @@ from functools import wraps
 from json import JSONDecodeError
 from typing import Callable
 
+from django.contrib.auth.models import User
 from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, HttpResponseForbidden, JsonResponse, Http404, \
     RawPostDataException
 from django.shortcuts import render
@@ -29,6 +30,10 @@ def objects_exists(view):  # type: (Callable) -> Callable
             'file_id': {
                 'model': File,
                 'name': 'File',
+            },
+            'user_id': {
+                'model': User,
+                'name': 'User',
             }
         }
 
