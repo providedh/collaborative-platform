@@ -70,6 +70,7 @@
         <p class="project__text--license">{% if project.license %}{{ project.license }}{% else %}<span class="project__text--placeholder">Add a license</span>{% endif %}</p>
       </div>
     </div>
+      {% if admin %}
     <div class="ml-auto project__buttons d-flex flex-nowrap">
       <div><button type="button" class="{% if not project.public %}project__button--makeprivate{% else %}project__button--makeprivate-active{% endif %}" js-makePrivateProject="{{ project.id }}">Private</button></div>
       <div>
@@ -78,6 +79,7 @@
         </button>
       </div>
     </div>
+      {% endif %}
   </div>
   <div class="row">
     <div class="col-lg-6">
