@@ -119,14 +119,27 @@ def contributors(request, project_id):  # type: (HttpRequest, int) -> HttpRespon
             # without this form autocomplete widget is not visible in formset
             form = ContributorForm
 
-            return render(request, 'projects/contributors.html', {'formset': formset, 'form': form, 'alerts': alerts})
+            context = {
+                'formset': formset,
+                'form': form,
+                'alerts': alerts,
+                'title': 'Contributors',
+            }
+
+            return render(request, 'projects/contributors.html', context)
 
     formset = ContributorFormset(instance=project)
 
     # without this form autocomplete widget is not visible in formset
     form = ContributorForm
 
-    return render(request, 'projects/contributors.html', {'formset': formset, 'form': form})
+    context = {
+        'formset': formset,
+        'form': form,
+        'title': 'Contributors',
+    }
+
+    return render(request, 'projects/contributors.html', context)
 
 
 @method_decorator(login_required, name='dispatch')
