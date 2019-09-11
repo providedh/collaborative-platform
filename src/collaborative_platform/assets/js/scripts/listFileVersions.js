@@ -22,7 +22,7 @@ $('[js-listFileVersions]').DataTable( {
         {
             "data": "id",
             "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
-                $(nTd).html('lll');
+                $(nTd).html('<a href="/user/' + oData.created_by_id + '">'+ oData.created_by +'</a>');
             }
         },
 
