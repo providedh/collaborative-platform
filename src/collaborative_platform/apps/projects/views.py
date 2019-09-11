@@ -3,11 +3,13 @@ from dal import autocomplete
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db.models import Q
+from django.forms import inlineformset_factory
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render
-from django.forms import inlineformset_factory
+from django.utils.decorators import method_decorator
 
 from apps.views_decorators import objects_exists, user_has_access
+from apps.core.models import Profile
 
 from .forms import ContributorForm
 from .models import Project, Contributor
@@ -127,10 +129,10 @@ def contributors(request, project_id):  # type: (HttpRequest, int) -> HttpRespon
     return render(request, 'projects/contributors.html', {'formset': formset, 'form': form})
 
 
+@method_decorator(login_required, name='dispatch')
 class UserAutocomplete(autocomplete.Select2QuerySetView):
-    # TODO: View decorators not working for class based views. Secure this view manually
     def get_queryset(self):
-        qs = User.objects.all()
+        qs = Profile.objects.all()
 
         if self.q:
             qs = qs.filter(Q(username__istartswith=self.q) |
