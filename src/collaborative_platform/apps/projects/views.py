@@ -69,9 +69,12 @@ def contributors(request, project_id):  # type: (HttpRequest, int) -> HttpRespon
     project = Project.objects.get(pk=project_id)
     ContributorFormset = inlineformset_factory(Project,
                                                Contributor,
-                                               fields=('user', 'permissions'),
-                                               widgets={'user': autocomplete.ModelSelect2(url='user_autocomplete')},
-                                               extra=1)
+                                               fields=('profile', 'permissions'),
+                                               widgets={'profile': autocomplete.ModelSelect2(url='user_autocomplete')},
+                                               extra=1,
+                                               labels={
+                                                   'profile': 'User',
+                                               })
 
     if request.method == 'POST':
         formset = ContributorFormset(request.POST, instance=project)
@@ -82,13 +85,15 @@ def contributors(request, project_id):  # type: (HttpRequest, int) -> HttpRespon
             alerts = []
 
             for form in cleaned_forms:
-                if 'user' not in form:
+                if 'profile' not in form:
                     continue
 
                 try:
-                    contributor = Contributor.objects.get(user=form['user'], project_id=project_id)
+                    contributor = Contributor.objects.get(profile=form['profile'], project_id=project_id)
                 except Contributor.DoesNotExist:
-                    contributor = Contributor(user=form['user'], project_id=project_id, permissions='RO')
+                    user = form['profile'].user
+
+                    contributor = Contributor(profile=form['profile'], project_id=project_id, permissions='RO', user=user)
 
                 if form['DELETE']:
                     if contributor.permissions == 'AD':

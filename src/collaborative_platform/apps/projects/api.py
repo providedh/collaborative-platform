@@ -7,6 +7,7 @@ from django.core.paginator import InvalidPage, EmptyPage
 from django.db.models import QuerySet, Q
 from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, HttpResponseNotFound
 
+from apps.core.models import Profile
 from apps.files_management.models import Directory
 from apps.projects.helpers import page_to_json_response, include_contributors, log_activity, paginate_start_length, \
     change_public
@@ -31,7 +32,9 @@ def create(request):  # type: (HttpRequest) -> HttpResponse
             project = Project(title=data['title'], description=data["description"])
             project.save()
 
-            contributor = Contributor(project=project, user=request.user, permissions="AD")
+            profile = Profile.objects.get(user=request.user)
+
+            contributor = Contributor(project=project, user=request.user, permissions="AD", profile=profile)
             contributor.save()
 
             base_dir = Directory(name=data['title'], project=project)

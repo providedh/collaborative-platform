@@ -25,7 +25,8 @@ class Contributor(models.Model):
     )
 
     project = models.ForeignKey(Project, related_name='contributors', on_delete=models.CASCADE)
-    user = models.ForeignKey(Profile, related_name='contributions', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name='contributions', on_delete=models.CASCADE)
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     permissions = models.CharField(max_length=2, choices=permissions_levels, default="RO")
 
     class Meta:

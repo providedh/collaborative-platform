@@ -78,32 +78,6 @@ def log_activity(project, user, action_text="", file=None,
     return a
 
 
-def update_contributor(project_id, user_id, level, delete=False):  # type: (int, int, str, bool) -> None
-    try:
-        c = Contributor.objects.filter(project_id=project_id, user_id=user_id).get()
-        if delete:
-            c.delete()
-            return
-    except Contributor.DoesNotExist():
-        c = Contributor(project_id=project_id, user_id=user_id, level=level)
-        c.save()
-        return
-    else:
-        c.level = level
-        c.save()
-
-
-def update_contributors(project_id, contributors):
-    # type: (int, Iterable[Dict[str, Union[int, str, bool]]]) -> HttpResponse
-    if 'AD' not in (c['level'] for c in contributors):
-        return HttpResponseBadRequest(dumps({"message": "There must be at least one administrator in a project."}))
-
-    for contrib in contributors:
-        update_contributor(project_id, **contrib)
-
-    return HttpResponse("OK")
-
-
 def change_public(request, project_id, public):  # type: (HttpRequest, int, bool) -> HttpResponse
     p = Project.objects.filter(id=project_id).get()
     p.public = public
