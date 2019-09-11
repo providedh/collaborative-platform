@@ -133,10 +133,11 @@ def contributors(request, project_id):  # type: (HttpRequest, int) -> HttpRespon
 class UserAutocomplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
         qs = Profile.objects.all()
+        qs = qs.exclude(user__username='admin')
 
         if self.q:
-            qs = qs.filter(Q(username__istartswith=self.q) |
-                           Q(first_name__istartswith=self.q) |
-                           Q(last_name__istartswith=self.q))
+            qs = qs.filter(Q(user__username__istartswith=self.q) |
+                           Q(user__first_name__istartswith=self.q) |
+                           Q(user__last_name__istartswith=self.q))
 
         return qs
