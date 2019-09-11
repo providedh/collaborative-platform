@@ -70,7 +70,6 @@ exit()
 ```
 upstream django {
     server unix:///home/ubuntu/collaborative-platform/src/collaborative_platform/collaborative_platform.sock; # for a file socket
-    # server 127.0.0.1:8001; # for a web port socket (we'll use this first)
 }
 
 server {
