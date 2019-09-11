@@ -15,6 +15,9 @@ class Profile(models.Model):
     researchgate = models.CharField(max_length=20, null=True, blank=True)
     about = models.CharField(max_length=500, null=True, blank=True)
 
+    def __str__(self):
+        return "{0} {1} ({2})".format(self.user.first_name, self.user.last_name, self.user.username)
+
 
 @receiver(post_save, sender=User)
 def update_user_profile(sender, instance, created, **kwargs):
