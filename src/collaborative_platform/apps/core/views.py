@@ -5,7 +5,6 @@ from django.contrib.auth.forms import AdminPasswordChangeForm, PasswordChangeFor
 from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render, redirect
-from django.urls import reverse
 from social_django.models import UserSocialAuth
 
 from apps.index_and_search.models import User as ESUser
