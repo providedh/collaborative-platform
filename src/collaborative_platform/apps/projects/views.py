@@ -1,14 +1,16 @@
+from dal import autocomplete
+
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.db.models import Q
 from django.http import HttpResponse, HttpRequest
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.forms import inlineformset_factory
 
 from apps.views_decorators import objects_exists, user_has_access
 
-from .models import Project, Contributor
-from dal import autocomplete
 from .forms import ContributorForm
+from .models import Project, Contributor
 
 
 @login_required()
@@ -63,7 +65,11 @@ def project(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
 @user_has_access('AD')
 def contributors(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
     project = Project.objects.get(pk=project_id)
-    ContributorFormset = inlineformset_factory(Project, Contributor, fields=('user', 'permissions'), extra=1, widgets={'user': autocomplete.ModelSelect2(url='user_autocomplete')})
+    ContributorFormset = inlineformset_factory(Project,
+                                               Contributor,
+                                               fields=('user', 'permissions'),
+                                               widgets={'user': autocomplete.ModelSelect2(url='user_autocomplete')},
+                                               extra=1)
 
     if request.method == 'POST':
         formset = ContributorFormset(request.POST, instance=project)
@@ -82,7 +88,7 @@ def contributors(request, project_id):  # type: (HttpRequest, int) -> HttpRespon
                 except Contributor.DoesNotExist:
                     contributor = Contributor(user=form['user'], project_id=project_id, permissions='RO')
 
-                if form['DELETE'] == True:
+                if form['DELETE']:
                     if contributor.permissions == 'AD':
                         admins = Contributor.objects.filter(project_id=project_id, permissions='AD')
 
@@ -91,7 +97,8 @@ def contributors(request, project_id):  # type: (HttpRequest, int) -> HttpRespon
                         else:
                             alert = {
                                 'type': 'warning',
-                                'message': "Can't remove contributor: {0}. There must be at least one administrator in a project.".format(contributor.user.username),
+                                'message': "Can't remove contributor: {0}. There must be at least one administrator "
+                                           "in a project.".format(contributor.user.user.username),
                             }
 
                             alerts.append(alert)
@@ -100,6 +107,9 @@ def contributors(request, project_id):  # type: (HttpRequest, int) -> HttpRespon
 
                 elif contributor.permissions != form['permissions']:
                     contributor.permissions = form['permissions']
+                    contributor.save()
+
+                elif contributor.id is None:
                     contributor.save()
 
             formset = ContributorFormset(instance=project)
@@ -123,6 +133,8 @@ class UserAutocomplete(autocomplete.Select2QuerySetView):
         qs = User.objects.all()
 
         if self.q:
-            qs = qs.filter(username__istartswith=self.q)
+            qs = qs.filter(Q(username__istartswith=self.q) |
+                           Q(first_name__istartswith=self.q) |
+                           Q(last_name__istartswith=self.q))
 
         return qs
