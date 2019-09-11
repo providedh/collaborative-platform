@@ -16,7 +16,7 @@ from apps.projects.models import Project
 from apps.views_decorators import objects_exists, user_has_access
 from .file_conversions.tei_handler import TeiHandler
 from .helpers import extract_text_and_entities, index_entities, upload_file, uploaded_file_object_from_string, \
-    get_directory_content
+    get_directory_content, include_user
 
 
 @login_required
@@ -106,7 +106,7 @@ def get_file_versions(request, file_id):  # type: (HttpRequest, int) -> HttpResp
         file = File.objects.filter(id=file_id).get()
 
         page = paginate_start_length(request, file.versions.all())
-        return page_to_json_response(page)
+        return include_user(page_to_json_response(page))
 
     else:
         return HttpResponseBadRequest("Invalid request method")
