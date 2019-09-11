@@ -13,18 +13,49 @@
           <h1>{{ user.first_name }} {{ user.last_name }}</h1>
           
           <div class="project__date">
-            <span class="project__text--label">Date joined</span>
-            <span class="project__text--date">{{ user.date_joined|date:'Y-m-d, H:i' }}</span>
+            <span class="project__text--label">Username</span>
+            <span class="project__text--date">{{user.username}}</span>
             <span class="project__text--divider"></span>
-            <span class="project__text--label">Last login</span>
-            <span class="project__text--date">{{ user.last_login|date:'Y-m-d, H:i' }}</span>
+            <span class="project__text--label">Email</span>
+            <span class="project__text--date">{{user.email}}</span>
           </div>
-          Username: {{user.username}}
-          Email: {{user.email}}
-          Link to this profile: <a href>{{user_url}}</a>
 
-          <p>This users available projects:</p>
+          <div class="project__date">
+              <span class="project__text--label">Date joined</span>
+              <span class="project__text--date">{{ user.date_joined|date:'Y-m-d, H:i' }}</span>
+              <span class="project__text--divider"></span>
+              <span class="project__text--label">Last login</span>
+              <span class="project__text--date">{{ user.last_login|date:'Y-m-d, H:i' }}</span>
+            </div>
+          
       </div>
   </div>
 </div>
+
+<div class="projects d-flex flex-column flex-fill">
+    <div class="projects-public flex-fill">
+      <div class="container">
+        <div class="row">
+          <div class="col p-5">
+            <div class="d-md-flex justify-content-between align-items-center mb-3 mb-md-0">
+              <h1>User projects</h1>
+            </div>
+            <div class="projects-table flex-fill p-md-5 pt-md-0">
+              <div class="table-responsive projects-table__container">
+                <table js-listProjectsUsers data-user-id="{{ user.id }}" data-link-project="{% url 'project_template' %}"  data-link-contributor="{% url 'user_template' %}" class="table m-0 table-hover table-striped">
+                  <thead>
+                  <tr>
+                    <th scope="col">Title</th>
+                    <th scope="col">Contributors</th>
+                    <th scope="col">Modification date</th>
+                  </tr>
+                  </thead>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock %}
