@@ -100,7 +100,7 @@ def contributors(request, project_id):  # type: (HttpRequest, int) -> HttpRespon
                             alert = {
                                 'type': 'warning',
                                 'message': "Can't remove contributor: {0}. There must be at least one administrator "
-                                           "in a project.".format(contributor.user.user.username),
+                                           "in a project.".format(str(contributor.user)),
                             }
 
                             alerts.append(alert)
