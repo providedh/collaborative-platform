@@ -52,11 +52,19 @@ def project(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
 
     users = User.objects.filter(id__in=contributors_ids)
 
+    try:
+        Contributor.objects.get(user=request.user, project=project, permissions='AD')
+    except Contributor.DoesNotExist:
+        admin = False
+    else:
+        admin = True
+
     context = {
         'title': project.title,
         'alerts': None,
         'project': project,
         'contributors': users,
+        'admin': admin,
     }
 
     return render(request, 'projects/project.html', context)

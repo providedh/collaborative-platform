@@ -1,10 +1,12 @@
 import hashlib
 from io import BytesIO
+from json import loads
 from typing import List, Set
 
 from django.contrib.auth.models import User
 from django.core.files.uploadedfile import UploadedFile
 from django.forms import model_to_dict
+from django.http import JsonResponse
 from django.utils import timezone
 
 from apps.index_and_search.content_extractor import ContentExtractor
@@ -140,3 +142,12 @@ def is_child(parent, child):  # type: (int, int) -> bool
     parent_dir = Directory.objects.get(id=parent)
     children = get_all_child_dirs(parent_dir)
     return child in children
+
+
+def include_user(response):  # type: (JsonResponse) -> JsonResponse
+    json = loads(response.content)
+    for fv in json['data']:
+        u = User.objects.get(id=fv['created_by_id'])  # type: User
+        fv['created_by'] = u.first_name + ' ' + u.last_name
+
+    return JsonResponse(json)
