@@ -135,6 +135,7 @@ def contributors(request, project_id):  # type: (HttpRequest, int) -> HttpRespon
             context = {
                 'formset': formset,
                 'form': form,
+                'project': project,
                 'alerts': alerts,
                 'title': 'Contributors',
             }
@@ -149,6 +150,7 @@ def contributors(request, project_id):  # type: (HttpRequest, int) -> HttpRespon
     context = {
         'formset': formset,
         'form': form,
+        'project': project,
         'title': 'Contributors',
     }
 
