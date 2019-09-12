@@ -79,10 +79,8 @@ def contributors(request, project_id):  # type: (HttpRequest, int) -> HttpRespon
                                                Contributor,
                                                fields=('profile', 'permissions'),
                                                widgets={'profile': autocomplete.ModelSelect2(url='user_autocomplete')},
-                                               extra=1,
-                                               labels={
-                                                   'profile': 'User',
-                                               })
+                                               labels={'profile': 'User'},
+                                               extra=1)
 
     if request.method == 'POST':
         formset = ContributorFormset(request.POST, instance=project)
@@ -90,12 +88,17 @@ def contributors(request, project_id):  # type: (HttpRequest, int) -> HttpRespon
         if formset.is_valid():
             cleaned_forms = [form.cleaned_data for form in formset.forms]
 
-            alerts = []
+            valid_forms = []
 
             for form in cleaned_forms:
-                if 'profile' not in form:
-                    continue
+                if 'profile' in form:
+                    valid_forms.append(form)
 
+            sorted_forms = sorted(valid_forms, key=lambda k: k['DELETE'])
+
+            alerts = []
+
+            for form in sorted_forms:
                 try:
                     contributor = Contributor.objects.get(profile=form['profile'], project_id=project_id)
                 except Contributor.DoesNotExist:
