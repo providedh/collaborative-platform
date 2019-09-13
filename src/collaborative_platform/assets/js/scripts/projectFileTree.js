@@ -38,10 +38,12 @@ var options = {
             console.log(event)
         },
 
-        complete: function(treebeard) {
-            console.log(this)
-            console.log(treebeard)
-            // treebeard.refreshData();
+        complete: function(file) {
+            tb.refreshData();
+        },
+
+        completemultiple: function(file) {
+            tb.refreshData();
         }
     },
     uploadURL : "eee",
