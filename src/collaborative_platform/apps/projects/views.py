@@ -15,32 +15,6 @@ from .forms import ContributorForm
 from .models import Project, Contributor
 
 
-@login_required()
-def projects(request, user_id):  # type: (HttpRequest, int) -> HttpResponse
-    if user_id == request.user.pk:
-        context = {
-            'title': 'Projects',
-            'alerts': None,
-        }
-
-        return render(request, 'projects/projects.html', context)
-
-    else:
-        alerts = [
-            {
-                'type': 'warning',
-                'message': "You can't see another user projects."
-            }
-        ]
-
-        context = {
-            'title': 'Home',
-            'alerts': alerts,
-        }
-
-        return render(request, 'core/index.html', context)
-
-
 @login_required
 @objects_exists
 @user_has_access()
@@ -52,19 +26,11 @@ def project(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
 
     users = User.objects.filter(id__in=contributors_ids)
 
-    try:
-        Contributor.objects.get(user=request.user, project=project, permissions='AD')
-    except Contributor.DoesNotExist:
-        admin = False
-    else:
-        admin = True
-
     context = {
         'title': project.title,
         'alerts': None,
         'project': project,
         'contributors': users,
-        'admin': admin,
     }
 
     return render(request, 'projects/project.html', context)
@@ -73,7 +39,7 @@ def project(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
 @login_required
 @objects_exists
 @user_has_access('AD')
-def contributors(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
+def settings(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
     project = Project.objects.get(pk=project_id)
     ContributorFormset = inlineformset_factory(Project,
                                                Contributor,
@@ -143,7 +109,7 @@ def contributors(request, project_id):  # type: (HttpRequest, int) -> HttpRespon
                 'title': 'Contributors',
             }
 
-            return render(request, 'projects/contributors.html', context)
+            return render(request, 'projects/settings.html', context)
 
     formset = ContributorFormset(instance=project)
 
@@ -157,7 +123,7 @@ def contributors(request, project_id):  # type: (HttpRequest, int) -> HttpRespon
         'title': 'Contributors',
     }
 
-    return render(request, 'projects/contributors.html', context)
+    return render(request, 'projects/settings.html', context)
 
 
 @method_decorator(login_required, name='dispatch')
