@@ -49,12 +49,16 @@ def settings(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
                                                labels={'profile': 'User'},
                                                extra=1)
 
-    if request.method == 'POST' and 'title' in request.POST:
-        formset = ContributorFormset(instance=project)
-        project_edit_form = ProjectEditForm(request.POST, instance=project)
+    contributor_formset = ContributorFormset(instance=project)
+    project_edit_form = ProjectEditForm(instance=project)
 
-        # without this form autocomplete widget is not visible in formset
-        form = ContributorForm
+    # without this form autocomplete widget is not visible in formset
+    dummy_form = ContributorForm
+
+    alerts = []
+
+    if request.method == 'POST' and 'title' in request.POST:
+        project_edit_form = ProjectEditForm(request.POST, instance=project)
 
         if project_edit_form.is_valid():
             project_edit_form.save()
@@ -62,25 +66,11 @@ def settings(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
             directory = Directory.objects.get(project=project, parent_dir=None)
             directory.rename(project.title, request.user)
 
-        context = {
-            'formset': formset,
-            'form': form,
-            'project_edit_form': project_edit_form,
-            'project': project,
-            'title': 'Contributors',
-        }
-
-        return render(request, 'projects/settings.html', context)
-
     if request.method == 'POST' and 'contributors-TOTAL_FORMS' in request.POST:
-        formset = ContributorFormset(request.POST, instance=project)
-        project_edit_form = ProjectEditForm(instance=project)
+        contributor_formset = ContributorFormset(request.POST, instance=project)
 
-        # without this form autocomplete widget is not visible in formset
-        form = ContributorForm
-
-        if formset.is_valid():
-            cleaned_forms = [form.cleaned_data for form in formset.forms]
+        if contributor_formset.is_valid():
+            cleaned_forms = [form.cleaned_data for form in contributor_formset.forms]
 
             valid_forms = []
 
@@ -89,8 +79,6 @@ def settings(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
                     valid_forms.append(form)
 
             sorted_forms = sorted(valid_forms, key=lambda k: k['DELETE'])
-
-            alerts = []
 
             for form in sorted_forms:
                 try:
@@ -110,7 +98,7 @@ def settings(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
                             alert = {
                                 'type': 'warning',
                                 'message': "Can't remove contributor: {0}. There must be at least one administrator "
-                                           "in a project.".format(str(contributor.user)),
+                                           "in a project.".format(str(contributor.profile)),
                             }
 
                             alerts.append(alert)
@@ -124,35 +112,15 @@ def settings(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
                 elif contributor.id is None:
                     contributor.save()
 
-            # formset = ContributorFormset(instance=project)
-            # project_edit_form = ProjectEditForm(instance=project)
-
-            # # without this form autocomplete widget is not visible in formset
-            # form = ContributorForm
-
-            context = {
-                'formset': formset,
-                'form': form,
-                'project_edit_form': project_edit_form,
-                'project': project,
-                'alerts': alerts,
-                'title': 'Contributors',
-            }
-
-            return render(request, 'projects/settings.html', context)
-
-    formset = ContributorFormset(instance=project)
-    project_edit_form = ProjectEditForm(instance=project)
-
-    # without this form autocomplete widget is not visible in formset
-    form = ContributorForm
+            contributor_formset = ContributorFormset(instance=project)
 
     context = {
-        'formset': formset,
-        'form': form,
-        'project_edit_form': project_edit_form,
-        'project': project,
         'title': 'Contributors',
+        'project': project,
+        'alerts': alerts,
+        'contributor_formset': contributor_formset,
+        'project_edit_form': project_edit_form,
+        'dummy_form': dummy_form,
     }
 
     return render(request, 'projects/settings.html', context)

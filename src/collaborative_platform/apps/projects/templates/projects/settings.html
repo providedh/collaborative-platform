@@ -3,7 +3,7 @@
 
 {% block head %}
 <script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
-{{ form.media }}
+{{ dummy_form.media }}
 {% endblock %}
 
 {% block submenu %}
@@ -53,7 +53,7 @@
         <div class="box__content">
           <form method="post">
             {% csrf_token %}
-            {{ formset.as_p }}
+            {{ contributor_formset.as_p }}
 
             <button type="submit">Update</button>
           </form>
