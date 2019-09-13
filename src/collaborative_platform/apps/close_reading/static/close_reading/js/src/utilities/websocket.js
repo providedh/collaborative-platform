@@ -55,10 +55,8 @@ const AnnotatorWebSocket = function(){
             //console.log("data from socket:" + event.data);
             if (first_entry)
             {
-                // m.startComputation();
                 loaded = true;
                 content = JSON.parse(event.data);
-                // m.endComputation();
 
                 if (content.status === 200)
                 {
