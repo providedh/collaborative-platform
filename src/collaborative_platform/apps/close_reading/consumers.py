@@ -27,19 +27,17 @@ class AnnotatorConsumer(WebsocketConsumer):
             self.send(text_data=response)
             return
 
-        # COMMENTED FOR SIMPLE WEBSOCKET CLIENT (TO BYPASS NOT WORKING JS IN CLOSE READING APP)
-        # TODO: Remove comment when js in close reading will work
-        # contributor = Contributor.objects.filter(project_id=project_id, user_id=self.scope['user'].pk)
-        # if not contributor:
-        #     response = {
-        #         'status': 403,
-        #         'message': "You aren't contributor in project with id: {}.".format(project_id),
-        #         'xml_content': None,
-        #     }
-        #
-        #     response = json.dumps(response)
-        #     self.send(text_data=response)
-        #     return
+        contributor = Contributor.objects.filter(project_id=project_id, user_id=self.scope['user'].pk)
+        if not contributor:
+            response = {
+                'status': 403,
+                'message': "You aren't contributor in project with id: {}.".format(project_id),
+                'xml_content': None,
+            }
+
+            response = json.dumps(response)
+            self.send(text_data=response)
+            return
 
         try:
             annotating_xml_content = AnnotatingXmlContent.objects.get(file_symbol=room_symbol)
@@ -79,15 +77,12 @@ class AnnotatorConsumer(WebsocketConsumer):
 
         self.accept()
 
-        # IF STATEMENT FOR SIMPLE WEBSOCKET CLIENT (TO BYPASS NOT WORKING JS IN CLOSE READING APP)
-        # TODO: Remove if statement when js in close reading will work
-        if self.scope['user'].pk is not None:
-            room_presence, created = RoomPresence.objects.get_or_create(
-                room_symbol=room_symbol,
-                user=self.scope['user'],
-            )
+        room_presence, created = RoomPresence.objects.get_or_create(
+            room_symbol=room_symbol,
+            user=self.scope['user'],
+        )
 
-            room_presence.save()
+        room_presence.save()
 
         response = {
             'status': 200,
@@ -108,15 +103,12 @@ class AnnotatorConsumer(WebsocketConsumer):
 
         room_symbol = self.scope['url_route']['kwargs']['room_name']
 
-        # IF STATEMENT FOR SIMPLE WEBSOCKET CLIENT (TO BYPASS NOT WORKING JS IN CLOSE READING APP)
-        # TODO: Remove if statement when js in close reading will work
-        if self.scope['user'].pk is not None:
-            room_presence = RoomPresence.objects.get(
-                room_symbol=room_symbol,
-                user=self.scope['user'],
-            )
+        room_presence = RoomPresence.objects.get(
+            room_symbol=room_symbol,
+            user=self.scope['user'],
+        )
 
-            room_presence.delete()
+        room_presence.delete()
 
         remain_users = RoomPresence.objects.filter(room_symbol=room_symbol)
 
@@ -142,12 +134,7 @@ class AnnotatorConsumer(WebsocketConsumer):
             annotating_xml_content = AnnotatingXmlContent.objects.get(file_symbol=room_symbol)
             xml_content = annotating_xml_content.xml_content
 
-            # IF STATEMENT FOR SIMPLE WEBSOCKET CLIENT (TO BYPASS NOT WORKING JS IN CLOSE READING APP)
-            # TODO: Remove if statement when js in close reading will work
-            if self.scope['user'].pk is not None:
-                user_id = self.scope['user'].pk
-            else:
-                user_id = 6
+            user_id = self.scope['user'].pk
 
             request_json = json.loads(request_json)
 
