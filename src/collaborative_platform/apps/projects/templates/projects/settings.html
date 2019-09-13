@@ -3,7 +3,7 @@
 
 {% block head %}
 <script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
-{{ form.media }}
+{{ dummy_form.media }}
 {% endblock %}
 
 {% block submenu %}
@@ -15,7 +15,7 @@
     <a href="{% url 'project' project.id %}" class="submenu__link">Files</a>
   </li>
   <li class="submenu__item">
-    <a href="{% url 'contributors' project.id %}" class="submenu__link">Settings</a>
+    <a href="{% url 'project_settings' project.id %}" class="submenu__link">Settings</a>
   </li>
 </ul>
 {% endblock %}
@@ -32,7 +32,7 @@
         <a href="{% url 'project' project.id %}" class="submenu__link">Files</a>
       </li>
       <li class="submenu__item submenu__item--active">
-        <a href="{% url 'contributors' project.id %}" class="submenu__link">Settings</a>
+        <a href="{% url 'project_settings' project.id %}" class="submenu__link">Settings</a>
       </li>
     </ul>
   </div>
@@ -53,7 +53,7 @@
         <div class="box__content">
           <form method="post">
             {% csrf_token %}
-            {{ formset.as_p }}
+            {{ contributor_formset.as_p }}
 
             <button type="submit">Update</button>
           </form>
@@ -67,7 +67,20 @@
           <h3 class="box__text--title">Settings</h3>
         </div>
         <div class="box__content">
-          settings
+          <form method="post">
+            {% csrf_token %}
+            {{ project_edit_form.as_p }}
+
+            <button type="submit">Update</button>
+          </form>
+        </div>
+      </div>
+      <div class="box">
+        <div class="box__header">
+          <h3 class="box__text--title">Delete</h3>
+        </div>
+        <div class="box__content">
+          <a href="{% url 'project_delete' project.id %}" class="btn btn-danger">Delete</a>
         </div>
       </div>
     </div>

@@ -14,7 +14,7 @@
     <a href="{% url 'project' project.id %}" class="submenu__link">Files</a>
   </li>
   <li class="submenu__item">
-    <a href="{% url 'contributors' project.id %}" class="submenu__link">Settings</a>
+    <a href="{% url 'project_settings' project.id %}" class="submenu__link">Settings</a>
   </li>
 </ul>
 {% endblock %}
@@ -31,7 +31,7 @@
         <a href="{% url 'project' project.id %}" class="submenu__link">Files</a>
       </li>
       <li class="submenu__item">
-        <a href="{% url 'contributors' project.id %}" class="submenu__link">Settings</a>
+        <a href="{% url 'project_settings' project.id %}" class="submenu__link">Settings</a>
       </li>
     </ul>
   </div>
@@ -64,16 +64,6 @@
         <p class="project__text--license">{% if project.license %}{{ project.license }}{% else %}<span class="project__text--placeholder">Add a license</span>{% endif %}</p>
       </div>
     </div>
-      {% if admin %}
-    <div class="ml-auto project__buttons d-flex flex-nowrap">
-      <div><button type="button" class="{% if not project.public %}project__button--makeprivate{% else %}project__button--makeprivate-active{% endif %}" js-makePrivateProject="{{ project.id }}">Private</button></div>
-      <div>
-        <button class="{% if project.public %}project__button--makepublic{% else %}project__button--makepublic-active{% endif %}"
-                js-makePublicProject="{{ project.id }}" type="button">Public
-        </button>
-      </div>
-    </div>
-      {% endif %}
   </div>
   <div class="row">
     <div class="col-lg-6">
