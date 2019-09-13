@@ -78,9 +78,9 @@ def log_activity(project, user, action_text="", file=None,
     return a
 
 
-def change_public(request, project_id, public):  # type: (HttpRequest, int, bool) -> HttpResponse
-    p = Project.objects.filter(id=project_id).get()
-    p.public = public
-    p.save()
-    log_activity(project=p, user=request.user, action_text="made project private")
-    return HttpResponse("OK")
+# def change_public(request, project_id, public):  # type: (HttpRequest, int, bool) -> HttpResponse
+#     p = Project.objects.filter(id=project_id).get()
+#     p.public = public
+#     p.save()
+#     log_activity(project=p, user=request.user, action_text="made project private")
+#     return HttpResponse("OK")

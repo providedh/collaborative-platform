@@ -10,8 +10,9 @@ from django.utils.decorators import method_decorator
 
 from apps.views_decorators import objects_exists, user_has_access
 from apps.core.models import Profile
+from apps.files_management.models import Directory
 
-from .forms import ContributorForm
+from .forms import ContributorForm, ProjectEditForm
 from .models import Project, Contributor
 
 
@@ -48,8 +49,35 @@ def settings(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
                                                labels={'profile': 'User'},
                                                extra=1)
 
-    if request.method == 'POST':
+    if request.method == 'POST' and 'title' in request.POST:
+        formset = ContributorFormset(instance=project)
+        project_edit_form = ProjectEditForm(request.POST, instance=project)
+
+        # without this form autocomplete widget is not visible in formset
+        form = ContributorForm
+
+        if project_edit_form.is_valid():
+            project_edit_form.save()
+
+            directory = Directory.objects.get(project=project, parent_dir=None)
+            directory.rename(project.title, request.user)
+
+        context = {
+            'formset': formset,
+            'form': form,
+            'project_edit_form': project_edit_form,
+            'project': project,
+            'title': 'Contributors',
+        }
+
+        return render(request, 'projects/settings.html', context)
+
+    if request.method == 'POST' and 'contributors-TOTAL_FORMS' in request.POST:
         formset = ContributorFormset(request.POST, instance=project)
+        project_edit_form = ProjectEditForm(instance=project)
+
+        # without this form autocomplete widget is not visible in formset
+        form = ContributorForm
 
         if formset.is_valid():
             cleaned_forms = [form.cleaned_data for form in formset.forms]
@@ -96,14 +124,16 @@ def settings(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
                 elif contributor.id is None:
                     contributor.save()
 
-            formset = ContributorFormset(instance=project)
+            # formset = ContributorFormset(instance=project)
+            # project_edit_form = ProjectEditForm(instance=project)
 
-            # without this form autocomplete widget is not visible in formset
-            form = ContributorForm
+            # # without this form autocomplete widget is not visible in formset
+            # form = ContributorForm
 
             context = {
                 'formset': formset,
                 'form': form,
+                'project_edit_form': project_edit_form,
                 'project': project,
                 'alerts': alerts,
                 'title': 'Contributors',
@@ -112,6 +142,7 @@ def settings(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
             return render(request, 'projects/settings.html', context)
 
     formset = ContributorFormset(instance=project)
+    project_edit_form = ProjectEditForm(instance=project)
 
     # without this form autocomplete widget is not visible in formset
     form = ContributorForm
@@ -119,6 +150,7 @@ def settings(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
     context = {
         'formset': formset,
         'form': form,
+        'project_edit_form': project_edit_form,
         'project': project,
         'title': 'Contributors',
     }

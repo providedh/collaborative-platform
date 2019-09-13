@@ -9,8 +9,8 @@ from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, HttpR
 
 from apps.core.models import Profile
 from apps.files_management.models import Directory
-from apps.projects.helpers import page_to_json_response, include_contributors, log_activity, paginate_start_length, \
-    change_public
+from apps.projects.helpers import page_to_json_response, include_contributors, log_activity, paginate_start_length
+    # change_public
 from apps.views_decorators import objects_exists, user_has_access
 
 from .helpers import paginate_page_perpage, order_queryset
@@ -102,18 +102,18 @@ def get_activities(request, project_id):
     return page_to_json_response(page)
 
 
-@login_required
-@objects_exists
-@user_has_access('RW')
-def make_public(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
-    return change_public(request, project_id, True)
-
-
-@login_required
-@objects_exists
-@user_has_access('RW')
-def make_private(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
-    return change_public(request, project_id, False)
+# @login_required
+# @objects_exists
+# @user_has_access('RW')
+# def make_public(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
+#     return change_public(request, project_id, True)
+#
+#
+# @login_required
+# @objects_exists
+# @user_has_access('RW')
+# def make_private(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
+#     return change_public(request, project_id, False)
 
 
 def get_user_projects(user):  # type: (User) -> QuerySet
