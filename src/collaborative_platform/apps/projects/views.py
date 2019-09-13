@@ -170,3 +170,26 @@ class UserAutocomplete(autocomplete.Select2QuerySetView):
                            Q(user__last_name__istartswith=self.q))
 
         return qs
+
+
+@login_required
+@objects_exists
+@user_has_access('AD')
+def delete(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
+    project = Project.objects.get(id=project_id)
+
+    project_title = project.title
+
+    project.delete()
+
+    alert = {
+        'type': 'success',
+        'message': "Project: {0} removed successfully.".format(project_title),
+    }
+
+    context = {
+        'title': 'Projects',
+        'alerts': [alert],
+    }
+
+    return render(request, 'projects/projects.html', context)

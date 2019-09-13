@@ -1,13 +1,12 @@
-from json import loads, dumps
-from typing import Iterable, Dict, Union
+from json import loads
 
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator, Page
 from django.db.models import QuerySet
-from django.http import HttpRequest, JsonResponse, HttpResponse, HttpResponseBadRequest
+from django.http import HttpRequest, JsonResponse
 
 from apps.files_management.models import File, Directory
-from apps.projects.models import Activity, Project, Contributor
+from apps.projects.models import Activity, Project
 
 
 def paginate_page_perpage(request, queryset):  # type: (HttpRequest, QuerySet) -> Page
@@ -76,11 +75,3 @@ def log_activity(project, user, action_text="", file=None,
         a.related_dir_name = related_dir.name
     a.save()
     return a
-
-
-# def change_public(request, project_id, public):  # type: (HttpRequest, int, bool) -> HttpResponse
-#     p = Project.objects.filter(id=project_id).get()
-#     p.public = public
-#     p.save()
-#     log_activity(project=p, user=request.user, action_text="made project private")
-#     return HttpResponse("OK")

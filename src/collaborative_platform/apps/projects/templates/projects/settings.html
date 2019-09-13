@@ -67,21 +67,20 @@
           <h3 class="box__text--title">Settings</h3>
         </div>
         <div class="box__content">
-{#          <div class="ml-auto project__buttons d-flex flex-nowrap">#}
-{#            <div><button type="button" class="{% if not project.public %}project__button--makeprivate{% else %}project__button--makeprivate-active{% endif %}" js-makePrivateProject="{{ project.id }}">Private</button></div>#}
-{#            <div>#}
-{#              <button class="{% if project.public %}project__button--makepublic{% else %}project__button--makepublic-active{% endif %}"#}
-{#                      js-makePublicProject="{{ project.id }}" type="button">Public#}
-{#              </button>#}
-{#            </div>#}
-{#          </div>#}
-
           <form method="post">
             {% csrf_token %}
             {{ project_edit_form.as_p }}
 
-            <button type="submit">Update project</button>
+            <button type="submit">Update</button>
           </form>
+        </div>
+      </div>
+      <div class="box">
+        <div class="box__header">
+          <h3 class="box__text--title">Delete</h3>
+        </div>
+        <div class="box__content">
+          <a href="{% url 'project_delete' project.id %}" class="btn btn-danger">Delete</a>
         </div>
       </div>
     </div>
