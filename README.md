@@ -11,6 +11,7 @@
 cd collaborative-platform
 sudo pip3 install -r requirements.txt
 sudo pip3 install uwsgi
+sudo pip3 install daphne
 ```
 
 ##4. install external packages
@@ -69,8 +70,13 @@ exit()
 ##8. in /etc/nginx/sites-enabled/ create file collaborative_platform_nginx.conf with following content:
 ```
 upstream django {
-    server unix:///home/ubuntu/collaborative-platform/src/collaborative_platform/collaborative_platform.sock; # for a file socket
+    server unix:///home/ubuntu/collaborative-platform/src/collaborative_platform/collaborative_platform.sock;
 }
+
+upstream ws {
+    server unix:///home/ubuntu/collaborative-platform/src/collaborative_platform/collaborative_platform_websockets.sock;
+}
+
 
 server {
     listen      80;
@@ -98,6 +104,15 @@ server {
         alias /home/ubuntu/collaborative-platform/src/collaborative_platform/static; # your Django project's static files - amend as required
     }
 
+    location /ws/ {
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $host;
+        proxy_pass http://ws;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+    }
+
     # Finally, send all non-media requests to the Django server.
     location / {
         uwsgi_pass  django;
@@ -110,9 +125,11 @@ server {
     ssl_ciphers 'ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256';
     ssl_prefer_server_ciphers on;
 
+
     add_header Strict-Transport-Security max-age=31536000;
 
 }
+
 
 ```
 adjust domain and paths in above config, copy SSL certs to /etc/ssl/.
@@ -129,11 +146,17 @@ cp src/collaborative_platform/collaborative_platform/settings.py_template src/co
 ```
 then fill settings file with keys to social media auth, credentials to database, and add domain to allowed_hosts. Set paths for files storage.
 
-##10. run uwsgi:
+##10. run uwsgi and daphne:
 go to src/collaborative_platform
 ```
 screen uwsgi --socket /home/ubuntu/collaborative-platform/src/collaborative_platform/collaborative_platform.sock --chmod-socket=666 --module collaborative_platform.wsgi
 ```
 and detach from screen session by pressing ctrl+a, ctrl+d
+
+then
+```
+screen daphne -u collaborative_platform_websockets.sock collaborative_platform.asgi:application
+```
+and like before, detach by pressing ctrl+a, ctrl+d.
 
 ##Congrats, your environment should be working now.
