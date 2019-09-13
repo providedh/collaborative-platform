@@ -31,7 +31,7 @@ const AnnotatorWebSocket = function(){
     {
         let wsPrefix = (window.location.protocol === 'https:') ? 'wss://' : 'ws://';
 
-        socket = new WebSocket(wsPrefix + window.location.host.split(':')[0] + ':8000' + '/close_reading/' + project_id + '_' + file_id + '/');
+        socket = new WebSocket(wsPrefix + window.location.host.split(':')[0] + '/ws/close_reading/' + project_id + '_' + file_id + '/');
 
         if (socket.readyState === WebSocket.OPEN) {
             socket.onopen();

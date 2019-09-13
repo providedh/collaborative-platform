@@ -116,7 +116,7 @@ function createWebSocket()
 {
     let wsPrefix = (window.location.protocol === 'https:') ? 'wss://' : 'ws://';
 
-    self.socket = new WebSocket(wsPrefix + window.location.host.split(':')[0] + ':8000' + '/close_reading/' + self.project_id + '_' + self.file_id + '/');
+    self.socket = new WebSocket(wsPrefix + window.location.host.split(':')[0] + '/ws/close_reading/' + self.project_id + '_' + self.file_id + '/');
 
     if (self.socket.readyState === WebSocket.OPEN) {
         self.socket.onopen();
