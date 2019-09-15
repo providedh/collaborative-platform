@@ -258,7 +258,7 @@ let PanelView = function(args){
 	          b.addEventListener("click", function(e) {
 	              document.getElementById('references').value = this.data.name;
 	              inp.value = `${this.data.name} | ${this.data.filepath}`;
-	              document.getElementById(''asserted-value'').value = this.data.id;
+	              document.getElementById('asserted-value').value = this.data.id;
 	              closeAllLists();
 	          });
 	          a.appendChild(b);
