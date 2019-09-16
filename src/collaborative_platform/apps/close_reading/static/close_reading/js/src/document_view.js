@@ -10,9 +10,11 @@
  * - panel/display_options
  * */
 import ColorScheme from './utilities/color.js';
+import AjaxCalls from './utilities/ajax.js';
 
 var DocumentView = function(args){
 	let self = null;
+	const ajaxCalls = AjaxCalls();
 	const XML_EXTRA_CHAR_SPACER="xxxx"; // Used to keep string lengths for ids.
 
 	function _init(args){
@@ -61,17 +63,29 @@ var DocumentView = function(args){
 	        return({body, parsed_tei});
 	}
 
-	function _styleAnnotatedTags(file){
-		function addStyle(id, category, cert){
-		    const greyRule = 'div#annotator-root[display-uncertainty=true] ' 
+	function _styleAnnotatedTags(file, currentUser){
+		function addStyle(id, category, cert, resp, currentUser){
+		    const currentUserGreyRule = 'div#annotator-root[display-uncertainty=true] ' 
 		        + '#'+id
 		        + '{background-color: lightgrey;}';
-		    const colorRule = 'div#annotator-root[display-uncertainty=true][color-uncertainty=true] ' 
+		    const currentUserColorRule = 'div#annotator-root[display-uncertainty=true][color-uncertainty=true] ' 
 		        + '#'+id
 		        + `{background-color: ${ColorScheme.calculate(category,cert)};}`;
 
-		    document.getElementById('style').innerText += (greyRule);
-    		document.getElementById('style').innerText += (colorRule);
+		    const greyRule = 'div#annotator-root[display-uncertainty=true] ' 
+		        + '#'+id
+		        + '{background: linear-gradient(180deg, #fff 50%, lightgrey 50%);}';
+		    const colorRule = 'div#annotator-root[display-uncertainty=true][color-uncertainty=true] ' 
+		        + '#'+id
+		        + `{background: linear-gradient(180deg, #fff 50%, ${ColorScheme.calculate(category,cert)} 50%);}`;
+
+		    if(resp == ('#' + currentUser)){
+		    	document.getElementById('style').innerText += (currentUserGreyRule);
+	    		document.getElementById('style').innerText += (currentUserColorRule);
+		    }else{
+			    document.getElementById('style').innerText += (greyRule);
+	    		document.getElementById('style').innerText += (colorRule);
+		    }
 		}
 
 		document.getElementById('style').innerText = '';
@@ -84,7 +98,9 @@ var DocumentView = function(args){
                         addStyle(
                             XML_EXTRA_CHAR_SPACER+target.slice(1), 
                             annotation.attributes['category'].value, 
-                            annotation.attributes['cert'].value
+                            annotation.attributes['cert'].value,
+                            annotation.attributes['resp'].value,
+                            currentUser
                             );
                     }
                 })
@@ -161,8 +177,15 @@ var DocumentView = function(args){
 		const {body, parsed_tei} = _parseTEI(file);
 		document.getElementById('editor').innerHTML='';
 		document.getElementById('editor').appendChild(body);
-		_styleAnnotatedTags(parsed_tei);
-		self.publish('document/render', {XML_EXTRA_CHAR_SPACER, document: parsed_tei});
+
+		ajaxCalls.getUser().then(response=>{
+			let user = 'none';
+			if(response.success === true)
+				user = response.content.id;
+
+			_styleAnnotatedTags(parsed_tei, user);
+			self.publish('document/render', {XML_EXTRA_CHAR_SPACER, document: parsed_tei});
+		})
 	}
 
 	function _handleDisplayOptions(args){
