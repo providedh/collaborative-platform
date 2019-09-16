@@ -227,11 +227,6 @@ let PanelView = function(args){
 	function _updateAutocompleteOptions(entityType, text){
 		ajaxCalls.getAutocomplete(window.project_id, entityType, text).then(response=>{
 			if(response.success === true){				
-				/*response.content.data.push({_source:{
-					name: 'Alex',
-					filepath: 'some.text',
-					id: '012'
-				}})*/
 				document.getElementById("references-autocomplete").options = response.content.data.map(a=>(
 	                {name: a._source.name, id:a._source.id, filepath:a._source.filepath}
 	            ))
@@ -245,10 +240,9 @@ let PanelView = function(args){
 	function _updateAutocompleteInput(inp){
 	    currentFocus = -1;
 	    let a = document.getElementById('autocomplete-list');
-
 	    for (let i = 0; i < inp.options.length; i++) {
-	        if (inp.options[i].name.substr(0, inp.value.length).toUpperCase() == inp.value.toUpperCase()) {
-	          b = document.createElement("DIV");
+	        if (inp.options[i].name.toUpperCase().includes(inp.value.toUpperCase())) {
+	          let b = document.createElement("DIV");
 	          b.data = inp.options[i];
 	          b.innerHTML = "<strong>" + inp.options[i].name.substr(0, inp.value.length) + "</strong>";
 	          b.innerHTML += inp.options[i].name.substr(inp.value.length);
