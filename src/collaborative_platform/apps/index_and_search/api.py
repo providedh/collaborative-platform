@@ -4,6 +4,7 @@ from elasticsearch_dsl import Search
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, HttpResponseBadRequest, JsonResponse, HttpResponse
 
+from apps.files_management.models import File
 from .models import User
 from apps.views_decorators import objects_exists, user_has_access
 
@@ -19,6 +20,9 @@ def entity_completion(request, project_id, entity_type, query):  # type: (HttpRe
         'data': [entity.to_dict() for entity in r.suggest.ac[0].options if
                  entity['_source']['project_id'] == project_id]
     }
+    for entry in result['data']:
+        entry['_source']['filepath'] = File.objects.get(id=entry['_source']['file_id']).get_path()
+
     return JsonResponse(result)
 
 
