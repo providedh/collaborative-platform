@@ -7,7 +7,7 @@
 {% block submenu %}
 <ul class="submenu__list">
   <li class="submenu__item">
-    <h4>{{ file.project.title }}</h4>
+    <a href="{% url 'project' file.project.id %}" class="submenu__link">{{ file.project.title }}</a>
   </li>
   <li class="submenu__item">
     <a href="#" class="submenu__link">Files</a>
@@ -54,9 +54,9 @@
         <div class="btn-group" role="group" aria-label="Basic example">
           <button type="button" class="btn btn-outline-primary btn-sm btn-disabled" data-toggle="modal" data-target="#contentFileCheckout">Check out</button>
           <button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#contentFileDelete">Delete</button>
-          <button type="button" class="btn btn-outline-primary btn-sm" js-contentFileDownload="">Download</button>
-          <button type="button" class="btn btn-outline-primary btn-sm" js-contentFileCloseReading="">Close reading</button>
-          <button type="button" class="btn btn-outline-primary btn-sm" js-contentFileRevisions="">Revisions</button>
+          <button type="button" class="btn btn-outline-primary btn-sm" js-contentFileDownload="{{ file.id }}">Download</button>
+          <button type="button" class="btn btn-outline-primary btn-sm" js-contentFileCloseReading="{{ file.id }}">Close reading</button>
+          <button type="button" class="btn btn-outline-primary btn-sm" js-contentFileRevisions="{{ file.id }}">Revisions</button>
         </div>
       </div>
     </div>

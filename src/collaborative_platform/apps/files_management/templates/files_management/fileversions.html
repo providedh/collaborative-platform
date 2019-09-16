@@ -6,14 +6,11 @@
 
 {% block submenu %}
 <ul class="submenu__list">
-  <li class="submenu__item">
-    <h4>{{ project.title }}</h4>
+  <li class="submenu__item  submenu__item--active">
+    <a href="{% url 'project' file.project.id %}" class="submenu__link">{{ project.title }}</a>
   </li>
   <li class="submenu__item">
     <a href="#" class="submenu__link">Files</a>
-  </li>
-  <li class="submenu__item  submenu__item--active">
-    <a href="#" class="submenu__link">Contributors</a>
   </li>
   <li class="submenu__item">
     <a href="#" class="submenu__link">Settings</a>
@@ -26,17 +23,14 @@
 <div class="submenu">
   <div class="container">
     <ul class="submenu__list d-flex">
-      <li class="submenu__iteme">
-        <h4 class="submenu__item--title">{{ file.project.title }}</h4>
+      <li class="submenu__item">
+        <a href="{% url 'project' file.project.id %}" class="submenu__link">{{ file.project.title }}</a>
       </li>
       <li class="submenu__item submenu__item--active">
         <a href="#" class="submenu__link">Files</a>
       </li>
       <li class="submenu__item">
-        <a href="#" class="submenu__link">Contributors</a>
-      </li>
-      <li class="submenu__item">
-        <a href="#" class="submenu__link">Settings</a>
+        <a href="{% url 'project_settings' file.project.id %}" class="submenu__link">Settings</a>
       </li>
     </ul>
   </div>
@@ -60,9 +54,9 @@
         <div class="btn-group" role="group" aria-label="Basic example">
           <button type="button" class="btn btn-outline-primary btn-sm btn-disabled" data-toggle="modal" data-target="#contentFileCheckout">Check out</button>
           <button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#contentFileDelete">Delete</button>
-          <button type="button" class="btn btn-outline-primary btn-sm" js-contentFileDownload="">Download</button>
-          <button type="button" class="btn btn-outline-primary btn-sm" js-contentFileCloseReading="">Close reading</button>
-          <button type="button" class="btn btn-outline-primary btn-sm active" js-contentFileRevisions="">Revisions</button>
+          <button type="button" class="btn btn-outline-primary btn-sm" js-contentFileDownload="{{ file.id }}">Download</button>
+          <button type="button" class="btn btn-outline-primary btn-sm" js-contentFileCloseReading="{{ file.id }}">Close reading</button>
+          <button type="button" class="btn btn-outline-primary btn-sm active" js-contentFileRevisions="{{ file.id }}">Revisions</button>
         </div>
       </div>
     </div>
