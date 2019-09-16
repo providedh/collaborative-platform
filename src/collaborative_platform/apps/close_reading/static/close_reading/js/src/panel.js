@@ -153,9 +153,28 @@ let PanelView = function(args){
 	}
 
 	function _setup_autocomplete(inp) {
-	        //Snippet from w3school.com	     
-	        inp.addEventListener("input", function(e) {
-	              let a, b, i, val = inp.value;
+		function addActive(x) {
+			if (!x) return false;
+			removeActive(x);
+			if (currentFocus >= x.length) currentFocus = 0;
+			if (currentFocus < 0) currentFocus = (x.length - 1);
+			x[currentFocus].classList.add("autocomplete-active");
+		}
+		function removeActive(x) {
+			for (let i = 0; i < x.length; i++) {
+			  x[i].classList.remove("autocomplete-active");
+			}
+		}
+		function closeAllLists(elmnt) {
+			let x = document.getElementsByClassName("autocomplete-items");
+			for (let i = 0; i < x.length; i++) {
+			  if (elmnt != x[i] && elmnt != inp) {
+			    x[i].parentNode.removeChild(x[i]);
+			  }
+			}
+		}
+        inp.addEventListener("input", function(e) {
+            let a, b, i, val = inp.value;
 	        closeAllLists();
 	        if (!val) { return false;}
 	        currentFocus = -1;
@@ -181,9 +200,9 @@ let PanelView = function(args){
 	              a.appendChild(b);
 	            }
 	        }
-	      });
+	    });
 
-	      inp.addEventListener("keydown", function(e) {
+	    inp.addEventListener("keydown", function(e) {
 	          let x = document.getElementById("autocomplete-list");
 	          if (x) x = x.getElementsByTagName("div");
 	          if (e.keyCode == 40) {
@@ -199,26 +218,6 @@ let PanelView = function(args){
 	            }
 	          }
 	      });
-	      function addActive(x) {
-	        if (!x) return false;
-	        removeActive(x);
-	        if (currentFocus >= x.length) currentFocus = 0;
-	        if (currentFocus < 0) currentFocus = (x.length - 1);
-	        x[currentFocus].classList.add("autocomplete-active");
-	      }
-	      function removeActive(x) {
-	        for (let i = 0; i < x.length; i++) {
-	          x[i].classList.remove("autocomplete-active");
-	        }
-	      }
-	      function closeAllLists(elmnt) {
-	        let x = document.getElementsByClassName("autocomplete-items");
-	        for (let i = 0; i < x.length; i++) {
-	          if (elmnt != x[i] && elmnt != inp) {
-	            x[i].parentNode.removeChild(x[i]);
-	          }
-	        }
-	      }
 	      document.addEventListener("click", function (e) {
 	          closeAllLists(e.target);
 	      });
