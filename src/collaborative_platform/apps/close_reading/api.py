@@ -31,14 +31,15 @@ def save(request, project_id, file_id):  # type: (HttpRequest, int, int) -> Http
 
             return JsonResponse(response, status=status)
 
-        file_version_old = File.objects.get(id=file_id).version_number
+        file = File.objects.get(id=file_id)
+        file_version_old = file.version_number
 
         xml_content = annotating_xml_content.xml_content
         file_name = annotating_xml_content.file_name
         uploaded_file = uploaded_file_object_from_string(xml_content, file_name)
 
         project = Project.objects.get(id=project_id)
-        upload_response = upload_file(uploaded_file, project, request.user)
+        upload_response = upload_file(uploaded_file, project, request.user, file.parent_dir)
 
         file_version_new = upload_response.version_number
 
