@@ -41,7 +41,6 @@ var AjaxCalls = function(args){
 		    return cookieValue;
 		}
 
-		console.log(url)
 		const csrftoken = getCookie('csrftoken');
 
 		return new Promise(function(resolve, cancel){
