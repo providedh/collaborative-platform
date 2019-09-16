@@ -13,12 +13,14 @@ var AjaxCalls = function(args){
 	const save_url = (project, file) => ['/api','close_reading', 'project', project, 'file', file, 'save/'].join('/');
 	const history_url = (project, file, version) => ['/api','close_reading','project', project, 'file', file,'version', version, 'history/'].join('/');
 	const search_url = (project, entity_type, query) => ['/api/search/entity_completion/project',project,'entity',entity_type,query].join('/');
+	const user_url = (project, entity_type, query) => '/api/close_reading/current_user/';
 
 	function _init(args){
 		const obj = {
 			safeFile: (project, file) => _createCall('PUT', base_url + save_url(project, file)),
 			getHistory: (project, file, version) => _createCall('GET', base_url + history_url(project, file, version)),
-			getAutocomplete: (project, entity_type, query) => _createCall('GET', base_url + search_url(project, entity_type, query))
+			getAutocomplete: (project, entity_type, query) => _createCall('GET', base_url + search_url(project, entity_type, query)),
+			getUser: () => _createCall('GET', base_url + user_url())
 		};
 
 		return obj;
