@@ -24,6 +24,15 @@ class FileNode(models.Model):
         self.save()
         return self
 
+    def get_path(self):
+        s = self
+        r = [self.name]
+        while s.parent_dir is not None:
+            r.insert(0, s.parent_dir.name)
+            s = s.parent_dir
+
+        return '/'.join(r)
+
 
 class Directory(FileNode):
     parent_dir = models.ForeignKey("Directory", related_name='subdirs', on_delete=models.CASCADE, blank=True, null=True)
