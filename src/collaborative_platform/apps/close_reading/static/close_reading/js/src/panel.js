@@ -49,7 +49,7 @@ let PanelView = function(args){
 		const visualOptions = document.getElementById('visual-options').getElementsByTagName('button');
 
 		Array.from(formInputs)
-			.map(e=>e.addEventListener('change',
+			.map(e=>e.addEventListener('input',
 				()=>_handleValueChange(e.attributes['id'].value, e.value))); // 
 		Array.from(formSelects)
 			.map(e=>e.addEventListener('change',
