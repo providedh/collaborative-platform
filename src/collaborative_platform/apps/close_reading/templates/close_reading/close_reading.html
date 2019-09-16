@@ -25,9 +25,9 @@
       </div>
     </div>
     <section id="asserted-value-input-options">
-      <input id="asserted-value" type="text" class="input locus-attribute">
-      <input id="asserted-value" type="text" class="input locus-value">
-      <select class="form-control form-control-sm locus-name input" id='asserted-value'>
+      <input type="text" class="input locus-attribute">
+      <input type="text" class="input locus-value">
+      <select class="form-control form-control-sm locus-name input">
         <option value="date">Date</option>
         <option value="event">Event</option>
         <option value="geolocation">geolocation</option>
@@ -41,7 +41,7 @@
       </select>
     </section>
     <div class="row justify-content-center">
-      <div class="col-auto">
+      <div id="toolbar-container" class="col-auto">
         <section id="toolbar">
           <div id="alert" class="hide" role="alert"></div>
           <div class="card card-body">
@@ -56,12 +56,17 @@
             </span>
             <button class="btn btn-outline-primary btn-sm" href="" id="saveFile">Save current file</button>
           </h2>
-          <div id="history">
-            <canvas></canvas>
-            <hr/>
-            <div id="versions"></div>
-            <div id="version-toltip"></div>
-            <div id="history-popup">
+          <div id="history-container">
+            <div id="history">
+              <span id="history-legend">Uncertainty</span>
+              <div>
+                <canvas></canvas>
+                <hr/>
+                <div id="versions"></div>
+                <div id="version-toltip"></div>
+                <div id="history-popup">
+              </div>
+            </div>
           </div>
           </div>
           </div>
@@ -336,6 +341,6 @@
     window.file_id = "{{ file_id }}";
     window.file_version = "{{ file.version_number }}";
   </script>
-
+  <script src="https://d3js.org/d3.v5.min.js"></script>
   <script type="module" src="{% static 'close_reading/js/app.js' %}"></script>
 {% endblock %}

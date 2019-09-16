@@ -1,6 +1,15 @@
 button span{
     pointer-events: none;
 }
+
+#editor{
+    margin-top: 225px;
+}
+
+#editor.lowered{
+    margin-top: 265px;
+}
+
 #annotator-root{max-width: 23.7cm;}
 #versionLink:first-of-type{font-size: 0.7em;}
 .break-word {
@@ -29,6 +38,11 @@ page {
 
 #alert.hide{opacity: 0;}
 #alert.show{opacity: 1;}
+
+#toolbar-container{
+    position: fixed;
+    z-index: 2;
+}
 
 #toolbar .toogle-button{
 	position: relative;
@@ -170,6 +184,24 @@ input#references-autocomplete {
 #history{
     height: 20px;
     position: relative;
+}
+
+#history-legend{
+    color: rgb(49, 130, 154);
+    position: absolute;
+    right: 0;
+    top: -1.3em;
+    font-size: .9em;
+    display: none;
+}
+
+#history.hovered #history-legend{
+    display: initial;
+}
+
+#history-container{
+    padding-top:10px;
+    padding-bottom:8px;
 }
 
 #history.hovered{

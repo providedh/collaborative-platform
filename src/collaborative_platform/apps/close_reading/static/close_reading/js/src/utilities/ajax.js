@@ -8,11 +8,11 @@
  * - get_autocomplete_url
  * */
 var AjaxCalls = function(args){
-	const base_url = [window.location.protocol + '/', window.location.hostname+':'+window.location.port, 'api/'].join('/');
+	const base_url = [window.location.protocol + '/', window.location.hostname+':'+window.location.port].join('/');
 
-	const save_url = (project, file) => ['close_reading', 'project', project, 'file', file, 'save/'].join('/');
-	const history_url = (project, file, version) => ['close_reading','project', project, 'file', file,'version', version, 'history/'].join('/');
-	const search_url = (project, entity_type, query) => ['fuzzysearch', project, entity_type, query].join('/');
+	const save_url = (project, file) => ['/api','close_reading', 'project', project, 'file', file, 'save/'].join('/');
+	const history_url = (project, file, version) => ['/api','close_reading','project', project, 'file', file,'version', version, 'history/'].join('/');
+	const search_url = (project, entity_type, query) => ['/api/search/entity_completion/project',project,'entity',entity_type,query].join('/');
 
 	function _init(args){
 		const obj = {
@@ -41,6 +41,7 @@ var AjaxCalls = function(args){
 		    return cookieValue;
 		}
 
+		console.log(url)
 		const csrftoken = getCookie('csrftoken');
 
 		return new Promise(function(resolve, cancel){
