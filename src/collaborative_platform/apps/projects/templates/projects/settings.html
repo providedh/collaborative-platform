@@ -9,10 +9,10 @@
 {% block submenu %}
 <ul class="submenu__list">
   <li class="submenu__item">
-    <h4>{{ project.title }}</h4>
+    <a href="{% url 'project' project.id %}" class="submenu__link">{{ project.title }}</a>
   </li>
   <li class="submenu__item">
-    <a href="{% url 'project' project.id %}" class="submenu__link">Files</a>
+    <a href="#" class="submenu__link">Files</a>
   </li>
   <li class="submenu__item">
     <a href="{% url 'project_settings' project.id %}" class="submenu__link">Settings</a>
@@ -26,10 +26,10 @@
   <div class="container">
     <ul class="submenu__list d-flex">
       <li class="submenu__item">
-        <h4 class="submenu__item--title">{{ project.title }}</h4>
+        <a href="{% url 'project' project.id %}" class="submenu__link">{{ project.title }}</a>
       </li>
       <li class="submenu__item">
-        <a href="{% url 'project' project.id %}" class="submenu__link">Files</a>
+        <a href="#" class="submenu__link">Files</a>
       </li>
       <li class="submenu__item submenu__item--active">
         <a href="{% url 'project_settings' project.id %}" class="submenu__link">Settings</a>
