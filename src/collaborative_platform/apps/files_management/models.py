@@ -114,6 +114,14 @@ class File(FileNode):
         fv = self.versions.filter(number=self.version_number).get()
         return fv.download()
 
+    def delete(self, using=None, keep_parents=False):
+        from apps.index_and_search.models import Person, Place, Organization, Event
+        Person.search().query('match', file_id=self.id).delete()
+        Place.search().query('match', file_id=self.id).delete()
+        Organization.search().query('match', file_id=self.id).delete()
+        Event.search().query('match', file_id=self.id).delete()
+        super().delete()
+
 
 class FileVersion(models.Model):
     upload = models.FileField(upload_to=UPLOADED_FILES_PATH)
