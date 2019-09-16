@@ -83,3 +83,20 @@ def history(request, project_id, file_id, version):  # type: (HttpRequest, int, 
         }
 
         return JsonResponse(response, status=status)
+
+
+@login_required
+def current_user(request): # type: (HttpRequest) -> HttpResponse
+    if request.method == 'GET':
+        user = request.user
+
+        status = HttpResponse.status_code
+
+        response = {
+            'id': 'person' + str(user.id),
+            'forename': user.first_name,
+            'surname': user.last_name,
+            'email': user.email,
+        }
+
+        return JsonResponse(response, status=status)
