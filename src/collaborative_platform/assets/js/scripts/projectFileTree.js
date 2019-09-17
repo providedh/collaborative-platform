@@ -307,7 +307,14 @@ var options = {
             width: "20%",
             sort: false
         }]
-    }
+    },
+
+    ondataload : function () {
+        var tb = this,
+            rowDiv = tb.select('.tb-row');
+
+        rowDiv.first().find('.tb-toggle-icon').click();
+    },
 
 };
 
