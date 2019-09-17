@@ -20,7 +20,6 @@ var options = {
     // useDropzone : true,
     uploads: true,
     resolveUploadUrl: function(item) {
-        console.log(item)
         return "/api/files/upload/" + item.data.id + "/";
     },
     dropzone: {
@@ -28,8 +27,8 @@ var options = {
         headers: {
             'X-CSRFToken': csrftoken
         },
-        uploadMultiple: false,
-        //parallelUploads: 100,
+        //uploadMultiple: false,
+        ////parallelUploads: 100,
 
         dragstart: function (treebeard, event) {
             // this = dropzone object
@@ -38,9 +37,9 @@ var options = {
             window.console.log("dragstart", this, treebeard, event);
         },
 
-        drop: function(event) {
-          console.log(event)
-        },
+        //drop: function(event) {
+        //  console.log(event)
+        //},
 
         dragend: function(event) {
             console.log(event)
@@ -314,6 +313,9 @@ var options = {
             rowDiv = tb.select('.tb-row');
 
         rowDiv.first().find('.tb-toggle-icon').click();
+
+        console.log(tb.find(24).data.parent)
+
     },
 
 };
