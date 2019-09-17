@@ -39,6 +39,21 @@ def project(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
 
 @login_required
 @objects_exists
+@user_has_access()
+def project_files(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
+    project = Project.objects.get(id=project_id)
+
+    context = {
+        'title': project.title,
+        'alerts': None,
+        'project': project,
+    }
+
+    return render(request, 'projects/project_files.html', context)
+
+
+@login_required
+@objects_exists
 @user_has_access('AD')
 def settings(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
     project = Project.objects.get(pk=project_id)

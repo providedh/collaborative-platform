@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{%  load static %}
+
+{% block head %}
+{% endblock %}
+
+{% block submenu %}
+<ul class="submenu__list">
+  <li class="submenu__item">
+    <a href="{% url 'project' project.id %}" class="submenu__link">{{ project.title }}</a>
+  </li>
+  <li class="submenu__item">
+    <a href="#" class="submenu__link">Files</a>
+  </li>
+  <li class="submenu__item">
+    <a href="{% url 'project_settings' project.id %}" class="submenu__link">Settings</a>
+  </li>
+</ul>
+{% endblock %}
+
+{% block content %}
+{% csrf_token %}
+<div class="submenu">
+  <div class="container">
+    <ul class="submenu__list d-flex">
+      <li class="submenu__item  submenu__item--active">
+        <a href="{% url 'project' project.id %}" class="submenu__link">{{ project.title }}</a>
+      </li>
+      <li class="submenu__item">
+        <a href="#" class="submenu__link">Files</a>
+      </li>
+      <li class="submenu__item">
+        <a href="{% url 'project_settings' project.id %}" class="submenu__link">Settings</a>
+      </li>
+    </ul>
+  </div>
+</div>
+<div class="container project">
+  <div class="d-flex flex-column-reverse flex-md-row project__header">
+    <div class=" project__content">
+      <h1>{{ project.title }}</h1>
+      <div class="d-md-flex project__contributors">
+        <a href="#" class="project__text--label project__text--label-contributors">Contributors</a>
+        <ul class="project__contributors--list d-flex flex-wrap">
+          {% for contributor in contributors %}
+          <li class="project__contributors--item"><a href="{% url 'user' contributor.id %}" class="project__link--contributors">{{ contributor.first_name }} {{ contributor.last_name }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="project__date">
+        <span class="project__text--label">Date created</span>
+        <span class="project__text--date">{{ project.creation_date|date:'Y-m-d, H:i' }}</span>
+        <span class="project__text--divider"></span>
+        <span class="project__text--label">Last updated</span>
+        <span class="project__text--date">{{ project.modification_date|date:'Y-m-d, H:i' }}</span>
+      </div>
+      <div class="d-md-flex project__description">
+        <span class="project__text--label">Description</span>
+        <p class="project__text--description">{% if project.description %}{{ project.description }}{% else %}<span class="project__text--placeholder">Add a brief description to your project</span>{% endif %}</p>
+      </div>
+      <div class="d-md-flex project__license">
+        <span class="project__text--label">License</span>
+        <p class="project__text--license">{% if project.license %}{{ project.license }}{% else %}<span class="project__text--placeholder">Add a license</span>{% endif %}</p>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-6">
+
+      <div class="box">
+        <div class="box__header">
+          <h3 class="box__text--title">Files</h3>
+        </div>
+        <div class="box__content">
+          <div id="files" data-project-id="{{ project.id }}">
+            <p style="font-size: 24px;text-align:center; margin-top:20px"> Loading <i class="fa fa-spinner fa-spin"></i></p>
+          </div>
+        </div>
+      </div>
+
+
+
+    </div>
+    <div class="col-lg-6">
+      <div class="box">
+        <div class="box__header">
+          <h3 class="box__text--title">Recent Activity</h3>
+        </div>
+        <div class="box__content">
+          <table js-listRecentActivities data-project-id="{{ project.id }}" class="table table-sm m-0 table-hover">
+            <thead>
+            <tr>
+              <th scope="col">Action</th>
+              <th scope="col">Date</th>
+            </tr>
+            </thead>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
