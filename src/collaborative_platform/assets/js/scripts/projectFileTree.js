@@ -19,7 +19,8 @@ var options = {
     lazyLoad : true,
     // useDropzone : true,
     uploads: true,
-    resolveUploadUrl: function(item) { 
+    resolveUploadUrl: function(item) {
+        console.log(item)
         return "/api/files/upload/" + item.data.id + "/";
     },
     dropzone: {
@@ -27,6 +28,9 @@ var options = {
         headers: {
             'X-CSRFToken': csrftoken
         },
+        uploadMultiple: false,
+        //parallelUploads: 100,
+
         dragstart: function (treebeard, event) {
             // this = dropzone object
             // treebeard = treebeard object
@@ -34,16 +38,38 @@ var options = {
             window.console.log("dragstart", this, treebeard, event);
         },
 
+        drop: function(event) {
+          console.log(event)
+        },
+
         dragend: function(event) {
             console.log(event)
         },
 
         complete: function(file) {
-            tb.refreshData();
+            console.log('complete')
+            //tb.refreshData();
         },
 
         completemultiple: function(file) {
-            tb.refreshData();
+            console.log('completemultiple')
+            //tb.refreshData();
+        },
+
+        successmultiple: function() {
+          console.log('success?')
+        },
+
+        error: function() {
+            console.log('error')
+        },
+
+        errormultiple: function() {
+            console.log('2222')
+        },
+
+        queuecomplete: function() {
+            console.log('queue end');
         }
     },
     uploadURL : "eee",

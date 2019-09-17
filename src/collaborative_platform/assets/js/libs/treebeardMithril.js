@@ -4605,6 +4605,8 @@ if (typeof exports == "object") {
                     if ($.isFunction(self.options.dropzoneEvents.drop)) {
                         self.options.dropzoneEvents.drop.call(this, self, event);
                     }
+
+					console.log(event)
                 },
                 dragstart: function _dropzoneDragStart(event) {
                     if ($.isFunction(self.options.dropzoneEvents.dragstart)) {
