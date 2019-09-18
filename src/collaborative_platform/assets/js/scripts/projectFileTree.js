@@ -39,15 +39,13 @@ var options = {
 
         //drop: function(event) {
         //  console.log(event)
-        //},
-
+        //},'
         //dragend: function(event) {
         //    console.log(event)
         //},
 
-        //complete: function(file) {
+        //com plete: function(file) {
         //    console.log('complete')
-        //    //tb.refreshData();
         //},
         //
         //completemultiple: function(file) {
