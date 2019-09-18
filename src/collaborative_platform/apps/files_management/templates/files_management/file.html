@@ -10,10 +10,10 @@
     <a href="{% url 'project' file.project.id %}" class="submenu__link">{{ file.project.title }}</a>
   </li>
   <li class="submenu__item">
-    <a href="#" class="submenu__link">Files</a>
+    <a href="{% url 'project_files' file.project.id %}" class="submenu__link">Files</a>
   </li>
   <li class="submenu__item">
-    <a href="#" class="submenu__link">Settings</a>
+    <a href="{% url 'project_settings' file.project.id %}" class="submenu__link">Settings</a>
   </li>
 </ul>
 {% endblock %}
@@ -27,7 +27,7 @@
         <a href="{% url 'project' file.project.id %}" class="submenu__link">{{ file.project.title }}</a>
       </li>
       <li class="submenu__item submenu__item--active">
-        <a href="#" class="submenu__link">Files</a>
+        <a href="{% url 'project_files' file.project.id %}" class="submenu__link">Files</a>
       </li>
       <li class="submenu__item">
         <a href="{% url 'project_settings' file.project.id %}" class="submenu__link">Settings</a>

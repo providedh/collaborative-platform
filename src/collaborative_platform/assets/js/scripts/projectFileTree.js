@@ -30,46 +30,46 @@ var options = {
         //uploadMultiple: false,
         ////parallelUploads: 100,
 
-        dragstart: function (treebeard, event) {
-            // this = dropzone object
-            // treebeard = treebeard object
-            // event = event passed in
-            window.console.log("dragstart", this, treebeard, event);
-        },
+        //dragstart: function (treebeard, event) {
+        //    // this = dropzone object
+        //    // treebeard = treebeard object
+        //    // event = event passed in
+        //    window.console.log("dragstart", this, treebeard, event);
+        //},
 
         //drop: function(event) {
         //  console.log(event)
         //},
 
-        dragend: function(event) {
-            console.log(event)
-        },
+        //dragend: function(event) {
+        //    console.log(event)
+        //},
 
-        complete: function(file) {
-            console.log('complete')
-            //tb.refreshData();
-        },
-
-        completemultiple: function(file) {
-            console.log('completemultiple')
-            //tb.refreshData();
-        },
-
-        successmultiple: function() {
-          console.log('success?')
-        },
-
-        error: function() {
-            console.log('error')
-        },
-
-        errormultiple: function() {
-            console.log('2222')
-        },
-
-        queuecomplete: function() {
-            console.log('queue end');
-        }
+        //complete: function(file) {
+        //    console.log('complete')
+        //    //tb.refreshData();
+        //},
+        //
+        //completemultiple: function(file) {
+        //    console.log('completemultiple')
+        //    //tb.refreshData();
+        //},
+        //
+        //successmultiple: function() {
+        //  console.log('success?')
+        //},
+        //
+        //error: function() {
+        //    console.log('error')
+        //},
+        //
+        //errormultiple: function() {
+        //    console.log('2222')
+        //},
+        //
+        //queuecomplete: function() {
+        //    console.log('queue end');
+        //}
     },
     uploadURL : "eee",
     allowMove : true,
@@ -106,7 +106,7 @@ var options = {
                     var buttons = []
 
                     var downloadDirectoryButton = m("a.tb-button[href='/api/files/directory/" + row.data.id +  "/download']", {}, m("i", {'class': "fa fa-download"}));
-                    var downloadFileButton = m("a.tb-button[href='/api/files/" + row.data.id +  "/download']", m("i", {'class': "fa fa-edit"}));
+                    var downloadFileButton = m("a.tb-button[href='/api/files/" + row.data.id +  "/download']", m("i", {'class': "fa fa-download"}));
 
                     var editButton = m("button.tb-button", {
                             onclick: function _editClick(e) {
@@ -313,9 +313,6 @@ var options = {
             rowDiv = tb.select('.tb-row');
 
         rowDiv.first().find('.tb-toggle-icon').click();
-
-        console.log(tb.find(24).data.parent)
-
     },
 
 };
