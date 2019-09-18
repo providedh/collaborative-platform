@@ -3621,6 +3621,9 @@ if (typeof exports == "object") {
         // private variables
         var self = this; // Treebard.controller
 		var filesDropArray = [];
+		var filesCompleteArray = [];
+		var filesSuccessArray = [];
+		var filesFailedArray = [];
         var lastLocation = 0; // The last scrollTop location, updates on every scroll.
         var lastNonFilterLocation = 0; // The last scrolltop location before filter was used.
         this.isSorted = {}; // Temporary variables for sorting
@@ -4566,9 +4569,6 @@ if (typeof exports == "object") {
                 clickable: false,
                 counter: 0,
                 accept: function _dropzoneAccept(file, done) {
-					filesDropArray.push(file.name)
-
-
                     var parent = file.treebeardParent;
                     if (self.options.addcheck.call(this, self, parent, file)) {
                         $.when(self.options.resolveUploadUrl.call(self, parent, file))
@@ -4611,9 +4611,6 @@ if (typeof exports == "object") {
                         self.options.dropzoneEvents.drop.call(this, self, event);
                     }
 
-
-
-
                 },
                 dragstart: function _dropzoneDragStart(event) {
                     if ($.isFunction(self.options.dropzoneEvents.dragstart)) {
@@ -4647,16 +4644,15 @@ if (typeof exports == "object") {
                     if ($.isFunction(self.options.onadd)) {
                         self.options.onadd.call(this, self, file.treebeardParent, file, response);
                     }
+					filesSuccessArray.push(file.name)
                 },
                 error: function _dropzoneError(file, message, xhr) {
                     if ($.isFunction(self.options.dropzoneEvents.error)) {
                         self.options.dropzoneEvents.error.call(this, self, file, message, xhr);
                     }
+					filesFailedArray.push(file.name)
                 },
                 uploadprogress: function _dropzoneUploadProgress(file, progress, bytesSent) {
-					console.log(filesDropArray)
-
-					console.log(self.select('tb-tbody'))
                     if ($.isFunction(self.options.dropzoneEvents.uploadprogress)) {
                         self.options.dropzoneEvents.uploadprogress.call(this, self, file, progress, bytesSent);
                     }
@@ -4676,18 +4672,61 @@ if (typeof exports == "object") {
                     if ($.isFunction(self.options.dropzoneEvents.complete)) {
                         self.options.dropzoneEvents.complete.call(this, self, file);
                     }
+					filesCompleteArray.push(file.name)
+					if ( filesCompleteArray.length === filesDropArray.length ) {
+
+						var filesSuccessList = [];
+						var filesFailedList = [];
+
+						for (var i = 0; i < filesSuccessArray.length; i++) {
+							filesSuccessList.push( m('li', filesSuccessArray[i]) )
+						}
+
+						for (var i = 0; i < filesFailedArray.length; i++) {
+							filesFailedList.push( m('li', filesFailedArray[i]) )
+						}
+
+						var mithrilUpload = [m('h3.break-word', 'Upload files')]
+
+						if (filesSuccessArray.length > 0) {
+							mithrilUpload.push([m('p', 'Success:'),
+								m('ul', filesSuccessList)])
+						}
+
+						if (filesFailedArray.length > 0) {
+							mithrilUpload.push([m('p', 'Failed:'),
+								m('ul', filesFailedList)])
+						}
+
+						var mithrilContent = m('div', mithrilUpload);
+
+						var mithrilButtons = m('div', [
+							m('button', { 'class' : 'btn btn-success', onclick : function() { self.modal.dismiss(); } }, 'Ok'),
+						]);
+						self.modal.update(mithrilContent, mithrilButtons);
+
+						filesDropArray.length = 0;
+						filesCompleteArray.length = 0;
+						filesFailedArray.length = 0;
+						filesSuccessArray.length = 0;
+
+						self.refreshData()
+
+					}
                 },
                 queuecomplete: function _dropzoneComplete(file) {
                     self.isUploading(false);
                     if ($.isFunction(self.options.dropzoneEvents.queuecomplete)) {
                         self.options.dropzoneEvents.queuecomplete.call(this, self, file);
                     }
+					console.log('eee')
                 },
                 addedfile: function _dropzoneAddedFile(file) {
                     file.treebeardParent = self.dropzoneItemCache;
                     if ($.isFunction(self.options.dropzoneEvents.addedfile)) {
                         self.options.dropzoneEvents.addedfile.call(this, self, file);
                     }
+					filesDropArray.push(file.name)
                 },
                 removedfile: function _dropzoneRemovedFile(file) {
                     file.treebeardParent = self.dropzoneItemCache;
