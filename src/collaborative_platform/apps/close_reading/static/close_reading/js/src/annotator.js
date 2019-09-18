@@ -87,8 +87,12 @@ var Annotator = function(args){
 
 	function _handleFileSave(args){
 		ajaxCalls.safeFile(window.project_id, window.file_id).then(response=>{
-			if(response.success === true)
+			if(response.success === true){
 				Alert.alert('success','Changes successfully saved.');
+				document.getElementById('versionLink').innerText = 'Version: '+response.content.version;
+				window.file_version = response.content.version;
+				self.publish('file/saved', response.content.version);
+			}
 			else
 				Alert.alert('success','Error saving the changes.');
 			console.info('Changes '+(response.success === true)?'saved':'not saved');

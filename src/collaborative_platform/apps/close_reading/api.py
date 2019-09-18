@@ -60,6 +60,7 @@ def save(request, project_id, file_id):  # type: (HttpRequest, int, int) -> Http
             response = {
                 'status': status,
                 'message': 'File with id: {0} was saved.'.format(file_id),
+                'version': file_version_new,
                 'data': None
             }
 

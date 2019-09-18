@@ -139,7 +139,6 @@ let PanelView = function(args){
 				.value
 				.includes('active'),
 			'cert-level': document.getElementById('cert-level').value,
-			'category': document.getElementById('category').value,
 			'locus': document.getElementById('locus').value,
 			'tag-name': document.getElementById('tag-name').value,
 			'attribute-name': document.getElementById('attribute-name').value,
@@ -152,39 +151,44 @@ let PanelView = function(args){
 		return options;
 	}
 
+	function addActive(x) {
+		if (!x) return false;
+		removeActive(x);
+		if (currentFocus >= x.length) currentFocus = 0;
+		if (currentFocus < 0) currentFocus = (x.length - 1);
+		x[currentFocus].classList.add("autocomplete-active");
+	}
+	
+	function removeActive(x) {
+		for (let i = 0; i < x.length; i++) {
+		  x[i].classList.remove("autocomplete-active");
+		}
+	}
+	
+	function closeAllLists(elmnt, inp) {
+		let x = document.getElementsByClassName("autocomplete-items");
+		for (let i = 0; i < x.length; i++) {
+		  if (elmnt != x[i] && elmnt != inp) {
+		    x[i].parentNode.removeChild(x[i]);
+		  }
+		}
+	}
+
 	function _setup_autocomplete(inp) {
-		function addActive(x) {
-			if (!x) return false;
-			removeActive(x);
-			if (currentFocus >= x.length) currentFocus = 0;
-			if (currentFocus < 0) currentFocus = (x.length - 1);
-			x[currentFocus].classList.add("autocomplete-active");
-		}
-		function removeActive(x) {
-			for (let i = 0; i < x.length; i++) {
-			  x[i].classList.remove("autocomplete-active");
-			}
-		}
-		function closeAllLists(elmnt) {
-			let x = document.getElementsByClassName("autocomplete-items");
-			for (let i = 0; i < x.length; i++) {
-			  if (elmnt != x[i] && elmnt != inp) {
-			    x[i].parentNode.removeChild(x[i]);
-			  }
-			}
-		}
         inp.addEventListener("input", function(e) {
             let a, b, i, val = inp.value;
-	        closeAllLists();
+	        closeAllLists(null, inp);
 	        if (!val) { return false;}
 	        currentFocus = -1;
 	        a = document.createElement("DIV");
-	        a.setAttribute("id", "autocomplete-list");
 	        a.setAttribute("class", "autocomplete-items");
+	        a.setAttribute("id", "autocomplete-list");
 	        document.getElementById('references-container').appendChild(a);
+	                  
 	        for (let i = 0; i < inp.options.length; i++) {
 	            if (inp.options[i].name.substr(0, val.length).toUpperCase() == val.toUpperCase()) {
 	              b = document.createElement("DIV");
+	              b.setAttribute("class", "autocomplete-items");
 	              b.data = inp.options[i];
 	              b.innerHTML = "<strong>" + inp.options[i].name.substr(0, val.length) + "</strong>";
 	              b.innerHTML += inp.options[i].name.substr(val.length);
@@ -195,7 +199,6 @@ let PanelView = function(args){
 	                  document.getElementById('references').value = this.data.name;
 	                  inp.value = `${this.data.name} | ${this.data.filepath}`;
 	                  document.getElementById('asserted-value').value = this.data.id;
-	                  closeAllLists();
 	              });
 	              a.appendChild(b);
 	            }
@@ -219,7 +222,7 @@ let PanelView = function(args){
 	          }
 	      });
 	      document.addEventListener("click", function (e) {
-	          closeAllLists(e.target);
+	          closeAllLists(e.target, inp);
 	      });
 	    }
 
@@ -231,28 +234,38 @@ let PanelView = function(args){
 	            ))
 	            _updateAutocompleteInput(document.getElementById("references-autocomplete"));
 			}
-	        else
+	        else{
+	        	document.getElementById("references-autocomplete").options = [];
+	        	closeAllLists(null, inp);
 	        	console.log('autocomplete - error < ',window.project, entityType, text,' < ',response)
+	        }
 		});
 	}
 
 	function _updateAutocompleteInput(inp){
 	    currentFocus = -1;
 	    let a = document.getElementById('autocomplete-list');
+	    for(let child of Array.from(a.children))
+	    	a.removeChild(child);
+
 	    for (let i = 0; i < inp.options.length; i++) {
 	        if (inp.options[i].name.toUpperCase().includes(inp.value.toUpperCase())) {
 	          let b = document.createElement("DIV");
+	          b.setAttribute("class", "autocomplete-items");
 	          b.data = inp.options[i];
-	          b.innerHTML = "<strong>" + inp.options[i].name.substr(0, inp.value.length) + "</strong>";
-	          b.innerHTML += inp.options[i].name.substr(inp.value.length);
+	          const index = inp.options[i].name.toUpperCase().indexOf(inp.value.toUpperCase());
+
+	          b.innerHTML = inp.options[i].name.substr(0,index);
+	          b.innerHTML += "<strong>" + inp.options[i].name.substr(index, inp.value.length) + "</strong>";
+	          b.innerHTML += inp.options[i].name.slice(index + inp.value.length);
 	          b.innerHTML += ` | ${inp.options[i].filepath}`;
 	          b.innerHTML += "<input type='hidden' id='"+inp.options[i].id+"' value='" + 
 	            `${inp.options[i].name} | ${inp.options[i].filepath}` + "'>";
 	          b.addEventListener("click", function(e) {
+	    		  closeAllLists(null, inp);
 	              document.getElementById('references').value = this.data.name;
 	              inp.value = `${this.data.name} | ${this.data.filepath}`;
 	              document.getElementById('asserted-value').value = this.data.id;
-	              closeAllLists();
 	          });
 	          a.appendChild(b);
 	        }
@@ -275,8 +288,6 @@ let PanelView = function(args){
 			_updateAssertedValueControl();
 		if(['locus', 'attribute-name'].includes(id))
 			_updateReferencesControl();
-		
-		console.log(id,value);
 	}
 
 	function _handleLoadHistory(args){
