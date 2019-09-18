@@ -147,4 +147,7 @@ class FileVersion(models.Model):
 
 @receiver(post_delete, sender=FileVersion)
 def submission_delete(sender, instance, **kwargs):
-    instance.file.delete(False)
+    try:
+        instance.file.delete(False)
+    except File.DoesNotExist:
+        pass
