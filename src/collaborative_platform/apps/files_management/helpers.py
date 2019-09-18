@@ -8,6 +8,7 @@ from django.core.files.uploadedfile import UploadedFile
 from django.forms import model_to_dict
 from django.http import JsonResponse
 from django.utils import timezone
+from elasticsearch import ConflictError
 
 from apps.index_and_search.content_extractor import ContentExtractor
 from apps.index_and_search.entities_extractor import EntitiesExtractor
@@ -155,7 +156,35 @@ def include_user(response):  # type: (JsonResponse) -> JsonResponse
 
 def delete_entities(file_id):  # type: (int) -> None
     from apps.index_and_search.models import Person, Place, Organization, Event
-    Person.search().query('match', file_id=file_id).delete()
-    Place.search().query('match', file_id=file_id).delete()
-    Organization.search().query('match', file_id=file_id).delete()
-    Event.search().query('match', file_id=file_id).delete()
+    i = 0
+    while i < 10:
+        try:
+            Person.search().query('match', file_id=file_id).delete()
+        except ConflictError:
+            i += 1
+        else:
+            break
+    i = 0
+    while i < 10:
+        try:
+            Place.search().query('match', file_id=file_id).delete()
+        except ConflictError:
+            i += 1
+        else:
+            break
+    i = 0
+    while i < 10:
+        try:
+            Organization.search().query('match', file_id=file_id).delete()
+        except ConflictError:
+            i += 1
+        else:
+            break
+    i = 0
+    while i < 10:
+        try:
+            Event.search().query('match', file_id=file_id).delete()
+        except ConflictError:
+            i += 1
+        else:
+            break
