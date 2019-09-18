@@ -101,7 +101,7 @@ server {
     }
 
     location /static {
-        alias /home/ubuntu/collaborative-platform/src/collaborative_platform/static; # your Django project's static files - amend as required
+        alias /home/ubuntu/collaborative_platform/static; # your Django project's static files - amend as required
     }
 
     location /ws/ {
