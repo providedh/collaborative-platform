@@ -103,12 +103,26 @@ var HistoryView = function(args){
 				_drawDetails();
 			}
 		});
+		obj.subscribe('file/saved', _handleFileSaved);
+
+		args.channel.getSubscribers()
 
 
 		//obj.suscribe('popup/render', _handleRenderPopup);
 
 		self = obj;
 		return obj;
+	}
+
+	function _handleFileSaved(newVersion){
+		ajaxCalls.getHistory(window.project_id, window.file_id, newVersion).then(response=>{
+			if(response.success === true){
+				versions = response.content.data;
+				window.file_version = newVersion;
+				_updateVersions();
+				_drawDetails();
+			}
+		});
 	}
 
 	function _renderVersions(){
