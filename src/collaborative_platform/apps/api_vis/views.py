@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from apps.views_decorators import objects_exists, user_has_access
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpRequest, HttpResponse
@@ -12,17 +11,17 @@ def projects(request):  # type: (HttpRequest) -> JsonResponse
         user = request.user
 
         contributors = Contributor.objects.filter(user=user)
-        projects = [contributor.project for contributor in contributors]
 
         response = []
 
-        for project in projects:
-            project_details = {
-                'id': project.id,
-                'name': project.title,
+        for contributor in contributors:
+            project = {
+                'id': contributor.project.id,
+                'name': contributor.project.title,
+                'permissions': contributor.permissions,
             }
 
-            response.append(project_details)
+            response.append(project)
 
         return JsonResponse(response, status=HttpResponse.status_code, safe=False)
 
