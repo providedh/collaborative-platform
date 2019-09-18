@@ -60,7 +60,7 @@ def settings(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
     ContributorFormset = inlineformset_factory(Project,
                                                Contributor,
                                                fields=('profile', 'permissions'),
-                                               widgets={'profile': autocomplete.ModelSelect2(url='user_autocomplete')},
+                                               widgets={'profile': autocomplete.ModelSelect2(url='projects:user_autocomplete')},
                                                labels={'profile': 'User'},
                                                extra=1)
 

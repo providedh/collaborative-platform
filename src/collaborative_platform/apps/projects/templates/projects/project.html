@@ -7,13 +7,13 @@
 {% block submenu %}
 <ul class="submenu__list">
   <li class="submenu__item">
-    <a href="{% url 'project' project.id %}" class="submenu__link">{{ project.title }}</a>
+    <a href="{% url 'projects:project' project.id %}" class="submenu__link">{{ project.title }}</a>
   </li>
   <li class="submenu__item">
-    <a href="{% url 'project_files' project.id %}" class="submenu__link">Files</a>
+    <a href="{% url 'projects:files' project.id %}" class="submenu__link">Files</a>
   </li>
   <li class="submenu__item">
-    <a href="{% url 'project_settings' project.id %}" class="submenu__link">Settings</a>
+    <a href="{% url 'projects:project_settings' project.id %}" class="submenu__link">Settings</a>
   </li>
 </ul>
 {% endblock %}
@@ -24,13 +24,13 @@
   <div class="container">
     <ul class="submenu__list d-flex">
       <li class="submenu__item  submenu__item--active">
-        <a href="{% url 'project' project.id %}" class="submenu__link">{{ project.title }}</a>
+        <a href="{% url 'projects:project' project.id %}" class="submenu__link">{{ project.title }}</a>
       </li>
       <li class="submenu__item">
-        <a href="{% url 'project_files' project.id %}" class="submenu__link">Files</a>
+        <a href="{% url 'projects:files' project.id %}" class="submenu__link">Files</a>
       </li>
       <li class="submenu__item">
-        <a href="{% url 'project_settings' project.id %}" class="submenu__link">Settings</a>
+        <a href="{% url 'projects:project_settings' project.id %}" class="submenu__link">Settings</a>
       </li>
     </ul>
   </div>

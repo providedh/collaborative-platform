@@ -21,7 +21,7 @@ urlpatterns = [
     path('api/files/', include('apps.files_management.urls_api')),
     path('files/', include('apps.files_management.urls')),
     path('api/projects/', include('apps.projects.urls_api')),
-    path('projects/', include('apps.projects.urls')),
+    path('projects/', include('apps.projects.urls', namespace='projects')),
     path('api/close_reading/', include('apps.close_reading.urls_api')),
     path('close_reading/', include('apps.close_reading.urls')),
     path('api/search/', include('apps.index_and_search.urls_api')),

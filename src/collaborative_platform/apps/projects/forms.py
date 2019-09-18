@@ -9,7 +9,7 @@ class ContributorForm(forms.ModelForm):
         model = Contributor
         fields = ('user', )
         widgets = {
-            'user': autocomplete.ModelSelect2(url='user_autocomplete')
+            'user': autocomplete.ModelSelect2(url='projects:user_autocomplete')
         }
 
 
