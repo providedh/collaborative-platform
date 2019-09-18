@@ -53,8 +53,7 @@ def project_files(request, project_id):  # type: (HttpRequest, int) -> JsonRespo
             file_details = {
                 'id': file.id,
                 'name': file.name,
-                'path': file_version.upload.url,
-                'version': file.version_number,
+                'path': file.get_relative_path(),
             }
 
             response.append(file_details)

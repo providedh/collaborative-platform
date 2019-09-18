@@ -119,6 +119,16 @@ class File(FileNode):
         delete_entities(self.id)
         super().delete()
 
+    def get_relative_path(self):
+        path = self.name
+        parent_dir = self.parent_dir
+
+        while parent_dir is not None:
+            path = parent_dir.name + '/' + path
+            parent_dir = parent_dir.parent_dir
+
+        return path
+
 
 class FileVersion(models.Model):
     upload = models.FileField(upload_to=UPLOADED_FILES_PATH)
