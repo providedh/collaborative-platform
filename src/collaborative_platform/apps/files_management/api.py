@@ -72,7 +72,6 @@ def upload(request, directory_id):  # type: (HttpRequest, int) -> HttpResponse
                     migrated_string = tei_handler.text.read()
 
                     text, entities = extract_text_and_entities(migrated_string, project.id, dbfile.id)
-                    index_entities(entities)
 
                     uploaded_file = uploaded_file_object_from_string(migrated_string, file_name)
 
@@ -81,6 +80,7 @@ def upload(request, directory_id):  # type: (HttpRequest, int) -> HttpResponse
                     message = tei_handler.get_message()
                     migration_status = {'migrated': True, 'message': message}
                     upload_statuses[file_name].update(migration_status)
+                    index_entities(entities)
                     log_activity(dbfile.project, request.user, "File migrated: {} ".format(message), dbfile)
                 else:
                     file.seek(0)

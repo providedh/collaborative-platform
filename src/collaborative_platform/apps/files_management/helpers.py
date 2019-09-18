@@ -151,3 +151,11 @@ def include_user(response):  # type: (JsonResponse) -> JsonResponse
         fv['created_by'] = u.first_name + ' ' + u.last_name
 
     return JsonResponse(json)
+
+
+def delete_entities(file_id):  # type: (int) -> None
+    from apps.index_and_search.models import Person, Place, Organization, Event
+    Person.search().query('match', file_id=file_id).delete()
+    Place.search().query('match', file_id=file_id).delete()
+    Organization.search().query('match', file_id=file_id).delete()
+    Event.search().query('match', file_id=file_id).delete()
