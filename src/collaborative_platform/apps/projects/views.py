@@ -80,6 +80,17 @@ def settings(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
 
             directory = Directory.objects.get(project=project, parent_dir=None)
             directory.rename(project.title, request.user)
+            alert = {
+                'type': 'success',
+                'message': "Project properties changed successfully"
+            }
+            alerts.append(alert)
+        else:
+            alert = {
+                'type': 'warning',
+                'message': "Form invalid"
+            }
+            alerts.append(alert)
 
     if request.method == 'POST' and 'contributors-TOTAL_FORMS' in request.POST:
         contributor_formset = ContributorFormset(request.POST, instance=project)
