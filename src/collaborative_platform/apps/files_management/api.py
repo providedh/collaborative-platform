@@ -197,12 +197,12 @@ def delete(request, **kwargs):
         return HttpResponseBadRequest("Only delete method is allowed here")
     if 'directory_id' in kwargs:
         dir = Directory.objects.filter(id=kwargs['directory_id']).get()
-        log_activity(project=dir.project, user=request.user, related_dir=dir, action_text="deleted")
         dir.delete()
+        log_activity(project=dir.project, user=request.user, related_dir=dir, action_text="deleted")
     elif 'file_id' in kwargs:
         file = File.objects.filter(id=kwargs['file_id']).get()
-        log_activity(project=file.project, user=request.user, file=file, action_text="deleted")
         file.delete()
+        log_activity(project=file.project, user=request.user, file=file, action_text="deleted")
     else:
         return HttpResponseBadRequest("Invalid arguments")
     return HttpResponse("OK")
