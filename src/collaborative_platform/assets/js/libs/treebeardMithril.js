@@ -3620,6 +3620,7 @@ if (typeof exports == "object") {
     Treebeard.controller = function _treebeardController(opts) {
         // private variables
         var self = this; // Treebard.controller
+		var filesDropArray = [];
         var lastLocation = 0; // The last scrollTop location, updates on every scroll.
         var lastNonFilterLocation = 0; // The last scrolltop location before filter was used.
         this.isSorted = {}; // Temporary variables for sorting
@@ -4565,6 +4566,9 @@ if (typeof exports == "object") {
                 clickable: false,
                 counter: 0,
                 accept: function _dropzoneAccept(file, done) {
+					filesDropArray.push(file.name)
+
+
                     var parent = file.treebeardParent;
                     if (self.options.addcheck.call(this, self, parent, file)) {
                         $.when(self.options.resolveUploadUrl.call(self, parent, file))
@@ -4591,7 +4595,8 @@ if (typeof exports == "object") {
                             });
                     }
                 },
-                drop: function _dropzoneDrop(event) {
+                drop: function _dropzoneDrop(event, ui) {
+
                     var rowID = $(event.target).closest('.tb-row').attr('data-id');
                     var item = Indexes[rowID];
                     if (item.kind === 'file') {
@@ -4606,7 +4611,9 @@ if (typeof exports == "object") {
                         self.options.dropzoneEvents.drop.call(this, self, event);
                     }
 
-					console.log(event)
+
+
+
                 },
                 dragstart: function _dropzoneDragStart(event) {
                     if ($.isFunction(self.options.dropzoneEvents.dragstart)) {
@@ -4647,6 +4654,9 @@ if (typeof exports == "object") {
                     }
                 },
                 uploadprogress: function _dropzoneUploadProgress(file, progress, bytesSent) {
+					console.log(filesDropArray)
+
+					console.log(self.select('tb-tbody'))
                     if ($.isFunction(self.options.dropzoneEvents.uploadprogress)) {
                         self.options.dropzoneEvents.uploadprogress.call(this, self, file, progress, bytesSent);
                     }
@@ -4689,16 +4699,11 @@ if (typeof exports == "object") {
             // Add Dropzone with different scenarios of library inclusion, should work for most installations
             var Dropzone;
 
-            console.log(self.options.dropzone)
-            console.log(typeof Dropzone === 'undefined')
-
             if (typeof module === 'object') {
                 Dropzone = require('dropzone');
             } else {
                 Dropzone = window.Dropzone;
             }
-
-            console.log(options)
 
 
             if (typeof Dropzone === 'undefined') {
@@ -4709,9 +4714,7 @@ if (typeof exports == "object") {
             }
             // apply dropzone to the Treebeard object
             self.dropzone = new Dropzone('#' + self.options.divID, options); // Initialize dropzone
-
-            console.log(self.dropzone)
-        }
+       }
 
         /**
          * Loads the data pushed in to Treebeard and handles it to comply with treebeard data structure.
