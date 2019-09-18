@@ -139,7 +139,6 @@ let PanelView = function(args){
 				.value
 				.includes('active'),
 			'cert-level': document.getElementById('cert-level').value,
-			'category': document.getElementById('category').value,
 			'locus': document.getElementById('locus').value,
 			'tag-name': document.getElementById('tag-name').value,
 			'attribute-name': document.getElementById('attribute-name').value,
