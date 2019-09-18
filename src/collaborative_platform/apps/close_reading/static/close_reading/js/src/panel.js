@@ -235,14 +235,20 @@ let PanelView = function(args){
 	            ))
 	            _updateAutocompleteInput(document.getElementById("references-autocomplete"));
 			}
-	        else
+	        else{
+	        	document.getElementById("references-autocomplete").options = [];
+	        	closeAllLists(null, inp);
 	        	console.log('autocomplete - error < ',window.project, entityType, text,' < ',response)
+	        }
 		});
 	}
 
 	function _updateAutocompleteInput(inp){
 	    currentFocus = -1;
 	    let a = document.getElementById('autocomplete-list');
+	    for(let child of Array.from(a.children))
+	    	a.removeChild(child);
+
 	    for (let i = 0; i < inp.options.length; i++) {
 	        if (inp.options[i].name.toUpperCase().includes(inp.value.toUpperCase())) {
 	          let b = document.createElement("DIV");
