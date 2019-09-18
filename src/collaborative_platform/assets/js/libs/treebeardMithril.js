@@ -4654,7 +4654,6 @@ if (typeof exports == "object") {
                 },
                 uploadprogress: function _dropzoneUploadProgress(file, progress, bytesSent) {
 					$('#tb-tbody').addClass('upload')
-					console.log($('#tb-tbody').addClass('upload'))
                     if ($.isFunction(self.options.dropzoneEvents.uploadprogress)) {
                         self.options.dropzoneEvents.uploadprogress.call(this, self, file, progress, bytesSent);
                     }
