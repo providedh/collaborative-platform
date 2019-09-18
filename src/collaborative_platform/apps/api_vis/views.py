@@ -43,13 +43,11 @@ def project_history(request, project_id):  # type: (HttpRequest, int) -> JsonRes
 @user_has_access()
 def project_files(request, project_id):  # type: (HttpRequest, int) -> JsonResponse
     if request.method == 'GET':
-        files = File.objects.filter(project=project_id)
+        files = File.objects.filter(project=project_id).order_by('id')
 
         response = []
 
         for file in files:
-            file_version = FileVersion.objects.get(file=file, number=file.version_number)
-
             file_details = {
                 'id': file.id,
                 'name': file.name,
