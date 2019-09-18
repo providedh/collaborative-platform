@@ -118,7 +118,6 @@ var HistoryView = function(args){
 		ajaxCalls.getHistory(window.project_id, window.file_id, newVersion).then(response=>{
 			if(response.success === true){
 				versions = response.content.data;
-				window.file_version = newVersion;
 				_updateVersions();
 				_drawDetails();
 			}
