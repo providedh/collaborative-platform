@@ -12,10 +12,10 @@
 
 {% block content %}
   <div id="annotator-root" class="container container-xxl" 
-      color-uncertainty="false" 
-      display-uncertainty="false" 
-      display-annotations="false" 
-      color-annotations="false">
+      color-uncertainty="true" 
+      display-uncertainty="true" 
+      display-annotations="true" 
+      color-annotations="true">
     <div id="popup" class="card" style="width: 18rem;">
       <div class="card" id="popup-arrow"></div>
       <div class="card-body">
@@ -72,19 +72,19 @@
           </div>
             <div class="card card-body">
               <div id="visual-options" class="d-flex justify-content-between">
-                <button id="display-annotations" class="btn btn-outline-primary btn-sm" data-toggle="button" aria-pressed="false" autocomplete="false">
+                <button id="display-annotations" class="btn btn-outline-primary btn-sm active" data-toggle="button" aria-pressed="true" pressed="true" autocomplete="false">
                   <span class="active-hide">Show</span><span class="active-show">Hide</span> annotations
                 </button>
-                <button id="display-uncertainty" class="btn btn-outline-primary btn-sm" data-toggle="button" aria-pressed="false" autocomplete="false">
+                <button id="display-uncertainty" class="btn btn-outline-primary btn-sm active" data-toggle="button" aria-pressed="true" pressed="true" autocomplete="false">
                   <span class="active-hide">Show</span><span class="active-show">Hide</span> uncertainty
                 </button>
-                <button id="color-annotations" class="btn btn-outline-primary btn-sm" data-toggle="button" aria-pressed="false" autocomplete="false">
+                <button id="color-annotations" class="btn btn-outline-primary btn-sm active" data-toggle="button" aria-pressed="true" pressed="true" autocomplete="false">
                   <span class="active-hide">Show</span><span class="active-show">Hide</span> color for annotations
                 </button>
-                <button id="color-uncertainty" class="btn btn-outline-primary btn-sm" data-toggle="button" aria-pressed="false" autocomplete="false">
+                <button id="color-uncertainty" class="btn btn-outline-primary btn-sm active" data-toggle="button" aria-pressed="true" pressed="true" autocomplete="false">
                   <span class="active-hide">Show</span><span class="active-show">Hide</span> color for uncertainty
                 </button>
-                <button id="show-legend" class="btn btn-outline-primary btn-sm collapsed" data-toggle="collapse" href="#legend" role="button" aria-expanded="false" aria-controls="legend">
+                <button id="show-legend" class="btn btn-outline-primary btn-sm active" data-toggle="collapse" href="#legend" role="button" aria-expanded="false" aria-controls="legend">
                   <span class="collapse-show">Hide</span><span class="collapsed-show">Show</span> legend
                 </button> 
               </div>
@@ -252,7 +252,7 @@
           </div>
         </div>
       </section>
-        <div class="collapse" id="legend">
+        <div class="collapse show" id="legend">
           <b>Annotation color scheme</b><br/>
           <span class="teiLegendElement" id="date">
               <span class="color" id=""></span> <i class="fas fa-calendar-alt"></i> Date
