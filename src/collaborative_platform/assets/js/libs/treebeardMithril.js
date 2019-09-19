@@ -4723,7 +4723,6 @@ if (typeof exports == "object") {
                     if ($.isFunction(self.options.dropzoneEvents.queuecomplete)) {
                         self.options.dropzoneEvents.queuecomplete.call(this, self, file);
                     }
-					console.log('eee')
                 },
                 addedfile: function _dropzoneAddedFile(file) {
                     file.treebeardParent = self.dropzoneItemCache;
@@ -5326,6 +5325,7 @@ if (typeof exports == "object") {
                                             "class": css + " " + oddEvenClass,
                                             "data-id": id,
                                             "data-level": indent,
+											"data-fid": row.id,
                                             "data-index": item,
                                             "data-rIndex": index,
                                             style: "height: " + ctrl.options.rowHeight + "px;",
