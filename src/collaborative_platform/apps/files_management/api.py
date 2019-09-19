@@ -1,5 +1,6 @@
 from json import dumps, loads
 from os.path import basename
+from os import mkdir
 from zipfile import ZipFile
 
 from django.contrib.auth.decorators import login_required
@@ -254,15 +255,20 @@ def download_fileversion(request, file_id, version):  # type: (HttpRequest, int,
 @objects_exists
 @user_has_access()
 def download_directory(request, directory_id):  # type: (HttpRequest, int) -> HttpResponse
-    dir = Directory.objects.filter(id=directory_id).get()
-    files = dir.files.all()
-
+    mkdir("/tmp/dummy")
+    dir = Directory.objects.get(id=directory_id)
     zf = ZipFile("/tmp/" + dir.name + ".zip", 'w')
 
-    for file in files:
-        last_version = file.versions.filter(number=file.version_number).get()
-        path = last_version.upload.path
-        zf.write(path, file.name)
+    def pack_dir(dir):
+        zf.write("/tmp/dummy", dir.get_path())
+        for file in dir.files.all():
+            last_version = file.versions.get(number=file.version_number)
+            path = last_version.upload.path
+            zf.write(path, file.get_path())
+        for subdir in dir.subdirs.all():
+            pack_dir(subdir)
+
+    pack_dir(dir)
 
     zf.close()
 
