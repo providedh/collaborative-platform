@@ -3659,6 +3659,7 @@ if (typeof exports == "object") {
 
 		this.refreshData = function _refreshData() {
 			_loadData(self.options.filesData);
+			recentActivities.ajax.reload()
 		}
 
         this.mredraw = function _mredraw() {
@@ -4713,6 +4714,7 @@ if (typeof exports == "object") {
 						filesSuccessArray.length = 0;
 
 						self.refreshData()
+
 
 					}
                 },

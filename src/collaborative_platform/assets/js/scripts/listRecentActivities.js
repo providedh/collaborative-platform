@@ -1,4 +1,4 @@
-$('[js-listRecentActivities]').DataTable( {
+var recentActivities = $('[js-listRecentActivities]').DataTable( {
     "searching": false,
     "processing": true,
     "serverSide": true,
