@@ -55,7 +55,7 @@ class Directory(FileNode):
         self.name = new_name
         self.save()
         log_activity(project=self.project, user=user, related_dir=self,
-                     action_text="renamed {} to {}".format(old_name, new_name))
+                     action_text="renamed directory {} to {}".format(old_name, new_name))
 
     def get_files(self):  # type: (Directory) -> QuerySet
         return self.files.values()

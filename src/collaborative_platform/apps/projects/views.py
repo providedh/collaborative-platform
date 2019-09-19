@@ -79,7 +79,10 @@ def settings(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
             project_edit_form.save()
 
             directory = Directory.objects.get(project=project, parent_dir=None)
-            directory.rename(project.title, request.user)
+
+            if directory.name != project_edit_form.cleaned_data['title']:
+                directory.rename(project.title, request.user)
+
             alert = {
                 'type': 'success',
                 'message': "Project properties changed successfully"
