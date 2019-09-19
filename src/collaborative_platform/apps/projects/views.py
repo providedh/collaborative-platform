@@ -79,7 +79,10 @@ def settings(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
             project_edit_form.save()
 
             directory = Directory.objects.get(project=project, parent_dir=None)
-            directory.rename(project.title, request.user)
+
+            if directory.name != project_edit_form.cleaned_data['title']:
+                directory.rename(project.title, request.user)
+
             alert = {
                 'type': 'success',
                 'message': "Project properties changed successfully"
@@ -132,8 +135,23 @@ def settings(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
                         contributor.delete()
 
                 elif contributor.permissions != form['permissions']:
-                    contributor.permissions = form['permissions']
-                    contributor.save()
+                    if contributor.permissions == 'AD':
+                        admins = Contributor.objects.filter(project_id=project_id, permissions='AD')
+
+                        if not len(admins) > 1:
+                            alert = {
+                                'type': 'warning',
+                                'message': "Can't change permissions for contributor: {0}. There must be at least one "
+                                           "administrator in a project.".format(str(contributor.profile)),
+                            }
+                            alerts.append(alert)
+                        else:
+                            contributor.permissions = form['permissions']
+                            contributor.save()
+
+                    else:
+                        contributor.permissions = form['permissions']
+                        contributor.save()
 
                 elif contributor.id is None:
                     contributor.save()
