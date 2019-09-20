@@ -4,6 +4,8 @@ import os
 import sys
 from elasticsearch_dsl import connections
 
+from collaborative_platform import settings
+
 
 def main():
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'collaborative_platform.settings')
@@ -16,7 +18,7 @@ def main():
             "forget to activate a virtual environment?"
         ) from exc
 
-    connections.create_connection()
+    connections.create_connection(hosts=[settings.ES_HOST])
     execute_from_command_line(sys.argv)
 
 

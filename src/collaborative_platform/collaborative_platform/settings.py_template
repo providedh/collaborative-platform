@@ -94,9 +94,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'collaborative_platform',
-        'USER': 'put your database user here',
-        'PASSWORD': 'put your dapabase password here',
-        'HOST': 'localhost',
+        'USER': 'collaborative_platform',
+        'PASSWORD': 'collapass',
+        'HOST': 'postgres',
         'PORT': '5432',
     }
 }
@@ -149,15 +149,15 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            'hosts': [('localhost', 6379)],
+            'hosts': [('redis', 6379)],
         }
     }
 }
 
 
 # For periodic tasks
-CELERY_BROKER_URL = 'redis://localhost:6379'
-CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+CELERY_BROKER_URL = 'redis://redis:6379'
+CELERY_RESULT_BACKEND = 'redis://redis:6379'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'
