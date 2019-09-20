@@ -1,0 +1,52 @@
+version: '1'
+
+services:
+  postgres:
+    image: postgres
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: "collaborative_platform"
+      POSTGRES_PASSWORD: "collapass"
+    stdin_open: true
+
+  elasticsearch:
+    image: elasticsearch:7.3.2
+    ports:
+      - 9200:9200
+      - 9300:9300
+    environment:
+      - discovery.type=single-node
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - elasticsearch_data_vol:/usr/share/elasticsearch/data
+    stdin_open: true
+
+  redis:
+    image: redis
+
+  web:
+    build: .
+    command: runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+    ports:
+      - 8000:8000
+    depends_on:
+      - postgres
+      - elasticsearch
+      - redis
+    stdin_open: true
+
+volumes:
+  db-data:
+    external: false
+    driver: local
+  elasticsearch_data_vol:
+    external: false
+    driver: local
