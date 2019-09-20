@@ -1,3 +1,22 @@
+#Running Collaborative Platform for development
+
+##1. clone this repository
+```git clone https://github.com/providedh/collaborative-platform```
+
+##2. install & run docker, docker-compose and add yourself to docker group if not done yet
+
+##3. go to projects directory and build project
+```docker-compose build```
+
+##4. run migrations
+```
+docker-compose run web makemigrations
+docker-compose run web migrate
+docker-compose run web shell -c "from apps.index_and_search.initialize import initialize; initialize()"
+```
+##5. project is ready to run
+```docker-compose up -d```
+
 #Running Collaborative Platform in production environment
 
 ##1. copy this repository to a server on which the platform will run
