@@ -7,6 +7,7 @@ $.ajaxSetup({
 
 var id = $('#files').attr('data-project-id');
 var idFile = $('#filep').attr('data-project-id');
+var idFiles = $('#filep').attr('data-files-id');
 var draggableElements = {};
 
 var options = {
@@ -27,47 +28,7 @@ var options = {
         headers: {
             'X-CSRFToken': csrftoken
         },
-        //uploadMultiple: false,
-        ////parallelUploads: 100,
 
-        //dragstart: function (treebeard, event) {
-        //    // this = dropzone object
-        //    // treebeard = treebeard object
-        //    // event = event passed in
-        //    window.console.log("dragstart", this, treebeard, event);
-        //},
-
-        //drop: function(event) {
-        //  console.log(event)
-        //},'
-        //dragend: function(event) {
-        //    console.log(event)
-        //},
-
-        //com plete: function(file) {
-        //    console.log('complete')
-        //},
-        //
-        //completemultiple: function(file) {
-        //    console.log('completemultiple')
-        //    //tb.refreshData();
-        //},
-        //
-        //successmultiple: function() {
-        //  console.log('success?')
-        //},
-        //
-        //error: function() {
-        //    console.log('error')
-        //},
-        //
-        //errormultiple: function() {
-        //    console.log('2222')
-        //},
-        //
-        //queuecomplete: function() {
-        //    console.log('queue end');
-        //}
     },
     uploadURL : "eee",
     allowMove : true,
@@ -322,7 +283,7 @@ var optionsFile = {
     showTotal : 15,
     paginate : false,
     paginateToggle : false,
-    lazyLoad : true,
+    lazyLoad : false,
     uploads: false,
     showFilter : false,
     allowMove : false,
@@ -352,7 +313,40 @@ var optionsFile = {
             sortType: "text",
             sort: false
         }]
-    }
+    },
+
+    ondataload : function (e) {
+        var tb = this;
+
+        tb.toggleFolder(0, false, false)
+
+        function getIdFile(element) {
+            if (element.row.id === parseInt(idFiles)) return element
+        }
+
+        var id = tb.flatData.find(getIdFile).id
+        var findId = tb.find(id)
+        var parId = findId.parentID
+
+        arrayNestedOpen = [];
+
+        do {
+            if ( parId > 1 ){
+                arrayNestedOpen.push(parId)
+            }
+
+            findId = tb.find(parId)
+            parId = findId.parentID
+        }
+        while (parId > 0)
+
+        arrayNestedOpen = arrayNestedOpen.reverse()
+
+        for (var i = 0; i < arrayNestedOpen.length; i++ ) {
+            $('[data-id="' + arrayNestedOpen[i] + '"]').find('.tb-toggle-icon').click()
+        }
+
+    },
 
 };
 

@@ -20,8 +20,6 @@ function contentFile(id) {
         url: "/api/files/" + id,
         contentType : 'application/json',
         success: function(resultData){
-            console.log(resultData)
-
             var html = Prism.highlight(resultData.data, Prism.languages.xml, 'xml');
             $('[js-contentFile]').html(html)
 
