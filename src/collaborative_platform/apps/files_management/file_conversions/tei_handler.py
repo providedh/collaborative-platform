@@ -3,7 +3,6 @@ import re
 import logging
 
 from bs4 import UnicodeDammit
-from lxml import etree
 
 from .migrator_tei import MigratorTEI
 from .migrator_csv import MigratorCSV
@@ -13,6 +12,7 @@ from .file_type_finder import FileTypeFinder
 from .entities_decoder import EntitiesDecoder
 from .recognized_types import FileType, XMLType
 from .white_chars_corrector import WhiteCharsCorrector
+from .xml_formatter import XMLFormatter
 
 logger = logging.getLogger(__name__)
 
@@ -35,11 +35,11 @@ class TeiHandler:
 
         self.__cr_lf_codes = False
         self.__non_unix_newline_chars = False
+        self.__need_reformat = False
 
         self.__recognized = False
         self.__migrated = False
         self.__migrate = False
-        self.__reformatted = False
         self.__message = ""
 
         self.__is_tei_p5_unprefixed = False
@@ -90,6 +90,10 @@ class TeiHandler:
             self.__cr_lf_codes = white_chars_corrector.check_if_cr_lf_codes(self.__text_utf_8)
             self.__non_unix_newline_chars = white_chars_corrector.check_if_non_unix_newlines(self.__text_utf_8)
 
+        if self.__file_type == FileType.XML:
+            xml_formatter = XMLFormatter()
+            self.__need_reformat = xml_formatter.check_if_reformat_is_needed(self.__text_utf_8)
+
         self.__migrate = self.__make_decision()
         self.__is_tei_p5_unprefixed = self.__check_if_tei_p5_unprefixed()
         self.__recognized = True
@@ -139,7 +143,12 @@ class TeiHandler:
         return text
 
     def __make_decision(self):
-        if self.__file_type == FileType.XML:
+        if (self.__file_type == FileType.XML and self.__xml_type == XMLType.TEI_P5 and
+                self.__encoding != 'utf-8'):
+            return True
+        elif self.__file_type == FileType.XML and self.__xml_type == XMLType.TEI_P5 and self.__prefixed:
+            return True
+        elif self.__file_type == FileType.XML and self.__xml_type == XMLType.TEI_P4:
             return True
         elif self.__file_type == FileType.CSV:
             return True
@@ -148,6 +157,8 @@ class TeiHandler:
         elif self.__cr_lf_codes:
             return True
         elif self.__non_unix_newline_chars:
+            return True
+        elif self.__need_reformat:
             return True
         else:
             return False
@@ -188,7 +199,9 @@ class TeiHandler:
             migrated_text = white_chars_corrector.normalize_newlines(migrated_text)
 
         migrated_text = self.__remove_encoding_declaration(migrated_text)
-        migrated_text = self.__reformat_xml(migrated_text)
+
+        xml_formatter = XMLFormatter()
+        migrated_text = xml_formatter.reformat_xml(migrated_text)
 
         self.text.write(migrated_text)
         self.text.seek(io.SEEK_SET)
@@ -238,22 +251,13 @@ class TeiHandler:
 
             message += "Normalized new line characters."
 
-        if self.__reformatted:
+        if self.__need_reformat:
             if message:
                 message += " "
 
             message += "Reformatted xml."
 
         self.__message = message
-
-    def __reformat_xml(self, text):
-        parser = etree.XMLParser(remove_blank_text=True)
-        tree = etree.fromstring(text, parser=parser)
-        pretty_xml = etree.tounicode(tree, pretty_print=True)
-
-        self.__reformatted = True
-
-        return pretty_xml
 
     def get_message(self):
         return self.__message
