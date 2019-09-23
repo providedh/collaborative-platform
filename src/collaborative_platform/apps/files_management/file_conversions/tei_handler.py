@@ -3,6 +3,8 @@ import re
 import logging
 
 from bs4 import UnicodeDammit
+from lxml import etree
+
 from .migrator_tei import MigratorTEI
 from .migrator_csv import MigratorCSV
 from .migrator_tsv import MigratorTSV
@@ -10,7 +12,6 @@ from .xml_type_finder import XMLTypeFinder
 from .file_type_finder import FileTypeFinder
 from .entities_decoder import EntitiesDecoder
 from .recognized_types import FileType, XMLType
-# from waterbutler.core.streams.base import BaseStream
 from .white_chars_corrector import WhiteCharsCorrector
 
 logger = logging.getLogger(__name__)
@@ -38,6 +39,7 @@ class TeiHandler:
         self.__recognized = False
         self.__migrated = False
         self.__migrate = False
+        self.__reformatted = False
         self.__message = ""
 
         self.__is_tei_p5_unprefixed = False
@@ -137,12 +139,7 @@ class TeiHandler:
         return text
 
     def __make_decision(self):
-        if (self.__file_type == FileType.XML and self.__xml_type == XMLType.TEI_P5 and
-                self.__encoding != 'utf-8'):
-            return True
-        elif self.__file_type == FileType.XML and self.__xml_type == XMLType.TEI_P5 and self.__prefixed:
-            return True
-        elif self.__file_type == FileType.XML and self.__xml_type == XMLType.TEI_P4:
+        if self.__file_type == FileType.XML:
             return True
         elif self.__file_type == FileType.CSV:
             return True
@@ -191,6 +188,7 @@ class TeiHandler:
             migrated_text = white_chars_corrector.normalize_newlines(migrated_text)
 
         migrated_text = self.__remove_encoding_declaration(migrated_text)
+        migrated_text = self.__reformat_xml(migrated_text)
 
         self.text.write(migrated_text)
         self.text.seek(io.SEEK_SET)
@@ -240,7 +238,22 @@ class TeiHandler:
 
             message += "Normalized new line characters."
 
+        if self.__reformatted:
+            if message:
+                message += " "
+
+            message += "Reformatted xml."
+
         self.__message = message
+
+    def __reformat_xml(self, text):
+        parser = etree.XMLParser(remove_blank_text=True)
+        tree = etree.fromstring(text, parser=parser)
+        pretty_xml = etree.tounicode(tree, pretty_print=True)
+
+        self.__reformatted = True
+
+        return pretty_xml
 
     def get_message(self):
         return self.__message
