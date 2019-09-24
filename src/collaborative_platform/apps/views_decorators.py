@@ -153,7 +153,7 @@ def __get_project_id(request, **kwargs):
             except TypeError:
                 raise KeyError("Not found required 'project_id', 'file_id' or 'directory_id' "
                                "in given arguments and POST body is empty")
-            except JSONDecodeError:
+            except (JSONDecodeError, UnicodeDecodeError):
                 pass
             else:
                 project_id_files = check_if_all_in_one_project(data, 'files')
