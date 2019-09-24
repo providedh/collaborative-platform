@@ -1,10 +1,20 @@
 import xmltodict
 
-from apps.views_decorators import objects_exists, user_has_access
+from lxml import etree
+
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpRequest, HttpResponse
-from apps.projects.models import Contributor, Project
+
 from apps.files_management.models import File, FileVersion
+from apps.projects.models import Contributor, Project
+from apps.views_decorators import objects_exists, user_has_access
+
+
+NAMESPACES = {
+    'default': 'http://www.tei-c.org/ns/1.0',
+    'xml': 'http://www.w3.org/XML/1998/namespace',
+    'xi': 'http://www.w3.org/2001/XInclude',
+}
 
 
 @login_required
@@ -95,11 +105,19 @@ def file(request, project_id, file_id):  # type: (HttpRequest, int, int) -> Http
 @user_has_access()
 def file_body(request, project_id, file_id):  # type: (HttpRequest, int, int) -> HttpResponse
     if request.method == 'GET':
-        response = {
-            'info': 'Not implemented. Need to agree how handle <div> sections in body for plain text.'
-        }
+        file = File.objects.get(id=file_id)
+        file_version = FileVersion.objects.get(file=file, number=file.version_number)
+        file_path = file_version.upload.path
 
-        return JsonResponse(response, status=HttpResponse.status_code)
+        with open(file_path) as file:
+            xml_content = file.read()
+
+        tree = etree.fromstring(xml_content)
+        body = tree.xpath('//default:text/default:body', namespaces=NAMESPACES)[0]
+        text_nodes = body.xpath('.//text()')
+        plain_text = ''.join(text_nodes)
+
+        return HttpResponse(plain_text, status=HttpResponse.status_code)
 
 
 @login_required
