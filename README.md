@@ -1,21 +1,55 @@
 #Running Collaborative Platform for development
+>######note: to run platform without docker, install postgres, redis and elasticsearch locally and set those to run on default ports. In settings.py change respective hosts to localhost and manually initialize postgres DB. Then set up virtualenv locally, and run migrations and ES initilaization just like in docker setup.
 
-##1. clone this repository
-```git clone https://github.com/providedh/collaborative-platform```
+The recommended way:
 
-##2. install & run docker, docker-compose and add yourself to docker group if not done yet
+##0. Install & run docker, docker-compose and add yourself to docker group to allow executing docker command without sudo
+* Before installing any new packets, it is recommended to perform full system update  
+`$ yay -Syu`  
+and reboot, to load any changed kernel modules.  
+* Then, we'll install docker and docker-compose on our system:  
+`$ yay -S docker docker-compose`  
+* To enable docker on system start, run:
+`# systemctl enable docker`
+* Then, to start docker right now:
+`#systemctl start docker`
+* To enable access to docker commands without using sudo, we'll add ourselves to _docker_ group:
+```
+$ sudo usermod -aG docker $USER
+```
+  then logout and login to get our permissions reevaluated.
+  
+##1. clone this repository and go to created directory
+`$ git clone https://github.com/providedh/collaborative-platform`
+`$ cd collaborative-platform`
 
-##3. go to projects directory and build project
+##2. prepare settings file
+`cp src/collaborative_platform/collaborative_platform/settings.py_template src/collaborative_platform/collaborative_platform/settings.py`
+it is advised to go trough the content of settings file and possibly tweak some settings, like media storage paths.
+
+##3. go to project directory and build project
 ```docker-compose build```
 
-##4. run migrations
-```
-docker-compose run web makemigrations
-docker-compose run web migrate
-docker-compose run web shell -c "from apps.index_and_search.initialize import initialize; initialize()"
-```
-##5. project is ready to run
-```docker-compose up -d```
+##4. open PyCharm and open the project in it
+* Open settings and go to Build, Execution, Deployment -> Docker
+* If there are no docker machines add one, default settings should prefer connecting by Unix socket, if not, select it.
+* Then go to File | Settings | Project: collaborative-platform | Project Interpreter
+* in interpreters list click on "Show All"
+* click on the plus sign on the right side of the window, and add a configuration according to a screenshot below:
+ []!(https://github.com/providedh/collaborative-platform/blob/master/interpreter_conf.png?raw=true)
+* pick the newly-created interpreter and add path mapping: `collaborative-platform (Project Root)` to `/code`
+
+Now we've configured interpreter, and after pycharm finishes it's processing we should be able to use configurations pulled from git.
+
+##5. initialize databases
+To initialize databases simply run following configurations in PyCharm in this exact order:
+`makemigrations`
+`migrate`
+`initialize ES` 
+
+##6. Done
+to run or debug project use `runserver 8000` configuration. There is also a `web` configuration included in git. It allows to run PyCharm docker extensions and get logs from all containers in those. It can be used to run (but not debug) project instead of `runserver 8000`.
+
 
 #Running Collaborative Platform in production environment
 
@@ -179,3 +213,10 @@ screen daphne -u collaborative_platform_websockets.sock collaborative_platform.a
 and like before, detach by pressing ctrl+a, ctrl+d.
 
 ##Congrats, your environment should be working now.
+
+
+#Useful commands:
+```
+docker system prune -a
+docker volume prune
+```

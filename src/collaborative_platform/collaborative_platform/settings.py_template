@@ -28,6 +28,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 ES_HOST = "elasticsearch"
+POSTGRES_HOST = 'postgres'
+REDIS_HOST = 'redis'
 
 # Application definition
 
@@ -96,7 +98,7 @@ DATABASES = {
         'NAME': 'collaborative_platform',
         'USER': 'collaborative_platform',
         'PASSWORD': 'collapass',
-        'HOST': 'postgres',
+        'HOST': POSTGRES_HOST,
         'PORT': '5432',
     }
 }
@@ -149,15 +151,15 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            'hosts': [('redis', 6379)],
+            'hosts': [(REDIS_HOST, 6379)],
         }
     }
 }
 
 
 # For periodic tasks
-CELERY_BROKER_URL = 'redis://redis:6379'
-CELERY_RESULT_BACKEND = 'redis://redis:6379'
+CELERY_BROKER_URL = 'redis://{}:6379'.format(REDIS_HOST)
+CELERY_RESULT_BACKEND = 'redis://{}:6379'.format(REDIS_HOST)
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'
@@ -221,7 +223,7 @@ SOCIAL_AUTH_LOGIN_ERROR_URL = 'settings'
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = 'settings'
 SOCIAL_AUTH_RAISE_EXCEPTIONS = False
 
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-SECURE_SSL_REDIRECT = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+#SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+#SECURE_SSL_REDIRECT = True
+#SESSION_COOKIE_SECURE = True
+#CSRF_COOKIE_SECURE = True

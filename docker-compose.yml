@@ -32,7 +32,7 @@ services:
 
   web:
     build: .
-    command: runserver 0.0.0.0:8000
+    command: python src/collaborative_platform/manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/code
     ports:

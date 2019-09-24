@@ -8,4 +8,4 @@ COPY . /code/
 
 EXPOSE 8000
 STOPSIGNAL SIGINT
-ENTRYPOINT ["python", "src/collaborative_platform/manage.py"]
+#ENTRYPOINT ["python", "src/collaborative_platform/manage.py"]

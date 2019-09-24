@@ -38,3 +38,4 @@ celerybeat-schedule
 #uploaded files
 
 *uploaded_files/
+!.idea/
