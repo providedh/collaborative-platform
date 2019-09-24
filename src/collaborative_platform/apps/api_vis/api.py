@@ -1,3 +1,5 @@
+import xmltodict
+
 from apps.views_decorators import objects_exists, user_has_access
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpRequest, HttpResponse
@@ -88,6 +90,9 @@ def file(request, project_id, file_id):  # type: (HttpRequest, int, int) -> Http
         return response
 
 
+@login_required
+@objects_exists
+@user_has_access()
 def file_body(request, project_id, file_id):  # type: (HttpRequest, int, int) -> HttpResponse
     if request.method == 'GET':
         response = {
@@ -95,3 +100,21 @@ def file_body(request, project_id, file_id):  # type: (HttpRequest, int, int) ->
         }
 
         return JsonResponse(response, status=HttpResponse.status_code)
+
+
+@login_required
+@objects_exists
+@user_has_access()
+def file_meta(request, project_id, file_id):  # type: (HttpRequest, int, int) -> HttpResponse
+    if request.method == 'GET':
+        file = File.objects.get(id=file_id)
+        file_version = FileVersion.objects.get(file=file, number=file.version_number)
+        file_path = file_version.upload.path
+
+        with open(file_path) as file:
+            xml_content = file.read()
+
+        parsed_xml = xmltodict.parse(xml_content)
+        response = parsed_xml['TEI']['teiHeader']
+
+        return JsonResponse(response, status=HttpResponse.status_code, safe=False)
