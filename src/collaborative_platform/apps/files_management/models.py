@@ -143,11 +143,3 @@ class FileVersion(models.Model):
         response = HttpResponse(content, content_type='application/xml')
         response['Content-Disposition'] = bytes('attachment; filename="{}"'.format(self.file.name), 'utf-8')
         return response
-
-
-@receiver(post_delete, sender=FileVersion)
-def submission_delete(sender, instance, **kwargs):
-    try:
-        instance.file.delete(False)
-    except File.DoesNotExist:
-        pass
