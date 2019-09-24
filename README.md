@@ -20,15 +20,18 @@ $ sudo usermod -aG docker $USER
   then logout and login to get our permissions reevaluated.
   
 ## 1. clone this repository and go to created directory
-`$ git clone https://github.com/providedh/collaborative-platform`
-`$ cd collaborative-platform`
+```
+$ git clone https://github.com/providedh/collaborative-platform`
+$ cd collaborative-platform`
+```
 
 ## 2. prepare settings file
 `cp src/collaborative_platform/collaborative_platform/settings.py_template src/collaborative_platform/collaborative_platform/settings.py`
 then edit `settings.py` – comment out these lines:
-`RECAPTCHA_PUBLIC_KEY = 'put_public_key_here'`
-
-`RECAPTCHA_PRIVATE_KEY = 'put_private_key_here'`
+```
+RECAPTCHA_PUBLIC_KEY = 'put_public_key_here'
+RECAPTCHA_PRIVATE_KEY = 'put_private_key_here'
+```
 
 and uncomment this line:
 
@@ -54,9 +57,11 @@ Now we've configured interpreter, and after pycharm finishes it's processing we 
 
 ## 5. initialize databases
 To initialize databases simply run following configurations in PyCharm in this exact order:
-`makemigrations`
-`migrate`
-`initialize ES` 
+```
+makemigrations
+migrate
+initialize ES
+``` 
 
 ## 5.1 (optional) If you care about profile links being correctly generated in annotator
 use your favourite database tool (I recommned DataGrip) and while postgres container is up, connect to it (connection data can be found in `settings.py` file, although `localhost` must be used instead of `postgres`) and in table `django_site` change `example.com` to `localhost`.
