@@ -233,4 +233,6 @@ and like before, detach by pressing ctrl+a, ctrl+d.
 ```
 docker system prune -a
 docker volume prune
+
+docker-compose run web python src/collaborative_platform/manage.py [migrate|makemigrations|shell|...]
 ```
