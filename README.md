@@ -47,7 +47,7 @@ it is advised to go trough the content of settings file and possibly tweak some 
 * Then go to File | Settings | Project: collaborative-platform | Project Interpreter
 * in interpreters list click on "Show All"
 * click on the plus sign on the right side of the window, and add a configuration according to a screenshot below:
- []!(https://github.com/providedh/collaborative-platform/blob/master/interpreter_conf.png?raw=true)
+ [](https://github.com/providedh/collaborative-platform/blob/master/interpreter_conf.png?raw=true)
 * pick the newly-created interpreter and add path mapping: `collaborative-platform (Project Root)` to `/code`
 
 Now we've configured interpreter, and after pycharm finishes it's processing we should be able to use configurations pulled from git.
