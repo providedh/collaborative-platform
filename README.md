@@ -26,7 +26,9 @@ $ cd collaborative-platform`
 ```
 
 ## 2. prepare settings file
-`cp src/collaborative_platform/collaborative_platform/settings.py_template src/collaborative_platform/collaborative_platform/settings.py`
+```
+cp src/collaborative_platform/collaborative_platform/settings.py_template src/collaborative_platform/collaborative_platform/settings.py
+```
 then edit `settings.py` – comment out these lines:
 ```
 RECAPTCHA_PUBLIC_KEY = 'put_public_key_here'
