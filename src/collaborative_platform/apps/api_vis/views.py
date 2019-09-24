@@ -43,17 +43,35 @@ def project_history(request, project_id):  # type: (HttpRequest, int) -> JsonRes
 @user_has_access()
 def project_files(request, project_id):  # type: (HttpRequest, int) -> JsonResponse
     if request.method == 'GET':
-        files = File.objects.filter(project=project_id).order_by('id')
+        search = request.GET.get('search', None)
+        person = request.GET.get('person', None)
 
-        response = []
-
-        for file in files:
-            file_details = {
-                'id': file.id,
-                'name': file.name,
-                'path': file.get_relative_path(),
+        if search:
+            response = {
+                'info': 'Not implemented.'
             }
 
-            response.append(file_details)
+            return JsonResponse(response, status=HttpResponse.status_code)
 
-        return JsonResponse(response, status=HttpResponse.status_code, safe=False)
+        elif person:
+            response = {
+                'info': 'Not implemented.'
+            }
+
+            return JsonResponse(response, status=HttpResponse.status_code)
+
+        else:
+            files = File.objects.filter(project=project_id).order_by('id')
+
+            response = []
+
+            for file in files:
+                file_details = {
+                    'id': file.id,
+                    'name': file.name,
+                    'path': file.get_relative_path(),
+                }
+
+                response.append(file_details)
+
+            return JsonResponse(response, status=HttpResponse.status_code, safe=False)
