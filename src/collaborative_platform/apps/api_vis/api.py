@@ -86,3 +86,12 @@ def file(request, project_id, file_id):  # type: (HttpRequest, int, int) -> Http
         response = file.download()
 
         return response
+
+
+def file_body(request, project_id, file_id):  # type: (HttpRequest, int, int) -> HttpResponse
+    if request.method == 'GET':
+        response = {
+            'info': 'Not implemented. Need to agree how handle <div> sections in body for plain text.'
+        }
+
+        return JsonResponse(response, status=HttpResponse.status_code)
