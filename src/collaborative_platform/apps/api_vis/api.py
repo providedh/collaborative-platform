@@ -5,6 +5,7 @@ from lxml import etree
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpRequest, HttpResponse
 
+from apps.api_vis.helpers import search_files_by_person_name
 from apps.files_management.models import File, FileVersion
 from apps.projects.models import Contributor, Project
 from apps.views_decorators import objects_exists, user_has_access
@@ -66,11 +67,7 @@ def project_files(request, project_id):  # type: (HttpRequest, int) -> JsonRespo
             return JsonResponse(response, status=HttpResponse.status_code)
 
         elif person:
-            response = {
-                'info': 'Not implemented.'
-            }
-
-            return JsonResponse(response, status=HttpResponse.status_code)
+            return search_files_by_person_name(request, project_id, person)
 
         else:
             files = File.objects.filter(project=project_id).order_by('id')
