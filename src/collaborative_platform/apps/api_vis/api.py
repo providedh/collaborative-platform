@@ -75,3 +75,14 @@ def project_files(request, project_id):  # type: (HttpRequest, int) -> JsonRespo
                 response.append(file_details)
 
             return JsonResponse(response, status=HttpResponse.status_code, safe=False)
+
+
+@login_required
+@objects_exists
+@user_has_access()
+def file(request, project_id, file_id):  # type: (HttpRequest, int, int) -> HttpResponse
+    if request.method == 'GET':
+        file = File.objects.filter(id=file_id).get()
+        response = file.download()
+
+        return response
