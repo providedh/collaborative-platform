@@ -25,6 +25,17 @@ $ sudo usermod -aG docker $USER
 
 ##2. prepare settings file
 `cp src/collaborative_platform/collaborative_platform/settings.py_template src/collaborative_platform/collaborative_platform/settings.py`
+then edit `settings.py` – comment out these lines:
+`RECAPTCHA_PUBLIC_KEY = 'put_public_key_here'`
+
+`RECAPTCHA_PRIVATE_KEY = 'put_private_key_here'`
+
+and uncomment this line:
+
+`SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']`
+
+to disable captcha on register.
+
 it is advised to go trough the content of settings file and possibly tweak some settings, like media storage paths.
 
 ##3. go to project directory and build project
