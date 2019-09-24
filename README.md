@@ -58,6 +58,9 @@ To initialize databases simply run following configurations in PyCharm in this e
 `migrate`
 `initialize ES` 
 
+##5.1 (optional) If you care about profile links being correctly generated in annotator
+use your favourite database tool (I recommned DataGrip) and while postgres container is up, connect to it (connection data can be found in `settings.py` file) and in table `django_site` change `example.com` to `localhost`.
+
 ##6. Done
 to run or debug project use `runserver 8000` configuration. There is also a `web` configuration included in git. It allows to run PyCharm docker extensions and get logs from all containers in those. It can be used to run (but not debug) project instead of `runserver 8000`.
 
