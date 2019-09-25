@@ -136,3 +136,16 @@ def file_meta(request, project_id, file_id):  # type: (HttpRequest, int, int) ->
         response = parsed_xml['TEI']['teiHeader']
 
         return JsonResponse(response, status=HttpResponse.status_code, safe=False)
+
+
+@login_required
+@objects_exists
+@user_has_access()
+def file_names(request, project_id, file_id):  # type: (HttpRequest, int, int) -> JsonResponse
+    if request.method == 'GET':
+        response = {
+            'info': 'Not implemented.'
+        }
+
+        return JsonResponse(response, status=HttpResponse.status_code)
+
