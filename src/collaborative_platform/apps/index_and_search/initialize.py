@@ -1,5 +1,5 @@
 def initialize():
-    from apps.index_and_search.models import Person, Event, Organization, Place, User
+    from apps.index_and_search.models import Person, Event, Organization, Place, User, File
     from elasticsearch_dsl import connections
     from collaborative_platform import settings
     connections.create_connection(hosts=[settings.ES_HOST])
@@ -8,4 +8,5 @@ def initialize():
     Organization.init()
     Place.init()
     User.init()
+    File.init()
     print("OK")

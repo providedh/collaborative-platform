@@ -99,3 +99,17 @@ class User(Document):
         self.suggest = {
             'input': [' '.join(p) for p in permutations(self.name.split())],
         }
+
+
+class File(Document):
+    name = Text(fields={'keywords': Keyword()})
+    text = Text()
+    id = Integer()
+    project_id = Integer()
+
+    class Index:
+        name = 'file'
+        settings = {
+            'number_of_shards': 1,
+            'number_of_replicas': 0
+        }

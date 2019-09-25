@@ -17,7 +17,7 @@ from apps.projects.models import Project
 from apps.views_decorators import objects_exists, user_has_access
 from .file_conversions.tei_handler import TeiHandler
 from .helpers import extract_text_and_entities, index_entities, upload_file, uploaded_file_object_from_string, \
-    get_directory_content, include_user
+    get_directory_content, include_user, index_file
 
 
 @login_required
@@ -82,11 +82,13 @@ def upload(request, directory_id):  # type: (HttpRequest, int) -> HttpResponse
                     migration_status = {'migrated': True, 'message': message}
                     upload_statuses[file_name].update(migration_status)
                     index_entities(entities)
+                    index_file(dbfile, text)
                     log_activity(dbfile.project, request.user, "File migrated: {} ".format(message), dbfile)
                 else:
                     file.seek(0)
                     text, entities = extract_text_and_entities(file.read(), project.id, dbfile.id)
                     index_entities(entities)
+                    index_file(dbfile, text)
 
             except Exception as exception:
                 upload_status = {'message': str(exception)}
