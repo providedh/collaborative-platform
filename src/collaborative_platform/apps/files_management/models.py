@@ -115,8 +115,8 @@ class File(FileNode):
         return fv.download()
 
     def delete(self, using=None, keep_parents=False):
-        from apps.files_management.helpers import delete_entities
-        delete_entities(self.id)
+        from apps.files_management.helpers import delete_es_docs
+        delete_es_docs(self.id)
         super().delete()
 
     def get_relative_path(self):
