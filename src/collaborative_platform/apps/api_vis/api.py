@@ -1,4 +1,5 @@
 import xmltodict
+import re
 
 from lxml import etree
 
@@ -16,6 +17,9 @@ NAMESPACES = {
     'xml': 'http://www.w3.org/XML/1998/namespace',
     'xi': 'http://www.w3.org/2001/XInclude',
 }
+
+ANNOTATION_TAGS = ['date', 'event', 'location', 'geolocation', 'name', 'occupation', 'object', 'org', 'person', 'place',
+               'country', 'time']
 
 
 @login_required
@@ -142,3 +146,53 @@ def file_names(request, project_id, file_id):  # type: (HttpRequest, int, int) -
 
         return JsonResponse(response, status=HttpResponse.status_code)
 
+
+def file_annotations(request, project_id, file_id):  # type: (HttpRequest, int, int) -> JsonResponse
+    if request.method == 'GET':
+        file = File.objects.get(id=file_id)
+        file_version = FileVersion.objects.get(file=file, number=file.version_number)
+        file_path = file_version.upload.path
+
+        with open(file_path) as file:
+            xml_content = file.read()
+
+        annotations = []
+
+        tree = etree.fromstring(xml_content)
+        xml_body_nodes = tree.xpath('//default:text/default:body', namespaces=NAMESPACES)[0]
+
+        for annotation_tag in ANNOTATION_TAGS:
+            annotation_nodes = xml_body_nodes.xpath('.//default:{0}'.format(annotation_tag), namespaces=NAMESPACES)
+
+            for node in annotation_nodes:
+                attributes = []
+
+                for item in node.attrib.items():
+                    name = item[0]
+
+                    regex = r'{.*?}'
+                    match = re.search(regex, name)
+
+                    if match:
+                        for prefix, namespace in NAMESPACES.items():
+                            ns = match.group()[1:-1]
+
+                            if namespace == ns:
+                                name = name.replace('{' + ns + '}', prefix + ':')
+
+                    atribute = {
+                        'name': name,
+                        'value': item[1]
+                    }
+
+                    attributes.append(atribute)
+
+                annotation = {
+                    'tag': annotation_tag,
+                    'attibutes': attributes,
+                    'textContext': node.text,
+                }
+
+                annotations.append(annotation)
+
+        return JsonResponse(annotations, status=HttpResponse.status_code, safe=False)
