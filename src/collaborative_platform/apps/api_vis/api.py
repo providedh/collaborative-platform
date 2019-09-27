@@ -1,5 +1,4 @@
 import xmltodict
-import re
 
 from lxml import etree
 
@@ -10,7 +9,7 @@ from apps.api_vis.helpers import search_files_by_person_name, search_files_by_co
 from apps.files_management.models import File, FileVersion
 from apps.projects.models import Contributor, Project
 from apps.views_decorators import objects_exists, user_has_access
-
+from .helpers import get_annotations_from_file_version_body
 
 NAMESPACES = {
     'default': 'http://www.tei-c.org/ns/1.0',
@@ -19,7 +18,7 @@ NAMESPACES = {
 }
 
 ANNOTATION_TAGS = ['date', 'event', 'location', 'geolocation', 'name', 'occupation', 'object', 'org', 'person', 'place',
-               'country', 'time']
+                   'country', 'time']
 
 
 @login_required
@@ -147,52 +146,14 @@ def file_names(request, project_id, file_id):  # type: (HttpRequest, int, int) -
         return JsonResponse(response, status=HttpResponse.status_code)
 
 
+@login_required
+@objects_exists
+@user_has_access()
 def file_annotations(request, project_id, file_id):  # type: (HttpRequest, int, int) -> JsonResponse
     if request.method == 'GET':
         file = File.objects.get(id=file_id)
         file_version = FileVersion.objects.get(file=file, number=file.version_number)
-        file_path = file_version.upload.path
 
-        with open(file_path) as file:
-            xml_content = file.read()
-
-        annotations = []
-
-        tree = etree.fromstring(xml_content)
-        xml_body_nodes = tree.xpath('//default:text/default:body', namespaces=NAMESPACES)[0]
-
-        for annotation_tag in ANNOTATION_TAGS:
-            annotation_nodes = xml_body_nodes.xpath('.//default:{0}'.format(annotation_tag), namespaces=NAMESPACES)
-
-            for node in annotation_nodes:
-                attributes = []
-
-                for item in node.attrib.items():
-                    name = item[0]
-
-                    regex = r'{.*?}'
-                    match = re.search(regex, name)
-
-                    if match:
-                        for prefix, namespace in NAMESPACES.items():
-                            ns = match.group()[1:-1]
-
-                            if namespace == ns:
-                                name = name.replace('{' + ns + '}', prefix + ':')
-
-                    atribute = {
-                        'name': name,
-                        'value': item[1]
-                    }
-
-                    attributes.append(atribute)
-
-                annotation = {
-                    'tag': annotation_tag,
-                    'attibutes': attributes,
-                    'textContext': node.text,
-                }
-
-                annotations.append(annotation)
+        annotations = get_annotations_from_file_version_body(file_version, NAMESPACES, ANNOTATION_TAGS)
 
         return JsonResponse(annotations, status=HttpResponse.status_code, safe=False)
