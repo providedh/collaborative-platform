@@ -10,6 +10,7 @@ from apps.files_management.models import File, FileVersion
 from apps.projects.models import Contributor, Project
 from apps.views_decorators import objects_exists, user_has_access
 from .helpers import get_annotations_from_file_version_body
+import apps.index_and_search.models as es
 
 NAMESPACES = {
     'default': 'http://www.tei-c.org/ns/1.0',
@@ -157,3 +158,24 @@ def file_annotations(request, project_id, file_id):  # type: (HttpRequest, int, 
         annotations = get_annotations_from_file_version_body(file_version, NAMESPACES, ANNOTATION_TAGS)
 
         return JsonResponse(annotations, status=HttpResponse.status_code, safe=False)
+
+
+@login_required
+@objects_exists
+@user_has_access()
+def context_search(request, project_id, text):  # type: (HttpRequest, int, str) -> HttpResponse
+    r = es.File.search().filter('term', project_id=project_id).highlight('text').query('match', text=text).execute()
+
+    response = []
+    for hit in r:
+        file = File.objects.get(id=hit.id)
+        response.append({
+            'file': {
+                'name': file.name,
+                'path': file.get_path(),
+                'id': file.id
+            },
+            'contexts': [fragment for fragment in hit.meta.highlight.text]
+        })
+
+    return JsonResponse(response, safe=False)
