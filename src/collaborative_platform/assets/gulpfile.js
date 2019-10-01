@@ -39,20 +39,20 @@ gulp.task('libs', function () {
         './node_modules/prismjs/prism.js', 
         'js/libs/*.js'
         ])
-        .pipe(jshint())
-        .pipe(jshint.reporter('default'))
+        // .pipe(jshint())
+        // .pipe(jshint.reporter('default'))
         .pipe(concat('main-libs.js'))
-        .pipe(uglify())
+        // .pipe(uglify())
         .pipe(gulp.dest('../static/js'))
         .pipe(notify('libs reloaded'))
 });
 
 gulp.task('scripts', function () {
     gulp.src(['js/scripts/*.js'])
-        .pipe(jshint())
-        .pipe(jshint.reporter('default'))
+        // .pipe(jshint())
+        // .pipe(jshint.reporter('default'))
         .pipe(concat('main-scripts.js'))
-        .pipe(uglify())
+        // .pipe(uglify())
         .pipe(gulp.dest('../static/js'))
         .pipe(notify('scripts reloaded'))
 });

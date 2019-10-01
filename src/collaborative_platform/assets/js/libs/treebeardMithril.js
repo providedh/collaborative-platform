@@ -3624,6 +3624,7 @@ if (typeof exports == "object") {
 		var filesCompleteArray = [];
 		var filesSuccessArray = [];
 		var filesFailedArray = [];
+		var uploadStatusesArray = [];
         var lastLocation = 0; // The last scrollTop location, updates on every scroll.
         var lastNonFilterLocation = 0; // The last scrolltop location before filter was used.
         this.isSorted = {}; // Temporary variables for sorting
@@ -4674,29 +4675,46 @@ if (typeof exports == "object") {
                     if ($.isFunction(self.options.dropzoneEvents.complete)) {
                         self.options.dropzoneEvents.complete.call(this, self, file);
                     }
-					filesCompleteArray.push(file.name)
+					filesCompleteArray.push(file.name);
+
+                    let uploadStatuses = JSON.parse(file.xhr.responseText);
+
+                    for (let i = 0; i < uploadStatuses.length; i++) {
+                    	uploadStatusesArray.push(uploadStatuses[i]);
+					}
+
 					if ( filesCompleteArray.length === filesDropArray.length ) {
-						$('#tb-tbody').removeClass('upload')
+						$('#tb-tbody').removeClass('upload');
 
 						var filesSuccessList = [];
 						var filesFailedList = [];
 
-						for (var i = 0; i < filesSuccessArray.length; i++) {
-							filesSuccessList.push( m('li', filesSuccessArray[i]) )
+						for (var i = 0; i < uploadStatusesArray.length; i++) {
+							if (uploadStatusesArray[i].uploaded === true) {
+								if (uploadStatusesArray[i].message != null){
+									filesSuccessList.push(m('li', uploadStatusesArray[i].file_name, m('ul', m('li', uploadStatusesArray[i].message))))
+								}
+								else {
+									filesSuccessList.push(m('li', uploadStatusesArray[i].file_name))
+								}
+							}
+							else {
+								if (uploadStatusesArray[i].message != null) {
+									filesFailedList.push(m('li', uploadStatusesArray[i].file_name, m('ul', m('li', uploadStatusesArray[i].message))))
+								} else {
+									filesFailedList.push(m('li', uploadStatusesArray[i].file_name))
+								}
+							}
 						}
 
-						for (var i = 0; i < filesFailedArray.length; i++) {
-							filesFailedList.push( m('li', filesFailedArray[i]) )
-						}
+						var mithrilUpload = [m('h3.break-word', 'Upload files')];
 
-						var mithrilUpload = [m('h3.break-word', 'Upload files')]
-
-						if (filesSuccessArray.length > 0) {
+						if (filesSuccessList.length > 0) {
 							mithrilUpload.push([m('p', 'Success:'),
 								m('ul', filesSuccessList)])
 						}
 
-						if (filesFailedArray.length > 0) {
+						if (filesFailedList.length > 0) {
 							mithrilUpload.push([m('p', 'Failed:'),
 								m('ul', filesFailedList)])
 						}
@@ -4712,6 +4730,7 @@ if (typeof exports == "object") {
 						filesCompleteArray.length = 0;
 						filesFailedArray.length = 0;
 						filesSuccessArray.length = 0;
+						uploadStatusesArray.length = 0;
 
 						self.refreshData()
 
