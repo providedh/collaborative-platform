@@ -71,13 +71,14 @@ var Annotator = function(args){
             data['tag'] = args['asserted-value'];
         }
 
-        if(args['locus'] == 'attribute'){
+        if(args['attribute_name'] != ''){
+        	data['locus'] = 'attribute';
             data['attribute_name'] = args['attribute-name'];
             data['asserted_value'] = args['asserted-value'];
         }
-
-        if(args['locus'] == 'attribute' && ['person', 'event', 'org', 'place'].includes(args['tag-name']) && args['references'] != ''){
-            data['references'] = args.references
+        
+        if(args['attribute-name'] == 'sameAs' && ['person', 'event', 'org', 'place'].includes(args['tag-name']) && args['references'] != ''){
+            data['asserted_value'] = args['references-filepath']+'#'+args['asserted-value'];
         }
 
         console.log(data)
