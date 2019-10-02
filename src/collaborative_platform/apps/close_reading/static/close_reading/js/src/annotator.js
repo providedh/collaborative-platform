@@ -72,7 +72,6 @@ var Annotator = function(args){
         }
 
         if(args['attribute_name'] != ''){
-        	data['locus'] = 'attribute';
             data['attribute_name'] = args['attribute-name'];
             data['asserted_value'] = args['asserted-value'];
         }
