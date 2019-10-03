@@ -5,8 +5,10 @@ from channels.generic.websocket import WebsocketConsumer
 
 from apps.projects.models import Contributor, Project
 from apps.files_management.models import FileVersion, File
-from .models import AnnotatingXmlContent, RoomPresence
+
 from .annotator import Annotator, NotModifiedException
+from .helpers import verify_reference
+from .models import AnnotatingXmlContent, RoomPresence
 
 
 class AnnotatorConsumer(WebsocketConsumer):
@@ -137,6 +139,12 @@ class AnnotatorConsumer(WebsocketConsumer):
             user_id = self.scope['user'].pk
 
             request_json = json.loads(request_json)
+
+            if request_json['attribute_name'] == 'sameAs' and 'asserted_value' in request_json and \
+                    '#' in request_json['asserted_value']:
+                _, file_id = room_symbol.split('_')
+
+                request_json['asserted_value'] = verify_reference(file_id, request_json['asserted_value'])
 
             try:
                 annotator = Annotator()
