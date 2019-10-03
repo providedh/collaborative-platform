@@ -25,7 +25,6 @@
       </div>
     </div>
     <section id="asserted-value-input-options">
-      <input type="text" class="input locus-attribute">
       <input type="text" class="input locus-value">
       <select class="form-control form-control-sm locus-name input">
         <option value="date">Date</option>
@@ -121,7 +120,6 @@
                               <select class="form-control form-control-sm" id='locus'>
                                 <option value="value">Value</option>
                                 <option value="name">Name</option>
-                                <option value="attribute">Attribute</option>
                               </select>
                             </div>
                             <div class="col">
@@ -144,12 +142,14 @@
                               </div>
                             </div>
                             <div class="col">
-                              <div id="attribute-name-input">
-                                <label for="attribute-name">Attribute name 
-                                  <span class="help-tooltip" help="This is the attribute's name." />
-                                </label>
-                                <input type="text" id="attribute-name">
-                              </div>
+                              <label for="attribute-name">Attribute name 
+                                <span class="help-tooltip" help="
+                                  Use this optional parameter to annotate an attribute. <br>
+                                  The 'sameAs' attribute is used to create a correspondence
+                                  with another entity (an input will appear to allow selecting the second entity).
+                                " />
+                              </label>
+                              <input type="text" id="attribute-name">
                             </div>
                           </div>
                           <div class="form-row">

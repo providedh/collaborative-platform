@@ -105,16 +105,10 @@ let PanelView = function(args){
         	document.getElementById('tag-name-input').style.setProperty('display','none');
         else
         	document.getElementById('tag-name-input').style.setProperty('display','initial');
-
-        if(values['locus'] == 'attribute')
-        	document.getElementById('attribute-name-input').style.setProperty('display','initial');
-        else
-        	document.getElementById('attribute-name-input').style.setProperty('display','none');
 	}
 
 	function _updateReferencesControl(){
-		if(values['locus'] == 'attribute' 
-				&& ['person', 'event', 'org', 'place'].includes(values['tag-name'])
+		if(['person', 'event', 'org', 'place'].includes(values['tag-name'])
 				&& values['attribute-name'] == 'sameAs'){
 			document.getElementById('references-container').style.setProperty('display','initial');
 		}else{
@@ -145,6 +139,7 @@ let PanelView = function(args){
 			'category': document.getElementById('category').value,
 			'asserted-value': document.getElementById('asserted-value-container').getElementsByClassName('input')[0].value,
 			'references': document.getElementById('references').value,
+			'references-filepath': document.getElementById('references').filepath,
 			'description': document.getElementById('description').value,
 			'tei-tag-name': document.getElementById('tei-tag-name').value,
 		};
@@ -197,6 +192,7 @@ let PanelView = function(args){
 	                `${inp.options[i].name} | ${inp.options[i].filepath}`; + "'>";
 	              b.addEventListener("click", function(e) {
 	                  document.getElementById('references').value = this.data.name;
+	                  document.getElementById('references').filepath = this.data.filepath;
 	                  inp.value = `${this.data.name} | ${this.data.filepath}`;
 	                  document.getElementById('asserted-value').value = this.data.id;
 	              });
@@ -227,6 +223,7 @@ let PanelView = function(args){
 	    }
 
 	function _updateAutocompleteOptions(entityType, text){
+		const inp = document.getElementById("references-autocomplete");
 		ajaxCalls.getAutocomplete(window.project_id, entityType, text).then(response=>{
 			if(response.success === true){				
 				document.getElementById("references-autocomplete").options = response.content.data.map(a=>(
@@ -264,6 +261,7 @@ let PanelView = function(args){
 	          b.addEventListener("click", function(e) {
 	    		  closeAllLists(null, inp);
 	              document.getElementById('references').value = this.data.name;
+	              document.getElementById('references').filepath = this.data.filepath;
 	              inp.value = `${this.data.name} | ${this.data.filepath}`;
 	              document.getElementById('asserted-value').value = this.data.id;
 	          });
