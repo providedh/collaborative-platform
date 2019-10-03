@@ -140,8 +140,8 @@ class AnnotatorConsumer(WebsocketConsumer):
 
             request_json = json.loads(request_json)
 
-            if request_json['attribute_name'] == 'sameAs' and 'asserted_value' in request_json and \
-                    '#' in request_json['asserted_value']:
+            if 'attribute_name' in request_json and request_json['attribute_name'] == 'sameAs' and \
+                    'asserted_value' in request_json and '#' in request_json['asserted_value']:
                 _, file_id = room_symbol.split('_')
 
                 request_json['asserted_value'] = verify_reference(file_id, request_json['asserted_value'])
