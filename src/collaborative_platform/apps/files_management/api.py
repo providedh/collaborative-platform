@@ -56,6 +56,7 @@ def upload(request, directory_id):  # type: (HttpRequest, int) -> HttpResponse
                     upload_status = {"message": "Invalid filetype, please provide TEI file or compatible ones.",
                                      "uploaded": False}
                     upload_statuses[i].update(upload_status)
+                    dbfile.activities.get().delete()
                     dbfile.delete()
                     continue
 
