@@ -163,6 +163,21 @@ def file_annotations(request, project_id, file_id):  # type: (HttpRequest, int, 
 @login_required
 @objects_exists
 @user_has_access()
+def file_people(request, project_id, file_id):  # type: (HttpRequest, int, int) -> JsonResponse
+    if request.method == 'GET':
+        file = File.objects.get(id=file_id)
+        file_version = FileVersion.objects.get(file=file, number=file.version_number)
+
+        annotation_tags = ['persName', 'person', 'name']
+
+        annotations = get_annotations_from_file_version_body(file_version, NAMESPACES, annotation_tags)
+
+        return JsonResponse(annotations, status=HttpResponse.status_code, safe=False)
+
+
+@login_required
+@objects_exists
+@user_has_access()
 def context_search(request, project_id, text):  # type: (HttpRequest, int, str) -> HttpResponse
     r = es.File.search().filter('term', project_id=project_id).highlight('text').query('match', text=text).execute()
 
