@@ -308,40 +308,40 @@ class Annotator:
         elif self.__json['locus'] == 'value' and self.__json['tag'] == '' and self.__json['attribute_name'] == '':
             self.__fragment_annotated, annotation_ids = self.__add_tag(self.__fragment_to_annotate, 'ab',
                                                                        uncertainty=True)
-            self.__certainty_to_add = self.__create_certainty_description_for_value_or_name(self.__json, annotation_ids,
-                                                                                            self.__annotator_xml_id)
+            self.__certainty_to_add = self.__create_certainty_description(self.__json, annotation_ids,
+                                                                          self.__annotator_xml_id)
             self.__annotator_to_add = self.__create_annotator(self.__annotator_xml_id)
 
         # 3.Add certainty with tag to text
         elif self.__json['locus'] == 'value' and self.__json['tag'] != '' and self.__json['attribute_name'] == '':
             self.__fragment_annotated, annotation_ids = self.__add_tag(self.__fragment_to_annotate, self.__json["tag"],
                                                                        uncertainty=True)
-            self.__certainty_to_add = self.__create_certainty_description_for_value_or_name(self.__json, annotation_ids,
-                                                                                            self.__annotator_xml_id)
+            self.__certainty_to_add = self.__create_certainty_description(self.__json, annotation_ids,
+                                                                          self.__annotator_xml_id)
             self.__annotator_to_add = self.__create_annotator(self.__annotator_xml_id)
 
         # 4.Add certainty to tag
         elif self.__json['locus'] == 'name' and self.__json['tag'] != '' and self.__json['attribute_name'] == '':
             self.__fragment_annotated, annotation_ids = self.__add_tag(self.__fragment_to_annotate, self.__json["tag"],
                                                                        uncertainty=True)
-            self.__certainty_to_add = self.__create_certainty_description_for_value_or_name(self.__json, annotation_ids,
-                                                                                            self.__annotator_xml_id)
+            self.__certainty_to_add = self.__create_certainty_description(self.__json, annotation_ids,
+                                                                          self.__annotator_xml_id)
             self.__annotator_to_add = self.__create_annotator(self.__annotator_xml_id)
 
             if self.__json['tag'] not in self.__tags and self.__json['asserted_value'] != '':
                 raise ValueError("You can't add asserted value for tag name when you creating new tag.")
 
         # 5.Add reference to tag
-        elif self.__json['locus'] == 'attribute' and self.__json['tag'] != '' and \
+        elif self.__json['locus'] == 'value' and self.__json['tag'] != '' and \
                 self.__json['attribute_name'] == 'sameAs' and self.__json['asserted_value'] != '':
             self.__fragment_annotated, annotation_ids = self.__add_tag(self.__fragment_to_annotate, self.__json["tag"],
                                                                        uncertainty=True)
-            self.__certainty_to_add = self.__create_certainty_description_for_attribute(self.__json, annotation_ids,
-                                                                                        self.__annotator_xml_id)
+            self.__certainty_to_add = self.__create_certainty_description_for_referece(self.__json, annotation_ids,
+                                                                                       self.__annotator_xml_id)
             self.__annotator_to_add = self.__create_annotator(self.__annotator_xml_id)
 
         # 6.Add attribute to tag
-        elif self.__json['locus'] == 'attribute' and self.__json['tag'] != '' and \
+        elif self.__json['locus'] == 'value' and self.__json['tag'] != '' and \
                 self.__json['attribute_name'] != '' and self.__json['asserted_value'] != '':
             self.__fragment_annotated, annotation_ids = self.__add_tag(self.__fragment_to_annotate, self.__json["tag"],
                                                                        uncertainty=True)
@@ -425,7 +425,7 @@ class Annotator:
 
         return new_annotated_fragment, annotation_ids
 
-    def __create_certainty_description_for_value_or_name(self, json, annotation_ids, user_uuid):
+    def __create_certainty_description(self, json, annotation_ids, user_uuid):
         target = u" ".join(annotation_ids)
 
         certainty = u'<certainty category="{0}" locus="{1}" cert="{2}" resp="#{3}" ' \
@@ -450,6 +450,27 @@ class Annotator:
         certainty = u'<certainty category="{0}" locus="{1}" cert="{2}" resp="#{3}" target="{4}" ' \
                     u'assertedValue="{5}"/>'.format(json['category'], json['attribute_name'], json['certainty'],
                                              user_uuid, target, json['asserted_value'])
+
+        new_element = etree.fromstring(certainty)
+
+        if json["description"]:
+            description = etree.Element("desc")
+            description.text = json["description"]
+
+            new_element.append(description)
+
+        return new_element
+
+    def __create_certainty_description_for_referece(self, json, annotation_ids, user_uuid):
+        target = u" ".join(annotation_ids)
+
+        asserted_value = json['asserted_value']
+
+
+
+        certainty = u'<certainty category="{0}" locus="{1}" cert="{2}" resp="#{3}" target="{4}" match="@sameAs" ' \
+                    u'assertedValue="{5}"/>'.format(json['category'], json['locus'], json['certainty'], user_uuid,
+                                                    target, json['asserted_value'])
 
         new_element = etree.fromstring(certainty)
 

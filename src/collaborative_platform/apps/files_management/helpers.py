@@ -15,6 +15,7 @@ from apps.index_and_search.entities_extractor import EntitiesExtractor
 from apps.index_and_search.models import Person, Organization, Event, Place
 from apps.projects.helpers import log_activity
 from apps.files_management.models import File, FileVersion, Project, Directory
+import apps.index_and_search.models as es
 
 
 def upload_new_file(uploaded_file, project, parent_dir, user):  # type: (UploadedFile, Project, int, User) -> File
@@ -154,37 +155,18 @@ def include_user(response):  # type: (JsonResponse) -> JsonResponse
     return JsonResponse(json)
 
 
-def delete_entities(file_id):  # type: (int) -> None
-    from apps.index_and_search.models import Person, Place, Organization, Event
-    i = 0
-    while i < 10:
-        try:
-            Person.search().query('match', file_id=file_id).delete()
-        except ConflictError:
-            i += 1
-        else:
-            break
-    i = 0
-    while i < 10:
-        try:
-            Place.search().query('match', file_id=file_id).delete()
-        except ConflictError:
-            i += 1
-        else:
-            break
-    i = 0
-    while i < 10:
-        try:
-            Organization.search().query('match', file_id=file_id).delete()
-        except ConflictError:
-            i += 1
-        else:
-            break
-    i = 0
-    while i < 10:
-        try:
-            Event.search().query('match', file_id=file_id).delete()
-        except ConflictError:
-            i += 1
-        else:
-            break
+def delete_es_docs(file_id):  # type: (int) -> None
+    es.Person.search().filter('term', file_id=file_id).delete()
+    es.Place.search().filter('term', file_id=file_id).delete()
+    es.Organization.search().filter('term', file_id=file_id).delete()
+    es.Event.search().filter('term', file_id=file_id).delete()
+    es.File.search().filter('term', id=file_id).delete()
+
+
+def index_file(dbfile, text):  # type: (File, str) -> None
+    es.File(name=dbfile.name,
+            id=dbfile.id,
+            _id=dbfile.id,
+            project_id=dbfile.project.id,
+            text=text
+            ).save()

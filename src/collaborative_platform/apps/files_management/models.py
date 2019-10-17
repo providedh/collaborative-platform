@@ -115,9 +115,19 @@ class File(FileNode):
         return fv.download()
 
     def delete(self, using=None, keep_parents=False):
-        from apps.files_management.helpers import delete_entities
-        delete_entities(self.id)
+        from apps.files_management.helpers import delete_es_docs
+        delete_es_docs(self.id)
         super().delete()
+
+    def get_relative_path(self):
+        path = self.name
+        parent_dir = self.parent_dir
+
+        while parent_dir is not None:
+            path = parent_dir.name + '/' + path
+            parent_dir = parent_dir.parent_dir
+
+        return path
 
 
 class FileVersion(models.Model):
