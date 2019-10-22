@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.contrib.gis.db.models import PointField
 from django.db import models
 
@@ -10,17 +11,17 @@ class Entity(models.Model):
     fileversion = models.ForeignKey(FileVersion, on_delete=models.CASCADE)
     id = models.CharField(max_length=255)
     name = models.TextField()
-    xml = models.TextField()
-    context = models.TextField()
+    xml = models.TextField(blank=True, null=True)
+    context = models.TextField(blank=True, null=True)
+    type = models.CharField(max_length=12)
 
     class Meta:
-        abstract = True
         unique_together = ("fileversion", "id")
 
 
 class Person(Entity):
-    forename = models.CharField(max_length=255)
-    surname = models.CharField(max_length=255)
+    forename = models.CharField(max_length=255, blank=True, null=True)
+    surname = models.CharField(max_length=255, blank=True, null=True)
 
 
 class Event(Entity):
@@ -32,5 +33,23 @@ class Organization(Entity):
 
 
 class Place(Entity):
-    location = PointField(geography=True)
-    country = models.CharField(max_length=255)
+    location = PointField(geography=True, blank=True, null=True)
+    country = models.CharField(max_length=255, blank=True, null=True)
+
+
+class Clique(models.Model):
+    asserted_name = models.CharField(max_length=255)
+    created_by = models.ForeignKey(User, related_name="cliques", on_delete=models.SET_NULL, blank=True, null=True)
+    commit = models.ForeignKey("Commit", default=None, null=True, blank=True, on_delete=models.SET_NULL)  # TODO uncomment this when Commit is done
+
+
+class Unification(models.Model):
+    entity = models.ForeignKey(Entity, related_name="unifications", on_delete=models.DO_NOTHING)
+    clique = models.ForeignKey(Clique, related_name="unifications", on_delete=models.DO_NOTHING)
+    made_by = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    made_on = models.DateTimeField(auto_now_add=True)
+    deleted_by = models.ForeignKey(User, default=None, on_delete=models.DO_NOTHING, null=True)
+    deleted_on = models.DateTimeField(null=True)
+    levenshtein = models.IntegerField()
+    certainty = models.CharField(max_length=10)
+
