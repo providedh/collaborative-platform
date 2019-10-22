@@ -32,19 +32,19 @@ def upload(request, directory_id):  # type: (HttpRequest, int) -> HttpResponse
         parent_dir = directory_id
         project = Directory.objects.filter(id=parent_dir).get().project
 
-        upload_statuses = {}
+        upload_statuses = []
 
-        for file in files_list:
+        for i, file in enumerate(files_list):
             file_name = file.name
 
-            upload_status = {file_name: {'uploaded': False, 'migrated': False, 'message': None}}
-            upload_statuses.update(upload_status)
+            upload_status = {'file_name': file_name, 'uploaded': False, 'migrated': False, 'message': None}
+            upload_statuses.append(upload_status)
 
             try:
                 dbfile = upload_file(file, project, request.user, parent_dir)
 
                 upload_status = {'uploaded': True}
-                upload_statuses[file_name].update(upload_status)
+                upload_statuses[i].update(upload_status)
 
                 file_version = FileVersion.objects.get(file_id=dbfile.id, number=dbfile.version_number)
                 path_to_file = file_version.upload.path
@@ -55,7 +55,8 @@ def upload(request, directory_id):  # type: (HttpRequest, int) -> HttpResponse
                 if not migration and not is_tei_p5_unprefixed:
                     upload_status = {"message": "Invalid filetype, please provide TEI file or compatible ones.",
                                      "uploaded": False}
-                    upload_statuses[file_name].update(upload_status)
+                    upload_statuses[i].update(upload_status)
+                    dbfile.activities.get().delete()
                     dbfile.delete()
                     continue
 
@@ -80,7 +81,7 @@ def upload(request, directory_id):  # type: (HttpRequest, int) -> HttpResponse
 
                     message = tei_handler.get_message()
                     migration_status = {'migrated': True, 'message': message}
-                    upload_statuses[file_name].update(migration_status)
+                    upload_statuses[i].update(migration_status)
                     index_entities(entities)
                     index_file(dbfile, text)
                     log_activity(dbfile.project, request.user, "File migrated: {} ".format(message), dbfile)
@@ -92,7 +93,7 @@ def upload(request, directory_id):  # type: (HttpRequest, int) -> HttpResponse
 
             except Exception as exception:
                 upload_status = {'message': str(exception)}
-                upload_statuses[file_name].update(upload_status)
+                upload_statuses[i].update(upload_status)
 
         response = dumps(upload_statuses)
 

@@ -45,6 +45,7 @@ it is advised to go trough the content of settings file and possibly tweak some 
 
 ## 3. go to project directory and build project
 ```docker-compose build```
+>note: this command has to be re-run after each change in `requirements.txt`
 
 ## 4. open PyCharm and open the project in it
 * Open settings and go to Build, Execution, Deployment -> Docker
