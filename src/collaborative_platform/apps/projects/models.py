@@ -46,3 +46,9 @@ class Activity(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='activities', null=True)
     user_name = models.CharField(max_length=255)
     action_text = models.CharField(max_length=255)
+
+
+class ProjectVersion(models.Model):
+    version = models.CharField(max_length=8)
+    date = models.DateTimeField(auto_now_add=True)
+
