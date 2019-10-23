@@ -90,7 +90,7 @@ def get_activities(request, project_id):
     if request.method != "GET":
         return HttpResponseBadRequest("Invalid request method")
 
-    project = Project.objects.filter(id=project_id).get()
+    project = Project.objects.get(id=project_id)
 
     activities = project.activities.order_by("-date")
     try:

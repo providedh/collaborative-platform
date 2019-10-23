@@ -69,11 +69,11 @@ def hash_file(dbfile, uploaded_file):  # type: (File, UploadedFile) -> str
 
 def upload_file(uploaded_file, project, user, parent_dir=None):  # type: (UploadedFile, Project, User, int) -> File
     try:
-        dbfile = File.objects.filter(name=uploaded_file.name, parent_dir_id=parent_dir, project=project).get()
+        _ = File.objects.get(name=uploaded_file.name, parent_dir_id=parent_dir, project=project, deleted=False)
     except File.DoesNotExist:
         return upload_new_file(uploaded_file, project, parent_dir, user)
     else:
-        return overwrite_existing_file(dbfile, uploaded_file, user)
+        raise Exception(f"File with name {uploaded_file.name} already exist in this directory")
 
 
 def uploaded_file_object_from_string(string, file_name):  # type: (str, str) -> UploadedFile
@@ -108,7 +108,7 @@ def index_entities(entities):  # type: (List[dict]) -> None
 
 
 def get_directory_content(dir, indent):  # type: (Directory, int) -> dict
-    files = list(map(model_to_dict, dir.files.all()))
+    files = list(map(model_to_dict, dir.files.filter(deleted=False)))
     for file in files:
         file['kind'] = 'file'
         file['icon'] = 'fa-file-xml-o'
@@ -116,7 +116,7 @@ def get_directory_content(dir, indent):  # type: (Directory, int) -> dict
         file['parent'] = dir.id
         file['indent'] = indent + 1
 
-    subdirs = [get_directory_content(subdir, indent + 1) for subdir in dir.subdirs.all()]
+    subdirs = [get_directory_content(subdir, indent + 1) for subdir in dir.subdirs.filter(deleted=False)]
 
     result = model_to_dict(dir)
     result['parent'] = dir.parent_dir_id or 0
@@ -141,7 +141,7 @@ def get_all_child_dirs(directory):  # type: (Directory) -> Set[int]
 
 
 def is_child(parent, child):  # type: (int, int) -> bool
-    parent_dir = Directory.objects.get(id=parent)
+    parent_dir = Directory.objects.get(id=parent, deleted=False)
     children = get_all_child_dirs(parent_dir)
     return child in children
 
@@ -170,3 +170,21 @@ def index_file(dbfile, text):  # type: (File, str) -> None
             project_id=dbfile.project.id,
             text=text
             ).save()
+
+
+def delete_directory_with_contents_fake(directory_id, user):
+    child_directories = Directory.objects.filter(parent_dir=directory_id, deleted=False)
+
+    for directory in child_directories:
+        delete_directory_with_contents_fake(directory_id=directory.id, user=user)
+
+    files = File.objects.filter(parent_dir=directory_id, deleted=False)
+
+    for file in files:
+        file.delete_fake()
+        log_activity(project=file.project, user=user, action_text=f"deleted file {file.name}")
+
+    directory = Directory.objects.get(id=directory_id)
+    directory.delete_fake()
+    log_activity(project=directory.project, user=user, related_dir=directory,
+                 action_text=f"deleted directory {directory.name}")

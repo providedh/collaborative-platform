@@ -2,7 +2,7 @@ from apps.files_management.models import File
 
 
 def verify_reference(file_id, asserted_value):
-    file = File.objects.get(id=file_id)
+    file = File.objects.get(id=file_id, deleted=False)
     path_to_file = file.get_relative_path()
 
     path_to_reference, person_id = asserted_value.split('#')

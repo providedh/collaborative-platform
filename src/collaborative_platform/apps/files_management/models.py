@@ -1,10 +1,9 @@
 import hashlib
+import datetime
 
 from django.contrib.auth.models import User
 from django.db import models
-from django.db.models import QuerySet
-from django.db.models.signals import post_delete
-from django.dispatch import receiver
+from django.db.models import QuerySet, Q
 from django.http import HttpResponse
 
 from apps.projects.models import Project
@@ -15,6 +14,8 @@ UPLOADED_FILES_PATH = 'uploaded_files/'
 class FileNode(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
+    deleted = models.BooleanField(default=False)
+    deleted_on = models.DateTimeField(null=True)
 
     class Meta:
         abstract = True
@@ -33,12 +34,19 @@ class FileNode(models.Model):
 
         return '/'.join(r)
 
+    def delete_fake(self):
+        self.deleted = True
+        self.deleted_on = datetime.datetime.now()
+        self.save()
+
 
 class Directory(FileNode):
     parent_dir = models.ForeignKey("Directory", related_name='subdirs', on_delete=models.CASCADE, blank=True, null=True)
 
     class Meta:
-        unique_together = ("parent_dir", "name")
+        constraints = [
+            models.UniqueConstraint(fields=['parent_dir', 'name'], name='unique_undeleted_directory', condition=Q(deleted=False))
+        ]
 
     def create_subdirectory(self, name, user):  # type: (Directory, str, User) -> Directory
         from apps.projects.helpers import log_activity
@@ -81,7 +89,9 @@ class File(FileNode):
     parent_dir = models.ForeignKey("Directory", related_name='files', on_delete=models.CASCADE, blank=True, null=True)
 
     class Meta:
-        unique_together = ("parent_dir", "name")
+        constraints = [
+            models.UniqueConstraint(fields=['parent_dir', 'name'], name='unique_undeleted_file', condition=Q(deleted=False))
+        ]
 
     def rename(self, new_name, user):  # type: (File, str, User) -> File
         from apps.files_management.helpers import uploaded_file_object_from_string
