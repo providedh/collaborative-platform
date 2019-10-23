@@ -18,26 +18,31 @@ from apps.files_management.models import File, FileVersion, Project, Directory
 import apps.index_and_search.models as es
 
 
-def upload_new_file(uploaded_file, project, parent_dir, user):  # type: (UploadedFile, Project, int, User) -> File
+def upload_file(uploaded_file, project, user, parent_dir=None):  # type: (UploadedFile, Project, User, int) -> File
     # I assume that the project exists, bc few level above we checked if user has permissions to write to it.
 
-    dbfile = File(name=uploaded_file.name, parent_dir_id=parent_dir, project=project, version_number=1)
-    dbfile.save()
-
     try:
-        hash = hash_file(dbfile, uploaded_file)
-        uploaded_file.name = hash
-        file_version = FileVersion(upload=uploaded_file, number=1, hash=hash, file=dbfile, created_by=user)
-        file_version.save()
-    except Exception as e:
-        dbfile.delete()
-        raise e
+        _ = File.objects.get(name=uploaded_file.name, parent_dir_id=parent_dir, project=project, deleted=False)
+    except File.DoesNotExist:
+        dbfile = File(name=uploaded_file.name, parent_dir_id=parent_dir, project=project, version_number=1)
+        dbfile.save()
+
+        try:
+            hash = hash_file(dbfile, uploaded_file)
+            uploaded_file.name = hash
+            file_version = FileVersion(upload=uploaded_file, number=1, hash=hash, file=dbfile, created_by=user)
+            file_version.save()
+        except Exception as e:
+            dbfile.delete()
+            raise e
+        else:
+            log_activity(project, user, "created", file=dbfile)
+            return dbfile
     else:
-        log_activity(project, user, "created", file=dbfile)
-        return dbfile
+        raise Exception(f"File with name {uploaded_file.name} already exist in this directory")
 
 
-def overwrite_existing_file(dbfile, uploaded_file, user):  # type: (File, UploadedFile, User) -> File
+def overwrite_file(dbfile, uploaded_file, user):  # type: (File, UploadedFile, User) -> File
     hash = hash_file(dbfile, uploaded_file)
     latest_file_version = dbfile.versions.filter(number=dbfile.version_number).get()  # type: FileVersion
     if latest_file_version.hash == hash:
@@ -65,15 +70,6 @@ def hash_file(dbfile, uploaded_file):  # type: (File, UploadedFile) -> str
              uploaded_file.read()
     hash = hashlib.sha512(hashed).hexdigest()
     return hash
-
-
-def upload_file(uploaded_file, project, user, parent_dir=None):  # type: (UploadedFile, Project, User, int) -> File
-    try:
-        _ = File.objects.get(name=uploaded_file.name, parent_dir_id=parent_dir, project=project, deleted=False)
-    except File.DoesNotExist:
-        return upload_new_file(uploaded_file, project, parent_dir, user)
-    else:
-        raise Exception(f"File with name {uploaded_file.name} already exist in this directory")
 
 
 def uploaded_file_object_from_string(string, file_name):  # type: (str, str) -> UploadedFile
@@ -172,7 +168,7 @@ def index_file(dbfile, text):  # type: (File, str) -> None
             ).save()
 
 
-def delete_directory_with_contents_fake(directory_id, user):
+def delete_directory_with_contents_fake(directory_id, user):  # type: (int, User) -> None
     child_directories = Directory.objects.filter(parent_dir=directory_id, deleted=False)
 
     for directory in child_directories:
