@@ -31,7 +31,7 @@ def save(request, project_id, file_id):  # type: (HttpRequest, int, int) -> Http
 
             return JsonResponse(response, status=status)
 
-        file = File.objects.get(id=file_id)
+        file = File.objects.get(id=file_id, deleted=False)
         file_version_old = file.version_number
 
         xml_content = annotating_xml_content.xml_content

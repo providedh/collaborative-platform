@@ -70,7 +70,7 @@ def project_files(request, project_id):  # type: (HttpRequest, int) -> JsonRespo
             return search_files_by_person_name(request, project_id, person)
 
         else:
-            files = File.objects.filter(project=project_id).order_by('id')
+            files = File.objects.filter(project=project_id, deleted=False).order_by('id')
 
             response = []
 
@@ -91,7 +91,7 @@ def project_files(request, project_id):  # type: (HttpRequest, int) -> JsonRespo
 @user_has_access()
 def file(request, project_id, file_id):  # type: (HttpRequest, int, int) -> HttpResponse
     if request.method == 'GET':
-        file = File.objects.filter(id=file_id).get()
+        file = File.objects.get(id=file_id, deleted=False)
         response = file.download()
 
         return response
@@ -102,7 +102,7 @@ def file(request, project_id, file_id):  # type: (HttpRequest, int, int) -> Http
 @user_has_access()
 def file_body(request, project_id, file_id):  # type: (HttpRequest, int, int) -> HttpResponse
     if request.method == 'GET':
-        file = File.objects.get(id=file_id)
+        file = File.objects.get(id=file_id, deleted=False)
         file_version = FileVersion.objects.get(file=file, number=file.version_number)
         file_path = file_version.upload.path
 
@@ -122,7 +122,7 @@ def file_body(request, project_id, file_id):  # type: (HttpRequest, int, int) ->
 @user_has_access()
 def file_meta(request, project_id, file_id):  # type: (HttpRequest, int, int) -> HttpResponse
     if request.method == 'GET':
-        file = File.objects.get(id=file_id)
+        file = File.objects.get(id=file_id, deleted=False)
         file_version = FileVersion.objects.get(file=file, number=file.version_number)
         file_path = file_version.upload.path
 
@@ -152,7 +152,7 @@ def file_names(request, project_id, file_id):  # type: (HttpRequest, int, int) -
 @user_has_access()
 def file_annotations(request, project_id, file_id):  # type: (HttpRequest, int, int) -> JsonResponse
     if request.method == 'GET':
-        file = File.objects.get(id=file_id)
+        file = File.objects.get(id=file_id, deleted=False)
         file_version = FileVersion.objects.get(file=file, number=file.version_number)
 
         annotations = get_annotations_from_file_version_body(file_version, NAMESPACES, ANNOTATION_TAGS)
@@ -165,7 +165,7 @@ def file_annotations(request, project_id, file_id):  # type: (HttpRequest, int, 
 @user_has_access()
 def file_people(request, project_id, file_id):  # type: (HttpRequest, int, int) -> JsonResponse
     if request.method == 'GET':
-        file = File.objects.get(id=file_id)
+        file = File.objects.get(id=file_id, deleted=False)
         file_version = FileVersion.objects.get(file=file, number=file.version_number)
 
         annotation_tags = ['persName', 'person', 'name']
@@ -183,7 +183,7 @@ def context_search(request, project_id, text):  # type: (HttpRequest, int, str) 
 
     response = []
     for hit in r:
-        file = File.objects.get(id=hit.id)
+        file = File.objects.get(id=hit.id, deleted=False)
         response.append({
             'file': {
                 'name': file.name,
