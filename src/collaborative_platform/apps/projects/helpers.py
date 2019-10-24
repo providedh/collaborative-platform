@@ -51,7 +51,7 @@ def page_to_json_response(page):  # type: (Page) -> JsonResponse
 
 
 def get_project_contributors(project_id):  # type: (int) -> QuerySet
-    ids = Project.objects.filter(id=project_id).get().contributors.values_list('user', flat=True)
+    ids = Project.objects.get(id=project_id).contributors.values_list('user', flat=True)
     return User.objects.filter(id__in=ids)
 
 

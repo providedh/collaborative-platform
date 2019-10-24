@@ -15,7 +15,7 @@ def search_files_by_person_name(request, project_id, query):  # type: (HttpReque
     for person in r.suggest.ac[0].options:
         person = person.to_dict()['_source']
         if person['project_id'] == project_id:
-            file = File.objects.get(id=person['file_id'])
+            file = File.objects.get(id=person['file_id'], deleted=False)
             response.add((file.name, file.get_path(), file.id))
 
     response = [{
@@ -32,7 +32,7 @@ def search_files_by_content(request, project_id, query):  # type: (HttpRequest, 
 
     response = []
     for esfile in r:
-        dbfile = File.objects.get(id=esfile.id)
+        dbfile = File.objects.get(id=esfile.id, deleted=False)
         response.append({
             'name': dbfile.name,
             'path': dbfile.get_path(),

@@ -21,7 +21,7 @@ def entity_completion(request, project_id, entity_type, query):  # type: (HttpRe
                  entity['_source']['project_id'] == project_id]
     }
     for entry in result['data']:
-        entry['_source']['filepath'] = File.objects.get(id=entry['_source']['file_id']).get_path()
+        entry['_source']['filepath'] = File.objects.get(id=entry['_source']['file_id'], deleted=False).get_path()
 
     return JsonResponse(result)
 

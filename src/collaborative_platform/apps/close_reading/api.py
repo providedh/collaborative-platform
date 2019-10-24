@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, HttpResponse, JsonResponse, HttpResponseNotModified
 
 from apps.files_management.models import File
-from apps.files_management.helpers import upload_file
+from apps.files_management.helpers import overwrite_file
 from apps.files_management.helpers import uploaded_file_object_from_string
 from apps.projects.models import Project
 from apps.views_decorators import objects_exists, user_has_access
@@ -31,7 +31,7 @@ def save(request, project_id, file_id):  # type: (HttpRequest, int, int) -> Http
 
             return JsonResponse(response, status=status)
 
-        file = File.objects.get(id=file_id)
+        file = File.objects.get(id=file_id, deleted=False)
         file_version_old = file.version_number
 
         xml_content = annotating_xml_content.xml_content
@@ -39,9 +39,10 @@ def save(request, project_id, file_id):  # type: (HttpRequest, int, int) -> Http
         uploaded_file = uploaded_file_object_from_string(xml_content, file_name)
 
         project = Project.objects.get(id=project_id)
-        upload_response = upload_file(uploaded_file, project, request.user, file.parent_dir)
+        dbfile = File.objects.get(name=uploaded_file.name, parent_dir_id=file.parent_dir, project=project)
+        file_overwrited = overwrite_file(dbfile, uploaded_file, request.user)
 
-        file_version_new = upload_response.version_number
+        file_version_new = file_overwrited.version_number
 
         if file_version_old == file_version_new:
             status = HttpResponseNotModified.status_code

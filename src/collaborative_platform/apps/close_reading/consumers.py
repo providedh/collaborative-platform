@@ -58,7 +58,7 @@ class AnnotatorConsumer(WebsocketConsumer):
                 self.send(text_data=response)
                 return
 
-            file = File.objects.get(id=file_version.file_id)
+            file = File.objects.get(id=file_version.file_id, deleted=False)
 
             with open(file_version.upload.path) as file_version:
                 xml_content = file_version.read()

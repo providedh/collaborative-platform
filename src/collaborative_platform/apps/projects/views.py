@@ -78,7 +78,7 @@ def settings(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
         if project_edit_form.is_valid():
             project_edit_form.save()
 
-            directory = Directory.objects.get(project=project, parent_dir=None)
+            directory = Directory.objects.get(project=project, parent_dir=None, deleted=False)
 
             if directory.name != project_edit_form.cleaned_data['title']:
                 directory.rename(project.title, request.user)
