@@ -166,19 +166,27 @@ def move(request, move_to):  # type: (HttpRequest, int) -> HttpResponse
 
     for directory_id in data.get('directories', ()):
         dir = Directory.objects.get(id=directory_id, deleted=False)
+
         try:
             dir.move_to(move_to)
         except (ReferenceError, IntegrityError) as e:
-            statuses += [str(e)]
+            statuses.append(str(e))
         else:
             log_activity(project=dir.project, user=request.user, related_dir=dir,
                          action_text="moved {} to {}".format(dir.name, move_to_dir.name))
-            statuses += ["OK"]
+            statuses.append("OK")
+
     for file_id in data.get('files', ()):
         file = File.objects.get(id=file_id, deleted=False)
-        file.move_to(move_to)
-        log_activity(project=file.project, user=request.user, file=file,
-                     action_text="moved file to {}: ".format(move_to_dir.name))
+
+        try:
+            file.move_to(move_to)
+        except (ReferenceError, IntegrityError) as e:
+            statuses.append(str(e))
+        else:
+            log_activity(project=file.project, user=request.user, file=file,
+                         action_text="moved file to {}: ".format(move_to_dir.name))
+            statuses.append('OK')
 
     return JsonResponse(statuses, safe=False)
 
