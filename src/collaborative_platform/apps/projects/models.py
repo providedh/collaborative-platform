@@ -49,8 +49,8 @@ class Activity(models.Model):
 
 
 class ProjectVersion(models.Model):
-    fv_version = models.IntegerField()
-    commit_version = models.IntegerField()
+    fv_version = models.IntegerField(default=0)
+    commit_version = models.IntegerField(default=0)
     date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
