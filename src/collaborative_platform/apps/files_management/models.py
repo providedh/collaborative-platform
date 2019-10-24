@@ -148,7 +148,7 @@ class FileVersion(models.Model):
     creation_date = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='created_fileversions', null=True,
                                    blank=True)
-    message = models.CharField(max_length=255)
+    message = models.CharField(max_length=255, null=True)
 
     class Meta:
         unique_together = ("file", "number")
