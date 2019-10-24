@@ -49,6 +49,7 @@ class Activity(models.Model):
 
 
 class ProjectVersion(models.Model):
+    project = models.ForeignKey(Project, related_name="versions", on_delete=models.CASCADE)
     fv_version = models.IntegerField(default=0)
     commit_version = models.IntegerField(default=0)
     date = models.DateTimeField(auto_now_add=True)
