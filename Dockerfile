@@ -4,7 +4,7 @@ RUN mkdir /code
 WORKDIR /code
 COPY requirements.txt /code/
 RUN apt update
-RUN apt install -y python3-gdal
+RUN apt install -y --no-install-recommends binutils libproj-dev gdal-bin
 RUN pip install -r requirements.txt
 COPY . /code/
 

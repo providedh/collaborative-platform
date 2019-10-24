@@ -2,7 +2,8 @@ version: '3'
 
 services:
   postgres:
-    image: postgres
+    build:
+      ./postgres/
     volumes:
       - db-data:/var/lib/postgresql/data
     ports:
