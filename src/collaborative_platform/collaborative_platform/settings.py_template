@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    'django.contrib.gis',
     'apps.core',
     'apps.files_management',
     'apps.projects',
@@ -95,7 +96,7 @@ WSGI_APPLICATION = 'collaborative_platform.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': 'collaborative_platform',
         'USER': 'collaborative_platform',
         'PASSWORD': 'collapass',
@@ -123,7 +124,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, "..", "..", "static/")
+STATIC_ROOT = os.path.join(BASE_DIR, "..", "..", "static")
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
@@ -133,6 +134,10 @@ STATICFILES_DIRS = [
 # File storage
 MEDIA_ROOT = os.path.join(BASE_DIR, '..', '..', 'media')
 MEDIA_URL = "/media/"
+
+
+# Logging
+LOGS_ROOT = os.path.join(BASE_DIR, '..', '..', 'logs')
 
 
 # ReCaptcha keys
@@ -176,6 +181,8 @@ CELERY_BEAT_SCHEDULE = {
 }
 
 
+# For getting site url from database
+# https://docs.djangoproject.com/en/2.2/ref/contrib/sites/#enabling-the-sites-framework
 SITE_ID = 1
 
 
