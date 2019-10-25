@@ -6,7 +6,8 @@ from django.db import models
 from django.db.models import QuerySet, Q
 from django.http import HttpResponse
 
-from apps.projects.models import Project
+from apps.projects.models import Project, ProjectVersion
+
 
 UPLOADED_FILES_PATH = 'uploaded_files/'
 
@@ -164,3 +165,13 @@ class FileVersion(models.Model):
         response = HttpResponse(content, content_type='application/xml')
         response['Content-Disposition'] = bytes('attachment; filename="{}"'.format(self.file.name), 'utf-8')
         return response
+
+    def save(self, *args, **kwargs):
+        from apps.projects.helpers import create_new_project_version
+
+        created = self.pk is None
+        super(FileVersion, self).save(*args, **kwargs)
+
+        if created:
+            project = self.file.project
+            create_new_project_version(project=project, new_file_version=True)
