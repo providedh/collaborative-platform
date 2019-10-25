@@ -6,7 +6,7 @@ from django.db.models import QuerySet
 from django.http import HttpRequest, JsonResponse
 
 from apps.files_management.models import File, Directory
-from apps.projects.models import Activity, Project
+from apps.projects.models import Activity, Project, ProjectVersion
 
 
 def paginate_page_perpage(request, queryset):  # type: (HttpRequest, QuerySet) -> Page
@@ -75,3 +75,26 @@ def log_activity(project, user, action_text="", file=None,
         a.related_dir_name = related_dir.name
     a.save()
     return a
+
+
+def create_new_project_version(project, new_file_version=False, new_commit=False):
+    project_versions = ProjectVersion.objects.filter(project=project).order_by('-date')
+
+    if not project_versions:
+        new_project_version = ProjectVersion(fv_version=0, commit_version=0, project=project)
+        new_project_version.save()
+
+    else:
+        last_project_version = project_versions[0]
+
+        fv_version = last_project_version.fv_version
+        commit_version = last_project_version.commit_version
+
+        if new_file_version:
+            fv_version += 1
+
+        if new_commit:
+            commit_version += 1
+
+        new_project_version = ProjectVersion(fv_version=fv_version, commit_version=commit_version, project=project)
+        new_project_version.save()

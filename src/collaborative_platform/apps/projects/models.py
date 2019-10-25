@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
-from apps.core.models import Profile
 from django.db import models
+
+from apps.core.models import Profile
 
 
 class Project(models.Model):
@@ -15,6 +16,15 @@ class Project(models.Model):
         from django.core.exceptions import ValidationError
         if self.title == '':
             raise ValidationError('Empty title')
+
+    def save(self, *args, **kwargs):
+        from apps.projects.helpers import create_new_project_version
+
+        created = self.pk is None
+        super(Project, self).save(*args, **kwargs)
+
+        if created:
+            create_new_project_version(self)
 
 
 class Contributor(models.Model):

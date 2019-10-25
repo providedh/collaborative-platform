@@ -42,6 +42,17 @@ class Commit(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     message = models.TextField()
 
+    def save(self, *args, **kwargs):
+        from apps.projects.helpers import create_new_project_version
+
+        created = self.pk is None
+        super(Commit, self).save(*args, **kwargs)
+
+        if created:
+            # TODO: change to self.project, if field 'project' is added to model
+            project = self.fileversions.all()[0].file.project
+            create_new_project_version(project=project, new_commit=True)
+
 
 class Clique(models.Model):
     asserted_name = models.CharField(max_length=255)
