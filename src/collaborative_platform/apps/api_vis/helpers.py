@@ -5,7 +5,8 @@ import apps.index_and_search.models as es
 from django.http import HttpRequest, JsonResponse
 from lxml import etree
 
-from apps.files_management.models import File, FileVersion
+from apps.api_vis.models import Event, Organization, Person, Place
+from apps.files_management.models import File, FileVersion, Project
 
 
 def search_files_by_person_name(request, project_id, query):  # type: (HttpRequest, int, str) -> JsonResponse
@@ -129,3 +130,52 @@ def reformat_attribute(item, namespaces):
     }
 
     return attribute
+
+
+def create_entities_in_database(entities, project, file_version):  # type: (list, Project, FileVersion) -> None
+    for entity in entities:
+        if entity['tag'] == 'person':
+            person, created = Person.objects.get_or_create(
+                project=project,
+                fileversion=file_version,
+                xml_id=entity['id'],
+                name=entity['name'],
+                xml=entity['xml'] if 'xml' in entity else None,
+                context=entity['context'] if 'context' in entity else None,
+                type=entity['tag'],
+                forename=entity['forename'],
+                surname=entity['surname']
+            )
+        elif entity['tag'] == 'org':
+            organisation, created = Organization.objects.get_or_create(
+                project=project,
+                fileversion=file_version,
+                xml_id=entity['id'],
+                name=entity['name'],
+                xml=entity['xml'] if 'xml' in entity else None,
+                context=entity['context'] if 'context' in entity else None,
+                type=entity['tag']
+            )
+        elif entity['tag'] == 'event':
+            event, created = Event.objects.get_or_create(
+                project=project,
+                fileversion=file_version,
+                xml_id=entity['id'],
+                name=entity['name'],
+                xml=entity['xml'] if 'xml' in entity else None,
+                context=entity['context'] if 'context' in entity else None,
+                type=entity['tag'],
+                date=entity['date'] if 'date' in entity else None
+            )
+        elif entity['tag'] == 'place':
+            place, created = Place.objects.get_or_create(
+                project=project,
+                fileversion=file_version,
+                xml_id=entity['id'],
+                name=entity['name'],
+                xml=entity['xml'] if 'xml' in entity else None,
+                context=entity['context'] if 'context' in entity else None,
+                type=entity['tag'],
+                location=entity['location'] if 'location' in entity else None,
+                country=entity['country'] if 'country' in entity else None
+            )

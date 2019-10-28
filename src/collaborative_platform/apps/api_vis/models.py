@@ -25,7 +25,7 @@ class Person(Entity):
 
 
 class Event(Entity):
-    date = models.DateTimeField()
+    date = models.DateTimeField(blank=True, null=True)
 
 
 class Organization(Entity):
