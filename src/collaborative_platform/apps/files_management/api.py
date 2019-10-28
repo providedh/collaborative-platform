@@ -9,6 +9,7 @@ from django.forms import model_to_dict
 from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, JsonResponse, HttpResponseServerError
 from lxml.etree import XMLSyntaxError
 
+from apps.api_vis.helpers import create_entities_in_database
 from apps.files_management.file_conversions.ids_filler import IDsFiller
 from apps.projects.helpers import log_activity, paginate_start_length, page_to_json_response
 from apps.files_management.models import File, FileVersion, Directory
@@ -72,6 +73,8 @@ def upload(request, directory_id):  # type: (HttpRequest, int) -> HttpResponse
                     migrated_string = tei_handler.text.read()
 
                     text, entities = extract_text_and_entities(migrated_string, project.id, dbfile.id)
+
+                    create_entities_in_database(entities)
 
                     uploaded_file = create_uploaded_file_object_from_string(migrated_string, file_name)
 
