@@ -38,6 +38,7 @@ class Place(Entity):
 
 
 class Commit(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
     fileversions = models.ManyToManyField(FileVersion, related_name="commits")
     date = models.DateTimeField(auto_now_add=True)
     message = models.TextField()
@@ -49,12 +50,12 @@ class Commit(models.Model):
         super(Commit, self).save(*args, **kwargs)
 
         if created:
-            # TODO: change to self.project, if field 'project' is added to model
-            project = self.fileversions.all()[0].file.project
+            project = self.project
             create_new_project_version(project=project, new_commit=True)
 
 
 class Clique(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
     asserted_name = models.CharField(max_length=255)
     created_by = models.ForeignKey(User, related_name="cliques", on_delete=models.SET_NULL, blank=True, null=True)
     commit = models.ForeignKey(Commit, related_name="cliques", default=None, null=True, blank=True,
@@ -62,6 +63,7 @@ class Clique(models.Model):
 
 
 class Unification(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
     entity = models.ForeignKey(Entity, related_name="unifications", on_delete=models.DO_NOTHING)
     clique = models.ForeignKey(Clique, related_name="unifications", on_delete=models.DO_NOTHING)
     made_by = models.ForeignKey(User, on_delete=models.DO_NOTHING)
