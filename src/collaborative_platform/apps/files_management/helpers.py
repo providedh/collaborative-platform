@@ -72,7 +72,7 @@ def hash_file(dbfile, uploaded_file):  # type: (File, UploadedFile) -> str
     return hash
 
 
-def uploaded_file_object_from_string(string, file_name):  # type: (str, str) -> UploadedFile
+def create_uploaded_file_object_from_string(string, file_name):  # type: (str, str) -> UploadedFile
     file = BytesIO(string.encode('utf-8'))
 
     uploaded_file = UploadedFile(file=file, name=file_name)

@@ -14,7 +14,7 @@ from apps.projects.helpers import log_activity, paginate_start_length, page_to_j
 from apps.files_management.models import File, FileVersion, Directory
 from apps.views_decorators import objects_exists, user_has_access
 from .file_conversions.tei_handler import TeiHandler
-from .helpers import extract_text_and_entities, index_entities, upload_file, uploaded_file_object_from_string, \
+from .helpers import extract_text_and_entities, index_entities, upload_file, create_uploaded_file_object_from_string, \
     get_directory_content, include_user, index_file, delete_directory_with_contents_fake, overwrite_file
 
 
@@ -73,7 +73,7 @@ def upload(request, directory_id):  # type: (HttpRequest, int) -> HttpResponse
 
                     text, entities = extract_text_and_entities(migrated_string, project.id, dbfile.id)
 
-                    uploaded_file = uploaded_file_object_from_string(migrated_string, file_name)
+                    uploaded_file = create_uploaded_file_object_from_string(migrated_string, file_name)
 
                     dbfile = File.objects.get(name=uploaded_file.name, parent_dir_id=parent_dir, project=project)
                     dbfile = overwrite_file(dbfile, uploaded_file, request.user)

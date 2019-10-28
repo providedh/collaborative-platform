@@ -1,9 +1,10 @@
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, HttpResponse, JsonResponse, HttpResponseNotModified
 
+from apps.files_management.file_conversions.ids_filler import IDsFiller
+from apps.files_management.helpers import create_uploaded_file_object_from_string, overwrite_file, \
+    extract_text_and_entities, index_entities, index_file
 from apps.files_management.models import File
-from apps.files_management.helpers import overwrite_file
-from apps.files_management.helpers import uploaded_file_object_from_string
 from apps.projects.models import Project
 from apps.views_decorators import objects_exists, user_has_access
 
@@ -32,19 +33,26 @@ def save(request, project_id, file_id):  # type: (HttpRequest, int, int) -> Http
             return JsonResponse(response, status=status)
 
         file = File.objects.get(id=file_id, deleted=False)
-        file_version_old = file.version_number
+        version_nr_old = file.version_number
 
         xml_content = annotating_xml_content.xml_content
         file_name = annotating_xml_content.file_name
-        uploaded_file = uploaded_file_object_from_string(xml_content, file_name)
+
+        ids_filler = IDsFiller(xml_content, file_name)
+        is_id_filled = ids_filler.process()
+
+        if is_id_filled:
+            xml_content = ids_filler.text.read()
+
+        uploaded_file = create_uploaded_file_object_from_string(xml_content, file_name)
 
         project = Project.objects.get(id=project_id)
         dbfile = File.objects.get(name=uploaded_file.name, parent_dir_id=file.parent_dir, project=project)
         file_overwrited = overwrite_file(dbfile, uploaded_file, request.user)
 
-        file_version_new = file_overwrited.version_number
+        version_nr_new = file_overwrited.version_number
 
-        if file_version_old == file_version_new:
+        if version_nr_old == version_nr_new:
             status = HttpResponseNotModified.status_code
 
             response = {
@@ -56,12 +64,16 @@ def save(request, project_id, file_id):  # type: (HttpRequest, int, int) -> Http
             return JsonResponse(response, status=status)
 
         else:
+            text, entities = extract_text_and_entities(xml_content, project.id, file_overwrited.id)
+            index_entities(entities)
+            index_file(dbfile, text)
+
             status = HttpResponse.status_code
 
             response = {
                 'status': status,
                 'message': 'File with id: {0} was saved.'.format(file_id),
-                'version': file_version_new,
+                'version': version_nr_new,
                 'data': None
             }
 

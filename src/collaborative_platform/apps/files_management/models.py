@@ -95,7 +95,7 @@ class File(FileNode):
         ]
 
     def rename(self, new_name, user):  # type: (File, str, User) -> File
-        from apps.files_management.helpers import uploaded_file_object_from_string
+        from apps.files_management.helpers import create_uploaded_file_object_from_string
         from apps.projects.helpers import log_activity
 
         old_name = self.name
@@ -111,7 +111,7 @@ class File(FileNode):
                  bytes(contents, encoding='utf-8')
         hash = hashlib.sha512(hashed).hexdigest()
 
-        uf = uploaded_file_object_from_string(contents, hash)
+        uf = create_uploaded_file_object_from_string(contents, hash)
         fv = FileVersion(upload=uf, hash=hash, file=self, number=current_version.number + 1, created_by=user)
         fv.save()
 
