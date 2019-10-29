@@ -175,3 +175,11 @@ class FileVersion(models.Model):
         if created:
             project = self.file.project
             create_new_project_version(project=project, new_file_version=True)
+
+
+class IDsSequence(models.Model):
+    file = models.OneToOneField(File, on_delete=models.CASCADE, primary_key=True)
+    maxPerson = models.IntegerField()
+    maxEvent = models.IntegerField()
+    maxOrg = models.IntegerField()
+    maxPlace = models.IntegerField()
