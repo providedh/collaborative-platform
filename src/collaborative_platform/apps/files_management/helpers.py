@@ -97,7 +97,7 @@ def index_entities(entities):  # type: (List[dict]) -> None
         'place': Place
     }
 
-    for entity in entities:
+    for entity in entities[:]:
         tag = entity.pop('tag')
         es_entity = classes[tag](**entity)
         es_entity.save()
