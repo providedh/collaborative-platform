@@ -12,7 +12,8 @@ class Entity(models.Model):
     xml_id = models.CharField(max_length=255)
     deleted = models.BooleanField(default=False)
     deleted_on = models.DateTimeField(null=True)
-    last_existed_in_version = models.IntegerField(null=True)
+    added_in_version = models.IntegerField()
+    last_existed_in_version = models.IntegerField()
     type = models.CharField(max_length=12)
 
     class Meta:
@@ -27,7 +28,7 @@ class EntityVersion(models.Model):
     context = models.TextField(blank=True, null=True)
 
     class Meta:
-        unique_together = ("fileversion", "xml_id")
+        unique_together = ("fileversion", "entity")
         abstract = True
 
 

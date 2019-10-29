@@ -48,7 +48,8 @@ def save(request, project_id, file_id):  # type: (HttpRequest, int, int) -> Http
         uploaded_file = create_uploaded_file_object_from_string(xml_content, file_name)
 
         project = Project.objects.get(id=project_id)
-        dbfile = File.objects.get(name=uploaded_file.name, parent_dir_id=file.parent_dir, project=project)
+        dbfile = File.objects.get(name=uploaded_file.name, parent_dir_id=file.parent_dir, project=project,
+                                  deleted=False)
         file_overwrited = overwrite_file(dbfile, uploaded_file, request.user)
 
         version_nr_new = file_overwrited.version_number
@@ -66,11 +67,10 @@ def save(request, project_id, file_id):  # type: (HttpRequest, int, int) -> Http
 
         else:
             text, entities = extract_text_and_entities(xml_content, project.id, file_overwrited.id)
-            index_entities(entities)
-            index_file(dbfile, text)
-
             file_version = FileVersion.objects.get(file=file_overwrited, number=file_overwrited.version_number)
             create_entities_in_database(entities, project, file_version)
+            index_entities(entities)
+            index_file(dbfile, text)
 
             status = HttpResponse.status_code
 

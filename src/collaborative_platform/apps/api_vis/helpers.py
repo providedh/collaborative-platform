@@ -5,7 +5,7 @@ import apps.index_and_search.models as es
 from django.http import HttpRequest, JsonResponse
 from lxml import etree
 
-from apps.api_vis.models import Event, Organization, Person, Place
+from apps.api_vis.models import Entity, EventVersion, OrganizationVersion, PersonVersion, PlaceVersion
 from apps.files_management.models import File, FileVersion, Project
 
 
@@ -134,48 +134,57 @@ def reformat_attribute(item, namespaces):
 
 def create_entities_in_database(entities, project, file_version):  # type: (list, Project, FileVersion) -> None
     for entity in entities:
-        if entity['tag'] == 'person':
-            person, created = Person.objects.get_or_create(
+        try:
+            entity_db = Entity.objects.get(
                 project=project,
-                fileversion=file_version,
+                file=file_version.file,
                 xml_id=entity['id'],
-                name=entity['name'],
-                xml=entity['xml'] if 'xml' in entity else None,
-                context=entity['context'] if 'context' in entity else None,
-                type=entity['tag'],
-                forename=entity['forename'],
-                surname=entity['surname']
-            )
-        elif entity['tag'] == 'org':
-            organisation, created = Organization.objects.get_or_create(
-                project=project,
-                fileversion=file_version,
-                xml_id=entity['id'],
-                name=entity['name'],
-                xml=entity['xml'] if 'xml' in entity else None,
-                context=entity['context'] if 'context' in entity else None,
                 type=entity['tag']
             )
-        elif entity['tag'] == 'event':
-            event, created = Event.objects.get_or_create(
+        except Entity.DoesNotExist:
+            entity_db = Entity.objects.create(
                 project=project,
-                fileversion=file_version,
+                file=file_version.file,
                 xml_id=entity['id'],
+                added_in_version=file_version.number,
+                last_existed_in_version=file_version.number,
+                type=entity['tag'],
+            )
+
+        if entity['tag'] == 'person':
+            person_version = PersonVersion.objects.create(
+                entity=entity_db,
+                fileversion=file_version,
                 name=entity['name'],
                 xml=entity['xml'] if 'xml' in entity else None,
                 context=entity['context'] if 'context' in entity else None,
-                type=entity['tag'],
-                date=entity['date'] if 'date' in entity else None
+                forename=entity['forename'],
+                surname=entity['surname'],
+            )
+        elif entity['tag'] == 'org':
+            organisation_version = OrganizationVersion.objects.create(
+                entity=entity_db,
+                fileversion=file_version,
+                name=entity['name'],
+                xml=entity['xml'] if 'xml' in entity else None,
+                context=entity['context'] if 'context' in entity else None,
+            )
+        elif entity['tag'] == 'event':
+            event_version = EventVersion.objects.create(
+                entity=entity_db,
+                fileversion=file_version,
+                name=entity['name'],
+                xml=entity['xml'] if 'xml' in entity else None,
+                context=entity['context'] if 'context' in entity else None,
+                date=entity['date'] if 'date' in entity else None,
             )
         elif entity['tag'] == 'place':
-            place, created = Place.objects.get_or_create(
-                project=project,
+            place_version = PlaceVersion.objects.create(
+                entity=entity_db,
                 fileversion=file_version,
-                xml_id=entity['id'],
                 name=entity['name'],
                 xml=entity['xml'] if 'xml' in entity else None,
                 context=entity['context'] if 'context' in entity else None,
-                type=entity['tag'],
                 location=entity['location'] if 'location' in entity else None,
                 country=entity['country'] if 'country' in entity else None
             )
