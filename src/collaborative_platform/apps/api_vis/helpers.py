@@ -141,6 +141,10 @@ def create_entities_in_database(entities, project, file_version):  # type: (list
                 xml_id=entity['id'],
                 type=entity['tag']
             )
+
+            entity_db.last_existed_in_version = file_version.number
+            entity_db.save()
+
         except Entity.DoesNotExist:
             entity_db = Entity.objects.create(
                 project=project,
