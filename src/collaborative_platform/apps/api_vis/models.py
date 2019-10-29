@@ -8,31 +8,43 @@ from apps.projects.models import Project
 
 class Entity(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
-    fileversion = models.ForeignKey(FileVersion, on_delete=models.CASCADE)
+    file = models.ForeignKey(File, on_delete=models.CASCADE)
     xml_id = models.CharField(max_length=255)
-    name = models.TextField()
-    xml = models.TextField(blank=True, null=True)
-    context = models.TextField(blank=True, null=True)
+    deleted = models.BooleanField(default=False)
+    deleted_on = models.DateTimeField(null=True)
+    last_existed_in_version = models.IntegerField(null=True)
     type = models.CharField(max_length=12)
 
     class Meta:
-        unique_together = ("fileversion", "id")
+        unique_together = ("file", "xml_id")
 
 
-class Person(Entity):
+class EntityVersion(models.Model):
+    entity = models.ForeignKey(Entity, on_delete=models.CASCADE)
+    fileversion = models.ForeignKey(FileVersion, on_delete=models.CASCADE)
+    name = models.TextField()
+    xml = models.TextField(blank=True, null=True)
+    context = models.TextField(blank=True, null=True)
+
+    class Meta:
+        unique_together = ("fileversion", "xml_id")
+        abstract = True
+
+
+class PersonVersion(EntityVersion):
     forename = models.CharField(max_length=255, blank=True, null=True)
     surname = models.CharField(max_length=255, blank=True, null=True)
 
 
-class Event(Entity):
+class EventVersion(EntityVersion):
     date = models.DateTimeField(blank=True, null=True)
 
 
-class Organization(Entity):
+class OrganizationVersion(EntityVersion):
     pass
 
 
-class Place(Entity):
+class PlaceVersion(EntityVersion):
     location = PointField(geography=True, blank=True, null=True)
     country = models.CharField(max_length=255, blank=True, null=True)
 
