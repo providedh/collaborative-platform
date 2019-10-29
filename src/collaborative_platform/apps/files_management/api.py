@@ -74,8 +74,6 @@ def upload(request, directory_id):  # type: (HttpRequest, int) -> HttpResponse
 
                     text, entities = extract_text_and_entities(migrated_string, project.id, dbfile.id)
 
-                    create_entities_in_database(entities)
-
                     uploaded_file = create_uploaded_file_object_from_string(migrated_string, file_name)
 
                     dbfile = File.objects.get(name=uploaded_file.name, parent_dir_id=parent_dir, project=project)
@@ -86,12 +84,15 @@ def upload(request, directory_id):  # type: (HttpRequest, int) -> HttpResponse
                     upload_statuses[i].update(migration_status)
                     index_entities(entities)
                     index_file(dbfile, text)
+                    create_entities_in_database(entities, project, file_version)
+
                     log_activity(dbfile.project, request.user, "File migrated: {} ".format(message), dbfile)
                 else:
                     file.seek(0)
                     text, entities = extract_text_and_entities(file.read(), project.id, dbfile.id)
                     index_entities(entities)
                     index_file(dbfile, text)
+                    create_entities_in_database(entities, project, file_version)
 
             except Exception as exception:
                 upload_status = {'message': str(exception)}

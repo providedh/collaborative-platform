@@ -1,10 +1,11 @@
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, HttpResponse, JsonResponse, HttpResponseNotModified
 
+from apps.api_vis.helpers import create_entities_in_database
 from apps.files_management.file_conversions.ids_filler import IDsFiller
 from apps.files_management.helpers import create_uploaded_file_object_from_string, overwrite_file, \
     extract_text_and_entities, index_entities, index_file
-from apps.files_management.models import File
+from apps.files_management.models import File, FileVersion
 from apps.projects.models import Project
 from apps.views_decorators import objects_exists, user_has_access
 
@@ -67,6 +68,9 @@ def save(request, project_id, file_id):  # type: (HttpRequest, int, int) -> Http
             text, entities = extract_text_and_entities(xml_content, project.id, file_overwrited.id)
             index_entities(entities)
             index_file(dbfile, text)
+
+            file_version = FileVersion.objects.get(file=file_overwrited, number=file_overwrited.version_number)
+            create_entities_in_database(entities, project, file_version)
 
             status = HttpResponse.status_code
 
