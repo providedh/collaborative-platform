@@ -192,3 +192,21 @@ def create_entities_in_database(entities, project, file_version):  # type: (list
                 location=entity['location'] if 'location' in entity else None,
                 country=entity['country'] if 'country' in entity else None
             )
+
+
+def validate_request_parameters(name_type_template, request_data):  # type: (dict, dict) -> (bool, str)
+    message = ""
+    correct = True
+
+    for key in name_type_template:
+        if key not in request_data:
+            message = f"Missing '{key}' parameter in request data."
+            correct = False
+            break
+
+        if type(request_data[key]) is not name_type_template[key]:
+            message = f"Invalid type of '{key}' parameter. Correct type is '{str(name_type_template[key])}'"
+            correct = False
+            break
+
+    return correct, message

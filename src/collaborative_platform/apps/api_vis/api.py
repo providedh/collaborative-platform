@@ -1,16 +1,19 @@
+import json
 import xmltodict
+import apps.index_and_search.models as es
 
 from lxml import etree
 
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse, HttpRequest, HttpResponse
+from django.http import JsonResponse, HttpRequest, HttpResponse, HttpResponseBadRequest
 
-from apps.api_vis.helpers import search_files_by_person_name, search_files_by_content
 from apps.files_management.models import File, FileVersion
 from apps.projects.models import Contributor, Project
 from apps.views_decorators import objects_exists, user_has_access
-from .helpers import get_annotations_from_file_version_body
-import apps.index_and_search.models as es
+
+from .helpers import search_files_by_person_name, search_files_by_content, validate_request_parameters, get_annotations_from_file_version_body
+from .models import Clique, Entity, EventVersion, OrganizationVersion, PersonVersion, PlaceVersion, Unification
+
 
 NAMESPACES = {
     'default': 'http://www.tei-c.org/ns/1.0',
@@ -20,6 +23,14 @@ NAMESPACES = {
 
 ANNOTATION_TAGS = ['date', 'event', 'location', 'geolocation', 'name', 'occupation', 'object', 'org', 'person', 'place',
                    'country', 'time']
+
+
+ENTITY_CLASSES = {
+    'event': EventVersion,
+    'org': OrganizationVersion,
+    'person': PersonVersion,
+    'place': PlaceVersion,
+}
 
 
 @login_required
@@ -194,3 +205,68 @@ def context_search(request, project_id, text):  # type: (HttpRequest, int, str) 
         })
 
     return JsonResponse(response, safe=False)
+
+
+@login_required
+@objects_exists
+# @user_has_access('RW')
+def clique_creation(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
+    if request.method == 'PUT':
+        request_data = json.loads(request.body)
+
+        required_keys = {
+            'name': str,
+            'entities': list,
+            'certainty': str,
+        }
+
+        correct, message = validate_request_parameters(required_keys, request_data)
+
+        if not correct:
+            status = HttpResponseBadRequest.status_code
+
+            response = {
+                'status': status,
+                'message': message,
+            }
+
+            return JsonResponse(response, status=status)
+
+        if len(request_data['entities']) == 0 and request_data['name'] == '':
+            status = HttpResponseBadRequest.status_code
+
+            response = {
+                'status': status,
+                'message': f"Missing name for a clique. Provide 'name' parameter or at least one entity.",
+            }
+
+            return JsonResponse(response, status=status)
+
+        clique_name = request_data['name']
+
+        if clique_name == '':
+            entity = Entity.objects.get(id=request_data['entities'][0])
+            entity_version = ENTITY_CLASSES[entity.type].objects.filter(entity=entity).order_by('-fileversion')[0]
+            clique_name = entity_version.name
+
+        clique = Clique.objects.create(
+            asserted_name=clique_name,
+            created_by=request.user,
+            project_id=project_id,
+        )
+
+        for entity in request_data['entities']:
+            unification = Unification.objects.create(
+                project_id=project_id,
+                entity_id=entity,
+                clique=clique,
+                created_by=request.user,
+                certainty=request_data['certainty'],
+            )
+
+        response = {
+            'name': clique.asserted_name,
+            'id': clique.id,
+        }
+
+        return JsonResponse(response)
