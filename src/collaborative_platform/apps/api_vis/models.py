@@ -83,7 +83,6 @@ class Unification(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     deleted_by = models.ForeignKey(User, related_name="deleted_unifiactions", default=None, on_delete=models.DO_NOTHING, null=True)
     deleted_on = models.DateTimeField(null=True)
-    levenshtein = models.IntegerField()
     certainty = models.CharField(max_length=10)
     commit = models.ForeignKey(Commit, related_name="unifications", default=None, null=True, blank=True,
                                on_delete=models.SET_NULL)

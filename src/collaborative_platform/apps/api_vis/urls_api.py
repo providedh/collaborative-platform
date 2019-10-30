@@ -12,4 +12,5 @@ urlpatterns = [
     path('projects/<int:project_id>/files/<int:file_id>/', api.file),
     path('projects/<int:project_id>/files/', api.project_files),
     path('projects/<int:project_id>/context/<str:text>/', api.context_search),
+    path('projects/<int:project_id>/cliques/', api.clique_creation),
 ]
