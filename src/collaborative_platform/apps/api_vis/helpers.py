@@ -6,7 +6,7 @@ from django.http import HttpRequest, JsonResponse
 from lxml import etree
 
 from apps.api_vis.models import Entity, EventVersion, OrganizationVersion, PersonVersion, PlaceVersion
-from apps.files_management.models import File, FileVersion, Project
+from apps.files_management.models import File, FileVersion, Project, Directory
 
 
 def search_files_by_person_name(request, project_id, query):  # type: (HttpRequest, int, str) -> JsonResponse
@@ -210,3 +210,33 @@ def validate_request_parameters(name_type_template, request_data):  # type: (dic
             break
 
     return correct, message
+
+
+def get_file_id_from_path(project_id, file_path, parent_directory_id=None):  # type: (int, str, int) -> int
+    splitted_path = file_path.split('/')
+
+    if len(splitted_path) == 1:
+        file_name = splitted_path[0]
+        file = File.objects.get(project_id=project_id, parent_dir_id=parent_directory_id, name=file_name)
+
+        return file.id
+
+    else:
+        direcory_name = splitted_path[0]
+        directory = Directory.objects.get(project_id=project_id, parent_dir_id=parent_directory_id, name=direcory_name)
+        rest_of_path = '/'.join(splitted_path[1:])
+
+        return get_file_id_from_path(project_id, rest_of_path, directory.id)
+
+
+def get_entity_from_int_or_dict(request_entity, project_id):
+    if type(request_entity) == int:
+        entity = Entity.objects.get(id=request_entity)
+    else:
+        file_path = request_entity['file_path']
+        xml_id = request_entity['xml_id']
+
+        file_id = get_file_id_from_path(project_id, file_path)
+        entity = Entity.objects.get(file_id=file_id, xml_id=xml_id)
+
+    return entity
