@@ -5,6 +5,7 @@ import apps.index_and_search.models as es
 from django.http import HttpRequest, JsonResponse
 from lxml import etree
 
+from apps.exceptions import BadRequest
 from apps.api_vis.models import Entity, EventVersion, OrganizationVersion, PersonVersion, PlaceVersion
 from apps.files_management.models import File, FileVersion, Project, Directory
 
@@ -194,22 +195,16 @@ def create_entities_in_database(entities, project, file_version):  # type: (list
             )
 
 
-def validate_request_parameters(name_type_template, request_data):  # type: (dict, dict) -> (bool, str)
-    message = ""
-    correct = True
-
+def validate_keys_and_types(name_type_template, request_data, parent_name=None):  # type: (dict, dict, str) -> None
     for key in name_type_template:
         if key not in request_data:
-            message = f"Missing '{key}' parameter in request data."
-            correct = False
-            break
+            if not parent_name:
+                raise BadRequest(f"Missing '{key}' parameter in request data.")
+            else:
+                raise BadRequest(f"Missing '{key}' parameter in {parent_name} argument in request data.")
 
         if type(request_data[key]) is not name_type_template[key]:
-            message = f"Invalid type of '{key}' parameter. Correct type is '{str(name_type_template[key])}'"
-            correct = False
-            break
-
-    return correct, message
+            raise BadRequest(f"Invalid type of '{key}' parameter. Correct type is '{str(name_type_template[key])}'.")
 
 
 def get_file_id_from_path(project_id, file_path, parent_directory_id=None):  # type: (int, str, int) -> int
@@ -222,8 +217,8 @@ def get_file_id_from_path(project_id, file_path, parent_directory_id=None):  # t
         return file.id
 
     else:
-        direcory_name = splitted_path[0]
-        directory = Directory.objects.get(project_id=project_id, parent_dir_id=parent_directory_id, name=direcory_name)
+        directory_name = splitted_path[0]
+        directory = Directory.objects.get(project_id=project_id, parent_dir_id=parent_directory_id, name=directory_name)
         rest_of_path = '/'.join(splitted_path[1:])
 
         return get_file_id_from_path(project_id, rest_of_path, directory.id)
@@ -232,11 +227,22 @@ def get_file_id_from_path(project_id, file_path, parent_directory_id=None):  # t
 def get_entity_from_int_or_dict(request_entity, project_id):
     if type(request_entity) == int:
         entity = Entity.objects.get(id=request_entity)
-    else:
+        return entity
+
+    elif type(request_entity) == dict:
+        required_keys = {
+            'file_path': str,
+            'xml_id': str,
+        }
+
+        validate_keys_and_types(required_keys, request_entity, "entity")
+
         file_path = request_entity['file_path']
         xml_id = request_entity['xml_id']
 
         file_id = get_file_id_from_path(project_id, file_path)
         entity = Entity.objects.get(file_id=file_id, xml_id=xml_id)
+        return entity
 
-    return entity
+    else:
+        raise BadRequest(f"Invalid type of 'entity' parameter. Allowed types is '{str(int)}' and {str(dict)}.")
