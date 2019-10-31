@@ -179,7 +179,7 @@ class FileVersion(models.Model):
 
 class IDsSequence(models.Model):
     file = models.OneToOneField(File, on_delete=models.CASCADE, primary_key=True)
-    maxPerson = models.IntegerField()
-    maxEvent = models.IntegerField()
-    maxOrg = models.IntegerField()
-    maxPlace = models.IntegerField()
+    maxPerson = models.IntegerField(default=0)
+    maxEvent = models.IntegerField(default=0)
+    maxOrg = models.IntegerField(default=0)
+    maxPlace = models.IntegerField(default=0)
