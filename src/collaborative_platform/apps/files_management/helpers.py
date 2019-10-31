@@ -14,7 +14,7 @@ from apps.index_and_search.content_extractor import ContentExtractor
 from apps.index_and_search.entities_extractor import EntitiesExtractor
 from apps.index_and_search.models import Person, Organization, Event, Place
 from apps.projects.helpers import log_activity
-from apps.files_management.models import File, FileVersion, Project, Directory
+from apps.files_management.models import File, FileVersion, Project, Directory, IDsSequence
 import apps.index_and_search.models as es
 
 
@@ -22,7 +22,7 @@ def upload_file(uploaded_file, project, user, parent_dir=None):  # type: (Upload
     # I assume that the project exists, bc few level above we checked if user has permissions to write to it.
 
     try:
-        _ = File.objects.get(name=uploaded_file.name, parent_dir_id=parent_dir, project=project, deleted=False)
+        File.objects.get(name=uploaded_file.name, parent_dir_id=parent_dir, project=project, deleted=False)
     except File.DoesNotExist:
         dbfile = File(name=uploaded_file.name, parent_dir_id=parent_dir, project=project, version_number=1)
         dbfile.save()
@@ -32,6 +32,7 @@ def upload_file(uploaded_file, project, user, parent_dir=None):  # type: (Upload
             uploaded_file.name = hash
             file_version = FileVersion(upload=uploaded_file, number=1, hash=hash, file=dbfile, created_by=user)
             file_version.save()
+            IDsSequence(file=dbfile).save()
         except Exception as e:
             dbfile.delete()
             raise e
