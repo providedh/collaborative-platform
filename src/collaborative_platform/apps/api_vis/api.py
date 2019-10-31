@@ -8,11 +8,12 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpRequest, HttpResponse, HttpResponseBadRequest
 
 from apps.files_management.models import File, FileVersion
-from apps.projects.models import Contributor, Project
+from apps.projects.models import Contributor
 from apps.views_decorators import objects_exists, user_has_access
 
-from .helpers import search_files_by_person_name, search_files_by_content, validate_request_parameters, get_annotations_from_file_version_body
-from .models import Clique, Entity, EventVersion, OrganizationVersion, PersonVersion, PlaceVersion, Unification
+from .helpers import search_files_by_person_name, search_files_by_content, validate_request_parameters, \
+    get_annotations_from_file_version_body, get_entity_from_int_or_dict
+from .models import Clique, EventVersion, OrganizationVersion, PersonVersion, PlaceVersion, Unification
 
 
 NAMESPACES = {
@@ -207,6 +208,7 @@ def context_search(request, project_id, text):  # type: (HttpRequest, int, str) 
     return JsonResponse(response, safe=False)
 
 
+# TODO: uncomment '@user_has_access('RW')' after fix decorator for PUT method
 @login_required
 @objects_exists
 # @user_has_access('RW')
@@ -232,7 +234,7 @@ def clique_creation(request, project_id):  # type: (HttpRequest, int) -> HttpRes
 
             return JsonResponse(response, status=status)
 
-        if len(request_data['entities']) == 0 and request_data['name'] == '':
+        if request_data['name'] == '' and len(request_data['entities']) == 0:
             status = HttpResponseBadRequest.status_code
 
             response = {
@@ -245,7 +247,9 @@ def clique_creation(request, project_id):  # type: (HttpRequest, int) -> HttpRes
         clique_name = request_data['name']
 
         if clique_name == '':
-            entity = Entity.objects.get(id=request_data['entities'][0])
+            request_entity = request_data['entities'][0]
+            entity = get_entity_from_int_or_dict(request_entity, project_id)
+
             entity_version = ENTITY_CLASSES[entity.type].objects.filter(entity=entity).order_by('-fileversion')[0]
             clique_name = entity_version.name
 
@@ -256,9 +260,10 @@ def clique_creation(request, project_id):  # type: (HttpRequest, int) -> HttpRes
         )
 
         for entity in request_data['entities']:
+            entity_id = get_entity_from_int_or_dict(entity, project_id).id
             unification = Unification.objects.create(
                 project_id=project_id,
-                entity_id=entity,
+                entity_id=entity_id,
                 clique=clique,
                 created_by=request.user,
                 certainty=request_data['certainty'],
