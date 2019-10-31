@@ -63,11 +63,11 @@ def upload(request, directory_id):  # type: (HttpRequest, int) -> HttpResponse
                     tei_handler.migrate()
 
                 try:
-                    tei_handler = IDsFiller(tei_handler, file_name)
+                    tei_handler = IDsFiller(tei_handler, file_name, dbfile.pk)
                 except XMLSyntaxError:
                     is_id_filled = False
                 else:
-                    is_id_filled = tei_handler.process()
+                    is_id_filled = tei_handler.process(initial=True)
 
                 if migration or is_id_filled:
                     migrated_string = tei_handler.text.read()

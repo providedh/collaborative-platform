@@ -39,7 +39,7 @@ def save(request, project_id, file_id):  # type: (HttpRequest, int, int) -> Http
         xml_content = annotating_xml_content.xml_content
         file_name = annotating_xml_content.file_name
 
-        ids_filler = IDsFiller(xml_content, file_name)
+        ids_filler = IDsFiller(xml_content, file_name, file_id)
         is_id_filled = ids_filler.process()
 
         if is_id_filled:
