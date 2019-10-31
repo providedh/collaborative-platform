@@ -3,6 +3,7 @@ import io
 from lxml import etree as et
 
 from apps.files_management.file_conversions.tei_handler import TeiHandler
+from apps.files_management.models import IDsSequence
 from apps.index_and_search.entities_extractor import EntitiesExtractor
 
 
@@ -10,7 +11,7 @@ class IDsFiller:
     _tags = ('person', 'place', 'org', 'event')
     _namespaces = {'tei': 'http://www.tei-c.org/ns/1.0', 'xml': 'http://www.w3.org/XML/1998/namespace'}
 
-    def __init__(self, contents, filename):
+    def __init__(self, contents, filename, file_id=None):
         self._maxid = None
         if type(contents) is TeiHandler:
             self.__contents = contents.get_text()
@@ -23,6 +24,7 @@ class IDsFiller:
         self._parsed = et.fromstring(bytes(self.__contents, 'utf-8'))
         filename = filename[:-4] if filename[-4:] == ".xml" else filename
         self.filename = filename.replace(' ', '_')
+        self._file_id = file_id
 
     def __fill_tags(self):
         grouped_tags = EntitiesExtractor.extract_entities_elements(self._parsed)
@@ -45,21 +47,63 @@ class IDsFiller:
             ids = [id.split('-')[-1][:-1] for id in ids]
             self._maxid[tag] = max(map(int, ids)) if ids else 0
 
-    def process(self):
-        self.__find_max_ids()
-        if self.__fill_tags():
-            self.text = io.StringIO(et.tostring(self._parsed, pretty_print=True, encoding='utf-8').decode('utf-8'))
+    def __get_max_ids(self):
+        if self._file_id is None:
+            raise ResourceWarning("No file_id given on initialization, cannot retrieve max_ids from database.")
+        dbo = IDsSequence.objects.get(file_id=self._file_id)  # type: IDsSequence
+        self._maxid = dict(zip(self._tags, (dbo.maxPerson, dbo.maxPlace, dbo.maxOrg, dbo.maxEvent)))
+
+    def __update_max_ids(self):
+        if self._file_id is None:
+            raise ResourceWarning("No file_id given on initialization, cannot retrieve max_ids from database.")
+        dbo = IDsSequence.objects.get(file_id=self._file_id)
+        dbo.maxEvent = self._maxid["event"]
+        dbo.maxPerson = self._maxid["person"]
+        dbo.maxPlace = self._maxid["place"]
+        dbo.maxOrg = self._maxid["org"]
+        dbo.save()
+
+    def __replace_all(self):
+        grouped_tags = EntitiesExtractor.extract_entities_elements(self._parsed)
+
+        original_ids_map = {}
+
+        for tag, elements in grouped_tags.items():
+            for element in elements:
+                org = element.attrib.get("{{{}}}id".format(self._namespaces['xml']))
+                self._maxid[tag] += 1
+                new = "{}_{}-{}".format(tag, self.filename, self._maxid[tag])
+                element.attrib['{{{}}}id'.format(self._namespaces['xml'])] = new
+                original_ids_map[org] = new
+
+        return original_ids_map
+
+    def process(self, initial=False):
+        if initial:
+            self.__get_max_ids()
+            ids_map = self.__replace_all()
+            text = et.tostring(self._parsed, pretty_print=True, encoding='utf-8').decode('utf-8')
+            for old, new in ids_map:
+                text = text.replace(old, new)
+            self.text = io.StringIO(text)
             self.text.seek(io.SEEK_SET)
-
-            if self.__message:
-                self.__message += " "
-
-            self.__message += "Filled in missing ids of entities in file."
-            return True
+            self.__update_max_ids()
         else:
-            self.text = io.StringIO(self.__contents)
-            self.text.seek(io.SEEK_SET)
-            return False  # no change needed
+            self.__get_max_ids()
+            if self.__fill_tags():
+                self.text = io.StringIO(et.tostring(self._parsed, pretty_print=True, encoding='utf-8').decode('utf-8'))
+                self.text.seek(io.SEEK_SET)
+
+                if self.__message:
+                    self.__message += " "
+
+                self.__message += "Filled in missing ids of entities in file."
+                self.__update_max_ids()
+                return True
+            else:
+                self.text = io.StringIO(self.__contents)
+                self.text.seek(io.SEEK_SET)
+                return False  # no change needed
 
     def get_message(self):
         return self.__message
