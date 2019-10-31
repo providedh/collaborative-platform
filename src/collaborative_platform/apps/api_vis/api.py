@@ -2,16 +2,18 @@ import json
 import xmltodict
 import apps.index_and_search.models as es
 
+from json.decoder import JSONDecodeError
 from lxml import etree
 
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpRequest, HttpResponse, HttpResponseBadRequest
 
+from apps.exceptions import BadRequest
 from apps.files_management.models import File, FileVersion
 from apps.projects.models import Contributor
 from apps.views_decorators import objects_exists, user_has_access
 
-from .helpers import search_files_by_person_name, search_files_by_content, validate_request_parameters, \
+from .helpers import search_files_by_person_name, search_files_by_content, validate_keys_and_types, \
     get_annotations_from_file_version_body, get_entity_from_int_or_dict
 from .models import Clique, EventVersion, OrganizationVersion, PersonVersion, PlaceVersion, Unification
 
@@ -214,64 +216,60 @@ def context_search(request, project_id, text):  # type: (HttpRequest, int, str) 
 # @user_has_access('RW')
 def clique_creation(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
     if request.method == 'PUT':
-        request_data = json.loads(request.body)
+        try:
+            request_data = json.loads(request.body)
 
-        required_keys = {
-            'name': str,
-            'entities': list,
-            'certainty': str,
-        }
-
-        correct, message = validate_request_parameters(required_keys, request_data)
-
-        if not correct:
-            status = HttpResponseBadRequest.status_code
-
-            response = {
-                'status': status,
-                'message': message,
+            required_keys = {
+                'name': str,
+                'entities': list,
+                'certainty': str,
             }
 
-            return JsonResponse(response, status=status)
+            validate_keys_and_types(required_keys, request_data)
 
-        if request_data['name'] == '' and len(request_data['entities']) == 0:
-            status = HttpResponseBadRequest.status_code
+            if request_data['name'] == '' and len(request_data['entities']) == 0:
+                raise BadRequest(f"Missing name for a clique. Provide 'name' parameter or at least one entity.")
 
-            response = {
-                'status': status,
-                'message': f"Missing name for a clique. Provide 'name' parameter or at least one entity.",
-            }
+            clique_name = request_data['name']
 
-            return JsonResponse(response, status=status)
+            if clique_name == '':
+                request_entity = request_data['entities'][0]
+                entity = get_entity_from_int_or_dict(request_entity, project_id)
 
-        clique_name = request_data['name']
+                entity_version = ENTITY_CLASSES[entity.type].objects.filter(entity=entity).order_by('-fileversion')[0]
+                clique_name = entity_version.name
 
-        if clique_name == '':
-            request_entity = request_data['entities'][0]
-            entity = get_entity_from_int_or_dict(request_entity, project_id)
-
-            entity_version = ENTITY_CLASSES[entity.type].objects.filter(entity=entity).order_by('-fileversion')[0]
-            clique_name = entity_version.name
-
-        clique = Clique.objects.create(
-            asserted_name=clique_name,
-            created_by=request.user,
-            project_id=project_id,
-        )
-
-        for entity in request_data['entities']:
-            entity_id = get_entity_from_int_or_dict(entity, project_id).id
-            unification = Unification.objects.create(
-                project_id=project_id,
-                entity_id=entity_id,
-                clique=clique,
+            clique = Clique.objects.create(
+                asserted_name=clique_name,
                 created_by=request.user,
-                certainty=request_data['certainty'],
+                project_id=project_id,
             )
 
-        response = {
-            'name': clique.asserted_name,
-            'id': clique.id,
-        }
+            for entity in request_data['entities']:
+                entity_id = get_entity_from_int_or_dict(entity, project_id).id
 
-        return JsonResponse(response)
+                unification = Unification.objects.create(
+                    project_id=project_id,
+                    entity_id=entity_id,
+                    clique=clique,
+                    created_by=request.user,
+                    certainty=request_data['certainty'],
+                )
+
+        except (BadRequest, JSONDecodeError) as exception:
+            status = HttpResponseBadRequest.status_code
+
+            response = {
+                'status': status,
+                'message': str(exception),
+            }
+
+            return JsonResponse(response, status=status)
+
+        else:
+            response = {
+                'name': clique.asserted_name,
+                'id': clique.id,
+            }
+
+            return JsonResponse(response)
