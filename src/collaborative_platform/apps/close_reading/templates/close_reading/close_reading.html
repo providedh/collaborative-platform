@@ -41,83 +41,78 @@
     </section>
     <div class="container-fluid">
       <div class="row justify-content-md-center">
-        <nav class="col-md-2 d-none d-md-block sidebar">
+        <nav id="left-sidebar" class="col-md-2 d-none d-md-block sidebar">
           <button class="btn btn-outline-primary collapsed btn-collapse" type="button" 
                   data-toggle="collapse" data-target="#certaintyList" 
                   aria-expanded="false" aria-controls="certaintyList">
                   Toggle certainty list <span class="onCollapse">></span>
           </button>
           <div class="sidebar-sticky collapse" id="certaintyList">
-            <ul class="nav flex-column">
-              <li class="nav-item">
-                <a class="nav-link active" href="#">
-                  <span data-feather="home"></span>
-                  Dashboard <span class="sr-only">(current)</span>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <span data-feather="file"></span>
-                  Orders
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <span data-feather="shopping-cart"></span>
-                  Products
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <span data-feather="users"></span>
-                  Customers
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <span data-feather="bar-chart-2"></span>
-                  Reports
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <span data-feather="layers"></span>
-                  Integrations
-                </a>
-              </li>
-            </ul>
-
-            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-              <span>Saved reports</span>
-              <a class="d-flex align-items-center text-muted" href="#">
-                <span data-feather="plus-circle"></span>
-              </a>
-            </h6>
-            <ul class="nav flex-column mb-2">
-              <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <span data-feather="file-text"></span>
-                  Current month
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <span data-feather="file-text"></span>
-                  Last quarter
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <span data-feather="file-text"></span>
-                  Social engagement
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <span data-feather="file-text"></span>
-                  Year-end sale
-                </a>
-              </li>
+            <ul class="flex-column">
+              <div class="card w-100">
+                <div class="card-header">
+                  <div class="d-flex justify-content-between">
+                    <div>
+                        <h5 class="card-title d-inline text-dark">Id :</h5>
+                        <i class="text-muted"> 0asd032</i>
+                    </div>
+                      <div>
+                        <h5 class="card-title d-inline text-dark">Target :</h5>
+                        <i class="text-muted"> 123da32</i>
+                      </div>
+                    </div>
+                    <div class="row d-flex px-3 justify-content-between">
+                    <div class="text-muted">
+                        By: <i>Alejandro Rod. (xxx@domain.com)</i>
+                    </div>
+                      <div>
+                        <i class="text-muted">(person)</i>
+                      </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                  <ul class="list-group list-group-flush">
+                  <li class="list-group-item">
+                    <div class="row">
+                      <div class="col-5 text-info">Original value</div>
+                      <div class="col-7"><i>Text</i></div>
+                    </div>
+                  </li>
+                  <li class="list-group-item">
+                    <div class="row">
+                      <div class="col-5 text-info">Proposed value</div>
+                      <div class="col-7"><i>Text</i></div>
+                    </div>
+                  </li>
+                  <li class="list-group-item">
+                    <div class="row">
+                      <div class="col-5 text-info">Certainty</div>
+                      <div class="col-7"><i>Text</i></div>
+                    </div>
+                  </li>
+                  <li class="list-group-item">
+                    <div class="row">
+                      <div class="col-5 text-info">Uncertainty type</div>
+                      <div class="col-7"><i>Text</i></div>
+                    </div>
+                  </li>
+                  <li class="list-group-item">
+                    <div class="row">
+                      <div class="col-5 text-info">Attribute</div>
+                      <div class="col-7"><i>Text</i></div>
+                    </div>
+                  </li>
+                  <li class="list-group-item">
+                    <div class="row">
+                      <div class="col-5 text-info">Comments</div>
+                      <div class="col-12">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    </div>
+                  </li>
+                </ul>
+                  <a href="#" class="card-link">Scroll to position</a>
+                  <a href="#" class="card-link">Add annotation</a>
+                </div>
+              </div>
             </ul>
           </div>
         </nav>

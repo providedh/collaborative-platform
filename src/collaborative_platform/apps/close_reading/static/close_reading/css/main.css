@@ -791,3 +791,10 @@ div#annotator-root[display-uncertainty="false"] section#editor certainty{
   font-size: .75rem;
   text-transform: uppercase;
 }
+
+#certaintyList > ul{padding-left: 0;}
+#certaintyList .list-group-item{padding:0;}
+
+@media (min-width: 1800px) {
+    #left-sidebar{max-width: 25%;}
+}
