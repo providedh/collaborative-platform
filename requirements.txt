@@ -48,3 +48,7 @@ django-autocomplete-light==3.4.1
 django-cleanup==4.0.0
 
 asgiref==3.2.0
+
+# For NLP
+pandas
+tqdm
