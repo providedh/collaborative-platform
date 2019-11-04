@@ -147,7 +147,7 @@
               <h3 class="break-word">
     {#             Split file name into two parts: with and without extension#}
                 <span>
-                  <span id="fileTitleEditable">{{ file.name }}</span>
+                  <span id="fileTitleEditable" title="{{ file.name }}">{{ file.name |truncatechars:40}}</span>
                   <a id='versionLink'  class='scripted'>Version: {{ file.version_number }}</a>
     {#              % if file_revision:#}
     {#                <small>&nbsp;${file_revision | h}</small>#}

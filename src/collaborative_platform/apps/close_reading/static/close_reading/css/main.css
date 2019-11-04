@@ -1,4 +1,4 @@
-button span{
+button span, #alert{
     pointer-events: none;
 }
 
