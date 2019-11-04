@@ -11,7 +11,7 @@
 {% endblock %}
 
 {% block content %}
-  <div id="annotator-root" class="container container-xxl" 
+  <div id="annotator-root" class="" 
       color-uncertainty="true" 
       display-uncertainty="true" 
       display-annotations="true" 
@@ -39,300 +39,182 @@
         <option value="time">Time</option>
       </select>
     </section>
-    <div class="row justify-content-center">
-      <div id="toolbar-container" class="col-auto">
-        <section id="toolbar">
-          <div id="alert" class="hide" role="alert"></div>
-          <div class="card card-body">
-          <h2 class="break-word">
-{#             Split file name into two parts: with and without extension#}
-            <span>
-              <span id="fileTitleEditable">{{ file.name }}</span>
-              <a id='versionLink'  class='scripted'>Version: {{ file.version_number }}</a>
-{#              % if file_revision:#}
-{#                <small>&nbsp;${file_revision | h}</small>#}
-{#              % endif#}
-            </span>
-            <button class="btn btn-outline-primary btn-sm" href="" id="saveFile">Save current file</button>
-          </h2>
-          <div id="history-container">
-            <div id="history">
-              <span id="history-legend">Uncertainty</span>
-              <div>
-                <canvas></canvas>
-                <hr/>
-                <div id="versions"></div>
-                <div id="version-toltip"></div>
-                <div id="history-popup">
-              </div>
-            </div>
+    <div class="container-fluid">
+      <div class="row justify-content-md-center">
+        <nav class="col-md-2 d-none d-md-block sidebar">
+          <button class="btn btn-outline-primary collapsed btn-collapse" type="button" 
+                  data-toggle="collapse" data-target="#certaintyList" 
+                  aria-expanded="false" aria-controls="certaintyList">
+                  Toggle certainty list <span class="onCollapse">></span>
+          </button>
+          <div class="sidebar-sticky collapse" id="certaintyList">
+            <ul class="nav flex-column">
+              <li class="nav-item">
+                <a class="nav-link active" href="#">
+                  <span data-feather="home"></span>
+                  Dashboard <span class="sr-only">(current)</span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">
+                  <span data-feather="file"></span>
+                  Orders
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">
+                  <span data-feather="shopping-cart"></span>
+                  Products
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">
+                  <span data-feather="users"></span>
+                  Customers
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">
+                  <span data-feather="bar-chart-2"></span>
+                  Reports
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">
+                  <span data-feather="layers"></span>
+                  Integrations
+                </a>
+              </li>
+            </ul>
+
+            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+              <span>Saved reports</span>
+              <a class="d-flex align-items-center text-muted" href="#">
+                <span data-feather="plus-circle"></span>
+              </a>
+            </h6>
+            <ul class="nav flex-column mb-2">
+              <li class="nav-item">
+                <a class="nav-link" href="#">
+                  <span data-feather="file-text"></span>
+                  Current month
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">
+                  <span data-feather="file-text"></span>
+                  Last quarter
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">
+                  <span data-feather="file-text"></span>
+                  Social engagement
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">
+                  <span data-feather="file-text"></span>
+                  Year-end sale
+                </a>
+              </li>
+            </ul>
           </div>
-          </div>
-          </div>
-            <div class="card card-body">
-              <div id="visual-options" class="d-flex justify-content-between">
-                <button id="display-annotations" class="btn btn-outline-primary btn-sm active" data-toggle="button" aria-pressed="true" pressed="true" autocomplete="false">
-                  <span class="active-hide">Show</span><span class="active-show">Hide</span> annotations
-                </button>
-                <button id="display-uncertainty" class="btn btn-outline-primary btn-sm active" data-toggle="button" aria-pressed="true" pressed="true" autocomplete="false">
-                  <span class="active-hide">Show</span><span class="active-show">Hide</span> uncertainty
-                </button>
-                <button id="color-annotations" class="btn btn-outline-primary btn-sm active" data-toggle="button" aria-pressed="true" pressed="true" autocomplete="false">
-                  <span class="active-hide">Show</span><span class="active-show">Hide</span> color for annotations
-                </button>
-                <button id="color-uncertainty" class="btn btn-outline-primary btn-sm active" data-toggle="button" aria-pressed="true" pressed="true" autocomplete="false">
-                  <span class="active-hide">Show</span><span class="active-show">Hide</span> color for uncertainty
-                </button>
-                <button id="show-legend" class="btn btn-outline-primary btn-sm active" data-toggle="collapse" href="#legend" role="button" aria-expanded="false" aria-controls="legend">
-                  <span class="collapse-show">Hide</span><span class="collapsed-show">Show</span> legend
-                </button> 
-              </div>
-              <div class="collapse" id="example">
-                <hr>
-                <div class="toolbarRow" id="toolbar-controls">
-                    <span class="toolbar-control" id="annotation-options">
-                      <ul class="nav nav-tabs" id="myTab" role="tablist">
-                        <li class="nav-item">
-                          <a class="nav-link active" id="annotating-uncertainty" data-toggle="tab" href="#uncertainty-tab" role="tab" aria-controls="uncertainty-tab" aria-selected="true">Add uncertainty annotations</a>
-                        </li>
-                        <li class="nav-item">
-                          <a class="nav-link" id="annotating-tei" data-toggle="tab" href="#tei-tab" role="tab" aria-controls="tei-tab" aria-selected="false">Add TEI annotations</a>
-                        </li>
-                      </ul>
-                      <div class="tab-content" id="annotation-form">
-                        <div class="tab-pane show active" id="uncertainty-tab" role="tabpanel" aria-labelledby="annotating-uncertainty">
-                          <div class="form-row">
-                            <div class="col">
-                              <label for="category">Category of uncertainty 
-                                <span class="help-tooltip" help="This is the category." />
-                              </label>
-                              <select class="form-control form-control-sm" id='category'>
-                                <option class="ignorance" value="ignorance">Ignorance</option>
-                                <option class="credibility" value="credibility">Credibility</option>
-                                <option class="imprecision" value="imprecision">Imprecision</option>
-                                <option class="incompleteness" value="incompleteness">Incompleteness</option>
-                              </select>
-                            </div>
-                            <div class="col">
-                              <label for="locus">Locus
-                                <span class="help-tooltip" help="This is the locus." />
-                              </label>
-                              <select class="form-control form-control-sm" id='locus'>
-                                <option value="value">Value</option>
-                                <option value="name">Name</option>
-                              </select>
-                            </div>
-                            <div class="col">
-                              <div id="tag-name-input">
-                                <label for="tag-name">Tag name
-                                  <span class="help-tooltip" help="This is the type of tag to which the annotation refers." />
-                                </label>
-                                <select class="form-control form-control-sm" id='tag-name'>
-                                  <option value="date">Date</option>
-                                  <option value="event">Event</option>
-                                  <option value="geolocation">geolocation</option>
-                                  <option value="name">Name</option>
-                                  <option value="occupation">Occupation</option>
-                                  <option value="object">Object</option>
-                                  <option value="org">Org</option>
-                                  <option value="person">Person</option>
-                                  <option value="country">country</option>
-                                  <option value="time">Time</option>
-                                </select>
-                              </div>
-                            </div>
-                            <div class="col">
-                              <label for="attribute-name">Attribute name 
-                                <span class="help-tooltip" help="
-                                  Use this optional parameter to annotate an attribute. <br>
-                                  The 'sameAs' attribute is used to create a correspondence
-                                  with another entity (an input will appear to allow selecting the second entity).
-                                " />
-                              </label>
-                              <input type="text" id="attribute-name">
-                            </div>
-                          </div>
-                          <div class="form-row">
-                            <div class="col">
-                              <label for="selection">Text selection
-                                <span class="help-tooltip" help="This is the selected text." />
-                              </label>
-                              <input readonly type="text" id="selection">
-                            </div>
-                            <div class="col">
-                              <label for="asserted-value">Asserted value
-                                <span class="help-tooltip" help="This is the proposed value." />
-                              </label>
-                              <div id="asserted-value-container">
-                                <input id="asserted-value" class="input">
-                              </div>
-                            </div>
-                            <div class="col">
-                              <label for="cert-level">Certainty
-                                <span class="help-tooltip" help="This is the level of certainty on the proposed value." />
-                              </label>
-                              <select class="form-control form-control-sm" id='cert-level'>
-                                <option value="unknown">Unknown</option>
-                                <option value="high">High</option>
-                                <option value="medium">Medium</option>
-                                <option value="low">Low</option>
-                              </select>
-                            </div>
-                          </div>
-                          <div class="form-row">
-                            <div class="col">
-                              <label for="description">Description
-                                <span class="help-tooltip" help="This is an optional description." />
-                              </label>
-                              <input type="text" id="description">
-                            </div>
-                            <div class="col">
-                              <span id="references-container">
-                                <label for="references-autocomplete">References
-                                  <span class="help-tooltip" help="This is the referenced tag." />
-                                </label>
-                                <div class="autocomplete">
-                                  <input type="text" id="references-autocomplete">
-                                  <input type="text" id="references">
-                                </div>
-                              </span>
-                            </div>
-                            <div class="col d-flex justify-content-end align-items-end">
-                              <button class="btn btn-outline-success" id="create-uncertainty-annotation">Create</button>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="tab-pane" id="tei-tab" role="tabpanel" aria-labelledby="annotating-tei">
-                          <div class="form-row">
-                            <div class="col">
-                              <label for="tei-tag-name">Tag name
-                                <span class="help-tooltip" help="This is the type TEI tag to use for annotating." />
-                              </label>
-                                <select class="form-control form-control-sm" id='tei-tag-name'>
-                                  <option value="date">Date</option>
-                                  <option value="event">Event</option>
-                                  <option value="geolocation">geolocation</option>
-                                  <option value="name">Name</option>
-                                  <option value="occupation">Occupation</option>
-                                  <option value="object">Object</option>
-                                  <option value="org">Org</option>
-                                  <option value="person">Person</option>
-                                  <option value="country">country</option>
-                                  <option value="time">Time</option>
-                                </select>
-                            </div>
-                            <div class="col">
-                              <p><br>Annotate TEI without a sense of certainty attached to it.</p>
-                            </div>
-                            <div class="col d-flex justify-content-end align-items-end">
-                              <button class="btn btn-outline-success" id="create-tei-annotation">Create</button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <!-- 
-                      <input class="nav-link active" id="uncertainty-a" data-toggle="tab" role="tab" aria-controls="uncertainty-tab"
-                      aria-selected="true" type="radio" name="annotation" value="uncertainty" checked> Annotate Uncertainty
-                      <input class="nav-link" id="tei-a" data-toggle="tab" role="tab" aria-controls="tei-tab"
-                      aria-selected="false" type="radio" name="annotation" value="tei"> Annotate TEI -->
-                    </span>
-                </div>
-              </div>
-              <div class="d-flex justify-content-center toogle-button">
-                <div class="relative-group">
-                <a class="btn btn-primary btn-sm collapsed" data-toggle="collapse" href="#example" role="button" aria-expanded="false" aria-controls="example">
-                  <span class="collapse-show">
-                    Hide controls
-                  </span>
-                  <span class="collapsed-show">
-                    Show controls
-                  </span>
-                </a> 
-              </div>
+        </nav>
+        <div id="legend" class="col-md-2 d-none d-md-block legend">
+          <button class="btn btn-outline-primary collapsed btn-collapse" type="button" 
+                  data-toggle="collapse" data-target="#legend-sidebar" 
+                  aria-expanded="false" aria-controls="legend-sidebar">
+                  <span class="onCollapse"><</span> Toggle legend
+          </button>
+          <div class="sidebar-sticky collapse" id="legend-sidebar">
+            <ul class="nav flex-column">
+              <b>Annotation color scheme</b><br/>
+              <span class="teiLegendElement" id="date">
+                  <span class="color" id=""></span> <i class="fas fa-calendar-alt"></i> Date
+              </span>
+              <span class="teiLegendElement" id="event">
+                <span class="color" id=""></span> <i class="fas fa-calendar-check"></i> Event
+              </span>
+              <span class="teiLegendElement" id="location">
+                <span class="color" id=""></span> <i class="fas fa-map-marked-alt"></i> Location, geolocation
+              </span>
+              <span class="teiLegendElement" id="name">
+                <span class="color" id=""></span> <i class="fas fa-user-tag"></i> Name
+              </span>
+              <span class="teiLegendElement" id="occupation">
+                <span class="color" id=""></span> <i class="fas fa-briefcase"></i> Occupation
+              </span>
+              <span class="teiLegendElement" id="object">
+                <span class="color" id=""></span> <i class="fas fa-box"></i> Object
+              </span>
+              <span class="teiLegendElement" id="org">
+                <span class="color" id=""></span> <i class="fas fa-building"></i> Org
+              </span>
+              <span class="teiLegendElement" id="person">
+                <span class="color" id=""></span> <i class="fas fa-user"></i> Person
+              </span>
+              <span class="teiLegendElement" id="place">
+                <span class="color" id=""></span> <i class="fas fa-map"></i> Place, country
+              </span>
+              <span class="teiLegendElement" id="time">
+                <span class="color" id=""></span> <i class="fas fa-clock"></i> Time
+              </span>
+              <b>Uncertainty notion color scheme</b><br/>
+              <span class="teiLegendElement">
+                <span class="color uncertainty" author="me" title="unknown"
+        category="ignorance" cert="unknown"></span>
+                <span class="color uncertainty" author="me" title="low"
+        category="ignorance" cert="low"></span>
+                <span class="color uncertainty" author="me" title="medium"
+        category="ignorance" cert="medium"></span>
+                <span class="color uncertainty" author="me" title="high"
+        category="ignorance" cert="high"></span>
+                Ignorance
+              </span>
+              <span class="teiLegendElement">
+                <span class="color uncertainty" author="me" title="unknown"
+        category="credibility" cert="unknown"></span>
+                <span class="color uncertainty" author="me" title="low"
+        category="credibility" cert="low"></span>
+                <span class="color uncertainty" author="me" title="medium"
+        category="credibility" cert="medium"></span>
+                <span class="color uncertainty" author="me" title="high"
+        category="credibility" cert="high"></span>
+                Credibility
+              </span>
+              <span class="teiLegendElement">
+                <span class="color uncertainty" author="me" title="unknown"
+        category="imprecision" cert="unknown"></span>
+                <span class="color uncertainty" author="me" title="low"
+        category="imprecision" cert="low"></span>
+                <span class="color uncertainty" author="me" title="medium"
+        category="imprecision" cert="medium"></span>
+                <span class="color uncertainty" author="me" title="high"
+        category="imprecision" cert="high"></span>
+                Imprecision
+              </span>
+              <span class="teiLegendElement">
+                <span class="color uncertainty" author="me" title="unknown"
+        category="incompleteness" cert="unknown"></span>
+                <span class="color uncertainty" author="me" title="low"
+        category="incompleteness" cert="low"></span>
+                <span class="color uncertainty" author="me" title="medium"
+        category="incompleteness" cert="medium"></span>
+                <span class="color uncertainty" author="me" title="high"
+        category="incompleteness" cert="high"></span>
+                Incompleteness
+              </span>
+            </ul>
           </div>
         </div>
-      </section>
-        <div class="collapse show" id="legend">
-          <b>Annotation color scheme</b><br/>
-          <span class="teiLegendElement" id="date">
-              <span class="color" id=""></span> <i class="fas fa-calendar-alt"></i> Date
-          </span>
-          <span class="teiLegendElement" id="event">
-            <span class="color" id=""></span> <i class="fas fa-calendar-check"></i> Event
-          </span>
-          <span class="teiLegendElement" id="location">
-            <span class="color" id=""></span> <i class="fas fa-map-marked-alt"></i> Location, geolocation
-          </span>
-          <span class="teiLegendElement" id="name">
-            <span class="color" id=""></span> <i class="fas fa-user-tag"></i> Name
-          </span>
-          <span class="teiLegendElement" id="occupation">
-            <span class="color" id=""></span> <i class="fas fa-briefcase"></i> Occupation
-          </span>
-          <span class="teiLegendElement" id="object">
-            <span class="color" id=""></span> <i class="fas fa-box"></i> Object
-          </span>
-          <span class="teiLegendElement" id="org">
-            <span class="color" id=""></span> <i class="fas fa-building"></i> Org
-          </span>
-          <span class="teiLegendElement" id="person">
-            <span class="color" id=""></span> <i class="fas fa-user"></i> Person
-          </span>
-          <span class="teiLegendElement" id="place">
-            <span class="color" id=""></span> <i class="fas fa-map"></i> Place, country
-          </span>
-          <span class="teiLegendElement" id="time">
-            <span class="color" id=""></span> <i class="fas fa-clock"></i> Time
-          </span>
-          <b>Uncertainty notion color scheme</b><br/>
-          <span class="teiLegendElement">
-            <span class="color uncertainty" author="me" title="unknown"
-    category="ignorance" cert="unknown"></span>
-            <span class="color uncertainty" author="me" title="low"
-    category="ignorance" cert="low"></span>
-            <span class="color uncertainty" author="me" title="medium"
-    category="ignorance" cert="medium"></span>
-            <span class="color uncertainty" author="me" title="high"
-    category="ignorance" cert="high"></span>
-            Ignorance
-          </span>
-          <span class="teiLegendElement">
-            <span class="color uncertainty" author="me" title="unknown"
-    category="credibility" cert="unknown"></span>
-            <span class="color uncertainty" author="me" title="low"
-    category="credibility" cert="low"></span>
-            <span class="color uncertainty" author="me" title="medium"
-    category="credibility" cert="medium"></span>
-            <span class="color uncertainty" author="me" title="high"
-    category="credibility" cert="high"></span>
-            Credibility
-          </span>
-          <span class="teiLegendElement">
-            <span class="color uncertainty" author="me" title="unknown"
-    category="imprecision" cert="unknown"></span>
-            <span class="color uncertainty" author="me" title="low"
-    category="imprecision" cert="low"></span>
-            <span class="color uncertainty" author="me" title="medium"
-    category="imprecision" cert="medium"></span>
-            <span class="color uncertainty" author="me" title="high"
-    category="imprecision" cert="high"></span>
-            Imprecision
-          </span>
-          <span class="teiLegendElement">
-            <span class="color uncertainty" author="me" title="unknown"
-    category="incompleteness" cert="unknown"></span>
-            <span class="color uncertainty" author="me" title="low"
-    category="incompleteness" cert="low"></span>
-            <span class="color uncertainty" author="me" title="medium"
-    category="incompleteness" cert="medium"></span>
-            <span class="color uncertainty" author="me" title="high"
-    category="incompleteness" cert="high"></span>
-            Incompleteness
-          </span>
+
+        <main role="main" class="col-md-8 col-lg-8 px-4"> 
+          <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2">Dashboard</h1>
+          </div>
+        </main>
       </div>
-      </div>
-      <section id="editor" class="col-auto">
-      </section>
     </div>
   </div>
 
@@ -340,6 +222,12 @@
     window.project_id = "{{ project_id }}";
     window.file_id = "{{ file_id }}";
     window.file_version = "{{ file.version_number }}";
+
+    document.addEventListener("DOMContentLoaded", function(){
+       document.getElementById('toggle-uncertainty').addEventListener('click', evt=>{
+           document.getElementById('certainty-list').classList.toggle('expanded');
+       });
+    });
   </script>
   <script src="https://d3js.org/d3.v5.min.js"></script>
   <script type="module" src="{% static 'close_reading/js/app.js' %}"></script>

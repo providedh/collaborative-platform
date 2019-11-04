@@ -2,6 +2,8 @@ button span{
     pointer-events: none;
 }
 
+#versionLink{font-size: 0.5em;}
+
 #editor{
     margin-top: 225px;
 }
@@ -10,7 +12,7 @@ button span{
     margin-top: 265px;
 }
 
-#annotator-root{max-width: 23.7cm;}
+/*#annotator-root{max-width: 23.7cm;}*/
 #versionLink:first-of-type{font-size: 0.7em;}
 .break-word {
   display: flex;
@@ -105,23 +107,6 @@ page {
 }
 
 #asserted-value-input-options{display: none;}
-
-div#legend{
-    /*display: none;*/
-    font-size: small;
-    position:fixed;
-    margin-left: 2em;
-    margin-top: 0;
-    line-height: 1.8em;
-    z-index:500;
-    width:300px;
-    min-height:8em;
-    line-height: 1.4em;
-    padding: 7px;
-    background-color:white;
-    box-shadow:0 1px 3px 1px rgba(60,64,67,.15);
-    right: 2em;
-}
 
 div#legend i.fas{
     color:grey;
@@ -712,3 +697,96 @@ div#annotator-root[color-uncertainty="false"] section#editor certainty{
 div#annotator-root[display-uncertainty="false"] section#editor certainty{
     background-color: white !important;
 } 
+
+/*----------------------------------------*/
+
+.sidebar{
+  position: fixed;
+  top: 225px;
+  bottom: 0;
+  left: 0;
+  z-index: 100; /* Behind the navbar */
+  padding: 8px 0 0; /* Height of navbar */
+}
+
+.btn-collapse{
+  display: block;
+  width: 100%;
+}
+
+.btn-collapse.collapsed{
+  display: initial;
+  width: initial;
+}
+
+.btn-collapse .onCollapse{
+  display: none;
+}
+
+.btn-collapse.collapsed .onCollapse{
+  display: initial;
+}
+
+.sidebar > div, 
+.legend > div{
+  box-shadow: inset -1px 1px 0 rgba(0, 0, 0, .1);
+  background-color: var(--light);
+  text-align: initial;
+}
+
+.legend > div{
+  box-shadow: inset 1px -1px 0 rgba(0, 0, 0, .1);
+  height: 450px;
+}
+
+.legend > div{padding-left: 15px;}
+
+.legend {
+  position: fixed;
+  top: 225px;
+  bottom: 0;
+  right: 0;
+  z-index: 100; /* Behind the navbar */
+  padding: 8px 0 0; /* Height of navbar */
+  text-align: end;
+}
+
+.sidebar-sticky {
+  position: relative;
+  top: 0;
+  height: calc(100vh - 48px);
+  padding-top: .5rem;
+  overflow-x: hidden;
+  overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+}
+
+@supports ((position: -webkit-sticky) or (position: sticky)) {
+  .sidebar-sticky {
+    position: -webkit-sticky;
+    position: sticky;
+  }
+}
+
+.sidebar .nav-link {
+  font-weight: 500;
+  color: #333;
+}
+
+.sidebar .nav-link .feather {
+  margin-right: 4px;
+  color: #999;
+}
+
+.sidebar .nav-link.active {
+  color: #007bff;
+}
+
+.sidebar .nav-link:hover .feather,
+.sidebar .nav-link.active .feather {
+  color: inherit;
+}
+
+.sidebar-heading {
+  font-size: .75rem;
+  text-transform: uppercase;
+}
