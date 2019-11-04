@@ -336,8 +336,8 @@ class Annotator:
                 self.__json['attribute_name'] == 'sameAs' and self.__json['asserted_value'] != '':
             self.__fragment_annotated, annotation_ids = self.__add_tag(self.__fragment_to_annotate, self.__json["tag"],
                                                                        uncertainty=True)
-            self.__certainty_to_add = self.__create_certainty_description_for_referece(self.__json, annotation_ids,
-                                                                                       self.__annotator_xml_id)
+            self.__certainty_to_add = self.__create_certainty_description_for_attribute(self.__json, annotation_ids,
+                                                                                        self.__annotator_xml_id)
             self.__annotator_to_add = self.__create_annotator(self.__annotator_xml_id)
 
         # 6.Add attribute to tag
@@ -447,30 +447,9 @@ class Annotator:
     def __create_certainty_description_for_attribute(self, json, annotation_ids, user_uuid):
         target = u" ".join(annotation_ids)
 
-        certainty = u'<certainty category="{0}" locus="{1}" cert="{2}" resp="#{3}" target="{4}" ' \
-                    u'assertedValue="{5}"/>'.format(json['category'], json['attribute_name'], json['certainty'],
-                                             user_uuid, target, json['asserted_value'])
-
-        new_element = etree.fromstring(certainty)
-
-        if json["description"]:
-            description = etree.Element("desc")
-            description.text = json["description"]
-
-            new_element.append(description)
-
-        return new_element
-
-    def __create_certainty_description_for_referece(self, json, annotation_ids, user_uuid):
-        target = u" ".join(annotation_ids)
-
-        asserted_value = json['asserted_value']
-
-
-
-        certainty = u'<certainty category="{0}" locus="{1}" cert="{2}" resp="#{3}" target="{4}" match="@sameAs" ' \
-                    u'assertedValue="{5}"/>'.format(json['category'], json['locus'], json['certainty'], user_uuid,
-                                                    target, json['asserted_value'])
+        certainty = f'<certainty category="{json["category"]}" locus="{json["locus"]}" cert="{json["certainty"]}" ' \
+                    f'resp="#{user_uuid}" target="{target}" match="@{json["attribute_name"]}"' \
+                    f'assertedValue="{json["asserted_value"]}"/>'
 
         new_element = etree.fromstring(certainty)
 
