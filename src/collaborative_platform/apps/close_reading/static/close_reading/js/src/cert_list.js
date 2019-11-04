@@ -115,7 +115,7 @@ let CertaintyList = function(args){
 		if(document.getElementById('toggle-panel').classList.contains('collapsed'))
 			document.getElementById('toggle-panel').click();
 
-		const target = e.target.attributes['annotation-target'].value;
+		const target = e.target.attributes['annotation-target'].value.split('#')[1];
 
 		const args = {
 			selection: {
@@ -139,7 +139,7 @@ let CertaintyList = function(args){
                     let desc = '';
                     if(annotation.attributes.hasOwnProperty('desc'))
                     	desc = annotation.attributes['desc'].value;
-                    
+
                     const data = {
                     	id: '98',//annotation.attributes['id'].value,
                     	target: annotation.attributes['target'].value,
