@@ -130,25 +130,24 @@ let CertaintyList = function(args){
 	function _handleDocumentRender(args){
 		document.getElementById('certaintyList').innerHTML = '';
 
+    const getAttribute = (json, attr)=>json.hasOwnProperty(attr)?json[attr]:'';
+
 		Array.from(args.document.getElementsByTagName('teiHeader')[0].getElementsByTagName('certainty'), a=>a)
             .forEach(annotation=>{
                 annotation.attributes['target'].value.trim().split(" ").forEach(target=>{
                     const node = document.getElementById(args.XML_EXTRA_CHAR_SPACER+target.slice(1));
-                    let desc = '';
-                    if(annotation.attributes.hasOwnProperty('desc'))
-                    	desc = annotation.attributes['desc'].value;
-
+                    
                     const data = {
                     	id: '98',//annotation.attributes['id'].value,
-                    	target: annotation.attributes['target'].value,
+                    	target: getAttribute(annotation.attributes, 'target'),
                     	html_target: args.XML_EXTRA_CHAR_SPACER+target.slice(1),
-                    	author: annotation.attributes['resp'].value,
+                    	author: getAttribute(annotation.attributes, 'resp'),
                     	original: '',
-                    	asserted: annotation.attributes['assertedValue'].value,
-                    	certainty: annotation.attributes['cert'].value,
-                    	type: annotation.attributes['category'].value,
+                    	asserted: getAttribute(annotation.attributes, 'assertedValue'),
+                    	certainty: getAttribute(annotation.attributes, 'cert'),
+                    	type: getAttribute(annotation.attributes, 'category'),
                     	attribute: '',
-                    	desc: desc
+                    	desc: getAttribute(annotation.attributes, 'desc'),
                     }
                     if(node != null){   
                         
