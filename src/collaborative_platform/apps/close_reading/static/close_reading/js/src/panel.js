@@ -33,9 +33,10 @@ let PanelView = function(args){
 		if(args.hasOwnProperty('channel'))
 			args.channel.addToChannel(obj);
 
-		obj.suscribe('panel/load_history', _handleLoadHistory);
-		obj.suscribe('panel/reset', _handlePanelReset);
+		obj.subscribe('panel/load_history', _handleLoadHistory);
+		obj.subscribe('panel/reset', _handlePanelReset);
 		obj.suscribe('panel/autocomplete_options', _handleAutocompleteOptions);
+		obj.subscribe('sidepanel/selection', _handleSidepanelSelection);
 		obj.subscribe('document/selection', _handleDocumentSelection);
 
 		Object.assign(values, _getCurrentValues());
@@ -322,6 +323,10 @@ let PanelView = function(args){
 	}
 
 	function _handleDocumentSelection(args){
+		document.getElementById('selection').value = args.selection.text;
+	}
+
+	function _handleSidepanelSelection(args){
 		document.getElementById('selection').value = args.selection.text;
 	}
 

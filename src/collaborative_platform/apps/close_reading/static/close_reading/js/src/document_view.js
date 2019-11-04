@@ -169,7 +169,7 @@ var DocumentView = function(args){
 
 	    const abs_positions = {start: Math.min(...positions), end: Math.max(...positions)};
 
-	    selection = {text:text, range:selection_range, abs_positions:abs_positions};
+	    selection = {text:text, by_id: false, range:selection_range, abs_positions:abs_positions};
 		
 		self.publish('document/selection', {selection});
 	}

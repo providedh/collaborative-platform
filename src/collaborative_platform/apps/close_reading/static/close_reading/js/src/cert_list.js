@@ -103,12 +103,30 @@ let CertaintyList = function(args){
                   </li>
                 </ul>
                   <a href="#${data.html_target}" class="card-link">Scroll to position</a>
-                  <a href="#" class="card-link">Add annotation</a>
+                  <a href="#" class="card-link add-side-annotation" annotation-target=${data.target}>Add annotation</a>
                 </div>
               </div>
 		`
 
 		return $.parseHTML(card_text)[0];
+	}
+
+	function _handleAddAnnotation(e){
+		if(document.getElementById('toggle-panel').classList.contains('collapsed'))
+			document.getElementById('toggle-panel').click();
+
+		const target = e.target.attributes['annotation-target'].value;
+
+		const args = {
+			selection: {
+				text: target,
+				abs_positions: null,
+				by_id: true,
+				target: target
+			}
+		}
+
+		self.publish('sidepanel/selection', args);
 	}
 
 	function _handleDocumentRender(args){
@@ -118,6 +136,10 @@ let CertaintyList = function(args){
             .forEach(annotation=>{
                 annotation.attributes['target'].value.trim().split(" ").forEach(target=>{
                     const node = document.getElementById(args.XML_EXTRA_CHAR_SPACER+target.slice(1));
+                    let desc = '';
+                    if(annotation.attributes.hasOwnProperty('desc'))
+                    	desc = annotation.attributes['desc'].value;
+                    
                     const data = {
                     	id: '98',//annotation.attributes['id'].value,
                     	target: annotation.attributes['target'].value,
@@ -128,7 +150,7 @@ let CertaintyList = function(args){
                     	certainty: annotation.attributes['cert'].value,
                     	type: annotation.attributes['category'].value,
                     	attribute: '',
-                    	desc: annotation.attributes['desc'].value
+                    	desc: desc
                     }
                     if(node != null){   
                         
@@ -137,10 +159,8 @@ let CertaintyList = function(args){
                     document.getElementById('certaintyList').appendChild(card);
                 })
             });
-	}
-
-	function _handleCreateTEIannotation(){
-		self.publish('annotator/create-tei', _getCurrentValues());
+            Array.from(document.getElementsByClassName('add-side-annotation'))
+				.map(e=>e.addEventListener('click', event=>_handleAddAnnotation(event)));
 	}
 
 	function _notimplemented(method){
