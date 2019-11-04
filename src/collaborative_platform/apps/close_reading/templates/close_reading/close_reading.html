@@ -209,10 +209,220 @@
           </div>
         </div>
 
-        <main role="main" class="col-md-8 col-lg-8 px-4"> 
-          <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-            <h1 class="h2">Dashboard</h1>
-          </div>
+        <main role="main" class="col-md-8 col-lg-8 px-4 justify-content-center d-flex"> 
+          <div id="toolbar-container" class="col-auto">
+            <section id="toolbar">
+              <div id="alert" class="hide" role="alert"></div>
+              <div class="card card-body">
+              <h3 class="break-word">
+    {#             Split file name into two parts: with and without extension#}
+                <span>
+                  <span id="fileTitleEditable">{{ file.name }}</span>
+                  <a id='versionLink'  class='scripted'>Version: {{ file.version_number }}</a>
+    {#              % if file_revision:#}
+    {#                <small>&nbsp;${file_revision | h}</small>#}
+    {#              % endif#}
+                </span>
+                <button class="btn btn-outline-primary btn-sm" href="" id="saveFile">Save current file</button>
+              </h3>
+              <div id="history-container">
+                <div id="history">
+                  <span id="history-legend">Uncertainty</span>
+                  <div>
+                    <canvas></canvas>
+                    <hr/>
+                    <div id="versions"></div>
+                    <div id="version-toltip"></div>
+                    <div id="history-popup">
+                  </div>
+                </div>
+              </div>
+              </div>
+              </div>
+                <div class="collapse p-2" id="example" class="card card-body">
+                  <div>
+                    <div id="visual-options" class="d-flex justify-content-between">
+                      <button id="display-annotations" class="btn btn-outline-primary btn-sm active" data-toggle="button" aria-pressed="true" pressed="true" autocomplete="false">
+                        <span class="active-hide">Show</span><span class="active-show">Hide</span> annotations
+                      </button>
+                      <button id="display-uncertainty" class="btn btn-outline-primary btn-sm active" data-toggle="button" aria-pressed="true" pressed="true" autocomplete="false">
+                        <span class="active-hide">Show</span><span class="active-show">Hide</span> uncertainty
+                      </button>
+                      <button id="color-annotations" class="btn btn-outline-primary btn-sm active" data-toggle="button" aria-pressed="true" pressed="true" autocomplete="false">
+                        <span class="active-hide">Show</span><span class="active-show">Hide</span> color for annotations
+                      </button>
+                      <button id="color-uncertainty" class="btn btn-outline-primary btn-sm active" data-toggle="button" aria-pressed="true" pressed="true" autocomplete="false">
+                        <span class="active-hide">Show</span><span class="active-show">Hide</span> color for uncertainty
+                      </button>
+                    </div>
+                    <hr>
+                    <div class="toolbarRow" id="toolbar-controls">
+                        <span class="toolbar-control" id="annotation-options">
+                          <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item">
+                              <a class="nav-link active" id="annotating-uncertainty" data-toggle="tab" href="#uncertainty-tab" role="tab" aria-controls="uncertainty-tab" aria-selected="true">Add uncertainty annotations</a>
+                            </li>
+                            <li class="nav-item">
+                              <a class="nav-link" id="annotating-tei" data-toggle="tab" href="#tei-tab" role="tab" aria-controls="tei-tab" aria-selected="false">Add TEI annotations</a>
+                            </li>
+                          </ul>
+                          <div class="tab-content" id="annotation-form">
+                            <div class="tab-pane show active" id="uncertainty-tab" role="tabpanel" aria-labelledby="annotating-uncertainty">
+                              <div class="form-row">
+                                <div class="col">
+                                  <label for="category">Category of uncertainty 
+                                    <span class="help-tooltip" help="This is the category." />
+                                  </label>
+                                  <select class="form-control form-control-sm" id='category'>
+                                    <option class="ignorance" value="ignorance">Ignorance</option>
+                                    <option class="credibility" value="credibility">Credibility</option>
+                                    <option class="imprecision" value="imprecision">Imprecision</option>
+                                    <option class="incompleteness" value="incompleteness">Incompleteness</option>
+                                  </select>
+                                </div>
+                                <div class="col">
+                                  <label for="locus">Locus
+                                    <span class="help-tooltip" help="This is the locus." />
+                                  </label>
+                                  <select class="form-control form-control-sm" id='locus'>
+                                    <option value="value">Value</option>
+                                    <option value="name">Name</option>
+                                  </select>
+                                </div>
+                                <div class="col">
+                                  <div id="tag-name-input">
+                                    <label for="tag-name">Tag name
+                                      <span class="help-tooltip" help="This is the type of tag to which the annotation refers." />
+                                    </label>
+                                    <select class="form-control form-control-sm" id='tag-name'>
+                                      <option value="date">Date</option>
+                                      <option value="event">Event</option>
+                                      <option value="geolocation">geolocation</option>
+                                      <option value="name">Name</option>
+                                      <option value="occupation">Occupation</option>
+                                      <option value="object">Object</option>
+                                      <option value="org">Org</option>
+                                      <option value="person">Person</option>
+                                      <option value="country">country</option>
+                                      <option value="time">Time</option>
+                                    </select>
+                                  </div>
+                                </div>
+                                <div class="col">
+                                  <label for="attribute-name">Attribute name 
+                                    <span class="help-tooltip" help="
+                                      Use this optional parameter to annotate an attribute. <br>
+                                      The 'sameAs' attribute is used to create a correspondence
+                                      with another entity (an input will appear to allow selecting the second entity).
+                                    " />
+                                  </label>
+                                  <input type="text" id="attribute-name">
+                                </div>
+                              </div>
+                              <div class="form-row">
+                                <div class="col">
+                                  <label for="selection">Text selection
+                                    <span class="help-tooltip" help="This is the selected text." />
+                                  </label>
+                                  <input readonly type="text" id="selection">
+                                </div>
+                                <div class="col">
+                                  <label for="asserted-value">Asserted value
+                                    <span class="help-tooltip" help="This is the proposed value." />
+                                  </label>
+                                  <div id="asserted-value-container">
+                                    <input id="asserted-value" class="input">
+                                  </div>
+                                </div>
+                                <div class="col">
+                                  <label for="cert-level">Certainty
+                                    <span class="help-tooltip" help="This is the level of certainty on the proposed value." />
+                                  </label>
+                                  <select class="form-control form-control-sm" id='cert-level'>
+                                    <option value="unknown">Unknown</option>
+                                    <option value="high">High</option>
+                                    <option value="medium">Medium</option>
+                                    <option value="low">Low</option>
+                                  </select>
+                                </div>
+                              </div>
+                              <div class="form-row">
+                                <div class="col">
+                                  <label for="description">Description
+                                    <span class="help-tooltip" help="This is an optional description." />
+                                  </label>
+                                  <input type="text" id="description">
+                                </div>
+                                <div class="col">
+                                  <span id="references-container">
+                                    <label for="references-autocomplete">References
+                                      <span class="help-tooltip" help="This is the referenced tag." />
+                                    </label>
+                                    <div class="autocomplete">
+                                      <input type="text" id="references-autocomplete">
+                                      <input type="text" id="references">
+                                    </div>
+                                  </span>
+                                </div>
+                                <div class="col d-flex justify-content-end align-items-end">
+                                  <button class="btn btn-outline-success" id="create-uncertainty-annotation">Create</button>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="tab-pane" id="tei-tab" role="tabpanel" aria-labelledby="annotating-tei">
+                              <div class="form-row">
+                                <div class="col">
+                                  <label for="tei-tag-name">Tag name
+                                    <span class="help-tooltip" help="This is the type TEI tag to use for annotating." />
+                                  </label>
+                                    <select class="form-control form-control-sm" id='tei-tag-name'>
+                                      <option value="date">Date</option>
+                                      <option value="event">Event</option>
+                                      <option value="geolocation">geolocation</option>
+                                      <option value="name">Name</option>
+                                      <option value="occupation">Occupation</option>
+                                      <option value="object">Object</option>
+                                      <option value="org">Org</option>
+                                      <option value="person">Person</option>
+                                      <option value="country">country</option>
+                                      <option value="time">Time</option>
+                                    </select>
+                                </div>
+                                <div class="col">
+                                  <p><br>Annotate TEI without a sense of certainty attached to it.</p>
+                                </div>
+                                <div class="col d-flex justify-content-end align-items-end">
+                                  <button class="btn btn-outline-success" id="create-tei-annotation">Create</button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <!-- 
+                          <input class="nav-link active" id="uncertainty-a" data-toggle="tab" role="tab" aria-controls="uncertainty-tab"
+                          aria-selected="true" type="radio" name="annotation" value="uncertainty" checked> Annotate Uncertainty
+                          <input class="nav-link" id="tei-a" data-toggle="tab" role="tab" aria-controls="tei-tab"
+                          aria-selected="false" type="radio" name="annotation" value="tei"> Annotate TEI -->
+                        </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="d-flex justify-content-center toogle-button">
+                  <div class="relative-group">
+                  <a class="btn btn-primary btn-sm collapsed" data-toggle="collapse" href="#example" role="button" aria-expanded="false" aria-controls="example">
+                    <span class="collapse-show">
+                      Hide controls
+                    </span>
+                    <span class="collapsed-show">
+                      Show controls
+                    </span>
+                  </a> 
+                </div>
+              </section>
+            </div>
+            <div class="row">
+              <section id="editor" class="col-auto ">
+              </section>
+            </div>
         </main>
       </div>
     </div>

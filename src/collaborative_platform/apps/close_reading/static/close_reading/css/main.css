@@ -5,11 +5,11 @@ button span{
 #versionLink{font-size: 0.5em;}
 
 #editor{
-    margin-top: 225px;
+    margin-top: 195px;
 }
 
 #editor.lowered{
-    margin-top: 265px;
+    margin-top: 235px;
 }
 
 /*#annotator-root{max-width: 23.7cm;}*/
@@ -83,6 +83,7 @@ page {
 	position:relative;
 	margin-bottom: 2em;
     box-shadow: 0px 0px 5px -3px #acc5d7, 0px 0px 9px 3px #dfdede;
+    background-color: var(--light);
 }
 #toolbar > .card:first-of-type{padding: 0.1em 0.6em;}
 #toolbar .relative-group{position: relative;}
@@ -235,7 +236,7 @@ div#history-popup{
     display:none;
     position:absolute;
     z-index:500;
-    width:22em;
+    width:25em;
     line-height: 1.4em;
     padding: 7px;
     background-color:white;
@@ -702,7 +703,7 @@ div#annotator-root[display-uncertainty="false"] section#editor certainty{
 
 .sidebar{
   position: fixed;
-  top: 225px;
+  top: 184px;
   bottom: 0;
   left: 0;
   z-index: 100; /* Behind the navbar */
@@ -743,7 +744,7 @@ div#annotator-root[display-uncertainty="false"] section#editor certainty{
 
 .legend {
   position: fixed;
-  top: 225px;
+  top: 184px;
   bottom: 0;
   right: 0;
   z-index: 100; /* Behind the navbar */
