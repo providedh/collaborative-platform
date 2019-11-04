@@ -48,7 +48,6 @@
                   Toggle certainty list <span class="onCollapse">></span>
           </button>
           <div class="sidebar-sticky collapse" id="certaintyList">
-            <ul class="flex-column">
               <div class="card w-100">
                 <div class="card-header">
                   <div class="d-flex justify-content-between">
@@ -113,7 +112,6 @@
                   <a href="#" class="card-link">Add annotation</a>
                 </div>
               </div>
-            </ul>
           </div>
         </nav>
         <div id="legend" class="col-md-2 d-none d-md-block legend">
@@ -427,12 +425,6 @@
     window.project_id = "{{ project_id }}";
     window.file_id = "{{ file_id }}";
     window.file_version = "{{ file.version_number }}";
-
-    document.addEventListener("DOMContentLoaded", function(){
-       document.getElementById('toggle-uncertainty').addEventListener('click', evt=>{
-           document.getElementById('certainty-list').classList.toggle('expanded');
-       });
-    });
   </script>
   <script src="https://d3js.org/d3.v5.min.js"></script>
   <script type="module" src="{% static 'close_reading/js/app.js' %}"></script>

@@ -4,6 +4,7 @@ import DocumentView from './src/document_view.js';
 import PanelView from './src/panel.js';
 import Annotator from './src/annotator.js';
 import HistoryView from './src/history.js';
+import CertaintyList from './src/cert_list.js';
 import {Popup, Tooltips} from './src/tooltips.js';
 import Alert from './src/utilities/alert.js';
 
@@ -14,6 +15,7 @@ const document_view = DocumentView({channel});
 const panel_view = PanelView({channel});
 const annotator = Annotator({channel});
 const history_view = HistoryView({channel});
+const cert_list = CertaintyList({channel});
 const popup = Popup({channel});
 const tooltips = Tooltips({channel});
 
