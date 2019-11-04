@@ -795,6 +795,10 @@ div#annotator-root[display-uncertainty="false"] section#editor certainty{
 #certaintyList > ul{padding-left: 0;}
 #certaintyList .list-group-item{padding:0;}
 
+#certaintyList .card:last-child{
+  margin-bottom: 12em;
+}
+
 @media (min-width: 1800px) {
     #left-sidebar{max-width: 25%;}
 }
