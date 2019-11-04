@@ -130,7 +130,7 @@ let CertaintyList = function(args){
 	function _handleDocumentRender(args){
 		document.getElementById('certaintyList').innerHTML = '';
 
-    const getAttribute = (json, attr)=>json.hasOwnProperty(attr)?json[attr]:'';
+    const getAttribute = (json, attr)=>json.hasOwnProperty(attr)?json[attr].value:'';
 
 		Array.from(args.document.getElementsByTagName('teiHeader')[0].getElementsByTagName('certainty'), a=>a)
             .forEach(annotation=>{
