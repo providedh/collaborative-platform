@@ -29,8 +29,6 @@ let CertaintyList = function(args){
 			publish: ()=>_notimplemented('publish'),
 		};
 
-		console.log('hi')
-
 		// Add instance to the pub/sub channel
 		if(args.hasOwnProperty('channel'))
 			args.channel.addToChannel(obj);
