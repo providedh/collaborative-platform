@@ -87,7 +87,8 @@ def create_new_project_version(project, new_file_version=None, new_commit=None):
     project_versions = ProjectVersion.objects.filter(project=project).order_by('-date')
 
     if not project_versions:
-        new_project_version = ProjectVersion(fv_version=0, commit=new_commit, commit_version=0, project=project)
+        new_project_version = ProjectVersion(file_version_counter=0, commit=new_commit, commit_counter=0,
+                                             project=project)
         new_project_version.save()
 
         for file_version in file_versions:
@@ -98,17 +99,17 @@ def create_new_project_version(project, new_file_version=None, new_commit=None):
     else:
         last_project_version = project_versions[0]
 
-        fv_version = last_project_version.fv_version
-        commit_version = last_project_version.commit_version
+        file_version_counter = last_project_version.file_version_counter
+        commit_counter = last_project_version.commit_counter
 
         if new_file_version:
-            fv_version += 1
+            file_version_counter += 1
 
         if new_commit:
-            commit_version += 1
+            commit_counter += 1
 
-        new_project_version = ProjectVersion(fv_version=fv_version, commit=new_commit, commit_version=commit_version,
-                                             project=project)
+        new_project_version = ProjectVersion(file_version_counter=file_version_counter, commit=new_commit,
+                                             commit_counter=commit_counter, project=project)
         new_project_version.save()
 
         for file_version in file_versions:
