@@ -248,7 +248,7 @@ def clique_creation(request, project_id):  # type: (HttpRequest, int) -> HttpRes
             for entity in request_data['entities']:
                 entity_id = get_entity_from_int_or_dict(entity, project_id).id
 
-                unification = Unification.objects.create(
+                Unification.objects.create(
                     project_id=project_id,
                     entity_id=entity_id,
                     clique=clique,
@@ -275,6 +275,10 @@ def clique_creation(request, project_id):  # type: (HttpRequest, int) -> HttpRes
             return JsonResponse(response)
 
 
+# TODO: uncomment '@user_has_access('RW')' after fix decorator for PUT method
+@login_required
+@objects_exists
+# @user_has_access('RW')
 def add_to_clique(request, project_id, clique_id):  # type: (HttpRequest, int, int) -> HttpResponse
     if request.method == 'PUT':
         try:
@@ -290,13 +294,12 @@ def add_to_clique(request, project_id, clique_id):  # type: (HttpRequest, int, i
             if not request_data['entities']:
                 raise BadRequest("Provide at least one entity.")
 
-
             clique = Clique.objects.get(project_id=project_id, id=clique_id)
 
             for entity in request_data['entities']:
                 entity_id = get_entity_from_int_or_dict(entity, project_id).id
 
-                unification = Unification.objects.create(
+                Unification.objects.create(
                     project_id=project_id,
                     entity_id=entity_id,
                     clique=clique,
