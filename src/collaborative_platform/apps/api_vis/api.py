@@ -273,3 +273,48 @@ def clique_creation(request, project_id):  # type: (HttpRequest, int) -> HttpRes
             }
 
             return JsonResponse(response)
+
+
+def add_to_clique(request, project_id, clique_id):  # type: (HttpRequest, int, int) -> HttpResponse
+    if request.method == 'PUT':
+        try:
+            request_data = json.loads(request.body)
+
+            required_keys = {
+                'entities': list,
+                'certainty': str,
+            }
+
+            validate_keys_and_types(required_keys, request_data)
+
+            if not request_data['entities']:
+                raise BadRequest("Provide at least one entity.")
+
+
+            clique = Clique.objects.get(project_id=project_id, id=clique_id)
+
+            for entity in request_data['entities']:
+                entity_id = get_entity_from_int_or_dict(entity, project_id).id
+
+                unification = Unification.objects.create(
+                    project_id=project_id,
+                    entity_id=entity_id,
+                    clique=clique,
+                    created_by=request.user,
+                    certainty=request_data['certainty']
+                )
+
+        except (BadRequest, JSONDecodeError) as exception:
+            status = HttpResponseBadRequest.status_code
+
+            response = {
+                'status': status,
+                'message': str(exception)
+            }
+
+            return JsonResponse(response, status=status)
+
+        else:
+            response = {}
+
+            return JsonResponse(response)
