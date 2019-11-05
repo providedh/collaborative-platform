@@ -52,7 +52,6 @@ class PlaceVersion(EntityVersion):
 
 class Commit(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
-    fileversions = models.ManyToManyField(FileVersion, related_name="commits")
     date = models.DateTimeField(auto_now_add=True)
     message = models.TextField()
 
@@ -64,7 +63,7 @@ class Commit(models.Model):
 
         if created:
             project = self.project
-            create_new_project_version(project=project, new_commit=True)
+            create_new_project_version(project=project, new_commit=self)
 
 
 class Clique(models.Model):

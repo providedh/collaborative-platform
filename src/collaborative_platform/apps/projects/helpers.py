@@ -5,7 +5,8 @@ from django.core.paginator import Paginator, Page
 from django.db.models import QuerySet
 from django.http import HttpRequest, JsonResponse
 
-from apps.files_management.models import File, Directory
+from apps.api_vis.models import Commit
+from apps.files_management.models import Directory, File, FileVersion
 from apps.projects.models import Activity, Project, ProjectVersion
 
 
@@ -63,8 +64,9 @@ def include_contributors(response):  # type: (JsonResponse) -> JsonResponse
     return JsonResponse(json)
 
 
-def log_activity(project, user, action_text="", file=None,
-                 related_dir=None):  # type: (Project, User, str, File, Directory) -> Activity
+def log_activity(project, user, action_text="", file=None, related_dir=None):
+    # type: (Project, User, str, File, Directory) -> Activity
+
     a = Activity(project=project, user=user, user_name="{} {}".format(user.first_name, user.last_name),
                  action_text=action_text)
     if file is not None:
@@ -77,11 +79,20 @@ def log_activity(project, user, action_text="", file=None,
     return a
 
 
-def create_new_project_version(project, new_file_version=False, new_commit=False):
+def create_new_project_version(project, new_file_version=None, new_commit=None):
+    # type: (Project, FileVersion, Commit) -> None
+
+    files = File.objects.filter(project=project, deleted=False)
+    file_versions = (FileVersion.objects.get(file=file, number=file.version_number) for file in files)
     project_versions = ProjectVersion.objects.filter(project=project).order_by('-date')
 
     if not project_versions:
-        new_project_version = ProjectVersion(fv_version=0, commit_version=0, project=project)
+        new_project_version = ProjectVersion(fv_version=0, commit=new_commit, commit_version=0, project=project)
+        new_project_version.save()
+
+        for file_version in file_versions:
+            new_project_version.file_versions.add(file_version)
+
         new_project_version.save()
 
     else:
@@ -96,5 +107,11 @@ def create_new_project_version(project, new_file_version=False, new_commit=False
         if new_commit:
             commit_version += 1
 
-        new_project_version = ProjectVersion(fv_version=fv_version, commit_version=commit_version, project=project)
+        new_project_version = ProjectVersion(fv_version=fv_version, commit=new_commit, commit_version=commit_version,
+                                             project=project)
+        new_project_version.save()
+
+        for file_version in file_versions:
+            new_project_version.file_versions.add(file_version)
+
         new_project_version.save()

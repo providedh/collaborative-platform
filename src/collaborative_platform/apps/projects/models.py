@@ -24,7 +24,7 @@ class Project(models.Model):
         super(Project, self).save(*args, **kwargs)
 
         if created:
-            create_new_project_version(self)
+            create_new_project_version(project=self)
 
 
 class Contributor(models.Model):
@@ -60,9 +60,11 @@ class Activity(models.Model):
 
 class ProjectVersion(models.Model):
     project = models.ForeignKey(Project, related_name="versions", on_delete=models.CASCADE)
-    fv_version = models.IntegerField(default=0)
-    commit_version = models.IntegerField(default=0)
+    file_versions = models.ManyToManyField('files_management.FileVersion')
+    file_version_counter = models.IntegerField(default=0)
+    commit = models.ForeignKey('api_vis.Commit', on_delete=models.SET_NULL, null=True, blank=True)
+    commit_counter = models.IntegerField(default=0)
     date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.fv_version}.{self.commit_version}"
+        return f"{self.file_version_counter}.{self.commit_counter}"
