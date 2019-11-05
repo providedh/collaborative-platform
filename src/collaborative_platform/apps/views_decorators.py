@@ -94,7 +94,7 @@ def user_has_access(permissions_level=None):
     """Requirements:
         - user must be logged in ('@login_required' from django.contrib.auth.decorators)
         - decorated view must take 'project_id', 'file_id' or 'directory_id' argument
-        - project, file or directory must exist ('@exists' from apps.decorators)
+        - project, file or directory must exist ('@objects_exists' from apps.decorators)
     """
 
     def decorator(func):
@@ -138,7 +138,7 @@ def user_has_access(permissions_level=None):
 
 def __get_project_id(request, **kwargs):
     project_id, file_project_id, directory_project_id, post_project_id = None, None, None, None
-
+    print(kwargs)
     if 'project_id' in kwargs:
         project_id = kwargs['project_id']
     if 'file_id' in kwargs:
@@ -170,11 +170,10 @@ def __get_project_id(request, **kwargs):
 
                 elif project_id_files is not None or project_id_dirs is not None:
                     post_project_id = project_id_files or project_id_dirs
-                else:
-                    raise KeyError("Not found required 'project_id', 'file_id' or 'directory_id' in given arguments")
     except RawPostDataException:
         pass
 
+    print(f"pro_id={project_id}")
     any_id = project_id or file_project_id or directory_project_id or post_project_id
     if any_id is None:
         raise KeyError("Not found required 'project_id', 'file_id' or 'directory_id' in given arguments")
