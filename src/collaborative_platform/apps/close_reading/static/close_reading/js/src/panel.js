@@ -102,10 +102,14 @@ let PanelView = function(args){
         asserted_value_container.removeChild(asserted_value_container.children[0]);
         asserted_value_container.appendChild(input);
 
-        if(values['locus'] == 'name')
+        if(values['locus'] == 'name'){
         	document.getElementById('tag-name-input').style.setProperty('display','none');
-        else
+        	document.getElementById('attribute-name-control').style.setProperty('display','none');
+        }
+        else{
         	document.getElementById('tag-name-input').style.setProperty('display','initial');
+        	document.getElementById('attribute-name-control').style.setProperty('display','initial');
+        }
 	}
 
 	function _updateReferencesControl(){
