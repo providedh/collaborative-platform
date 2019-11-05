@@ -8,13 +8,14 @@ from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, HttpR
     RawPostDataException
 from django.shortcuts import render
 
+from apps.api_vis.models import Clique
 from apps.files_management.models import File, FileVersion, Directory
 from apps.projects.models import Contributor, Project
 
 
 def objects_exists(view):  # type: (Callable) -> Callable
     """Requirements:
-        - decorated view must take 'project_id', 'directory_id', 'file_id' or 'version' argument
+        - decorated view must take 'project_id', 'directory_id', 'file_id', 'user_id', 'clique_id' or 'version' argument
     """
 
     def decorator(*args, **kwargs):
@@ -34,7 +35,11 @@ def objects_exists(view):  # type: (Callable) -> Callable
             'user_id': {
                 'model': User,
                 'name': 'User',
-            }
+            },
+            'clique_id': {
+                'model': Clique,
+                'name': 'Clique',
+            },
         }
 
         for kwarg in wanted_kwargs:
@@ -51,7 +56,7 @@ def objects_exists(view):  # type: (Callable) -> Callable
                 except model.DoesNotExist:
                     request = args[0]
                     status = HttpResponseBadRequest.status_code
-                    message = "{0} with id: {1} doesn't exist.".format(model_name, model_id)
+                    message = f"{model_name} with id: {model_id} doesn't exist."
                     bootstrap_alert_type = 'danger'
 
                     response = __get_response(request, status, bootstrap_alert_type, message)
