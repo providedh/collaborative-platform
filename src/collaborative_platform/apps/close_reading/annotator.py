@@ -127,7 +127,11 @@ class Annotator:
             raise ValueError("No position arguments or target reference in request.")
 
         if position_v1 or position_v2:
-            validated_json = self.__validate_request_positions(json)
+            validated_json = self.__validate_request_positions(json, 
+                                                               position_params_v1, 
+                                                               position_v1, 
+                                                               position_params_v2, 
+                                                               position_v2)
         else:
             validated_json = self.__validate_request_target(json)
 
