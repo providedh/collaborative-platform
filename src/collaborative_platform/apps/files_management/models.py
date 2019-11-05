@@ -174,7 +174,7 @@ class FileVersion(models.Model):
 
         if created:
             project = self.file.project
-            create_new_project_version(project=project, new_file_version=True)
+            create_new_project_version(project=project, new_file_version=self)
 
 
 class IDsSequence(models.Model):
