@@ -204,7 +204,7 @@ def validate_keys_and_types(name_type_template, request_data, parent_name=None):
                 raise BadRequest(f"Missing '{key}' parameter in {parent_name} argument in request data.")
 
         if type(request_data[key]) is not name_type_template[key]:
-            raise BadRequest(f"Invalid type of '{key}' parameter. Correct type is '{str(name_type_template[key])}'.")
+            raise BadRequest(f"Invalid type of '{key}' parameter. Correct type is: '{str(name_type_template[key])}'.")
 
 
 def get_file_id_from_path(project_id, file_path, parent_directory_id=None):  # type: (int, str, int) -> int
@@ -212,22 +212,38 @@ def get_file_id_from_path(project_id, file_path, parent_directory_id=None):  # t
 
     if len(splitted_path) == 1:
         file_name = splitted_path[0]
-        file = File.objects.get(project_id=project_id, parent_dir_id=parent_directory_id, name=file_name)
 
-        return file.id
+        try:
+            file = File.objects.get(project_id=project_id, parent_dir_id=parent_directory_id, name=file_name,
+                                    deleted=False)
+
+            return file.id
+
+        except File.DoesNotExist:
+            raise BadRequest(f"File with name {file_name} doesn't exist in this directory.")
 
     else:
         directory_name = splitted_path[0]
-        directory = Directory.objects.get(project_id=project_id, parent_dir_id=parent_directory_id, name=directory_name)
-        rest_of_path = '/'.join(splitted_path[1:])
 
-        return get_file_id_from_path(project_id, rest_of_path, directory.id)
+        try:
+            directory = Directory.objects.get(project_id=project_id, parent_dir_id=parent_directory_id,
+                                              name=directory_name)
+            rest_of_path = '/'.join(splitted_path[1:])
+
+            return get_file_id_from_path(project_id, rest_of_path, directory.id)
+
+        except Directory.DoesNotExist:
+            raise BadRequest(f"Directory with name {directory_name} does't exist in this directory.")
 
 
 def get_entity_from_int_or_dict(request_entity, project_id):
     if type(request_entity) == int:
-        entity = Entity.objects.get(id=request_entity)
-        return entity
+        try:
+            entity = Entity.objects.get(id=request_entity)
+            return entity
+
+        except Entity.DoesNotExist:
+            raise BadRequest(f"Entity with id: {request_entity} doesn't exist.")
 
     elif type(request_entity) == dict:
         required_keys = {
@@ -241,8 +257,15 @@ def get_entity_from_int_or_dict(request_entity, project_id):
         xml_id = request_entity['xml_id']
 
         file_id = get_file_id_from_path(project_id, file_path)
-        entity = Entity.objects.get(file_id=file_id, xml_id=xml_id)
-        return entity
+
+        try:
+            entity = Entity.objects.get(file_id=file_id, xml_id=xml_id)
+
+            return entity
+
+        except Entity.DoesNotExist:
+            file_name = request_entity['file_path'].split('/')[-1]
+            raise BadRequest(f"Entity with xml:id: {xml_id} doesn't exist in file: {file_name}.")
 
     else:
         raise BadRequest(f"Invalid type of 'entity' parameter. Allowed types is '{str(int)}' and {str(dict)}.")
