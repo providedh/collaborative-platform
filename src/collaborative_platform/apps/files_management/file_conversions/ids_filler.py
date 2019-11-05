@@ -83,7 +83,7 @@ class IDsFiller:
             self.__get_max_ids()
             ids_map = self.__replace_all()
             text = et.tostring(self._parsed, pretty_print=True, encoding='utf-8').decode('utf-8')
-            for old, new in ids_map:
+            for old, new in ids_map.items():
                 text = text.replace(old, new)
             self.text = io.StringIO(text)
             self.text.seek(io.SEEK_SET)
