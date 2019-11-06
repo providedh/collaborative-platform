@@ -244,3 +244,6 @@ docker volume prune
 
 docker-compose run web python src/collaborative_platform/manage.py [migrate|makemigrations|shell|...]
 ```
+
+# Common problems:
+Collect statics while updating production server, or else .js files will be out of date and annotator probably won't work!
