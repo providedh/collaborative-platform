@@ -210,10 +210,9 @@ def context_search(request, project_id, text):  # type: (HttpRequest, int, str) 
     return JsonResponse(response, safe=False)
 
 
-# TODO: uncomment '@user_has_access('RW')' after fix decorator for PUT method
 @login_required
 @objects_exists
-# @user_has_access('RW')
+@user_has_access('RW')
 def clique_creation(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
     if request.method == 'PUT':
         try:
