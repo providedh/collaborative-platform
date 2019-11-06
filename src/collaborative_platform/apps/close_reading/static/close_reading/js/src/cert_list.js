@@ -168,7 +168,7 @@ let CertaintyList = function(args){
     const card_target_id = 'card_' + args.target.id,
       card_target_node = document.getElementById(card_target_id);
 
-    document.getElementById('certaintyList').scrollTop = card_target_node.offsetTop;
+    document.getElementById('certaintyList').scrollTop = card_target_node.offsetTop - 5;
   }
 
   function _toggleCardHighliht(args){
