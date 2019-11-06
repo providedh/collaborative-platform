@@ -330,7 +330,7 @@ div#annotator-root[display-annotations="true"] time::before,
 div#annotator-root[display-annotations="true"] org::before,
 div#annotator-root[display-annotations="true"] pb::before,
 div#annotator-root[display-annotations="true"] rolename::before,
-div#annotator-root[display-annotations="true"] person::after
+div#annotator-root[display-annotations="true"] person::before
 {
     content:"";
     position: absolute;
@@ -435,14 +435,15 @@ person,
 [type="person"]{
     border-color: #ff7f00;
 }
-div#annotator-root[display-annotations="true"] person::after{
+div#annotator-root[display-annotations="true"] person::before{
     content:"\f007";
-    position: absolute;
+    left: 1.8em;
+    top: 1.3em;
+    position: relative;
     font-size: 0.9em;
-    padding-top:1.3em;
 }
 
-div#annotator-root[color-annotations="true"] person::after{
+div#annotator-root[color-annotations="true"] person::before{
     color: #ff7f00;
 }
 
