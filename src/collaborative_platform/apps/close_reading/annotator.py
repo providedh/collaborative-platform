@@ -46,6 +46,7 @@ class Annotator:
 
         if 'target' in self.__json:
             # The annotation can be created directly
+            self.__get_annotators_and_free_uncertainty_number_from_xml()
             self.__prepare_xml_parts_for_target()
         else:
             self.__get_data_from_xml()
@@ -90,7 +91,7 @@ class Annotator:
         if 0 == len(dep_tree.xpath(f'//*[@xml:id="{target_id}"]', namespaces=NAMESPACES)):
             raise ValueError('Target "{}"" is not present in the document.'.format(target_id))
 
-        return {"target": target_id}
+        return {"target": '#'+target_id}
 
     def __validate_request(self, json):
         position_params_v1 = [
@@ -143,6 +144,14 @@ class Annotator:
 
         return validated_json
 
+    def __get_annotators_and_free_uncertainty_number_from_xml(self):
+
+        # Beware that just the annotators ids and first free annotation number is required for
+        # annotations made using IDs instead of text positions.
+        self.__annotators_xml_ids = self.__get_annotators_xml_ids_from_file(self.__xml)
+        certainties = self.__get_certainties_from_file(self.__xml)
+        self.__first_free_certainty_number = self.__get_first_free_certainty_number(certainties, self.__json["tag"])
+
     def __get_data_from_xml(self):
         self.__start, self.__end = self.__get_fragment_position(self.__xml, self.__json)
         self.__start, self.__end = self.__get_fragment_position_without_adhering_tags(self.__xml, self.__start, self.__end)
@@ -151,9 +160,7 @@ class Annotator:
         self.__fragment_to_annotate = self.__xml[self.__start: self.__end]
 
         self.__tags = self.__get_adhering_tags_from_annotated_fragment(self.__fragment_to_annotate)
-        self.__annotators_xml_ids = self.__get_annotators_xml_ids_from_file(self.__xml)
-        certainties = self.__get_certainties_from_file(self.__xml)
-        self.__first_free_certainty_number = self.__get_first_free_certainty_number(certainties, self.__json["tag"])
+        self.__get_annotators_and_free_uncertainty_number_from_xml()
 
     def __get_fragment_position(self, xml, json):
         if 'start_pos' in json and json['start_pos'] is not None and 'end_pos' in json and json['end_pos'] is not None:
