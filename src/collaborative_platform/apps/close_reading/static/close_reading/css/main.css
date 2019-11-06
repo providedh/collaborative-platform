@@ -6,6 +6,7 @@ button span, #alert{
 
 #editor{
     margin-top: 195px;
+    line-height: 2.3em;
 }
 
 #editor.lowered{
