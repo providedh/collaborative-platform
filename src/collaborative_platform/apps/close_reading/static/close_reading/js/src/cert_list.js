@@ -42,7 +42,7 @@ let CertaintyList = function(args){
 	}
 
 	function _createCard(data, nested=false){
-		const card_text = `<div class="card w-100" id="card_${data.html_target}">
+		const card_text = `<div class="card w-100 card_${data.html_target}" id="card_${data.html_target}_${data.count}">
                 <div class="card-header">
                   <div class="d-flex justify-content-between">
                     <div>
@@ -134,50 +134,68 @@ let CertaintyList = function(args){
 
     const getAttribute = (json, attr)=>json.hasOwnProperty(attr)?json[attr].value:'';
 
+    const seen = {};
+    const annotations = [];
 		Array.from(args.document.getElementsByTagName('teiHeader')[0].getElementsByTagName('certainty'), a=>a)
-            .forEach(annotation=>{
-                annotation.attributes['target'].value.trim().split(" ").forEach(target=>{
-                    const node = document.getElementById(args.XML_EXTRA_CHAR_SPACER+target.slice(1));
-                    
-                    const data = {
-                    	id: '98',//annotation.attributes['id'].value,
-                    	target: getAttribute(annotation.attributes, 'target'),
-                    	html_target: args.XML_EXTRA_CHAR_SPACER+target.slice(1),
-                    	author: getAttribute(annotation.attributes, 'resp'),
-                    	original: '',
-                    	asserted: getAttribute(annotation.attributes, 'assertedValue'),
-                    	certainty: getAttribute(annotation.attributes, 'cert'),
-                    	type: getAttribute(annotation.attributes, 'category'),
-                    	attribute: '',
-                    	desc: getAttribute(annotation.attributes, 'desc'),
-                    }
-                    if(node != null){   
-                        
-                    }
-                    const card = _createCard(data);
-                    document.getElementById('certaintyList').appendChild(card);
-                })
-            });
-            Array.from(document.getElementsByClassName('add-side-annotation'))
-				.map(e=>e.addEventListener('click', event=>_handleAddAnnotation(event)));
+            .forEach(annotation=>annotation.attributes['target'].value.trim().split(" ")
+            .forEach(target=>annotations.push([annotation, target])));
+
+    annotations.sort((a,b)=>a[1]>b[1]?1:-1).forEach(pair=>{
+      const annotation = pair[0],
+        target = pair[1];
+
+      const node = document.getElementById(args.XML_EXTRA_CHAR_SPACER+target.slice(1));
+
+      if(! seen.hasOwnProperty(target)){
+        seen[target] = 1;
+      }else{
+        seen[target] += 1;
+      }
+
+      const data = {
+      	id: '98',//annotation.attributes['id'].value,
+        count: seen[target],
+      	target: getAttribute(annotation.attributes, 'target'),
+      	html_target: args.XML_EXTRA_CHAR_SPACER+target.slice(1),
+      	author: getAttribute(annotation.attributes, 'resp'),
+      	original: '',
+      	asserted: getAttribute(annotation.attributes, 'assertedValue'),
+      	certainty: getAttribute(annotation.attributes, 'cert'),
+      	type: getAttribute(annotation.attributes, 'category'),
+      	attribute: '',
+      	desc: getAttribute(annotation.attributes, 'desc'),
+      }
+      if(node != null){   
+          
+      }
+      const card = _createCard(data);
+      card.target = getAttribute(annotation.attributes, 'target');
+      document.getElementById('certaintyList').appendChild(card);
+    });
+
+    Array.from(document.getElementsByClassName('add-side-annotation'))
+		  .map(e=>e.addEventListener('click', event=>_handleAddAnnotation(event)));
 	}
 
   function _handleAnnotationHover(args){
     _toggleCardHighliht(args);
 
-    const card_target_id = 'card_' + args.target.id,
+    const card_target_id = 'card_' + args.target.id + '_1',
       card_target_node = document.getElementById(card_target_id);
-
+    
     document.getElementById('certaintyList').scrollTop = card_target_node.offsetTop - 5;
   }
 
   function _toggleCardHighliht(args){
-    const card_target_id = 'card_' + args.target.id,
-      card_target_node = document.getElementById(card_target_id);
+    const card_target_class = 'card_' + args.target.id,
+      card_target_nodes = document.getElementsByClassName(card_target_class);
     
-    card_target_node.classList.toggle('hovered');
-    card_target_node
-      .getElementsByClassName('target_id')[0].classList.toggle('hovered');
+    Array.from(card_target_nodes).forEach(card_target_node=>{
+      card_target_node.classList.toggle('hovered');
+      
+      card_target_node
+        .getElementsByClassName('target_id')[0].classList.toggle('hovered');
+    });
   }
 
 	function _notimplemented(method){

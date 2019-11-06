@@ -108,17 +108,19 @@ var DocumentView = function(args){
             .forEach(annotation=>{
                 annotation.attributes['target'].value.trim().split(" ").forEach(target=>{
                 	const node = document.getElementById(XML_EXTRA_CHAR_SPACER+target.slice(1));
-                	console.log(target, node)
-                    if(node != null){   
-	                	if(!node.hasOwnProperty('_uncertainty_count'))
-	                		node._uncertainty_count = 1;
-	                	else
-	                		node._uncertainty_count += 1;
 
-	                	node.addEventListener('mouseenter', 
-	                		()=>self.publish('annotation/mouseenter', {target: node}))
-	                	node.addEventListener('mouseleave', 
-	                		()=>self.publish('annotation/mouseleave', {target: node}))
+                    if(node != null){   
+	                	if(!node.hasOwnProperty('_uncertainty_count')){
+	                		node._uncertainty_count = 1;
+		                	node.addEventListener('mouseenter', 
+		                		()=>self.publish('annotation/mouseenter', {target: node}))
+		                	node.addEventListener('mouseleave', 
+		                		()=>self.publish('annotation/mouseleave', {target: node}))
+	                	}
+	                	else{
+	                		node._uncertainty_count += 1;
+	                	}
+
 
                         addStyle(
                             XML_EXTRA_CHAR_SPACER+target.slice(1), 
