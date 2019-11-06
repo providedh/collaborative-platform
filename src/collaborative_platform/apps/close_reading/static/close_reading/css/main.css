@@ -5,12 +5,12 @@ button span, #alert{
 #versionLink{font-size: 0.5em;}
 
 #editor{
-    margin-top: 195px;
+    margin-top: 155px;
     line-height: 2.3em;
 }
 
 #editor.lowered{
-    margin-top: 235px;
+    margin-top: 195px;
 }
 
 /*#annotator-root{max-width: 23.7cm;}*/
