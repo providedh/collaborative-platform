@@ -34,13 +34,15 @@ let CertaintyList = function(args){
 			args.channel.addToChannel(obj);
 
 		obj.subscribe('document/render', _handleDocumentRender);
+    obj.subscribe('annotation/mouseenter', _handleAnnotationHover);
+    obj.subscribe('annotation/mouseleave', _toggleCardHighliht);
 
 		self = obj;
 		return obj;
 	}
 
 	function _createCard(data, nested=false){
-		const card_text = `<div class="card w-100">
+		const card_text = `<div class="card w-100" id="card_${data.html_target}">
                 <div class="card-header">
                   <div class="d-flex justify-content-between">
                     <div>
@@ -49,7 +51,7 @@ let CertaintyList = function(args){
                     </div>
                       <div>
                         <h5 class="card-title d-inline text-dark">Target :</h5>
-                        <i class="text-muted"> ${data.target}</i>
+                        <i class="text-muted target_id"> ${data.target}</i>
                       </div>
                     </div>
                     <div class="row d-flex px-3 justify-content-between">
@@ -159,6 +161,24 @@ let CertaintyList = function(args){
             Array.from(document.getElementsByClassName('add-side-annotation'))
 				.map(e=>e.addEventListener('click', event=>_handleAddAnnotation(event)));
 	}
+
+  function _handleAnnotationHover(args){
+    _toggleCardHighliht(args);
+
+    const card_target_id = 'card_' + args.target.id,
+      card_target_node = document.getElementById(card_target_id);
+
+    document.getElementById('certaintyList').scrollTop = card_target_node.offsetTop;
+  }
+
+  function _toggleCardHighliht(args){
+    const card_target_id = 'card_' + args.target.id,
+      card_target_node = document.getElementById(card_target_id);
+    
+    card_target_node.classList.toggle('hovered');
+    card_target_node
+      .getElementsByClassName('target_id')[0].classList.toggle('hovered');
+  }
 
 	function _notimplemented(method){
 		return function(){throw(new Error('Not implemented : '+method))};

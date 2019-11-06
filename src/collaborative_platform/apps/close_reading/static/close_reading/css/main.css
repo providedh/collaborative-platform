@@ -787,6 +787,18 @@ div#annotator-root[display-uncertainty="false"] section#editor certainty{
   color: inherit;
 }
 
+.sidebar .card.hovered,
+.sidebar .card:hover{
+  margin: 5px;
+  width: 98% !important;
+  border-color: var(--primary);
+  box-shadow: 0 .5rem 1rem rgba(0,0,0,.15) !important;
+}
+.sidebar .card .target_id.hovered{
+  font-weight: bold;
+  color: black !important;
+}
+
 .sidebar-heading {
   font-size: .75rem;
   text-transform: uppercase;

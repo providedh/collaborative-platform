@@ -94,7 +94,12 @@ var DocumentView = function(args){
 		Array.from(file.getElementsByTagName('teiHeader')[0].getElementsByTagName('certainty'), a=>a)
             .forEach(annotation=>{
                 annotation.attributes['target'].value.trim().split(" ").forEach(target=>{
-                    const node = document.getElementById(XML_EXTRA_CHAR_SPACER+target.slice(1));
+                	const node = document.getElementById(XML_EXTRA_CHAR_SPACER+target.slice(1));
+                	node.addEventListener('mouseenter', 
+                		()=>self.publish('annotation/mouseenter', {target: node}))
+                	node.addEventListener('mouseleave', 
+                		()=>self.publish('annotation/mouseleave', {target: node}))
+
                     if(node != null){   
                         addStyle(
                             XML_EXTRA_CHAR_SPACER+target.slice(1), 
