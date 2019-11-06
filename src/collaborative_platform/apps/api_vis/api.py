@@ -219,24 +219,22 @@ def clique_creation(request, project_id):  # type: (HttpRequest, int) -> HttpRes
             request_data = json.loads(request.body)
 
             required_keys = {
-                'name': str,
                 'entities': list,
                 'certainty': str,
             }
+            optional_keys = {'name': str}
 
-            validate_keys_and_types(required_keys, request_data)
+            validate_keys_and_types(required_keys, request_data, optional_keys)
 
-            if request_data['name'] == '' and len(request_data['entities']) == 0:
-                raise BadRequest(f"Missing name for a clique. Provide 'name' parameter or at least one entity.")
-
-            clique_name = request_data['name']
-
-            if clique_name == '':
+            if 'name' in request_data and request_data['name'] is not '':
+                clique_name = request_data['name']
+            elif len(request_data['entities']) > 0:
                 request_entity = request_data['entities'][0]
                 entity = get_entity_from_int_or_dict(request_entity, project_id)
-
                 entity_version = ENTITY_CLASSES[entity.type].objects.filter(entity=entity).order_by('-fileversion')[0]
                 clique_name = entity_version.name
+            else:
+                raise BadRequest(f"Missing name for a clique. Provide name in 'name' parameter or at least one entity.")
 
             clique = Clique.objects.create(
                 asserted_name=clique_name,
