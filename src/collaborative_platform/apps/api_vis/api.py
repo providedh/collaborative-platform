@@ -6,9 +6,9 @@ from json.decoder import JSONDecodeError
 from lxml import etree
 
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse, HttpRequest, HttpResponse, HttpResponseBadRequest
+from django.http import JsonResponse, HttpRequest, HttpResponse, HttpResponseBadRequest, HttpResponseNotModified
 
-from apps.exceptions import BadRequest
+from apps.exceptions import BadRequest, NotModified
 from apps.files_management.models import File, FileVersion
 from apps.projects.models import Contributor
 from apps.views_decorators import objects_exists, user_has_access
@@ -294,29 +294,59 @@ def add_to_clique(request, project_id, clique_id):  # type: (HttpRequest, int, i
                 raise BadRequest("Provide at least one entity.")
 
             clique = Clique.objects.get(project_id=project_id, id=clique_id)
+            unification_statuses = []
 
-            for entity in request_data['entities']:
-                entity_id = get_entity_from_int_or_dict(entity, project_id).id
+            for i, entity in enumerate(request_data['entities']):
+                if type(entity) == int:
+                    unification_statuses.append({'id': entity})
+                else:
+                    unification_statuses.append(entity)
 
-                Unification.objects.create(
-                    project_id=project_id,
-                    entity_id=entity_id,
-                    clique=clique,
-                    created_by=request.user,
-                    certainty=request_data['certainty']
-                )
+                try:
+                    entity_id = get_entity_from_int_or_dict(entity, project_id).id
+
+                    unification, created = Unification.objects.get_or_create(
+                        project_id=project_id,
+                        entity_id=entity_id,
+                        clique=clique,
+                        created_by=request.user,
+                        certainty=request_data['certainty']
+                    )
+
+                    if not created:
+                        raise NotModified(f"This entity already exist in clique with id: {clique_id}")
+
+                    unification_statuses[i].update({
+                        'status': 200,
+                        'message': 'OK'
+                    })
+
+                except (BadRequest, JSONDecodeError) as exception:
+                    status = HttpResponseBadRequest.status_code
+
+                    unification_statuses[i].update({
+                        'status': status,
+                        'message': str(exception)
+                    })
+                except NotModified as exception:
+                    status = HttpResponseNotModified.status_code
+
+                    unification_statuses[i].update({
+                        'status': status,
+                        'message': str(exception)
+                    })
 
         except (BadRequest, JSONDecodeError) as exception:
             status = HttpResponseBadRequest.status_code
 
             response = {
                 'status': status,
-                'message': str(exception)
+                'message': str(exception),
             }
 
             return JsonResponse(response, status=status)
 
         else:
-            response = {}
+            response = {'unification_statuses': unification_statuses}
 
             return JsonResponse(response)
