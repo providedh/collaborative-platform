@@ -65,21 +65,34 @@ var DocumentView = function(args){
 	}
 
 	function _styleAnnotatedTags(file, currentUser){
-		function addStyle(id, category, cert, resp, currentUser){
+		function addStyle(id, category, cert, resp, currentUser, annotations){
 		    const currentUserGreyRule = 'div#annotator-root[display-uncertainty=true] ' 
 		        + '#'+id
 		        + '{background-color: lightgrey;}';
 		    const currentUserColorRule = 'div#annotator-root[display-uncertainty=true][color-uncertainty=true] ' 
 		        + '#'+id
-		        + `{background-color: ${ColorScheme.calculate(category,cert)};}`;
+		        + `{background-color: ${ColorScheme.calculate(category, cert, annotations)};}`;
 
 		    const greyRule = 'div#annotator-root[display-uncertainty=true] ' 
 		        + '#'+id
 		        + '{background: linear-gradient(180deg, #fff 50%, lightgrey 50%);}';
 		    const colorRule = 'div#annotator-root[display-uncertainty=true][color-uncertainty=true] ' 
 		        + '#'+id
-		        + `{background: linear-gradient(180deg, #fff 50%, ${ColorScheme.calculate(category,cert)} 50%);}`;
+		        + `{background: linear-gradient(180deg, #fff 50%, ${ColorScheme.calculate(category, cert, annotations)} 50%);}`;
 
+		    const annotationsRule = ('div#annotator-root[display-uncertainty=true] ' 
+		        + '#'+id+'::after'
+		        + `{content: "${annotations} \\f591";`
+			    +'border: solid 2px var(--primary); border-radius: 0 0 50% 50%; color: black;'
+			    +'height: 20px; text-align: center; width: 28px; vertical-align: bottom;'
+			    +'display: table-cell; font-weight: bold; line-height: 1em; position: relative;'
+			    +'top: -0.6em; font-family: "Font Awesome 5 Free"; font-size: .7em; left: 2px;'
+			    +'padding-bottom: 5px; background-color: white;}');
+
+		        /* position: relative; top: -.6em; width: 1.5em; height: 1.5em;`
+		        + `border: solid 2px var(--primary); border-radius: 50%; display: inline-block; text-anchor: middle;}`;*/
+
+		    document.getElementById('style').innerText += (annotationsRule);
 		    if(resp == ('#' + currentUser)){
 		    	document.getElementById('style').innerText += (currentUserGreyRule);
 	    		document.getElementById('style').innerText += (currentUserColorRule);
@@ -106,7 +119,8 @@ var DocumentView = function(args){
                             annotation.attributes['category'].value, 
                             annotation.attributes['cert'].value,
                             annotation.attributes['resp'].value,
-                            currentUser
+                            currentUser,
+                            3
                             );
                     }
                 })
