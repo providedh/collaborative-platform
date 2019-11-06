@@ -272,10 +272,9 @@ def clique_creation(request, project_id):  # type: (HttpRequest, int) -> HttpRes
             return JsonResponse(response)
 
 
-# TODO: uncomment '@user_has_access('RW')' after fix decorator for PUT method
 @login_required
 @objects_exists
-# @user_has_access('RW')
+@user_has_access('RW')
 def add_to_clique(request, project_id, clique_id):  # type: (HttpRequest, int, int) -> HttpResponse
     if request.method == 'PUT':
         try:
