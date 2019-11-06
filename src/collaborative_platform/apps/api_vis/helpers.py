@@ -195,16 +195,24 @@ def create_entities_in_database(entities, project, file_version):  # type: (list
             )
 
 
-def validate_keys_and_types(name_type_template, request_data, parent_name=None):  # type: (dict, dict, str) -> None
-    for key in name_type_template:
+def validate_keys_and_types(required_name_type_template, request_data, optional_name_type_template=None,
+                            parent_name=None):  # type: (dict, dict, dict, str) -> None
+    for key in required_name_type_template:
         if key not in request_data:
             if not parent_name:
                 raise BadRequest(f"Missing '{key}' parameter in request data.")
             else:
                 raise BadRequest(f"Missing '{key}' parameter in {parent_name} argument in request data.")
 
-        if type(request_data[key]) is not name_type_template[key]:
-            raise BadRequest(f"Invalid type of '{key}' parameter. Correct type is: '{str(name_type_template[key])}'.")
+        if type(request_data[key]) is not required_name_type_template[key]:
+            raise BadRequest(f"Invalid type of '{key}' parameter. "
+                             f"Correct type is: '{str(required_name_type_template[key])}'.")
+
+    if optional_name_type_template:
+        for key in optional_name_type_template:
+            if key in request_data and type(request_data[key]) is not optional_name_type_template[key]:
+                raise BadRequest(f"Invalid type of '{key}' parameter. "
+                                 f"Correct type is: '{str(optional_name_type_template[key])}'.")
 
 
 def get_file_id_from_path(project_id, file_path, parent_directory_id=None):  # type: (int, str, int) -> int
@@ -251,7 +259,7 @@ def get_entity_from_int_or_dict(request_entity, project_id):
             'xml_id': str,
         }
 
-        validate_keys_and_types(required_keys, request_entity, "entity")
+        validate_keys_and_types(required_keys, request_entity, parent_name="entity")
 
         file_path = request_entity['file_path']
         xml_id = request_entity['xml_id']
