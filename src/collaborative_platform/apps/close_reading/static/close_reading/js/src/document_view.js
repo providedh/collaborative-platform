@@ -108,19 +108,25 @@ var DocumentView = function(args){
             .forEach(annotation=>{
                 annotation.attributes['target'].value.trim().split(" ").forEach(target=>{
                 	const node = document.getElementById(XML_EXTRA_CHAR_SPACER+target.slice(1));
-                	node.addEventListener('mouseenter', 
-                		()=>self.publish('annotation/mouseenter', {target: node}))
-                	node.addEventListener('mouseleave', 
-                		()=>self.publish('annotation/mouseleave', {target: node}))
-
+                	console.log(target, node)
                     if(node != null){   
+	                	if(!node.hasOwnProperty('_uncertainty_count'))
+	                		node._uncertainty_count = 1;
+	                	else
+	                		node._uncertainty_count += 1;
+
+	                	node.addEventListener('mouseenter', 
+	                		()=>self.publish('annotation/mouseenter', {target: node}))
+	                	node.addEventListener('mouseleave', 
+	                		()=>self.publish('annotation/mouseleave', {target: node}))
+
                         addStyle(
                             XML_EXTRA_CHAR_SPACER+target.slice(1), 
                             annotation.attributes['category'].value, 
                             annotation.attributes['cert'].value,
                             annotation.attributes['resp'].value,
                             currentUser,
-                            3
+                            node._uncertainty_count
                             );
                     }
                 })
