@@ -18,7 +18,7 @@ class EntitiesExtractor:
         list_persons = parsed_et.findall(".//tei:listPerson", namespaces=cls.namespaces)
         list_persons = [listp for listp in list_persons if 'PROVIDEDH Annotators' not in listp.attrib.values()]
         text = parsed_et.find(".//tei:text", namespaces=cls.namespaces)
-        persons = text.findall(".//tei:person", namespaces=cls.namespaces) if not list_persons else []
+        persons = text.findall(".//tei:person", namespaces=cls.namespaces)
 
         for list_p in list_persons:
             persons.extend(list_p.findall(".//tei:person", namespaces=cls.namespaces))
