@@ -136,11 +136,12 @@ def reformat_attribute(item, namespaces):
 
 def create_entities_in_database(entities, project, file_version):  # type: (list, Project, FileVersion) -> None
     for entity in entities:
+        entity["xml_id"] = entity.pop("id")
         try:
             entity_db = Entity.objects.get(
                 project=project,
                 file=file_version.file,
-                xml_id=entity['id'],
+                xml_id=entity['xml_id'],
                 type=entity['tag']
             )
 
@@ -148,7 +149,7 @@ def create_entities_in_database(entities, project, file_version):  # type: (list
             entity_db = Entity.objects.create(
                 project=project,
                 file=file_version.file,
-                xml_id=entity['id'],
+                xml_id=entity['xml_id'],
                 created_in_version=file_version.number,
                 type=entity['tag'],
             )
@@ -167,7 +168,7 @@ def create_entities_in_database(entities, project, file_version):  # type: (list
         excessive_elements = set(entity.keys()).difference(tag_elements)
         tuple(map(entity.pop, excessive_elements))  # pop all excessive elements from entity
 
-        classes[tag](entity=entity_db, file_version=file_version, **entity).save()
+        classes[tag](entity=entity_db, fileversion=file_version, **entity).save()
 
 
 def validate_keys_and_types(required_name_type_template, request_data, optional_name_type_template=None,
