@@ -13,5 +13,6 @@ urlpatterns = [
     path('projects/<int:project_id>/files/', api.project_files),
     path('projects/<int:project_id>/context/<str:text>/', api.context_search),
     path('projects/<int:project_id>/cliques/<clique_id>/add/', api.add_to_clique),
-    path('projects/<int:project_id>/cliques/', api.clique_creation),
+    path('projects/<int:project_id>/cliques/<clique_id>/', api.clique),
+    path('projects/<int:project_id>/cliques/', api.cliques),
 ]

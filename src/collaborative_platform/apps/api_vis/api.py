@@ -10,12 +10,14 @@ from django.http import JsonResponse, HttpRequest, HttpResponse, HttpResponseBad
 
 from apps.exceptions import BadRequest, NotModified
 from apps.files_management.models import File, FileVersion
+from apps.projects.helpers import user_is_project_admin
 from apps.projects.models import Contributor
 from apps.views_decorators import objects_exists, user_has_access
 
 from .helpers import search_files_by_person_name, search_files_by_content, validate_keys_and_types, \
     get_annotations_from_file_version_body, get_entity_from_int_or_dict
-from .models import Clique, EventVersion, OrganizationVersion, PersonVersion, PlaceVersion, Unification
+from .models import Clique, CliquesToDelete, EventVersion, OrganizationVersion, PersonVersion, PlaceVersion, \
+    Unification, UnificationToDelete
 
 
 NAMESPACES = {
@@ -213,7 +215,7 @@ def context_search(request, project_id, text):  # type: (HttpRequest, int, str) 
 @login_required
 @objects_exists
 @user_has_access('RW')
-def clique_creation(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
+def cliques(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
     if request.method == 'PUT':
         try:
             request_data = json.loads(request.body)
@@ -345,5 +347,57 @@ def add_to_clique(request, project_id, clique_id):  # type: (HttpRequest, int, i
 
         else:
             response = {'unification_statuses': unification_statuses}
+
+            return JsonResponse(response)
+
+
+@login_required
+@objects_exists
+@user_has_access('RW')
+def clique(request, project_id, clique_id):  # type: (HttpRequest, int, int) -> HttpResponse
+    if request.method == 'DELETE':
+        try:
+            try:
+                clique = Clique.objects.get(
+                    id=clique_id,
+                    project_id=project_id,
+                )
+
+            except Clique.DoesNotExist:
+                raise BadRequest(f"There is no clique with id: {clique_id} in project: {project_id}.")
+
+            if request.user != clique.created_by and not user_is_project_admin(project_id, request.user):
+                raise BadRequest(f"You don't have enough permissions to delete another user's clique.")
+
+            clique_to_delete, created = CliquesToDelete.objects.get_or_create(
+                clique=clique,
+                deleted_by=request.user,
+            )
+
+            if not created:
+                raise NotModified(f"You already deleted clique with id: {clique_id}.")
+
+        except BadRequest as exception:
+            status = HttpResponseBadRequest.status_code
+
+            response = {
+                'status': status,
+                'message': str(exception),
+            }
+
+            return JsonResponse(response, status=status)
+
+        except NotModified as exception:
+            status = HttpResponseNotModified.status_code
+
+            response = {
+                'status': status,
+                'message': str(exception)
+            }
+
+            return JsonResponse(response, status=status)
+
+        else:
+            response = {}
 
             return JsonResponse(response)
