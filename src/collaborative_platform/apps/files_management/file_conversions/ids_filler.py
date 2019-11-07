@@ -76,6 +76,10 @@ class IDsFiller:
                 element.attrib['{{{}}}id'.format(self._namespaces['xml'])] = new
                 original_ids_map[org] = new
 
+        try:
+            original_ids_map.pop(None)
+        except KeyError:
+            pass
         return original_ids_map
 
     def process(self, initial=False):
@@ -83,6 +87,7 @@ class IDsFiller:
             self.__get_max_ids()
             ids_map = self.__replace_all()
             text = et.tostring(self._parsed, pretty_print=True, encoding='utf-8').decode('utf-8')
+
             for old, new in ids_map.items():
                 text = text.replace(old, new)
             self.text = io.StringIO(text)
