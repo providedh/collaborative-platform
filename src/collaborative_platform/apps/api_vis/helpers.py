@@ -77,8 +77,9 @@ def get_annotations_from_file_version_body(file_version, namespaces, annotation_
 
                 if match:
                     id_value = ann_item[1]
-                    xml_uncertainties = xml_certainties_node.xpath('./default:certainty[@target="#{0}"]'.format(id_value),
-                                                                   namespaces=namespaces)
+                    xml_uncertainties = xml_certainties_node.xpath(
+                        './default:certainty[@target="#{0}"]'.format(id_value),
+                        namespaces=namespaces)
 
                     for cert_node in xml_uncertainties:
                         cert_attributes = []
@@ -152,43 +153,21 @@ def create_entities_in_database(entities, project, file_version):  # type: (list
                 type=entity['tag'],
             )
 
-        if entity['tag'] == 'person':
-            person_version = PersonVersion.objects.create(
-                entity=entity_db,
-                fileversion=file_version,
-                name=entity['name'],
-                xml=entity['xml'] if 'xml' in entity else None,
-                context=entity['context'] if 'context' in entity else None,
-                forename=entity['forename'],
-                surname=entity['surname'],
-            )
-        elif entity['tag'] == 'org':
-            organisation_version = OrganizationVersion.objects.create(
-                entity=entity_db,
-                fileversion=file_version,
-                name=entity['name'],
-                xml=entity['xml'] if 'xml' in entity else None,
-                context=entity['context'] if 'context' in entity else None,
-            )
-        elif entity['tag'] == 'event':
-            event_version = EventVersion.objects.create(
-                entity=entity_db,
-                fileversion=file_version,
-                name=entity['name'],
-                xml=entity['xml'] if 'xml' in entity else None,
-                context=entity['context'] if 'context' in entity else None,
-                date=entity['date'] if 'date' in entity else None,
-            )
-        elif entity['tag'] == 'place':
-            place_version = PlaceVersion.objects.create(
-                entity=entity_db,
-                fileversion=file_version,
-                name=entity['name'],
-                xml=entity['xml'] if 'xml' in entity else None,
-                context=entity['context'] if 'context' in entity else None,
-                location=entity['location'] if 'location' in entity else None,
-                country=entity['country'] if 'country' in entity else None
-            )
+        classes = {
+            'person': PersonVersion,
+            'org': OrganizationVersion,
+            'event': EventVersion,
+            'place': PlaceVersion,
+        }
+
+        tag = entity.pop("tag")
+
+        # make sure we're not passing excessive keyword arguments to constructor, as that would cause an error
+        tag_elements = {field.name for field in classes[tag]._meta.fields}
+        excessive_elements = set(entity.keys()).difference(tag_elements)
+        tuple(map(entity.pop, excessive_elements))  # pop all excessive elements from entity
+
+        classes[tag](entity=entity_db, file_version=file_version, **entity).save()
 
 
 def validate_keys_and_types(required_name_type_template, request_data, optional_name_type_template=None,

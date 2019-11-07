@@ -62,7 +62,7 @@ class EntitiesExtractor:
 
     @staticmethod
     def __get_context(element):  # type: (Element) -> str
-        return ' '.join(re.sub("<.*?>", "", et.tostring(element.getparent())).split())
+        return ' '.join(re.sub("<.*?>", "", str(et.tostring(element.getparent()), 'utf-8')).split())
 
     @classmethod
     def __process_person_tags(cls, elements):  # type: (List[Element]) -> map
@@ -72,7 +72,7 @@ class EntitiesExtractor:
             name = cls.__extract_subtag_text(element, 'name')
             forename = cls.__extract_subtag_text(element, 'forename')
             surname = cls.__extract_subtag_text(element, 'surname')
-            xml = et.tostring(element)
+            xml = str(et.tostring(element), 'utf-8')
             context = cls.__get_context(element)
 
             name = name or text or "{} {}".format(forename, surname)
@@ -97,7 +97,8 @@ class EntitiesExtractor:
 
             context = cls.__get_context(element)
             location = ' '.join(
-                re.sub("<.*?>", "", et.tostring(element.find(".//tei:location", namespaces=cls.namespaces))).split())
+                re.sub("<.*?>", "", str(et.tostring(element.find(".//tei:location", namespaces=cls.namespaces)),
+                       'utf-8')).split())
 
             return {'tag': 'place',
                     'id': id,
@@ -107,7 +108,7 @@ class EntitiesExtractor:
                     'region': subtags_text['region'],
                     'country': subtags_text['country'],
                     'location': location,
-                    'xml': et.tostring(element),
+                    'xml': str(et.tostring(element), 'utf-8'),
                     'context': context,
                     }
 
@@ -119,7 +120,7 @@ class EntitiesExtractor:
             id = cls.__extract_tag_id(element)
             name = cls.__extract_subtag_text(element, 'orgName')
             name = name or element.text.strip() if element.text is not None else ""
-            xml = et.tostring(element)
+            xml = str(et.tostring(element), 'utf-8')
             context = cls.__get_context(element)
             return {'tag': 'org', 'id': id, 'name': name, 'xml': xml, 'context': context}
 
@@ -131,7 +132,7 @@ class EntitiesExtractor:
             id = cls.__extract_tag_id(element)
             name = element.text.strip() if element.text is not None else ""
             when = element.attrib.get("when")
-            xml = et.tostring(element)
+            xml = str(et.tostring(element), 'utf-8')
             context = cls.__get_context(element)
             return {'tag': 'event', 'id': id, 'name': name, 'when': when, 'xml': xml, 'context': context}
 
