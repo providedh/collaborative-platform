@@ -100,6 +100,12 @@ def index_entities(entities):  # type: (List[dict]) -> None
 
     for entity in entities[:]:
         tag = entity.pop('tag')
+
+        # make sure we're not passing excessive keyword arguments to constructor, as that would cause an error
+        tag_elements = {f[0] for f in classes[tag]._ObjectBase__list_fields()}
+        excessive_elements = set(entity.keys()).difference(tag_elements)
+        tuple(map(entity.pop, excessive_elements))  # pop all excessive elements from entity
+
         es_entity = classes[tag](**entity)
         es_entity.save()
 
