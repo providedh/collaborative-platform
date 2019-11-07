@@ -10,7 +10,7 @@ class Entity(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     file = models.ForeignKey(File, on_delete=models.CASCADE)
     xml_id = models.CharField(max_length=255)
-    added_in_version = models.IntegerField()
+    created_in_version = models.IntegerField()
     deleted = models.BooleanField(default=False)
     deleted_on = models.DateTimeField(null=True)
     deleted_in_version = models.IntegerField(null=True)
@@ -94,7 +94,7 @@ class Unification(models.Model):
     certainty = models.CharField(max_length=10)
 
 
-class CliquesToDelete(models.Model):
+class CliqueToDelete(models.Model):
     clique = models.ForeignKey(Clique, on_delete=models.CASCADE)
     deleted_by = models.ForeignKey(User, on_delete=models.CASCADE)
     deleted_on = models.DateTimeField(auto_now=True)
