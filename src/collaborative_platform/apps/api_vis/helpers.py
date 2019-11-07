@@ -149,7 +149,7 @@ def create_entities_in_database(entities, project, file_version):  # type: (list
                 project=project,
                 file=file_version.file,
                 xml_id=entity['id'],
-                added_in_version=file_version.number,
+                created_in_version=file_version.number,
                 type=entity['tag'],
             )
 
