@@ -228,7 +228,7 @@ def cliques(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
 
             validate_keys_and_types(required_keys, request_data, optional_keys)
 
-            if 'name' in request_data and request_data['name'] is not '':
+            if 'name' in request_data and request_data['name'] != '':
                 clique_name = request_data['name']
             elif len(request_data['entities']) > 0:
                 request_entity = request_data['entities'][0]
