@@ -143,7 +143,6 @@ def user_has_access(permissions_level=None):
 
 def __get_project_id(request, **kwargs):
     project_id, file_project_id, directory_project_id, post_project_id = None, None, None, None
-    print(kwargs)
     if 'project_id' in kwargs:
         project_id = kwargs['project_id']
     if 'file_id' in kwargs:
@@ -178,7 +177,6 @@ def __get_project_id(request, **kwargs):
     except RawPostDataException:
         pass
 
-    print(f"pro_id={project_id}")
     any_id = project_id or file_project_id or directory_project_id or post_project_id
     if any_id is None:
         raise KeyError("Not found required 'project_id', 'file_id' or 'directory_id' in given arguments")
