@@ -23,7 +23,7 @@ class IDsFiller:
         self.text = io.StringIO()
         self._parsed = et.fromstring(bytes(self.__contents, 'utf-8'))
         filename = filename[:-4] if filename[-4:] == ".xml" else filename
-        self.filename = filename.replace(' ', '_')
+        self.filename = filename.replace(' ', '_').replace('(', '').replace(')', '')
         self._file_id = file_id
 
     def __fill_tags(self):
@@ -45,6 +45,7 @@ class IDsFiller:
         for tag in self._tags:
             ids = re.findall('xml:id="{}{}-[0-9]+?"'.format(tag, self.filename), self.__contents)
             ids = [id.split('-')[-1][:-1] for id in ids]
+            print(ids)
             self._maxid[tag] = max(map(int, ids)) if ids else 0
 
     def __get_max_ids(self):
