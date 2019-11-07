@@ -7,7 +7,7 @@ from django.http import HttpRequest, JsonResponse
 
 from apps.api_vis.models import Commit
 from apps.files_management.models import Directory, File, FileVersion
-from apps.projects.models import Activity, Project, ProjectVersion
+from apps.projects.models import Activity, Project, ProjectVersion, Contributor
 
 
 def paginate_page_perpage(request, queryset):  # type: (HttpRequest, QuerySet) -> Page
@@ -116,3 +116,17 @@ def create_new_project_version(project, new_file_version=None, new_commit=None):
             new_project_version.file_versions.add(file_version)
 
         new_project_version.save()
+
+
+def user_is_project_admin(project_id, user):  # type: (int, User) -> bool
+    try:
+        Contributor.objects.get(
+            project_id=project_id,
+            user=user,
+            permissions='AD',
+        )
+
+        return True
+
+    except Contributor.DoesNotExist:
+        return False

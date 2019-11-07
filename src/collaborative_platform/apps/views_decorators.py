@@ -129,7 +129,7 @@ def user_has_access(permissions_level=None):
                         return func(request, *args, **kwargs)
 
             status = HttpResponseForbidden.status_code
-            message = "You dont have enough permissions to perform this action.".format(project_id)
+            message = "You don't have enough permissions to perform this action.".format(project_id)
             bootstrap_alert_type = 'warning'
 
             response = __get_response(request, status, bootstrap_alert_type, message)
