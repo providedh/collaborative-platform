@@ -38,7 +38,7 @@ class PersonVersion(EntityVersion):
 
 
 class EventVersion(EntityVersion):
-    date = models.DateTimeField(blank=True, null=True)
+    when = models.DateTimeField(blank=True, null=True)
 
 
 class OrganizationVersion(EntityVersion):
