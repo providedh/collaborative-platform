@@ -45,7 +45,6 @@ class IDsFiller:
         for tag in self._tags:
             ids = re.findall('xml:id="{}{}-[0-9]+?"'.format(tag, self.filename), self.__contents)
             ids = [id.split('-')[-1][:-1] for id in ids]
-            print(ids)
             self._maxid[tag] = max(map(int, ids)) if ids else 0
 
     def __get_max_ids(self):
