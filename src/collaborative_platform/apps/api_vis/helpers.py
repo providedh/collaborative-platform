@@ -223,11 +223,11 @@ def get_file_id_from_path(project_id, file_path, parent_directory_id=None):  # t
 def get_entity_from_int_or_dict(request_entity, project_id):
     if type(request_entity) == int:
         try:
-            entity = Entity.objects.get(id=request_entity)
+            entity = Entity.objects.get(id=request_entity, project_id=project_id)
             return entity
 
         except Entity.DoesNotExist:
-            raise BadRequest(f"Entity with id: {request_entity} doesn't exist.")
+            raise BadRequest(f"Entity with id: {request_entity} doesn't exist in project with id: {project_id}.")
 
     elif type(request_entity) == dict:
         required_keys = {
