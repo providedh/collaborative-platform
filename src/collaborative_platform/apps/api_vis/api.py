@@ -2,6 +2,7 @@ import json
 import xmltodict
 import apps.index_and_search.models as es
 
+from datetime import datetime
 from json.decoder import JSONDecodeError
 from lxml import etree
 
@@ -300,7 +301,16 @@ def cliques(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
                     if request.user != clique.created_by and not user_is_project_admin(project_id, request.user):
                         raise BadRequest(f"You don't have enough permissions to delete another user's clique.")
 
-                    clique.delete()
+                    clique_to_delete, created = CliqueToDelete.objects.get_or_create(
+                        clique=clique,
+                        deleted_by=request.user,
+                    )
+
+                    if not created:
+                        raise NotModified(f"You already deleted clique with id: {clique_id}.")
+
+                    clique_to_delete.deleted_on = datetime.now()
+                    clique_to_delete.save()
 
                     delete_statuses[i].update({
                         'status': 200,
@@ -317,6 +327,14 @@ def cliques(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
 
                 except BadRequest as exception:
                     status = HttpResponseBadRequest.status_code
+
+                    delete_statuses[i].update({
+                        'status': status,
+                        'message': str(exception)
+                    })
+
+                except NotModified as exception:
+                    status = HttpResponseNotModified.status_code
 
                     delete_statuses[i].update({
                         'status': status,
@@ -352,7 +370,7 @@ def cliques(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
 @login_required
 @objects_exists
 @user_has_access('RW')
-def add_to_clique(request, project_id, clique_id):  # type: (HttpRequest, int, int) -> HttpResponse
+def entities(request, project_id, clique_id):  # type: (HttpRequest, int, int) -> HttpResponse
     if request.method == 'PUT':
         try:
             request_data = json.loads(request.body)
@@ -426,12 +444,10 @@ def add_to_clique(request, project_id, clique_id):  # type: (HttpRequest, int, i
 
             return JsonResponse(response)
 
+    elif request.method == 'GET':
+        pass
 
-@login_required
-@objects_exists
-@user_has_access('RW')
-def entities_in_clique(request, project_id, clique_id, entity_id):  # type: (HttpRequest, int, int, int) -> HttpResponse
-    if request.method == 'DELETE':
+    elif request.method == 'DELETE':
         try:
             try:
                 unification = Unification.objects.get(
