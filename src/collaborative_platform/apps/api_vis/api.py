@@ -245,16 +245,37 @@ def cliques(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
                 project_id=project_id,
             )
 
-            for entity in request_data['entities']:
-                entity_id = get_entity_from_int_or_dict(entity, project_id).id
+            unification_statuses = []
 
-                Unification.objects.create(
-                    project_id=project_id,
-                    entity_id=entity_id,
-                    clique=clique,
-                    created_by=request.user,
-                    certainty=request_data['certainty'],
-                )
+            for i, entity in enumerate(request_data['entities']):
+                if type(entity) == int:
+                    unification_statuses.append({'id': entity})
+                else:
+                    unification_statuses.append(entity)
+
+                try:
+                    entity_id = get_entity_from_int_or_dict(entity, project_id).id
+
+                    Unification.objects.create(
+                        project_id=project_id,
+                        entity_id=entity_id,
+                        clique=clique,
+                        created_by=request.user,
+                        certainty=request_data['certainty'],
+                    )
+
+                    unification_statuses[i].update({
+                        'status': 200,
+                        'message': 'OK'
+                    })
+
+                except BadRequest as exception:
+                    status = HttpResponseBadRequest.status_code
+
+                    unification_statuses[i].update({
+                        'status': status,
+                        'message': str(exception)
+                    })
 
         except (BadRequest, JSONDecodeError) as exception:
             status = HttpResponseBadRequest.status_code
@@ -270,6 +291,7 @@ def cliques(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
             response = {
                 'name': clique.asserted_name,
                 'id': clique.id,
+                'unification_statuses': unification_statuses,
             }
 
             return JsonResponse(response)
