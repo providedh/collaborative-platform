@@ -57,7 +57,7 @@ var DocumentView = function(args){
 	        self.TEItext = file;
 	        self.TEIbody = body.innerHTML.replace(/ xmlns="http:\/\/www.tei-c.org\/ns\/1.0"/g, '');
 
-	        self.TEIemptyTags = body.innerHTML.match(/<[^>]+\/>/gm);
+	        self.TEIemptyTags = body.innerHTML.match(/<[^>]+\/>/gm) || [];
 	        self.TEIheaderLength = file.indexOf('<body>') + '<body>'.length;
 	        body.setAttribute('size', 'A4');
 	        
