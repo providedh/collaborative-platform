@@ -9,6 +9,10 @@ button span, #alert{
     line-height: 2.3em;
 }
 
+#breadcrumb{
+  position: fixed;
+}
+
 #editor p,
 #editor div,
 #editor br{

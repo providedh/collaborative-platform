@@ -11,6 +11,15 @@
 {% endblock %}
 
 {% block content %}
+<div class="container">
+  <nav aria-label="breadcrumb" id="breadcrumb">
+    <ol class="breadcrumb bg-transparent">
+      <a href="{{ origin_url }}" class="breadcrumb-item">{{ origin }}</a>
+      <li class="breadcrumb-item active" aria-current="page">Close Reading</li>
+    </ol>
+  </nav>
+</div>
+
   <div id="annotator-root" class="" 
       color-uncertainty="true" 
       display-uncertainty="true" 
