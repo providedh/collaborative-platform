@@ -385,7 +385,11 @@ def entities(request, project_id, clique_id):  # type: (HttpRequest, int, int) -
             if not request_data['entities']:
                 raise BadRequest("Provide at least one entity.")
 
-            clique = Clique.objects.get(project_id=project_id, id=clique_id)
+            clique = Clique.objects.get(
+                project_id=project_id,
+                id=clique_id
+            )
+
             unification_statuses = []
 
             for i, entity in enumerate(request_data['entities']):
@@ -449,29 +453,75 @@ def entities(request, project_id, clique_id):  # type: (HttpRequest, int, int) -
 
     elif request.method == 'DELETE':
         try:
-            try:
-                unification = Unification.objects.get(
-                    project_id=project_id,
-                    entity_id=entity_id,
-                    clique_id=clique_id,
-                )
+            request_data = json.loads(request.body)
 
-            except Unification.DoesNotExist:
-                raise BadRequest(f"There is no entity with id: {entity_id} in clique: {clique_id} "
-                                 f"in project: {project_id}.")
+            required_keys = {
+                'entities': list,
+            }
 
-            if request.user != unification.created_by and not user_is_project_admin(project_id, request.user):
-                raise BadRequest("You don't have enough permissions to remove entity added by another user.")
+            validate_keys_and_types(required_keys, request_data)
 
-            unification_to_delete, created = UnificationToDelete.objects.get_or_create(
-                unification=unification,
-                deleted_by=request.user,
-            )
+            if len(request_data['entities']) == 0:
+                raise NotModified("You didn't provide any entity id to remove.")
 
-            if not created:
-                raise NotModified(f"You already removed entity with id: {entity_id} from clique with id: {clique_id}.")
+            delete_statuses = []
 
-        except BadRequest as exception:
+            for i, entity_id in enumerate(request_data['entities']):
+                delete_statuses.append({'id': entity_id})
+
+                try:
+                    unification = Unification.objects.get(
+                        project_id=project_id,
+                        clique_id=clique_id,
+                        entity_id=entity_id)
+
+                    if request.user != unification.created_by and not user_is_project_admin(project_id, request.user):
+                        raise BadRequest(f"You don't have enough permissions to remove another user's entity "
+                                         f"from clique.")
+
+                    unification_to_delete, created = UnificationToDelete.objects.get_or_create(
+                        unification=unification,
+                        deleted_by=request.user,
+                    )
+
+                    if not created:
+                        raise NotModified(f"You already removed entity with id: {entity_id} from clique "
+                                          f"with id: {clique_id}.")
+
+                    unification_to_delete.deleted_on = datetime.now()
+                    unification_to_delete.save()
+
+                    delete_statuses[i].update({
+                        'status': 200,
+                        'message': 'OK'
+                    })
+
+                except Unification.DoesNotExist:
+                    status = HttpResponseBadRequest.status_code
+
+                    delete_statuses[i].update({
+                        'status': status,
+                        'message': f"There is no entity with id: {entity_id} in clique with id: {clique_id} "
+                                   f"in project: {project_id}."
+                    })
+
+                except BadRequest as exception:
+                    status = HttpResponseBadRequest.status_code
+
+                    delete_statuses[i].update({
+                        'status': status,
+                        'message': str(exception)
+                    })
+
+                except NotModified as exception:
+                    status = HttpResponseNotModified.status_code
+
+                    delete_statuses[i].update({
+                        'status': status,
+                        'message': str(exception)
+                    })
+
+        except (BadRequest, JSONDecodeError) as exception:
             status = HttpResponseBadRequest.status_code
 
             response = {
@@ -492,6 +542,6 @@ def entities(request, project_id, clique_id):  # type: (HttpRequest, int, int) -
             return JsonResponse(response, status=status)
 
         else:
-            response = {}
+            response = {'delete_statuses': delete_statuses}
 
             return JsonResponse(response)
