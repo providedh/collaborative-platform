@@ -9,6 +9,12 @@ button span, #alert{
     line-height: 2.3em;
 }
 
+#editor p,
+#editor div,
+#editor br{
+  display: block;
+}
+
 #editor.lowered{
     margin-top: 195px;
 }
