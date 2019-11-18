@@ -273,6 +273,81 @@ def cliques(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
 
             return JsonResponse(response)
 
+    elif request.method == 'GET':
+        pass
+
+    elif request.method == 'DELETE':
+        try:
+            request_data = json.loads(request.body)
+
+            required_keys = {
+                'cliques': list,
+            }
+
+            validate_keys_and_types(required_keys, request_data)
+
+            if len(request_data['cliques']) == 0:
+                raise NotModified("You didn't provide any clique id to delete.")
+
+            delete_statuses = []
+
+            for i, clique_id in enumerate(request_data['cliques']):
+                delete_statuses.append({'id': clique_id})
+
+                try:
+                    clique = Clique.objects.get(project_id=project_id, id=clique_id)
+
+                    if request.user != clique.created_by and not user_is_project_admin(project_id, request.user):
+                        raise BadRequest(f"You don't have enough permissions to delete another user's clique.")
+
+                    clique.delete()
+
+                    delete_statuses[i].update({
+                        'status': 200,
+                        'message': 'OK'
+                    })
+
+                except Clique.DoesNotExist:
+                    status = HttpResponseBadRequest.status_code
+
+                    delete_statuses[i].update({
+                        'status': status,
+                        'message': f"There is no clique with id: {clique_id} in project: {project_id}."
+                    })
+
+                except BadRequest as exception:
+                    status = HttpResponseBadRequest.status_code
+
+                    delete_statuses[i].update({
+                        'status': status,
+                        'message': str(exception)
+                    })
+
+        except (BadRequest, JSONDecodeError) as exception:
+            status = HttpResponseBadRequest.status_code
+
+            response = {
+                'status': status,
+                'message': str(exception),
+            }
+
+            return JsonResponse(response, status=status)
+
+        except NotModified as exception:
+            status = HttpResponseNotModified.status_code
+
+            response = {
+                'status': status,
+                'message': str(exception),
+            }
+
+            return JsonResponse(response, status=status)
+
+        else:
+            response = {'delete_statuses': delete_statuses}
+
+            return JsonResponse(response)
+
 
 @login_required
 @objects_exists
@@ -327,6 +402,7 @@ def add_to_clique(request, project_id, clique_id):  # type: (HttpRequest, int, i
                         'status': status,
                         'message': str(exception)
                     })
+
                 except NotModified as exception:
                     status = HttpResponseNotModified.status_code
 
@@ -347,58 +423,6 @@ def add_to_clique(request, project_id, clique_id):  # type: (HttpRequest, int, i
 
         else:
             response = {'unification_statuses': unification_statuses}
-
-            return JsonResponse(response)
-
-
-@login_required
-@objects_exists
-@user_has_access('RW')
-def clique(request, project_id, clique_id):  # type: (HttpRequest, int, int) -> HttpResponse
-    if request.method == 'DELETE':
-        try:
-            try:
-                clique = Clique.objects.get(
-                    project_id=project_id,
-                    id=clique_id,
-                )
-
-            except Clique.DoesNotExist:
-                raise BadRequest(f"There is no clique with id: {clique_id} in project: {project_id}.")
-
-            if request.user != clique.created_by and not user_is_project_admin(project_id, request.user):
-                raise BadRequest(f"You don't have enough permissions to delete another user's clique.")
-
-            clique_to_delete, created = CliqueToDelete.objects.get_or_create(
-                clique=clique,
-                deleted_by=request.user,
-            )
-
-            if not created:
-                raise NotModified(f"You already deleted clique with id: {clique_id}.")
-
-        except BadRequest as exception:
-            status = HttpResponseBadRequest.status_code
-
-            response = {
-                'status': status,
-                'message': str(exception),
-            }
-
-            return JsonResponse(response, status=status)
-
-        except NotModified as exception:
-            status = HttpResponseNotModified.status_code
-
-            response = {
-                'status': status,
-                'message': str(exception)
-            }
-
-            return JsonResponse(response, status=status)
-
-        else:
-            response = {}
 
             return JsonResponse(response)
 
