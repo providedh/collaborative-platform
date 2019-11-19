@@ -89,10 +89,9 @@ class Taxonomy(models.Model):
     contents = models.TextField()
 
     def save(self, *args, **kwargs):
-        if self.pk is not None:
+        if self.pk is None:
             from .taxonomy_template import template_string
             self.contents = template_string.format(
-                self.project.title,
                 self.xml_id_1,
                 self.desc_1,
                 self.xml_id_2,
