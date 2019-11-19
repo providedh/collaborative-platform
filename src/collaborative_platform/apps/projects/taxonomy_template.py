@@ -3,7 +3,7 @@ template_string = """<?xml version="1.0" encoding="UTF-8"?>
   <teiHeader>
     <fileDesc>
       <titleStmt>
-        <title>Uncertainty Taxonomy for project @ProjectName</title>
+        <title>Uncertainty Taxonomy for project {}</title>
       </titleStmt>
     </fileDesc>
     <encodingDesc>

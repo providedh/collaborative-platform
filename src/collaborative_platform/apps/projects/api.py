@@ -128,3 +128,14 @@ def get_users(request, user_id):  # type: (HttpRequest, int) -> HttpResponse
     projects = order_queryset(request, projects)
     page = paginate_start_length(request, projects)
     return include_contributors(page_to_json_response(page))
+
+
+@login_required
+@objects_exists
+@user_has_access()
+def get_taxonomy(request, project_id):
+    if request.method != "GET":
+        return HttpResponseBadRequest("Invalid request method")
+
+    project = Project.objects.get(id=project_id)
+    return HttpResponse(project.taxonomy.contents)
