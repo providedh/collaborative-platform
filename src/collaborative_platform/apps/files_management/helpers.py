@@ -1,3 +1,4 @@
+import copy
 import hashlib
 from io import BytesIO
 from json import loads
@@ -98,7 +99,7 @@ def index_entities(entities):  # type: (List[dict]) -> None
         'place': Place
     }
 
-    for entity in entities[:]:
+    for entity in copy.deepcopy(entities):
         tag = entity.pop('tag')
 
         # make sure we're not passing excessive keyword arguments to constructor, as that would cause an error
