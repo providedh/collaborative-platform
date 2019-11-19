@@ -1,3 +1,4 @@
+import copy
 import re
 
 import apps.index_and_search.models as es
@@ -135,7 +136,7 @@ def reformat_attribute(item, namespaces):
 
 
 def create_entities_in_database(entities, project, file_version):  # type: (list, Project, FileVersion) -> None
-    for entity in entities:
+    for entity in copy.deepcopy(entities):
         entity["xml_id"] = entity.pop("id")
         try:
             entity_db = Entity.objects.get(
