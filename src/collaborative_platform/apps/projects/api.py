@@ -13,7 +13,7 @@ from apps.projects.helpers import page_to_json_response, include_contributors, l
 from apps.views_decorators import objects_exists, user_has_access
 
 from .helpers import paginate_page_perpage, order_queryset
-from .models import Project, Contributor
+from .models import Project, Contributor, Taxonomy
 
 
 @login_required
@@ -27,9 +27,15 @@ def create(request):  # type: (HttpRequest) -> HttpResponse
         try:
             if not data['title']:
                 return HttpResponseBadRequest(dumps({"message": "Title cannot be empty"}))
-
             project = Project(title=data['title'], description=data["description"])
             project.save()
+
+            taxonomy_data = {key[9:]: val for key, val in data.items() if key.startswith("taxonomy.")}
+            for key, val in taxonomy_data.items():
+                if key.startswith("taxonomy.xml_id"):
+                    taxonomy_data[key] = '-'.join(val.lower().strip().split())
+            taxonomy = Taxonomy(project=project, **taxonomy_data)
+            taxonomy.save()
 
             profile = Profile.objects.get(user=request.user)
 
