@@ -3,7 +3,7 @@ from django.contrib.gis.db.models import PointField
 from django.db import models
 
 from apps.files_management.models import File, FileVersion
-from apps.projects.models import Project
+from apps.projects.models import Project, ProjectVersion
 
 
 class Entity(models.Model):
@@ -87,10 +87,13 @@ class Unification(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     created_in_commit = models.ForeignKey(Commit, related_name="unifications", default=None, null=True, blank=True,
                                           on_delete=models.CASCADE)
+    created_in_file_version = models.ForeignKey(FileVersion, related_name="unifications", on_delete=models.CASCADE)
     deleted_by = models.ForeignKey(User, related_name="deleted_unifiactions", default=None, on_delete=models.SET_NULL,
                                    null=True)
     deleted_on = models.DateTimeField(null=True)
     deleted_in_commit = models.ForeignKey(Commit, default=None, null=True, blank=True, on_delete=models.CASCADE)
+    deleted_in_file_version = models.ForeignKey(FileVersion, default=None, null=True, blank=True,
+                                                on_delete=models.CASCADE)
     certainty = models.CharField(max_length=10)
 
 
@@ -98,9 +101,11 @@ class CliqueToDelete(models.Model):
     clique = models.ForeignKey(Clique, on_delete=models.CASCADE)
     deleted_by = models.ForeignKey(User, on_delete=models.CASCADE)
     deleted_on = models.DateTimeField(auto_now=True)
+    project_version = models.ForeignKey(ProjectVersion, on_delete=models.CASCADE)
 
 
 class UnificationToDelete(models.Model):
     unification = models.ForeignKey(Unification, on_delete=models.CASCADE)
     deleted_by = models.ForeignKey(User, on_delete=models.CASCADE)
     deleted_on = models.DateTimeField(auto_now=True)
+    project_version = models.ForeignKey(ProjectVersion, on_delete=models.CASCADE)

@@ -2,7 +2,6 @@ import json
 import xmltodict
 import apps.index_and_search.models as es
 
-from datetime import datetime
 from json.decoder import JSONDecodeError
 from lxml import etree
 
@@ -12,11 +11,11 @@ from django.http import JsonResponse, HttpRequest, HttpResponse, HttpResponseBad
 from apps.exceptions import BadRequest, NotModified
 from apps.files_management.models import File, FileVersion
 from apps.projects.helpers import user_is_project_admin
-from apps.projects.models import Contributor
+from apps.projects.models import Contributor, ProjectVersion
 from apps.views_decorators import objects_exists, user_has_access
 
 from .helpers import search_files_by_person_name, search_files_by_content, validate_keys_and_types, \
-    get_annotations_from_file_version_body, get_entity_from_int_or_dict
+    get_annotations_from_file_version_body, get_entity_from_int_or_dict, parse_project_version
 from .models import Clique, CliqueToDelete, EventVersion, OrganizationVersion, PersonVersion, PlaceVersion, \
     Unification, UnificationToDelete
 
@@ -224,6 +223,7 @@ def cliques(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
             required_keys = {
                 'entities': list,
                 'certainty': str,
+                'project_version': float,
             }
             optional_keys = {'name': str}
 
@@ -245,6 +245,18 @@ def cliques(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
                 project_id=project_id,
             )
 
+            file_version_counter, commit_counter = parse_project_version(request_data['project_version'])
+
+            try:
+                project_version = ProjectVersion.objects.get(
+                    project_id=project_id,
+                    file_version_counter=file_version_counter,
+                    commit_counter=commit_counter,
+                )
+            except ProjectVersion.DoesNotExist:
+                raise BadRequest(f"Version: {request_data['project_version']} of project with id: {project_id} "
+                                 f"doesn't exist.")
+
             unification_statuses = []
 
             for i, entity in enumerate(request_data['entities']):
@@ -254,14 +266,29 @@ def cliques(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
                     unification_statuses.append(entity)
 
                 try:
-                    entity_id = get_entity_from_int_or_dict(entity, project_id).id
+                    entity = get_entity_from_int_or_dict(entity, project_id)
+
+                    try:
+                        file_version = FileVersion.objects.get(
+                            projectversion=project_version,
+                            file=entity.file
+                        )
+                    except FileVersion.DoesNotExist:
+                        raise BadRequest(f"Source file of entity with id: {entity.id} doesn't exist in version: "
+                                         f"{request_data['project_version']} of the project with id: {project_id}.")
+
+                    if entity.created_in_version > file_version.number or \
+                            entity.deleted_in_version and entity.deleted_in_version < file_version.number:
+                        raise BadRequest(f"Entity with id: {entity.id} doesn't exist in version: "
+                                         f"{request_data['project_version']} of the project with id: {project_id}.")
 
                     Unification.objects.create(
                         project_id=project_id,
-                        entity_id=entity_id,
+                        entity=entity,
                         clique=clique,
                         created_by=request.user,
                         certainty=request_data['certainty'],
+                        created_in_file_version=file_version,
                     )
 
                     unification_statuses[i].update({
@@ -305,6 +332,7 @@ def cliques(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
 
             required_keys = {
                 'cliques': list,
+                'project_version': float,
             }
 
             validate_keys_and_types(required_keys, request_data)
@@ -312,39 +340,52 @@ def cliques(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
             if len(request_data['cliques']) == 0:
                 raise NotModified("You didn't provide any clique id to delete.")
 
+            file_version_counter, commit_counter = parse_project_version(request_data['project_version'])
+
+            try:
+                project_version = ProjectVersion.objects.get(
+                    project_id=project_id,
+                    file_version_counter=file_version_counter,
+                    commit_counter=commit_counter,
+                )
+            except ProjectVersion.DoesNotExist:
+                raise BadRequest(f"Version: {request_data['project_version']} of project with id: {project_id} "
+                                 f"doesn't exist.")
+
             delete_statuses = []
 
             for i, clique_id in enumerate(request_data['cliques']):
                 delete_statuses.append({'id': clique_id})
 
                 try:
-                    clique = Clique.objects.get(project_id=project_id, id=clique_id)
+                    try:
+                        clique = Clique.objects.get(
+                            project_id=project_id,
+                            id=clique_id
+                        )
+                    except Clique.DoesNotExist:
+                        raise BadRequest(f"There is no clique with id: {clique_id} in project: {project_id}.")
 
                     if request.user != clique.created_by and not user_is_project_admin(project_id, request.user):
                         raise BadRequest(f"You don't have enough permissions to delete another user's clique.")
 
-                    clique_to_delete, created = CliqueToDelete.objects.get_or_create(
-                        clique=clique,
-                        deleted_by=request.user,
-                    )
-
-                    if not created:
+                    try:
+                        CliqueToDelete.objects.get(
+                            clique=clique,
+                            deleted_by=request.user,
+                        )
+                    except CliqueToDelete.DoesNotExist:
+                        CliqueToDelete.objects.create(
+                            clique=clique,
+                            deleted_by=request.user,
+                            project_version=project_version,
+                        )
+                    else:
                         raise NotModified(f"You already deleted clique with id: {clique_id}.")
-
-                    clique_to_delete.deleted_on = datetime.now()
-                    clique_to_delete.save()
 
                     delete_statuses[i].update({
                         'status': 200,
                         'message': 'OK'
-                    })
-
-                except Clique.DoesNotExist:
-                    status = HttpResponseBadRequest.status_code
-
-                    delete_statuses[i].update({
-                        'status': status,
-                        'message': f"There is no clique with id: {clique_id} in project: {project_id}."
                     })
 
                 except BadRequest as exception:
@@ -400,6 +441,7 @@ def entities(request, project_id, clique_id):  # type: (HttpRequest, int, int) -
             required_keys = {
                 'entities': list,
                 'certainty': str,
+                'project_version': float
             }
 
             validate_keys_and_types(required_keys, request_data)
@@ -412,6 +454,18 @@ def entities(request, project_id, clique_id):  # type: (HttpRequest, int, int) -
                 id=clique_id
             )
 
+            file_version_counter, commit_counter = parse_project_version(request_data['project_version'])
+
+            try:
+                project_version = ProjectVersion.objects.get(
+                    project_id=project_id,
+                    file_version_counter=file_version_counter,
+                    commit_counter=commit_counter,
+                )
+            except ProjectVersion.DoesNotExist:
+                raise BadRequest(f"Version: {request_data['project_version']} of project with id: {project_id} "
+                                 f"doesn't exist.")
+
             unification_statuses = []
 
             for i, entity in enumerate(request_data['entities']):
@@ -421,17 +475,39 @@ def entities(request, project_id, clique_id):  # type: (HttpRequest, int, int) -
                     unification_statuses.append(entity)
 
                 try:
-                    entity_id = get_entity_from_int_or_dict(entity, project_id).id
+                    entity = get_entity_from_int_or_dict(entity, project_id)
 
-                    unification, created = Unification.objects.get_or_create(
-                        project_id=project_id,
-                        entity_id=entity_id,
-                        clique=clique,
-                        created_by=request.user,
-                        certainty=request_data['certainty']
-                    )
+                    try:
+                        file_version = FileVersion.objects.get(
+                            projectversion=project_version,
+                            file=entity.file,
+                        )
+                    except FileVersion.DoesNotExist:
+                        raise BadRequest(f"Source file of entity with id: {entity.id} doesn't exist in version: "
+                                         f"{request_data['project_version']} of the project with id: {project_id}.")
 
-                    if not created:
+                    if entity.created_in_version > file_version.number or \
+                            entity.deleted_in_version and entity.deleted_in_version < file_version.number:
+                        raise BadRequest(f"Entity with id: {entity.id} doesn't exist in version: "
+                                         f"{request_data['project_version']} of the project with id: {project_id}.")
+
+                    try:
+                        Unification.objects.get(
+                            project_id=project_id,
+                            entity=entity,
+                            clique=clique,
+                            created_by=request.user,
+                        )
+                    except Unification.DoesNotExist:
+                        Unification.objects.create(
+                            project_id=project_id,
+                            entity=entity,
+                            clique=clique,
+                            created_by=request.user,
+                            certainty=request_data['certainty'],
+                            created_in_file_version=file_version,
+                        )
+                    else:
                         raise NotModified(f"This entity already exist in clique with id: {clique_id}")
 
                     unification_statuses[i].update({
@@ -479,6 +555,7 @@ def entities(request, project_id, clique_id):  # type: (HttpRequest, int, int) -
 
             required_keys = {
                 'entities': list,
+                'project_version': float
             }
 
             validate_keys_and_types(required_keys, request_data)
@@ -486,45 +563,56 @@ def entities(request, project_id, clique_id):  # type: (HttpRequest, int, int) -
             if len(request_data['entities']) == 0:
                 raise NotModified("You didn't provide any entity id to remove.")
 
+            file_version_counter, commit_counter = parse_project_version(request_data['project_version'])
+
+            try:
+                project_version = ProjectVersion.objects.get(
+                    project_id=project_id,
+                    file_version_counter=file_version_counter,
+                    commit_counter=commit_counter,
+                )
+            except ProjectVersion.DoesNotExist:
+                raise BadRequest(f"Version: {request_data['project_version']} of project with id: {project_id} "
+                                 f"doesn't exist.")
+
             delete_statuses = []
 
             for i, entity_id in enumerate(request_data['entities']):
                 delete_statuses.append({'id': entity_id})
 
                 try:
-                    unification = Unification.objects.get(
-                        project_id=project_id,
-                        clique_id=clique_id,
-                        entity_id=entity_id)
+                    try:
+                        unification = Unification.objects.get(
+                            project_id=project_id,
+                            clique_id=clique_id,
+                            entity_id=entity_id,
+                        )
+                    except Unification.DoesNotExist:
+                        raise BadRequest(f"There is no entity with id: {entity_id} in clique with id: {clique_id} "
+                                         f"in project: {project_id}.")
 
                     if request.user != unification.created_by and not user_is_project_admin(project_id, request.user):
                         raise BadRequest(f"You don't have enough permissions to remove another user's entity "
                                          f"from clique.")
 
-                    unification_to_delete, created = UnificationToDelete.objects.get_or_create(
-                        unification=unification,
-                        deleted_by=request.user,
-                    )
-
-                    if not created:
+                    try:
+                        UnificationToDelete.objects.get(
+                            unification=unification,
+                            deleted_by=request.user,
+                        )
+                    except UnificationToDelete.DoesNotExist:
+                        UnificationToDelete.objects.create(
+                            unification=unification,
+                            deleted_by=request.user,
+                            project_version=project_version,
+                        )
+                    else:
                         raise NotModified(f"You already removed entity with id: {entity_id} from clique "
                                           f"with id: {clique_id}.")
-
-                    unification_to_delete.deleted_on = datetime.now()
-                    unification_to_delete.save()
 
                     delete_statuses[i].update({
                         'status': 200,
                         'message': 'OK'
-                    })
-
-                except Unification.DoesNotExist:
-                    status = HttpResponseBadRequest.status_code
-
-                    delete_statuses[i].update({
-                        'status': status,
-                        'message': f"There is no entity with id: {entity_id} in clique with id: {clique_id} "
-                                   f"in project: {project_id}."
                     })
 
                 except BadRequest as exception:

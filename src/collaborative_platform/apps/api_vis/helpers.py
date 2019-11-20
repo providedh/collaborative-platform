@@ -254,3 +254,11 @@ def get_entity_from_int_or_dict(request_entity, project_id):
 
     else:
         raise BadRequest(f"Invalid type of 'entity' parameter. Allowed types is '{str(int)}' and {str(dict)}.")
+
+
+def parse_project_version(project_version):  # type: (str) -> (int, int)
+    file_version_counter, commit_counter = str(project_version).split('.')
+    file_version_counter = int(file_version_counter)
+    commit_counter = int(commit_counter)
+
+    return file_version_counter, commit_counter
