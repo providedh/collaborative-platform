@@ -7,6 +7,8 @@
  * Listens:
  * - panel/display_options
  * */
+import teiConf from './utilities/taxonomy.js';
+
 var Popup = function(args){
 	let self = null;
 
@@ -83,11 +85,7 @@ var Popup = function(args){
  * */
 var Tooltips = function(args){
 	let self = null;
-	const tags = [
-		'placeName','place','country','location','geogName',
-		'geolocation','person','name','persName','occupation',
-		'event','object','date','time','org','pb','rolename'
-		]
+	const tags = Object.keys(teiConf['entities']);
 
 	function _init(args){
 		const obj = {
@@ -160,7 +158,7 @@ var Tooltips = function(args){
 
 				node.addEventListener('mouseenter', e=>self.publish('popup/render',{
 					title: (`<span class="teiLegendElement" id="${tag_name}">
-							<span class="color" id=""></span></span>`
+							<span class="color bg-${tag_name}"></span></span>`
 							+ node.textContent),
 					subtitle: `( ${tag_name} )`,
 					body: body,

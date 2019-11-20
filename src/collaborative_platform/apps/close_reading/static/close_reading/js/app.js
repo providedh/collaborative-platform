@@ -7,8 +7,10 @@ import HistoryView from './src/history.js';
 import CertaintyList from './src/cert_list.js';
 import {Popup, Tooltips} from './src/tooltips.js';
 import Alert from './src/utilities/alert.js';
+import UISetup from './src/ui.js';
 
 // Load all components
+const uisetup = UISetup({});
 const websocket = AnnotatorWebSocket();
 const channel = PubSubChannel.create();
 const document_view = DocumentView({channel});

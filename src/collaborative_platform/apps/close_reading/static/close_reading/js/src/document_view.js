@@ -71,14 +71,14 @@ var DocumentView = function(args){
 		        + '{background-color: lightgrey;}';
 		    const currentUserColorRule = 'div#annotator-root[display-uncertainty=true][color-uncertainty=true] ' 
 		        + '#'+id
-		        + `{background-color: ${ColorScheme.calculate(category, cert, annotations)};}`;
+		        + `{background-color: ${ColorScheme.calculate(category, cert)};}`;
 
 		    const greyRule = 'div#annotator-root[display-uncertainty=true] ' 
 		        + '#'+id
 		        + '{background: linear-gradient(180deg, #fff 50%, lightgrey 50%);}';
 		    const colorRule = 'div#annotator-root[display-uncertainty=true][color-uncertainty=true] ' 
 		        + '#'+id
-		        + `{background: linear-gradient(180deg, #fff 50%, ${ColorScheme.calculate(category, cert, annotations)} 50%);}`;
+		        + `{background: linear-gradient(180deg, #fff 50%, ${ColorScheme.calculate(category, cert)} 50%);}`;
 
 		    const annotationsRule = ('div#annotator-root[display-uncertainty=true] ' 
 		        + '#'+id+'::after'
