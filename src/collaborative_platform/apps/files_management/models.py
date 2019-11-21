@@ -177,9 +177,10 @@ class FileVersion(models.Model):
             create_new_project_version(project=project, new_file_version=self)
 
 
-class IDsSequence(models.Model):
+class FileMaxXmlIds(models.Model):
     file = models.OneToOneField(File, on_delete=models.CASCADE, primary_key=True)
-    maxPerson = models.IntegerField(default=0)
-    maxEvent = models.IntegerField(default=0)
-    maxOrg = models.IntegerField(default=0)
-    maxPlace = models.IntegerField(default=0)
+    person = models.IntegerField(default=0)
+    event = models.IntegerField(default=0)
+    org = models.IntegerField(default=0)
+    place = models.IntegerField(default=0)
+    certainty = models.IntegerField(default=0)

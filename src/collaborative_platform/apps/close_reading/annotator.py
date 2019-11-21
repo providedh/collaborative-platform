@@ -1,9 +1,8 @@
-# -*- coding: utf-8 -*-
 import re
 from lxml import etree
 from django.contrib.auth.models import User
 
-# from osf.models import Guid, OSFUser
+from apps.files_management.models import FileMaxXmlIds, File
 
 import logging
 logger = logging.getLogger(__name__)
@@ -22,6 +21,7 @@ class NotModifiedException(Exception):
 class Annotator:
     def __init__(self):
         self.__xml = ""
+        self.__file = None
         self.__json = {}
         self.__annotator_xml_id = ""
 
@@ -30,7 +30,8 @@ class Annotator:
         self.__fragment_to_annotate = ""
         self.__tags = {}
         self.__annotators_xml_ids = []
-        self.__first_free_certainty_number = 0
+        self.__tag_xml_id_number = 0
+        self.__certainty_xml_id_number = 0
 
         self.__fragment_annotated = ""
         self.__certainty_to_add = None
@@ -38,8 +39,9 @@ class Annotator:
 
         self.__xml_annotated = ""
 
-    def add_annotation(self, xml, json, annotator_guid):
+    def add_annotation(self, xml, file_id, json, annotator_guid):
         self.__xml = xml
+        self.__file = File.objects.get(id=file_id)
         self.__annotator_xml_id = 'person' + str(annotator_guid)
 
         self.__json = self.__validate_request(json)
@@ -119,7 +121,8 @@ class Annotator:
         self.__tags = self.__get_adhering_tags_from_annotated_fragment(self.__fragment_to_annotate)
         self.__annotators_xml_ids = self.__get_annotators_xml_ids_from_file(self.__xml)
         certainties = self.__get_certainties_from_file(self.__xml)
-        self.__first_free_certainty_number = self.__get_first_free_certainty_number(certainties, self.__json["tag"])
+        self.__tag_xml_id_number = self.__get_xml_id_number_for_tag(certainties, self.__json["tag"])
+        self.__certainty_xml_id_number = self.__get_xml_id_number_for_tag(certainties, 'certainty')
 
     def __get_fragment_position(self, xml, json):
         if 'start_pos' in json and json['start_pos'] is not None and 'end_pos' in json and json['end_pos'] is not None:
@@ -132,6 +135,7 @@ class Annotator:
 
         return start, end
 
+    @staticmethod
     def __convert_rows_and_cols_to_start_and_end(self, text, start_row, start_col, end_row, end_col):
         text_in_lines = text.splitlines(True)
 
@@ -154,6 +158,7 @@ class Annotator:
 
         return chars_to_start, chars_to_end
 
+    @staticmethod
     def __get_fragment_position_without_adhering_tags(self, string, start, end):
         found_tag = True
 
@@ -176,6 +181,7 @@ class Annotator:
 
         return start, end
 
+    @staticmethod
     def __get_fragment_position_with_adhering_tags(self, string, start, end):
         found_tag = True
 
@@ -199,6 +205,7 @@ class Annotator:
 
         return start, end
 
+    @staticmethod
     def __get_adhering_tags_from_annotated_fragment(self, fragment):
         tags = {}
 
@@ -236,6 +243,7 @@ class Annotator:
 
         return tags
 
+    @staticmethod
     def __get_certainties_from_file(self, text):
         text_in_lines = text.splitlines()
 
@@ -252,6 +260,7 @@ class Annotator:
 
         return certainties
 
+    @staticmethod
     def __get_annotators_xml_ids_from_file(self, text):
         text_in_lines = text.splitlines()
 
@@ -275,29 +284,36 @@ class Annotator:
 
         return xml_ids
 
-    def __get_first_free_certainty_number(self, certainties, tag):
-        if not tag:
-            tag = 'ab'
+    def __get_xml_id_number_for_tag(self, certainties, tag='ab'):
+        if tag in ['event', 'org', 'person', 'place', 'certainty']:
+            file_mx_xml_id = FileMaxXmlIds.objects.get(file=self.__file)
 
-        biggest_number = 0
+            file_mx_xml_id.__dict__[tag] += 1
+            file_mx_xml_id.save()
 
-        for certainty in certainties:
-            id_value = certainty.attrib['target']
+            return file_mx_xml_id.__dict__[tag]
 
-            if tag not in id_value:
-                continue
+        # TODO: Max IDs for all tags in file should be keep in database
+        else:
+            biggest_number = 0
 
-            id_value = id_value.strip()
+            for certainty in certainties:
+                id_value = certainty.attrib['target']
 
-            split_values = id_value.split(' ')
-            for value in split_values:
-                number = value.replace('#' + tag, '')
-                number = int(number)
+                if tag not in id_value:
+                    continue
 
-                if number > biggest_number:
-                    biggest_number = number
+                id_value = id_value.strip()
 
-        return biggest_number + 1
+                split_values = id_value.split(' ')
+                for value in split_values:
+                    number = value.replace('#' + tag, '')
+                    number = int(number)
+
+                    if number > biggest_number:
+                        biggest_number = number
+
+            return biggest_number + 1
 
     def __prepare_xml_parts(self):
         # 1.Add tag to text
@@ -370,7 +386,7 @@ class Annotator:
                     tag_begin = match.group()
 
                     if 'xml:id="' not in tag_to_move:
-                        id = '{0}{1:06d}'.format(tag, self.__first_free_certainty_number)
+                        id = f"{tag}_{self.__file.name}-{self.__tag_xml_id_number}"
                         attribute = ' xml:id="{0}"'.format(id)
 
                         annotation_ids.append('#' + id)
@@ -378,7 +394,7 @@ class Annotator:
                         new_tag_to_move = "{0}{1}{2}".format(tag_to_move[:len(tag_begin)], attribute,
                                                              tag_to_move[len(tag_begin):])
 
-                        self.__first_free_certainty_number += 1
+                        self.__tag_xml_id_number += 1
                     else:
                         match = re.search(r'xml:id=".*?"', tag_to_move)
                         existing_id = match.group()
@@ -408,7 +424,7 @@ class Annotator:
                     attribute = ""
 
                     if uncertainty:
-                        id = '{0}{1:06d}'.format(tag, self.__first_free_certainty_number)
+                        id = f"{tag}_{self.__file.name}-{self.__tag_xml_id_number}"
                         attribute = ' xml:id="{0}"'.format(id)
 
                         annotation_ids.append('#' + id)
@@ -421,15 +437,16 @@ class Annotator:
                     annotated_fragment = annotated_fragment[len(text_to_move):]
 
                     if uncertainty:
-                        self.__first_free_certainty_number += 1
+                        self.__tag_xml_id_number += 1
 
         return new_annotated_fragment, annotation_ids
 
     def __create_certainty_description(self, json, annotation_ids, user_uuid):
-        target = u" ".join(annotation_ids)
+        target = " ".join(annotation_ids)
+        xml_id = f"certainty_{self.__file.name}-{self.__certainty_xml_id_number}"
 
-        certainty = u'<certainty category="{0}" locus="{1}" cert="{2}" resp="#{3}" ' \
-                    u'target="{4}"/>'.format(json['category'], json['locus'], json['certainty'],  user_uuid, target)
+        certainty = f'<certainty category="{json["category"]}" locus="{json["locus"]}" cert="{json["certainty"]}" ' \
+                    f'resp="#{user_uuid}" target="{target}" xml:id="{xml_id}"/>'
 
         new_element = etree.fromstring(certainty)
 
@@ -445,11 +462,12 @@ class Annotator:
         return new_element
 
     def __create_certainty_description_for_attribute(self, json, annotation_ids, user_uuid):
-        target = u" ".join(annotation_ids)
+        target = " ".join(annotation_ids)
+        xml_id = f"certainty_{self.__file.name}-{self.__certainty_xml_id_number}"
 
         certainty = f'<certainty category="{json["category"]}" locus="{json["locus"]}" cert="{json["certainty"]}" ' \
                     f'resp="#{user_uuid}" target="{target}" match="@{json["attribute_name"]}"' \
-                    f'assertedValue="{json["asserted_value"]}"/>'
+                    f'assertedValue="{json["asserted_value"]}" xml:id="{xml_id}"/>'
 
         new_element = etree.fromstring(certainty)
 
@@ -482,6 +500,7 @@ class Annotator:
 
         return annotator_xml
 
+    @staticmethod
     def __get_user_data_from_db(self, user_id):
         user = User.objects.get(id=user_id)
 
@@ -580,6 +599,7 @@ class Annotator:
 
         return text
 
+    @staticmethod
     def __create_list_person(self, tree):
         prefix = "{%s}" % NAMESPACES['default']
 
@@ -632,6 +652,7 @@ class Annotator:
 
         return text
 
+    @staticmethod
     def __create_annotation_list(self, tree):
         default_namespace = NAMESPACES['default']
         default = "{%s}" % default_namespace
@@ -666,6 +687,7 @@ class Annotator:
 
         return tree
 
+    @staticmethod
     def __reformat_xml(self, text):
         parser = etree.XMLParser(remove_blank_text=True)
         tree = etree.fromstring(text, parser=parser)

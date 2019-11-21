@@ -7,14 +7,14 @@ from lxml.etree import Element
 
 
 class EntitiesExtractor:
-    tags = ('person', 'place', 'org', 'event')
+    tags = ('person', 'place', 'org', 'event', 'certainty')
     namespaces = {'tei': 'http://www.tei-c.org/ns/1.0', 'xml': 'http://www.w3.org/XML/1998/namespace'}
 
     @classmethod
     def extract_entities_elements(cls, parsed_et):  # type: (et) -> Dict[str, Element]
         entites_elements = dict(
             (tag, parsed_et.xpath(".//tei:{}".format(tag), namespaces=cls.namespaces))
-            for tag in ('place', 'org', 'event'))
+            for tag in ('place', 'org', 'event', 'certainty'))
 
         list_persons = parsed_et.findall(".//tei:listPerson", namespaces=cls.namespaces)
         list_persons = [listp for listp in list_persons if 'PROVIDEDH Annotators' not in listp.attrib.values()]
@@ -139,11 +139,23 @@ class EntitiesExtractor:
         return map(process_event_tag, elements)
 
     @classmethod
+    def __process_certainty_tags(cls, elements):  # type: (List[Element]) -> map
+        def process_certainty_tag(element):
+            id = cls.__extract_tag_id(element)
+            name = ''
+            xml = str(et.tostring(element), 'utf-8')
+            context = ''
+            return {'tag': 'certainty', 'id': id, 'name': name, 'xml': xml, 'context': context}
+
+        return map(process_certainty_tag, elements)
+
+    @classmethod
     def __process_tags(cls, tag, elements):  # type: (str, List[Element]) -> map
         functions = (cls.__process_person_tags,
                      cls.__process_place_tags,
                      cls.__process_org_tags,
-                     cls.__process_event_tags)
+                     cls.__process_event_tags,
+                     cls.__process_certainty_tags)
 
         return dict(zip(cls.tags, functions))[tag](elements)
 
