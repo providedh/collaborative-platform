@@ -3,12 +3,12 @@ import io
 from lxml import etree as et
 
 from apps.files_management.file_conversions.tei_handler import TeiHandler
-from apps.files_management.models import IDsSequence
+from apps.files_management.models import FileMaxXmlIds
 from apps.index_and_search.entities_extractor import EntitiesExtractor
 
 
 class IDsFiller:
-    _tags = ('person', 'place', 'org', 'event')
+    _tags = ('person', 'place', 'org', 'event', 'certainty')
     _namespaces = {'tei': 'http://www.tei-c.org/ns/1.0', 'xml': 'http://www.w3.org/XML/1998/namespace'}
 
     def __init__(self, contents, filename, file_id=None):
@@ -36,31 +36,32 @@ class IDsFiller:
                 if element.attrib.get("{{{}}}id".format(self._namespaces['xml'])) is None:
                     modified = True
                     self._maxid[tag] += 1
-                    element.attrib['{{{}}}id'.format(self._namespaces['xml'])] = "{}{}-{}".format(tag, self.filename,
+                    element.attrib['{{{}}}id'.format(self._namespaces['xml'])] = "{}_{}-{}".format(tag, self.filename,
                                                                                                   self._maxid[tag])
         return modified
 
     def __find_max_ids(self):
         self._maxid = dict()
         for tag in self._tags:
-            ids = re.findall('xml:id="{}{}-[0-9]+?"'.format(tag, self.filename), self.__contents)
+            ids = re.findall('xml:id="{}_{}-[0-9]+?"'.format(tag, self.filename), self.__contents)
             ids = [id.split('-')[-1][:-1] for id in ids]
             self._maxid[tag] = max(map(int, ids)) if ids else 0
 
     def __get_max_ids(self):
         if self._file_id is None:
             raise ResourceWarning("No file_id given on initialization, cannot retrieve max_ids from database.")
-        dbo = IDsSequence.objects.get(file_id=self._file_id)  # type: IDsSequence
-        self._maxid = dict(zip(self._tags, (dbo.maxPerson, dbo.maxPlace, dbo.maxOrg, dbo.maxEvent)))
+        dbo = FileMaxXmlIds.objects.get(file_id=self._file_id)  # type: FileMaxXmlIds
+        self._maxid = dict(zip(self._tags, (dbo.person, dbo.place, dbo.org, dbo.event, dbo.certainty)))
 
     def __update_max_ids(self):
         if self._file_id is None:
             raise ResourceWarning("No file_id given on initialization, cannot retrieve max_ids from database.")
-        dbo = IDsSequence.objects.get(file_id=self._file_id)
-        dbo.maxEvent = self._maxid["event"]
-        dbo.maxPerson = self._maxid["person"]
-        dbo.maxPlace = self._maxid["place"]
-        dbo.maxOrg = self._maxid["org"]
+        dbo = FileMaxXmlIds.objects.get(file_id=self._file_id)
+        dbo.event = self._maxid["event"]
+        dbo.person = self._maxid["person"]
+        dbo.place = self._maxid["place"]
+        dbo.org = self._maxid["org"]
+        dbo.certainty = self._maxid["certainty"]
         dbo.save()
 
     def __replace_all(self):

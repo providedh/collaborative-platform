@@ -50,6 +50,10 @@ class PlaceVersion(EntityVersion):
     country = models.CharField(max_length=255, blank=True, null=True)
 
 
+class CertaintyVersion(EntityVersion):
+    pass
+
+
 class Commit(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)

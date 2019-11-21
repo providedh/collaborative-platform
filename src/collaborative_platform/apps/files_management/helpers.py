@@ -15,7 +15,7 @@ from apps.index_and_search.content_extractor import ContentExtractor
 from apps.index_and_search.entities_extractor import EntitiesExtractor
 from apps.index_and_search.models import Person, Organization, Event, Place
 from apps.projects.helpers import log_activity
-from apps.files_management.models import File, FileVersion, Project, Directory, IDsSequence
+from apps.files_management.models import File, FileVersion, Project, Directory, FileMaxXmlIds
 import apps.index_and_search.models as es
 
 
@@ -33,7 +33,7 @@ def upload_file(uploaded_file, project, user, parent_dir=None):  # type: (Upload
             uploaded_file.name = hash
             file_version = FileVersion(upload=uploaded_file, number=1, hash=hash, file=dbfile, created_by=user)
             file_version.save()
-            IDsSequence(file=dbfile).save()
+            FileMaxXmlIds(file=dbfile).save()
         except Exception as e:
             dbfile.delete()
             raise e
@@ -100,6 +100,9 @@ def index_entities(entities):  # type: (List[dict]) -> None
     }
 
     for entity in copy.deepcopy(entities):
+        if entity['tag'] == 'certainty':
+            continue
+
         tag = entity.pop('tag')
 
         # make sure we're not passing excessive keyword arguments to constructor, as that would cause an error

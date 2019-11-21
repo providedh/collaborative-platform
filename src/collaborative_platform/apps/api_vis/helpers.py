@@ -7,7 +7,7 @@ from django.http import HttpRequest, JsonResponse
 from lxml import etree
 
 from apps.exceptions import BadRequest
-from apps.api_vis.models import Entity, EventVersion, OrganizationVersion, PersonVersion, PlaceVersion
+from apps.api_vis.models import Entity, EventVersion, OrganizationVersion, PersonVersion, PlaceVersion, CertaintyVersion
 from apps.files_management.models import File, FileVersion, Project, Directory
 
 
@@ -160,6 +160,7 @@ def create_entities_in_database(entities, project, file_version):  # type: (list
             'org': OrganizationVersion,
             'event': EventVersion,
             'place': PlaceVersion,
+            'certainty': CertaintyVersion,
         }
 
         tag = entity.pop("tag")
