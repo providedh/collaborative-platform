@@ -136,7 +136,7 @@ class Annotator:
         return start, end
 
     @staticmethod
-    def __convert_rows_and_cols_to_start_and_end(self, text, start_row, start_col, end_row, end_col):
+    def __convert_rows_and_cols_to_start_and_end(text, start_row, start_col, end_row, end_col):
         text_in_lines = text.splitlines(True)
 
         chars_to_start = 0
@@ -159,7 +159,7 @@ class Annotator:
         return chars_to_start, chars_to_end
 
     @staticmethod
-    def __get_fragment_position_without_adhering_tags(self, string, start, end):
+    def __get_fragment_position_without_adhering_tags(string, start, end):
         found_tag = True
 
         while found_tag:
@@ -182,7 +182,7 @@ class Annotator:
         return start, end
 
     @staticmethod
-    def __get_fragment_position_with_adhering_tags(self, string, start, end):
+    def __get_fragment_position_with_adhering_tags(string, start, end):
         found_tag = True
 
         while found_tag:
@@ -206,7 +206,7 @@ class Annotator:
         return start, end
 
     @staticmethod
-    def __get_adhering_tags_from_annotated_fragment(self, fragment):
+    def __get_adhering_tags_from_annotated_fragment(fragment):
         tags = {}
 
         while re.search(r'^\s*?<[^<>]*?>', fragment):
@@ -244,7 +244,7 @@ class Annotator:
         return tags
 
     @staticmethod
-    def __get_certainties_from_file(self, text):
+    def __get_certainties_from_file(text):
         text_in_lines = text.splitlines()
 
         if 'encoding=' in text_in_lines[0]:
@@ -261,7 +261,7 @@ class Annotator:
         return certainties
 
     @staticmethod
-    def __get_annotators_xml_ids_from_file(self, text):
+    def __get_annotators_xml_ids_from_file(text):
         text_in_lines = text.splitlines()
 
         if 'encoding=' in text_in_lines[0]:
@@ -501,7 +501,7 @@ class Annotator:
         return annotator_xml
 
     @staticmethod
-    def __get_user_data_from_db(self, user_id):
+    def __get_user_data_from_db(user_id):
         user = User.objects.get(id=user_id)
 
         data = {
@@ -600,7 +600,7 @@ class Annotator:
         return text
 
     @staticmethod
-    def __create_list_person(self, tree):
+    def __create_list_person(tree):
         prefix = "{%s}" % NAMESPACES['default']
 
         ns_map = {
@@ -653,7 +653,7 @@ class Annotator:
         return text
 
     @staticmethod
-    def __create_annotation_list(self, tree):
+    def __create_annotation_list(tree):
         default_namespace = NAMESPACES['default']
         default = "{%s}" % default_namespace
 
@@ -688,7 +688,7 @@ class Annotator:
         return tree
 
     @staticmethod
-    def __reformat_xml(self, text):
+    def __reformat_xml(text):
         parser = etree.XMLParser(remove_blank_text=True)
         tree = etree.fromstring(text, parser=parser)
         pretty_xml = etree.tounicode(tree, pretty_print=True)
