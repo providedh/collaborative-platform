@@ -118,7 +118,6 @@ let UISetup = function(args){
   }
 
   function _setupEntityStyles(){
-    console.log(_createDisplayStyles())
     document.getElementById('ui-style').innerText += _createDisplayStyles();
   }
 
