@@ -4,9 +4,10 @@ from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 
 from apps.projects.models import Contributor, Project
+from apps.exceptions import BadRequest, NotModified
 from apps.files_management.models import FileVersion, File
 
-from .annotator import Annotator, NotModifiedException
+from .annotator import Annotator
 from .helpers import verify_reference
 from .models import AnnotatingXmlContent, RoomPresence
 
@@ -169,10 +170,10 @@ class AnnotatorConsumer(WebsocketConsumer):
                     }
                 )
 
-            except NotModifiedException as exception:
+            except NotModified as exception:
                 self.send_response(304, exception)
 
-            except (ValueError, TypeError) as error:
+            except BadRequest as error:
                 self.send_response(400, error)
 
     def send_response(self, code, message):
