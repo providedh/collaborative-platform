@@ -3,6 +3,7 @@ from lxml import etree
 from django.contrib.auth.models import User
 
 from apps.files_management.models import FileMaxXmlIds, File
+from apps.projects.helpers import get_ana_link
 
 import logging
 logger = logging.getLogger(__name__)
@@ -67,7 +68,7 @@ class Annotator:
         ]
 
         optional_params = [
-            'category',
+            'categories',
             'locus',
             'certainty',
             'asserted_value',
@@ -445,7 +446,8 @@ class Annotator:
         target = " ".join(annotation_ids)
         xml_id = f"certainty_{self.__file.name}-{self.__certainty_xml_id_number}"
 
-        certainty = f'<certainty category="{json["category"]}" locus="{json["locus"]}" cert="{json["certainty"]}" ' \
+        categories = " ".join([get_ana_link(self.__file.project_id, cat) for cat in json["categories"]])
+        certainty = f'<certainty ana="{categories}" locus="{json["locus"]}" cert="{json["certainty"]}" ' \
                     f'resp="#{user_uuid}" target="{target}" xml:id="{xml_id}"/>'
 
         new_element = etree.fromstring(certainty)
@@ -465,7 +467,8 @@ class Annotator:
         target = " ".join(annotation_ids)
         xml_id = f"certainty_{self.__file.name}-{self.__certainty_xml_id_number}"
 
-        certainty = f'<certainty category="{json["category"]}" locus="{json["locus"]}" cert="{json["certainty"]}" ' \
+        categories = " ".join([get_ana_link(self.__file.project_id, cat) for cat in json["categories"]])
+        certainty = f'<certainty ana="{categories}" locus="{json["locus"]}" cert="{json["certainty"]}" ' \
                     f'resp="#{user_uuid}" target="{target}" match="@{json["attribute_name"]}"' \
                     f'assertedValue="{json["asserted_value"]}" xml:id="{xml_id}"/>'
 
@@ -529,10 +532,10 @@ class Annotator:
                     '//default:classCode[' \
                     '@scheme="http://providedh.eu/uncertainty/ns/1.0"]' \
                     '//default:certainty[' \
-                    '@category="{0}" and ' \
+                    '@ana="{0}" and ' \
                     '@locus="{1}" and ' \
                     '@cert="{2}" and ' \
-                    '@target="{3}"'.format(self.__certainty_to_add.attrib['category'],
+                    '@target="{3}"'.format(self.__certainty_to_add.attrib['ana'],
                                            self.__certainty_to_add.attrib['locus'],
                                            self.__certainty_to_add.attrib['cert'],
                                            self.__certainty_to_add.attrib['target'])
