@@ -8,7 +8,8 @@ from lxml import etree
 
 from apps.exceptions import BadRequest
 from apps.api_vis.models import Entity, EventVersion, OrganizationVersion, PersonVersion, PlaceVersion, CertaintyVersion
-from apps.files_management.models import File, FileVersion, Project, Directory
+from apps.files_management.models import File, FileVersion, Directory
+from apps.projects.models import Project
 
 
 def search_files_by_person_name(request, project_id, query):  # type: (HttpRequest, int, str) -> JsonResponse
