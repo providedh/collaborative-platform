@@ -27,6 +27,7 @@ def create(request):  # type: (HttpRequest) -> HttpResponse
         try:
             if not data['title']:
                 return HttpResponseBadRequest(dumps({"message": "Title cannot be empty"}))
+            print(data)
             project = Project(title=data['title'], description=data["description"])
             project.save()
 
