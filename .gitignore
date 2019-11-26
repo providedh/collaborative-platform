@@ -34,8 +34,5 @@ settings.py
 celerybeat-schedule
 
 # Migrations
-*migrations/
-!migrations/__init__.py
-
-# Uploaded files
-*uploaded_files/
+**/migrations/*
+!**/migrations/__init__.py
