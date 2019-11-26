@@ -655,3 +655,88 @@ def entities(request, project_id, clique_id):  # type: (HttpRequest, int, int) -
             response = {'delete_statuses': delete_statuses}
 
             return JsonResponse(response)
+
+
+@login_required
+@objects_exists
+@user_has_access('RW')
+def uncommitted_changes(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
+    if request.method == 'GET':
+        uncommitted_changes = {
+            'cliques_to_create': [],
+            'cliques_to_delete': [],
+            'unification_to_add': [],
+            'unification_to_remove': [],
+        }
+
+        cliques_to_create = Clique.objects.filter(
+            created_by=request.user,
+            created_in_commit=None,
+            project_id=project_id,
+        )
+
+        for clique in cliques_to_create:
+            clique_data = {
+                'id': clique.id,
+                'asserted_name': clique.asserted_name,
+                'created_by_id': clique.created_by_id,
+            }
+
+            uncommitted_changes['cliques_to_create'].append(clique_data)
+
+        cliques_to_delete = CliqueToDelete.objects.filter(
+            deleted_by=request.user,
+            project_version__project_id=project_id,
+        )
+
+        for clique in cliques_to_delete:
+            clique_data = {
+                'id': clique.id,
+                'asserted_name': clique.clique.asserted_name,
+                'created_by_id': clique.clique.created_by,
+            }
+
+            uncommitted_changes['cliques_to_delete'].append(clique_data)
+
+        unifications_to_add = Unification.objects.filter(
+            created_by=request.user,
+            created_in_commit=None,
+            project_id=project_id,
+        )
+
+        for unification in unifications_to_add:
+            unification_data = {
+                'id': unification.id,
+                'clique_id': unification.clique.id,
+                'clique_asserted_name': unification.clique.asserted_name,
+                'entity_id': unification.entity_id,
+                'entity_name': ENTITY_CLASSES[unification.entity.type].objects.get(
+                    entity_id=unification.entity_id).name,
+                'certainty': unification.certainty,
+                'created_by': unification.created_by_id,
+            }
+
+            uncommitted_changes['unification_to_add'].append(unification_data)
+
+        unifications_to_delete = UnificationToDelete.objects.filter(
+            deleted_by=request.user,
+            project_version__project_id=project_id
+        )
+
+        for unification in unifications_to_delete:
+            unification_data = {
+                'id': unification.unification.id,
+                'clique_id': unification.unification.clique_id,
+                'clique_asserted_name': unification.unification.clique.asserted_name,
+                'entity_id': unification.unification.entity_id,
+                'entity_name': ENTITY_CLASSES[unification.unification.entity.type].objects.get(
+                    entity_id=unification.unification.entity_id).name,
+                'certainty': unification.unification.certainty,
+                'created_by': unification.unification.created_by_id,
+            }
+
+            uncommitted_changes['unification_to_remove'].append(unification_data)
+
+        response = {'uncommitted_changes': uncommitted_changes}
+
+        return JsonResponse(response)

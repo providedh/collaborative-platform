@@ -1,4 +1,4 @@
-asgiref
+# Framework
 Django==2.2.3
 
 # For Postgres database
