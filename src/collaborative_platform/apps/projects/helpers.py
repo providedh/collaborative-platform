@@ -1,9 +1,11 @@
 from json import loads
 
 from django.contrib.auth.models import User
+from django.contrib.sites.shortcuts import get_current_site
 from django.core.paginator import Paginator, Page
 from django.db.models import QuerySet
 from django.http import HttpRequest, JsonResponse
+from django.urls import reverse
 
 from apps.api_vis.models import Commit
 from apps.files_management.models import Directory, File, FileVersion
@@ -130,3 +132,14 @@ def user_is_project_admin(project_id, user):  # type: (int, User) -> bool
 
     except Contributor.DoesNotExist:
         return False
+
+
+def get_ana_link(project_id, uncertainty_type):  # type: (int, str) -> str
+    path = reverse('taxonomy', args=(project_id,))
+    domain = get_current_site(None).domain
+
+    return f"https://{domain}{path}#{uncertainty_type}"
+
+
+def ana_link_to_type(link):  # type: (str) -> str
+    return link.split('#')[1]
