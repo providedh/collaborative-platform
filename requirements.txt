@@ -46,3 +46,5 @@ django-autocomplete-light==3.4.1
 
 # For files deletion
 django-cleanup==4.0.0
+
+asgiref==3.2.0
