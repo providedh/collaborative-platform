@@ -174,18 +174,19 @@ def create_entities_in_database(entities, project, file_version):  # type: (list
         classes[tag](entity=entity_db, fileversion=file_version, **entity).save()
 
 
-def validate_keys_and_types(required_name_type_template, request_data, optional_name_type_template=None,
+def validate_keys_and_types(request_data, required_name_type_template=None, optional_name_type_template=None,
                             parent_name=None):  # type: (dict, dict, dict, str) -> None
-    for key in required_name_type_template:
-        if key not in request_data:
-            if not parent_name:
-                raise BadRequest(f"Missing '{key}' parameter in request data.")
-            else:
-                raise BadRequest(f"Missing '{key}' parameter in {parent_name} argument in request data.")
+    if required_name_type_template:
+        for key in required_name_type_template:
+            if key not in request_data:
+                if not parent_name:
+                    raise BadRequest(f"Missing '{key}' parameter in request data.")
+                else:
+                    raise BadRequest(f"Missing '{key}' parameter in {parent_name} argument in request data.")
 
-        if type(request_data[key]) is not required_name_type_template[key]:
-            raise BadRequest(f"Invalid type of '{key}' parameter. "
-                             f"Correct type is: '{str(required_name_type_template[key])}'.")
+            if type(request_data[key]) is not required_name_type_template[key]:
+                raise BadRequest(f"Invalid type of '{key}' parameter. "
+                                 f"Correct type is: '{str(required_name_type_template[key])}'.")
 
     if optional_name_type_template:
         for key in optional_name_type_template:
@@ -238,7 +239,7 @@ def get_entity_from_int_or_dict(request_entity, project_id):
             'xml_id': str,
         }
 
-        validate_keys_and_types(required_keys, request_entity, parent_name="entity")
+        validate_keys_and_types(request_entity, required_keys, parent_name="entity")
 
         file_path = request_entity['file_path']
         xml_id = request_entity['xml_id']
