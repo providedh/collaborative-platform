@@ -32,7 +32,8 @@ var Annotator = function(args){
 		obj.subscribe('annotator/create-tei', _handleCreateTEIAnnotation);
 		obj.subscribe('annotator/create-uncertainty', _handleCreateUncertaintyAnnotation);
 		obj.subscribe('annotator/save', _handleFileSave);
-		obj.subscribe('document/selection', _handleDocumentSelection);
+		obj.subscribe('document/selection', _handleSelection);
+		obj.subscribe('sidepanel/selection', _handleSelection);
 
 		self = obj;
 		return obj;
@@ -54,14 +55,19 @@ var Annotator = function(args){
 	        return
 
 	    const data = {
-	    	'start_pos': _selection.abs_positions.start,
-	    	'end_pos': _selection.abs_positions.end,
 	    	"category": args.category,
             "locus": args.locus,
             "certainty": args['cert-level'],
             "description": args.desc,
             "tag": args['tag-name'],
 	    };
+
+	    if(_selection.by_id === true)
+	    	data['target'] = _selection['target'];
+	    else{
+	    	data['start_pos'] = _selection.abs_positions.start;
+	    	data['end_pos'] = _selection.abs_positions.end;
+	    }
 
         if(args['locus'] == 'value'){
 	    	data['asserted_value'] = args['asserted-value'];
@@ -71,7 +77,7 @@ var Annotator = function(args){
             data['tag'] = args['asserted-value'];
         }
 
-        if(args['attribute_name'] != ''){
+        if(args['attribute_name'] != undefined && args['attribute_name'] != ''){
             data['attribute_name'] = args['attribute-name'];
             data['asserted_value'] = args['asserted-value'];
         }
@@ -79,9 +85,7 @@ var Annotator = function(args){
         if(args['attribute-name'] == 'sameAs' && ['person', 'event', 'org', 'place'].includes(args['tag-name']) && args['references'] != ''){
             data['asserted_value'] = args['references-filepath']+'#'+args['asserted-value'];
         }
-
-        console.log(data)
-
+        
 	    self.publish('websocket/send', JSON.stringify(data));
 	}
 
@@ -99,7 +103,7 @@ var Annotator = function(args){
 		});
 	}
 
-	function _handleDocumentSelection(args){
+	function _handleSelection(args){
 		_selection = args.selection;
 	}
 
