@@ -107,8 +107,8 @@ class IDsFiller:
     def process(self, initial=False):
         if initial:
             self.__get_max_ids()
-            self.__replace_all()
             text = et.tostring(self._parsed, pretty_print=True, encoding='utf-8').decode('utf-8')
+            text = self.__replace_all(text)
             self.text = io.StringIO(text)
             self.text.seek(io.SEEK_SET)
             self.__update_max_ids()
