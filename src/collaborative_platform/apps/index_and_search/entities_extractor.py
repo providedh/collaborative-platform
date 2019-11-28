@@ -14,16 +14,7 @@ class EntitiesExtractor:
     def extract_entities_elements(cls, parsed_et):  # type: (et) -> Dict[str, Element]
         entites_elements = dict(
             (tag, parsed_et.xpath(".//tei:{}".format(tag), namespaces=cls.namespaces))
-            for tag in ('place', 'org', 'event', 'certainty'))
-
-        list_persons = parsed_et.findall(".//tei:listPerson", namespaces=cls.namespaces)
-        list_persons = [listp for listp in list_persons if 'PROVIDEDH Annotators' not in listp.attrib.values()]
-        text = parsed_et.find(".//tei:text", namespaces=cls.namespaces)
-        persons = text.findall(".//tei:person", namespaces=cls.namespaces)
-
-        for list_p in list_persons:
-            persons.extend(list_p.findall(".//tei:person", namespaces=cls.namespaces))
-        entites_elements['person'] = persons
+            for tag in ('person', 'place', 'org', 'event', 'certainty'))
 
         return entites_elements
 

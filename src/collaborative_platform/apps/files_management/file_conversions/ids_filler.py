@@ -88,6 +88,8 @@ class IDsFiller:
 
         def process_match(match):
             tag_name = match.group(1)
+            if tag_name in self._tags:
+                return match.group(0)
             result = "<" + tag_name + match.group(2) + 'xml:id="'
             id_no = self._maxid.get(tag_name, 0)
             new_id = f"{tag_name}_{self.filename}-{id_no}"
@@ -101,7 +103,7 @@ class IDsFiller:
                       process_match, text)
 
         for old, new in ids_map.items():
-            text = text.replace(old, new)
+            text = text.replace("='" + old, "='" + new).replace('="' + old, '="' + new)
         return text
 
     def process(self, initial=False):
@@ -111,7 +113,7 @@ class IDsFiller:
             text = et.tostring(self._parsed, pretty_print=True, encoding='utf-8').decode('utf-8')
 
             for old, new in ids_map.items():
-                text = text.replace(old, new)
+                text = text.replace("='" + old, "='" + new).replace('="' + old, '="' + new)
 
             text = self.__alter_not_indexed_ids(text)
             self.text = io.StringIO(text)
