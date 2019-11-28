@@ -64,26 +64,26 @@ class IDsFiller:
         dbo.certainty = self._maxid["certainty"]
         dbo.save()
 
-    def __replace_all(self):
-        grouped_tags = EntitiesExtractor.extract_entities_elements(self._parsed)
+    # def __replace_all(self):
+    #     grouped_tags = EntitiesExtractor.extract_entities_elements(self._parsed)
+    #
+    #     original_ids_map = {}
+    #
+    #     for tag, elements in grouped_tags.items():
+    #         for element in elements:
+    #             org = element.attrib.get("{{{}}}id".format(self._namespaces['xml']))
+    #             self._maxid[tag] += 1
+    #             new = "{}_{}-{}".format(tag, self.filename, self._maxid[tag])
+    #             element.attrib['{{{}}}id'.format(self._namespaces['xml'])] = new
+    #             original_ids_map[org] = new
+    #
+    #     try:
+    #         original_ids_map.pop(None)
+    #     except KeyError:
+    #         pass
+    #     return original_ids_map
 
-        original_ids_map = {}
-
-        for tag, elements in grouped_tags.items():
-            for element in elements:
-                org = element.attrib.get("{{{}}}id".format(self._namespaces['xml']))
-                self._maxid[tag] += 1
-                new = "{}_{}-{}".format(tag, self.filename, self._maxid[tag])
-                element.attrib['{{{}}}id'.format(self._namespaces['xml'])] = new
-                original_ids_map[org] = new
-
-        try:
-            original_ids_map.pop(None)
-        except KeyError:
-            pass
-        return original_ids_map
-
-    def __alter_not_indexed_ids(self, text):
+    def __replace_all(self, text):
         ids_map = {}
 
         def process_match(match):
@@ -107,13 +107,8 @@ class IDsFiller:
     def process(self, initial=False):
         if initial:
             self.__get_max_ids()
-            ids_map = self.__replace_all()
+            self.__replace_all()
             text = et.tostring(self._parsed, pretty_print=True, encoding='utf-8').decode('utf-8')
-
-            for old, new in ids_map.items():
-                text = text.replace(old, new)
-
-            text = self.__alter_not_indexed_ids(text)
             self.text = io.StringIO(text)
             self.text.seek(io.SEEK_SET)
             self.__update_max_ids()
