@@ -37,7 +37,7 @@ class IDsFiller:
                     modified = True
                     self._maxid[tag] += 1
                     element.attrib['{{{}}}id'.format(self._namespaces['xml'])] = "{}_{}-{}".format(tag, self.filename,
-                                                                                                  self._maxid[tag])
+                                                                                                   self._maxid[tag])
         return modified
 
     def __find_max_ids(self):
@@ -83,6 +83,27 @@ class IDsFiller:
             pass
         return original_ids_map
 
+    def __alter_not_indexed_ids(self, text):
+        ids_map = {}
+
+        def process_match(match):
+            tag_name = match.group(1)
+            result = "<" + tag_name + match.group(2) + 'xml:id="'
+            id_no = self._maxid.get(tag_name, 0)
+            new_id = f"{tag_name}_{self.filename}-{id_no}"
+            result += new_id
+            result += '"' + match.group(4)
+            ids_map[match.group(3)] = new_id
+            self._maxid[tag_name] = id_no + 1
+            return result
+
+        text = re.sub(r"<([a-zA-Z_][a-zA-Z\-_.]*)([^>]*?)xml:id=['\"]([^>\"']*?)['\"]([^>]*?>)",
+                      process_match, text)
+
+        for old, new in ids_map.items():
+            text = text.replace(old, new)
+        return text
+
     def process(self, initial=False):
         if initial:
             self.__get_max_ids()
@@ -91,6 +112,8 @@ class IDsFiller:
 
             for old, new in ids_map.items():
                 text = text.replace(old, new)
+
+            text = self.__alter_not_indexed_ids(text)
             self.text = io.StringIO(text)
             self.text.seek(io.SEEK_SET)
             self.__update_max_ids()
