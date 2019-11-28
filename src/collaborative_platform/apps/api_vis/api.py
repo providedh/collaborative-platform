@@ -16,7 +16,7 @@ from apps.views_decorators import objects_exists, user_has_access
 
 from .helpers import search_files_by_person_name, search_files_by_content, validate_keys_and_types, \
     get_annotations_from_file_version_body, get_entity_from_int_or_dict, parse_project_version
-from .models import Clique, CliqueToDelete, EventVersion, OrganizationVersion, PersonVersion, PlaceVersion, \
+from .models import Clique, CliqueToDelete, Commit, EventVersion, OrganizationVersion, PersonVersion, PlaceVersion, \
     Unification, UnificationToDelete
 
 
@@ -227,7 +227,7 @@ def cliques(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
             }
             optional_keys = {'name': str}
 
-            validate_keys_and_types(required_keys, request_data, optional_keys)
+            validate_keys_and_types(request_data, required_keys, optional_keys)
 
             if 'name' in request_data and request_data['name'] != '':
                 clique_name = request_data['name']
@@ -335,7 +335,7 @@ def cliques(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
                 'project_version': float,
             }
 
-            validate_keys_and_types(required_keys, request_data)
+            validate_keys_and_types(request_data, required_keys)
 
             if len(request_data['cliques']) == 0:
                 raise NotModified("You didn't provide any clique id to delete.")
@@ -444,7 +444,7 @@ def entities(request, project_id, clique_id):  # type: (HttpRequest, int, int) -
                 'project_version': float
             }
 
-            validate_keys_and_types(required_keys, request_data)
+            validate_keys_and_types(request_data, required_keys)
 
             if not request_data['entities']:
                 raise BadRequest("Provide at least one entity.")
@@ -558,7 +558,7 @@ def entities(request, project_id, clique_id):  # type: (HttpRequest, int, int) -
                 'project_version': float
             }
 
-            validate_keys_and_types(required_keys, request_data)
+            validate_keys_and_types(request_data, required_keys)
 
             if len(request_data['entities']) == 0:
                 raise NotModified("You didn't provide any entity id to remove.")
@@ -653,5 +653,217 @@ def entities(request, project_id, clique_id):  # type: (HttpRequest, int, int) -
 
         else:
             response = {'delete_statuses': delete_statuses}
+
+            return JsonResponse(response)
+
+
+@login_required
+@objects_exists
+@user_has_access('RW')
+def uncommitted_changes(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
+    if request.method == 'GET':
+        uncommitted_changes = {
+            'cliques_to_create': [],
+            'cliques_to_delete': [],
+            'unification_to_add': [],
+            'unification_to_remove': [],
+        }
+
+        cliques_to_create = Clique.objects.filter(
+            created_by=request.user,
+            created_in_commit=None,
+            project_id=project_id,
+        )
+
+        for clique in cliques_to_create:
+            clique_data = {
+                'id': clique.id,
+                'asserted_name': clique.asserted_name,
+                'created_by_id': clique.created_by_id,
+            }
+
+            uncommitted_changes['cliques_to_create'].append(clique_data)
+
+        cliques_to_delete = CliqueToDelete.objects.filter(
+            deleted_by=request.user,
+            project_version__project_id=project_id,
+        )
+
+        for clique in cliques_to_delete:
+            clique_data = {
+                'id': clique.id,
+                'asserted_name': clique.clique.asserted_name,
+                'created_by_id': clique.clique.created_by,
+            }
+
+            uncommitted_changes['cliques_to_delete'].append(clique_data)
+
+        unifications_to_add = Unification.objects.filter(
+            created_by=request.user,
+            created_in_commit=None,
+            project_id=project_id,
+        )
+
+        for unification in unifications_to_add:
+            unification_data = {
+                'id': unification.id,
+                'clique_id': unification.clique.id,
+                'clique_asserted_name': unification.clique.asserted_name,
+                'entity_id': unification.entity_id,
+                'entity_name': ENTITY_CLASSES[unification.entity.type].objects.get(
+                    entity_id=unification.entity_id).name,
+                'certainty': unification.certainty,
+                'created_by': unification.created_by_id,
+            }
+
+            uncommitted_changes['unification_to_add'].append(unification_data)
+
+        unifications_to_remove = UnificationToDelete.objects.filter(
+            deleted_by=request.user,
+            project_version__project_id=project_id
+        )
+
+        for unification in unifications_to_remove:
+            unification_data = {
+                'id': unification.unification.id,
+                'clique_id': unification.unification.clique_id,
+                'clique_asserted_name': unification.unification.clique.asserted_name,
+                'entity_id': unification.unification.entity_id,
+                'entity_name': ENTITY_CLASSES[unification.unification.entity.type].objects.get(
+                    entity_id=unification.unification.entity_id).name,
+                'certainty': unification.unification.certainty,
+                'created_by': unification.unification.created_by_id,
+            }
+
+            uncommitted_changes['unification_to_remove'].append(unification_data)
+
+        response = {'uncommitted_changes': uncommitted_changes}
+
+        return JsonResponse(response)
+
+
+@login_required
+@objects_exists
+@user_has_access('RW')
+def commits(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
+    if request.method == 'POST':
+        try:
+            cliques_to_create = Clique.objects.filter(
+                created_by=request.user,
+                created_in_commit=None,
+                project_id=project_id,
+            )
+
+            cliques_to_delete = CliqueToDelete.objects.filter(
+                deleted_by=request.user,
+                project_version__project_id=project_id,
+            )
+
+            unifications_to_add = Unification.objects.filter(
+                created_by=request.user,
+                created_in_commit=None,
+                project_id=project_id,
+            )
+
+            unifications_to_remove = UnificationToDelete.objects.filter(
+                deleted_by=request.user,
+                project_version__project_id=project_id
+            )
+
+            if len(cliques_to_create) == 0 and len(cliques_to_delete) == 0 and len(unifications_to_add) == 0 \
+                    and len(unifications_to_remove) == 0:
+                raise NotModified(f'You dont have any changes to commit in project with id: {project_id}.')
+
+            request_data = json.loads(request.body)
+
+            optional_keys = {
+                'message': str,
+            }
+
+            validate_keys_and_types(request_data, optional_name_type_template=optional_keys)
+
+            commit = Commit.objects.create(
+                project_id=project_id,
+                message=request_data['message'] if 'message' in request_data else ''
+            )
+
+            for clique_to_create in cliques_to_create:
+                clique_to_create.created_in_commit = commit
+                clique_to_create.save()
+
+            for clique_to_delete in cliques_to_delete:
+                clique = clique_to_delete.clique
+                clique.deleted_on = clique_to_delete.deleted_on
+                clique.deleted_by = clique_to_delete.deleted_by
+                clique.deleted_in_commit = commit
+                clique.save()
+
+                unifications = Unification.objects.filter(
+                    project_id=project_id,
+                    clique=clique,
+                    deleted_in_commit=None
+                )
+
+                for unification in unifications:
+                    file_version = FileVersion.objects.get(
+                        projectversion=clique_to_delete.project_version,
+                        file=unification.entity.file,
+                    )
+
+                    unification.deleted_on = clique_to_delete.deleted_on
+                    unification.deleted_by = clique_to_delete.deleted_by
+                    unification.deleted_in_commit = commit
+                    unification.deleted_in_file_version = file_version
+                    unification.save()
+
+                clique_to_delete.delete()
+
+            for unification_to_add in unifications_to_add:
+                unification_to_add.created_in_commit = commit
+                unification_to_add.save()
+
+            for unification_to_remove in unifications_to_remove:
+                unification = unification_to_remove.unification
+
+                file_version = FileVersion.objects.get(
+                    projectversion=unification_to_remove.project_version,
+                    file=unification_to_remove.unification.entity.file,
+                )
+
+                unification.deleted_on = unification_to_remove.deleted_on
+                unification.deleted_by = unification_to_remove.deleted_by
+                unification.deleted_in_commit = commit
+                unification.deleted_in_file_version = file_version
+                unification.save()
+
+                unification_to_remove.delete()
+
+        except NotModified as exception:
+            status = HttpResponseNotModified.status_code
+
+            response = {
+                'status': status,
+                'message': str(exception),
+            }
+
+            return JsonResponse(response, status=status)
+
+        except (BadRequest, JSONDecodeError) as exception:
+            status = HttpResponseBadRequest.status_code
+
+            response = {
+                'status': status,
+                'message': str(exception),
+            }
+
+            return JsonResponse(response, status=status)
+
+        else:
+            status = HttpResponse.status_code
+
+            response = {
+                'status': status,
+                'message': 'OK'
+            }
 
             return JsonResponse(response)

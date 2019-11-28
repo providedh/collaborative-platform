@@ -1,18 +1,18 @@
 # Frontend files
-node_modules
+**/node_modules/
 
 # PyCharm IDE settings files
-.idea/
+.idea/*
 !.idea/runConfigurations/
 
 # Vietualenv files
 venv/
 
 # Pyhon cache files
-__pycache__/
+**/__pycache__/
 
 # Python eggs
-*.egg-info/
+**/*.egg-info/
 
 # Uploaded files
 media/
@@ -34,8 +34,5 @@ settings.py
 celerybeat-schedule
 
 # Migrations
-*migrations/
-
-#uploaded files
-
-*uploaded_files/
+**/migrations/*
+!**/migrations/__init__.py

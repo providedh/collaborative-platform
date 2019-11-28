@@ -33,9 +33,10 @@ let PanelView = function(args){
 		if(args.hasOwnProperty('channel'))
 			args.channel.addToChannel(obj);
 
-		obj.suscribe('panel/load_history', _handleLoadHistory);
-		obj.suscribe('panel/reset', _handlePanelReset);
+		obj.subscribe('panel/load_history', _handleLoadHistory);
+		obj.subscribe('panel/reset', _handlePanelReset);
 		obj.suscribe('panel/autocomplete_options', _handleAutocompleteOptions);
+		obj.subscribe('sidepanel/selection', _handleSidepanelSelection);
 		obj.subscribe('document/selection', _handleDocumentSelection);
 
 		Object.assign(values, _getCurrentValues());
@@ -101,10 +102,14 @@ let PanelView = function(args){
         asserted_value_container.removeChild(asserted_value_container.children[0]);
         asserted_value_container.appendChild(input);
 
-        if(values['locus'] == 'name')
+        if(values['locus'] == 'name'){
         	document.getElementById('tag-name-input').style.setProperty('display','none');
-        else
+        	document.getElementById('attribute-name-control').style.setProperty('display','none');
+        }
+        else{
         	document.getElementById('tag-name-input').style.setProperty('display','initial');
+        	document.getElementById('attribute-name-control').style.setProperty('display','initial');
+        }
 	}
 
 	function _updateReferencesControl(){
@@ -322,6 +327,10 @@ let PanelView = function(args){
 	}
 
 	function _handleDocumentSelection(args){
+		document.getElementById('selection').value = args.selection.text;
+	}
+
+	function _handleSidepanelSelection(args){
 		document.getElementById('selection').value = args.selection.text;
 	}
 
