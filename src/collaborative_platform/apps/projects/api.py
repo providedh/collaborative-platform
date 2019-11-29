@@ -32,8 +32,8 @@ def create(request):  # type: (HttpRequest) -> HttpResponse
 
             taxonomy_data = {key[9:]: val for key, val in data.items() if key.startswith("taxonomy.")}
             for key, val in taxonomy_data.items():
-                if key.startswith("taxonomy.xml_id"):
-                    taxonomy_data[key] = '-'.join(val.lower().strip().split())
+                if key.startswith("name"):
+                    taxonomy_data[key.replace("name", "xml_id")] = '-'.join(val.lower().strip().split())
             taxonomy = Taxonomy(project=project, **taxonomy_data)
             taxonomy.save()
 
