@@ -7,4 +7,5 @@ urlpatterns = [
     path('get_mine/', api.get_mine, name='get_mine'),
     path('get_users/<int:user_id>/', api.get_users, name='get_users'),
     path('<int:project_id>/activities/', api.get_activities, name='activities'),
+    path('<int:project_id>/taxonomy/', api.get_taxonomy, name='taxonomy'),
 ]

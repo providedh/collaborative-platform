@@ -1,3 +1,4 @@
+from copy import copy
 from json import loads, JSONDecodeError, dumps
 
 from django.contrib.auth.decorators import login_required
@@ -13,7 +14,7 @@ from apps.projects.helpers import page_to_json_response, include_contributors, l
 from apps.views_decorators import objects_exists, user_has_access
 
 from .helpers import paginate_page_perpage, order_queryset
-from .models import Project, Contributor
+from .models import Project, Contributor, Taxonomy
 
 
 @login_required
@@ -27,9 +28,15 @@ def create(request):  # type: (HttpRequest) -> HttpResponse
         try:
             if not data['title']:
                 return HttpResponseBadRequest(dumps({"message": "Title cannot be empty"}))
-
             project = Project(title=data['title'], description=data["description"])
             project.save()
+
+            taxonomy_data = {key[9:]: val for key, val in data.items() if key.startswith("taxonomy.")}
+            for key, val in copy(taxonomy_data).items():
+                if key.startswith("name"):
+                    taxonomy_data[key.replace("name", "xml_id")] = '-'.join(val.lower().strip().split())
+            taxonomy = Taxonomy(project=project, **taxonomy_data)
+            taxonomy.save()
 
             profile = Profile.objects.get(user=request.user)
 
@@ -122,3 +129,14 @@ def get_users(request, user_id):  # type: (HttpRequest, int) -> HttpResponse
     projects = order_queryset(request, projects)
     page = paginate_start_length(request, projects)
     return include_contributors(page_to_json_response(page))
+
+
+@login_required
+@objects_exists
+@user_has_access()
+def get_taxonomy(request, project_id):
+    if request.method != "GET":
+        return HttpResponseBadRequest("Invalid request method")
+
+    project = Project.objects.get(id=project_id)
+    return HttpResponse(project.taxonomy.contents)
