@@ -11,9 +11,10 @@ class Entity(models.Model):
     file = models.ForeignKey(File, on_delete=models.CASCADE)
     xml_id = models.CharField(max_length=255)
     created_in_version = models.IntegerField()
-    deleted = models.BooleanField(default=False)
     deleted_on = models.DateTimeField(null=True)
     deleted_in_version = models.IntegerField(null=True)
+    deleted_by = models.ForeignKey(User, related_name="deleted_entities", default=None, on_delete=models.SET_NULL,
+                                   null=True)
     type = models.CharField(max_length=12)
 
     class Meta:

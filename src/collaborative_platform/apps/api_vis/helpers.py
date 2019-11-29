@@ -11,7 +11,7 @@ import apps.index_and_search.models as es
 from apps.api_vis.models import Entity, EventVersion, OrganizationVersion, PersonVersion, PlaceVersion, CertaintyVersion
 from apps.exceptions import BadRequest
 from apps.files_management.models import File, FileVersion, Directory
-from apps.projects.models import Project
+from apps.projects.models import Project, ProjectVersion
 
 
 def search_files_by_person_name(request, project_id, query):  # type: (HttpRequest, int, str) -> JsonResponse
@@ -280,6 +280,10 @@ def parse_query_string(query_string):
     users = parse_string_to_list_of_integers(users)
     parsed_query_string.update({'users': users})
 
+    date = query_string.get('date', None)
+    date = parse_string_to_date(date)
+    parsed_query_string.update({'date': date})
+
     start_date = query_string.get('start_date', None)
     start_date = parse_string_to_date(start_date)
     parsed_query_string.update({'start_date': start_date})
@@ -299,6 +303,7 @@ def parse_string_to_list_of_strings(string):
     if string:
         return string.split(',')
 
+
 def parse_string_to_list_of_integers(string):
     if string:
         strings = string.split(',')
@@ -309,10 +314,49 @@ def parse_string_to_list_of_integers(string):
 
         return integers
 
+
 def parse_string_to_date(string):
     if string:
         return datetime.strptime(string, '%Y-%m-%d.%H.%M.%S')
 
+
 def parse_string_to_float(string):
     if string:
         return float(string)
+
+
+def filter_entities_by_project_version(entities, project_id, project_version):
+    file_version_counter, commit_counter = parse_project_version(project_version)
+
+    try:
+        project_version = ProjectVersion.objects.get(
+            project_id=project_id,
+            file_version_counter=file_version_counter,
+            commit_counter=commit_counter,
+        )
+    except ProjectVersion.DoesNotExist:
+        raise BadRequest(f"Version: {project_version} of project with id: {project_id} "
+                         f"doesn't exist.")
+
+    filtered_entities = []
+
+    for entity in entities:
+        created_in_file_version = entity.created_in_version
+        deleted_in_file_version = entity.deleted_in_version
+        file = entity.file
+
+        try:
+            file_version_in_project_version = FileVersion.objects.get(
+                projectversion=project_version,
+                file=file,
+            ).number
+        except FileVersion.DoesNotExist:
+            continue
+
+        if created_in_file_version <= file_version_in_project_version:
+            if deleted_in_file_version and file_version_in_project_version < deleted_in_file_version:
+                filtered_entities.append(entity)
+            elif not deleted_in_file_version:
+                filtered_entities.append(entity)
+
+    return filtered_entities

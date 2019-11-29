@@ -15,9 +15,10 @@ from apps.projects.models import Contributor, ProjectVersion
 from apps.views_decorators import objects_exists, user_has_access
 
 from .helpers import search_files_by_person_name, search_files_by_content, validate_keys_and_types, \
-    get_annotations_from_file_version_body, get_entity_from_int_or_dict, parse_project_version, parse_query_string
-from .models import Clique, CliqueToDelete, Commit, EventVersion, OrganizationVersion, PersonVersion, PlaceVersion, \
-    Unification, UnificationToDelete
+    get_annotations_from_file_version_body, get_entity_from_int_or_dict, parse_project_version, parse_query_string, \
+    filter_entities_by_project_version
+from .models import Clique, CliqueToDelete, Commit, Entity, EventVersion, OrganizationVersion, PersonVersion, \
+    PlaceVersion, Unification, UnificationToDelete
 
 
 NAMESPACES = {
@@ -327,7 +328,10 @@ def cliques(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
         try:
             query_string = parse_query_string(request.GET)
 
-            unifications = Unification.objects.filter(created_in_commit__isnull=False)
+            unifications = Unification.objects.filter(
+                created_in_commit__isnull=False,
+                project_id=project_id,
+            )
 
             if query_string['types']:
                 unifications = unifications.filter(entity__type__in=query_string['types'])
@@ -365,10 +369,14 @@ def cliques(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
                         deleted_in_file_version = None
 
                     file = unification.created_in_file_version.file
-                    file_version_in_project_version = FileVersion.objects.get(
-                        projectversion=project_version,
-                        file=file,
-                    ).number
+
+                    try:
+                        file_version_in_project_version = FileVersion.objects.get(
+                            projectversion=project_version,
+                            file=file,
+                        ).number
+                    except FileVersion.DoesNotExist:
+                        continue
 
                     if created_in_file_version <= file_version_in_project_version:
                         if deleted_in_file_version and file_version_in_project_version <= deleted_in_file_version:
@@ -520,7 +528,7 @@ def cliques(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
 @login_required
 @objects_exists
 @user_has_access('RW')
-def entities(request, project_id, clique_id):  # type: (HttpRequest, int, int) -> HttpResponse
+def clique_entities(request, project_id, clique_id):  # type: (HttpRequest, int, int) -> HttpResponse
     if request.method == 'PUT':
         try:
             request_data = json.loads(request.body)
@@ -954,3 +962,65 @@ def commits(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
             }
 
             return JsonResponse(response)
+
+
+@login_required
+@objects_exists
+@user_has_access()
+def project_entities(request, project_id):
+    if request.method == 'GET':
+        try:
+            query_string = parse_query_string(request.GET)
+
+            entities = Entity.objects.filter(project_id=project_id)
+
+            if query_string['types']:
+                entities = entities.filter(type__in=query_string['types'])
+
+            # TODO: Update filtering by user after adding field for responsible user to entity model
+            # if query_string['users']:
+            #     entities = entities.filter()
+
+            if query_string['project_version']:
+                entities = filter_entities_by_project_version(entities, project_id, query_string['project_version'])
+
+            elif query_string['date']:
+                project_versions = ProjectVersion.objects.filter(
+                    project_id=project_id,
+                    date__lte=query_string['date'],
+                ).order_by('-date')
+
+                if project_versions:
+                    project_version = str(project_versions[0])
+                else:
+                    raise BadRequest(f"There is no project version before date: {query_string['date']}.")
+
+                entities = filter_entities_by_project_version(entities, project_id, str(project_version))
+            else:
+                entities = entities.filter(deleted_on__isnull=True)
+
+            entities_to_return = []
+
+            for entity in entities:
+                entity_to_return = {
+                    'id': entity.id,
+                    'name': ENTITY_CLASSES[entity.type].objects.get(entity_id=entity.id).name,
+                    'type': entity.type,
+                }
+
+                entities_to_return.append(entity_to_return)
+
+        except BadRequest as exception:
+            status = HttpResponseBadRequest.status_code
+
+            response = {
+                'status': status,
+                'message': str(exception),
+            }
+
+            return JsonResponse(response, status=status)
+
+        else:
+            response = entities_to_return
+
+            return JsonResponse(response, safe=False)
