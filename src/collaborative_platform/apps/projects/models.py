@@ -75,15 +75,19 @@ class ProjectVersion(models.Model):
 class Taxonomy(models.Model):
     project = models.OneToOneField(Project, primary_key=True, related_name='taxonomy', on_delete=models.CASCADE)
     xml_id_1 = models.CharField(max_length=255)
+    name_1 = models.CharField(max_length=255)
     desc_1 = models.TextField(null=True, blank=True)
     color_1 = models.CharField(max_length=7)
     xml_id_2 = models.CharField(max_length=255)
+    name_2 = models.CharField(max_length=255)
     desc_2 = models.TextField(null=True, blank=True)
     color_2 = models.CharField(max_length=7)
     xml_id_3 = models.CharField(max_length=255)
+    name_3 = models.CharField(max_length=255)
     desc_3 = models.TextField(null=True, blank=True)
     color_3 = models.CharField(max_length=7)
     xml_id_4 = models.CharField(max_length=255)
+    name_4 = models.CharField(max_length=255)
     desc_4 = models.TextField(null=True, blank=True)
     color_4 = models.CharField(max_length=7)
     contents = models.TextField()
@@ -94,12 +98,16 @@ class Taxonomy(models.Model):
             self.contents = template_string.format(
                 self.project.title,
                 self.xml_id_1,
+                self.name_1,
                 self.desc_1,
                 self.xml_id_2,
+                self.name_2,
                 self.desc_2,
                 self.xml_id_3,
+                self.name_3,
                 self.desc_3,
                 self.xml_id_4,
+                self.name_4,
                 self.desc_4,
             )
         super(Taxonomy, self).save(*args, **kwargs)

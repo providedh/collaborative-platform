@@ -13,15 +13,19 @@ template_string = """<?xml version="1.0" encoding="UTF-8"?>
             <catDesc>User recognized uncertainty</catDesc>
             <category xml:id="{}">
               <catDesc>{}</catDesc>
+              <desc>{}</desc>
             </category>
             <category xml:id="{}">
               <catDesc>{}</catDesc>
+              <desc>{}</desc>
             </category>
             <category xml:id="{}">
               <catDesc>{}</catDesc>
+              <desc>{}</desc>
             </category>
             <category xml:id="{}">
               <catDesc>{}</catDesc>
+              <desc>{}</desc>
             </category>
           </category>
           <category>

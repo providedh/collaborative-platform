@@ -1,3 +1,4 @@
+from copy import copy
 from json import loads, JSONDecodeError, dumps
 
 from django.contrib.auth.decorators import login_required
@@ -31,9 +32,9 @@ def create(request):  # type: (HttpRequest) -> HttpResponse
             project.save()
 
             taxonomy_data = {key[9:]: val for key, val in data.items() if key.startswith("taxonomy.")}
-            for key, val in taxonomy_data.items():
-                if key.startswith("taxonomy.xml_id"):
-                    taxonomy_data[key] = '-'.join(val.lower().strip().split())
+            for key, val in copy(taxonomy_data).items():
+                if key.startswith("name"):
+                    taxonomy_data[key.replace("name", "xml_id")] = '-'.join(val.lower().strip().split())
             taxonomy = Taxonomy(project=project, **taxonomy_data)
             taxonomy.save()
 
