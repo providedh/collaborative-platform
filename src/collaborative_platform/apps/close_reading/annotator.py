@@ -27,9 +27,6 @@ POSITION_PARAMS_V2 = [
     'end_pos',
 ]
 
-class NotModifiedException(Exception):
-    pass
-
 
 class Annotator:
     def __init__(self):

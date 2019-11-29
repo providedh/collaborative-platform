@@ -55,7 +55,7 @@ var Annotator = function(args){
 	        return
 
 	    const data = {
-	    	"category": args.category,
+			"categories": [args.category],
             "locus": args.locus,
             "certainty": args['cert-level'],
             "description": args.desc,
