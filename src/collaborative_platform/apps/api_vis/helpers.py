@@ -1,13 +1,15 @@
 import copy
 import re
 
-import apps.index_and_search.models as es
-
-from django.http import HttpRequest, JsonResponse
+from datetime import datetime
 from lxml import etree
 
-from apps.exceptions import BadRequest
+from django.http import HttpRequest, JsonResponse
+
+import apps.index_and_search.models as es
+
 from apps.api_vis.models import Entity, EventVersion, OrganizationVersion, PersonVersion, PlaceVersion, CertaintyVersion
+from apps.exceptions import BadRequest
 from apps.files_management.models import File, FileVersion, Directory
 from apps.projects.models import Project
 
@@ -265,3 +267,52 @@ def parse_project_version(project_version):  # type: (str) -> (int, int)
     commit_counter = int(commit_counter)
 
     return file_version_counter, commit_counter
+
+
+def parse_query_string(query_string):
+    parsed_query_string = {}
+
+    types = query_string.get('types', None)
+    types = parse_string_to_list_of_strings(types)
+    parsed_query_string.update({'types': types})
+
+    users = query_string.get('users', None)
+    users = parse_string_to_list_of_integers(users)
+    parsed_query_string.update({'users': users})
+
+    start_date = query_string.get('start_date', None)
+    start_date = parse_string_to_date(start_date)
+    parsed_query_string.update({'start_date': start_date})
+
+    end_date = query_string.get('end_date', None)
+    end_date = parse_string_to_date(end_date)
+    parsed_query_string.update({'end_date': end_date})
+
+    project_version = query_string.get('project_version', None)
+    project_version = parse_string_to_float(project_version)
+    parsed_query_string.update({'project_version': project_version})
+
+    return parsed_query_string
+
+
+def parse_string_to_list_of_strings(string):
+    if string:
+        return string.split(',')
+
+def parse_string_to_list_of_integers(string):
+    if string:
+        strings = string.split(',')
+        integers = []
+
+        for string in strings:
+            integers.append(int(string))
+
+        return integers
+
+def parse_string_to_date(string):
+    if string:
+        return datetime.strptime(string, '%Y-%m-%d.%H.%M.%S')
+
+def parse_string_to_float(string):
+    if string:
+        return float(string)

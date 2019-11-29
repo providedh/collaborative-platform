@@ -15,7 +15,7 @@ from apps.projects.models import Contributor, ProjectVersion
 from apps.views_decorators import objects_exists, user_has_access
 
 from .helpers import search_files_by_person_name, search_files_by_content, validate_keys_and_types, \
-    get_annotations_from_file_version_body, get_entity_from_int_or_dict, parse_project_version
+    get_annotations_from_file_version_body, get_entity_from_int_or_dict, parse_project_version, parse_query_string
 from .models import Clique, CliqueToDelete, Commit, EventVersion, OrganizationVersion, PersonVersion, PlaceVersion, \
     Unification, UnificationToDelete
 
@@ -324,7 +324,94 @@ def cliques(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
             return JsonResponse(response)
 
     elif request.method == 'GET':
-        pass
+        try:
+            query_string = parse_query_string(request.GET)
+
+            unifications = Unification.objects.filter(created_in_commit__isnull=False)
+
+            if query_string['types']:
+                unifications = unifications.filter(entity__type__in=query_string['types'])
+
+            if query_string['users']:
+                unifications = unifications.filter(created_by_id__in=query_string['users'])
+
+            if query_string['start_date']:
+                unifications = unifications.filter(created_on__gte=query_string['start_date'])
+
+            if query_string['end_date']:
+                unifications = unifications.filter(created_on__lte=query_string['end_date'])
+
+            if query_string['project_version']:
+                file_version_counter, commit_counter = parse_project_version(query_string['project_version'])
+
+                try:
+                    project_version = ProjectVersion.objects.get(
+                        project_id=project_id,
+                        file_version_counter=file_version_counter,
+                        commit_counter=commit_counter,
+                    )
+                except ProjectVersion.DoesNotExist:
+                    raise BadRequest(f"Version: {query_string['project_version']} of project with id: {project_id} "
+                                     f"doesn't exist.")
+
+                filtered_unifications = []
+
+                for unification in unifications:
+                    created_in_file_version = unification.created_in_file_version.number
+
+                    try:
+                        deleted_in_file_version = unification.deleted_in_file_version.number
+                    except AttributeError:
+                        deleted_in_file_version = None
+
+                    file = unification.created_in_file_version.file
+                    file_version_in_project_version = FileVersion.objects.get(
+                        projectversion=project_version,
+                        file=file,
+                    ).number
+
+                    if created_in_file_version <= file_version_in_project_version:
+                        if deleted_in_file_version and file_version_in_project_version <= deleted_in_file_version:
+                            filtered_unifications.append(unification)
+                        elif not deleted_in_file_version:
+                            filtered_unifications.append(unification)
+
+                unifications = filtered_unifications
+
+            else:
+                unifications = unifications.filter(deleted_on__isnull=True)
+
+            cliques = {}
+
+            for unification in unifications:
+                if unification.clique_id not in cliques:
+                    clique = {
+                        'id': unification.clique_id,
+                        'name': unification.clique.asserted_name,
+                        'type': unification.entity.type,
+                        'entities': []
+                    }
+
+                    cliques.update({unification.clique_id: clique})
+
+                cliques[unification.clique_id]['entities'].append(unification.entity_id)
+
+            cliques = list(cliques.values())
+
+        except (BadRequest, JSONDecodeError) as exception:
+            status = HttpResponseBadRequest.status_code
+
+            response = {
+                'status': status,
+                'message': str(exception),
+            }
+
+            return JsonResponse(response, status=status)
+
+        else:
+            response = cliques
+
+            return JsonResponse(response, safe=False)
 
     elif request.method == 'DELETE':
         try:
