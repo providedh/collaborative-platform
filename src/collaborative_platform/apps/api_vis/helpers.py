@@ -465,3 +465,55 @@ def common_filter_cliques(query_string, project_id):
     cliques = list(cliques.values())
 
     return cliques
+
+
+def common_filter_entities(query_string, project_id):
+    from apps.api_vis.api import ENTITY_CLASSES
+
+    if query_string['project_version'] and query_string['date']:
+        raise BadRequest("Provided timestamp parameters are ambiguous. Provide 'project_version' "
+                         "for reference to specific project version, OR 'date' for reference to "
+                         "latest project version on given time.")
+
+    entities = Entity.objects.filter(project_id=project_id)
+
+    if query_string['types']:
+        entities = entities.filter(type__in=query_string['types'])
+
+    # TODO: Update filtering by user after adding field for responsible user to entity model
+    # if query_string['users']:
+    #     entities = entities.filter()
+
+    if query_string['project_version']:
+        entities = filter_entities_by_project_version(entities, project_id, query_string['project_version'])
+
+    elif query_string['date']:
+        project_versions = ProjectVersion.objects.filter(
+            project_id=project_id,
+            date__lte=query_string['date'],
+        ).order_by('-date')
+
+        if project_versions:
+            project_version = project_versions[0]
+        else:
+            raise BadRequest(f"There is no project version before date: {query_string['date']}.")
+
+        entities = filter_entities_by_project_version(entities, project_id, str(project_version))
+    else:
+        entities = entities.filter(deleted_on__isnull=True)
+
+    entities_to_return = []
+
+    for entity in entities:
+        if entity.type == 'certainty':
+            continue
+
+        entity_to_return = {
+            'id': entity.id,
+            'name': ENTITY_CLASSES[entity.type].objects.get(entity_id=entity.id).name,
+            'type': entity.type,
+        }
+
+        entities_to_return.append(entity_to_return)
+
+    return entities_to_return

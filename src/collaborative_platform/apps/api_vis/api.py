@@ -16,7 +16,8 @@ from apps.views_decorators import objects_exists, user_has_access
 
 from .helpers import search_files_by_person_name, search_files_by_content, validate_keys_and_types, \
     get_annotations_from_file_version_body, get_entity_from_int_or_dict, parse_project_version, parse_query_string, \
-    filter_entities_by_project_version, filter_unifications_by_project_version, common_filter_cliques
+    filter_entities_by_project_version, filter_unifications_by_project_version, common_filter_cliques, \
+    common_filter_entities
 from .models import Clique, CliqueToDelete, Commit, Entity, EventVersion, OrganizationVersion, PersonVersion, \
     PlaceVersion, Unification, UnificationToDelete
 
@@ -896,48 +897,7 @@ def project_entities(request, project_id):  # type: (HttpRequest, int) -> HttpRe
         try:
             query_string = parse_query_string(request.GET)
 
-            if query_string['project_version'] and query_string['date']:
-                raise BadRequest("Provided timestamp parameters are ambiguous. Provide 'project_version' "
-                                 "for reference to specific project version, OR 'date' for reference to "
-                                 "latest project version on given time.")
-
-            entities = Entity.objects.filter(project_id=project_id)
-
-            if query_string['types']:
-                entities = entities.filter(type__in=query_string['types'])
-
-            # TODO: Update filtering by user after adding field for responsible user to entity model
-            # if query_string['users']:
-            #     entities = entities.filter()
-
-            if query_string['project_version']:
-                entities = filter_entities_by_project_version(entities, project_id, query_string['project_version'])
-
-            elif query_string['date']:
-                project_versions = ProjectVersion.objects.filter(
-                    project_id=project_id,
-                    date__lte=query_string['date'],
-                ).order_by('-date')
-
-                if project_versions:
-                    project_version = project_versions[0]
-                else:
-                    raise BadRequest(f"There is no project version before date: {query_string['date']}.")
-
-                entities = filter_entities_by_project_version(entities, project_id, str(project_version))
-            else:
-                entities = entities.filter(deleted_on__isnull=True)
-
-            entities_to_return = []
-
-            for entity in entities:
-                entity_to_return = {
-                    'id': entity.id,
-                    'name': ENTITY_CLASSES[entity.type].objects.get(entity_id=entity.id).name,
-                    'type': entity.type,
-                }
-
-                entities_to_return.append(entity_to_return)
+            entities = common_filter_entities(query_string, project_id)
 
         except BadRequest as exception:
             status = HttpResponseBadRequest.status_code
@@ -950,7 +910,7 @@ def project_entities(request, project_id):  # type: (HttpRequest, int) -> HttpRe
             return JsonResponse(response, status=status)
 
         else:
-            response = entities_to_return
+            response = entities
 
             return JsonResponse(response, safe=False)
 
@@ -1085,5 +1045,39 @@ def file_cliques(request, project_id, file_id):  # type: (HttpRequest, int, int)
 
         else:
             response = cliques_to_return
+
+            return JsonResponse(response, safe=False)
+
+
+@login_required
+@objects_exists
+@user_has_access()
+def file_entities(request, project_id, file_id):  # type: (HttpRequest, int, int) -> HttpResponse
+    if request.method == 'GET':
+        try:
+            query_string = parse_query_string(request.GET)
+
+            entities = common_filter_entities(query_string, project_id)
+
+            entities_to_return = []
+
+            for entity_params in entities:
+                entity = Entity.objects.get(id=entity_params['id'])
+
+                if entity.file_id == file_id:
+                    entities_to_return.append(entity_params)
+
+        except BadRequest as exception:
+            status = HttpResponseBadRequest.status_code
+
+            response = {
+                'status': status,
+                'message': str(exception),
+            }
+
+            return JsonResponse(response, status=status)
+
+        else:
+            response = entities_to_return
 
             return JsonResponse(response, safe=False)

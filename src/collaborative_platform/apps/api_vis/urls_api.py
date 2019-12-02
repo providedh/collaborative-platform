@@ -12,6 +12,7 @@ urlpatterns = [
     path('projects/<int:project_id>/files/<int:file_id>/people/', api.file_people),
     path('projects/<int:project_id>/files/<int:file_id>/', api.file),
     path('projects/<int:project_id>/files/<int:file_id>/cliques/', api.file_cliques),
+    path('projects/<int:project_id>/files/<int:file_id>/entities/', api.file_entities),
     path('projects/<int:project_id>/files/', api.project_files),
     path('projects/<int:project_id>/context/<str:text>/', api.context_search),
     path('projects/<int:project_id>/cliques/<int:clique_id>/entities/', api.clique_entities),
