@@ -8,7 +8,8 @@ from django.http import HttpRequest, JsonResponse
 
 import apps.index_and_search.models as es
 
-from apps.api_vis.models import Entity, EventVersion, OrganizationVersion, PersonVersion, PlaceVersion, CertaintyVersion
+from apps.api_vis.models import Entity, EventVersion, OrganizationVersion, PersonVersion, PlaceVersion, \
+    CertaintyVersion, Unification
 from apps.exceptions import BadRequest
 from apps.files_management.models import File, FileVersion, Directory
 from apps.projects.models import Project, ProjectVersion
@@ -402,3 +403,65 @@ def filter_entities_by_project_version(entities, project_id, project_version):
                 filtered_entities.append(entity)
 
     return filtered_entities
+
+
+def common_filter_cliques(query_string, project_id):
+    if query_string['project_version'] and query_string['date']:
+        raise BadRequest("Provided timestamp parameters are ambiguous. Provide 'project_version' "
+                         "for reference to specific project version, OR 'date' for reference to "
+                         "latest project version on given time.")
+
+    unifications = Unification.objects.filter(
+        created_in_commit__isnull=False,
+        project_id=project_id,
+    )
+
+    if query_string['types']:
+        unifications = unifications.filter(entity__type__in=query_string['types'])
+
+    if query_string['users']:
+        unifications = unifications.filter(created_by_id__in=query_string['users'])
+
+    if query_string['start_date']:
+        unifications = unifications.filter(created_on__gte=query_string['start_date'])
+
+    if query_string['end_date']:
+        unifications = unifications.filter(created_on__lte=query_string['end_date'])
+
+    if query_string['project_version']:
+        unifications = filter_unifications_by_project_version(unifications, project_id,
+                                                              query_string['project_version'])
+    elif query_string['date']:
+        project_versions = ProjectVersion.objects.filter(
+            project_id=project_id,
+            date__lte=query_string['date'],
+        ).order_by('-date')
+
+        if project_versions:
+            project_version = project_versions[0]
+        else:
+            raise BadRequest(f"There is no project version before date: {query_string['date']}.")
+
+        unifications = filter_unifications_by_project_version(unifications, project_id, str(project_version))
+
+    else:
+        unifications = unifications.filter(deleted_on__isnull=True)
+
+    cliques = {}
+
+    for unification in unifications:
+        if unification.clique_id not in cliques:
+            clique = {
+                'id': unification.clique_id,
+                'name': unification.clique.asserted_name,
+                'type': unification.entity.type,
+                'entities': []
+            }
+
+            cliques.update({unification.clique_id: clique})
+
+        cliques[unification.clique_id]['entities'].append(unification.entity_id)
+
+    cliques = list(cliques.values())
+
+    return cliques
