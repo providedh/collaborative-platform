@@ -10,6 +10,7 @@ class Entity(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     file = models.ForeignKey(File, on_delete=models.CASCADE)
     xml_id = models.CharField(max_length=255)
+    created_by = models.ForeignKey(User, related_name="created_entities", on_delete=models.SET_NULL, null=True)
     created_in_version = models.IntegerField()
     deleted_on = models.DateTimeField(null=True)
     deleted_in_version = models.IntegerField(null=True)
