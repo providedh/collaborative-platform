@@ -325,6 +325,48 @@ def parse_string_to_float(string):
         return float(string)
 
 
+def filter_unifications_by_project_version(unifications, project_id, project_version):
+    file_version_counter, commit_counter = parse_project_version(project_version)
+
+    try:
+        project_version = ProjectVersion.objects.get(
+            project_id=project_id,
+            file_version_counter=file_version_counter,
+            commit_counter=commit_counter,
+        )
+    except ProjectVersion.DoesNotExist:
+        raise BadRequest(f"Version: {project_version} of project with id: {project_id} "
+                         f"doesn't exist.")
+
+    filtered_unifications = []
+
+    for unification in unifications:
+        created_in_file_version = unification.created_in_file_version.number
+
+        try:
+            deleted_in_file_version = unification.deleted_in_file_version.number
+        except AttributeError:
+            deleted_in_file_version = None
+
+        file = unification.created_in_file_version.file
+
+        try:
+            file_version_in_project_version = FileVersion.objects.get(
+                projectversion=project_version,
+                file=file,
+            ).number
+        except FileVersion.DoesNotExist:
+            continue
+
+        if created_in_file_version <= file_version_in_project_version:
+            if deleted_in_file_version and file_version_in_project_version <= deleted_in_file_version:
+                filtered_unifications.append(unification)
+            elif not deleted_in_file_version:
+                filtered_unifications.append(unification)
+
+    return filtered_unifications
+
+
 def filter_entities_by_project_version(entities, project_id, project_version):
     file_version_counter, commit_counter = parse_project_version(project_version)
 

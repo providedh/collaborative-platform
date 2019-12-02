@@ -17,5 +17,6 @@ urlpatterns = [
     path('projects/<int:project_id>/cliques/', api.cliques),
     path('projects/<int:project_id>/commits/uncommitted_changes/', api.uncommitted_changes),
     path('projects/<int:project_id>/commits/', api.commits),
+    path('projects/<int:project_id>/entities/unbounded_entities/', api.unbounded_project_entities),
     path('projects/<int:project_id>/entities/', api.project_entities),
 ]
