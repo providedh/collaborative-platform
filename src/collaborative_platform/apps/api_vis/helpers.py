@@ -1,15 +1,18 @@
 import copy
 import re
 
-import apps.index_and_search.models as es
-
-from django.http import HttpRequest, JsonResponse
+from datetime import datetime
 from lxml import etree
 
+from django.http import HttpRequest, JsonResponse
+
+import apps.index_and_search.models as es
+
+from apps.api_vis.models import Entity, EventVersion, OrganizationVersion, PersonVersion, PlaceVersion, \
+    CertaintyVersion, Unification
 from apps.exceptions import BadRequest
-from apps.api_vis.models import Entity, EventVersion, OrganizationVersion, PersonVersion, PlaceVersion, CertaintyVersion
 from apps.files_management.models import File, FileVersion, Directory
-from apps.projects.models import Project
+from apps.projects.models import Project, ProjectVersion
 
 
 def search_files_by_person_name(request, project_id, query):  # type: (HttpRequest, int, str) -> JsonResponse
@@ -265,3 +268,289 @@ def parse_project_version(project_version):  # type: (str) -> (int, int)
     commit_counter = int(commit_counter)
 
     return file_version_counter, commit_counter
+
+
+def parse_query_string(query_string):
+    parsed_query_string = {}
+
+    types = query_string.get('types', None)
+    types = parse_string_to_list_of_strings(types)
+    parsed_query_string.update({'types': types})
+
+    users = query_string.get('users', None)
+    users = parse_string_to_list_of_integers(users)
+    parsed_query_string.update({'users': users})
+
+    date = query_string.get('date', None)
+    date = parse_string_to_date(date)
+    parsed_query_string.update({'date': date})
+
+    start_date = query_string.get('start_date', None)
+    start_date = parse_string_to_date(start_date)
+    parsed_query_string.update({'start_date': start_date})
+
+    end_date = query_string.get('end_date', None)
+    end_date = parse_string_to_date(end_date)
+    parsed_query_string.update({'end_date': end_date})
+
+    file_version = query_string.get('file_version', None)
+    file_version = parse_string_to_int(file_version)
+    parsed_query_string.update({'file_version': file_version})
+
+    project_version = query_string.get('project_version', None)
+    project_version = parse_string_to_float(project_version)
+    parsed_query_string.update({'project_version': project_version})
+
+    return parsed_query_string
+
+
+def parse_string_to_list_of_strings(string):
+    if string:
+        return string.split(',')
+
+
+def parse_string_to_list_of_integers(string):
+    if string:
+        strings = string.split(',')
+        integers = []
+
+        for string in strings:
+            integers.append(int(string))
+
+        return integers
+
+
+def parse_string_to_date(string):
+    if string:
+        return datetime.strptime(string, '%Y-%m-%d.%H.%M.%S')
+
+
+def parse_string_to_int(string):
+    if string:
+        return int(string)
+
+
+def parse_string_to_float(string):
+    if string:
+        return float(string)
+
+
+def filter_unifications_by_project_version(unifications, project_id, project_version):
+    file_version_counter, commit_counter = parse_project_version(project_version)
+
+    try:
+        project_version = ProjectVersion.objects.get(
+            project_id=project_id,
+            file_version_counter=file_version_counter,
+            commit_counter=commit_counter,
+        )
+    except ProjectVersion.DoesNotExist:
+        raise BadRequest(f"Version: {project_version} of project with id: {project_id} "
+                         f"doesn't exist.")
+
+    filtered_unifications = []
+
+    for unification in unifications:
+        created_in_file_version = unification.created_in_file_version.number
+
+        try:
+            deleted_in_file_version = unification.deleted_in_file_version.number
+        except AttributeError:
+            deleted_in_file_version = None
+
+        file = unification.created_in_file_version.file
+
+        try:
+            file_version_in_project_version = FileVersion.objects.get(
+                projectversion=project_version,
+                file=file,
+            ).number
+        except FileVersion.DoesNotExist:
+            continue
+
+        if created_in_file_version <= file_version_in_project_version:
+            if deleted_in_file_version and file_version_in_project_version <= deleted_in_file_version:
+                filtered_unifications.append(unification)
+            elif not deleted_in_file_version:
+                filtered_unifications.append(unification)
+
+    return filtered_unifications
+
+
+def filter_entities_by_project_version(entities, project_id, project_version):
+    file_version_counter, commit_counter = parse_project_version(project_version)
+
+    try:
+        project_version = ProjectVersion.objects.get(
+            project_id=project_id,
+            file_version_counter=file_version_counter,
+            commit_counter=commit_counter,
+        )
+    except ProjectVersion.DoesNotExist:
+        raise BadRequest(f"Version: {project_version} of project with id: {project_id} "
+                         f"doesn't exist.")
+
+    filtered_entities = []
+
+    for entity in entities:
+        created_in_file_version = entity.created_in_version
+        deleted_in_file_version = entity.deleted_in_version
+        file = entity.file
+
+        try:
+            file_version_in_project_version = FileVersion.objects.get(
+                projectversion=project_version,
+                file=file,
+            ).number
+        except FileVersion.DoesNotExist:
+            continue
+
+        if created_in_file_version <= file_version_in_project_version:
+            if deleted_in_file_version and file_version_in_project_version < deleted_in_file_version:
+                filtered_entities.append(entity)
+            elif not deleted_in_file_version:
+                filtered_entities.append(entity)
+
+    return filtered_entities
+
+
+def filter_entities_by_file_version(entities, project_id, file_id, file_version):
+    try:
+        file_version = FileVersion.objects.get(
+            file_id=file_id,
+            number=file_version,
+        )
+
+    except FileVersion.DoesNotExist:
+        raise BadRequest(f"Version: {file_version} of file with id: {file_id} "
+                         f"doesn't exist in project with id: {project_id}.")
+
+    file_version = file_version.number
+
+    filtered_entities = []
+
+    for entity in entities:
+        created_in_file_version = entity.created_in_version
+        deleted_in_file_version = entity.deleted_in_version
+
+        if created_in_file_version <= file_version:
+            if deleted_in_file_version and file_version < deleted_in_file_version:
+                filtered_entities.append(entity)
+            elif not deleted_in_file_version:
+                filtered_entities.append(entity)
+
+    return filtered_entities
+
+
+def common_filter_cliques(query_string, project_id):
+    if query_string['project_version'] and query_string['date']:
+        raise BadRequest("Provided timestamp parameters are ambiguous. Provide 'project_version' "
+                         "for reference to specific project version, OR 'date' for reference to "
+                         "latest project version on given time.")
+
+    unifications = Unification.objects.filter(
+        created_in_commit__isnull=False,
+        project_id=project_id,
+    )
+
+    if query_string['types']:
+        unifications = unifications.filter(entity__type__in=query_string['types'])
+
+    if query_string['users']:
+        unifications = unifications.filter(created_by_id__in=query_string['users'])
+
+    if query_string['start_date']:
+        unifications = unifications.filter(created_on__gte=query_string['start_date'])
+
+    if query_string['end_date']:
+        unifications = unifications.filter(created_on__lte=query_string['end_date'])
+
+    if query_string['project_version']:
+        unifications = filter_unifications_by_project_version(unifications, project_id,
+                                                              query_string['project_version'])
+    elif query_string['date']:
+        project_versions = ProjectVersion.objects.filter(
+            project_id=project_id,
+            date__lte=query_string['date'],
+        ).order_by('-date')
+
+        if project_versions:
+            project_version = project_versions[0]
+        else:
+            raise BadRequest(f"There is no project version before date: {query_string['date']}.")
+
+        unifications = filter_unifications_by_project_version(unifications, project_id, str(project_version))
+
+    else:
+        unifications = unifications.filter(deleted_on__isnull=True)
+
+    cliques = {}
+
+    for unification in unifications:
+        if unification.clique_id not in cliques:
+            clique = {
+                'id': unification.clique_id,
+                'name': unification.clique.asserted_name,
+                'type': unification.entity.type,
+                'entities': []
+            }
+
+            cliques.update({unification.clique_id: clique})
+
+        cliques[unification.clique_id]['entities'].append(unification.entity_id)
+
+    cliques = list(cliques.values())
+
+    return cliques
+
+
+def common_filter_entities(query_string, project_id):
+    from apps.api_vis.api import ENTITY_CLASSES
+
+    if query_string['project_version'] and query_string['date']:
+        raise BadRequest("Provided timestamp parameters are ambiguous. Provide 'project_version' "
+                         "for reference to specific project version, OR 'date' for reference to "
+                         "latest project version on given time.")
+
+    entities = Entity.objects.filter(project_id=project_id)
+
+    if query_string['types']:
+        entities = entities.filter(type__in=query_string['types'])
+
+    # TODO: Update filtering by user after adding field for responsible user to entity model
+    # if query_string['users']:
+    #     entities = entities.filter()
+
+    if query_string['project_version']:
+        entities = filter_entities_by_project_version(entities, project_id, query_string['project_version'])
+
+    elif query_string['date']:
+        project_versions = ProjectVersion.objects.filter(
+            project_id=project_id,
+            date__lte=query_string['date'],
+        ).order_by('-date')
+
+        if project_versions:
+            project_version = project_versions[0]
+        else:
+            raise BadRequest(f"There is no project version before date: {query_string['date']}.")
+
+        entities = filter_entities_by_project_version(entities, project_id, str(project_version))
+    else:
+        entities = entities.filter(deleted_on__isnull=True)
+
+    entities_to_return = []
+
+    for entity in entities:
+        if entity.type == 'certainty':
+            continue
+
+        entity_to_return = {
+            'id': entity.id,
+            'name': ENTITY_CLASSES[entity.type].objects.get(entity_id=entity.id).name,
+            'type': entity.type,
+        }
+
+        entities_to_return.append(entity_to_return)
+
+    return entities_to_return
