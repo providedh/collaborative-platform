@@ -16,6 +16,10 @@ class EntitiesExtractor:
             (tag, parsed_et.xpath(".//tei:{}".format(tag), namespaces=cls.namespaces))
             for tag in ('person', 'place', 'org', 'event', 'certainty'))
 
+        for elem in entites_elements['person'].copy():
+            if elem.getparent().attrib.get("type", "") == 'PROVIDEDH Annotators':
+                entites_elements['person'].remove(elem)
+
         return entites_elements
 
     @classmethod
@@ -89,7 +93,7 @@ class EntitiesExtractor:
             context = cls.__get_context(element)
             location = ' '.join(
                 re.sub("<.*?>", "", str(et.tostring(element.find(".//tei:location", namespaces=cls.namespaces)),
-                       'utf-8')).split())
+                                        'utf-8')).split())
 
             return {'tag': 'place',
                     'id': id,
