@@ -17,12 +17,22 @@ class App extends React.Component {
     };
 
     this.createProject = this.createProject.bind(this);
+    this.updateTeiScheme = this.updateTeiScheme.bind(this);
+    this.updateCertScheme = this.updateCertScheme.bind(this);
   }
 
   componentDidMount(){
     document.getElementById('create-project-button')
         .addEventListener('click', this.createProject);
       
+  }
+
+  updateTeiScheme(scheme){
+    this.setState({teiScheme: scheme});
+  }
+
+  updateCertScheme(scheme){
+    this.setState({certScheme: scheme});
   }
 
   createProject(e){
@@ -82,11 +92,11 @@ class App extends React.Component {
           />
         <TEIentitiesSection 
           scheme={this.state.teiScheme}
-          updateScheme={scheme=>this.setState({teiScheme: scheme})}
+          updateScheme={this.updateTeiScheme}
           />
         <TaxonomySection 
           scheme={this.state.certScheme}
-          updateScheme={scheme=>this.setState({certScheme: scheme})}
+          updateScheme={this.updateCertScheme}
           />
       </div>
     );

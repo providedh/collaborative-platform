@@ -2,7 +2,7 @@ import React from 'react';
 
 import IconPicker from './IconPicker.js';
 
-class TEIentitiesSection extends React.Component {
+class TEIentitiesSection extends React.PureComponent {
   constructor(props){
     super(props);
     
@@ -95,8 +95,10 @@ class TEIentitiesSection extends React.Component {
   }
   
   handleNameChange(index, newName){
-    this.props.scheme[index][0] = newName;
-    this.props.updateScheme(this.props.scheme);
+    const newValue = this.props.scheme[index];
+    newValue[0] = newName;
+    const newScheme = this.props.scheme.map((x,i)=>i!=index?x:newValue);
+    this.props.updateScheme(newScheme);
   }
   
   handleRemoveEntry(index){
@@ -105,8 +107,10 @@ class TEIentitiesSection extends React.Component {
   }
   
   handleValueChange(index, key, value){
-    this.props.scheme[index][1][key] = value;
-    this.props.updateScheme(this.props.scheme);
+    const newValue = this.props.scheme[index];
+    newValue[1][key] = value;
+    const newScheme = this.props.scheme.map((x,i)=>i!=index?x:newValue);
+    this.props.updateScheme(newScheme);
   }
   
   render(){
