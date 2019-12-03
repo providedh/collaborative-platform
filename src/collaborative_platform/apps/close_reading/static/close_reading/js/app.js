@@ -26,6 +26,7 @@ const tooltips = Tooltips({channel});
 const sub = {};
 channel.addToChannel(sub);
 sub.subscribe('websocket/send', json=>websocket.send(json));
+sub.subscribe('websocket/send', json=>console.log(json));
 sub.subscribe('document/render', selection=>console.info('Document rendered.'));
 
 // Publish websocket updates
