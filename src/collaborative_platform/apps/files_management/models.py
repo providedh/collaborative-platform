@@ -140,6 +140,13 @@ class File(FileNode):
 
         return path
 
+    def delete_fake(self):
+        from apps.projects.helpers import create_new_project_version
+
+        super().delete_fake()
+
+        create_new_project_version(self.project, True)
+
 
 class FileVersion(models.Model):
     upload = models.FileField(upload_to=UPLOADED_FILES_PATH)
@@ -174,7 +181,7 @@ class FileVersion(models.Model):
 
         if created:
             project = self.file.project
-            create_new_project_version(project=project, new_file_version=self)
+            create_new_project_version(project=project, new_file_version=True)
 
 
 class FileMaxXmlIds(models.Model):

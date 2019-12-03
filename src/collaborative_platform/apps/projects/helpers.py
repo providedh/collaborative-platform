@@ -80,7 +80,7 @@ def log_activity(project, user, action_text="", file=None, related_dir=None):
 
 
 def create_new_project_version(project, new_file_version=None, new_commit=None):
-    # type: (Project, FileVersion, Commit) -> None
+    # type: (Project, bool, Commit) -> None
 
     files = File.objects.filter(project=project, deleted=False)
     file_versions = (FileVersion.objects.get(file=file, number=file.version_number) for file in files)
