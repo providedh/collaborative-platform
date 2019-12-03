@@ -1,4 +1,6 @@
 import re
+from typing import Callable
+
 from lxml import etree
 from django.contrib.auth.models import User
 
@@ -7,6 +9,7 @@ from apps.files_management.models import FileMaxXmlIds, File
 from apps.projects.helpers import get_ana_link
 
 import logging
+
 logger = logging.getLogger(__name__)
 
 NAMESPACES = {
@@ -26,6 +29,14 @@ POSITION_PARAMS_V2 = [
     'start_pos',
     'end_pos',
 ]
+
+
+def log(func: Callable):
+    def f(*args, **kwargs):
+        print(f"{func.__name__} called.")
+        func(*args, **kwargs)
+
+    return f
 
 
 class Annotator:
@@ -51,7 +62,10 @@ class Annotator:
 
         self.__xml_annotated = ""
 
+    @log
     def add_annotation(self, xml, file_id, request, annotator_guid):
+        import pprint
+        pprint.pprint(request)
         self.__xml = xml
         self.__file = File.objects.get(id=file_id)
         self.__annotator_xml_id = 'person' + str(annotator_guid)
@@ -64,6 +78,7 @@ class Annotator:
 
         return self.__xml_annotated
 
+    @log
     def __validate_request(self, request):
         self.__check_target_in_request(request)
         self.__check_positions_in_request(request)
@@ -82,12 +97,14 @@ class Annotator:
             self.__validate_positions(request)
 
         self.__fill_in_optional_params(request)
-        self.__validate_closed_list_parameters()
+        # self.__validate_closed_list_parameters()
 
+    @log
     def __check_target_in_request(self, request):
         if 'target' in request:
             self.__target = True
 
+    @log
     def __check_positions_in_request(self, request):
         position_v1 = all(elements in request.keys() for elements in POSITION_PARAMS_V1)
         position_v2 = all(elements in request.keys() for elements in POSITION_PARAMS_V2)
@@ -95,6 +112,7 @@ class Annotator:
         if position_v1 or position_v2:
             self.__positions = True
 
+    @log
     def __validate_target(self, request):
         text_in_lines = self.__xml.splitlines()
 
@@ -114,6 +132,7 @@ class Annotator:
 
         self.__request.update({'target': request['target']})
 
+    @log
     def __validate_positions(self, request):
         position_v1 = all(elements in request.keys() for elements in POSITION_PARAMS_V1)
 
@@ -140,6 +159,7 @@ class Annotator:
 
         self.__request.update(validated_positions)
 
+    @log
     def __fill_in_optional_params(self, request):
         optional_params = [
             'categories',
@@ -161,6 +181,7 @@ class Annotator:
 
         self.__request.update(filled_params)
 
+    @log
     def __validate_closed_list_parameters(self):
         correct_values = {
             'category': ['ignorance', 'credibility', 'imprecision', 'incompleteness'],
@@ -175,11 +196,14 @@ class Annotator:
 
                 raise BadRequest(f"Value of '{parameter}' parameter is incorrect. Correct values are: {values}.")
 
+    @log
     def __get_data_from_xml(self):
         if self.__positions:
             self.__start, self.__end = self.__get_fragment_position(self.__xml, self.__request)
-            self.__start, self.__end = self.__get_fragment_position_without_adhering_tags(self.__xml, self.__start, self.__end)
-            self.__start, self.__end = self.__get_fragment_position_with_adhering_tags(self.__xml, self.__start, self.__end)
+            self.__start, self.__end = self.__get_fragment_position_without_adhering_tags(self.__xml, self.__start,
+                                                                                          self.__end)
+            self.__start, self.__end = self.__get_fragment_position_with_adhering_tags(self.__xml, self.__start,
+                                                                                       self.__end)
             self.__fragment_to_annotate = self.__xml[self.__start: self.__end]
             self.__tags = self.__get_adhering_tags_from_annotated_fragment(self.__fragment_to_annotate)
 
@@ -188,6 +212,7 @@ class Annotator:
         self.__tag_xml_id_number = self.__get_xml_id_number_for_tag(certainties, self.__request["tag"])
         self.__certainty_xml_id_number = self.__get_xml_id_number_for_tag(certainties, 'certainty')
 
+    @log
     def __get_fragment_position(self, xml, json):
         if 'start_pos' in json and json['start_pos'] is not None and 'end_pos' in json and json['end_pos'] is not None:
             start = json['start_pos']
@@ -199,6 +224,7 @@ class Annotator:
 
         return start, end
 
+    @log
     @staticmethod
     def __convert_rows_and_cols_to_start_and_end(text, start_row, start_col, end_row, end_col):
         text_in_lines = text.splitlines(True)
@@ -223,6 +249,7 @@ class Annotator:
         return chars_to_start, chars_to_end
 
     @staticmethod
+    @log
     def __get_fragment_position_without_adhering_tags(string, start, end):
         found_tag = True
 
@@ -246,6 +273,7 @@ class Annotator:
         return start, end
 
     @staticmethod
+    @log
     def __get_fragment_position_with_adhering_tags(string, start, end):
         found_tag = True
 
@@ -270,6 +298,7 @@ class Annotator:
         return start, end
 
     @staticmethod
+    @log
     def __get_adhering_tags_from_annotated_fragment(fragment):
         tags = {}
 
@@ -308,6 +337,7 @@ class Annotator:
         return tags
 
     @staticmethod
+    @log
     def __get_certainties_from_file(text):
         text_in_lines = text.splitlines()
 
@@ -325,6 +355,7 @@ class Annotator:
         return certainties
 
     @staticmethod
+    @log
     def __get_annotators_xml_ids_from_file(text):
         text_in_lines = text.splitlines()
 
@@ -348,6 +379,7 @@ class Annotator:
 
         return xml_ids
 
+    @log
     def __get_xml_id_number_for_tag(self, certainties, tag='ab'):
         if tag in ['event', 'org', 'person', 'place', 'certainty']:
             file_mx_xml_id = FileMaxXmlIds.objects.get(file=self.__file)
@@ -379,6 +411,7 @@ class Annotator:
 
             return biggest_number + 1
 
+    @log
     def __prepare_xml_parts(self):
         # 1.Add tag to text
         if self.__request['locus'] == '' \
@@ -470,6 +503,7 @@ class Annotator:
         else:
             raise BadRequest("There is no method to modify xml according to given parameters.")
 
+    @log
     def __add_tag(self, annotated_fragment, tag, uncertainty=False):
         new_annotated_fragment = ''
         annotation_ids = []
@@ -542,6 +576,7 @@ class Annotator:
 
         return new_annotated_fragment, annotation_ids
 
+    @log
     def __get_annotation_ids_from_target(self, target):
         if type(target) == list:
             return target
@@ -550,6 +585,7 @@ class Annotator:
             target = target.split(' ')
             return target
 
+    @log
     def __create_certainty_description(self, json, annotation_ids, user_uuid):
         target = " ".join(annotation_ids)
         xml_id = f"certainty_{self.__file.name}-{self.__certainty_xml_id_number}"
@@ -571,6 +607,7 @@ class Annotator:
 
         return new_element
 
+    @log
     def __create_certainty_description_for_attribute(self, json, annotation_ids, user_uuid):
         target = " ".join(annotation_ids)
         xml_id = f"certainty_{self.__file.name}-{self.__certainty_xml_id_number}"
@@ -590,6 +627,7 @@ class Annotator:
 
         return new_element
 
+    @log
     def __create_annotator(self, user_xml_id):
         user_guid = user_xml_id.replace('person', '')
 
@@ -611,6 +649,7 @@ class Annotator:
         return annotator_xml
 
     @staticmethod
+    @log
     def __get_user_data_from_db(user_id):
         user = User.objects.get(id=user_id)
 
@@ -623,6 +662,7 @@ class Annotator:
 
         return data
 
+    @log
     def __check_if_new_elements_already_exist(self):
         if self.__request['locus'] == '' and self.__request['tag'] in self.__tags:
             raise NotModified('This tag already exist.')
@@ -659,6 +699,7 @@ class Annotator:
             elif existing_certainties and not self.__request['description']:
                 raise NotModified('This certainty already exist.')
 
+    @log
     def __create_new_xml(self):
         xml_annotated = self.__add_tagged_string(self.__xml, self.__fragment_annotated)
 
@@ -682,11 +723,13 @@ class Annotator:
 
         self.__xml_annotated = xml_annotated
 
+    @log
     def __add_tagged_string(self, xml, new_fragment):
         new_xml = xml[:self.__start] + new_fragment + xml[self.__end:]
 
         return new_xml
 
+    @log
     def __add_annotator(self, text, annotator):
         tree = etree.fromstring(text)
 
@@ -705,6 +748,7 @@ class Annotator:
         return text
 
     @staticmethod
+    @log
     def __create_list_person(tree):
         prefix = "{%s}" % NAMESPACES['default']
 
@@ -738,6 +782,7 @@ class Annotator:
 
         return tree
 
+    @log
     def __add_certainty(self, text, certainty):
         tree = etree.fromstring(text)
 
@@ -758,6 +803,7 @@ class Annotator:
         return text
 
     @staticmethod
+    @log
     def __create_annotation_list(tree):
         default_namespace = NAMESPACES['default']
         default = "{%s}" % default_namespace
@@ -793,6 +839,7 @@ class Annotator:
         return tree
 
     @staticmethod
+    @log
     def __reformat_xml(text):
         parser = etree.XMLParser(remove_blank_text=True)
         tree = etree.fromstring(text, parser=parser)
