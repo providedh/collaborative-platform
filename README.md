@@ -64,6 +64,7 @@ To initialize databases simply run following configurations in PyCharm in this e
 makemigrations
 migrate
 initialize ES
+load fixtures
 ``` 
 
 ## 5.1 (optional) If you care about profile links being correctly generated in annotator
@@ -243,6 +244,7 @@ docker system prune -a
 docker volume prune
 
 docker-compose run web python src/collaborative_platform/manage.py [migrate|makemigrations|shell|...]
+docker-compose run web python src/collaborative_platform/manage.py loaddata core_initial.json
 ```
 
 # Common problems:
