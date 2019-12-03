@@ -2,7 +2,6 @@ import React from 'react';
 
 import taxonomy from './def_taxonomy.js';
 import ProjectDescriptionSection from './ProjectDescriptionSection.js';
-import TEIentitiesSection from './TEIentitiesSection.js';
 import TaxonomySection from './TaxonomySection.js';
 
 class App extends React.Component {
@@ -12,12 +11,10 @@ class App extends React.Component {
     this.state = {
       title: '',
       description: '',
-      teiScheme: Object.entries(taxonomy.entities),
       certScheme: Object.entries(taxonomy.taxonomy),
     };
 
     this.createProject = this.createProject.bind(this);
-    this.updateTeiScheme = this.updateTeiScheme.bind(this);
     this.updateCertScheme = this.updateCertScheme.bind(this);
   }
 
@@ -25,10 +22,6 @@ class App extends React.Component {
     document.getElementById('create-project-button')
         .addEventListener('click', this.createProject);
       
-  }
-
-  updateTeiScheme(scheme){
-    this.setState({teiScheme: scheme});
   }
 
   updateCertScheme(scheme){
@@ -39,7 +32,6 @@ class App extends React.Component {
     const data = {
       title: this.state.title,
       description: this.state.description,
-      entities: this.state.teiScheme,
       categories: this.state.certScheme,
       "taxonomy.xml_id_1": this.state.certScheme[0],
       "taxonomy.xml_color_1": this.state.certScheme[1].color,
@@ -89,10 +81,6 @@ class App extends React.Component {
           description={this.state.description}
           setTitle={title=>this.setState({title:title})}
           setDescription={description=>this.setState({description:description})}
-          />
-        <TEIentitiesSection 
-          scheme={this.state.teiScheme}
-          updateScheme={this.updateTeiScheme}
           />
         <TaxonomySection 
           scheme={this.state.certScheme}
