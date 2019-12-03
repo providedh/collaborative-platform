@@ -142,7 +142,7 @@ class TaxonomySection extends React.PureComponent {
           <div className="col">
             Certainty tags in TEI allow to annotate missing or incorrect information, 
             specify your confidence on a modification, and  collaborate with other people's work through nested 
-            annotations. Choose what different sources of uncertainty you will use to describe your annotations and ther color and icon scheme.
+            annotations. Choose what different sources of uncertainty you will use to describe your annotations and their color and icon scheme.
           </div>
         </div>
         <div className="row mt-4">
