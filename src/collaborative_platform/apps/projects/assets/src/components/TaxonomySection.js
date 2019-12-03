@@ -58,6 +58,7 @@ class TaxonomySection extends React.PureComponent {
         <button type="button" 
                 className="close" 
                 aria-label="Close" 
+                style={{display: 'none'}}
                 onClick={()=>this.handleRemoveEntry(i)}>
           <span aria-hidden="true">&times;</span>
         </button>
@@ -151,7 +152,6 @@ class TaxonomySection extends React.PureComponent {
             <label>Category name</label>
             <ul className="noListStyle">
                 {this.categoryListEntries()}
-                {this.categoryNewEntryField()}
             </ul>
           </div>
           <div className="col">
