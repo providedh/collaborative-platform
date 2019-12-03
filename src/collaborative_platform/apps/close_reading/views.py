@@ -1,4 +1,5 @@
 import re
+import json
 from urllib.parse import urlparse
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render
@@ -30,6 +31,24 @@ def close_reading(request, project_id, file_id):  # type: (HttpRequest, int, int
     
     origin = resolve_match.url_name
 
+    preferences = { 'taxonomy':{ }}
+    preferences['taxonomy'][file.project.taxonomy.name_1] = {
+        'color': file.project.taxonomy.color_1,
+        'desc': file.project.taxonomy.desc_1
+    }
+    preferences['taxonomy'][file.project.taxonomy.name_2] = {
+        'color': file.project.taxonomy.color_2,
+        'desc': file.project.taxonomy.desc_2
+    }
+    preferences['taxonomy'][file.project.taxonomy.name_3] = {
+        'color': file.project.taxonomy.color_3,
+        'desc': file.project.taxonomy.desc_3
+    }
+    preferences['taxonomy'][file.project.taxonomy.name_4] = {
+        'color': file.project.taxonomy.color_4,
+        'desc': file.project.taxonomy.desc_4
+    }
+
     context = {
         'origin': origin,
         'origin_url': origin_url,
@@ -38,6 +57,7 @@ def close_reading(request, project_id, file_id):  # type: (HttpRequest, int, int
         'file': file,
         'project_id': project_id,
         'file_id': file_id,
+        'preferences': json.dumps(preferences)
     }
 
     return render(request, 'close_reading/close_reading.html', context)

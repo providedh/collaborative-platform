@@ -264,6 +264,7 @@
     window.project_id = "{{ project_id }}";
     window.file_id = "{{ file_id }}";
     window.file_version = "{{ file.version_number }}";
+    window.preferences = JSON.parse("{{ preferences|escapejs|safe }}");
   </script>
   <script src="https://d3js.org/d3.v5.min.js"></script>
   <script type="module" src="{% static 'close_reading/js/app.js' %}"></script>
