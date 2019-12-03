@@ -69,6 +69,15 @@ export default {
 		"time": {
 			"icon": "\\f017", 
 			"color": "#eab9e4"
-		}
+		},"ingredient": {
+			"icon": "\uf787", 
+			"color": "#395b50"
+		},"productionMethod": {
+			"icon": "\\f542", 
+			"color": "#291528"
+		},"utensil": {
+			"icon": "\uf6e3", 
+			"color": "#96031a"
+		},
 	}
 };
