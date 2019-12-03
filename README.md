@@ -72,7 +72,7 @@ OR, in project directory run the following commands:
 docker-compose run web python src/collaborative_platform/manage.py makemigrations
 docker-compose run web python src/collaborative_platform/manage.py migrate
 docker-compose run web python src/collaborative_platform/manage.py shell -c "from apps.index_and_search.initialize import initialize; initialize()"
-docker-compose run web python src/collaborative_platform/manage.py loaddata core_initial.jsonrtfm
+docker-compose run web python src/collaborative_platform/manage.py loaddata core_initial.json
 ```
 
 ## 6. Done
