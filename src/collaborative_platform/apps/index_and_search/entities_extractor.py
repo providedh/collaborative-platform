@@ -12,9 +12,9 @@ class EntitiesExtractor:
 
     @classmethod
     def extract_entities_elements(cls, parsed_et):  # type: (et) -> Dict[str, Element]
-        entites_elements = dict(
-            (tag, parsed_et.xpath(".//tei:{}".format(tag), namespaces=cls.namespaces))
-            for tag in ('person', 'place', 'org', 'event', 'certainty'))
+        entites_elements = {
+            tag: parsed_et.xpath(".//tei:{}".format(tag), namespaces=cls.namespaces)
+            for tag in ('person', 'place', 'org', 'event', 'certainty')}
 
         for elem in entites_elements['person'].copy():
             if elem.getparent().attrib.get("type", "") == 'PROVIDEDH Annotators':
