@@ -189,7 +189,7 @@ def delete_directory_with_contents_fake(directory_id, user):  # type: (int, User
     files = File.objects.filter(parent_dir=directory_id, deleted=False)
 
     for file in files:
-        file.delete_fake()
+        file.delete_fake(user)
         log_activity(project=file.project, user=user, action_text=f"deleted file {file.name}")
 
     directory = Directory.objects.get(id=directory_id)

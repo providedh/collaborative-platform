@@ -69,7 +69,7 @@ class Commit(models.Model):
 
         if created:
             project = self.project
-            create_new_project_version(project=project, new_commit=self)
+            create_new_project_version(project=project, commit=self)
 
 
 class Clique(models.Model):

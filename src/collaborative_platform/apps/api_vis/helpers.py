@@ -5,10 +5,11 @@ from datetime import datetime
 from lxml import etree
 
 from django.http import HttpRequest, JsonResponse
+from django.contrib.auth.models import User
 
 import apps.index_and_search.models as es
 
-from apps.api_vis.models import Entity, EventVersion, OrganizationVersion, PersonVersion, PlaceVersion, \
+from apps.api_vis.models import Commit, Entity, EventVersion, OrganizationVersion, PersonVersion, PlaceVersion, \
     CertaintyVersion, Unification
 from apps.exceptions import BadRequest
 from apps.files_management.models import File, FileVersion, Directory
@@ -175,6 +176,55 @@ def create_entities_in_database(entities, project, file_version):  # type: (list
         tuple(map(entity.pop, excessive_elements))  # pop all excessive elements from entity
 
         classes[tag](entity=entity_db, fileversion=file_version, **entity).save()
+
+
+def fake_delete_entities(file, user):  # type: (File, User) -> list
+    entities = Entity.objects.filter(
+        file=file,
+        deleted_on__isnull=True,
+    )
+
+    deleted_entity_ids = []
+
+    file_version = FileVersion.objects.filter(
+        file=file
+    ).order_by('-number')[0].number
+
+    for entity in entities:
+        entity.deleted_in_version = file_version
+        entity.deleted_on = datetime.now()
+        entity.deleted_by = user
+        entity.save()
+
+        deleted_entity_ids.append(entity.id)
+
+    return deleted_entity_ids
+
+
+def fake_delete_unifications(file, user, deleted_entity_ids):  # type: (File, User, list) -> Commit
+    unifications = Unification.objects.filter(
+        entity_id__in=deleted_entity_ids,
+        deleted_on__isnull=True,
+    )
+
+    if unifications:
+        commit = Commit.objects.create(
+            project_id=file.project_id,
+            message=f"Removing unifications associated with deleted file '{file.name}'.",
+        )
+
+        for unification in unifications:
+            file_version = FileVersion.objects.filter(
+                file=file
+            ).order_by('-number')[0]
+
+            unification.deleted_on = datetime.now()
+            unification.deleted_by = user
+            unification.deleted_in_commit = commit
+            unification.deleted_in_file_version = file_version
+            unification.save()
+
+        return commit
 
 
 def validate_keys_and_types(request_data, required_name_type_template=None, optional_name_type_template=None,

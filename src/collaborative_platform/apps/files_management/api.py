@@ -216,7 +216,7 @@ def delete(request, **kwargs):
     elif 'file_id' in kwargs:
         file = File.objects.get(id=kwargs['file_id'], deleted=False)
         log_activity(project=file.project, user=request.user, action_text=f"deleted file {file.name}")
-        file.delete_fake()
+        file.delete_fake(request.user)
     else:
         return HttpResponseBadRequest("Invalid arguments")
     return HttpResponse("OK")

@@ -79,7 +79,7 @@ def log_activity(project, user, action_text="", file=None, related_dir=None):
     return a
 
 
-def create_new_project_version(project, new_file_version=None, new_commit=None):
+def create_new_project_version(project, files_modification=False, commit=None):
     # type: (Project, bool, Commit) -> None
 
     files = File.objects.filter(project=project, deleted=False)
@@ -87,7 +87,7 @@ def create_new_project_version(project, new_file_version=None, new_commit=None):
     project_versions = ProjectVersion.objects.filter(project=project).order_by('-date')
 
     if not project_versions:
-        new_project_version = ProjectVersion(file_version_counter=0, commit=new_commit, commit_counter=0,
+        new_project_version = ProjectVersion(file_version_counter=0, commit=commit, commit_counter=0,
                                              project=project)
         new_project_version.save()
 
@@ -102,13 +102,13 @@ def create_new_project_version(project, new_file_version=None, new_commit=None):
         file_version_counter = last_project_version.file_version_counter
         commit_counter = last_project_version.commit_counter
 
-        if new_file_version:
+        if files_modification:
             file_version_counter += 1
 
-        if new_commit:
+        if commit:
             commit_counter += 1
 
-        new_project_version = ProjectVersion(file_version_counter=file_version_counter, commit=new_commit,
+        new_project_version = ProjectVersion(file_version_counter=file_version_counter, commit=commit,
                                              commit_counter=commit_counter, project=project)
         new_project_version.save()
 
