@@ -47,7 +47,7 @@ it is advised to go trough the content of settings file and possibly tweak some 
 ```docker-compose build```
 >note: this command has to be re-run after each change in `requirements.txt`
 
-## 4. open PyCharm and open the project in it
+## 4. (optional) open PyCharm and open the project in it
 * Open settings and go to Build, Execution, Deployment -> Docker
 * If there are no docker machines add one, default settings should prefer connecting by Unix socket, if not, select it.
 * Then go to File | Settings | Project: collaborative-platform | Project Interpreter
@@ -64,14 +64,24 @@ To initialize databases simply run following configurations in PyCharm in this e
 makemigrations
 migrate
 initialize ES
+load fixtures
 ``` 
 
-## 5.1 (optional) If you care about profile links being correctly generated in annotator
-use your favourite database tool (I recommned DataGrip) and while postgres container is up, connect to it (connection data can be found in `settings.py` file, although `localhost` must be used instead of `postgres`) and in table `django_site` change `example.com` to `localhost`.
+OR, in project directory run the following commands:
+```
+docker-compose run web python src/collaborative_platform/manage.py makemigrations
+docker-compose run web python src/collaborative_platform/manage.py migrate
+docker-compose run web python src/collaborative_platform/manage.py shell -c "from apps.index_and_search.initialize import initialize; initialize()"
+docker-compose run web python src/collaborative_platform/manage.py loaddata core_initial.json
+```
 
 ## 6. Done
 to run or debug project use `runserver 8000` configuration. There is also a `web` configuration included in git. It allows to run PyCharm docker extensions and get logs from all containers in those. It can be used to run (but not debug) project instead of `runserver 8000`.
 
+If not using pycharm you can use `docker-compose up` or more verbose 
+```
+docker-compose run web python src/collaborative_platform/manage.py runserver 0.0.0.0:8000
+```
 
 # Running Collaborative Platform in production environment
 
@@ -243,6 +253,7 @@ docker system prune -a
 docker volume prune
 
 docker-compose run web python src/collaborative_platform/manage.py [migrate|makemigrations|shell|...]
+docker-compose run web python src/collaborative_platform/manage.py loaddata core_initial.json
 ```
 
 # Common problems:
