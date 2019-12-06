@@ -32,7 +32,7 @@ $('[js-listFileVersions]').DataTable( {
         {
             "data": "upload",
             "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
-                $(nTd).html('<a href="/' + oData.upload + '" class="tb-button"><i class="fa fa-download"></i></a>');
+                $(nTd).html('<a href="/api/files/' + oData.file_id + '/version/' + oData.number + '/download/" class="tb-button"><i class="fa fa-download"></i></a>');
             }
         }
 
