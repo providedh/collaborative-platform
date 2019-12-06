@@ -13,15 +13,20 @@ function contentFile(id) {
         }
     });
 
-    window.history.replaceState(null, null, "/files/" + id);
+    if (window.location.pathname.includes('/version/')){
+        var url = "/api/files/" + id + "/version/" + $('[js-contentFileVersion]').text() + "/";
+    }
+    else{
+        var url = "/api/files/" + id + "/";
+    }
 
     $.ajax({
         type: "GET",
-        url: "/api/files/" + id,
+        url: url,
         contentType : 'application/json',
         success: function(resultData){
             var html = Prism.highlight(resultData.data, Prism.languages.xml, 'xml');
-            $('[js-contentFile]').html(html)
+            $('[js-contentFile]').html(html);
 
             $('[js-contentFileName]').text(resultData.filename);
             $('[js-contentFileVersion]').text(resultData.version_number);
@@ -139,6 +144,9 @@ $('[js-listFileVersions]').DataTable( {
     "columns": [
         {
             "data": "number",
+            "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+                $(nTd).html('<a href="/files/' + oData.file_id + '/version/' + oData.number + '/">'+ oData.number +'</a>');
+            }
         },
     
         {

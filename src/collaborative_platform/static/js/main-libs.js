@@ -15032,7 +15032,7 @@ return jQuery;
   Object.defineProperty(exports, '__esModule', { value: true });
 
 }));
-//# sourceMappingURL=bootstrap.js.map
+// # sourceMappingURL=bootstrap.js.map
 
 /*! DataTables 1.10.19
  * ©2008-2018 SpryMedia Ltd - datatables.net/license

@@ -10,6 +10,9 @@ $('[js-listFileVersions]').DataTable( {
     "columns": [
         {
             "data": "number",
+            "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+                $(nTd).html('<a href="/files/' + oData.file_id + '/version/' + oData.number + '/">'+ oData.number +'</a>');
+            }
         },
     
         {
