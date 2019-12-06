@@ -35,7 +35,7 @@ def fileversions(request, file_id):  # type: (HttpRequest, int) -> HttpResponse
     content = {
         'title': file.name,
         'file': file,
-        'versions': file.version_number
+        'version': file.version_number
     }
 
     return render(request, 'files_management/fileversions.html', content)
