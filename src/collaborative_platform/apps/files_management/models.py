@@ -175,7 +175,11 @@ class FileVersion(models.Model):
         return content
 
     def download(self):
+        from apps.files_management.helpers import append_unifications
+
         content = self.get_content()
+        content = append_unifications(content, self)
+
         response = HttpResponse(content, content_type='application/xml')
         response['Content-Disposition'] = bytes('attachment; filename="{}"'.format(self.file.name), 'utf-8')
         return response
