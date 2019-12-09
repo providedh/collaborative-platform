@@ -179,6 +179,12 @@ var DocumentView = function(args){
 	        end_content = end_content.replace(_expandedEmptyTag(empty_tag), empty_tag);
 	    }
 
+	    /* Browsers will now add the xmlns attribute nonetheless to
+	       make sure that the markup is representative of the namespaces.
+	       This breaks the ability to compare with the initial content. */
+	    start_content = start_content.replace(/ xmlns="http:\/\/www.tei-c.org\/ns\/1.0"/g, '');
+	    end_content = end_content.replace(/ xmlns="http:\/\/www.tei-c.org\/ns\/1.0"/g, '');
+
 	    const positions = [];
 
 	    for(let i=0; i<start_content.length; i++){
