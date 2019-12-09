@@ -121,15 +121,16 @@ var DocumentView = function(args){
 	                		node._uncertainty_count += 1;
 	                	}
 
-
-                        addStyle(
-                            XML_EXTRA_CHAR_SPACER+target.slice(1), 
-                            annotation.attributes['category'].value, 
-                            annotation.attributes['cert'].value,
-                            annotation.attributes['resp'].value,
-                            currentUser,
-                            node._uncertainty_count
-                            );
+	                	if(annotation.attributes.hasOwnProperty('category')){
+	                        addStyle(
+	                            XML_EXTRA_CHAR_SPACER+target.slice(1), 
+	                            annotation.attributes['category'].value, 
+	                            annotation.attributes['cert'].value,
+	                            annotation.attributes['resp'].value,
+	                            currentUser,
+	                            node._uncertainty_count
+	                            );
+	                	}
                     }
                 })
             });
