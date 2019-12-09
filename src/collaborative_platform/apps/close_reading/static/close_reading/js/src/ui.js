@@ -39,10 +39,22 @@ let UISetup = function(args){
     select_form = document
       .getElementById('tei-tag-name');
     _createEntitiesFormOptions().forEach(opt=>select_form.appendChild(opt));
+
+    select_form = document
+      .getElementById('category');
+    _createCertFormOptions().forEach(opt=>select_form.appendChild(opt));
   }
 
   function _createEntitiesFormOptions(){
     const options = Object.entries(ColorScheme.scheme['entities']).map(e=>$.parseHTML(
+      `<option value="${e[0]}">${e[0].slice(0,1).toUpperCase() + e[0].slice(1)}</option>`
+      )[0]);
+
+    return options;
+  }
+
+  function _createCertFormOptions(){
+    const options = Object.entries(ColorScheme.scheme['taxonomy']).map(e=>$.parseHTML(
       `<option value="${e[0]}">${e[0].slice(0,1).toUpperCase() + e[0].slice(1)}</option>`
       )[0]);
 
