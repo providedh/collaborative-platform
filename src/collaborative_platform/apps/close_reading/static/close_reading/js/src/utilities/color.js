@@ -3,10 +3,12 @@
  * or calculating the color for a specific annotation
  *
  * */
-import teiConf from './taxonomy.js';
+import defConf from './taxonomy.js';
 
 var ColorScheme = (function(args){
 	let self = null;
+
+	const teiConf = Object.assign(defConf, window.preferences);
 
 	const certaintyLevelTransparencies = {
 		high: 'ff',
@@ -28,7 +30,8 @@ var ColorScheme = (function(args){
 	}
 
 	return {
-		calculate: _applyColorScheme
+		calculate: _applyColorScheme,
+		scheme: teiConf
 	};
 })();
 

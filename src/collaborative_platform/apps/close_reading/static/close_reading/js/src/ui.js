@@ -2,7 +2,6 @@
  * View rendering form options, legends, and other ui 
  * elements based on the taxonomy configuration.
  * */
-import teiConf from './utilities/taxonomy.js';
 import ColorScheme from './utilities/color.js';
 
 let UISetup = function(args){
@@ -40,10 +39,22 @@ let UISetup = function(args){
     select_form = document
       .getElementById('tei-tag-name');
     _createEntitiesFormOptions().forEach(opt=>select_form.appendChild(opt));
+
+    select_form = document
+      .getElementById('category');
+    _createCertFormOptions().forEach(opt=>select_form.appendChild(opt));
   }
 
   function _createEntitiesFormOptions(){
-    const options = Object.entries(teiConf['entities']).map(e=>$.parseHTML(
+    const options = Object.entries(ColorScheme.scheme['entities']).map(e=>$.parseHTML(
+      `<option value="${e[0]}">${e[0].slice(0,1).toUpperCase() + e[0].slice(1)}</option>`
+      )[0]);
+
+    return options;
+  }
+
+  function _createCertFormOptions(){
+    const options = Object.entries(ColorScheme.scheme['taxonomy']).map(e=>$.parseHTML(
       `<option value="${e[0]}">${e[0].slice(0,1).toUpperCase() + e[0].slice(1)}</option>`
       )[0]);
 
@@ -55,12 +66,12 @@ let UISetup = function(args){
       .getElementById('legend-sidebar');
 
     const entityEntries = Object
-      .entries(teiConf['entities'])
+      .entries(ColorScheme.scheme['entities'])
       .map(e=>_createEntityLegendEntry(e))
       .join('\n');
 
     const certEntries = Object
-      .entries(teiConf['taxonomy'])
+      .entries(ColorScheme.scheme['taxonomy'])
       .map(e=>_createCertLegendEntry(e))
       .join('\n');
     
@@ -122,7 +133,7 @@ let UISetup = function(args){
   }
 
   function _createDisplayStyles(){
-    let selectors = Object.keys(teiConf['entities']).map(e=>
+    let selectors = Object.keys(ColorScheme.scheme['entities']).map(e=>
       `div#annotator-root[color-annotations="false"] ${e}`).join(',\n');
     
     const colorRule = `
@@ -132,7 +143,7 @@ let UISetup = function(args){
       }
     `
 
-    selectors = Object.keys(teiConf['entities']).map(e=>
+    selectors = Object.keys(ColorScheme.scheme['entities']).map(e=>
       `div#annotator-root[display-annotations="true"] ${e}::before`).join(',\n');
     
     const displayRule = `
@@ -148,7 +159,7 @@ let UISetup = function(args){
       }
     `
 
-    selectors = Object.keys(teiConf['entities']).map(e=>
+    selectors = Object.keys(ColorScheme.scheme['entities']).map(e=>
       `div#annotator-root[display-annotations="false"] ${e}`).join(',\n');
     
     const hideRule = `
@@ -158,7 +169,7 @@ let UISetup = function(args){
       }
     `
 
-    selectors = Object.keys(teiConf['entities']).join(',');
+    selectors = Object.keys(ColorScheme.scheme['entities']).join(',');
     
     const tagRule = `
       ${selectors}
@@ -172,22 +183,22 @@ let UISetup = function(args){
     `
 
     const borderRules = Object
-      .entries(teiConf['entities'])
+      .entries(ColorScheme.scheme['entities'])
       .map(e=>`${e[0]}{ border-color: ${e[1].color};}`)
       .join('\n');
 
     const entityFillRules = Object
-      .entries(teiConf['entities'])
+      .entries(ColorScheme.scheme['entities'])
       .map(e=>`.bg-${e[0]}{ background-color: ${e[1].color};}`)
       .join('\n');
 
     const entityIconRules = Object
-      .entries(teiConf['entities'])
+      .entries(ColorScheme.scheme['entities'])
       .map(e=>`div#annotator-root[display-annotations="true"] ${e[0]}::before{ content: "${e[1].icon}";}`)
       .join('\n');
 
     const entityIconColorRules = Object
-      .entries(teiConf['entities'])
+      .entries(ColorScheme.scheme['entities'])
       .map(e=>`div#annotator-root[color-annotations="true"] ${e[0]}::before{ color: ${e[1].color};}`)
       .join('\n');
 
@@ -204,7 +215,7 @@ let UISetup = function(args){
   }
 
   function _createContentStyles(){
-    const selectors = Object.keys(teiConf['entities']).map(e=>
+    const selectors = Object.keys(ColorScheme.scheme['entities']).map(e=>
       `div#annotator-root[color-annotations="false"] ${e}`).join(',\n');
     
     const rule = `

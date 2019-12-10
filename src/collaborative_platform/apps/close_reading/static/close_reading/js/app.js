@@ -26,6 +26,7 @@ const tooltips = Tooltips({channel});
 const sub = {};
 channel.addToChannel(sub);
 sub.subscribe('websocket/send', json=>websocket.send(json));
+sub.subscribe('websocket/send', json=>console.log(json));
 sub.subscribe('document/render', selection=>console.info('Document rendered.'));
 
 // Publish websocket updates
@@ -37,12 +38,3 @@ websocket.addCallback('onreload', ()=>Alert.alert('success','Changes successfull
 
 // Create websocket
 websocket.create();
-
-/*sub.publish('popup/render', {
-	title: 'alex',
-	subtitle: 'holaaaaaa',
-	body: 'ajdjasjd asjd as dsv j esrdfvkj re adsvcneroijvdv eñdskfnv',
-	x: '300px',
-	y: '150px'
-})
-setTimeout(()=>sub.publish('popup/hide', {}), 3000);*/
