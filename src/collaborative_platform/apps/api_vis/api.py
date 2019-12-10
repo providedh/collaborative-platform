@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpRequest, HttpResponse, HttpResponseBadRequest, HttpResponseNotModified
 
 from apps.exceptions import BadRequest, NotModified
-from apps.files_management.models import File, FileVersion
+from apps.files_management.models import File, FileVersion, FileMaxXmlIds
 from apps.projects.helpers import user_is_project_admin
 from apps.projects.models import Contributor, ProjectVersion
 from apps.views_decorators import objects_exists, user_has_access
@@ -840,6 +840,12 @@ def commits(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
 
             for unification_to_add in unifications_to_add:
                 unification_to_add.created_in_commit = commit
+
+                file_max_xml_ids = FileMaxXmlIds.objects.get(file=unification_to_add.entity.file)
+                file_max_xml_ids.certainty += 1
+                file_max_xml_ids.save()
+
+                unification_to_add.xml_id_number = file_max_xml_ids.certainty
                 unification_to_add.save()
 
             for unification_to_remove in unifications_to_remove:

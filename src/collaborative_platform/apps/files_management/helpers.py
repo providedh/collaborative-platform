@@ -1,23 +1,30 @@
 import copy
 import hashlib
+
 from io import BytesIO
 from json import loads
+from lxml import etree
 from typing import List, Set
 
 from django.contrib.auth.models import User
+from django.contrib.sites.shortcuts import get_current_site
 from django.core.files.uploadedfile import UploadedFile
+from django.db.models import Q
 from django.forms import model_to_dict
 from django.http import JsonResponse
 from django.utils import timezone
-from elasticsearch import ConflictError
 
+import apps.index_and_search.models as es
+
+from apps.api_vis.models import Clique, Unification
+from apps.close_reading.annotator import NAMESPACES
+from apps.files_management.file_conversions.xml_formatter import XMLFormatter
+from apps.files_management.models import File, FileVersion, Directory, FileMaxXmlIds
 from apps.index_and_search.content_extractor import ContentExtractor
 from apps.index_and_search.entities_extractor import EntitiesExtractor
 from apps.index_and_search.models import Person, Organization, Event, Place
 from apps.projects.helpers import log_activity
-from apps.files_management.models import File, FileVersion, Directory, FileMaxXmlIds
 from apps.projects.models import Project
-import apps.index_and_search.models as es
 
 
 def upload_file(uploaded_file, project, user, parent_dir=None):  # type: (UploadedFile, Project, User, int) -> File
@@ -55,10 +62,15 @@ def overwrite_file(dbfile, uploaded_file, user):  # type: (File, UploadedFile, U
     new_version_number = latest_file_version.number + 1
     new_file_version = FileVersion(upload=uploaded_file, number=new_version_number, hash=hash, file=dbfile,
                                    created_by=user, creation_date=timezone.now())
-    new_file_version.save()
 
     dbfile.version_number = new_version_number
     dbfile.save()
+
+    try:
+        new_file_version.save()
+    except:
+        dbfile.version_number -= 1
+        dbfile.save()
 
     log_activity(dbfile.project, user, action_text="created version number {} of".format(new_version_number),
                  file=dbfile)
@@ -189,10 +201,247 @@ def delete_directory_with_contents_fake(directory_id, user):  # type: (int, User
     files = File.objects.filter(parent_dir=directory_id, deleted=False)
 
     for file in files:
-        file.delete_fake()
+        file.delete_fake(user)
         log_activity(project=file.project, user=user, action_text=f"deleted file {file.name}")
 
     directory = Directory.objects.get(id=directory_id)
     directory.delete_fake()
     log_activity(project=directory.project, user=user, related_dir=directory,
                  action_text=f"deleted directory {directory.name}")
+
+
+def append_unifications(xml_content, file_version):  # type: (str, FileVersion) -> str
+    cliques = Clique.objects.filter(
+        Q(unifications__deleted_in_file_version__isnull=True)
+        | Q(unifications__deleted_in_file_version__number__gte=file_version.number),
+        unifications__created_in_file_version__number__lte=file_version.number,
+        project_id=file_version.file.project_id,
+        unifications__entity__file=file_version.file,
+        created_in_commit__isnull=False,
+    ).distinct()
+
+    certainty_elements_to_add = []
+
+    for clique in cliques:
+        unifications = Unification.objects.filter(
+            clique=clique,
+            deleted_on__isnull=True,
+            created_in_commit__isnull=False,
+        )
+
+        internal_unifications = unifications.filter(
+            entity__file=file_version.file,
+        )
+
+        external_unifications = unifications.filter(
+            ~Q(entity__file=file_version.file),
+        )
+
+        certainty_elements = create_certainty_elements_from_unifications(internal_unifications, external_unifications)
+
+        certainty_elements_to_add.extend(certainty_elements)
+
+    if certainty_elements_to_add:
+        xml_in_lines = xml_content.splitlines()
+        if 'encoding=' in xml_in_lines[0]:
+            xml_content = '\n'.join(xml_in_lines[1:])
+
+        xml_tree = etree.fromstring(xml_content)
+
+        add_certainties_to_xml_tree(certainty_elements_to_add, xml_tree)
+        fill_up_certainty_authors_list(xml_tree)
+
+        xml_content = etree.tounicode(xml_tree)
+        xml_formatter = XMLFormatter()
+
+        if xml_formatter.check_if_reformat_is_needed(xml_content):
+            xml_content = xml_formatter.reformat_xml(xml_content)
+
+    return xml_content
+
+
+def create_certainty_elements_from_unifications(internal_unifications, external_unifications):
+    external_unification_xml_ids = [unification.entity.file.get_path() + '#' + unification.entity.xml_id
+                                    for unification in external_unifications]
+
+    certainties = []
+
+    for unification in internal_unifications:
+        default_namespace = NAMESPACES['default']
+        xml_namespace = NAMESPACES['xml']
+        default = '{%s}' % default_namespace
+        xml = '{%s}' % xml_namespace
+
+        ns_map = {
+            None: default_namespace,
+            'xml': xml_namespace,
+        }
+
+        ana = ''
+        locus = 'value'
+        certainty = unification.certainty
+        annotator_id = '#person' + str(unification.created_by_id)
+
+        entity_xml_id = unification.entity.xml_id
+        target = '#' + entity_xml_id
+
+        internal_unification_xml_ids = ['#' + unification.entity.xml_id for unification in internal_unifications if
+                                        unification.entity.xml_id != entity_xml_id]
+        asserted_value = ' '.join(internal_unification_xml_ids + external_unification_xml_ids)
+
+        certainty = etree.Element(default + 'certainty', ana=ana, locus=locus, cert=certainty,
+                                  resp=annotator_id, target=target, match='@sameAs', assertedValue=asserted_value,
+                                  nsmap=ns_map)
+
+        certainty_xml_id = 'certainty_' + unification.entity.file.name + '-' + str(unification.xml_id_number)
+        certainty.attrib[etree.QName(xml + 'id')] = certainty_xml_id
+
+        certainties.append(certainty)
+
+    return certainties
+
+
+def add_certainties_to_xml_tree(certainty_elements, xml_tree):
+    certainties_node = xml_tree.xpath('//default:teiHeader'
+                                      '//default:classCode[@scheme="http://providedh.eu/uncertainty/ns/1.0"]',
+                                      namespaces=NAMESPACES)
+
+    if not certainties_node:
+        xml_tree = create_annotation_list(xml_tree)
+        certainties_node = xml_tree.xpath('//default:teiHeader'
+                                          '//default:classCode[@scheme="http://providedh.eu/uncertainty/ns/1.0"]',
+                                          namespaces=NAMESPACES)
+
+    for certainty in certainty_elements:
+        xpath = f'//default:teiHeader' \
+                f'//default:classCode[@scheme="http://providedh.eu/uncertainty/ns/1.0"]' \
+                f'//default:certainty[@ana="{certainty.attrib["ana"]}" ' \
+                f'and @locus="{certainty.attrib["locus"]}" ' \
+                f'and @cert="{certainty.attrib["cert"]}" ' \
+                f'and @target="{certainty.attrib["target"]}" ' \
+                f'and @assertedValue="{certainty.attrib["assertedValue"]}"]'
+
+        existing_certainties = xml_tree.xpath(xpath, namespaces=NAMESPACES)
+
+        if not existing_certainties:
+            certainties_node[0].append(certainty)
+
+
+def create_annotation_list(tree):
+    default_namespace = NAMESPACES['default']
+    default = "{%s}" % default_namespace
+
+    ns_map = {
+        None: default_namespace
+    }
+
+    profile_desc = tree.xpath('//default:teiHeader/default:profileDesc', namespaces=NAMESPACES)
+
+    if not profile_desc:
+        tei_header = tree.xpath('//default:teiHeader', namespaces=NAMESPACES)
+        profile_desc = etree.Element(default + 'profileDesc', nsmap=ns_map)
+        tei_header[0].append(profile_desc)
+
+    text_class = tree.xpath('//default:teiHeader/default:profileDesc/default:textClass', namespaces=NAMESPACES)
+
+    if not text_class:
+        profile_desc = tree.xpath('//default:teiHeader/default:profileDesc', namespaces=NAMESPACES)
+        text_class = etree.Element(default + 'textClass', nsmap=ns_map)
+        profile_desc[0].append(text_class)
+
+    class_code = tree.xpath(
+        '//default:teiHeader/default:profileDesc/default:textClass/default:classCode[@scheme="http://providedh.eu/uncertainty/ns/1.0"]',
+        namespaces=NAMESPACES)
+
+    if not class_code:
+        text_class = tree.xpath('//default:teiHeader/default:profileDesc/default:textClass', namespaces=NAMESPACES)
+        class_code = etree.Element(default + 'classCode', scheme="http://providedh.eu/uncertainty/ns/1.0",
+                                   nsmap=ns_map)
+        text_class[0].append(class_code)
+
+    return tree
+
+
+def fill_up_certainty_authors_list(xml_tree):
+    list_person = xml_tree.xpath('//default:teiHeader'
+                                 '//default:listPerson[@type="PROVIDEDH Annotators"]', namespaces=NAMESPACES)
+
+    if not list_person:
+        xml_tree = create_list_person(xml_tree)
+        list_person = xml_tree.xpath('//default:teiHeader'
+                                     '//default:listPerson[@type="PROVIDEDH Annotators"]', namespaces=NAMESPACES)
+
+    certainty_authors = xml_tree.xpath('//default:teiHeader'
+                                       '//default:classCode[@scheme="http://providedh.eu/uncertainty/ns/1.0"]'
+                                       '//default:certainty/@resp',
+                                       namespaces=NAMESPACES)
+    certainty_authors = set(certainty_authors)
+
+    for author in certainty_authors:
+        author = author.replace('#', '')
+        author_in_list = list_person[0].xpath(f'./default:person[@xml:id="{author}"]', namespaces=NAMESPACES)
+
+        if not author_in_list:
+            author_element = create_author_element(author)
+            list_person[0].append(author_element)
+
+    return xml_tree
+
+
+def create_list_person(xml_tree):
+    prefix = "{%s}" % NAMESPACES['default']
+
+    ns_map = {
+        None: NAMESPACES['default']
+    }
+
+    profile_desc = xml_tree.xpath('//default:teiHeader/default:profileDesc', namespaces=NAMESPACES)
+
+    if not profile_desc:
+        tei_header = xml_tree.xpath('//default:teiHeader', namespaces=NAMESPACES)
+        profile_desc = etree.Element(prefix + 'profileDesc', nsmap=ns_map)
+        tei_header[0].append(profile_desc)
+
+    partic_desc = xml_tree.xpath('//default:teiHeader/default:profileDesc/default:particDesc', namespaces=NAMESPACES)
+
+    if not partic_desc:
+        profile_desc = xml_tree.xpath('//default:teiHeader/default:profileDesc', namespaces=NAMESPACES)
+        partic_desc = etree.Element(prefix + 'particDesc', nsmap=ns_map)
+        profile_desc[0].append(partic_desc)
+
+    list_person = xml_tree.xpath(
+        '//default:teiHeader/default:profileDesc/default:particDesc/default:listPerson[@type="PROVIDEDH Annotators"]',
+        namespaces=NAMESPACES)
+
+    if not list_person:
+        partic_desc = xml_tree.xpath('//default:teiHeader/default:profileDesc/default:particDesc',
+                                     namespaces=NAMESPACES)
+        list_person = etree.Element(prefix + 'listPerson', type="PROVIDEDH Annotators", nsmap=ns_map)
+        partic_desc[0].append(list_person)
+
+    return xml_tree
+
+
+def create_author_element(author):  # type: (str) -> etree.Element
+    user_id = author.replace('person', '')
+    user_id = int(user_id)
+
+    user = User.objects.get(id=user_id)
+
+    request = None
+    site = get_current_site(request)
+
+    annotator = f"""
+                <person xml:id="{author}">
+                  <persName>
+                    <forename>{user.first_name}</forename>
+                    <surname>{user.last_name}</surname>
+                    <email>{user.email}</email>
+                  </persName>
+                  <link>https://{site.domain}/user/{user_id}/</link>
+                </person>
+            """
+
+    annotator_xml = etree.fromstring(annotator)
+
+    return annotator_xml

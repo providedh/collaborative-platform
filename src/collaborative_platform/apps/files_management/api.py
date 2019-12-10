@@ -15,8 +15,9 @@ from apps.projects.helpers import log_activity, paginate_start_length, page_to_j
 from apps.files_management.models import File, FileVersion, Directory
 from apps.views_decorators import objects_exists, user_has_access
 from .file_conversions.tei_handler import TeiHandler
-from .helpers import extract_text_and_entities, index_entities, upload_file, create_uploaded_file_object_from_string, \
-    get_directory_content, include_user, index_file, delete_directory_with_contents_fake, overwrite_file
+from .helpers import append_unifications, extract_text_and_entities, index_entities, upload_file, \
+    create_uploaded_file_object_from_string, get_directory_content, include_user, index_file, \
+    delete_directory_with_contents_fake, overwrite_file
 
 
 @login_required
@@ -139,21 +140,25 @@ def get_file_version(request, file_id, version=None):  # type: (HttpRequest, int
     if version is None:
         version = file.version_number
 
-    fv = file.versions.filter(number=version).get()  # type: FileVersion
+    file_version = file.versions.filter(number=version).get()  # type: FileVersion
 
     try:
-        creator = model_to_dict(fv.created_by, fields=('id', 'first_name', 'last_name'))
+        creator = model_to_dict(file_version.created_by, fields=('id', 'first_name', 'last_name'))
     except (AttributeError, User.DoesNotExist):
-        creator = fv.created_by_id
+        creator = file_version.created_by_id
 
-    fv.upload.open('r')
+    file_version.upload.open('r')
+    xml_content = file_version.upload.read()
+    file_version.upload.close()
+
+    xml_content = append_unifications(xml_content, file_version)
+
     response = {
         "filename": file.name,
-        "version_number": fv.number,
+        "version_number": file_version.number,
         "creator": creator,
-        "data": fv.upload.read()
+        "data": xml_content
     }
-    fv.upload.close()
 
     return JsonResponse(response)
 
@@ -216,7 +221,7 @@ def delete(request, **kwargs):
     elif 'file_id' in kwargs:
         file = File.objects.get(id=kwargs['file_id'], deleted=False)
         log_activity(project=file.project, user=request.user, action_text=f"deleted file {file.name}")
-        file.delete_fake()
+        file.delete_fake(request.user)
     else:
         return HttpResponseBadRequest("Invalid arguments")
     return HttpResponse("OK")

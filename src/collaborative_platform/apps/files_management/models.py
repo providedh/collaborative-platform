@@ -35,7 +35,7 @@ class FileNode(models.Model):
 
         return '/'.join(r)
 
-    def delete_fake(self):
+    def delete_fake(self, user=None):
         self.deleted = True
         self.deleted_on = datetime.datetime.now()
         self.save()
@@ -140,6 +140,20 @@ class File(FileNode):
 
         return path
 
+    def delete_fake(self, user=None):
+        if not user:
+            raise ValueError("Attribute 'user' is required to delete a file.")
+
+        from apps.projects.helpers import create_new_project_version
+        from apps.api_vis.helpers import fake_delete_entities, fake_delete_unifications
+        from apps.api_vis.models import Entity
+
+        super().delete_fake()
+
+        deleted_entity_ids = fake_delete_entities(self, user)
+        commit = fake_delete_unifications(self, user, deleted_entity_ids)
+        create_new_project_version(project=self.project, files_modification=True, commit=commit)
+
 
 class FileVersion(models.Model):
     upload = models.FileField(upload_to=UPLOADED_FILES_PATH)
@@ -161,7 +175,11 @@ class FileVersion(models.Model):
         return content
 
     def download(self):
+        from apps.files_management.helpers import append_unifications
+
         content = self.get_content()
+        content = append_unifications(content, self)
+
         response = HttpResponse(content, content_type='application/xml')
         response['Content-Disposition'] = bytes('attachment; filename="{}"'.format(self.file.name), 'utf-8')
         return response
@@ -174,7 +192,7 @@ class FileVersion(models.Model):
 
         if created:
             project = self.file.project
-            create_new_project_version(project=project, new_file_version=self)
+            create_new_project_version(project=project, files_modification=True)
 
 
 class FileMaxXmlIds(models.Model):

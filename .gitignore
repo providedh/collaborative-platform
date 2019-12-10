@@ -24,6 +24,9 @@ media/
 # Django default database file
 *.sqlite3
 
+# Database backup
+db_backup.json
+
 # Logs
 *.log
 
