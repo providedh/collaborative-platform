@@ -28,11 +28,10 @@ def create(request):  # type: (HttpRequest) -> HttpResponse
         try:
             if not data['title']:
                 return HttpResponseBadRequest(dumps({"message": "Title cannot be empty"}))
-            print(data)
             project = Project(title=data['title'], description=data["description"])
             project.save()
 
-            taxonomy_data = {key[9:]: val for key, val in data.items() if key.startswith("taxonomy.")}
+            taxonomy_data = data['taxonomy']
             for key, val in copy(taxonomy_data).items():
                 if key.startswith("name"):
                     taxonomy_data[key.replace("name", "xml_id")] = '-'.join(val.lower().strip().split())
