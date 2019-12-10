@@ -277,7 +277,7 @@ def create_certainty_elements_from_unifications(internal_unifications, external_
             'xml': xml_namespace,
         }
 
-        category = 'incompleteness'
+        ana = ''
         locus = 'value'
         certainty = unification.certainty
         annotator_id = '#person' + str(unification.created_by_id)
@@ -285,11 +285,11 @@ def create_certainty_elements_from_unifications(internal_unifications, external_
         entity_xml_id = unification.entity.xml_id
         target = '#' + entity_xml_id
 
-        internal_unification_xml_ids = [unification.entity.xml_id for unification in internal_unifications if
+        internal_unification_xml_ids = ['#' + unification.entity.xml_id for unification in internal_unifications if
                                         unification.entity.xml_id != entity_xml_id]
         asserted_value = ' '.join(internal_unification_xml_ids + external_unification_xml_ids)
 
-        certainty = etree.Element(default + 'certainty', category=category, locus=locus, cert=certainty,
+        certainty = etree.Element(default + 'certainty', ana=ana, locus=locus, cert=certainty,
                                   resp=annotator_id, target=target, match='@sameAs', assertedValue=asserted_value,
                                   nsmap=ns_map)
 
@@ -315,7 +315,7 @@ def add_certainties_to_xml_tree(certainty_elements, xml_tree):
     for certainty in certainty_elements:
         xpath = f'//default:teiHeader' \
                 f'//default:classCode[@scheme="http://providedh.eu/uncertainty/ns/1.0"]' \
-                f'//default:certainty[@category="{certainty.attrib["category"]}" ' \
+                f'//default:certainty[@ana="{certainty.attrib["ana"]}" ' \
                 f'and @locus="{certainty.attrib["locus"]}" ' \
                 f'and @cert="{certainty.attrib["cert"]}" ' \
                 f'and @target="{certainty.attrib["target"]}" ' \
