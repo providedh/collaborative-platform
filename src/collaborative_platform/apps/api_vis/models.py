@@ -101,6 +101,7 @@ class Unification(models.Model):
     deleted_in_file_version = models.ForeignKey(FileVersion, default=None, null=True, blank=True,
                                                 on_delete=models.CASCADE)
     certainty = models.CharField(max_length=10)
+    xml_id_number = models.IntegerField(default=None, null=True)
 
 
 class CliqueToDelete(models.Model):

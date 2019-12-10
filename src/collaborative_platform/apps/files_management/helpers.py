@@ -13,7 +13,6 @@ from django.db.models import Q
 from django.forms import model_to_dict
 from django.http import JsonResponse
 from django.utils import timezone
-from elasticsearch import ConflictError
 
 import apps.index_and_search.models as es
 
@@ -26,7 +25,6 @@ from apps.index_and_search.entities_extractor import EntitiesExtractor
 from apps.index_and_search.models import Person, Organization, Event, Place
 from apps.projects.helpers import log_activity
 from apps.projects.models import Project
-
 
 
 def upload_file(uploaded_file, project, user, parent_dir=None):  # type: (UploadedFile, Project, User, int) -> File
@@ -270,10 +268,13 @@ def create_certainty_elements_from_unifications(internal_unifications, external_
 
     for unification in internal_unifications:
         default_namespace = NAMESPACES['default']
-        default = "{%s}" % default_namespace
+        xml_namespace = NAMESPACES['xml']
+        default = '{%s}' % default_namespace
+        xml = '{%s}' % xml_namespace
 
         ns_map = {
-            None: default_namespace
+            None: default_namespace,
+            'xml': xml_namespace,
         }
 
         category = 'incompleteness'
@@ -288,9 +289,12 @@ def create_certainty_elements_from_unifications(internal_unifications, external_
                                         unification.entity.xml_id != entity_xml_id]
         asserted_value = ' '.join(internal_unification_xml_ids + external_unification_xml_ids)
 
-        certainty = etree.Element(default + 'certainty', category=category, locus=locus,cert=certainty,
+        certainty = etree.Element(default + 'certainty', category=category, locus=locus, cert=certainty,
                                   resp=annotator_id, target=target, match='@sameAs', assertedValue=asserted_value,
                                   nsmap=ns_map)
+
+        certainty_xml_id = 'certainty_' + unification.entity.file.name + '-' + str(unification.xml_id_number)
+        certainty.attrib[etree.QName(xml + 'id')] = certainty_xml_id
 
         certainties.append(certainty)
 
