@@ -1,4 +1,6 @@
 import json
+import os
+
 from functools import wraps
 from json import JSONDecodeError
 from typing import Callable
@@ -11,6 +13,8 @@ from django.shortcuts import render
 from apps.api_vis.models import Clique
 from apps.files_management.models import File, FileVersion, Directory
 from apps.projects.models import Contributor, Project
+
+from collaborative_platform.settings import STATIC_ROOT
 
 
 def objects_exists(view):  # type: (Callable) -> Callable
@@ -230,3 +234,33 @@ def __get_response(request, status, bootstrap_alert_type, message, data=None):
 
 def __from_api(request):  # type: (HttpRequest) -> bool
     return request.path.split('/')[1] == 'api'
+
+
+def static_file_exists(view):  # type: (Callable) -> Callable
+    """Requirements:
+        - decorated view must take 'file_name' argument
+    """
+
+    def decorator(*args, **kwargs):
+        if 'file_name' in kwargs:
+            file_name = kwargs['file_name']
+
+            try:
+                file_path = os.path.join(STATIC_ROOT, 'docs', file_name)
+
+                with open(file_path, 'rb'):
+                    pass
+
+            except FileNotFoundError:
+                request = args[0]
+                status = HttpResponseBadRequest.status_code
+                message = f"File with name: '{file_name}' doesn't exist."
+                bootstrap_alert_type = 'danger'
+
+                response = __get_response(request, status, bootstrap_alert_type, message)
+
+                return response
+
+        return view(*args, **kwargs)
+
+    return decorator

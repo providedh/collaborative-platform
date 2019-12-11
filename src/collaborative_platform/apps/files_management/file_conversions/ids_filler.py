@@ -2,6 +2,7 @@ import re
 import io
 from lxml import etree as et
 
+from apps.files_management.file_conversions.xml_formatter import XMLFormatter
 from apps.files_management.file_conversions.tei_handler import TeiHandler
 from apps.files_management.models import FileMaxXmlIds
 from apps.index_and_search.entities_extractor import EntitiesExtractor
@@ -116,13 +117,22 @@ class IDsFiller:
                 text = text.replace("='" + old, "='" + new).replace('="' + old, '="' + new)
 
             text = self.__alter_not_indexed_ids(text)
+
+            xml_formatter = XMLFormatter()
+            text = xml_formatter.reformat_xml(text)
+
             self.text = io.StringIO(text)
             self.text.seek(io.SEEK_SET)
             self.__update_max_ids()
         else:
             self.__get_max_ids()
             if self.__fill_tags():
-                self.text = io.StringIO(et.tostring(self._parsed, pretty_print=True, encoding='utf-8').decode('utf-8'))
+                text = et.tostring(self._parsed, pretty_print=True, encoding='utf-8').decode('utf-8')
+
+                xml_formatter = XMLFormatter()
+                text = xml_formatter.reformat_xml(text)
+
+                self.text = io.StringIO(text)
                 self.text.seek(io.SEEK_SET)
 
                 if self.__message:

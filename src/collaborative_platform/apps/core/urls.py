@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, re_path
 from . import views
 
 urlpatterns = [
@@ -10,4 +10,5 @@ urlpatterns = [
     path('settings/password/', views.password, name='password'),
     path('user/<int:user_id>/', views.user, name='user'),
     path('user/', views.user, name='user_template'),
+    re_path(r'^(?P<file_name>[^/]+?)$', views.static_docs, name='docs'),
 ]
