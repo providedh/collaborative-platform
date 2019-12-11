@@ -7,7 +7,7 @@ import TaxonomySection from './TaxonomySection.js';
 class App extends React.Component {
   constructor(props){
     super(props);
-    
+
     this.state = {
       title: '',
       description: '',
@@ -21,7 +21,7 @@ class App extends React.Component {
   componentDidMount(){
     document.getElementById('create-project-button')
         .addEventListener('click', this.createProject);
-      
+
   }
 
   updateCertScheme(scheme){
@@ -33,18 +33,20 @@ class App extends React.Component {
       title: this.state.title,
       description: this.state.description,
       categories: this.state.certScheme,
-      "taxonomy.xml_id_1": this.state.certScheme[0],
-      "taxonomy.xml_color_1": this.state.certScheme[1].color,
-      "taxonomy.xml_desc_1": this.state.certScheme[1].desc,
-      "taxonomy.xml_id_2": this.state.certScheme[0],
-      "taxonomy.xml_color_2": this.state.certScheme[1].color,
-      "taxonomy.xml_desc_2": this.state.certScheme[1].desc,
-      "taxonomy.xml_id_3": this.state.certScheme[0],
-      "taxonomy.xml_color_3": this.state.certScheme[1].color,
-      "taxonomy.xml_desc_3": this.state.certScheme[1].desc,
-      "taxonomy.xml_id_4": this.state.certScheme[0],
-      "taxonomy.xml_color_4": this.state.certScheme[1].color,
-      "taxonomy.xml_desc_4": this.state.certScheme[1].desc,
+      taxonomy: {
+              name_1: this.state.certScheme[0][0],
+              color_1: this.state.certScheme[0][1].color,
+              desc_1: this.state.certScheme[0][1].description,
+              name_2: this.state.certScheme[1][0],
+              color_2: this.state.certScheme[1][1].color,
+              desc_2: this.state.certScheme[1][1].description,
+              name_3: this.state.certScheme[2][0],
+              color_3: this.state.certScheme[2][1].color,
+              desc_3: this.state.certScheme[2][1].description,
+              name_4: this.state.certScheme[3][0],
+              color_4: this.state.certScheme[3][1].color,
+              desc_4: this.state.certScheme[3][1].description
+          }
     };
 
     e.preventDefault()
@@ -72,23 +74,23 @@ class App extends React.Component {
         }
     });
   }
-  
+
   render(){
     return(
       <div>
-        <ProjectDescriptionSection 
+        <ProjectDescriptionSection
           title={this.state.title}
           description={this.state.description}
           setTitle={title=>this.setState({title:title})}
           setDescription={description=>this.setState({description:description})}
           />
-        <TaxonomySection 
+        <TaxonomySection
           scheme={this.state.certScheme}
           updateScheme={this.updateCertScheme}
           />
       </div>
     );
-  }  
+  }
 }
 
 export default App;

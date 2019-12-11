@@ -7,7 +7,7 @@
  * Listens:
  * - panel/display_options
  * */
-import teiConf from './utilities/taxonomy.js';
+import ColorScheme from './utilities/color.js';
 
 var Popup = function(args){
 	let self = null;
@@ -85,7 +85,7 @@ var Popup = function(args){
  * */
 var Tooltips = function(args){
 	let self = null;
-	const tags = Object.keys(teiConf['entities']);
+	const tags = Object.keys(ColorScheme.scheme['entities']);
 
 	function _init(args){
 		const obj = {

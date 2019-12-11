@@ -126,6 +126,8 @@ let PanelView = function(args){
 	}
 
 	function _getCurrentValues(args){
+		const getAllSelected = selectInput=>Array.from(selectInput.options).reduce((ac,dc)=>dc.selected?[...ac,dc.value]:ac,[]);
+
 		const options = {
 			'annotating-uncertainty': document
 				.getElementById('annotating-uncertainty')
@@ -141,13 +143,14 @@ let PanelView = function(args){
 			'locus': document.getElementById('locus').value,
 			'tag-name': document.getElementById('tag-name').value,
 			'attribute-name': document.getElementById('attribute-name').value,
-			'category': document.getElementById('category').value,
+			'categories': getAllSelected(document.getElementById('category')),
 			'asserted-value': document.getElementById('asserted-value-container').getElementsByClassName('input')[0].value,
 			'references': document.getElementById('references').value,
 			'references-filepath': document.getElementById('references').filepath,
 			'description': document.getElementById('description').value,
 			'tei-tag-name': document.getElementById('tei-tag-name').value,
 		};
+
 		return options;
 	}
 

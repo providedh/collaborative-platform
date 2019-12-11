@@ -125,11 +125,7 @@
                                   <label for="category">Category of uncertainty 
                                     <span class="help-tooltip" help="This is the category." />
                                   </label>
-                                  <select class="form-control form-control-sm" id='category'>
-                                    <option class="ignorance" value="ignorance">Ignorance</option>
-                                    <option class="credibility" value="credibility">Credibility</option>
-                                    <option class="imprecision" value="imprecision">Imprecision</option>
-                                    <option class="incompleteness" value="incompleteness">Incompleteness</option>
+                                  <select multiple class="form-control form-control-sm" id='category'>
                                   </select>
                                 </div>
                                 <div class="col">
@@ -182,9 +178,11 @@
                                   </label>
                                   <select class="form-control form-control-sm" id='cert-level'>
                                     <option value="unknown">Unknown</option>
+                                    <option value="very high">Very high</option>
                                     <option value="high">High</option>
                                     <option value="medium">Medium</option>
                                     <option value="low">Low</option>
+                                    <option value="very low">Very low</option>
                                   </select>
                                 </div>
                               </div>
@@ -264,6 +262,7 @@
     window.project_id = "{{ project_id }}";
     window.file_id = "{{ file_id }}";
     window.file_version = "{{ file.version_number }}";
+    window.preferences = JSON.parse("{{ preferences|escapejs|safe }}");
   </script>
   <script src="https://d3js.org/d3.v5.min.js"></script>
   <script type="module" src="{% static 'close_reading/js/app.js' %}"></script>
