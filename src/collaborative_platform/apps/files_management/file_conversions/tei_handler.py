@@ -36,6 +36,7 @@ class TeiHandler:
         self.__cr_lf_codes = False
         self.__non_unix_newline_chars = False
         self.__need_reformat = False
+        self.__tei_providedh_schema_missing = False
 
         self.__recognized = False
         self.__migrated = False
@@ -93,6 +94,7 @@ class TeiHandler:
         if self.__file_type == FileType.XML:
             xml_formatter = XMLFormatter()
             self.__need_reformat = xml_formatter.check_if_reformat_is_needed(self.__text_utf_8)
+            self.__tei_providedh_schema_missing = xml_formatter.check_if_tei_providedh_schema_missing(self.__text_utf_8)
 
         self.__migrate = self.__make_decision()
         self.__is_tei_p5_unprefixed = self.__check_if_tei_p5_unprefixed()
@@ -160,6 +162,8 @@ class TeiHandler:
             return True
         elif self.__need_reformat:
             return True
+        elif self.__tei_providedh_schema_missing:
+            return True
         else:
             return False
 
@@ -201,7 +205,12 @@ class TeiHandler:
         migrated_text = self.__remove_encoding_declaration(migrated_text)
 
         xml_formatter = XMLFormatter()
-        migrated_text = xml_formatter.reformat_xml(migrated_text)
+
+        if self.__tei_providedh_schema_missing:
+            migrated_text = xml_formatter.append_missing_tei_providedh_schema(migrated_text)
+
+        if self.__need_reformat:
+            migrated_text = xml_formatter.reformat_xml(migrated_text)
 
         self.text.write(migrated_text)
         self.text.seek(io.SEEK_SET)
@@ -250,6 +259,12 @@ class TeiHandler:
                 message += " "
 
             message += "Normalized new line characters."
+
+        if self.__tei_providedh_schema_missing:
+            if message:
+                message += " "
+
+            message += "Appended TEI ProvideDH schema."
 
         if self.__need_reformat:
             if message:
