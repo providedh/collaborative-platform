@@ -66,7 +66,7 @@ def projects(request):  # type: (HttpRequest) -> JsonResponse
 @user_has_access()
 def project_history(request, project_id):  # type: (HttpRequest, int) -> JsonResponse
     if request.method == 'GET':
-        response = {
+        response = { # TODO: not implemented
             'info': 'Not implemented. Need to agree an appearance of response.'
         }
 
