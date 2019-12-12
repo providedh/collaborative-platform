@@ -5,10 +5,11 @@ from channels.generic.websocket import WebsocketConsumer
 
 from apps.projects.models import Contributor, Project
 from apps.exceptions import BadRequest, NotModified
+from apps.files_management.helpers import create_certainty_elements_for_file_version
 from apps.files_management.models import FileVersion, File
 
 from .annotator import Annotator
-from .helpers import verify_reference
+from .helpers import verify_reference, unification_xml_elements_to_json
 from .models import AnnotatingXmlContent, RoomPresence
 
 
@@ -87,10 +88,21 @@ class AnnotatorConsumer(WebsocketConsumer):
 
         room_presence.save()
 
+        file = File.objects.get(id=file_id, deleted=False)
+        file_version = FileVersion.objects.get(
+            file=file,
+            number=file.version_number,
+        )
+
+        unification_xml_elements = create_certainty_elements_for_file_version(file_version, include_uncommitted=True,
+                                                                              user=self.scope['user'])
+        unifications = unification_xml_elements_to_json(unification_xml_elements)
+
         response = {
             'status': 200,
             'message': 'OK',
             'xml_content': annotating_xml_content.xml_content,
+            'unifications': unifications,
         }
 
         response = json.dumps(response)

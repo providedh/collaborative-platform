@@ -211,14 +211,50 @@ def delete_directory_with_contents_fake(directory_id, user):  # type: (int, User
 
 
 def append_unifications(xml_content, file_version):  # type: (str, FileVersion) -> str
+    certainty_elements = create_certainty_elements_for_file_version(file_version)
+
+    if certainty_elements:
+        xml_in_lines = xml_content.splitlines()
+        if 'encoding=' in xml_in_lines[0]:
+            xml_content = '\n'.join(xml_in_lines[1:])
+
+        xml_tree = etree.fromstring(xml_content)
+
+        add_certainties_to_xml_tree(certainty_elements, xml_tree)
+        fill_up_certainty_authors_list(xml_tree)
+
+        xml_content = etree.tounicode(xml_tree)
+        xml_formatter = XMLFormatter()
+
+        if xml_formatter.check_if_reformat_is_needed(xml_content):
+            xml_content = xml_formatter.reformat_xml(xml_content)
+
+    return xml_content
+
+
+def create_certainty_elements_for_file_version(file_version, include_uncommitted=False, user=None):
+    # type: (FileVersion, bool, User) -> list
+
+    if include_uncommitted and not user:
+        raise ValueError("Argument 'include_uncommitted' require to fill a 'user' argument.")
+
     cliques = Clique.objects.filter(
         Q(unifications__deleted_in_file_version__isnull=True)
         | Q(unifications__deleted_in_file_version__number__gte=file_version.number),
         unifications__created_in_file_version__number__lte=file_version.number,
         project_id=file_version.file.project_id,
         unifications__entity__file=file_version.file,
-        created_in_commit__isnull=False,
     ).distinct()
+
+    if include_uncommitted:
+        cliques = cliques.filter(
+            (Q(created_in_commit__isnull=True) & Q(created_by=user))
+            | Q(created_in_commit__isnull=False),
+        )
+    else:
+        cliques = cliques.filter(
+            created_in_commit__isnull=False,
+        )
 
     certainty_elements_to_add = []
 
@@ -228,6 +264,16 @@ def append_unifications(xml_content, file_version):  # type: (str, FileVersion) 
             deleted_on__isnull=True,
             created_in_commit__isnull=False,
         )
+
+        if include_uncommitted:
+            unifications = unifications.filter(
+                (Q(created_in_commit__isnull=True) & Q(created_by=user))
+                | Q(created_in_commit__isnull=False),
+            )
+        else:
+            unifications = unifications.filter(
+                created_in_commit__isnull=False,
+            )
 
         internal_unifications = unifications.filter(
             entity__file=file_version.file,
@@ -241,26 +287,11 @@ def append_unifications(xml_content, file_version):  # type: (str, FileVersion) 
 
         certainty_elements_to_add.extend(certainty_elements)
 
-    if certainty_elements_to_add:
-        xml_in_lines = xml_content.splitlines()
-        if 'encoding=' in xml_in_lines[0]:
-            xml_content = '\n'.join(xml_in_lines[1:])
-
-        xml_tree = etree.fromstring(xml_content)
-
-        add_certainties_to_xml_tree(certainty_elements_to_add, xml_tree)
-        fill_up_certainty_authors_list(xml_tree)
-
-        xml_content = etree.tounicode(xml_tree)
-        xml_formatter = XMLFormatter()
-
-        if xml_formatter.check_if_reformat_is_needed(xml_content):
-            xml_content = xml_formatter.reformat_xml(xml_content)
-
-    return xml_content
+    return certainty_elements_to_add
 
 
 def create_certainty_elements_from_unifications(internal_unifications, external_unifications):
+    # type: (list, list) -> list
     external_unification_xml_ids = [unification.entity.file.get_path() + '#' + unification.entity.xml_id
                                     for unification in external_unifications]
 
