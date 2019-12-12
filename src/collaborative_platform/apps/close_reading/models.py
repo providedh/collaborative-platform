@@ -13,6 +13,7 @@ class RoomPresence(models.Model):
     room_symbol = models.CharField(max_length=255)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now=True)
+    channel_name = models.CharField(max_length=255)
 
 
 class AnnotationHistory(models.Model):

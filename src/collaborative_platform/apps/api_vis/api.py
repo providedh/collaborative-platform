@@ -284,6 +284,10 @@ def project_cliques(request, project_id):  # type: (HttpRequest, int) -> HttpRes
                         raise BadRequest(f"Entity with id: {entity.id} doesn't exist in version: "
                                          f"{request_data['project_version']} of the project with id: {project_id}.")
 
+                    file_max_xml_ids = FileMaxXmlIds.objects.get(file=entity.file)
+                    file_max_xml_ids.certainty += 1
+                    file_max_xml_ids.save()
+
                     Unification.objects.create(
                         project_id=project_id,
                         entity=entity,
@@ -291,6 +295,7 @@ def project_cliques(request, project_id):  # type: (HttpRequest, int) -> HttpRes
                         created_by=request.user,
                         certainty=request_data['certainty'],
                         created_in_file_version=file_version,
+                        xml_id_number=file_max_xml_ids.certainty,
                     )
 
                     unification_statuses[i].update({
@@ -519,6 +524,10 @@ def clique_entities(request, project_id, clique_id):  # type: (HttpRequest, int,
                             created_by=request.user,
                         )
                     except Unification.DoesNotExist:
+                        file_max_xml_ids = FileMaxXmlIds.objects.get(file=entity.file)
+                        file_max_xml_ids.certainty += 1
+                        file_max_xml_ids.save()
+
                         Unification.objects.create(
                             project_id=project_id,
                             entity=entity,
@@ -526,6 +535,7 @@ def clique_entities(request, project_id, clique_id):  # type: (HttpRequest, int,
                             created_by=request.user,
                             certainty=request_data['certainty'],
                             created_in_file_version=file_version,
+                            xml_id_number=file_max_xml_ids.certainty,
                         )
                     else:
                         raise NotModified(f"This entity already exist in clique with id: {clique_id}")
@@ -840,12 +850,6 @@ def commits(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
 
             for unification_to_add in unifications_to_add:
                 unification_to_add.created_in_commit = commit
-
-                file_max_xml_ids = FileMaxXmlIds.objects.get(file=unification_to_add.entity.file)
-                file_max_xml_ids.certainty += 1
-                file_max_xml_ids.save()
-
-                unification_to_add.xml_id_number = file_max_xml_ids.certainty
                 unification_to_add.save()
 
             for unification_to_remove in unifications_to_remove:

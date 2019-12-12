@@ -2,6 +2,7 @@ import json
 
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
+from channels.layers import get_channel_layer
 
 from apps.projects.models import Contributor, Project
 from apps.exceptions import BadRequest, NotModified
@@ -84,6 +85,7 @@ class AnnotatorConsumer(WebsocketConsumer):
         room_presence, created = RoomPresence.objects.get_or_create(
             room_symbol=room_symbol,
             user=self.scope['user'],
+            channel_name=self.channel_name,
         )
 
         room_presence.save()
@@ -136,10 +138,10 @@ class AnnotatorConsumer(WebsocketConsumer):
 
         if text_data == '"heartbeat"':
             if self.scope['user'].pk is not None:
-                room_presence = RoomPresence.objects.get(
+                room_presence = RoomPresence.objects.filter(
                     room_symbol=room_symbol,
                     user=self.scope['user'],
-                )
+                ).order_by('-timestamp')[0]
 
                 room_presence.save()
 
@@ -165,22 +167,40 @@ class AnnotatorConsumer(WebsocketConsumer):
                 annotating_xml_content.xml_content = xml_content
                 annotating_xml_content.save()
 
-                response = {
-                    'status': 200,
-                    'message': 'OK',
-                    'xml_content': annotating_xml_content.xml_content,
-                }
-
-                response = json.dumps(response)
-
-                # Send message to room group
-                async_to_sync(self.channel_layer.group_send)(
-                    self.room_group_name,
-                    {
-                        'type': 'xml_modification',
-                        'message': response,
-                    }
+                # send individual messages with uncommitted certainties to every user
+                room_presences = RoomPresence.objects.filter(
+                    room_symbol=room_symbol
                 )
+
+                for presence in room_presences:
+                    file = File.objects.get(id=file_id, deleted=False)
+                    file_version = FileVersion.objects.get(
+                        file=file,
+                        number=file.version_number,
+                    )
+
+                    unification_xml_elements = create_certainty_elements_for_file_version(file_version,
+                                                                                          include_uncommitted=True,
+                                                                                          user=presence.user)
+                    unifications = unification_xml_elements_to_json(unification_xml_elements)
+
+                    response = {
+                        'status': 200,
+                        'message': 'OK',
+                        'xml_content': annotating_xml_content.xml_content,
+                        'unifications': unifications,
+                    }
+
+                    response = json.dumps(response)
+
+                    channel_layer = get_channel_layer()
+                    async_to_sync(channel_layer.send)(
+                        presence.channel_name,
+                        {
+                            'type': 'xml_modification',
+                            'message': response,
+                        }
+                    )
 
             except NotModified as exception:
                 self.send_response(304, exception)

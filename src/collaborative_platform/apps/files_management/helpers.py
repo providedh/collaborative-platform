@@ -262,7 +262,6 @@ def create_certainty_elements_for_file_version(file_version, include_uncommitted
         unifications = Unification.objects.filter(
             clique=clique,
             deleted_on__isnull=True,
-            created_in_commit__isnull=False,
         )
 
         if include_uncommitted:
