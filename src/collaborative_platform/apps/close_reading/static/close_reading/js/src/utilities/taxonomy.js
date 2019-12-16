@@ -34,10 +34,6 @@ export default {
 			"icon": "\\f5a0", 
 			"color": "#ff6464"
 		},
-		"name": {
-			"icon": "\\f007", 
-			"color": "#ff7f00"
-		},
 		"occupation": {
 			"icon": "\\f0b1", 
 			"color": "#3c8745"
