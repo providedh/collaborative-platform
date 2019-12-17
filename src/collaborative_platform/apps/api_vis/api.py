@@ -295,7 +295,7 @@ def project_cliques(request, project_id):  # type: (HttpRequest, int) -> HttpRes
                         created_by=request.user,
                         certainty=request_data['certainty'],
                         created_in_file_version=file_version,
-                        xml_id_number=file_max_xml_ids.certainty,
+                        xml_id=f'certainty_{entity.file.name}-{file_max_xml_ids.certainty}',
                     )
 
                     unification_statuses[i].update({
@@ -535,7 +535,7 @@ def clique_entities(request, project_id, clique_id):  # type: (HttpRequest, int,
                             created_by=request.user,
                             certainty=request_data['certainty'],
                             created_in_file_version=file_version,
-                            xml_id_number=file_max_xml_ids.certainty,
+                            xml_id=f'certainty_{entity.file.name}-{file_max_xml_ids.certainty}',
                         )
                     else:
                         raise NotModified(f"This entity already exist in clique with id: {clique_id}")

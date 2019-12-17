@@ -101,7 +101,7 @@ class Unification(models.Model):
     deleted_in_file_version = models.ForeignKey(FileVersion, default=None, null=True, blank=True,
                                                 on_delete=models.CASCADE)
     certainty = models.CharField(max_length=10)
-    xml_id_number = models.IntegerField(default=None, null=True)
+    xml_id = models.CharField(max_length=255)
 
 
 class CliqueToDelete(models.Model):
@@ -116,3 +116,15 @@ class UnificationToDelete(models.Model):
     deleted_by = models.ForeignKey(User, on_delete=models.CASCADE)
     deleted_on = models.DateTimeField(auto_now=True)
     project_version = models.ForeignKey(ProjectVersion, on_delete=models.CASCADE)
+
+
+class Certainty(models.Model):
+    ana = models.CharField(max_length=255)
+    locus = models.CharField(max_length=255)
+    cert = models.CharField(max_length=255)
+    asserted_value = models.CharField(max_length=255, null=True)
+    resp = models.CharField(max_length=255)
+    target = models.CharField(max_length=255)
+    xml_id = models.CharField(max_length=255)
+    description = models.CharField(max_length=255, null=True)
+    unification = models.ForeignKey(Unification, related_name='certainties', on_delete=models.CASCADE)
