@@ -42,7 +42,7 @@ let CertaintyList = function(args){
 	}
 
 	function _createCard(data, nested=false){
-		const card_text = `<div class="card w-100 card_${data.html_target}" id="card_${data.html_target}_${data.count}">
+		const card_text = `<div class="card w-100 card_${data.target}" id="card_${data.target}_${data.count}">
                 <div class="card-header">
                   <div class="d-flex justify-content-between">
                     <div>
@@ -59,7 +59,7 @@ let CertaintyList = function(args){
                         By: <i>${data.author}</i>
                     </div>
                       <div>
-                        <i class="text-muted">(person)</i>
+                        <i class="text-muted">(${data.target_type})</i>
                       </div>
                     </div>
                 </div>
@@ -136,15 +136,25 @@ let CertaintyList = function(args){
     const getAttribute = (json, attr)=>json.hasOwnProperty(attr)?json[attr].value:'';
 
     const seen = {};
-    const annotations = [];
+    const annotations = {};
+
 		Array.from(args.document.getElementsByTagName('teiHeader')[0].getElementsByTagName('certainty'), a=>a)
             .forEach(annotation=>annotation.attributes['target'].value.trim().split(" ")
-            .forEach(target=>annotations.push([annotation, target])));
+            .forEach(target=>annotations[annotation.attributes['id'].value] = [annotation, target]));
 
-    annotations.sort((a,b)=>a[1]>b[1]?1:-1).forEach(item=>{
-      const [annotation, target] = item;
+    Object.entries(annotations).sort((a,b)=>a[1][1]>b[1][1]?1:-1).forEach(item=>{
+      const [id, [annotation, target]] = item;
 
-      const node = document.getElementById(args.XML_EXTRA_CHAR_SPACER+target.slice(1));
+      const target_id = target.startsWith('#')?target.split('#')[1]:target;
+      let node = null;
+
+      const cert_types = annotation.attributes['ana'].value.split(' ').map(x=>x.split('#')[1])
+
+      if(target_id.startsWith('certainty'))
+        [node, ] = annotations[args.XML_EXTRA_CHAR_SPACER+target_id];
+      else
+        node = document.getElementById(args.XML_EXTRA_CHAR_SPACER+target_id);
+      
       if(! seen.hasOwnProperty(target)){
         seen[target] = 1;
       }else{
@@ -156,13 +166,14 @@ let CertaintyList = function(args){
         original_id: '#' + annotation.attributes['id'].value.split(args.XML_EXTRA_CHAR_SPACER)[1],
         count: seen[target],
       	original_target: getAttribute(annotation.attributes, 'target'),
-      	target: args.XML_EXTRA_CHAR_SPACER+target.slice(1),
+      	target: args.XML_EXTRA_CHAR_SPACER+target_id,
+        target_type: node.tagName,
       	author: getAttribute(annotation.attributes, 'resp'),
-      	original: '',
+      	original: node.tagName=='certainty'?node.attributes['assertedValue'].value:node.textContent,
       	asserted: getAttribute(annotation.attributes, 'assertedValue'),
       	certainty: getAttribute(annotation.attributes, 'cert'),
-      	type: getAttribute(annotation.attributes, 'category'),
-      	attribute: '',
+      	type: cert_types,
+      	attribute: getAttribute(annotation.attributes, 'attr'),
       	desc: getAttribute(annotation.attributes, 'desc'),
       }
       if(node != null){   
