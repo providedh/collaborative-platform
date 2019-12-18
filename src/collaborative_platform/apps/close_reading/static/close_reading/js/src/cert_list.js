@@ -47,11 +47,11 @@ let CertaintyList = function(args){
                   <div class="d-flex justify-content-between">
                     <div>
                         <h5 class="card-title d-inline text-dark">Id :</h5>
-                        <i class="text-muted"> ${data.id}</i>
+                        <i class="text-muted"> ${data.original_id}</i>
                     </div>
                       <div>
                         <h5 class="card-title d-inline text-dark">Target :</h5>
-                        <i class="text-muted target_id"> ${data.target}</i>
+                        <i class="text-muted target_id"> ${data.original_target}</i>
                       </div>
                     </div>
                     <div class="row d-flex px-3 justify-content-between">
@@ -102,8 +102,9 @@ let CertaintyList = function(args){
                     </div>
                   </li>
                 </ul>
-                  <a href="#${data.html_target}" class="card-link">Scroll to position</a>
-                  <a href="#" class="card-link add-side-annotation" annotation-target=${data.target}>Add annotation</a>
+                  <a href="#${data.target}" class="card-link">Scroll to position</a>
+                  <a href="#" class="card-link add-side-annotation" annotation-target=${data.original_id}>Annotate this</a>
+                  <a href="#" class="card-link add-side-annotation" annotation-target=${data.original_target}>Annotate the referenced element</a>
                 </div>
               </div>
 		`
@@ -140,12 +141,10 @@ let CertaintyList = function(args){
             .forEach(annotation=>annotation.attributes['target'].value.trim().split(" ")
             .forEach(target=>annotations.push([annotation, target])));
 
-    annotations.sort((a,b)=>a[1]>b[1]?1:-1).forEach(pair=>{
-      const annotation = pair[0],
-        target = pair[1];
+    annotations.sort((a,b)=>a[1]>b[1]?1:-1).forEach(item=>{
+      const [annotation, target] = item;
 
       const node = document.getElementById(args.XML_EXTRA_CHAR_SPACER+target.slice(1));
-
       if(! seen.hasOwnProperty(target)){
         seen[target] = 1;
       }else{
@@ -153,10 +152,11 @@ let CertaintyList = function(args){
       }
 
       const data = {
-      	id: '98',//annotation.attributes['id'].value,
+      	id: annotation.attributes['id'].value,
+        original_id: '#' + annotation.attributes['id'].value.split(args.XML_EXTRA_CHAR_SPACER)[1],
         count: seen[target],
-      	target: getAttribute(annotation.attributes, 'target'),
-      	html_target: args.XML_EXTRA_CHAR_SPACER+target.slice(1),
+      	original_target: getAttribute(annotation.attributes, 'target'),
+      	target: args.XML_EXTRA_CHAR_SPACER+target.slice(1),
       	author: getAttribute(annotation.attributes, 'resp'),
       	original: '',
       	asserted: getAttribute(annotation.attributes, 'assertedValue'),
