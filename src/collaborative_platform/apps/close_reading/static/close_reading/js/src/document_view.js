@@ -49,16 +49,21 @@ var DocumentView = function(args){
 
 	function _parseTEI(file){
 		const sanityzed_xml = file.replace(/\r/gm," "),
+			// xml:id is not valid as an attribute name for DOM queries
             ids_replaced_xml = file.replace(/xml:id="/gm,'id="'+XML_EXTRA_CHAR_SPACER),
-            body_replaced_xml = ids_replaced_xml.replace(/body>/gm, 'page>'), // Creating a separate div would alter structure
+
+            // Add a page element so that browsers add there a xmlns="http://www.tei-c.org/ns/1.0" attribute
+            // instead of changing the original and rendered content
+            body_open_replaced_xml = ids_replaced_xml.replace(/<body>/, '<body><page xmlns="http://www.tei-c.org/ns/1.0">'), 
+            body_replaced_xml = body_open_replaced_xml.replace(/<\/body>/, '<\/page><\/body>'), 
+
             parsed_tei = $.parseXML(body_replaced_xml).documentElement,
-            body = parsed_tei.getElementsByTagName('page')[0];
+            body = parsed_tei.getElementsByTagName('body')[0];
         
 	        self.TEItext = file;
-	        self.TEIbody = body.innerHTML.replace(/ xmlns="http:\/\/www.tei-c.org\/ns\/1.0"/g, '');
-
+	        self.TEIbody = body.innerHTML
 	        self.TEIemptyTags = body.innerHTML.match(/<[^>]+\/>/gm) || [];
-	        self.TEIheaderLength = file.indexOf('<body>') + '<body>'.length;
+	        self.TEIheaderLength = file.indexOf('<body>') +'<body>'.length;
 	        body.setAttribute('size', 'A4');
 	        
 	        return({body, parsed_tei});
@@ -174,6 +179,7 @@ var DocumentView = function(args){
 	    let start_content = _contentsFromRange($('#editor page')[0], 0, selection_range.startContainer,selection_range.startOffset),
 	        end_content = _contentsFromRange($('#editor page')[0], 0, selection_range.endContainer,selection_range.endOffset);
 
+
 	    for(let empty_tag of self.TEIemptyTags){
 	        start_content = start_content.replace(_expandedEmptyTag(empty_tag), empty_tag);
 	        end_content = end_content.replace(_expandedEmptyTag(empty_tag), empty_tag);
@@ -181,21 +187,22 @@ var DocumentView = function(args){
 
 	    /* Browsers will now add the xmlns attribute nonetheless to
 	       make sure that the markup is representative of the namespaces.
-	       This breaks the ability to compare with the initial content. */
-	    start_content = start_content.replace(/ xmlns="http:\/\/www.tei-c.org\/ns\/1.0"/g, '');
-	    end_content = end_content.replace(/ xmlns="http:\/\/www.tei-c.org\/ns\/1.0"/g, '');
-
+	       This breaks the ability to compare with the initial content. 
+	    */
 	    const positions = [];
 
+	    // Remove the extra page element added to keep the TEI namespace
+	    const original_text = self.TEIbody.replace('<page xmlns="http://www.tei-c.org/ns/1.0">', '');
+
 	    for(let i=0; i<start_content.length; i++){
-	        if(self.TEIbody[i]!=start_content[i]){
+	        if(original_text[i]!=start_content[i]){
 	            positions.push(self.TEIheaderLength + i);
 	            break;
 	        }
 	    }
 
 	    for(let i=0; i<end_content.length; i++){
-	        if(self.TEIbody[i]!=end_content[i]){
+	        if(original_text[i]!=end_content[i]){
 	            positions.push(self.TEIheaderLength + i);
 	            break;
 	        }
