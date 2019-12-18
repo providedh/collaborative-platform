@@ -44,23 +44,18 @@ let CertaintyList = function(args){
 	function _createCard(data, nested=false){
 		const card_text = `<div class="card w-100 card_${data.target}" id="card_${data.target}_${data.count}">
                 <div class="card-header">
-                  <div class="d-flex justify-content-between">
+                  <div>
                     <div>
                         <h5 class="card-title d-inline text-dark">Id :</h5>
                         <i class="text-muted"> ${data.original_id}</i>
                     </div>
                       <div>
                         <h5 class="card-title d-inline text-dark">Target :</h5>
-                        <i class="text-muted target_id"> ${data.original_target}</i>
+                        <i class="text-muted target_id"> ${data.original_target} (${data.target_type})</i>
                       </div>
                     </div>
-                    <div class="row d-flex px-3 justify-content-between">
                     <div class="text-muted">
-                        By: <i>${data.author}</i>
-                    </div>
-                      <div>
-                        <i class="text-muted">(${data.target_type})</i>
-                      </div>
+                        Annotated by: <i>${data.author}</i>
                     </div>
                 </div>
                 <div class="card-body">
@@ -102,9 +97,10 @@ let CertaintyList = function(args){
                     </div>
                   </li>
                 </ul>
-                  <a href="#${data.target}" class="card-link">Scroll to position</a>
                   <a href="#" class="card-link add-side-annotation" annotation-target=${data.original_id}>Annotate this</a>
                   <a href="#" class="card-link add-side-annotation" annotation-target=${data.original_target}>Annotate the referenced element</a>
+                  <br/>
+                  <a href="#${data.target}" class="card-link">Scroll to position</a>
                 </div>
               </div>
 		`
