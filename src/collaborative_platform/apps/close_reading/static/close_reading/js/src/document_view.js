@@ -208,8 +208,8 @@ var DocumentView = function(args){
 		self.publish('document/selection', {selection});
 	}
 
-	function _handleDocumentLoad(file){
-		const {body, parsed_tei} = _parseTEI(file);
+	function _handleDocumentLoad({xml_content, certainties}){
+		const {body, parsed_tei} = _parseTEI(xml_content);
 		document.getElementById('editor').innerHTML='';
 		document.getElementById('editor').appendChild(body);
 

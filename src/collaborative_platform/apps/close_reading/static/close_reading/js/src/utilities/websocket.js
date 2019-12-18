@@ -52,7 +52,6 @@ const AnnotatorWebSocket = function(){
         };
 
         socket.onmessage = function message(event) {
-            //console.log("data from socket:" + event.data);
             if (first_entry)
             {
                 loaded = true;
@@ -64,7 +63,10 @@ const AnnotatorWebSocket = function(){
                     
                     // Run any callbacks if any, with the contents retrieved
                     for(let callback of callbacks.onload)
-                        callback(content.xml_content);
+                        callback({
+                            xml_content: content.xml_content, 
+                            certainties: content.certainties_from_db
+                        })
                 }
             }
             else
@@ -77,7 +79,10 @@ const AnnotatorWebSocket = function(){
 
                     // Run any callbacks if any, with the contents retrieved
                     for(let callback of callbacks.onreload)
-                        callback(content.xml_content);
+                        callback({
+                            xml_content: content.xml_content, 
+                            certainties: content.certainties_from_db
+                        })
                 }
                 else
                 {
