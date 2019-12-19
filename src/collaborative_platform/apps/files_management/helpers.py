@@ -1,6 +1,7 @@
 import copy
 import hashlib
 import json
+import re
 import xmltodict
 
 from io import BytesIO
@@ -566,3 +567,9 @@ def create_author_element(author):  # type: (str) -> etree.Element
     annotator_xml = etree.fromstring(annotator)
 
     return annotator_xml
+
+
+def clean_name(name):
+    name = re.sub(r'[^a-zA-Z0-9\-_]', '_', name)
+
+    return name
