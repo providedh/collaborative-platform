@@ -1,5 +1,7 @@
 import copy
 import hashlib
+import json
+import xmltodict
 
 from io import BytesIO
 from json import loads
@@ -16,7 +18,7 @@ from django.utils import timezone
 
 import apps.index_and_search.models as es
 
-from apps.api_vis.models import Clique, Unification
+from apps.api_vis.models import Clique, Unification, Certainty
 from apps.close_reading.annotator import NAMESPACES
 from apps.files_management.file_conversions.xml_formatter import XMLFormatter
 from apps.files_management.models import File, FileVersion, Directory, FileMaxXmlIds
@@ -211,44 +213,16 @@ def delete_directory_with_contents_fake(directory_id, user):  # type: (int, User
 
 
 def append_unifications(xml_content, file_version):  # type: (str, FileVersion) -> str
-    cliques = Clique.objects.filter(
-        Q(unifications__deleted_in_file_version__isnull=True)
-        | Q(unifications__deleted_in_file_version__number__gte=file_version.number),
-        unifications__created_in_file_version__number__lte=file_version.number,
-        project_id=file_version.file.project_id,
-        unifications__entity__file=file_version.file,
-        created_in_commit__isnull=False,
-    ).distinct()
+    certainty_elements = create_certainty_elements_for_file_version(file_version)
 
-    certainty_elements_to_add = []
-
-    for clique in cliques:
-        unifications = Unification.objects.filter(
-            clique=clique,
-            deleted_on__isnull=True,
-            created_in_commit__isnull=False,
-        )
-
-        internal_unifications = unifications.filter(
-            entity__file=file_version.file,
-        )
-
-        external_unifications = unifications.filter(
-            ~Q(entity__file=file_version.file),
-        )
-
-        certainty_elements = create_certainty_elements_from_unifications(internal_unifications, external_unifications)
-
-        certainty_elements_to_add.extend(certainty_elements)
-
-    if certainty_elements_to_add:
+    if certainty_elements:
         xml_in_lines = xml_content.splitlines()
         if 'encoding=' in xml_in_lines[0]:
             xml_content = '\n'.join(xml_in_lines[1:])
 
         xml_tree = etree.fromstring(xml_content)
 
-        add_certainties_to_xml_tree(certainty_elements_to_add, xml_tree)
+        add_certainties_to_xml_tree(certainty_elements, xml_tree)
         fill_up_certainty_authors_list(xml_tree)
 
         xml_content = etree.tounicode(xml_tree)
@@ -260,7 +234,71 @@ def append_unifications(xml_content, file_version):  # type: (str, FileVersion) 
     return xml_content
 
 
+def create_certainty_elements_for_file_version(file_version, include_uncommitted=False, user=None):
+    # type: (FileVersion, bool, User) -> list
+
+    if include_uncommitted and not user:
+        raise ValueError("Argument 'include_uncommitted' require to fill a 'user' argument.")
+
+    cliques = Clique.objects.filter(
+        Q(unifications__deleted_in_file_version__isnull=True)
+        | Q(unifications__deleted_in_file_version__number__gte=file_version.number),
+        unifications__created_in_file_version__number__lte=file_version.number,
+        project_id=file_version.file.project_id,
+        unifications__entity__file=file_version.file,
+    ).distinct()
+
+    if include_uncommitted:
+        cliques = cliques.filter(
+            (Q(created_in_commit__isnull=True) & Q(created_by=user))
+            | Q(created_in_commit__isnull=False),
+        )
+    else:
+        cliques = cliques.filter(
+            created_in_commit__isnull=False,
+        )
+
+    certainty_elements_to_add = []
+
+    for clique in cliques:
+        unifications = Unification.objects.filter(
+            clique=clique,
+            deleted_on__isnull=True,
+        )
+
+        if include_uncommitted:
+            unifications = unifications.filter(
+                (Q(created_in_commit__isnull=True) & Q(created_by=user))
+                | Q(created_in_commit__isnull=False),
+            )
+        else:
+            unifications = unifications.filter(
+                created_in_commit__isnull=False,
+            )
+
+        internal_unifications = unifications.filter(
+            entity__file=file_version.file,
+        )
+
+        external_unifications = unifications.filter(
+            ~Q(entity__file=file_version.file),
+        )
+
+        unification_elements = create_certainty_elements_from_unifications(internal_unifications, external_unifications)
+        certainty_elements_to_add.extend(unification_elements)
+
+        certainties = Certainty.objects.filter(
+            unification__in=unifications,
+        )
+
+        certainty_elements = create_certainty_elements_from_certainties(certainties)
+        certainty_elements_to_add.extend(certainty_elements)
+
+    return certainty_elements_to_add
+
+
 def create_certainty_elements_from_unifications(internal_unifications, external_unifications):
+    # type: (list, list) -> list
     external_unification_xml_ids = [unification.entity.file.get_path() + '#' + unification.entity.xml_id
                                     for unification in external_unifications]
 
@@ -293,12 +331,79 @@ def create_certainty_elements_from_unifications(internal_unifications, external_
                                   resp=annotator_id, target=target, match='@sameAs', assertedValue=asserted_value,
                                   nsmap=ns_map)
 
-        certainty_xml_id = 'certainty_' + unification.entity.file.name + '-' + str(unification.xml_id_number)
+        certainty_xml_id = unification.xml_id
         certainty.attrib[etree.QName(xml + 'id')] = certainty_xml_id
 
         certainties.append(certainty)
 
     return certainties
+
+
+def create_certainty_elements_from_certainties(certainties):
+    certainties_to_return = []
+
+    for certainty in certainties:
+        default_namespace = NAMESPACES['default']
+        xml_namespace = NAMESPACES['xml']
+        default = '{%s}' % default_namespace
+        xml = '{%s}' % xml_namespace
+
+        ns_map = {
+            None: default_namespace,
+            'xml': xml_namespace,
+        }
+
+        certainty_element = etree.Element(
+            default + 'certainty',
+            ana=certainty.ana,
+            locus=certainty.locus,
+            cert=certainty.cert,
+            resp=certainty.resp,
+            target='#' + certainty.target,
+            match='@sameAs',
+            nsmap=ns_map)
+
+        certainty_element.attrib[etree.QName(xml + 'id')] = certainty.xml_id
+
+        if certainty.asserted_value:
+            certainty_element.attrib['assertedValue'] = certainty.asserted_value
+
+        if certainty.description:
+            description = etree.Element('desc', nsmap=ns_map)
+            description.text = certainty.description
+
+            certainty_element.append(description)
+
+        certainties_to_return.append(certainty_element)
+
+    return certainties_to_return
+
+
+def certainty_elements_to_json(unifications):
+    unifications_to_return = []
+
+    for unification in unifications:
+        unification = etree.tostring(unification, encoding='utf-8')
+        parsed_unification = xmltodict.parse(unification)
+
+        del parsed_unification['certainty']['@xmlns']
+
+        entity_xml_id = parsed_unification['certainty']['@target'][1:]
+        xml_id = parsed_unification['certainty']['@xml:id']
+        target_type = entity_xml_id.split('_')[0]
+
+        unification_in_db = Unification.objects.get(
+            xml_id=entity_xml_id if target_type == 'certainty' else xml_id,
+            deleted_on__isnull=True,
+        )
+
+        parsed_unification['committed'] = True if unification_in_db.created_in_commit else False
+
+        unifications_to_return.append(parsed_unification)
+
+    unifications_to_return = json.dumps(unifications_to_return)
+
+    return unifications_to_return
 
 
 def add_certainties_to_xml_tree(certainty_elements, xml_tree):
@@ -318,13 +423,29 @@ def add_certainties_to_xml_tree(certainty_elements, xml_tree):
                 f'//default:certainty[@ana="{certainty.attrib["ana"]}" ' \
                 f'and @locus="{certainty.attrib["locus"]}" ' \
                 f'and @cert="{certainty.attrib["cert"]}" ' \
-                f'and @target="{certainty.attrib["target"]}" ' \
-                f'and @assertedValue="{certainty.attrib["assertedValue"]}"]'
+                f'and @target="{certainty.attrib["target"]}"'
+
+        if 'assertedValue' in certainty.attrib:
+            xpath += f' and @assertedValue="{certainty.attrib["assertedValue"]}"'
+
+        xpath += ']'
 
         existing_certainties = xml_tree.xpath(xpath, namespaces=NAMESPACES)
 
+        desc = certainty.xpath('.//desc', namespaces=NAMESPACES)
+
         if not existing_certainties:
             certainties_node[0].append(certainty)
+
+        else:
+            for existing_certainty in existing_certainties:
+                existing_desc = existing_certainty.xpath('.//desc', namespaces=NAMESPACES)
+
+                if desc and existing_desc:
+                    if desc.text() != existing_desc.text():
+                        certainties_node[0].append(certainty)
+                elif desc:
+                    certainties_node[0].append(certainty)
 
 
 def create_annotation_list(tree):
