@@ -97,7 +97,7 @@ class AnnotatorConsumer(WebsocketConsumer):
         )
 
         certainty_elements = create_certainty_elements_for_file_version(file_version, include_uncommitted=True,
-                                                                        user=self.scope['user'])
+                                                                        user=self.scope['user'], for_annotator=True)
         certainties_from_db = certainty_elements_to_json(certainty_elements)
 
         response = {
@@ -183,7 +183,8 @@ class AnnotatorConsumer(WebsocketConsumer):
 
                     certainty_elements = create_certainty_elements_for_file_version(file_version,
                                                                                     include_uncommitted=True,
-                                                                                    user=presence.user)
+                                                                                    user=presence.user,
+                                                                                    for_annotator=True)
                     certainties_from_db = certainty_elements_to_json(certainty_elements)
 
                     response = {

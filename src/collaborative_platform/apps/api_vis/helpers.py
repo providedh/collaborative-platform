@@ -619,7 +619,8 @@ def common_filter_entities(query_string, project_id):
     return entities_to_return
 
 
-def create_clique(request_data, project_id, user):  # type: (dict, int, User) -> (Clique, list)
+def create_clique(request_data, project_id, user, created_in_annotator=False):
+    # type: (dict, int, User, bool) -> (Clique, list)
     from apps.api_vis.api import ENTITY_CLASSES
 
     if 'name' in request_data and request_data['name'] != '':
@@ -636,6 +637,7 @@ def create_clique(request_data, project_id, user):  # type: (dict, int, User) ->
         asserted_name=clique_name,
         created_by=user,
         project_id=project_id,
+        created_in_annotator=created_in_annotator,
     )
 
     file_version_counter, commit_counter = parse_project_version(request_data['project_version'])
@@ -686,6 +688,7 @@ def create_clique(request_data, project_id, user):  # type: (dict, int, User) ->
                 created_by=user,
                 certainty=request_data['certainty'],
                 created_in_file_version=file_version,
+                created_in_annotator=created_in_annotator,
                 xml_id=f'certainty_{entity.file.name}-{file_max_xml_ids.certainty}',
             )
 
