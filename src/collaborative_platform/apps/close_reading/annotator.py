@@ -1,14 +1,17 @@
+import logging
 import re
 from typing import Callable
 
 from lxml import etree
-from django.contrib.auth.models import User
 
+from django.contrib.auth.models import User
+from django.db.models import Q
+
+from apps.api_vis.models import Unification, Certainty
 from apps.exceptions import BadRequest, NotModified
 from apps.files_management.models import FileMaxXmlIds, File
 from apps.projects.helpers import get_ana_link
 
-import logging
 
 logger = logging.getLogger(__name__)
 
@@ -39,6 +42,7 @@ class Annotator:
         self.__annotator_xml_id = ""
 
         self.__target = False
+        self.__target_in_db = False
         self.__positions = False
         self.__start = 0
         self.__end = 0
@@ -62,10 +66,18 @@ class Annotator:
         self.__validate_request(request)
         self.__get_data_from_xml()
         self.__prepare_xml_parts()
-        self.__check_if_new_elements_already_exist()
-        self.__create_new_xml()
 
-        return self.__xml_annotated
+        if self.__target_in_db:
+            self.__check_if_new_elements_already_exist_in_db()
+            self.__create_new_certainty_in_db()
+
+            return self.__xml
+
+        else:
+            self.__check_if_new_elements_already_exist_in_xml()
+            self.__create_new_xml()
+
+            return self.__xml_annotated
 
     def __validate_request(self, request):
         self.__check_target_in_request(request)
@@ -109,11 +121,24 @@ class Annotator:
         tree = etree.fromstring(text_to_parse)
         annotation_ids = self.__get_annotation_ids_from_target(request['target'])
 
-        for id in annotation_ids:
-            matching_elements = tree.xpath(f'//*[@xml:id="{id}"]')
+        for xml_id in annotation_ids:
+            matching_xml_element = tree.xpath(f'//*[@xml:id="{xml_id}"]')
 
-            if len(matching_elements) == 0:
-                raise BadRequest(f"There is no element with xml:id: {id} in file with id: {self.__file.id}")
+            user_id = int(self.__annotator_xml_id.replace('person', ''))
+
+            matching_unification = Unification.objects.filter(
+                (Q(created_in_commit__isnull=True) & Q(created_by_id=user_id))
+                | Q(created_in_commit__isnull=False),
+                entity__file=self.__file,
+                xml_id=xml_id,
+                deleted_on__isnull=True,
+            ).distinct()
+
+            if not matching_xml_element and not matching_unification:
+                raise BadRequest(f"There is no element with xml:id: {xml_id} in file with id: {self.__file.id}")
+
+            if matching_unification:
+                self.__target_in_db = True
 
         self.__request.update({'target': request['target']})
 
@@ -547,7 +572,8 @@ class Annotator:
 
         return new_annotated_fragment, annotation_ids
 
-    def __get_annotation_ids_from_target(self, target):
+    @staticmethod
+    def __get_annotation_ids_from_target(target):
         if type(target) == list:
             return target
 
@@ -628,7 +654,38 @@ class Annotator:
 
         return data
 
-    def __check_if_new_elements_already_exist(self):
+    def __check_if_new_elements_already_exist_in_db(self):
+        certainty = self.__certainty_to_add.attrib
+        desc = self.__certainty_to_add.xpath('.//desc', namespaces=NAMESPACES)
+
+        user_id = int(self.__annotator_xml_id.replace('person', ''))
+        annotation_ids = self.__get_annotation_ids_from_target(self.__request['target'])
+
+        if len(annotation_ids) > 1:
+            raise BadRequest('Add certainty to more than one certainty is not allowed.')
+
+        unification = Unification.objects.get(
+            (Q(created_in_commit__isnull=True) & Q(created_by_id=user_id))
+            | Q(created_in_commit__isnull=False),
+            entity__file=self.__file,
+            xml_id=annotation_ids[0],
+            deleted_on__isnull=True,
+        )
+
+        certainties = Certainty.objects.filter(
+            ana=certainty['ana'],
+            locus=certainty['locus'],
+            cert=certainty['cert'],
+            asserted_value=certainty['assertedValue'] if 'assertedValue' in certainty else None,
+            target=certainty['target'],
+            description=desc[0].text if desc else None,
+            unification=unification,
+        )
+
+        if len(certainties) > 0:
+            raise NotModified('This certainty already exist.')
+
+    def __check_if_new_elements_already_exist_in_xml(self):
         if self.__request['locus'] == '' and self.__request['tag'] in self.__tags:
             raise NotModified('This tag already exist.')
 
@@ -663,6 +720,36 @@ class Annotator:
 
             elif existing_certainties and not self.__request['description']:
                 raise NotModified('This certainty already exist.')
+
+    def __create_new_certainty_in_db(self):
+        certainty = self.__certainty_to_add.attrib
+        desc = self.__certainty_to_add.xpath('.//desc', namespaces=NAMESPACES)
+        prefix = '{%s}' % NAMESPACES['xml']
+
+        user_id = int(self.__annotator_xml_id.replace('person', ''))
+        xml_id = certainty[prefix + 'id']
+
+        annotation_ids = self.__get_annotation_ids_from_target(self.__request['target'])
+
+        unification = Unification.objects.get(
+            (Q(created_in_commit__isnull=True) & Q(created_by_id=user_id))
+            | Q(created_in_commit__isnull=False),
+            entity__file=self.__file,
+            xml_id=annotation_ids[0],
+            deleted_on__isnull=True,
+        )
+
+        Certainty.objects.create(
+            ana=certainty['ana'],
+            locus=certainty['locus'],
+            cert=certainty['cert'],
+            asserted_value=certainty['assertedValue'] if 'assertedValue' in certainty else None,
+            resp=certainty['resp'],
+            target=certainty['target'],
+            xml_id=certainty[prefix + 'id'],
+            description=desc[0].text if desc else None,
+            unification=unification,
+        )
 
     def __create_new_xml(self):
         xml_annotated = self.__add_tagged_string(self.__xml, self.__fragment_annotated)

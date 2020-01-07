@@ -2,9 +2,11 @@ import json
 
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
+from channels.layers import get_channel_layer
 
 from apps.projects.models import Contributor, Project
 from apps.exceptions import BadRequest, NotModified
+from apps.files_management.helpers import create_certainty_elements_for_file_version, certainty_elements_to_json
 from apps.files_management.models import FileVersion, File
 
 from .annotator import Annotator
@@ -83,14 +85,26 @@ class AnnotatorConsumer(WebsocketConsumer):
         room_presence, created = RoomPresence.objects.get_or_create(
             room_symbol=room_symbol,
             user=self.scope['user'],
+            channel_name=self.channel_name,
         )
 
         room_presence.save()
+
+        file = File.objects.get(id=file_id, deleted=False)
+        file_version = FileVersion.objects.get(
+            file=file,
+            number=file.version_number,
+        )
+
+        certainty_elements = create_certainty_elements_for_file_version(file_version, include_uncommitted=True,
+                                                                        user=self.scope['user'])
+        certainties_from_db = certainty_elements_to_json(certainty_elements)
 
         response = {
             'status': 200,
             'message': 'OK',
             'xml_content': annotating_xml_content.xml_content,
+            'certainties_from_db': certainties_from_db,
         }
 
         response = json.dumps(response)
@@ -124,12 +138,14 @@ class AnnotatorConsumer(WebsocketConsumer):
 
         if text_data == '"heartbeat"':
             if self.scope['user'].pk is not None:
-                room_presence = RoomPresence.objects.get(
+                room_presences = RoomPresence.objects.filter(
                     room_symbol=room_symbol,
                     user=self.scope['user'],
-                )
+                ).order_by('-timestamp')
 
-                room_presence.save()
+                if room_presences:
+                    room_presence = room_presences[0]
+                    room_presence.save()
 
         else:
             request_json = text_data
@@ -153,22 +169,40 @@ class AnnotatorConsumer(WebsocketConsumer):
                 annotating_xml_content.xml_content = xml_content
                 annotating_xml_content.save()
 
-                response = {
-                    'status': 200,
-                    'message': 'OK',
-                    'xml_content': annotating_xml_content.xml_content,
-                }
-
-                response = json.dumps(response)
-
-                # Send message to room group
-                async_to_sync(self.channel_layer.group_send)(
-                    self.room_group_name,
-                    {
-                        'type': 'xml_modification',
-                        'message': response,
-                    }
+                # send individual messages with uncommitted certainties to every user
+                room_presences = RoomPresence.objects.filter(
+                    room_symbol=room_symbol
                 )
+
+                for presence in room_presences:
+                    file = File.objects.get(id=file_id, deleted=False)
+                    file_version = FileVersion.objects.get(
+                        file=file,
+                        number=file.version_number,
+                    )
+
+                    certainty_elements = create_certainty_elements_for_file_version(file_version,
+                                                                                    include_uncommitted=True,
+                                                                                    user=presence.user)
+                    certainties_from_db = certainty_elements_to_json(certainty_elements)
+
+                    response = {
+                        'status': 200,
+                        'message': 'OK',
+                        'xml_content': annotating_xml_content.xml_content,
+                        'certainties_from_db': certainties_from_db,
+                    }
+
+                    response = json.dumps(response)
+
+                    channel_layer = get_channel_layer()
+                    async_to_sync(channel_layer.send)(
+                        presence.channel_name,
+                        {
+                            'type': 'xml_modification',
+                            'message': response,
+                        }
+                    )
 
             except NotModified as exception:
                 self.send_response(304, exception)
@@ -182,10 +216,13 @@ class AnnotatorConsumer(WebsocketConsumer):
             'message': str(message),
             'xml_content': None,
         }
+
         response = json.dumps(response)
-        # Send message to room group
-        async_to_sync(self.channel_layer.group_send)(
-            self.room_group_name,
+
+        # Send individual message to request's author
+        channel_layer = get_channel_layer()
+        async_to_sync(channel_layer.send)(
+            self.channel_name,
             {
                 'type': 'xml_modification',
                 'message': response,

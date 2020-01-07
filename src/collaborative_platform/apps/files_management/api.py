@@ -17,7 +17,7 @@ from apps.views_decorators import objects_exists, user_has_access
 from .file_conversions.tei_handler import TeiHandler
 from .helpers import append_unifications, extract_text_and_entities, index_entities, upload_file, \
     create_uploaded_file_object_from_string, get_directory_content, include_user, index_file, \
-    delete_directory_with_contents_fake, overwrite_file
+    delete_directory_with_contents_fake, overwrite_file, clean_name
 
 
 @login_required
@@ -35,7 +35,8 @@ def upload(request, directory_id):  # type: (HttpRequest, int) -> HttpResponse
         upload_statuses = []
 
         for i, file in enumerate(files_list):
-            file_name = file.name
+            file_name = clean_name(file.name)
+            file.name = file_name
 
             upload_status = {'file_name': file_name, 'uploaded': False, 'migrated': False, 'message': None}
             upload_statuses.append(upload_status)
@@ -205,6 +206,8 @@ def move(request, move_to):  # type: (HttpRequest, int) -> HttpResponse
 @objects_exists
 @user_has_access('RW')
 def create_directory(request, directory_id, name):  # type: (HttpRequest, int, str) -> HttpResponse
+    name = clean_name(name)
+
     dir = Directory.objects.get(id=directory_id, deleted=False)  # type: Directory
     dir.create_subdirectory(name, request.user)
     return HttpResponse("OK")
@@ -235,7 +238,10 @@ def rename(request, **kwargs):
         file = Directory.objects.get(id=kwargs['directory_id'], deleted=False)
     else:
         file = File.objects.get(id=kwargs['file_id'], deleted=False)
-    file.rename(kwargs['new_name'], request.user)
+
+    new_name = clean_name(kwargs['new_name'])
+
+    file.rename(new_name, request.user)
     return HttpResponse("OK")
 
 
