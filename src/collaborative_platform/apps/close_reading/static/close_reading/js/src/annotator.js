@@ -77,8 +77,8 @@ var Annotator = function(args){
             data['tag'] = args['asserted-value'];
         }
 
-        if(args['attribute_name'] != undefined && args['attribute_name'] != ''){
-            data['attribute_name'] = args['attribute-name'];
+        if(args['attribute-name'] != undefined && args['attribute-name'] != ''){
+            data['attribute-name'] = args['attribute-name'];
             data['asserted_value'] = args['asserted-value'];
         }
         
