@@ -144,13 +144,18 @@ let CertaintyList = function(args){
       const target_id = target.startsWith('#')?target.split('#')[1]:target;
       let node = null;
 
-      const cert_types = annotation.attributes['ana'].value.split(' ').map(x=>x.split('#')[1])
+      let cert_types = [];
+      if(annotation.attributes.hasOwnProperty('ana'))
+        cert_types = annotation.attributes['ana'].value.split(' ').map(x=>x.split('#')[1])
 
       if(target_id.startsWith('certainty'))
         [node, ] = annotations[args.XML_EXTRA_CHAR_SPACER+target_id];
       else
         node = document.getElementById(args.XML_EXTRA_CHAR_SPACER+target_id);
       
+      if(node == null)
+        return
+
       if(! seen.hasOwnProperty(target)){
         seen[target] = 1;
       }else{
@@ -172,9 +177,7 @@ let CertaintyList = function(args){
       	attribute: getAttribute(annotation.attributes, 'attr'),
       	desc: getAttribute(annotation.attributes, 'desc'),
       }
-      if(node != null){   
           
-      }
       const card = _createCard(data);
       card.target = getAttribute(annotation.attributes, 'target');
       document.getElementById('certaintyList').appendChild(card);
