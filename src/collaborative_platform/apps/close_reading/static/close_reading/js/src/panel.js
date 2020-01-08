@@ -292,7 +292,7 @@ let PanelView = function(args){
 			_updateReferencesControl();
 		if(['locus', 'attribute-name', 'tei-tag-name'].includes(id))
 			_updateAssertedValueControl();
-		if(['locus', 'attribute-name'].includes(id))
+		if(['locus', 'attribute-name', 'tag-name'].includes(id))
 			_updateReferencesControl();
 	}
 
