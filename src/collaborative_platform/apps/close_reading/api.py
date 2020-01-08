@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, HttpResponse, JsonResponse, HttpResponseNotModified
 
 from apps.api_vis.helpers import create_entities_in_database
+from apps.api_vis.models import Clique, Commit, Unification
 from apps.files_management.file_conversions.ids_filler import IDsFiller
 from apps.files_management.helpers import create_uploaded_file_object_from_string, overwrite_file, \
     extract_text_and_entities, index_entities, index_file
@@ -54,7 +55,14 @@ def save(request, project_id, file_id):  # type: (HttpRequest, int, int) -> Http
 
         version_nr_new = file_overwrited.version_number
 
-        if version_nr_old == version_nr_new:
+        unifications = Unification.objects.filter(
+            deleted_on__isnull=True,
+            created_by=request.user,
+            created_in_commit__isnull=True,
+            created_in_annotator=True,
+        )
+
+        if version_nr_old == version_nr_new and not unifications:
             status = HttpResponseNotModified.status_code
 
             response = {
@@ -65,18 +73,53 @@ def save(request, project_id, file_id):  # type: (HttpRequest, int, int) -> Http
 
             return JsonResponse(response, status=status)
 
-        else:
-            text, entities = extract_text_and_entities(xml_content, project.id, file_overwrited.id)
-            file_version = FileVersion.objects.get(file=file_overwrited, number=file_overwrited.version_number)
-            create_entities_in_database(entities, project, file_version)
-            index_entities(entities)
-            index_file(dbfile, text)
+        if version_nr_old < version_nr_new or unifications:
+            message = ''
+
+            if version_nr_old < version_nr_new:
+                text, entities = extract_text_and_entities(xml_content, project.id, file_overwrited.id)
+                file_version = FileVersion.objects.get(file=file_overwrited, number=file_overwrited.version_number)
+                create_entities_in_database(entities, project, file_version)
+                index_entities(entities)
+                index_file(dbfile, text)
+
+                message += f"File with id: {file_id} was saved."
+
+            if unifications:
+                commit = Commit.objects.create(
+                    project=project,
+                    message="Commit created in Annotator."
+                )
+
+                cliques_ids = unifications.values_list('clique_id', flat=True)
+                cliques_ids = set(cliques_ids)
+
+                for unification in unifications:
+                    unification.created_in_commit = commit
+                    unification.save()
+
+                cliques = Clique.objects.filter(
+                    deleted_on__isnull=True,
+                    created_by=request.user,
+                    created_in_commit__isnull=True,
+                    created_in_annotator=True,
+                    id__in=cliques_ids,
+                )
+
+                for clique in cliques:
+                    clique.created_in_commit = commit
+                    clique.save()
+
+                if message:
+                    message += ' '
+
+                message += f"New commit with {len(unifications)} unifications was created."
 
             status = HttpResponse.status_code
 
             response = {
                 'status': status,
-                'message': 'File with id: {0} was saved.'.format(file_id),
+                'message': message,
                 'version': version_nr_new,
                 'data': None
             }
