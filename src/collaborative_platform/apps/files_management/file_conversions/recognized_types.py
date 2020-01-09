@@ -5,7 +5,7 @@ class FileType(Enum):
     XML = 1
     CSV = 2
     TSV = 3
-    OTHER = 99
+    PLAIN_TEXT = 99
 
 
 class XMLType(Enum):
