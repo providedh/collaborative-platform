@@ -6,6 +6,7 @@ import styles from './style.module.css';
 import DashboardControlPanel from '../DashboardControlPanel';
 import ViewDetailsPanel from '../ViewDetailsPanel';
 import Workspace from '../Workspace';
+import AjaxCalls from '../../../helpers/ajax.js';
 
 export default class Dashboard extends React.Component {
     constructor(props){
@@ -25,6 +26,8 @@ export default class Dashboard extends React.Component {
             lastChangesSaved: true,
         };
 
+        this.ajax = AjaxCalls();
+
         this.updateDashboardConfig = this.updateDashboardConfig.bind(this);
         this.openDetails = this.openDetails.bind(this);
         this.closeDetails = this.closeDetails.bind(this);
@@ -37,6 +40,7 @@ export default class Dashboard extends React.Component {
     }
 
     updateDashboardConfig(config) {
+        console.log(this.dashboardConfig)
         this.dashboardConfig = Object.assign(this.dashboardConfig, config);
         this.setState({lastChangesSaved: false});
     }
@@ -63,8 +67,12 @@ export default class Dashboard extends React.Component {
     }
 
     save() {
-        console.log(JSON.stringify(this.dashboardConfig))
-        this.setState({lastChangesSaved: true});
+        const data = JSON.stringify(Object.assign(this.state, {lastChangesSaved: true}));
+        this.ajax.updateDashboard(window.project, window.dashboard, data).then(()=>{
+            this.setState({lastChangesSaved: true});
+            console.log(JSON.stringify(this.dashboardConfig))
+            console.alert('Dashboard saved.')
+        });
     }
 
     addView(newView){
@@ -97,6 +105,7 @@ export default class Dashboard extends React.Component {
     }
 
     render(){
+        console.log(this.state.lastChangesSaved)
         return (
             <ParentSize>
                 {parent =>
@@ -108,7 +117,7 @@ export default class Dashboard extends React.Component {
                                         type="button" 
                                         className={`btn ${this.state.lastChangesSaved===true?"btn-outline-success":"btn-primary"} h-75`}
                                         disabled={this.state.lastChangesSaved===true}>
-                                        {this.state.lastChangesSaved?'All changes saved':'Save last changes'}
+                                        {this.state.lastChangesSaved===true?'All changes saved':'Save last changes'}
                                     </button>
                                 </div>
                                 <Workspace 
