@@ -8,7 +8,7 @@
 {% block submenu %}
 <ul class="submenu__list">
   <li class="submenu__item">
-    <a href="{% url 'projects:project' project_id %}" class="submenu__link">{{ project.title }}</a>
+    <a href="{% url 'projects:project' project_id %}" class="submenu__link">{{ project_title }}</a>
   </li>
   <li class="submenu__item">
     <a href="{% url 'projects:files' project_id %}" class="submenu__link">Files</a>
@@ -28,7 +28,7 @@
   <div class="container">
     <ul class="submenu__list d-flex">
       <li class="submenu__item">
-        <a href="{% url 'projects:project' project_id %}" class="submenu__link">{{ project.title }}</a>
+        <a href="{% url 'projects:project' project_id %}" class="submenu__link">{{ project_title }}</a>
       </li>
       <li class="submenu__item submenu__item">
         <a href="{% url 'projects:files' project_id %}" class="submenu__link">Files</a>
