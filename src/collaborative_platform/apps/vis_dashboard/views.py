@@ -34,13 +34,11 @@ def get_dashboard(request, project_id, dashboard_id):
     if request.method == 'GET':
         dashboard = Dashboard.objects.get(project_id=project_id, id=dashboard_id)
     
-        print(dashboard.config)
-        print(json.dumps(dashboard.config))
         context = {
             'DEVELOPMENT': True,
             'project_id': project_id,
             'dashboard_config': json.dumps(dashboard.config),
-            'dashboard_id': dashboard_id
+            'dashboard': dashboard
         }
 
         return render(request, 'vis_dashboard/dashboard.html', context)
@@ -66,7 +64,7 @@ def dashboard_edit(request, project_id, dashboard_id):
 def dashboard_update(request, project_id, dashboard_id):
     if request.method == 'POST':
         newConfig = json.loads(request.body.decode('UTF-8'))
-
+        
         dashboard = Dashboard.objects.get(project_id=project_id, id=dashboard_id)
         dashboard.config = newConfig
         dashboard.last_edit = datetime.now()

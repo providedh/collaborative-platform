@@ -53,10 +53,9 @@
 <div id="react-root"></div>
 
 <script type="text/javascript">
-  window.project = {{ project_id }}
-  window.dashboard = {{ dashboard_id }}
-  console.log('{{dashboard_config}}'.replace(/&quot;/g, '"'))
-  window.config = JSON.parse('{{dashboard_config}}'.replace(/&quot;/g, '"'))
+  window.project = {{ project_id }};
+  window.dashboard = {{ dashboard.id }};
+  window.config = JSON.parse('{{dashboard_config}}'.replace(/&quot;/g, '"'));
 </script>
 
 {% if DEVELOPMENT is True %}
