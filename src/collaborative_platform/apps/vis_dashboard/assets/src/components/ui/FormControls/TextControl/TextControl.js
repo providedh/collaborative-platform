@@ -8,7 +8,7 @@ export default function TextControl({name, value='', onValueChange, params}) {
         <div className={styles.textControl}>
             <div className={"form-group "+styles.formGroupOverride}>
                 <label htmlFor={'input-'+name}>{name}</label>
-                <input value={value} onChange={handleChange}/>
+                <input className="form-control" value={value} onChange={handleChange}/>
             </div>
         </div>
     )

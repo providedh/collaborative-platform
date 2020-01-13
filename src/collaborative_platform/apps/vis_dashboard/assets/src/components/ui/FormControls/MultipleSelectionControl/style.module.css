@@ -3,12 +3,13 @@
     background-color: var(--light);
 }
 
-.multipleSelectionControl select{
+.options{
     width: 60%;
+    margin-bottom:1rem;
 }
 
 .formGroupOverride{
-    margin-bottom:1rem;
+    margin-bottom:0;
     display: flex;
     justify-content: space-between;
     width: 100%;

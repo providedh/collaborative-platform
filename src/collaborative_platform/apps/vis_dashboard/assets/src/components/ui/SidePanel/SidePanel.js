@@ -7,10 +7,10 @@ export default function SidePanel({title, labels, onClose=null, display, childre
     return(
         <div className={styles.sidePanel + (display===true?'':' d-none')}>
             <div className={styles.header}>
-                {title}
+                <h5>{title}</h5>
                 {onClose == null ? '' : 
                     <button type="button" 
-                            className="close" 
+                            className="close mr-4 mt-4" 
                             aria-label="Close"
                             onClick={onClose}>
                         <span aria-hidden="true">&times;</span>

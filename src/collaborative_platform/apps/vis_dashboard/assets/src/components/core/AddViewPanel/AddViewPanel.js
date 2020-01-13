@@ -29,12 +29,15 @@ export default function AddViewPanel({addView}) {
 
     return(
         <div className={styles.addViewPanel}>
-            <h1>{viewType.value}</h1>
-            <select {...viewType}>
-                {Object.keys(Views).map(o => <option key={o} value={o}>{o}</option>)}
-            </select>
+            <div className="d-flex justify-content-between pr-3 pt-1 pb-2">
+                <h3 className="d-inline p-1">{viewType.value}</h3>
+                <select className="form-control d-inline col-6" {...viewType}>
+                    {Object.keys(Views).map(o => <option key={o} value={o}>{o}</option>)}
+                </select>
+            </div>
+            <p className="p-1">{Views[viewType.value].prototype.description}</p>
             <Form options={viewConfig} onUpdate={setViewConfig} />
-            View creation panel <button onClick={handleCreateView}>Create</button>
+            <button className="btn btn-primary m-2" onClick={handleCreateView}>Create</button>
         </div>
     )
 }

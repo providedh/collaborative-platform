@@ -14,7 +14,9 @@ export default class Dashboard extends React.Component {
         this.dashboardConfig = this.props.hasOwnProperty('savedConf')?
             this.props.savedConf:{
             views:[],
-            layout:[]
+            layout:[],
+            authors:[],
+            version: '',
         };
 
         this.state = {
@@ -30,6 +32,8 @@ export default class Dashboard extends React.Component {
         this.updateView = this.updateView.bind(this);
         this.removeView = this.removeView.bind(this);
         this.save = this.save.bind(this);
+        this.setAuthors = this.setAuthors.bind(this);
+        this.setVersion = this.setVersion.bind(this);
     }
 
     updateDashboardConfig(config) {
@@ -76,6 +80,14 @@ export default class Dashboard extends React.Component {
         })
     }
 
+    setAuthors(authors){
+        this.setState({authors});
+    }
+
+    setVersion(versions){
+        this.setState({versions});
+    }
+
     openDetails(viewIndex){
         this.setState({focusedView: viewIndex});
     }
@@ -110,6 +122,10 @@ export default class Dashboard extends React.Component {
                             <div className={"col-3 px-0 " + styles.heightInherit}>
                                 <DashboardControlPanel 
                                     addView={this.addView} 
+                                    authors={this.state.authors} 
+                                    version={this.state.version} 
+                                    setAuthors={this.setAuthors} 
+                                    setVersion={this.setVersion}
                                     display={this.state.focusedView == -1}/>
                                 {this.state.focusedView != -1 &&
                                     <ViewDetailsPanel 

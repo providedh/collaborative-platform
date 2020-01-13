@@ -11,9 +11,9 @@
 	margin-top: 0;
 }
 
-.header{
-	padding: var(--space-m) var(--space-s) var(--space-s) var(--space-l);
+.header h5{
+	padding: var(--space-m) var(--space-s) 0 var(--space-l);
 	font-weight: bold;
-	font-size: 1.2em;
 	color: var(--dark);
+	display: inline-block;
 }

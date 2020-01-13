@@ -55,7 +55,7 @@ export default function Workspace({focused, onFocus, onClose, defLayout=[], lift
     const viewmap = views.map((view, i) => (
         <div key={views[i].id}>
             <VisFrame index={i} focused={focused == i} onViewClose={onClose} onViewFocus={onFocus}>
-                { React.createElement(Views[view.type], view.config) }                
+                { React.createElement(Views[view.type], {...view.config, layout: layout[i]}) }                
             </VisFrame>
         </div>
     ))

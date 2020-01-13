@@ -8,7 +8,7 @@ export default function SelectionControl({name, value='', onValueChange, params=
         <div className={styles.selectionControl}>
             <div className={"form-group "+styles.formGroupOverride}>
                 <label htmlFor={'input-'+name}>{name}</label>
-                <select value={value} onChange={handleChange}>
+                <select className="form-control" value={value} onChange={handleChange}>
                     {params.options.map((o, i) => <option value={o} key={i}>{o}</option>)}
                 </select>
             </div>

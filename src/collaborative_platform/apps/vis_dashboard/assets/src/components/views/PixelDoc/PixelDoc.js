@@ -49,6 +49,8 @@ function PixelDoc({documentId, dimension}) {
     )
 }
 
+PixelDoc.prototype.description = 'Display certainty, category, authorship and other information over a word-wise document representation.';
+
 PixelDoc.prototype.configOptions = [
     {name: 'documentId', type: 'selection', value: '#1', params: {options: ['#1', '#2', '#3']}},
     {name: 'dimension', type: 'selection', value: 'entityType', params: {options: ['entityType', 'certaintyType', 'certaintyLevel']}},

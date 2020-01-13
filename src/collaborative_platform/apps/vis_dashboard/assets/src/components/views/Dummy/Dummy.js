@@ -18,6 +18,8 @@ function Dummy({backgroundColor, documentId, childs, tickets, age, periodOfTime,
     )
 }
 
+Dummy.prototype.description = 'A dummy view for development and showcase of the platform functioning.';
+
 Dummy.prototype.configOptions = [
     {name: 'backgroundColor', type: 'color', value: '#fff'},
     {name: 'documentId', type: 'documentId', value: '#1'},

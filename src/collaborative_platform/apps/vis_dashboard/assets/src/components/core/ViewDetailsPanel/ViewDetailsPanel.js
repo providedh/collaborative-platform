@@ -20,12 +20,10 @@ export default function ViewDetailsPanel({view, display, updateView, close}) {
     }
 
     return(
-        <SidePanel title="View Details" labels={["Data", "Style"]} display={display} onClose={close}>
+        <SidePanel title="View Details" labels={["View Params", "Style"]} display={display} onClose={close}>
             <div className={styles.panelArea}>
                 {view!=null && (
                     <div>
-                    <p>{JSON.stringify(view, null, 2)}</p>
-                    <p>{JSON.stringify(Views[view.type].prototype.configOptions, null, 2)}</p>
                     <Form options={options} onUpdate={handleUpdateView} />
                     </div>
                 )

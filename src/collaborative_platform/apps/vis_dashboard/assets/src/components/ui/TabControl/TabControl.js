@@ -8,7 +8,7 @@ export default function TabControl({labels, active, onChange}) {
     const createControls = () => labels.map((x,i)=>(
         <div key={x} id={x}  onClick={e=>onChange(x)}
              className={`col text-center ${styles.option} ${i==active?styles.selected:''}`}>
-            {x}
+            <h5>{x}</h5>
         </div>)
     )
 
