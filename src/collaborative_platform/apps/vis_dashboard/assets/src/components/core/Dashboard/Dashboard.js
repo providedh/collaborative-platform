@@ -40,7 +40,6 @@ export default class Dashboard extends React.Component {
     }
 
     updateDashboardConfig(config) {
-        console.log(this.dashboardConfig)
         this.dashboardConfig = Object.assign(this.dashboardConfig, config);
         this.setState({lastChangesSaved: false});
     }
@@ -67,11 +66,10 @@ export default class Dashboard extends React.Component {
     }
 
     save() {
-        const data = JSON.stringify(Object.assign(this.state, {lastChangesSaved: true}));
+        const data = JSON.stringify(Object.assign(this.dashboardConfig, {lastChangesSaved: true}));
         this.ajax.updateDashboard(window.project, window.dashboard, data).then(()=>{
             this.setState({lastChangesSaved: true});
-            console.log(JSON.stringify(this.dashboardConfig))
-            console.alert('Dashboard saved.')
+            console.info('Dashboard saved.')
         });
     }
 
@@ -105,7 +103,6 @@ export default class Dashboard extends React.Component {
     }
 
     render(){
-        console.log(this.state.lastChangesSaved)
         return (
             <ParentSize>
                 {parent =>
