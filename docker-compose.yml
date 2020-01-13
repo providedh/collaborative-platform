@@ -46,7 +46,7 @@ services:
 
   frontend:
     image: node:slim
-    command: bash /code/frontend/build_webpack_apps.sh
+    #command: bash /code/frontend/build_webpack_apps.sh
     volumes:
       - .:/code
     ports:
