@@ -7,10 +7,12 @@ from lxml import etree
 from django.contrib.auth.models import User
 from django.db.models import Q
 
-from apps.api_vis.models import Unification, Certainty
+from apps.api_vis.helpers import get_entity_from_int_or_dict, create_clique
+from apps.api_vis.models import Entity, Certainty, Unification
 from apps.exceptions import BadRequest, NotModified
 from apps.files_management.models import FileMaxXmlIds, File
 from apps.projects.helpers import get_ana_link
+from apps.projects.models import ProjectVersion
 
 
 logger = logging.getLogger(__name__)
@@ -477,9 +479,7 @@ class Annotator:
                 self.__fragment_annotated, annotation_ids = self.__add_tag(self.__fragment_to_annotate,
                                                                            self.__request["tag"], uncertainty=True)
 
-            self.__certainty_to_add = self.__create_certainty_description_for_attribute(self.__request, annotation_ids,
-                                                                                        self.__annotator_xml_id)
-            self.__annotator_to_add = self.__create_annotator(self.__annotator_xml_id)
+            self.__create_unification(annotation_ids)
 
         # 6.Add attribute to tag
         elif self.__request['locus'] == 'value' \
@@ -891,3 +891,58 @@ class Annotator:
         pretty_xml = etree.tounicode(tree, pretty_print=True)
 
         return pretty_xml
+
+    def __create_unification(self, annotation_ids):
+        if len(annotation_ids) > 1:
+            raise BadRequest("Entity to unify must have only one xml:id.")
+
+        try:
+            entity = Entity.objects.get(
+                project_id=self.__file.project_id,
+                file=self.__file,
+                xml_id=annotation_ids[0].replace('#', ''),
+                deleted_on__isnull=True,
+            )
+        except Entity.DoesNotExist:
+            raise BadRequest("This entity doesn't exist in database. "
+                             "Add tag to marked text, save file and try again.")
+
+        entities_ids = [entity.id]
+
+        project_id = self.__file.project_id
+        asserted_entities = self.__request['asserted_value'].split(' ')
+
+        for asserted_entity in asserted_entities:
+            if '#' not in asserted_entity:
+                entity = Entity.objects.filter(
+                    project_id=self.__file.project_id,
+                    file=self.__file,
+                    xml_id=asserted_entity,
+                    deleted_on__isnull=True,
+                )
+
+                entities_ids.append(entity.id)
+            else:
+                entity_dict = {
+                    'file_path': asserted_entity.split('#')[0],
+                    'xml_id': asserted_entity.split('#')[1],
+                }
+
+                entity = get_entity_from_int_or_dict(entity_dict, project_id)
+
+                entities_ids.append(entity.id)
+
+        project_version = ProjectVersion.objects.filter(
+            project_id=project_id
+        ).order_by('-date')[0]
+
+        request_data = {
+            'entities': entities_ids,
+            'certainty': self.__request['certainty'],
+            'project_version': float(str(project_version)),
+        }
+
+        user_id = int(self.__annotator_xml_id.replace('person', ''))
+        user = User.objects.get(id=user_id)
+
+        create_clique(request_data, project_id, user)

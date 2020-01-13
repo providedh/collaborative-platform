@@ -7,6 +7,7 @@ from bs4 import UnicodeDammit
 from .migrator_tei import MigratorTEI
 from .migrator_csv import MigratorCSV
 from .migrator_tsv import MigratorTSV
+from .migrator_plain_text import MigratorPlainText
 from .xml_type_finder import XMLTypeFinder
 from .file_type_finder import FileTypeFinder
 from .entities_decoder import EntitiesDecoder
@@ -29,7 +30,7 @@ class TeiHandler:
         self.__text_binary = None
         self.__text_utf_8 = ""
 
-        self.__file_type = FileType.OTHER
+        self.__file_type = FileType.PLAIN_TEXT
         self.__xml_type = XMLType.OTHER
         self.__prefixed = False
 
@@ -74,7 +75,7 @@ class TeiHandler:
         file_type_finder = FileTypeFinder()
         self.__file_type = file_type_finder.check_if_xml(text_binary_without_entities)
 
-        if self.__file_type == FileType.OTHER:
+        if self.__file_type == FileType.PLAIN_TEXT:
             self.__file_type = file_type_finder.check_if_csv_or_tsv(self.__text_utf_8)
 
         if self.__file_type == FileType.XML:
@@ -84,7 +85,7 @@ class TeiHandler:
             xml_type_finder = XMLTypeFinder()
             self.__xml_type, self.__prefixed = xml_type_finder.find_xml_type(self.__text_utf_8)
 
-        file_types_to_correction = [FileType.XML, FileType.CSV, FileType.TSV]
+        file_types_to_correction = [FileType.XML, FileType.CSV, FileType.TSV, FileType.PLAIN_TEXT]
 
         if self.__file_type in file_types_to_correction:
             white_chars_corrector = WhiteCharsCorrector()
@@ -117,7 +118,7 @@ class TeiHandler:
 
         except Exception as exc:
             self.error = exc
-            return FileType.OTHER
+            return FileType.PLAIN_TEXT
 
     def __is_default_encoded_xml(self, text):
         if text:
@@ -155,6 +156,8 @@ class TeiHandler:
         elif self.__file_type == FileType.CSV:
             return True
         elif self.__file_type == FileType.TSV:
+            return True
+        elif self.__file_type == FileType.PLAIN_TEXT:
             return True
         elif self.__cr_lf_codes:
             return True
@@ -194,6 +197,10 @@ class TeiHandler:
             migrator_tsv = MigratorTSV()
             migrated_text = migrator_tsv.migrate(migrated_text)
 
+        elif self.__file_type == FileType.PLAIN_TEXT:
+            migrator_plain_text = MigratorPlainText()
+            migrated_text = migrator_plain_text.migrate(migrated_text)
+
         if self.__cr_lf_codes:
             white_chars_corrector = WhiteCharsCorrector()
             migrated_text = white_chars_corrector.replace_cr_lf_codes(migrated_text)
@@ -224,7 +231,7 @@ class TeiHandler:
             FileType.XML: "XML ",
             FileType.CSV: "CSV ",
             FileType.TSV: "TSV ",
-            FileType.OTHER: "",
+            FileType.PLAIN_TEXT: "plain text ",
         }
 
         xml_type = {

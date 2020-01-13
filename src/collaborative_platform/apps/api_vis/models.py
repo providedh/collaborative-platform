@@ -79,6 +79,7 @@ class Clique(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     created_in_commit = models.ForeignKey(Commit, related_name="cliques", default=None, null=True, blank=True,
                                           on_delete=models.CASCADE)
+    created_in_annotator = models.BooleanField(default=False)
     deleted_by = models.ForeignKey(User, related_name="deleted_cliques", default=None, on_delete=models.SET_NULL,
                                    null=True)
     deleted_on = models.DateTimeField(null=True)
@@ -94,6 +95,7 @@ class Unification(models.Model):
     created_in_commit = models.ForeignKey(Commit, related_name="unifications", default=None, null=True, blank=True,
                                           on_delete=models.CASCADE)
     created_in_file_version = models.ForeignKey(FileVersion, related_name="unifications", on_delete=models.CASCADE)
+    created_in_annotator = models.BooleanField(default=False)
     deleted_by = models.ForeignKey(User, related_name="deleted_unifiactions", default=None, on_delete=models.SET_NULL,
                                    null=True)
     deleted_on = models.DateTimeField(null=True)

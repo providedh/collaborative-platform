@@ -17,7 +17,7 @@ from apps.views_decorators import objects_exists, user_has_access
 from .helpers import search_files_by_person_name, search_files_by_content, validate_keys_and_types, \
     get_annotations_from_file_version_body, get_entity_from_int_or_dict, parse_project_version, parse_query_string, \
     filter_entities_by_file_version, filter_entities_by_project_version, filter_unifications_by_project_version, \
-    common_filter_cliques, common_filter_entities
+    common_filter_cliques, common_filter_entities, create_clique
 from .models import Clique, CliqueToDelete, Commit, Entity, EventVersion, OrganizationVersion, PersonVersion, \
     PlaceVersion, Unification, UnificationToDelete
 
@@ -231,85 +231,7 @@ def project_cliques(request, project_id):  # type: (HttpRequest, int) -> HttpRes
 
             validate_keys_and_types(request_data, required_keys, optional_keys)
 
-            if 'name' in request_data and request_data['name'] != '':
-                clique_name = request_data['name']
-            elif len(request_data['entities']) > 0:
-                request_entity = request_data['entities'][0]
-                entity = get_entity_from_int_or_dict(request_entity, project_id)
-                entity_version = ENTITY_CLASSES[entity.type].objects.filter(entity=entity).order_by('-fileversion')[0]
-                clique_name = entity_version.name
-            else:
-                raise BadRequest(f"Missing name for a clique. Provide name in 'name' parameter or at least one entity.")
-
-            clique = Clique.objects.create(
-                asserted_name=clique_name,
-                created_by=request.user,
-                project_id=project_id,
-            )
-
-            file_version_counter, commit_counter = parse_project_version(request_data['project_version'])
-
-            try:
-                project_version = ProjectVersion.objects.get(
-                    project_id=project_id,
-                    file_version_counter=file_version_counter,
-                    commit_counter=commit_counter,
-                )
-            except ProjectVersion.DoesNotExist:
-                raise BadRequest(f"Version: {request_data['project_version']} of project with id: {project_id} "
-                                 f"doesn't exist.")
-
-            unification_statuses = []
-
-            for i, entity in enumerate(request_data['entities']):
-                if type(entity) == int:
-                    unification_statuses.append({'id': entity})
-                else:
-                    unification_statuses.append(entity)
-
-                try:
-                    entity = get_entity_from_int_or_dict(entity, project_id)
-
-                    try:
-                        file_version = FileVersion.objects.get(
-                            projectversion=project_version,
-                            file=entity.file
-                        )
-                    except FileVersion.DoesNotExist:
-                        raise BadRequest(f"Source file of entity with id: {entity.id} doesn't exist in version: "
-                                         f"{request_data['project_version']} of the project with id: {project_id}.")
-
-                    if entity.created_in_version > file_version.number or \
-                            entity.deleted_in_version and entity.deleted_in_version < file_version.number:
-                        raise BadRequest(f"Entity with id: {entity.id} doesn't exist in version: "
-                                         f"{request_data['project_version']} of the project with id: {project_id}.")
-
-                    file_max_xml_ids = FileMaxXmlIds.objects.get(file=entity.file)
-                    file_max_xml_ids.certainty += 1
-                    file_max_xml_ids.save()
-
-                    Unification.objects.create(
-                        project_id=project_id,
-                        entity=entity,
-                        clique=clique,
-                        created_by=request.user,
-                        certainty=request_data['certainty'],
-                        created_in_file_version=file_version,
-                        xml_id=f'certainty_{entity.file.name}-{file_max_xml_ids.certainty}',
-                    )
-
-                    unification_statuses[i].update({
-                        'status': 200,
-                        'message': 'OK'
-                    })
-
-                except BadRequest as exception:
-                    status = HttpResponseBadRequest.status_code
-
-                    unification_statuses[i].update({
-                        'status': status,
-                        'message': str(exception)
-                    })
+            clique, unification_statuses = create_clique(request_data, project_id, request.user)
 
         except (BadRequest, JSONDecodeError) as exception:
             status = HttpResponseBadRequest.status_code

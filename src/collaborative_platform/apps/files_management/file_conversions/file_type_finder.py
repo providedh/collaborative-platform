@@ -22,7 +22,7 @@ class FileTypeFinder:
         except etree.XMLSyntaxError as err:
             logger.info("checking if xml: {}".format(err))
 
-            return FileType.OTHER
+            return FileType.PLAIN_TEXT
 
     def check_if_csv_or_tsv(self, text):
         fragment_to_check = text[:1024]
@@ -41,4 +41,4 @@ class FileTypeFinder:
         except Exception as ex:
             logger.info("checking if csv or tsv: {}".format(ex))
 
-            return FileType.OTHER
+            return FileType.PLAIN_TEXT

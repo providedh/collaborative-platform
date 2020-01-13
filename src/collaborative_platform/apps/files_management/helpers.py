@@ -235,11 +235,14 @@ def append_unifications(xml_content, file_version):  # type: (str, FileVersion) 
     return xml_content
 
 
-def create_certainty_elements_for_file_version(file_version, include_uncommitted=False, user=None):
-    # type: (FileVersion, bool, User) -> list
+def create_certainty_elements_for_file_version(file_version, include_uncommitted=False, user=None, for_annotator=False):
+    # type: (FileVersion, bool, User, bool) -> list
 
     if include_uncommitted and not user:
         raise ValueError("Argument 'include_uncommitted' require to fill a 'user' argument.")
+
+    if for_annotator and not include_uncommitted:
+        raise ValueError("Argument 'for_annotator' require to set a 'include_uncommitted' argument to 'True'.")
 
     cliques = Clique.objects.filter(
         Q(unifications__deleted_in_file_version__isnull=True)
@@ -249,7 +252,13 @@ def create_certainty_elements_for_file_version(file_version, include_uncommitted
         unifications__entity__file=file_version.file,
     ).distinct()
 
-    if include_uncommitted:
+    if include_uncommitted and for_annotator:
+        cliques = cliques.filter(
+            (Q(created_in_commit__isnull=True) & Q(created_in_annotator=False) & Q(created_by=user))
+            | (Q(created_in_commit__isnull=True) & Q(created_in_annotator=True))
+            | Q(created_in_commit__isnull=False)
+        )
+    elif include_uncommitted and not for_annotator:
         cliques = cliques.filter(
             (Q(created_in_commit__isnull=True) & Q(created_by=user))
             | Q(created_in_commit__isnull=False),
@@ -267,7 +276,13 @@ def create_certainty_elements_for_file_version(file_version, include_uncommitted
             deleted_on__isnull=True,
         )
 
-        if include_uncommitted:
+        if include_uncommitted and for_annotator:
+            unifications = unifications.filter(
+                (Q(created_in_commit__isnull=True) & Q(created_in_annotator=False) & Q(created_by=user))
+                | (Q(created_in_commit__isnull=True) & Q(created_in_annotator=True))
+                | Q(created_in_commit__isnull=False)
+            )
+        elif include_uncommitted and not for_annotator:
             unifications = unifications.filter(
                 (Q(created_in_commit__isnull=True) & Q(created_by=user))
                 | Q(created_in_commit__isnull=False),
