@@ -13,9 +13,6 @@
   <li class="submenu__item">
     <a href="{% url 'projects:files' project_id %}" class="submenu__link">Files</a>
   </li>
-  <li class="submenu__item">
-    <a href="{% url 'overview:main' project_id %}" class="submenu__link">Overview</a>
-  </li>
   <li class="submenu__item submenu__item--active">
     <a href="{% url 'dataset_stats:main' project_id %}" class="submenu__link">Stats</a>
   </li>
@@ -35,9 +32,6 @@
       </li>
       <li class="submenu__item">
         <a href="{% url 'projects:files' project_id %}" class="submenu__link">Files</a>
-      </li>
-      <li class="submenu__item">
-        <a href="{% url 'overview:main' project_id %}" class="submenu__link">Overview</a>
       </li>
       <li class="submenu__item submenu__item--active">
         <a href="{% url 'dataset_stats:main' project_id %}" class="submenu__link">Stats</a>
