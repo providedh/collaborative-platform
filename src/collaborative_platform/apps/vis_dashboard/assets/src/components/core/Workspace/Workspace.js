@@ -14,8 +14,8 @@ import Views from '../../views';
 
 const getDefPlacement = (idx, id)=>({
     i: id, 
-    x: (idx * 2)%10, 
-    y: Math.trunc((idx*2)/10), 
+    x: 0, 
+    y: 0, 
     w:4, 
     h:4, 
     minW: 4, 
@@ -24,33 +24,34 @@ const getDefPlacement = (idx, id)=>({
     isResizable: true
 })
 
-function useLayout(defLayout, views) {
+function useLayout(defLayout, views, liftState) {
     const [layout, setLayout] = useState(defLayout);
+    
+    const changeLayout = newLayout => {
+        setLayout(newLayout);
+        if(liftState != null)
+            liftState({layout: newLayout})
+    }
 
     useEffect(()=>{
         if(layout.length < views.length){
+            //console.log(layout, views)
             const newLayout = [...layout];
             for(let i=newLayout.length; i<views.length; i++){
                 newLayout.push(getDefPlacement(i, views[i].id))
             }
+            //console.log(newLayout)
             setLayout(newLayout);
+            if(liftState != null)
+                liftState({layout: newLayout})
         }
     }, [views]);
 
-    return [layout, setLayout];
-}
-
-function useLiftingState(layout, liftState){
-    useEffect(()=>{
-        if(liftState != null)
-            liftState({layout})
-    }, [layout])
+    return [layout, changeLayout];
 }
 
 export default function Workspace({focused, onFocus, onClose, defLayout=[], liftState=null, views}) {
-    const [layout, setLayout] = useLayout(defLayout, views);
-
-    useLiftingState(layout, liftState)
+    const [layout, setLayout] = useLayout(defLayout, views, liftState);
 
     const viewmap = views.map((view, i) => (
         <div key={views[i].id}>
@@ -59,7 +60,7 @@ export default function Workspace({focused, onFocus, onClose, defLayout=[], lift
             </VisFrame>
         </div>
     ))
-
+    
     return(
         <div className={styles.workspace}>
             <ParentSize>
