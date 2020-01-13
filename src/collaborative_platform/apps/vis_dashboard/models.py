@@ -8,7 +8,7 @@ class Dashboard(models.Model):
     name = models.CharField(max_length=255)
     description = models.CharField(max_length=150, null=True, blank=True)
     project = models.ForeignKey('projects.Project', on_delete=models.CASCADE)
-    config = JSONField(blank=True, default=list)
+    config = JSONField(blank=True, default=dict)
     created_on = models.DateField(default=django.utils.timezone.now)
     last_edited = models.DateField(default=django.utils.timezone.now)
 
