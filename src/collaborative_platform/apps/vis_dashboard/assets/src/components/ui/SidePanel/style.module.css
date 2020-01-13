@@ -1,0 +1,19 @@
+.sidePanel{
+	background-color: var(--grey);
+	height: 100%;
+}
+
+.innerPanel{
+	
+}
+
+.hr{
+	margin-top: 0;
+}
+
+.header{
+	padding: var(--space-m) var(--space-s) var(--space-s) var(--space-l);
+	font-weight: bold;
+	font-size: 1.2em;
+	color: var(--dark);
+}

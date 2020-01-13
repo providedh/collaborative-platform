@@ -1,0 +1,15 @@
+.dashboard{
+
+}
+
+.leftContainer {
+    padding: var(--space-s);
+}
+
+.breadcrumbOverride {
+    background-color: transparent;
+}
+
+.heightInherit{
+	height: 100%;
+}

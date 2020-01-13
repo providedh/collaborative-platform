@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{%  load static %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'vis_dashboard/css/main.css' %}">
+{% endblock %}
+
+{% block submenu %}
+<ul class="submenu__list">
+  <li class="submenu__item">
+    <a href="{% url 'projects:project' project_id %}" class="submenu__link">{{ project.title }}</a>
+  </li>
+  <li class="submenu__item">
+    <a href="{% url 'projects:files' project_id %}" class="submenu__link">Files</a>
+  </li>
+  <li class="submenu__item--active">
+    <a href="{% url 'vis_dashboard:list' project_id %}" class="submenu__link">Dashboard</a>
+  </li>
+  <li class="submenu__item">
+    <a href="{% url 'projects:project_settings' project_id %}" class="submenu__link">Settings</a>
+  </li>
+</ul>
+{% endblock %}
+
+{% block content %}
+{% csrf_token %}
+<div class="submenu">
+  <div class="container">
+    <ul class="submenu__list d-flex">
+      <li class="submenu__item">
+        <a href="{% url 'projects:project' project_id %}" class="submenu__link">{{ project.title }}</a>
+      </li>
+      <li class="submenu__item submenu__item">
+        <a href="{% url 'projects:files' project_id %}" class="submenu__link">Files</a>
+      </li>
+      <li class="submenu__item submenu__item--active">
+        <a href="{% url 'vis_dashboard:list' project_id %}" class="submenu__link">Dashboard</a>
+      </li>
+      <li class="submenu__item">
+        <a href="{% url 'projects:project_settings' project_id %}" class="submenu__link">Settings</a>
+      </li>
+    </ul>
+  </div>
+</div>
+<div class="container project">
+  <div class="d-flex flex-column-reverse flex-md-row project__header">
+    <div class=" project__content">
+      <h1>{{ project.title }}</h1>
+      <b>Visualization dashboards</b>
+    </div>
+  </div>
+  <div class="row">
+{#    <div class="col-lg-6">#}
+    <div class="col-12">
+      <div class="box">
+        <div class="box__header">
+          <h3 class="box__text--title">Dashboards</h3>
+        </div>
+        <div class="box__content">
+          <div class="row">
+            <div class="col-6 col-lg-4 col-xl-3">
+              <div id="create-form" class="card" style="width: 18rem;">
+                <div class="card-body">
+                  <form action="{% url 'vis_dashboard:create' project_id %}" method="POST">
+                    {% csrf_token %}
+                    <div class="form-group">
+                      <label for="name-input">Dashboard name</label>
+                      <input name="name" type="text" class="form-control" id="name-input" 
+                          aria-describedby="nameHelp" placeholder="Name the new dashboard" required>
+                      <small id="nameHelp" class="form-text text-muted">It can be changed later.</small>
+                    </div>
+                    <div class="form-group">
+                      <label for="desc-input">Description name</label>
+                      <textarea name="description" class="form-control" id="desc-input" placeholder="Enter description"></textarea>
+                    </div>
+                    <input class="btn btn-primary" type="submit" value="Submit">
+                  </form>
+                </div>
+              </div>
+            </div>
+            {% for dashboard in dashboards %}
+              <div class="col-6 col-lg-4 col-xl-3">
+                <div class="card dashboardCard" style="width: 18rem;">
+                  <div class="card-body">
+                    <form class="card-form" action="{% url 'vis_dashboard:edit' project_id dashboard.id %}" method="POST">
+                      {% csrf_token %}
+                      <h5 class="card-title">
+                        <input class="form-control nameInput" type="text" name="name" value="{{ dashboard.name }}" maxlength="255">
+                      </h5>
+                      <h6 class="card-subtitle mb-2 text-muted">Created on: {{ dashboard.created_on }}</h6>
+                      <h6 class="card-subtitle mb-2 text-muted">Last time edited: {{ dashboard.last_edited }}</h6>
+                      <p class="card-text">
+                        <textarea class="form-control" name="description" cols="40" rows="10">{{ dashboard.description }}</textarea>
+                      </p>
+                      <input class="editSubmit btn btn-outline-primary" type="submit" value="Update">
+                      <a href="{% url 'vis_dashboard:app' project_id dashboard.id %}" class="card-link">Open dashboard</a>
+                    </form>
+                    <hr>
+                    <form action="{% url 'vis_dashboard:delete' project_id dashboard.id %}" method="POST">
+                      {% csrf_token %}
+                      <input class="btn btn-outline-danger ml-3" type="submit" value="Delete">
+                    </form>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
