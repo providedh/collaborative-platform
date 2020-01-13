@@ -34,10 +34,13 @@ def get_dashboard(request, project_id, dashboard_id):
     if request.method == 'GET':
         dashboard = Dashboard.objects.get(project_id=project_id, id=dashboard_id)
     
+        print(dashboard.config)
+        print(json.dumps(dashboard.config))
         context = {
             'DEVELOPMENT': True,
             'project_id': project_id,
-            'dashboard': dashboard
+            'dashboard_config': json.dumps(dashboard.config),
+            'dashboard_id': dashboard_id
         }
 
         return render(request, 'vis_dashboard/dashboard.html', context)
@@ -59,17 +62,15 @@ def dashboard_edit(request, project_id, dashboard_id):
         return redirect('vis_dashboard:list', project_id=project_id)
 
 @login_required
-@objects_exists
 @user_has_access('RW')
 def dashboard_update(request, project_id, dashboard_id):
     if request.method == 'POST':
-        form = (request.POST)
+        newConfig = json.loads(request.body.decode('UTF-8'))
 
-        if form.is_valid():
-            dashboard = Dashboard.objects.get(project_id=project_id, id=dashboard_id)
-            dashboard.config = form.cleaned_data['config']
-            dashboard.last_edit = datetime.now()
-            dashboard.save()
+        dashboard = Dashboard.objects.get(project_id=project_id, id=dashboard_id)
+        dashboard.config = newConfig
+        dashboard.last_edit = datetime.now()
+        dashboard.save()
 
 @login_required
 @objects_exists
@@ -88,11 +89,13 @@ def dashboard_list(request, project_id):
     if request.method == 'GET':
         create_dashboard_form = DashboardCreateForm()
         edit_dashboard_form = DashboardEditForm()
+        project = Project.objects.get(id=project_id)
         dashboards = Dashboard.objects.all() \
             .filter(project_id=project_id) \
             .order_by('last_edited')
 
         context = {
+            'project_title': project.title,
             'project_id': project_id,
             'dashboards': dashboards,
             'edit_dashboard_form': edit_dashboard_form,
