@@ -6,6 +6,7 @@ import styles from './style.module.css';
 import DashboardControlPanel from '../DashboardControlPanel';
 import ViewDetailsPanel from '../ViewDetailsPanel';
 import Workspace from '../Workspace';
+import Help from '../Help';
 import AjaxCalls from '../../../helpers/ajax.js';
 
 export default class Dashboard extends React.Component {
@@ -117,6 +118,7 @@ export default class Dashboard extends React.Component {
                                         {this.state.lastChangesSaved===true?'All changes saved':'Save last changes'}
                                     </button>
                                 </div>
+                                <Help />
                                 <Workspace 
                                     liftState={this.updateDashboardConfig}
                                     defLayout={this.dashboardConfig.layout}
