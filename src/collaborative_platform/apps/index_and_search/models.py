@@ -113,3 +113,30 @@ class File(Document):
             'number_of_shards': 1,
             'number_of_replicas': 0
         }
+
+
+class Ingredient(Entity):
+    class Index:
+        name = 'ingredient'
+        settings = {
+            'number_of_shards': 1,
+            'number_of_replicas': 0
+        }
+
+
+class Utensil(Entity):
+    class Index:
+        name = 'utensil'
+        settings = {
+            'number_of_shards': 1,
+            'number_of_replicas': 0
+        }
+
+
+class ProductionMethod(Entity):
+    class Index:
+        name = 'productionmethod'
+        settings = {
+            'number_of_shards': 1,
+            'number_of_replicas': 0
+        }
