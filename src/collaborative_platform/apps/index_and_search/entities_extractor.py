@@ -7,7 +7,7 @@ from lxml.etree import Element
 
 
 class EntitiesExtractor:
-    tags = ('person', 'place', 'org', 'event', 'certainty')
+    tags = ('person', 'place', 'org', 'event', 'certainty', 'object')
     namespaces = {'tei': 'http://www.tei-c.org/ns/1.0', 'xml': 'http://www.w3.org/XML/1998/namespace'}
 
     @classmethod
@@ -145,12 +145,23 @@ class EntitiesExtractor:
         return map(process_certainty_tag, elements)
 
     @classmethod
+    def __process_object_tags(cls, elements):  # type: (List[Element]) -> map
+        def __process_object_tag(element):
+            id = cls.__extract_tag_id(element)
+            name = element.text.strip() if element.text is not None else ""
+            xml = str(et.tostring(element), 'utf-8')
+            context = cls.__get_context(element)
+            type = element.attrib.get("type")
+            return {'tag': type, 'id': id, 'name': name, 'xml': xml, 'context': context}
+
+    @classmethod
     def __process_tags(cls, tag, elements):  # type: (str, List[Element]) -> map
         functions = (cls.__process_person_tags,
                      cls.__process_place_tags,
                      cls.__process_org_tags,
                      cls.__process_event_tags,
-                     cls.__process_certainty_tags)
+                     cls.__process_certainty_tags,
+                     cls.__process_object_tags)
 
         return dict(zip(cls.tags, functions))[tag](elements)
 

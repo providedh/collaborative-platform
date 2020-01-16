@@ -25,7 +25,7 @@ from apps.files_management.file_conversions.xml_formatter import XMLFormatter
 from apps.files_management.models import File, FileVersion, Directory, FileMaxXmlIds
 from apps.index_and_search.content_extractor import ContentExtractor
 from apps.index_and_search.entities_extractor import EntitiesExtractor
-from apps.index_and_search.models import Person, Organization, Event, Place
+from apps.index_and_search.models import Person, Organization, Event, Place, Ingredient, Utensil, ProductionMethod
 from apps.projects.helpers import log_activity
 from apps.projects.models import Project
 
@@ -112,7 +112,10 @@ def index_entities(entities):  # type: (List[dict]) -> None
         'person': Person,
         'org': Organization,
         'event': Event,
-        'place': Place
+        'place': Place,
+        'ingredient': Ingredient,
+        'utensil': Utensil,
+        'productionmethod': ProductionMethod
     }
 
     for entity in copy.deepcopy(entities):
