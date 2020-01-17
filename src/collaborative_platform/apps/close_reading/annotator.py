@@ -1,6 +1,5 @@
 import logging
 import re
-from typing import Callable
 
 from lxml import etree
 
@@ -57,6 +56,7 @@ class Annotator:
         self.__fragment_annotated = ""
         self.__certainty_to_add = None
         self.__annotator_to_add = None
+        self.__list_element_to_add = None
 
         self.__xml_annotated = ""
 
@@ -82,6 +82,12 @@ class Annotator:
             return self.__xml_annotated
 
     def __validate_request(self, request):
+
+        # TODO: Delete after fix issue #47
+        if 'attribute-name' in request:
+            correction = {'attribute_name': request['attribute-name']}
+            request.update(correction)
+
         self.__check_target_in_request(request)
         self.__check_positions_in_request(request)
 
@@ -381,13 +387,10 @@ class Annotator:
         return xml_ids
 
     def __get_xml_id_number_for_tag(self, certainties, tag='ab'):
-        if tag in ['event', 'org', 'person', 'place', 'certainty']:
-            file_mx_xml_id = FileMaxXmlIds.objects.get(file=self.__file)
+        if tag in ['event', 'org', 'person', 'place', 'certainty', 'object']:
+            xml_id = self.__get_max_xml_id_from_database(tag)
 
-            file_mx_xml_id.__dict__[tag] += 1
-            file_mx_xml_id.save()
-
-            return file_mx_xml_id.__dict__[tag]
+            return xml_id
 
         # TODO: Max IDs for all tags in file should be keep in database
         else:
@@ -410,6 +413,14 @@ class Annotator:
                         biggest_number = number
 
             return biggest_number + 1
+
+    def __get_max_xml_id_from_database(self, tag):
+        file_mx_xml_id = FileMaxXmlIds.objects.get(file=self.__file)
+
+        file_mx_xml_id.__dict__[tag] += 1
+        file_mx_xml_id.save()
+
+        return file_mx_xml_id.__dict__[tag]
 
     def __prepare_xml_parts(self):
         # 1.Add tag to text
@@ -481,6 +492,21 @@ class Annotator:
 
             self.__create_unification(annotation_ids)
 
+        # 7.Add reference to element of the list
+        elif self.__request['locus'] == 'value' \
+                and self.__request['tag'] != '' \
+                and self.__request['attribute_name'] == 'ref' \
+                and self.__request['asserted_value'] != '' \
+                and (self.__target or self.__positions):
+            self.__fragment_annotated, annotation_ids = self.__add_tag(self.__fragment_to_annotate, 'objectName',
+                                                                       reference=True)
+
+            self.__list_element_to_add = self.__create_list_element(self.__request, annotation_ids)
+
+
+
+
+
         # 6.Add attribute to tag
         elif self.__request['locus'] == 'value' \
                 and self.__request['tag'] != '' \
@@ -500,7 +526,7 @@ class Annotator:
         else:
             raise BadRequest("There is no method to modify xml according to given parameters.")
 
-    def __add_tag(self, annotated_fragment, tag, uncertainty=False):
+    def __add_tag(self, annotated_fragment, tag, uncertainty=False, reference=False):
         new_annotated_fragment = ''
         annotation_ids = []
 
@@ -517,25 +543,51 @@ class Annotator:
                     match = re.search(r'<[^>\s]+', tag_to_move)
                     tag_begin = match.group()
 
-                    if 'xml:id="' not in tag_to_move:
-                        id = f"{tag}_{self.__file.name}-{self.__tag_xml_id_number}"
-                        attribute = f' xml:id="{id}"'
+                    if uncertainty:
+                        if 'xml:id="' not in tag_to_move:
+                            id = f"{tag}_{self.__file.name}-{self.__tag_xml_id_number}"
+                            attribute = f' xml:id="{id}"'
 
-                        annotation_ids.append('#' + id)
+                            annotation_ids.append('#' + id)
 
-                        new_tag_to_move = tag_to_move[:len(tag_begin)] + attribute + tag_to_move[len(tag_begin):]
+                            new_tag_to_move = tag_to_move[:len(tag_begin)] + attribute + tag_to_move[len(tag_begin):]
 
-                        self.__tag_xml_id_number += 1
-                    else:
-                        match = re.search(r'xml:id=".*?"', tag_to_move)
-                        existing_id = match.group()
-                        existing_id = existing_id.replace('xml:id="', '')
-                        existing_id = existing_id.replace('"', '')
+                            self.__tag_xml_id_number += 1
+                        else:
+                            match = re.search(r'xml:id=".*?"', tag_to_move)
+                            existing_id = match.group()
+                            existing_id = existing_id.replace('xml:id="', '')
+                            existing_id = existing_id.replace('"', '')
 
-                        annotation_ids.append('#' + existing_id)
-                        new_tag_to_move = tag_to_move
+                            annotation_ids.append('#' + existing_id)
+                            new_tag_to_move = tag_to_move
 
-                    new_annotated_fragment += new_tag_to_move
+                        new_annotated_fragment += new_tag_to_move
+
+                    elif reference:
+                        if 'ref="' not in tag_to_move:
+                            id = self.__get_id_of_list_object_to_reference()
+                            attribute = f' ref="#{id}"'
+
+                            annotation_ids.append('#' + id)
+
+                            new_tag_to_move = tag_to_move[:len(tag_begin)] + attribute + tag_to_move[len(tag_begin):]
+
+                        else:
+                            match = re.search(r'ref=".*?"', tag_to_move)
+                            existing_reference = match.group()
+
+                            id = self.__get_id_of_list_object_to_reference()
+
+                            if id in existing_reference:
+                                raise NotModified(f"Reference to element with xml:id: {id} already exist.")
+
+                            attribute = f'{existing_reference[:-1]} #{id}"'
+
+                            annotation_ids.append('#' + id)
+                            new_tag_to_move = tag_to_move[:len(tag_begin)] + attribute + tag_to_move[len(tag_begin):]
+
+                        new_annotated_fragment += new_tag_to_move
                 else:
                     new_annotated_fragment += tag_to_move
 
@@ -560,6 +612,12 @@ class Annotator:
 
                         annotation_ids.append('#' + id)
 
+                    elif reference:
+                        id = self.__get_id_of_list_object_to_reference()
+                        attribute = f' ref="#{id}"'
+
+                        annotation_ids.append('#' + id)
+
                     tag_open = f'<{tag}{attribute}>'
                     tag_close = f'</{tag}>'
 
@@ -571,6 +629,18 @@ class Annotator:
                         self.__tag_xml_id_number += 1
 
         return new_annotated_fragment, annotation_ids
+
+    def __get_id_of_list_object_to_reference(self):
+        xml_id_regex = r'object_[\w]+-[\d]+'
+        if re.match(xml_id_regex, self.__request['asserted_value']):
+            id = self.__request['asserted_value'].replace('#', '')
+
+        else:
+            xml_id_number = self.__get_max_xml_id_from_database('object')
+            id = f"object_{self.__file.name}-{xml_id_number}"
+
+        return id
+
 
     @staticmethod
     def __get_annotation_ids_from_target(target):
