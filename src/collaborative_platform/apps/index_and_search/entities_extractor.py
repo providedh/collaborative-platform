@@ -146,13 +146,15 @@ class EntitiesExtractor:
 
     @classmethod
     def __process_object_tags(cls, elements):  # type: (List[Element]) -> map
-        def __process_object_tag(element):
+        def process_object_tag(element):
             id = cls.__extract_tag_id(element)
             name = element.text.strip() if element.text is not None else ""
             xml = str(et.tostring(element), 'utf-8')
             context = cls.__get_context(element)
             type = element.attrib.get("type")
             return {'tag': type, 'id': id, 'name': name, 'xml': xml, 'context': context}
+
+        return map(process_object_tag, elements)
 
     @classmethod
     def __process_tags(cls, tag, elements):  # type: (str, List[Element]) -> map
