@@ -202,3 +202,4 @@ class FileMaxXmlIds(models.Model):
     org = models.IntegerField(default=0)
     place = models.IntegerField(default=0)
     certainty = models.IntegerField(default=0)
+    object = models.IntegerField(default=0)
