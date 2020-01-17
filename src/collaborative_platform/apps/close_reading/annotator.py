@@ -691,6 +691,9 @@ class Annotator:
 
         return new_element
 
+    def __create_list_element(self, json, annotation_ids):
+        pass
+
     def __create_annotator(self, user_xml_id):
         user_guid = user_xml_id.replace('person', '')
 
