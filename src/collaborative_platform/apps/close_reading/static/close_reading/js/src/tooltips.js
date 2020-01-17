@@ -1,4 +1,4 @@
-/* Module: Popup
+	/* Module: Popup
  * Module for displaying customizable popups.
  *
  * Publishes:
@@ -142,7 +142,11 @@ var Tooltips = function(args){
 	            });
 
 			Array.from(document.getElementsByTagName(tag_name)).forEach(node=>{
-				const attributes = [], tag_id = node.id;
+				const attributes = [], 
+					tag_id = node.id,
+					original_tag_id = tag_id.startsWith(args.XML_EXTRA_CHAR_SPACER)?
+						tag_id.slice(args.XML_EXTRA_CHAR_SPACER.length):
+						tag_id;
 
 				attributes.push(...node.attributes);
 
@@ -153,14 +157,18 @@ var Tooltips = function(args){
 					attributes.push(...headerTags[tag_id]);
 
 				const body = Array
-					.from(attributes.values())
+					.from(attributes.filter(x=>x.name != 'id').values())
 					.map(e=>e.name+' : '+e.value).join(', <br>');
+
+				const subtitle = original_tag_id != ''?
+					`ID : ${original_tag_id}<br/>( ${tag_name} )`:
+					`( ${tag_name} )`;
 
 				node.addEventListener('mouseenter', e=>self.publish('popup/render',{
 					title: (`<span class="teiLegendElement" id="${tag_name}">
 							<span class="color bg-${tag_name}"></span></span>`
 							+ node.textContent),
-					subtitle: `( ${tag_name} )`,
+					subtitle: subtitle,
 					body: body,
 					x: (e.clientX - 150)+'px',//(node.getBoundingClientRect().x+node.getBoundingClientRect().width/2 -150)+'px', 
 					y: (e.clientY + 40) +'px'
