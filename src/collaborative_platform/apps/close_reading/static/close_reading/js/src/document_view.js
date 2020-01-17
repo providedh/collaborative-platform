@@ -118,9 +118,9 @@ var DocumentView = function(args){
 	                	if(!node.hasOwnProperty('_uncertainty_count')){
 	                		node._uncertainty_count = 1;
 		                	node.addEventListener('mouseenter', 
-		                		()=>self.publish('annotation/mouseenter', {target: node}))
+		                		()=>self.publish('annotation/mouseenter', {target}))
 		                	node.addEventListener('mouseleave', 
-		                		()=>self.publish('annotation/mouseleave', {target: node}))
+		                		()=>self.publish('annotation/mouseleave', {target}))
 	                	}
 	                	else{
 	                		node._uncertainty_count += 1;
