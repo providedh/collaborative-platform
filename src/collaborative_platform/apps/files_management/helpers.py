@@ -119,7 +119,7 @@ def index_entities(entities):  # type: (List[dict]) -> None
     }
 
     for entity in copy.deepcopy(entities):
-        if entity['tag'] == 'certainty':
+        if entity['tag'] not in classes:
             continue
 
         tag = entity.pop('tag')

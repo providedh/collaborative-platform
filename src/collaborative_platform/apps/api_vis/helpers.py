@@ -142,6 +142,17 @@ def reformat_attribute(item, namespaces):
 
 def create_entities_in_database(entities, project, file_version):  # type: (list, Project, FileVersion) -> None
     for entity in copy.deepcopy(entities):
+        classes = {
+            'person': PersonVersion,
+            'org': OrganizationVersion,
+            'event': EventVersion,
+            'place': PlaceVersion,
+            'certainty': CertaintyVersion,
+        }
+
+        if entity['tag'] not in classes:
+            continue
+
         entity["xml_id"] = entity.pop("id")
         try:
             entity_db = Entity.objects.get(
@@ -159,14 +170,6 @@ def create_entities_in_database(entities, project, file_version):  # type: (list
                 created_in_version=file_version.number,
                 type=entity['tag'],
             )
-
-        classes = {
-            'person': PersonVersion,
-            'org': OrganizationVersion,
-            'event': EventVersion,
-            'place': PlaceVersion,
-            'certainty': CertaintyVersion,
-        }
 
         tag = entity.pop("tag")
 
@@ -260,7 +263,7 @@ def get_file_id_from_path(project_id, file_path, parent_directory_id=None):  # t
                 parent_dir_id=parent_directory_id,
                 name=file_name,
                 deleted=False
-             )
+            )
 
             return file.id
 
