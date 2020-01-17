@@ -570,7 +570,6 @@ class Annotator:
                             attribute = f' ref="#{id}"'
 
                             annotation_ids.append('#' + id)
-
                             new_tag_to_move = tag_to_move[:len(tag_begin)] + attribute + tag_to_move[len(tag_begin):]
 
                         else:
@@ -582,10 +581,10 @@ class Annotator:
                             if id in existing_reference:
                                 raise NotModified(f"Reference to element with xml:id: {id} already exist.")
 
-                            attribute = f'{existing_reference[:-1]} #{id}"'
+                            updated_reference = f'{existing_reference[:-1]} #{id}"'
 
                             annotation_ids.append('#' + id)
-                            new_tag_to_move = tag_to_move[:len(tag_begin)] + attribute + tag_to_move[len(tag_begin):]
+                            new_tag_to_move = tag_to_move.replace(existing_reference, updated_reference)
 
                         new_annotated_fragment += new_tag_to_move
                 else:
