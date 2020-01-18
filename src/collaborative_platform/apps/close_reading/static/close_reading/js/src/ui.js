@@ -20,10 +20,26 @@ let UISetup = function(args){
     _setupFormControls();
     _setupLegend();
     _setupEntityStyles();
+    _setupEditorPlacement();
+    _updateEditorSpacing(0);
 
 		self = obj;
 		return obj;
 	}
+
+  function _updateEditorSpacing(delay=380){
+    // Delay allows to adjust the height after an animation has finished
+    setTimeout(()=>{
+      const panelHeight = document.getElementById('toolbar-container').clientHeight + 'px';
+      document.getElementById('editor').style.setProperty('margin-top', panelHeight);      
+    }, delay);
+  }
+
+  function _setupEditorPlacement(){
+    document.getElementById('toggle-panel').addEventListener('click', ()=>_updateEditorSpacing());
+    Array.from(document.getElementById('tab-controls').children).forEach(
+      nav=>nav.addEventListener('click', ()=>_updateEditorSpacing()));
+  }
 
   function _setupFormControls(){
     
