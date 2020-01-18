@@ -116,17 +116,54 @@ page {
 
 #asserted-value-input-options{display: none;}
 
-div#legend i.fas{
+#annotator-root #legend,
+#annotator-root #left-sidebar{
+  display: none;
+}
+
+#legend i.fas{
     color:grey;
     font-weight: 900;
     font-size: 0.9em;
 }
 
-div#legend span.teiLegendElement{
+#legend span.teiLegendElement,
+#legend span.certLegendElement{
     display:block;
 }
 
-span.teiLegendElement span.color{
+#top-legend hr{margin-top: -.5em;}
+
+#legend-topbar{
+  padding: 0px 0.8em 0.1em;
+}
+
+#top-legend button{
+  text-align: end;
+}
+
+#top-legend ul{
+  padding-left: 0;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+#top-legend span.teiLegendElement{
+  min-width: 20%;
+}
+
+#top-breadcrumb ol{
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+span.certLegendElement {
+  margin-right: 10px;
+}
+
+span.teiLegendElement span.color,
+span.certLegendElement span.color{
     display: inline-block;
     height:1em;
     width:1em;
@@ -310,7 +347,7 @@ div#history-popup span.color{
   width: 100%;
 }
 
-.btn-collapse.collapsed{
+#legend .btn-collapse.collapsed{
   display: initial;
   width: initial;
 }
@@ -321,6 +358,14 @@ div#history-popup span.color{
 
 .btn-collapse.collapsed .onCollapse{
   display: initial;
+}
+
+.btn-collapse .onShow{
+  display: initial;
+}
+
+.btn-collapse.collapsed .onShow{
+  display: none;
 }
 
 .sidebar > div, 
@@ -408,4 +453,7 @@ div#history-popup span.color{
 
 @media (min-width: 1800px) {
     #left-sidebar{max-width: 25%;}
+    #annotator-root #legend,
+    #annotator-root #left-sidebar{display: initial;}
+    #top-legend, #top-breadcrumb{display: none;}
 }

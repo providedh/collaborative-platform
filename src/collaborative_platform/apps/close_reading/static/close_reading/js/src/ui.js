@@ -18,7 +18,8 @@ let UISetup = function(args){
 			args.channel.addToChannel(obj);
 
     _setupFormControls();
-    _setupLegend();
+    _setupSideLegend();
+    _setupTopLegend();
     _setupEntityStyles();
     _setupEditorPlacement();
     _updateEditorSpacing(0);
@@ -36,7 +37,9 @@ let UISetup = function(args){
   }
 
   function _setupEditorPlacement(){
+    window.addEventListener('resize', ()=>_updateEditorSpacing());
     document.getElementById('toggle-panel').addEventListener('click', ()=>_updateEditorSpacing());
+    document.getElementById('top-legend-toggle').addEventListener('click', ()=>_updateEditorSpacing());
     Array.from(document.getElementById('tab-controls').children).forEach(
       nav=>nav.addEventListener('click', ()=>_updateEditorSpacing()));
   }
@@ -77,7 +80,7 @@ let UISetup = function(args){
     return options;
   }
 
-  function _setupLegend(){
+  function _setupSideLegend(){
     const legend = document
       .getElementById('legend-sidebar');
 
@@ -102,6 +105,35 @@ let UISetup = function(args){
     legend.appendChild(legendContent)
   }
 
+  function _setupTopLegend(){
+    const legend = document
+      .getElementById('legend-topbar');
+
+    const entityEntries = Object
+      .entries(ColorScheme.scheme['entities'])
+      .map(e=>_createEntityLegendEntry(e))
+      .join('\n');
+
+    const certEntries = Object
+      .entries(ColorScheme.scheme['taxonomy'])
+      .map(e=>_createCertLegendEntry(e))
+      .join('\n');
+    
+    const legendContent = $.parseHTML(`
+      <div>
+        <b>Annotation color scheme</b>
+        <ul>
+          ${entityEntries}
+        </ul>
+        <b>Uncertainty notion color scheme</b>
+        <ul>
+          ${certEntries}
+        </ul>
+      </div>
+      `)[1];
+    legend.appendChild(legendContent)
+  }
+
   function _createEntityLegendEntry(entity){
     const entry = (
       `<span class="teiLegendElement">
@@ -121,7 +153,7 @@ let UISetup = function(args){
 
   function _createCertLegendEntry(cert){
     const entry = (
-      `<span class="teiLegendElement">
+      `<span class="certLegendElement">
         <span class="color" 
               title="unknown" 
               style="background-color: ${ColorScheme.calculate(cert[0], 'unknown')}">

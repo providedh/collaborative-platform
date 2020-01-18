@@ -41,7 +41,7 @@
     </section>
     <div class="container-fluid">
       <div class="row justify-content-md-center">
-        <nav id="left-sidebar" class="col-md-2 d-none d-md-block sidebar">
+        <nav id="left-sidebar" class="col-md-2 sidebar">
           <button class="btn btn-outline-primary collapsed btn-collapse" type="button" 
                   data-toggle="collapse" data-target="#certaintyList" 
                   aria-expanded="false" aria-controls="certaintyList">
@@ -51,7 +51,7 @@
               
           </div>
         </nav>
-        <div id="legend" class="col-md-2 d-none d-md-block legend">
+        <div id="legend" class="col-md-2 legend">
           <button class="btn btn-outline-primary collapsed btn-collapse" type="button" 
                   data-toggle="collapse" data-target="#legend-sidebar" 
                   aria-expanded="false" aria-controls="legend-sidebar">
@@ -64,6 +64,12 @@
         <main role="main" class="col-md-8 col-lg-8 px-4 justify-content-center d-flex"> 
           <div id="toolbar-container" class="col-auto">
             <section id="toolbar">
+              <nav aria-label="breadcrumb" id="top-breadcrumb">
+                <ol class="breadcrumb bg-transparent">
+                  <a href="{{ origin_url }}" class="breadcrumb-item">{{ origin }}</a>
+                  <li class="breadcrumb-item active" aria-current="page">Close Reading</li>
+                </ol>
+              </nav>
               <div id="alert" class="hide" role="alert"></div>
               <div class="card card-body">
               <h3 class="break-word">
@@ -238,14 +244,27 @@
                 </div>
                 <div class="d-flex justify-content-center toogle-button">
                   <div class="relative-group">
-                  <a id="toggle-panel" class="btn btn-primary btn-sm collapsed" data-toggle="collapse" href="#example" role="button" aria-expanded="false" aria-controls="example">
-                    <span class="collapse-show">
-                      Hide controls
-                    </span>
-                    <span class="collapsed-show">
-                      Show controls
-                    </span>
-                  </a> 
+                    <a id="toggle-panel" class="btn btn-primary btn-sm collapsed" data-toggle="collapse" href="#example" role="button" aria-expanded="false" aria-controls="example">
+                      <span class="collapse-show">
+                        Hide controls
+                      </span>
+                      <span class="collapsed-show">
+                        Show controls
+                      </span>
+                    </a> 
+                  </div>
+                </div>
+                <div id="top-legend">
+                  <hr/>
+                  <button 
+                      id="top-legend-toggle"
+                      class="btn btn-link btn-collapse collapsed" 
+                      type="button" data-toggle="collapse" data-target="#legend-topbar" aria-expanded="false" aria-controls="legend-topbar">
+                    Toggle legend
+                    <span class="onCollapse"><i class="fas fa-caret-down"></i></span>
+                    <span class="onShow"><i class="fas fa-caret-up"></i></span>
+                  </button>
+                  <div class="collapse" id="legend-topbar"></div>
                 </div>
               </section>
             </div>
