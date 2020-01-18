@@ -45,6 +45,7 @@ class Annotator:
         self.__target = False
         self.__target_in_db = False
         self.__positions = False
+        self.__reference = False
         self.__start = 0
         self.__end = 0
         self.__fragment_to_annotate = ""
@@ -90,6 +91,7 @@ class Annotator:
 
         self.__check_target_in_request(request)
         self.__check_positions_in_request(request)
+        self.__check_reference_to_list_in_request(request)
 
         if self.__target and self.__positions:
             raise BadRequest("Provided reference parameters are ambiguous. Provide 'target' parameter for reference to "
@@ -104,6 +106,9 @@ class Annotator:
         elif self.__positions:
             self.__validate_positions(request)
 
+        if self.__reference:
+            self.__validate_list_element_id(request)
+
         self.__fill_in_optional_params(request)
         # self.__validate_closed_list_parameters() # TODO rewrite validation in suitable way
 
@@ -117,6 +122,11 @@ class Annotator:
 
         if position_v1 or position_v2:
             self.__positions = True
+
+    def __check_reference_to_list_in_request(self, request):
+        xml_id_regex = r'object_[\w]+-[\d]+'
+        if re.match(xml_id_regex, request['asserted_value']):
+            self.__reference = True
 
     def __validate_target(self, request):
         text_in_lines = self.__xml.splitlines()
@@ -149,6 +159,23 @@ class Annotator:
                 self.__target_in_db = True
 
         self.__request.update({'target': request['target']})
+
+    def __validate_list_element_id(self, request):
+        text_in_lines = self.__xml.splitlines()
+
+        if 'encoding=' in text_in_lines[0]:
+            text_to_parse = '\n'.join(text_in_lines[1:])
+        else:
+            text_to_parse = self.__xml
+
+        tree = etree.fromstring(text_to_parse)
+        list_element_id = request['asserted_value']
+
+        matching_xml_element = tree.xpath(f'//*[@xml:id="{list_element_id}"]', namespaces=NAMESPACES)
+
+        if not matching_xml_element:
+            raise BadRequest(f"There is no element with xml:id: {list_element_id} on any list in file "
+                             f"with id: {self.__file.id}.")
 
     def __validate_positions(self, request):
         position_v1 = all(elements in request.keys() for elements in POSITION_PARAMS_V1)
@@ -503,10 +530,6 @@ class Annotator:
 
             self.__list_element_to_add = self.__create_list_element(self.__request, annotation_ids)
 
-
-
-
-
         # 6.Add attribute to tag
         elif self.__request['locus'] == 'value' \
                 and self.__request['tag'] != '' \
@@ -691,7 +714,14 @@ class Annotator:
         return new_element
 
     def __create_list_element(self, json, annotation_ids):
-        pass
+        xml_id = annotation_ids[0].replace('#', '')
+
+        element = f'<object type="{self.__request["tag"]}" xml:id="{xml_id}">' \
+                  f'{self.__request["asserted_value"]}</object>'
+
+        new_element = etree.fromstring(element)
+
+        return new_element
 
     def __create_annotator(self, user_xml_id):
         user_guid = user_xml_id.replace('person', '')
@@ -792,6 +822,31 @@ class Annotator:
 
             elif existing_certainties and not self.__request['description']:
                 raise NotModified('This certainty already exist.')
+
+        if not self.__reference and self.__request['attribute_name'] == 'ref' and self.__request['locus'] == 'value':
+            xml = self.__xml
+
+            xml_in_lines = xml.splitlines()
+            if 'encoding=' in xml_in_lines[0]:
+                xml = '\n'.join(xml_in_lines[1:])
+
+            tree = etree.fromstring(xml)
+            xpath = f'//default:text' \
+                    f'//default:body' \
+                    f'//default:div[@type="{self.__request["tag"]}"]' \
+                    f'//default:listObject' \
+                    f'//default:object[@type="{self.__request["tag"]}" and text()="{self.__request["asserted_value"]}"]'
+
+            existing_element = tree.xpath(xpath, namespaces=NAMESPACES)
+
+            if existing_element:
+                xml_namespace = NAMESPACES['xml']
+                xml = '{%s}' % xml_namespace
+
+                xml_id = existing_element[0].attrib[etree.QName(xml + 'id')]
+
+                raise BadRequest(f"Item: {self.__request['asserted_value']} already exist on: "
+                                 f"{self.__request['tag']} list and have id: {xml_id}")
 
     def __create_new_certainty_in_db(self):
         certainty = self.__certainty_to_add.attrib
