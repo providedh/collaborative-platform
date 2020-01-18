@@ -151,8 +151,8 @@ let UISetup = function(args){
       {
           content:"";
           position: absolute;
-          font-size: 0.9em;
-          padding-top:1.45em;
+          font-size: 0.85em;
+          padding-top: 1.3em;
           color:grey;
           font-family: "Font Awesome 5 Free";
           font-weight: 900;
@@ -174,11 +174,11 @@ let UISetup = function(args){
     const tagRule = `
       ${selectors}
       {
-          min-height: 4px;
-          margin: 2px 0;
           border-bottom: solid 2px white;
           cursor: default;
           background-color: white;
+          display: inline-block;
+          height: 1.7em;
       }
     `
 

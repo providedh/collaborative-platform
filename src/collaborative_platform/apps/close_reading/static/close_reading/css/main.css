@@ -6,7 +6,6 @@ button span, #alert{
 
 #editor{
     margin-top: 155px;
-    line-height: 2.3em;
 }
 
 #breadcrumb{
@@ -37,6 +36,7 @@ page {
   margin-bottom: 0.5cm;
   box-shadow: 0 1px 3px 1px rgba(60,64,67,.15);
   width: 21cm;
+  line-height: 2.1em;
 }
 
 #alert{
