@@ -677,7 +677,7 @@ class Annotator:
 
         categories = " ".join([get_ana_link(self.__file.project_id, cat) for cat in json["categories"]])
         certainty = f'<certainty ana="{categories}" locus="{json["locus"]}" cert="{json["certainty"]}" ' \
-                    f'resp="#{user_uuid}" target="{target}" match="@{json["attribute_name"]}"' \
+                    f'resp="#{user_uuid}" target="{target}" match="@{json["attribute_name"]}" ' \
                     f'assertedValue="{json["asserted_value"]}" xml:id="{xml_id}"/>'
 
         new_element = etree.fromstring(certainty)
