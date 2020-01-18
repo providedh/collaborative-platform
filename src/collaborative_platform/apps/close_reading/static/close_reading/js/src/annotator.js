@@ -98,7 +98,7 @@ var Annotator = function(args){
 				self.publish('file/saved', response.content.version);
 			}
 			else
-				Alert.alert('success','Error saving the changes.');
+				Alert.alert('success','Error saving : '+response.content);
 			console.info('Changes '+(response.success === true)?'saved':'not saved');
 		});
 	}
