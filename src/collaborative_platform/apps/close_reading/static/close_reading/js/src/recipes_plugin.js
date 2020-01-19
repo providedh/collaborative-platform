@@ -50,21 +50,22 @@ let RecipesPlugin = function(args){
 
 	function _setupUI(){
 		// 1) add style tag
+		document.getElementsByTagName('head')[0].appendChild(_createStyleTag());
+
+		// 2) add tab for settings
+		document.getElementById('tab-controls').appendChild(_createSettingsToggle());
+		document.getElementById('annotation-form').appendChild(_createSettingsTab());
+
+		// 3) add entity input to annotation tab
 		const tei_first_col = document.getElementById('tei-tab').children[0].children[0],
 			col = $.parseHTML('<div class="col"></div>')[0];
 		col.append(_createEntityTypeInput('tei'));
 		tei_first_col.insertAdjacentElement('afterend', col);
 
+		// 4) add entity input to tei tab
 		const annotation_left_col = document.getElementById('uncertainty-tab').children[0].children[2],
 			input = _createEntityTypeInput('annotation');
 		annotation_left_col.appendChild(input);
-
-		// 2) add tab for settings
-		document.getElementById('tab-controls').appendChild(_createSettingsToggle());
-		document.getElementById('annotation-form').appendChild(_createSettingsTab());
-		
-		// 3) add entity input to annotation tab
-		// 4) add entity input to tei tab
 	}
 
 	function _getInputId(name){
@@ -122,6 +123,11 @@ let RecipesPlugin = function(args){
               	</div>
             </div>`
 		return $.parseHTML(tabHtml)[0];
+	}
+
+	function _createStyleTag(){
+		const tagHtml = '<style type="text/css" id="recipes-style"></style>';
+		return $.parseHTML(tagHtml)[0];
 	}
 
 	function _handleDocumentLoad(){}
