@@ -34,6 +34,9 @@ let RecipesPlugin = function(args){
 			args.channel.addToChannel(obj);
 
 		obj.subscribe('websocket/send', _handleAnnotationCreate);
+		obj.subscribe('panel/update', _handleOptionsChange);
+
+		obj.currentValues = {};
 
 		_setupUI();
 		/*
@@ -66,6 +69,9 @@ let RecipesPlugin = function(args){
 		const annotation_left_col = document.getElementById('uncertainty-tab').children[0].children[2],
 			input = _createEntityTypeInput('annotation');
 		annotation_left_col.appendChild(input);
+
+		// 5) add handler for settings change
+		document.getElementById('using-recipes-plugin').addEventListener('change', _handleSettingsChange);
 	}
 
 	function _getInputId(name){
@@ -75,8 +81,12 @@ let RecipesPlugin = function(args){
 		return inputId;		
 	}
 
+	function _getFormId(name){
+		return name + '-entity-type-form-group';
+	}
+
 	function _createEntityTypeInput(name){
-		const inputHtml = `<div class="entityTypeFormGroup" fromList="true">
+		const inputHtml = `<div id="${name}-entity-type-form-group" class="entityTypeFormGroup" fromList="true">
 			  <label class="form-check-label addNewTypeLabel" for="teiAddType">
 			    <span class="type"></span> not in the list?
 			    Add new <span class="type"></span>
@@ -118,8 +128,11 @@ let RecipesPlugin = function(args){
 
 	function _createSettingsTab(){
 		const tabHtml = `<div class="tab-pane" id="settings-tab" role="tabpanel" aria-labelledby="settings">
-              	<div class="form-row"><div class="col"></div>
-              		<div class="col"><p>Configure the close reading app.</p></div>
+              	<div class="form-row"><div class="col">
+              		<label class="form-check-label" for="using-recipes-plugin">Use recipes module</label>
+					  <input checked class="form-check-input addNewType" type="checkbox" value="" id="using-recipes-plugin">
+              	</div>
+              	<div class="col"><p>Configure the close reading app.</p></div>
               	</div>
             </div>`
 		return $.parseHTML(tabHtml)[0];
@@ -131,8 +144,59 @@ let RecipesPlugin = function(args){
 	}
 
 	function _handleDocumentLoad(){}
-	function _handleOptionsChange(){}
-	function _handleSettingsChange(){}
+
+	function _updateAnnotationTypeInput(){
+		let show = true;
+
+		show = show && self.currentValues['locus'] == 'name';
+		show = show && ['ingredient', 'utensil', 'productionMethod'].includes(self.currentValues['asserted-value']);
+		show = show && _getSettings()['usingRecipesPlugin'];
+
+		if(show === true){
+			document.getElementById(_getFormId('annotation'))
+				.classList.remove('d-none');
+		}else{
+			document.getElementById(_getFormId('annotation'))
+				.classList.add('d-none');
+		}
+	}
+
+	function _updateTeiTypeInput(){
+		let show = true;
+
+		show = show && ['ingredient', 'utensil', 'productionMethod'].includes(self.currentValues['tei-tag-name']);
+		show = show && _getSettings()['usingRecipesPlugin'];
+
+		if(show === true){
+			document.getElementById(_getFormId('tei'))
+				.classList.remove('d-none');
+		}else{
+			document.getElementById(_getFormId('tei'))
+				.classList.add('d-none');
+		}
+	}
+
+	
+	function _handleOptionsChange(currentValues){
+		self.currentValues = currentValues;
+
+		_updateAnnotationTypeInput();
+		_updateTeiTypeInput();
+	}
+
+	function _handleSettingsChange(e){
+		const useRecipesPlugin = e.target.checked;
+
+		if(useRecipesPlugin === false){
+			document.getElementById(_getFormId('annotation'))
+				.classList.add('d-none');
+			document.getElementById(_getFormId('tei'))
+				.classList.add('d-none');
+		}else{
+			_updateTeiTypeInput();
+			_updateAnnotationTypeInput();
+		}
+	}
 	
 	function _handleAnnotationCreate(json){
 		const annotationInput = document.getElementById(_getInputId('annotation')),
@@ -143,13 +207,18 @@ let RecipesPlugin = function(args){
 		//self.publish('recipesWebsocket/send', json)
 	}
 	
-	function _getSettings(){}
+	function _getSettings(){
+		return {
+			usingRecipesPlugin: document.getElementById('using-recipes-plugin').checked
+		};
+	}
 	function _getValues(){}
 
-	function _createInputElements(){}
 	function _createInputOptions(){}
-	function _populateInputElements(){}
-	function _updateInputElements(){}
+	function _populateInputoptions(){}
+	function _updateInputOptions(){
+
+	}
 
 	function _createStyles4Entity(){}
 	function _styleRecipeEntities(){}
