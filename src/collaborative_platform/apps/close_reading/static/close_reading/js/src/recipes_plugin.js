@@ -34,6 +34,8 @@ let RecipesPlugin = function(args){
 			args.channel.addToChannel(obj);
 
 		obj.subscribe('websocket/send', _handleAnnotationCreate);
+
+		_setupUI();
 		/*
 			obj.subscribe('panel/load_history', _handleLoadHistory);
 			obj.subscribe('panel/reset', _handlePanelReset);
@@ -46,7 +48,21 @@ let RecipesPlugin = function(args){
 		return obj;
 	}
 
-	function _setupUI(){}
+	function _setupUI(){
+		// 1) add style tag
+		const tei_first_col = document.getElementById('tei-tab').children[0].children[0],
+			col = $.parseHTML('<div class="col"></div>')[0];
+		col.append(_createEntityTypeInput('tei'));
+		tei_first_col.insertAdjacentElement('afterend', col);
+
+		const annotation_left_col = document.getElementById('uncertainty-tab').children[0].children[2],
+			input = _createEntityTypeInput('annotation');
+		annotation_left_col.appendChild(input);
+
+		// 2) add tab for settings
+		// 3) add entity input to annotation tab
+		// 4) add entity input to tei tab
+	}
 
 	function _getInputId(name){
 		const creatingNewTypeCheckboxId = `${name}-tei-add-type`,
@@ -55,7 +71,31 @@ let RecipesPlugin = function(args){
 		return inputId;		
 	}
 
-	function _createEntityTypeInput(name){}
+	function _createEntityTypeInput(name){
+		const inputHtml = `<div class="entityTypeFormGroup" fromList="true">
+			  <label class="form-check-label addNewTypeLabel" for="teiAddType">
+			    <span class="type"></span> not in the list?
+			    Add new <span class="type"></span>
+			    </label>
+			  <input class="form-check-input addNewType" type="checkbox" value="" id="${name}-tei-add-type">
+			  <div class="typeList">
+			    <label for="${name}-entity-type">Type
+			      <span class="help-tooltip" help="Select a type for the TEI selected entity.<br/>This 
+			      is only available for ingredient, utensil and productionMethod entities" />
+			    </label>
+			    <select class="form-control form-control-sm" id='${name}-entity-type'></select>
+			  </div>
+			  <div class="newType">
+			    <label for="${name}-type-name">New <span class="type"></span> entity name
+			      <span class="help-tooltip" help="Provide a name for a new TEI entity type.<br/>This is
+			      only available for ingredient, utensil and productionMethod entities." />
+			    </label>
+			    <input class="form-control" type="text" id="${name}-type-name">
+			  </div>
+			</div>
+		`
+		return $.parseHTML(inputHtml)[0];
+	}
 
 	function _handleDocumentLoad(){}
 	function _handleOptionsChange(){}
