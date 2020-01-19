@@ -5,6 +5,7 @@ import PanelView from './src/panel.js';
 import Annotator from './src/annotator.js';
 import HistoryView from './src/history.js';
 import CertaintyList from './src/cert_list.js';
+import RecipesPlugin from './src/recipes_plugin.js';
 import {Popup, Tooltips} from './src/tooltips.js';
 import Alert from './src/utilities/alert.js';
 import UISetup from './src/ui.js';
@@ -13,6 +14,8 @@ import UISetup from './src/ui.js';
 const uisetup = UISetup({});
 const websocket = AnnotatorWebSocket();
 const channel = PubSubChannel.create();
+
+const recipes_plugin = RecipesPlugin({channel});
 const document_view = DocumentView({channel});
 const panel_view = PanelView({channel});
 const annotator = Annotator({channel});
@@ -25,7 +28,7 @@ const tooltips = Tooltips({channel});
 // the websocket
 const sub = {};
 channel.addToChannel(sub);
-sub.subscribe('websocket/send', json=>websocket.send(json));
+sub.subscribe('recipesWebsocket/send', json=>websocket.send(json));
 sub.subscribe('websocket/send', json=>console.log(json));
 sub.subscribe('document/render', selection=>console.info('Document rendered.'));
 
