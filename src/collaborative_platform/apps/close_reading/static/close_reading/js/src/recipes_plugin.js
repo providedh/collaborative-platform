@@ -60,6 +60,9 @@ let RecipesPlugin = function(args){
 		annotation_left_col.appendChild(input);
 
 		// 2) add tab for settings
+		document.getElementById('tab-controls').appendChild(_createSettingsToggle());
+		document.getElementById('annotation-form').appendChild(_createSettingsTab());
+		
 		// 3) add entity input to annotation tab
 		// 4) add entity input to tei tab
 	}
@@ -95,6 +98,30 @@ let RecipesPlugin = function(args){
 			</div>
 		`
 		return $.parseHTML(inputHtml)[0];
+	}
+
+	function _createSettingsToggle(){
+		const toggleHtml = `<li class="nav-item">
+				<a id="settings" 
+						class="nav-link" 
+						data-toggle="tab" 
+						href="#settings-tab" 
+						role="tab" 
+						aria-controls="settings-tab" 
+						aria-selected="false">
+					Settings
+				</a>
+			</li>`
+		return $.parseHTML(toggleHtml)[0];
+	}
+
+	function _createSettingsTab(){
+		const tabHtml = `<div class="tab-pane" id="settings-tab" role="tabpanel" aria-labelledby="settings">
+              	<div class="form-row"><div class="col"></div>
+              		<div class="col"><p>Configure the close reading app.</p></div>
+              	</div>
+            </div>`
+		return $.parseHTML(tabHtml)[0];
 	}
 
 	function _handleDocumentLoad(){}
