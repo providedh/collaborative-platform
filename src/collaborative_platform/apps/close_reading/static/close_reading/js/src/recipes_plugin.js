@@ -45,6 +45,9 @@ let RecipesPlugin = function(args){
 		};
 
 		_setupUI();
+
+		document.getElementById('editor')
+			.setAttribute('usingRecipePlugin', _getSettings()['usingRecipesPlugin']);
 		/*
 			obj.subscribe('panel/load_history', _handleLoadHistory);
 			obj.subscribe('panel/reset', _handlePanelReset);
@@ -215,6 +218,8 @@ let RecipesPlugin = function(args){
 
 	function _handleSettingsChange(e){
 		const useRecipesPlugin = e.target.checked;
+		document.getElementById('editor')
+			.setAttribute('usingRecipePlugin', useRecipesPlugin);
 
 		if(useRecipesPlugin === false){
 			document.getElementById(_getFormId('annotation'))
@@ -241,6 +246,7 @@ let RecipesPlugin = function(args){
 			usingRecipesPlugin: document.getElementById('using-recipes-plugin').checked
 		};
 	}
+
 	function _getValues(){}
 
 	function _createInputOptions(entityType){

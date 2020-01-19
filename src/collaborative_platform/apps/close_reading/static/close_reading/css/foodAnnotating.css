@@ -28,3 +28,36 @@
 .entityTypeFormGroup input.addNewType:checked ~ .newType{
 	display: initial;
 }
+
+#editor[usingRecipePlugin="true"] listObject {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+#editor[usingRecipePlugin="true"] listObject > * {
+    margin: 0 0 10px 1em;
+    flex-grow: 0;
+    display: list-item;
+}
+
+#editor[usingRecipePlugin="true"] div[type="ingredient"]:before {
+    content: "Ingredients";
+}
+
+#editor[usingRecipePlugin="true"] div[type="utensil"]:before{
+    content: "Utensils";
+}
+
+#editor[usingRecipePlugin="true"] div[type="productionMethod"]:before {
+    content: "Production Methods";
+}
+
+#editor[usingRecipePlugin="true"] div[type="ingredient"]:before,
+#editor[usingRecipePlugin="true"] div[type="utensil"]:before,
+#editor[usingRecipePlugin="true"] div[type="productionMethod"]:before {
+	display: block;
+    font-size: 1em;
+    font-weight: 400;
+    text-decoration: underline double grey;
+}
