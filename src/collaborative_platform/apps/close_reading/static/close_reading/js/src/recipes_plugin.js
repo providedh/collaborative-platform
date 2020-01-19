@@ -33,7 +33,7 @@ let RecipesPlugin = function(args){
 		if(args.hasOwnProperty('channel'))
 			args.channel.addToChannel(obj);
 
-		obj.subscribe('websocket/send', json=>obj.publish('recipesWebsocket/send', json));
+		obj.subscribe('websocket/send', _handleAnnotationCreate);
 		/*
 			obj.subscribe('panel/load_history', _handleLoadHistory);
 			obj.subscribe('panel/reset', _handlePanelReset);
@@ -47,12 +47,28 @@ let RecipesPlugin = function(args){
 	}
 
 	function _setupUI(){}
-	function _createEntityTypeInput(){}
+
+	function _getInputId(name){
+		const creatingNewTypeCheckboxId = `${name}-tei-add-type`,
+			creatingNewType = document.getElementById(creatingNewTypeCheckboxId).checked,
+			inputId = creatingNewType===true?`${name}-type-name`:`${name}-entity-type`;
+		return inputId;		
+	}
+
+	function _createEntityTypeInput(name){}
 
 	function _handleDocumentLoad(){}
 	function _handleOptionsChange(){}
 	function _handleSettingsChange(){}
-	function _handleAnnotationCreate(){}
+	
+	function _handleAnnotationCreate(json){
+		const annotationInput = document.getElementById(_getInputId('annotation')),
+			teiInput = document.getElementById(_getInputId('tei'));
+
+		console.log(annotationInput, teiInput)
+
+		//self.publish('recipesWebsocket/send', json)
+	}
 	
 	function _getSettings(){}
 	function _getValues(){}
