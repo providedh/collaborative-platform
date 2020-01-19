@@ -77,6 +77,8 @@ let PanelView = function(args){
 	    document.getElementById("references-autocomplete").options = [];
 	    _setup_autocomplete(document.getElementById("references-autocomplete"));
 
+	    obj.publish('panel/update', _getCurrentValues());
+
 		obj.getValues = ()=>_getValues;
 
 		self = obj;
@@ -294,6 +296,7 @@ let PanelView = function(args){
 			_updateAssertedValueControl();
 		if(['locus', 'attribute-name', 'tag-name'].includes(id))
 			_updateReferencesControl();
+		self.publish('panel/update', _getCurrentValues());
 	}
 
 	function _handleLoadHistory(args){
