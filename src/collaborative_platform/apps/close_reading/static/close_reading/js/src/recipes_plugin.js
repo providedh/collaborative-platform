@@ -35,8 +35,14 @@ let RecipesPlugin = function(args){
 
 		obj.subscribe('websocket/send', _handleAnnotationCreate);
 		obj.subscribe('panel/update', _handleOptionsChange);
+		obj.subscribe('document/render', _handleDocumentRender);
 
 		obj.currentValues = {};
+		obj.entityTypeOptions = {
+			'ingredient': [],
+			'utensil': [],
+			'productionMethod': []
+		};
 
 		_setupUI();
 		/*
@@ -143,7 +149,25 @@ let RecipesPlugin = function(args){
 		return $.parseHTML(tagHtml)[0];
 	}
 
-	function _handleDocumentLoad(){}
+	function _handleDocumentRender(args){
+		const editor = document.getElementById('editor'),
+			divNodes = editor.getElementsByTagName('div');
+
+		Array.from(divNodes).forEach(div=>{
+			if(div.attributes.hasOwnProperty('type')){
+				const type = div.attributes['type'].value;
+				if(self.entityTypeOptions.hasOwnProperty(type)){
+					const options = Array
+						.from(div.getElementsByTagName('object'))
+						.filter(x=>x.attributes.hasOwnProperty('type'))
+						.map(x=>x.attributes['type'].value);
+					self.entityTypeOptions[type] = options;
+				}
+			}
+		});
+
+		_updateInputOptions();
+	}
 
 	function _updateAnnotationTypeInput(){
 		let show = true;
@@ -182,6 +206,11 @@ let RecipesPlugin = function(args){
 
 		_updateAnnotationTypeInput();
 		_updateTeiTypeInput();
+
+		if(currentValues.modifiedField == 'asserted-value' || 
+			currentValues.modifiedField == 'tei-tag-name'){
+			_updateInputOptions();
+		}
 	}
 
 	function _handleSettingsChange(e){
@@ -214,10 +243,33 @@ let RecipesPlugin = function(args){
 	}
 	function _getValues(){}
 
-	function _createInputOptions(){}
-	function _populateInputoptions(){}
-	function _updateInputOptions(){
+	function _createInputOptions(entityType){
+		const option2html = option=>`<option value=${option}>${option[0].toUpperCase() + option.slice(1)}</option>`;
+		const html2node = html=>$.parseHTML(html)[0];
 
+		return self.entityTypeOptions[entityType].map(option=>html2node(option2html(option)));
+	}
+
+	function _populateInputOptions(input_name, entity){
+		const input = document.getElementById(_getInputId(input_name)),
+			options = _createInputOptions(entity);
+
+		input.innerHTML = '';
+		options.forEach(option=>input.appendChild(option));
+	}
+
+	function _updateInputOptions(){
+		if(self.currentValues['tei-tag-name'] != undefined
+				&& self.entityTypeOptions.hasOwnProperty(self.currentValues['tei-tag-name'])){
+			_populateInputOptions('tei', self.currentValues['tei-tag-name']);
+		}
+
+		if(self.currentValues['locus'] == 'name'
+				&& self.currentValues['asserted-value'] != undefined
+				&& self.entityTypeOptions.hasOwnProperty(self.currentValues['asserted-value'])){
+			console.log('annotation', self.currentValues['asserted-value'])
+			_populateInputOptions('annotation', self.currentValues['asserted-value']);
+		}
 	}
 
 	function _createStyles4Entity(){}
