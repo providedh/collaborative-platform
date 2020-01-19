@@ -18,6 +18,7 @@
  * - panel/autocomplete_options
  * */
 import AjaxCalls from './utilities/ajax.js';
+import ColorScheme from './utilities/color.js';
 
 let RecipesPlugin = function(args){
 	let self = null;
@@ -81,6 +82,9 @@ let RecipesPlugin = function(args){
 
 		// 5) add handler for settings change
 		document.getElementById('using-recipes-plugin').addEventListener('change', _handleSettingsChange);
+
+		// 6) style objects according to their type
+		_styleRecipeEntities();
 	}
 
 	function _getInputId(name){
@@ -202,7 +206,6 @@ let RecipesPlugin = function(args){
 				.classList.add('d-none');
 		}
 	}
-
 	
 	function _handleOptionsChange(currentValues){
 		self.currentValues = currentValues;
@@ -278,12 +281,77 @@ let RecipesPlugin = function(args){
 		}
 	}
 
-	function _createStyles4Entity(){}
-	function _styleRecipeEntities(){}
-	function _styleRecipeLists(){}
+	function _createStyles4Entities(entityNode){
+		const borderRules = Object
+	      .entries(ColorScheme.scheme['entities'])
+	      .map(e=>`#editor[usingRecipePlugin="true"] object[type="${e[0]}"]{ border-color: ${e[1].color};}`)
+	      .join('\n');
 
-	function _getRecipeEntities(){}
+	    const entityFillRules = Object
+	      .entries(ColorScheme.scheme['entities'])
+	      .map(e=>`#editor[usingRecipePlugin="true"] object.bg-${e[0]}{ background-color: ${e[1].color};}`)
+	      .join('\n');
 
+	    const entityIconRules = Object
+	      .entries(ColorScheme.scheme['entities'])
+	      .map(e=>`div#annotator-root[display-annotations="true"] 
+		      	#editor[usingRecipePlugin="true"]
+		      	object[type="${e[0]}"]::before{ content: "${e[1].icon}";}`)
+	      .join('\n');
+
+	    const entityIconColorRules = Object
+	      .entries(ColorScheme.scheme['entities'])
+	      .map(e=>`div#annotator-root[color-annotations="true"]
+		      	#editor[usingRecipePlugin="true"]
+		      	object[type="${e[0]}"]::before{ color: ${e[1].color};}`)
+	      .join('\n');
+
+	    return [
+	      borderRules,
+	      entityFillRules,
+	      entityIconRules,
+	      entityIconColorRules,
+	    ].join('\n');
+	}
+
+	function _createStyles4EntityDiv(entityNode){
+		const borderRules = Object
+	      .entries(ColorScheme.scheme['entities'])
+	      .map(e=>`#editor[usingRecipePlugin="true"] div[type="${e[0]}"] object{ border-color: ${e[1].color};}`)
+	      .join('\n');
+
+	    const entityFillRules = Object
+	      .entries(ColorScheme.scheme['entities'])
+	      .map(e=>`#editor[usingRecipePlugin="true"] div[type="${e[0]}"] object{ background-color: ${e[1].color};}`)
+	      .join('\n');
+
+	    const entityIconRules = Object
+	      .entries(ColorScheme.scheme['entities'])
+	      .map(e=>`div#annotator-root[display-annotations="true"] 
+		      	#editor[usingRecipePlugin="true"]
+		      	div[type="${e[0]}"] object::before{ content: "${e[1].icon}";}`)
+	      .join('\n');
+
+	    const entityIconColorRules = Object
+	      .entries(ColorScheme.scheme['entities'])
+	      .map(e=>`div#annotator-root[color-annotations="true"]
+		      	#editor[usingRecipePlugin="true"]
+		      	div[type="${e[0]}"] object::before{ color: ${e[1].color};}`)
+	      .join('\n');
+
+	    return [
+	      borderRules,
+	      
+	      entityIconRules,
+	      entityIconColorRules,
+	    ].join('\n');
+	}
+
+	function _styleRecipeEntities(){
+		document.getElementById('recipes-style').innerHTML = _createStyles4Entities();
+		document.getElementById('recipes-style').innerHTML = _createStyles4EntityDiv();
+	}
+	
 	function _notimplemented(method){
 		return function(){throw(new Error('Not implemented : '+method))};
 	}
