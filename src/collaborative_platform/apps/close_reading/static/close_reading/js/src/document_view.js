@@ -174,6 +174,9 @@ var DocumentView = function(args){
 	        text = document.selection.createRange().text;
 	    }
 
+	    if(selection.isCollased === true)
+	    	return
+
 	    const selection_range = selection.getRangeAt(0);
 
 	    let start_content = _contentsFromRange($('#editor page')[0], 0, selection_range.startContainer,selection_range.startOffset),
