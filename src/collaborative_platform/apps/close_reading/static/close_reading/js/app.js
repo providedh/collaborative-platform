@@ -11,11 +11,11 @@ import Alert from './src/utilities/alert.js';
 import UISetup from './src/ui.js';
 
 // Load all components
-const uisetup = UISetup({});
 const websocket = AnnotatorWebSocket();
 const channel = PubSubChannel.create();
 
 const recipes_plugin = RecipesPlugin({channel});
+const uisetup = UISetup({});
 const document_view = DocumentView({channel});
 const panel_view = PanelView({channel});
 const annotator = Annotator({channel});
