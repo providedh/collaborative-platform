@@ -893,6 +893,7 @@ class Annotator:
 
         if self.__list_element_to_add is not None:
             xml_annotated = self.__add_list_element(xml_annotated, self.__list_element_to_add)
+            xml_annotated = self.__reorder_elements(xml_annotated)
 
         xml_annotated = self.__reformat_xml(xml_annotated)
 
@@ -1093,6 +1094,32 @@ class Annotator:
                 parent[0].append(element)
 
         return tree
+
+    @staticmethod
+    def __reorder_elements(text):
+        parent_xpath = f'/default:TEI/default:text/default:body'
+
+        # TODO: Hardcoded order for workshop with recipes. During generalization change this to use types selected
+        #  by user
+        order = ['ingredient', 'utensil', 'dietetic', 'productionMethod', 'recipe']
+
+        tree = etree.fromstring(text)
+        parent = tree.xpath(parent_xpath, namespaces=NAMESPACES)[0]
+        children_queue = []
+
+        for type in order:
+            children = parent.findall(f'default:div[@type="{type}"]', namespaces=NAMESPACES)
+            children_queue += children
+
+            for child in children:
+                parent.remove(child)
+
+        for child in reversed(children_queue):
+            parent.insert(0, child)
+
+        text = etree.tounicode(tree)
+
+        return text
 
     @staticmethod
     def __reformat_xml(text):
