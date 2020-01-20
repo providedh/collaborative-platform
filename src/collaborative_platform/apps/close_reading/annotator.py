@@ -891,6 +891,9 @@ class Annotator:
         if self.__certainty_to_add is not None:
             xml_annotated = self.__add_certainty(xml_annotated, self.__certainty_to_add)
 
+        if self.__list_element_to_add is not None:
+            xml_annotated = self.__add_list_element(xml_annotated, self.__list_element_to_add)
+
         xml_annotated = self.__reformat_xml(xml_annotated)
 
         if 'encoding=' in xml_annotated_in_lines[0]:
@@ -1008,6 +1011,86 @@ class Annotator:
             class_code = etree.Element(default + 'classCode', scheme="http://providedh.eu/uncertainty/ns/1.0",
                                        nsmap=ns_map)
             text_class[0].append(class_code)
+
+        return tree
+
+    def __add_list_element(self, text, element):
+        tree = etree.fromstring(text)
+        element_type = element.get('type')
+        list_xpath = f'/default:TEI/default:text/default:body/default:div[@type="{element_type}"]/default:listObject'
+
+        list = tree.xpath(list_xpath, namespaces=NAMESPACES)
+
+        if not list:
+            tree = self.__create_elements_from_xpath(tree, list_xpath)
+            list = tree.xpath(list_xpath, namespaces=NAMESPACES)
+
+        list[0].append(element)
+
+        text = etree.tounicode(tree)
+
+        return text
+
+    @staticmethod
+    def __create_elements_from_xpath(tree, xpath):
+        default_namespace = NAMESPACES['default']
+
+        ns_map = {
+            None: default_namespace
+        }
+
+        path_steps = xpath.split('/')
+        path_steps = [step for step in path_steps if step != '']
+
+        for i in range(len(path_steps)):
+            i += 1
+
+            element_xpath = '/' + '/'.join(path_steps[:i])
+            element = tree.xpath(element_xpath, namespaces=NAMESPACES)
+
+            if not element:
+                parent_xpath = '/' + '/'.join(path_steps[:i-1])
+                parent = tree.xpath(parent_xpath, namespaces=NAMESPACES)
+
+                step = path_steps[i-1]
+
+                attributes_regex = r'\[.*?\]'
+                attributes_dict = {}
+                match = re.search(attributes_regex, step)
+
+                if match:
+                    attributes_part = match.group()
+                    step = step.replace(attributes_part, '')
+
+                    attribute_regex = r'@\w*?=[\'"].*?[\'"]'
+                    attributes = re.findall(attribute_regex, attributes_part)
+
+                    for attribute in attributes:
+                        key = attribute.split('=')[0]
+                        key = key.replace('@', '')
+
+                        value = attribute.split('=')[1]
+                        value = re.sub(r'[\'"]', '', value)
+
+                        attributes_dict.update({key: value})
+
+                if ':' in step:
+                    prefix = step.split(':')[0]
+                    name = step.split(':')[1]
+
+                else:
+                    prefix = ''
+                    name = step
+
+                namespace = '{%s}' % NAMESPACES[prefix]
+
+                element = etree.Element(namespace + name, nsmap=ns_map)
+
+                if attributes_dict:
+                    for key, value in attributes_dict.items():
+                        element.set(key, value)
+
+                parent[0].append(element)
 
         return tree
 
