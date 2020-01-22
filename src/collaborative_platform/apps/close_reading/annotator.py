@@ -125,7 +125,7 @@ class Annotator:
 
     def __check_reference_to_list_in_request(self, request):
         xml_id_regex = r'object_[\w]+-[\d]+'
-        if re.match(xml_id_regex, request['asserted_value']):
+        if 'asserted_value' in request and re.match(xml_id_regex, request['asserted_value']):
             self.__reference = True
 
     def __validate_target(self, request):
