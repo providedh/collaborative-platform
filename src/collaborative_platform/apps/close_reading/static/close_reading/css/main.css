@@ -6,6 +6,7 @@ button span, #alert{
 
 #breadcrumb{
   position: fixed;
+  display: none;
 }
 
 #editor p,
@@ -456,4 +457,5 @@ div#history-popup span.color{
     #annotator-root #legend,
     #annotator-root #left-sidebar{display: initial;}
     #top-legend, #top-breadcrumb{display: none;}
+    #breadcrumb{display: initial;}
 }
