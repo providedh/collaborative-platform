@@ -437,6 +437,7 @@ class Annotator:
                 and (self.__target or self.__positions):
             if self.__target:
                 annotation_ids = self.__get_annotation_ids_from_target(self.__request['target'])
+                annotation_ids = self.add_hash_sing_to_ids(annotation_ids)
             else:
                 self.__fragment_annotated, annotation_ids = self.__add_tag(self.__fragment_to_annotate, 'ab',
                                                                            uncertainty=True)
@@ -452,6 +453,7 @@ class Annotator:
                 and (self.__target or self.__positions):
             if self.__target:
                 annotation_ids = self.__get_annotation_ids_from_target(self.__request['target'])
+                annotation_ids = self.add_hash_sing_to_ids(annotation_ids)
             else:
                 self.__fragment_annotated, annotation_ids = self.__add_tag(self.__fragment_to_annotate,
                                                                            self.__request["tag"], uncertainty=True)
@@ -467,6 +469,7 @@ class Annotator:
                 and (self.__target or self.__positions):
             if self.__target:
                 annotation_ids = self.__get_annotation_ids_from_target(self.__request['target'])
+                annotation_ids = self.add_hash_sing_to_ids(annotation_ids)
             else:
                 self.__fragment_annotated, annotation_ids = self.__add_tag(self.__fragment_to_annotate,
                                                                            self.__request["tag"], uncertainty=True)
@@ -486,6 +489,7 @@ class Annotator:
                 and (self.__target or self.__positions):
             if self.__target:
                 annotation_ids = self.__get_annotation_ids_from_target(self.__request['target'])
+                annotation_ids = self.add_hash_sing_to_ids(annotation_ids)
             else:
                 self.__fragment_annotated, annotation_ids = self.__add_tag(self.__fragment_to_annotate,
                                                                            self.__request["tag"], uncertainty=True)
@@ -503,10 +507,6 @@ class Annotator:
 
             self.__list_element_to_add = self.__create_list_element(self.__request, annotation_ids)
 
-
-
-
-
         # 6.Add attribute to tag
         elif self.__request['locus'] == 'value' \
                 and self.__request['tag'] != '' \
@@ -515,6 +515,7 @@ class Annotator:
                 and (self.__target or self.__positions):
             if self.__target:
                 annotation_ids = self.__get_annotation_ids_from_target(self.__request['target'])
+                annotation_ids = self.add_hash_sing_to_ids(annotation_ids)
             else:
                 self.__fragment_annotated, annotation_ids = self.__add_tag(self.__fragment_to_annotate,
                                                                            self.__request["tag"], uncertainty=True)
@@ -640,15 +641,28 @@ class Annotator:
 
         return id
 
-
     @staticmethod
     def __get_annotation_ids_from_target(target):
         if type(target) == list:
+
             return target
 
         elif type(target) == str:
             target = target.split(' ')
+
             return target
+
+    @staticmethod
+    def add_hash_sing_to_ids(ids):
+        new_ids = []
+
+        for id in ids:
+            if id[0] != '#':
+                id = '#' + id
+
+            new_ids.append(id)
+
+        return new_ids
 
     def __create_certainty_description(self, json, annotation_ids, user_uuid):
         target = " ".join(annotation_ids)
