@@ -87,7 +87,7 @@ var Annotator = function(args){
             data['asserted_value'] = args['references-filepath']+'#'+args['asserted-value'];
         }
         
-	    self.publish('websocket/send', JSON.stringify(data));
+	    self.publish('websocket/send', data);
 	}
 
 	function _handleFileSave(args){
