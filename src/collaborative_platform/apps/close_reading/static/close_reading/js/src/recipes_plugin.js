@@ -237,11 +237,26 @@ let RecipesPlugin = function(args){
 	
 	function _handleAnnotationCreate(json){
 		const annotationInput = document.getElementById(_getInputId('annotation')),
-			teiInput = document.getElementById(_getInputId('tei'));
+			teiInput = document.getElementById(_getInputId('tei')),
+			{usingRecipesPlugin} = _getSettings();
 
-		console.log(annotationInput, teiInput)
-
-		self.publish('recipesWebsocket/send', json)
+		if(usingRecipesPlugin === true){
+			if(json.hasOwnProperty('locus')){
+				// annotating uncertainty
+				if(['ingredient', 'utensil', 'productionMethod'].includes(json['tag'])){
+					json['asserted_value'] = annotationInput.value;
+					json['attribute_name'] = 'ref';
+				}
+			} else {
+				// annotating tei
+				if(['ingredient', 'utensil', 'productionMethod'].includes(json['tag'])){
+					json['OBJECT_ID'] = teiInput.value;
+				}
+			}
+		}
+		
+		console.log('sent > ',JSON.stringify(json));
+		self.publish('recipesWebsocket/send', JSON.stringify(json));
 	}
 	
 	function _getSettings(){
