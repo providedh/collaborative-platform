@@ -227,6 +227,7 @@ let UISetup = function(args){
           background-color: white;
           display: inline-block;
           height: 1.7em;
+          position: relative;
       }
     `
 

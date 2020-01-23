@@ -241,7 +241,7 @@ let RecipesPlugin = function(args){
 
 		console.log(annotationInput, teiInput)
 
-		//self.publish('recipesWebsocket/send', json)
+		self.publish('recipesWebsocket/send', json)
 	}
 	
 	function _getSettings(){
