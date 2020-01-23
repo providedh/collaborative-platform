@@ -82,7 +82,8 @@ var Annotator = function(args){
             data['asserted_value'] = args['asserted-value'];
         }
         
-        if(args['attribute-name'] == 'sameAs' && ['person', 'event', 'org', 'place'].includes(args['tag-name']) && args['references'] != ''){
+        const validSameAsTags = ['person', 'event', 'org', 'place', 'ingredient', 'utensil', 'productionMethod'];
+        if(args['attribute-name'] == 'sameAs' && validSameAsTags.includes(args['tag-name']) && args['references'] != ''){
             data['asserted_value'] = args['references-filepath']+'#'+args['asserted-value'];
         }
         

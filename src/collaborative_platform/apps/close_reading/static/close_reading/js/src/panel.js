@@ -69,7 +69,7 @@ let PanelView = function(args){
 	        const tag = values['tag-name'];
 	        document.getElementById('references').value = e.target.value;
 	        if(values['attribute-name'] == 'sameAs' &&
-	            ['person', 'event', 'org', 'place'].includes(tag)){
+	            ['person', 'event', 'org', 'place', 'ingredient', 'utensil', 'productionMethod'].includes(tag)){
 	            _updateAutocompleteOptions(tag.replace('org','organization'), e.target.value);
 	        }
 	    })
@@ -115,7 +115,7 @@ let PanelView = function(args){
 	}
 
 	function _updateReferencesControl(){
-		if(['person', 'event', 'org', 'place'].includes(values['tag-name'])
+		if(['person', 'event', 'org', 'place', 'ingredient', 'utensil', 'productionMethod'].includes(values['tag-name'])
 				&& values['attribute-name'] == 'sameAs'){
 			document.getElementById('references-container').style.setProperty('display','initial');
 		}else{
