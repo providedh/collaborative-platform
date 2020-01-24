@@ -20,7 +20,9 @@ var ColorScheme = (function(args){
 	};
 
 	function _cert2color(source, level){
-		if(teiConf['taxonomy'] &&
+		if(level == 'unknown'){
+			return 'lightgrey';
+		}else if(teiConf['taxonomy'] &&
 			teiConf['taxonomy'].hasOwnProperty(source) &&
 			certaintyLevelTransparencies.hasOwnProperty(level))
 				return teiConf['taxonomy'][source]['color'] + certaintyLevelTransparencies[level];
