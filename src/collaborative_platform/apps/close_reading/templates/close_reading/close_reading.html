@@ -129,14 +129,14 @@
                               <div class="form-row">
                                 <div class="col">
                                   <label for="category">Category of uncertainty 
-                                    <span class="help-tooltip" help="This is the category." />
+                                    <span class="help-tooltip" help="Specify what uncertainty types your annotation is related to." />
                                   </label>
                                   <select multiple class="form-control form-control-sm" id='category'>
                                   </select>
                                 </div>
                                 <div class="col">
                                   <label for="locus">Locus
-                                    <span class="help-tooltip" help="This is the locus." />
+                                    <span class="help-tooltip" help="Specify wether the annotation refers to the tag name (<i>name</i>) or the text value (<i>value</i>)." />
                                   </label>
                                   <select class="form-control form-control-sm" id='locus'>
                                     <option value="value">Value</option>
@@ -146,7 +146,7 @@
                                 <div class="col">
                                   <div id="tag-name-input">
                                     <label for="tag-name">Tag name
-                                      <span class="help-tooltip" help="This is the type of tag to which the annotation refers." />
+                                      <span class="help-tooltip" help="Specify the type of entity the annotation refers to. <i>If the text is not already annotated, this will be used.</i>" />
                                     </label>
                                     <select class="form-control form-control-sm" id='tag-name'>
                                     </select>
@@ -166,13 +166,13 @@
                               <div class="form-row">
                                 <div class="col">
                                   <label for="selection">Target
-                                    <span class="help-tooltip" help="This is what will be annotated." />
+                                    <span class="help-tooltip" help="This is field show the selection that will be annotated. <i>Change it by selecting text or in the side list</i>." />
                                   </label>
                                   <input readonly type="text" id="selection">
                                 </div>
                                 <div class="col">
                                   <label for="asserted-value">Asserted value
-                                    <span class="help-tooltip" help="This is the proposed value." />
+                                    <span class="help-tooltip" help="Specify here the proposed value." />
                                   </label>
                                   <div id="asserted-value-container">
                                     <input id="asserted-value" class="input">
@@ -180,7 +180,7 @@
                                 </div>
                                 <div class="col">
                                   <label for="cert-level">Certainty
-                                    <span class="help-tooltip" help="This is the level of certainty on the proposed value." />
+                                    <span class="help-tooltip" help="Specify here how certain you are with the proposed value." />
                                   </label>
                                   <select class="form-control form-control-sm" id='cert-level'>
                                     <option value="unknown">Unknown</option>
@@ -195,7 +195,7 @@
                               <div class="form-row">
                                 <div class="col">
                                   <label for="description">Description
-                                    <span class="help-tooltip" help="This is an optional description." />
+                                    <span class="help-tooltip" help="This is an optional description that will remain visible in the annotation." />
                                   </label>
                                   <input type="text" id="description">
                                 </div>
@@ -219,13 +219,13 @@
                               <div class="form-row">
                                 <div class="col">
                                   <label for="tei-tag-name">Tag name
-                                    <span class="help-tooltip" help="This is the type TEI tag to use for annotating." />
+                                    <span class="help-tooltip" help="Select the tag that will be used to annotate the text." />
                                   </label>
                                     <select class="form-control form-control-sm" id='tei-tag-name'>
                                     </select>
                                 </div>
                                 <div class="col">
-                                  <p><br>Annotate TEI without a sense of certainty attached to it.</p>
+                                  <p><br>Annotate text without specifying uncertainty.</p>
                                 </div>
                                 <div class="col d-flex justify-content-end align-items-end">
                                   <button class="btn btn-outline-success" id="create-tei-annotation">Create</button>
