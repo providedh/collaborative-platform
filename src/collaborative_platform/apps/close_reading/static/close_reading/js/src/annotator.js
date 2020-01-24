@@ -43,11 +43,11 @@ var Annotator = function(args){
 		if(_selection == null)
 	        return
 
-	    self.publish('websocket/send', JSON.stringify({
+	    self.publish('websocket/send', {
 	    	'start_pos': _selection.abs_positions.start,
 	    	'end_pos': _selection.abs_positions.end,
 	    	'tag': args['tei-tag-name']
-	    }));
+	    });
 	}
 
 	function _handleCreateUncertaintyAnnotation(args){
