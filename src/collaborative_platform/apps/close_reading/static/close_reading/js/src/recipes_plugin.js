@@ -243,10 +243,10 @@ let RecipesPlugin = function(args){
 		if(usingRecipesPlugin === true){
 			if(json.hasOwnProperty('locus')){
 				// annotating uncertainty
-				if(['ingredient', 'utensil', 'productionMethod'].includes(json['tag'])){
+				/*if(['ingredient', 'utensil', 'productionMethod'].includes(json['tag'])){
 					json['asserted_value'] = annotationInput.value;
 					json['attribute_name'] = 'ref';
-				}
+				}*/
 			} else {
 				// annotating tei
 				if(['ingredient', 'utensil', 'productionMethod'].includes(json['tag'])){
