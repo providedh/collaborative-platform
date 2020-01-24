@@ -374,7 +374,7 @@ const eScheme = {
 			style = window.getComputedStyle(node, '::before'),
 			content = style.getPropertyValue('content');
 		
-		return `content: ${content.slice(0,-1)} ${''+numberAnnotations} \\f591";`;
+		return `content: ${content.slice(0,-1)} ${''+numberAnnotations} \\f591" !important;`;
 	},
 	greyContent: (id, annotations, currentUser, cssModule)=>{
 		const gradStops = [],
