@@ -288,12 +288,11 @@ let RecipesPlugin = function(args){
 			_populateInputOptions('tei', self.currentValues['tei-tag-name']);
 		}
 
-		if(self.currentValues['locus'] == 'name'
+		/*if(self.currentValues['locus'] == 'name'
 				&& self.currentValues['asserted-value'] != undefined
 				&& self.entityTypeOptions.hasOwnProperty(self.currentValues['asserted-value'])){
-			console.log('annotation', self.currentValues['asserted-value'])
 			_populateInputOptions('annotation', self.currentValues['asserted-value']);
-		}
+		}*/
 	}
 
 	function _createStyles4Entities(entityNode){
