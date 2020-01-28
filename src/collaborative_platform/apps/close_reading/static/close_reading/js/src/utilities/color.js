@@ -11,14 +11,19 @@ var ColorScheme = (function(args){
 	const teiConf = Object.assign(defConf, window.preferences);
 
 	const certaintyLevelTransparencies = {
-		high: 'ff',
-		medium: 'b8',
-		low: '5e',
+		'very high': 'f0',
+		high: 'e0',
+		medium: 'c0',
+		low: 'a6',
+		'very low': '90',
 		unknown: '30'
 	};
 
-	function _applyColorScheme(source, level){
-		if(teiConf['taxonomy'] &&
+	function _cert2color(source, level){
+		if(level == 'unknown'){
+			return 'lightgrey';
+		}else if(teiConf['taxonomy'] &&
+			teiConf['taxonomy'].hasOwnProperty(source) &&
 			certaintyLevelTransparencies.hasOwnProperty(level))
 				return teiConf['taxonomy'][source]['color'] + certaintyLevelTransparencies[level];
 		else
@@ -30,8 +35,9 @@ var ColorScheme = (function(args){
 	}
 
 	return {
-		calculate: _applyColorScheme,
-		scheme: teiConf
+		calculate: _cert2color,
+		scheme: teiConf,
+
 	};
 })();
 

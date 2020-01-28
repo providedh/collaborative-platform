@@ -4,11 +4,11 @@
 {% block head %}
 {#    <link rel="stylesheet" href="/static/css/pages/teiclose-page.css">#}
     <link rel="stylesheet" href="{% static 'close_reading/css/main.css' %}">
+    <link rel="stylesheet" href="{% static 'close_reading/css/foodAnnotating.css' %}">
     <link rel="stylesheet" href="{% static 'close_reading/css/font-awesome.css' %}">
 {#  <script src="https://requirejs.org/docs/release/2.3.5/minified/require.js"></script>#}
   <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
   <style type="text/css" id="ui-style"></style>
-  <style type="text/css" id="style"></style>
 {% endblock %}
 
 {% block content %}
@@ -41,7 +41,7 @@
     </section>
     <div class="container-fluid">
       <div class="row justify-content-md-center">
-        <nav id="left-sidebar" class="col-md-2 d-none d-md-block sidebar">
+        <nav id="left-sidebar" class="col-md-2 sidebar">
           <button class="btn btn-outline-primary collapsed btn-collapse" type="button" 
                   data-toggle="collapse" data-target="#certaintyList" 
                   aria-expanded="false" aria-controls="certaintyList">
@@ -51,7 +51,7 @@
               
           </div>
         </nav>
-        <div id="legend" class="col-md-2 d-none d-md-block legend">
+        <div id="legend" class="col-md-2 legend">
           <button class="btn btn-outline-primary collapsed btn-collapse" type="button" 
                   data-toggle="collapse" data-target="#legend-sidebar" 
                   aria-expanded="false" aria-controls="legend-sidebar">
@@ -64,6 +64,12 @@
         <main role="main" class="col-md-8 col-lg-8 px-4 justify-content-center d-flex"> 
           <div id="toolbar-container" class="col-auto">
             <section id="toolbar">
+              <nav aria-label="breadcrumb" id="top-breadcrumb">
+                <ol class="breadcrumb bg-transparent">
+                  <a href="{{ origin_url }}" class="breadcrumb-item">{{ origin }}</a>
+                  <li class="breadcrumb-item active" aria-current="page">Close Reading</li>
+                </ol>
+              </nav>
               <div id="alert" class="hide" role="alert"></div>
               <div class="card card-body">
               <h3 class="break-word">
@@ -110,7 +116,7 @@
                     <hr>
                     <div class="toolbarRow" id="toolbar-controls">
                         <span class="toolbar-control" id="annotation-options">
-                          <ul class="nav nav-tabs" id="myTab" role="tablist">
+                          <ul class="nav nav-tabs" id="tab-controls" role="tablist">
                             <li class="nav-item">
                               <a class="nav-link active" id="annotating-uncertainty" data-toggle="tab" href="#uncertainty-tab" role="tab" aria-controls="uncertainty-tab" aria-selected="true">Add uncertainty annotations</a>
                             </li>
@@ -123,14 +129,14 @@
                               <div class="form-row">
                                 <div class="col">
                                   <label for="category">Category of uncertainty 
-                                    <span class="help-tooltip" help="This is the category." />
+                                    <span class="help-tooltip" help="Specify what uncertainty types your annotation is related to." />
                                   </label>
                                   <select multiple class="form-control form-control-sm" id='category'>
                                   </select>
                                 </div>
                                 <div class="col">
                                   <label for="locus">Locus
-                                    <span class="help-tooltip" help="This is the locus." />
+                                    <span class="help-tooltip" help="Specify wether the annotation refers to the tag name (<i>name</i>) or the text value (<i>value</i>)." />
                                   </label>
                                   <select class="form-control form-control-sm" id='locus'>
                                     <option value="value">Value</option>
@@ -140,7 +146,7 @@
                                 <div class="col">
                                   <div id="tag-name-input">
                                     <label for="tag-name">Tag name
-                                      <span class="help-tooltip" help="This is the type of tag to which the annotation refers." />
+                                      <span class="help-tooltip" help="Specify the type of entity the annotation refers to. <i>If the text is not already annotated, this will be used.</i>" />
                                     </label>
                                     <select class="form-control form-control-sm" id='tag-name'>
                                     </select>
@@ -160,13 +166,13 @@
                               <div class="form-row">
                                 <div class="col">
                                   <label for="selection">Target
-                                    <span class="help-tooltip" help="This is what will be annotated." />
+                                    <span class="help-tooltip" help="This is field show the selection that will be annotated. <i>Change it by selecting text or in the side list</i>." />
                                   </label>
                                   <input readonly type="text" id="selection">
                                 </div>
                                 <div class="col">
                                   <label for="asserted-value">Asserted value
-                                    <span class="help-tooltip" help="This is the proposed value." />
+                                    <span class="help-tooltip" help="Specify here the proposed value." />
                                   </label>
                                   <div id="asserted-value-container">
                                     <input id="asserted-value" class="input">
@@ -174,7 +180,7 @@
                                 </div>
                                 <div class="col">
                                   <label for="cert-level">Certainty
-                                    <span class="help-tooltip" help="This is the level of certainty on the proposed value." />
+                                    <span class="help-tooltip" help="Specify here how certain you are with the proposed value." />
                                   </label>
                                   <select class="form-control form-control-sm" id='cert-level'>
                                     <option value="unknown">Unknown</option>
@@ -189,7 +195,7 @@
                               <div class="form-row">
                                 <div class="col">
                                   <label for="description">Description
-                                    <span class="help-tooltip" help="This is an optional description." />
+                                    <span class="help-tooltip" help="This is an optional description that will remain visible in the annotation." />
                                   </label>
                                   <input type="text" id="description">
                                 </div>
@@ -213,13 +219,13 @@
                               <div class="form-row">
                                 <div class="col">
                                   <label for="tei-tag-name">Tag name
-                                    <span class="help-tooltip" help="This is the type TEI tag to use for annotating." />
+                                    <span class="help-tooltip" help="Select the tag that will be used to annotate the text." />
                                   </label>
                                     <select class="form-control form-control-sm" id='tei-tag-name'>
                                     </select>
                                 </div>
                                 <div class="col">
-                                  <p><br>Annotate TEI without a sense of certainty attached to it.</p>
+                                  <p><br>Annotate text without specifying uncertainty.</p>
                                 </div>
                                 <div class="col d-flex justify-content-end align-items-end">
                                   <button class="btn btn-outline-success" id="create-tei-annotation">Create</button>
@@ -238,14 +244,27 @@
                 </div>
                 <div class="d-flex justify-content-center toogle-button">
                   <div class="relative-group">
-                  <a id="toggle-panel" class="btn btn-primary btn-sm collapsed" data-toggle="collapse" href="#example" role="button" aria-expanded="false" aria-controls="example">
-                    <span class="collapse-show">
-                      Hide controls
-                    </span>
-                    <span class="collapsed-show">
-                      Show controls
-                    </span>
-                  </a> 
+                    <a id="toggle-panel" class="btn btn-primary btn-sm collapsed" data-toggle="collapse" href="#example" role="button" aria-expanded="false" aria-controls="example">
+                      <span class="collapse-show">
+                        Hide controls
+                      </span>
+                      <span class="collapsed-show">
+                        Show controls
+                      </span>
+                    </a> 
+                  </div>
+                </div>
+                <div id="top-legend">
+                  <hr/>
+                  <button 
+                      id="top-legend-toggle"
+                      class="btn btn-link btn-collapse collapsed" 
+                      type="button" data-toggle="collapse" data-target="#legend-topbar" aria-expanded="false" aria-controls="legend-topbar">
+                    Toggle legend
+                    <span class="onCollapse"><i class="fas fa-caret-down"></i></span>
+                    <span class="onShow"><i class="fas fa-caret-up"></i></span>
+                  </button>
+                  <div class="collapse" id="legend-topbar"></div>
                 </div>
               </section>
             </div>

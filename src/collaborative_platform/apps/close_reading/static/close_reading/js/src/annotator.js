@@ -43,11 +43,11 @@ var Annotator = function(args){
 		if(_selection == null)
 	        return
 
-	    self.publish('websocket/send', JSON.stringify({
+	    self.publish('websocket/send', {
 	    	'start_pos': _selection.abs_positions.start,
 	    	'end_pos': _selection.abs_positions.end,
 	    	'tag': args['tei-tag-name']
-	    }));
+	    });
 	}
 
 	function _handleCreateUncertaintyAnnotation(args){
@@ -78,15 +78,16 @@ var Annotator = function(args){
         }
 
         if(args['attribute-name'] != undefined && args['attribute-name'] != ''){
-            data['attribute-name'] = args['attribute-name'];
+            data['attribute_name'] = args['attribute-name'];
             data['asserted_value'] = args['asserted-value'];
         }
         
-        if(args['attribute-name'] == 'sameAs' && ['person', 'event', 'org', 'place'].includes(args['tag-name']) && args['references'] != ''){
+        const validSameAsTags = ['person', 'event', 'org', 'place', 'ingredient', 'utensil', 'productionMethod'];
+        if(args['attribute-name'] == 'sameAs' && validSameAsTags.includes(args['tag-name']) && args['references'] != ''){
             data['asserted_value'] = args['references-filepath']+'#'+args['asserted-value'];
         }
         
-	    self.publish('websocket/send', JSON.stringify(data));
+	    self.publish('websocket/send', data);
 	}
 
 	function _handleFileSave(args){
@@ -98,7 +99,7 @@ var Annotator = function(args){
 				self.publish('file/saved', response.content.version);
 			}
 			else
-				Alert.alert('success','Error saving the changes.');
+				Alert.alert('success','Error saving : '+response.content);
 			console.info('Changes '+(response.success === true)?'saved':'not saved');
 		});
 	}
