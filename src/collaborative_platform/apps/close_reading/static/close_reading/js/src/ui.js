@@ -18,12 +18,31 @@ let UISetup = function(args){
 			args.channel.addToChannel(obj);
 
     _setupFormControls();
-    _setupLegend();
+    _setupSideLegend();
+    _setupTopLegend();
     _setupEntityStyles();
+    _setupEditorPlacement();
+    _updateEditorSpacing(0);
 
 		self = obj;
 		return obj;
 	}
+
+  function _updateEditorSpacing(delay=380){
+    // Delay allows to adjust the height after an animation has finished
+    setTimeout(()=>{
+      const panelHeight = document.getElementById('toolbar-container').clientHeight + 'px';
+      document.getElementById('editor').style.setProperty('margin-top', panelHeight);      
+    }, delay);
+  }
+
+  function _setupEditorPlacement(){
+    window.addEventListener('resize', ()=>_updateEditorSpacing());
+    document.getElementById('toggle-panel').addEventListener('click', ()=>_updateEditorSpacing());
+    document.getElementById('top-legend-toggle').addEventListener('click', ()=>_updateEditorSpacing());
+    Array.from(document.getElementById('tab-controls').children).forEach(
+      nav=>nav.addEventListener('click', ()=>_updateEditorSpacing()));
+  }
 
   function _setupFormControls(){
     
@@ -61,7 +80,7 @@ let UISetup = function(args){
     return options;
   }
 
-  function _setupLegend(){
+  function _setupSideLegend(){
     const legend = document
       .getElementById('legend-sidebar');
 
@@ -86,6 +105,35 @@ let UISetup = function(args){
     legend.appendChild(legendContent)
   }
 
+  function _setupTopLegend(){
+    const legend = document
+      .getElementById('legend-topbar');
+
+    const entityEntries = Object
+      .entries(ColorScheme.scheme['entities'])
+      .map(e=>_createEntityLegendEntry(e))
+      .join('\n');
+
+    const certEntries = Object
+      .entries(ColorScheme.scheme['taxonomy'])
+      .map(e=>_createCertLegendEntry(e))
+      .join('\n');
+    
+    const legendContent = $.parseHTML(`
+      <div>
+        <b>Annotation color scheme</b>
+        <ul>
+          ${entityEntries}
+        </ul>
+        <b>Uncertainty notion color scheme</b>
+        <ul>
+          ${certEntries}
+        </ul>
+      </div>
+      `)[1];
+    legend.appendChild(legendContent)
+  }
+
   function _createEntityLegendEntry(entity){
     const entry = (
       `<span class="teiLegendElement">
@@ -105,7 +153,7 @@ let UISetup = function(args){
 
   function _createCertLegendEntry(cert){
     const entry = (
-      `<span class="teiLegendElement">
+      `<span class="certLegendElement">
         <span class="color" 
               title="unknown" 
               style="background-color: ${ColorScheme.calculate(cert[0], 'unknown')}">
@@ -151,8 +199,8 @@ let UISetup = function(args){
       {
           content:"";
           position: absolute;
-          font-size: 0.9em;
-          padding-top:1.45em;
+          font-size: 0.85em;
+          padding-top: 1.3em;
           color:grey;
           font-family: "Font Awesome 5 Free";
           font-weight: 900;
@@ -174,11 +222,12 @@ let UISetup = function(args){
     const tagRule = `
       ${selectors}
       {
-          min-height: 4px;
-          margin: 2px 0;
           border-bottom: solid 2px white;
           cursor: default;
           background-color: white;
+          display: inline-block;
+          height: 1.7em;
+          position: relative;
       }
     `
 
