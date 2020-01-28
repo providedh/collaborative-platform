@@ -105,7 +105,8 @@ class IDsFiller:
                       process_match, text)
 
         for old, new in ids_map.items():
-            text = text.replace("='" + old, "='" + new).replace('="' + old, '="' + new)
+            text = text.replace("='" + old, "='" + new).replace('="' + old, '="' + new)\
+                .replace("='#" + old, "='#" + new).replace('=#"' + old, '="#' + new)
         return text
 
     def process(self, initial=False):
@@ -115,7 +116,8 @@ class IDsFiller:
             text = et.tostring(self._parsed, pretty_print=True, encoding='utf-8').decode('utf-8')
 
             for old, new in ids_map.items():
-                text = text.replace("='" + old, "='" + new).replace('="' + old, '="' + new)
+                text = text.replace("='" + old, "='" + new).replace('="' + old, '="' + new)\
+                    .replace("='#" + old, "='#" + new).replace('="#' + old, '="#' + new)
 
             text = self.__alter_not_indexed_ids(text)
 
