@@ -501,7 +501,7 @@ class Annotator:
                 and self.__request['tag'] != '' \
                 and self.__request['attribute_name'] == 'ref' \
                 and self.__request['asserted_value'] != '' \
-                and (self.__target or self.__positions):
+                and self.__positions:
             self.__fragment_annotated, annotation_ids = self.__add_tag(self.__fragment_to_annotate, 'objectName',
                                                                        reference=True)
 
