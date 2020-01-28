@@ -241,6 +241,10 @@ class Annotator:
     def __get_data_from_xml(self):
         if self.__positions:
             self.__start, self.__end = self.__get_fragment_position(self.__xml, self.__request)
+
+            selected_fragment = self.__xml[self.__start: self.__end]
+            self.__validate_selected_fragment(selected_fragment)
+
             self.__start, self.__end = self.__get_fragment_position_without_adhering_tags(self.__xml, self.__start,
                                                                                           self.__end)
             self.__start, self.__end = self.__get_fragment_position_with_adhering_tags(self.__xml, self.__start,
@@ -333,6 +337,18 @@ class Annotator:
                 found_tag = True
 
         return start, end
+
+    @staticmethod
+    def __validate_selected_fragment(text):
+        tag_part_on_beginning_regex = r'^[^<]*>'
+        tag_part_on_end_regex = r'<[^>]*$'
+
+        tag_part_on_beginning = re.search(tag_part_on_beginning_regex, text)
+        tag_part_on_end = re.search(tag_part_on_end_regex, text)
+
+        if tag_part_on_beginning or tag_part_on_end:
+            raise BadRequest(f"Wrong positions in request. Position can't point to inside of the tag. "
+                             f"Positions from current request pointing to fragment: '{text}'.")
 
     @staticmethod
     def __get_adhering_tags_from_annotated_fragment(fragment):
