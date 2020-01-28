@@ -69,13 +69,15 @@ let PanelView = function(args){
 	        const tag = values['tag-name'];
 	        document.getElementById('references').value = e.target.value;
 	        if(values['attribute-name'] == 'sameAs' &&
-	            ['person', 'event', 'org', 'place'].includes(tag)){
+	            ['person', 'event', 'org', 'place', 'ingredient', 'utensil', 'productionMethod'].includes(tag)){
 	            _updateAutocompleteOptions(tag.replace('org','organization'), e.target.value);
 	        }
 	    })
 
 	    document.getElementById("references-autocomplete").options = [];
 	    _setup_autocomplete(document.getElementById("references-autocomplete"));
+
+	    obj.publish('panel/update', {..._getCurrentValues(), modifiedField:null});
 
 		obj.getValues = ()=>_getValues;
 
@@ -113,7 +115,7 @@ let PanelView = function(args){
 	}
 
 	function _updateReferencesControl(){
-		if(['person', 'event', 'org', 'place'].includes(values['tag-name'])
+		if(['person', 'event', 'org', 'place', 'ingredient', 'utensil', 'productionMethod'].includes(values['tag-name'])
 				&& values['attribute-name'] == 'sameAs'){
 			document.getElementById('references-container').style.setProperty('display','initial');
 		}else{
@@ -294,6 +296,7 @@ let PanelView = function(args){
 			_updateAssertedValueControl();
 		if(['locus', 'attribute-name', 'tag-name'].includes(id))
 			_updateReferencesControl();
+		self.publish('panel/update', {..._getCurrentValues(), modifiedField:id});
 	}
 
 	function _handleLoadHistory(args){

@@ -45,6 +45,7 @@ class Annotator:
         self.__target = False
         self.__target_in_db = False
         self.__positions = False
+        self.__reference = False
         self.__start = 0
         self.__end = 0
         self.__fragment_to_annotate = ""
@@ -90,6 +91,7 @@ class Annotator:
 
         self.__check_target_in_request(request)
         self.__check_positions_in_request(request)
+        self.__check_reference_to_list_in_request(request)
 
         if self.__target and self.__positions:
             raise BadRequest("Provided reference parameters are ambiguous. Provide 'target' parameter for reference to "
@@ -104,6 +106,9 @@ class Annotator:
         elif self.__positions:
             self.__validate_positions(request)
 
+        if self.__reference:
+            self.__validate_list_element_id(request)
+
         self.__fill_in_optional_params(request)
         # self.__validate_closed_list_parameters() # TODO rewrite validation in suitable way
 
@@ -117,6 +122,11 @@ class Annotator:
 
         if position_v1 or position_v2:
             self.__positions = True
+
+    def __check_reference_to_list_in_request(self, request):
+        xml_id_regex = r'object_[\w]+-[\d]+'
+        if 'asserted_value' in request and re.match(xml_id_regex, request['asserted_value']):
+            self.__reference = True
 
     def __validate_target(self, request):
         text_in_lines = self.__xml.splitlines()
@@ -149,6 +159,23 @@ class Annotator:
                 self.__target_in_db = True
 
         self.__request.update({'target': request['target']})
+
+    def __validate_list_element_id(self, request):
+        text_in_lines = self.__xml.splitlines()
+
+        if 'encoding=' in text_in_lines[0]:
+            text_to_parse = '\n'.join(text_in_lines[1:])
+        else:
+            text_to_parse = self.__xml
+
+        tree = etree.fromstring(text_to_parse)
+        list_element_id = request['asserted_value']
+
+        matching_xml_element = tree.xpath(f'//*[@xml:id="{list_element_id}"]', namespaces=NAMESPACES)
+
+        if not matching_xml_element:
+            raise BadRequest(f"There is no element with xml:id: {list_element_id} on any list in file "
+                             f"with id: {self.__file.id}.")
 
     def __validate_positions(self, request):
         position_v1 = all(elements in request.keys() for elements in POSITION_PARAMS_V1)
@@ -691,7 +718,7 @@ class Annotator:
 
         categories = " ".join([get_ana_link(self.__file.project_id, cat) for cat in json["categories"]])
         certainty = f'<certainty ana="{categories}" locus="{json["locus"]}" cert="{json["certainty"]}" ' \
-                    f'resp="#{user_uuid}" target="{target}" match="@{json["attribute_name"]}"' \
+                    f'resp="#{user_uuid}" target="{target}" match="@{json["attribute_name"]}" ' \
                     f'assertedValue="{json["asserted_value"]}" xml:id="{xml_id}"/>'
 
         new_element = etree.fromstring(certainty)
@@ -705,7 +732,14 @@ class Annotator:
         return new_element
 
     def __create_list_element(self, json, annotation_ids):
-        pass
+        xml_id = annotation_ids[0].replace('#', '')
+
+        element = f'<object type="{self.__request["tag"]}" xml:id="{xml_id}">' \
+                  f'{self.__request["asserted_value"]}</object>'
+
+        new_element = etree.fromstring(element)
+
+        return new_element
 
     def __create_annotator(self, user_xml_id):
         user_guid = user_xml_id.replace('person', '')
@@ -807,6 +841,31 @@ class Annotator:
             elif existing_certainties and not self.__request['description']:
                 raise NotModified('This certainty already exist.')
 
+        if not self.__reference and self.__request['attribute_name'] == 'ref' and self.__request['locus'] == 'value':
+            xml = self.__xml
+
+            xml_in_lines = xml.splitlines()
+            if 'encoding=' in xml_in_lines[0]:
+                xml = '\n'.join(xml_in_lines[1:])
+
+            tree = etree.fromstring(xml)
+            xpath = f'//default:text' \
+                    f'//default:body' \
+                    f'//default:div[@type="{self.__request["tag"]}"]' \
+                    f'//default:listObject' \
+                    f'//default:object[@type="{self.__request["tag"]}" and text()="{self.__request["asserted_value"]}"]'
+
+            existing_element = tree.xpath(xpath, namespaces=NAMESPACES)
+
+            if existing_element:
+                xml_namespace = NAMESPACES['xml']
+                xml = '{%s}' % xml_namespace
+
+                xml_id = existing_element[0].attrib[etree.QName(xml + 'id')]
+
+                raise BadRequest(f"Item: {self.__request['asserted_value']} already exist on: "
+                                 f"{self.__request['tag']} list and have id: {xml_id}")
+
     def __create_new_certainty_in_db(self):
         certainty = self.__certainty_to_add.attrib
         desc = self.__certainty_to_add.xpath('.//desc', namespaces=NAMESPACES)
@@ -849,6 +908,10 @@ class Annotator:
 
         if self.__certainty_to_add is not None:
             xml_annotated = self.__add_certainty(xml_annotated, self.__certainty_to_add)
+
+        if self.__list_element_to_add is not None:
+            xml_annotated = self.__add_list_element(xml_annotated, self.__list_element_to_add)
+            xml_annotated = self.__reorder_elements(xml_annotated)
 
         xml_annotated = self.__reformat_xml(xml_annotated)
 
@@ -969,6 +1032,112 @@ class Annotator:
             text_class[0].append(class_code)
 
         return tree
+
+    def __add_list_element(self, text, element):
+        tree = etree.fromstring(text)
+        element_type = element.get('type')
+        list_xpath = f'/default:TEI/default:text/default:body/default:div[@type="{element_type}"]/default:listObject'
+
+        list = tree.xpath(list_xpath, namespaces=NAMESPACES)
+
+        if not list:
+            tree = self.__create_elements_from_xpath(tree, list_xpath)
+            list = tree.xpath(list_xpath, namespaces=NAMESPACES)
+
+        list[0].append(element)
+
+        text = etree.tounicode(tree)
+
+        return text
+
+    @staticmethod
+    def __create_elements_from_xpath(tree, xpath):
+        default_namespace = NAMESPACES['default']
+
+        ns_map = {
+            None: default_namespace
+        }
+
+        path_steps = xpath.split('/')
+        path_steps = [step for step in path_steps if step != '']
+
+        for i in range(len(path_steps)):
+            i += 1
+
+            element_xpath = '/' + '/'.join(path_steps[:i])
+            element = tree.xpath(element_xpath, namespaces=NAMESPACES)
+
+            if not element:
+                parent_xpath = '/' + '/'.join(path_steps[:i-1])
+                parent = tree.xpath(parent_xpath, namespaces=NAMESPACES)
+
+                step = path_steps[i-1]
+
+                attributes_regex = r'\[.*?\]'
+                attributes_dict = {}
+                match = re.search(attributes_regex, step)
+
+                if match:
+                    attributes_part = match.group()
+                    step = step.replace(attributes_part, '')
+
+                    attribute_regex = r'@\w*?=[\'"].*?[\'"]'
+                    attributes = re.findall(attribute_regex, attributes_part)
+
+                    for attribute in attributes:
+                        key = attribute.split('=')[0]
+                        key = key.replace('@', '')
+
+                        value = attribute.split('=')[1]
+                        value = re.sub(r'[\'"]', '', value)
+
+                        attributes_dict.update({key: value})
+
+                if ':' in step:
+                    prefix = step.split(':')[0]
+                    name = step.split(':')[1]
+
+                else:
+                    prefix = ''
+                    name = step
+
+                namespace = '{%s}' % NAMESPACES[prefix]
+
+                element = etree.Element(namespace + name, nsmap=ns_map)
+
+                if attributes_dict:
+                    for key, value in attributes_dict.items():
+                        element.set(key, value)
+
+                parent[0].append(element)
+
+        return tree
+
+    @staticmethod
+    def __reorder_elements(text):
+        parent_xpath = f'/default:TEI/default:text/default:body'
+
+        # TODO: Hardcoded order for workshop with recipes. During generalization change this to use types selected
+        #  by user
+        order = ['ingredient', 'utensil', 'dietetic', 'productionMethod', 'recipe']
+
+        tree = etree.fromstring(text)
+        parent = tree.xpath(parent_xpath, namespaces=NAMESPACES)[0]
+        children_queue = []
+
+        for type in order:
+            children = parent.findall(f'default:div[@type="{type}"]', namespaces=NAMESPACES)
+            children_queue += children
+
+            for child in children:
+                parent.remove(child)
+
+        for child in reversed(children_queue):
+            parent.insert(0, child)
+
+        text = etree.tounicode(tree)
+
+        return text
 
     @staticmethod
     def __reformat_xml(text):
