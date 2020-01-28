@@ -174,7 +174,7 @@ var DocumentView = function(args){
 
 	    for(let i=0; i<end_content.length; i++){
 	        if(original_text[i]!=end_content[i]){
-	            positions.push(self.TEIheaderLength + i - 1);
+	            positions.push(self.TEIheaderLength + i);
 	            break;
 	        }
 	    }
