@@ -7,6 +7,7 @@ cp collaborative_platform/settings.py_template collaborative_platform/settings.p
 cat /home/ubuntu/secrets >> collaborative_platform/settings.py
 python3 manage.py makemigrations
 python3 manage.py migrate
+python3 manage.py shell -c "from apps.index_and_search.initialize import initialize; initialize()"
 rm -r ~/collaborative-platform/static/*
 python3 manage.py collectstatic
 screen -d -m uwsgi --socket /home/ubuntu/collaborative-platform/src/collaborative_platform/collaborative_platform.sock --chmod-socket=666 --module collaborative_platform.wsgi
