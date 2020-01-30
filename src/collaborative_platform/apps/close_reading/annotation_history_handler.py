@@ -3,6 +3,7 @@ from django.db import connection
 from lxml import etree
 
 from apps.files_management.models import FileVersion
+from apps.projects.models import Taxonomy
 
 from .models import AnnotationHistory
 
@@ -106,22 +107,22 @@ class AnnotationHistoryHandler:
 
     def __create_history_step(self, version, version_metadata):
         text = self.__get_file_text(version)
-        uncertainties = self.__count_uncertainties(text)
+        uncertainty_names = self.__get_uncertainties_names()
 
         request = None
         site = get_current_site(request)
+
+        uncertainties = self.__count_uncertainties(text, uncertainty_names, site)
 
         history_step = {
             'version': version,
             'contributor': version_metadata['author_email'],
             'timestamp': str(version_metadata['created']),
             'url': 'https://' + site.domain + '/files/' + str(self.__file_id) + '/version/' + str(version) + '/',
-            'credibility': uncertainties['credibility'],
-            'ignorance': uncertainties['ignorance'],
-            'imprecision': uncertainties['imprecision'],
-            'incompleteness': uncertainties['incompleteness'],
-            'variation': uncertainties['variation'],
         }
+
+        for name in uncertainty_names:
+            history_step.update({name: uncertainties[name]})
 
         return history_step
 
@@ -133,7 +134,16 @@ class AnnotationHistoryHandler:
 
         return text
 
-    def __count_uncertainties(self, text):
+    def __get_uncertainties_names(self):
+        taxonomy = Taxonomy.objects.get(project_id=self.__project_id)
+        taxonomy_fields = taxonomy._meta.get_fields()
+
+        uncertainties_names_fields = [field.name for field in taxonomy_fields if field.name.startswith('name_')]
+        uncertainties_names = [taxonomy.__dict__[name] for name in uncertainties_names_fields]
+
+        return uncertainties_names
+
+    def __count_uncertainties(self, text, uncertainties_names, site):
         text = self.__remove_encoding_line(text)
         tree = etree.fromstring(text)
 
@@ -141,18 +151,14 @@ class AnnotationHistoryHandler:
             'default': "http://www.tei-c.org/ns/1.0",
         }
 
-        uncertainties = {
-            'credibility': 0,
-            'ignorance': 0,
-            'imprecision': 0,
-            'incompleteness': 0,
-            'variation': 0,
-        }
+        uncertainties = {name: 0 for name in uncertainties_names}
 
-        for key, value in uncertainties.items():
-            number_of_uncertainties = len(
-                tree.xpath("//default:classCode[@scheme=\"http://providedh.eu/uncertainty/ns/1.0\"]/"
-                           "default:certainty[@category='" + key + "']", namespaces=namespaces))
+        for key in uncertainties:
+            xpath_to_certainty = f"//default:classCode[@scheme=\"http://providedh.eu/uncertainty/ns/1.0\"]/" \
+                                 f"default:certainty[contains(concat(' ', @ana, ' '), " \
+                                 f"' https://{site}/api/projects/{self.__project_id}/taxonomy/#{key} ')]"
+
+            number_of_uncertainties = len(tree.xpath(xpath_to_certainty, namespaces=namespaces))
 
             uncertainties[key] = number_of_uncertainties
 

@@ -120,12 +120,13 @@ class AnnotatorConsumer(WebsocketConsumer):
 
         room_symbol = self.scope['url_route']['kwargs']['room_name']
 
-        room_presence = RoomPresence.objects.get(
+        room_presences = RoomPresence.objects.filter(
             room_symbol=room_symbol,
             user=self.scope['user'],
         )
 
-        room_presence.delete()
+        for presence in room_presences:
+            presence.delete()
 
         remain_users = RoomPresence.objects.filter(room_symbol=room_symbol)
 
