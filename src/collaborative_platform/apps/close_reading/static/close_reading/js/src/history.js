@@ -8,6 +8,7 @@
  * - panel/display_options
  * */
 import AjaxCalls from './utilities/ajax.js';
+import ColorScheme from './utilities/color.js';
 
 var HistoryView = function(args){
 	let self = null;
@@ -199,8 +200,9 @@ var HistoryView = function(args){
 	function _handleVersionHoverIn(evt, timestamp){
 	    const popup = document.getElementById('history-popup');
 	    const max = Math.max(timestamp.imprecision,timestamp.incompleteness,
-	        timestamp.ignorance,timestamp.credibility, timestamp.variation),
-	        xScale = d=>6*d/max;
+	        timestamp.ignorance,timestamp.credibility),
+	        xScale = d=>6*d/max,
+	        style = dim => `width:${xScale(timestamp[dim])}em; margin-left: calc(100% - ${xScale(timestamp[dim])}em); background-color: ${ColorScheme.scheme.taxonomy[dim].color};`;
 
 	    popup.innerHTML=`
 	      Version ${timestamp.version}<br>
@@ -214,21 +216,27 @@ var HistoryView = function(args){
 	        Ignorance<br/>
 	      </span>
 	      <span>
-	        <span class="color uncertainty" author="me" title="high"
-	            style="width:${xScale(timestamp.imprecision)}em;" category="imprecision" cert="high"></span></br>
-	        <span class="color uncertainty" author="me" title="high" 
-	            style="width:${xScale(timestamp.incompleteness)}em;" category="incompleteness" cert="high"></span></br>
-	        <span class="color uncertainty" author="me" title="high" 
-	            style="width:${xScale(timestamp.ignorance)}em;" category="ignorance" cert="high"></span></br>
-	        <span class="color uncertainty" author="me" title="high" 
-	            style="width:${xScale(timestamp.credibility)}em;" category="credibility" cert="high"></span></br>
-	      </span>
-	      <span>
-	        ${timestamp.imprecision}</br> 
-	        ${timestamp.incompleteness}</br> 
-	        ${timestamp.ignorance}</br> 
-	        ${timestamp.credibility}</br>
-	      </span>
+		      <span>
+		        <span class="color uncertainty" author="me" title="high"
+		            style="${style('imprecision')}" 
+		            category="imprecision" cert="high"></span></br>
+		        <span class="color uncertainty" author="me" title="high" 
+		            style="${style('incompleteness')}" 
+		            category="incompleteness" cert="high"></span></br>
+		        <span class="color uncertainty" author="me" title="high" 
+		            style="${style('ignorance')}" 
+		            category="ignorance" cert="high"></span></br>
+		        <span class="color uncertainty" author="me" title="high" 
+		            style="${style('credibility')}" 
+		            category="credibility" cert="high"></span></br>
+		      </span>
+		      <span>
+		        ${timestamp.imprecision}</br> 
+		        ${timestamp.incompleteness}</br> 
+		        ${timestamp.ignorance}</br> 
+		        ${timestamp.credibility}</br>
+		      </span>
+		   </span>
 	      </div>
 	    `;
 	    popup.style.left = evt.target.style.left;
