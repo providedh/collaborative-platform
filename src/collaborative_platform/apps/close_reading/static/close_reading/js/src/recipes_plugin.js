@@ -367,6 +367,7 @@ let RecipesPlugin = function(args){
 				if(['ingredient', 'utensil', 'productionMethod'].includes(json['tag'])){
 					json['asserted_value'] = teiInput.value.slice(self.XML_EXTRA_CHAR_SPACER.length);
 					json['attribute_name'] = 'ref';
+					json['locus'] = 'value';
 				}
 			}
 		}
