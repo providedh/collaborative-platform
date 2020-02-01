@@ -52,7 +52,7 @@ let RecipesPlugin = function(args){
 		_setupUI();
 
 		document.getElementById('editor')
-			.setAttribute('usingRecipesPlugin', _getSettings()['usingRecipesPlugin']);
+			.setAttribute('using-recipes-plugin', _getSettings()['usingRecipesPlugin']);
 		/*
 			obj.subscribe('panel/load_history', _handleLoadHistory);
 			obj.subscribe('panel/reset', _handlePanelReset);
@@ -367,28 +367,28 @@ let RecipesPlugin = function(args){
 		*/
 	}
 
-	function _createStyles4Entities(entityNode){
+	function _createStyles4Entities(){
 		const borderRules = Object
 	      .entries(ColorScheme.scheme['entities'])
-	      .map(e=>`#editor[usingRecipesPlugin="true"] object[type="${e[0]}"]{ border-color: ${e[1].color};}`)
+	      .map(e=>`#editor[using-recipes-plugin="true"] object[type="${e[0]}"]{ border-color: ${e[1].color};}`)
 	      .join('\n');
 
 	    const entityFillRules = Object
 	      .entries(ColorScheme.scheme['entities'])
-	      .map(e=>`#editor[usingRecipesPlugin="true"] object.bg-${e[0]}{ background-color: ${e[1].color};}`)
+	      .map(e=>`#editor[using-recipes-plugin="true"] object.bg-${e[0]}{ background-color: ${e[1].color};}`)
 	      .join('\n');
 
 	    const entityIconRules = Object
 	      .entries(ColorScheme.scheme['entities'])
 	      .map(e=>`div#annotator-root[display-annotations="true"] 
-		      	#editor[usingRecipesPlugin="true"]
+		      	#editor[using-recipes-plugin="true"]
 		      	object[type="${e[0]}"]::before{ content: "${e[1].icon}";}`)
 	      .join('\n');
 
 	    const entityIconColorRules = Object
 	      .entries(ColorScheme.scheme['entities'])
 	      .map(e=>`div#annotator-root[color-annotations="true"]
-		      	#editor[usingRecipesPlugin="true"]
+		      	#editor[using-recipes-plugin="true"]
 		      	object[type="${e[0]}"]::before{ color: ${e[1].color};}`)
 	      .join('\n');
 
