@@ -14,63 +14,7 @@ var HistoryView = function(args){
 	let ajaxCalls = AjaxCalls();
 	const canvasHeight=60;
 
-	let versions = [
-		/*{
-			contributor: "alex@alex.com",
-			credibility: 0,
-			ignorance: 0,
-			imprecision: 0,
-			incompleteness: 0,
-			timestamp: "2019-09-01 15:42:58.714838+00:00",
-			url: "https://example.com/files/1/version/1/",
-			variation: 0,
-			version: 1
-		},
-		{
-			contributor: "alex@alex.com",
-			credibility: 0,
-			ignorance: 1,
-			imprecision: 2,
-			incompleteness: 0,
-			timestamp: "2019-09-02 08:30:00.411063+00:00",
-			url: "https://example.com/files/1/version/2/",
-			variation: 0,
-			version: 2
-		},
-		{
-			contributor: "alex@alex.com",
-			credibility: 0,
-			ignorance: 2,
-			imprecision: 3,
-			incompleteness: 1,
-			timestamp: "2019-09-03 08:30:06.786190+00:00",
-			url: "https://example.com/files/1/version/3/",
-			variation: 0,
-			version: 3
-		},
-		{
-			contributor: "alex@alex.com",
-			credibility: 2,
-			ignorance: 2,
-			imprecision: 3,
-			incompleteness: 4,
-			timestamp: "2019-09-04 08:30:07.047789+00:00",
-			url: "https://example.com/files/1/version/4/",
-			variation: 0,
-			version: 4
-		},
-		{
-			contributor: "alex@alex.com",
-			credibility: 3,
-			ignorance: 4,
-			imprecision: 5,
-			incompleteness: 5,
-			timestamp: "2019-09-04 14:04:55.617754+00:00",
-			url: "https://example.com/files/1/version/5/",
-			variation: 0,
-			version: 5
-		},*/
-	];
+	let versions = [];
 
 	function _init(args){
 		const obj = {
