@@ -88,6 +88,11 @@ let RecipesPlugin = function(args){
 
 		// 5) add handler for settings change
 		document.getElementById('using-recipes-plugin').addEventListener('change', _handleSettingsChange);
+
+		// 6) setup forms
+		_updateEntitySelectOptions();
+		document.getElementById('using-recipes-plugin').addEventListener('change', _updateEntitySelectOptions);
+		document.getElementById('locus').addEventListener('change', _updateAssertedValueSelectOptions);
 	}
 
 	function _getInputId(name){
@@ -259,6 +264,48 @@ let RecipesPlugin = function(args){
 			document.getElementById(_getFormId('tei'))
 				.classList.add('d-none');
 		}
+	}
+
+	function _createEntitiesFormOptions(){
+		const usingRecipesPlugin = _getSettings()['usingRecipesPlugin'];
+		const entities = Object
+				.keys(ColorScheme.scheme['entities'])
+				.filter(e=>!['ingredient', 'utensil', 'productionMethod'].includes(e) || usingRecipesPlugin);
+
+	    const options = entities.map(e=>$.parseHTML(
+	      `<option value="${e}">${e.slice(0,1).toUpperCase() + e.slice(1)}</option>`
+	      )[0]);
+
+	    return options;
+	}
+
+	function _updateAssertedValueSelectOptions(){
+		const select_form = document
+	    	.getElementById('asserted-value');
+	    if(select_form.tagName.toLowerCase() == 'select'){
+	    	select_form.innerHTML = '';
+	    	_createEntitiesFormOptions().forEach(opt=>select_form.appendChild(opt));
+	    }
+	}
+
+	function _updateEntitySelectOptions(){    
+	    let select_form = document
+	      .getElementById('asserted-value-input-options')
+	      .getElementsByTagName('select')[0];
+	    select_form.innerHTML = '';
+	    _createEntitiesFormOptions().forEach(opt=>select_form.appendChild(opt));
+
+	    select_form = document
+	      .getElementById('tag-name');
+	    select_form.innerHTML = '';
+	    _createEntitiesFormOptions().forEach(opt=>select_form.appendChild(opt));
+
+	    select_form = document
+	      .getElementById('tei-tag-name');
+	    select_form.innerHTML = '';
+	    _createEntitiesFormOptions().forEach(opt=>select_form.appendChild(opt));
+
+	    _updateAssertedValueSelectOptions();
 	}
 	
 	function _handleOptionsChange(currentValues){

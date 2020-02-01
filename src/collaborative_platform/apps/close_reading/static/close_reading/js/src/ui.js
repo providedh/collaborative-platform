@@ -51,18 +51,22 @@ let UISetup = function(args){
     let select_form = document
       .getElementById('asserted-value-input-options')
       .getElementsByTagName('select')[0];
+    select_form.innerHTML = '';
     _createEntitiesFormOptions().forEach(opt=>select_form.appendChild(opt));
 
     select_form = document
       .getElementById('tag-name');
+    select_form.innerHTML = '';
     _createEntitiesFormOptions().forEach(opt=>select_form.appendChild(opt));
 
     select_form = document
       .getElementById('tei-tag-name');
+    select_form.innerHTML = '';
     _createEntitiesFormOptions().forEach(opt=>select_form.appendChild(opt));
 
     select_form = document
       .getElementById('category');
+    select_form.innerHTML = '';
     _createCertFormOptions().forEach(opt=>select_form.appendChild(opt));
   }
 
