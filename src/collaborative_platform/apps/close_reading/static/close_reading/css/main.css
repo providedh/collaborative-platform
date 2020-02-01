@@ -2,6 +2,8 @@ button span, #alert{
     pointer-events: none;
 }
 
+.hidden{display: none !important;}
+
 #versionLink{font-size: 0.5em;}
 
 #breadcrumb{
