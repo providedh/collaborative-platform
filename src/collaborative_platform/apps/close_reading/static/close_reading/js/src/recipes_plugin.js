@@ -88,9 +88,6 @@ let RecipesPlugin = function(args){
 
 		// 5) add handler for settings change
 		document.getElementById('using-recipes-plugin').addEventListener('change', _handleSettingsChange);
-
-		// 6) style objects according to their type
-		_styleRecipeEntities();
 	}
 
 	function _getInputId(name){
@@ -228,6 +225,8 @@ let RecipesPlugin = function(args){
 			}
 		});
 
+		_styleRecipeEntities();
+
 		_updateInputOptions();
 	}
 
@@ -281,7 +280,7 @@ let RecipesPlugin = function(args){
 	function _handleSettingsChange(e){
 		const usingRecipesPlugin = e.target.checked;
 		document.getElementById('editor')
-			.setAttribute('usingRecipesPlugin', usingRecipesPlugin);
+			.setAttribute('using-recipes-plugin', usingRecipesPlugin);
 
 		_updateLegendVisibility(usingRecipesPlugin);
 
@@ -400,42 +399,80 @@ let RecipesPlugin = function(args){
 	    ].join('\n');
 	}
 
-	function _createStyles4EntityDiv(entityNode){
-		const borderRules = Object
-	      .entries(ColorScheme.scheme['entities'])
-	      .map(e=>`#editor[usingRecipesPlugin="true"] div[type="${e[0]}"] object{ border-color: ${e[1].color};}`)
-	      .join('\n');
+	function _createStyles4Ref(entity){
+		function _createStyles(ref){
+		    const colorRule = `
+		      div#annotator-root[color-annotations="false"] #editor[using-recipes-plugin="true"] objectName[ref="${ref}"]
+		      {
+		          border-color: lightgrey !important;
+		      }
+		    `
+		    const displayRule = `
+		      div#annotator-root[display-annotations="true"] #editor[using-recipes-plugin="true"] objectName[ref="${ref}"]::before
+		      {
+		          content:"";
+		          position: absolute;
+		          font-size: 0.85em;
+		          padding-top: 1.3em;
+		          color:grey;
+		          font-family: "Font Awesome 5 Free";
+		          font-weight: 900;
+		      }
+		    `
+		    const hideRule = `
+		      div#annotator-root[display-annotations="false"] #editor[using-recipes-plugin="true"] objectName[ref="${ref}"]
+		      {
+		          border-color: white !important;
+		      }
+		    `
+		    const tagRule = `
+		      #editor[using-recipes-plugin="true"] objectName[ref="${ref}"]
+		      {
+		          border-bottom: solid 2px white;
+		          cursor: default;
+		          background-color: white;
+		          display: inline-block;
+		          height: 1.7em;
+		          position: relative;
+		      }
+		    `
 
-	    const entityFillRules = Object
-	      .entries(ColorScheme.scheme['entities'])
-	      .map(e=>`#editor[usingRecipesPlugin="true"] div[type="${e[0]}"] object{ background-color: ${e[1].color};}`)
-	      .join('\n');
+		    const borderRules = `#editor[using-recipes-plugin="true"] objectName[ref="${ref}"]{ border-color: ${entity[1].color};}`;
 
-	    const entityIconRules = Object
-	      .entries(ColorScheme.scheme['entities'])
-	      .map(e=>`div#annotator-root[display-annotations="true"] 
-		      	#editor[usingRecipesPlugin="true"]
-		      	div[type="${e[0]}"] object::before{ content: "${e[1].icon}";}`)
-	      .join('\n');
+		    const entityIconRules = `div#annotator-root[display-annotations="true"] #editor[using-recipes-plugin="true"] objectName[ref="${ref}"]::before{ content: "${entity[1].icon}";}`
 
-	    const entityIconColorRules = Object
-	      .entries(ColorScheme.scheme['entities'])
-	      .map(e=>`div#annotator-root[color-annotations="true"]
-		      	#editor[usingRecipesPlugin="true"]
-		      	div[type="${e[0]}"] object::before{ color: ${e[1].color};}`)
-	      .join('\n');
+		    const entityIconColorRules = `div#annotator-root[color-annotations="true"] #editor[using-recipes-plugin="true"] objectName[ref="${ref}"]::before{ color: ${entity[1].color};}`
 
-	    return [
-	      borderRules,
-	      
-	      entityIconRules,
-	      entityIconColorRules,
-	    ].join('\n');
+		    return [
+		      colorRule,
+		      displayRule,
+		      hideRule,
+		      tagRule,
+		      borderRules,
+		      entityIconRules,
+		      entityIconColorRules,
+		    ].join('\n');
+		}
+
+		const styles = $(`object[type="${entity[0]}"]`).toArray().map(node=>{
+			const ref = '#'+node.id.slice(self.XML_EXTRA_CHAR_SPACER.length),
+				selector = `#editor[using-recipes-plugin="true"]  objectName[ref="${ref}"]`;
+
+			return _createStyles(ref);
+		}).join('\n');
+
+	    return styles;
 	}
 
 	function _styleRecipeEntities(){
-		document.getElementById('recipes-style').innerHTML = _createStyles4Entities();
-		document.getElementById('recipes-style').innerHTML = _createStyles4EntityDiv();
+		document.getElementById('recipes-style').innerHTML = '';
+		document.getElementById('recipes-style').innerHTML += _createStyles4Entities();
+		document.getElementById('recipes-style').innerHTML += 
+			_createStyles4Ref(['ingredient', ColorScheme.scheme.entities['ingredient']]);
+		document.getElementById('recipes-style').innerHTML += 
+			_createStyles4Ref(['utensil', ColorScheme.scheme.entities['utensil']]);
+		document.getElementById('recipes-style').innerHTML += 
+			_createStyles4Ref(['productionMethod', ColorScheme.scheme.entities['productionMethod']]);
 	}
 	
 	function _notimplemented(method){
