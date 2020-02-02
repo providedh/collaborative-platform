@@ -111,6 +111,11 @@ export default class Dashboard extends React.Component {
                         <div className={"row " + styles.heightInherit}>
                             <div className={`col ${styles.heightInherit} ${styles.leftContainer}`}>
                                 <div className="row justify-content-end align-items-baseline pr-3">
+                                    <button onClick={()=>document.getElementById('help').classList.toggle('hidden')}
+                                        type="button" 
+                                        className="btn btn-primary h-75 mr-3">
+                                        Help
+                                    </button>
                                     <button onClick={this.save}
                                         type="button" 
                                         className={`btn ${this.state.lastChangesSaved===true?"btn-outline-success":"btn-primary"} h-75`}

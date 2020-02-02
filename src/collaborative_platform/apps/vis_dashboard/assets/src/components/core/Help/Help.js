@@ -1,12 +1,13 @@
 import React from 'react';
 import styles from './style.module.css';
+import css from './style.css';
 
 export default function Help(props){
     return(
-        <div id="help" className={'container shadow pt-2 '+styles.help}>
+        <div id="help" className={'container shadow-lg pt-2 hidden '+styles.help}>
             <h3>
                 Views in the PROVIDEDH Visualization Dashboard
-                <button type="button" class="close mt-2 mr-2" aria-label="Close">
+                <button type="button" onClick={()=>document.getElementById('help').classList.add('hidden')} className="close mt-2 mr-2" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
             </h3>
