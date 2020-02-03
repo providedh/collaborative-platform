@@ -364,8 +364,12 @@ let RecipesPlugin = function(args){
 				*/
 			} else {
 				// annotating tei
+				const asserted_value = teiInput.value.startsWith(self.XML_EXTRA_CHAR_SPACER)? 
+					teiInput.value.slice(self.XML_EXTRA_CHAR_SPACER.length):
+					teiInput.value;
+					
 				if(['ingredient', 'utensil', 'productionMethod'].includes(json['tag'])){
-					json['asserted_value'] = teiInput.value.slice(self.XML_EXTRA_CHAR_SPACER.length);
+					json['asserted_value'] = asserted_value
 					json['attribute_name'] = 'ref';
 					json['locus'] = 'value';
 				}
