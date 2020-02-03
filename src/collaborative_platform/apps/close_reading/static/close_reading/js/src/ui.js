@@ -24,6 +24,8 @@ let UISetup = function(args){
     _setupEditorPlacement();
     _updateEditorSpacing(0);
 
+    obj.publish('ui/loaded');
+
 		self = obj;
 		return obj;
 	}
@@ -49,18 +51,22 @@ let UISetup = function(args){
     let select_form = document
       .getElementById('asserted-value-input-options')
       .getElementsByTagName('select')[0];
+    select_form.innerHTML = '';
     _createEntitiesFormOptions().forEach(opt=>select_form.appendChild(opt));
 
     select_form = document
       .getElementById('tag-name');
+    select_form.innerHTML = '';
     _createEntitiesFormOptions().forEach(opt=>select_form.appendChild(opt));
 
     select_form = document
       .getElementById('tei-tag-name');
+    select_form.innerHTML = '';
     _createEntitiesFormOptions().forEach(opt=>select_form.appendChild(opt));
 
     select_form = document
       .getElementById('category');
+    select_form.innerHTML = '';
     _createCertFormOptions().forEach(opt=>select_form.appendChild(opt));
   }
 
@@ -86,6 +92,7 @@ let UISetup = function(args){
 
     const entityEntries = Object
       .entries(ColorScheme.scheme['entities'])
+      .filter(e=>!['ingredient', 'productionMethod', 'utensil'].includes(e[0]))
       .map(e=>_createEntityLegendEntry(e))
       .join('\n');
 
@@ -95,12 +102,16 @@ let UISetup = function(args){
       .join('\n');
     
     const legendContent = $.parseHTML(`
-      <ul class="nav flex-column">
-        <b>Annotation color scheme</b><br/>
-        ${entityEntries}
-        <b>Uncertainty notion color scheme</b><br/>
-        ${certEntries}
-      </ul>
+      <div>
+        <b>Annotation color scheme</b>
+        <ul class="nav flex-column">
+          ${entityEntries}
+        </ul>
+        <b>Uncertainty notion color scheme</b>
+        <ul class="nav flex-column">
+          ${certEntries}
+        </ul>
+      </div>
       `)[1];
     legend.appendChild(legendContent)
   }
@@ -111,6 +122,7 @@ let UISetup = function(args){
 
     const entityEntries = Object
       .entries(ColorScheme.scheme['entities'])
+      .filter(e=>!['ingredient', 'productionMethod', 'utensil'].includes(e[0]))
       .map(e=>_createEntityLegendEntry(e))
       .join('\n');
 

@@ -85,7 +85,7 @@ var Popup = function(args){
  * */
 var Tooltips = function(args){
 	let self = null;
-	const tags = Object.keys(ColorScheme.scheme['entities']);
+	const tags = [...Object.keys(ColorScheme.scheme['entities']), 'objectName'];
 
 	function _init(args){
 		const obj = {
@@ -164,15 +164,20 @@ var Tooltips = function(args){
 					`ID : ${original_tag_id}<br/>( ${tag_name} )`:
 					`( ${tag_name} )`;
 
-				node.addEventListener('mouseenter', e=>self.publish('popup/render',{
-					title: (`<span class="teiLegendElement" id="${tag_name}">
-							<span class="color bg-${tag_name}"></span></span>`
-							+ node.textContent),
-					subtitle: subtitle,
-					body: body,
-					x: (e.clientX - 150)+'px',//(node.getBoundingClientRect().x+node.getBoundingClientRect().width/2 -150)+'px', 
-					y: (e.clientY + 40) +'px'
-				}));
+				node.addEventListener('mouseenter', e=>{
+					if(tag_name == 'objectName' && document.getElementById('using-recipes-plugin').checked === false)
+						return 
+
+					self.publish('popup/render',{
+						title: (`<span class="teiLegendElement" id="${tag_name}">
+								<span class="color bg-${tag_name}"></span></span>`
+								+ node.textContent),
+						subtitle: subtitle,
+						body: body,
+						x: (e.clientX - 150)+'px',//(node.getBoundingClientRect().x+node.getBoundingClientRect().width/2 -150)+'px', 
+						y: (e.clientY + 40) +'px'
+					})
+				});
 				node.addEventListener('mouseout', ()=>self.publish('popup/hide',{}));
 			});
 		}

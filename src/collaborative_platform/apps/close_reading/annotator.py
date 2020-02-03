@@ -779,12 +779,14 @@ class Annotator:
     def __create_list_element(self, json, annotation_ids):
         xml_id = annotation_ids[0].replace('#', '')
 
-        element = f'<object type="{self.__request["tag"]}" xml:id="{xml_id}">' \
-                  f'{self.__request["asserted_value"]}</object>'
+        if xml_id == json['asserted_value']:
+            return None
 
-        new_element = etree.fromstring(element)
+        else:
+            element = f'<object type="{json["tag"]}" xml:id="{xml_id}">{json["asserted_value"]}</object>'
+            new_element = etree.fromstring(element)
 
-        return new_element
+            return new_element
 
     def __create_annotator(self, user_xml_id):
         user_guid = user_xml_id.replace('person', '')
