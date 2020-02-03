@@ -177,6 +177,26 @@ class Annotator:
             raise BadRequest(f"There is no element with xml:id: {list_element_id} on any list in file "
                              f"with id: {self.__file.id}.")
 
+    @staticmethod
+    def __validate_tag(tag):
+        legal_tags = [
+            'date',
+            'event',
+            'location',
+            'geolocation',
+            'occupation',
+            'object',
+            'org',
+            'person',
+            'place',
+            'placeName',
+            'country',
+            'time',
+        ]
+
+        if tag not in legal_tags:
+            raise BadRequest(f"Tag '{tag}' is illegal for TEI schema selected for this project.")
+
     def __validate_positions(self, request):
         position_v1 = all(elements in request.keys() for elements in POSITION_PARAMS_V1)
 
@@ -471,7 +491,8 @@ class Annotator:
                 and self.__request['tag'] != '' \
                 and self.__request['attribute_name'] == '' \
                 and self.__positions:
-            self.__fragment_annotated, _ = self.__add_tag(self.__fragment_to_annotate, self.__request["tag"])
+            self.__validate_tag(self.__request['tag'])
+            self.__fragment_annotated, _ = self.__add_tag(self.__fragment_to_annotate, self.__request['tag'])
 
         # 2.Add certainty without tag to text
         elif self.__request['locus'] == 'value' \
@@ -494,6 +515,8 @@ class Annotator:
                 and self.__request['tag'] != '' \
                 and self.__request['attribute_name'] == '' \
                 and (self.__target or self.__positions):
+            self.__validate_tag(self.__request['tag'])
+
             if self.__target:
                 annotation_ids = self.__get_annotation_ids_from_target(self.__request['target'])
                 annotation_ids = self.add_hash_sing_to_ids(annotation_ids)
@@ -510,6 +533,8 @@ class Annotator:
                 and self.__request['tag'] != '' \
                 and self.__request['attribute_name'] == '' \
                 and (self.__target or self.__positions):
+            self.__validate_tag(self.__request['tag'])
+
             if self.__target:
                 annotation_ids = self.__get_annotation_ids_from_target(self.__request['target'])
                 annotation_ids = self.add_hash_sing_to_ids(annotation_ids)
@@ -530,6 +555,8 @@ class Annotator:
                 and self.__request['attribute_name'] == 'sameAs' \
                 and self.__request['asserted_value'] != '' \
                 and (self.__target or self.__positions):
+            self.__validate_tag(self.__request['tag'])
+
             if self.__target:
                 annotation_ids = self.__get_annotation_ids_from_target(self.__request['target'])
                 annotation_ids = self.add_hash_sing_to_ids(annotation_ids)
@@ -556,6 +583,8 @@ class Annotator:
                 and self.__request['attribute_name'] != '' \
                 and self.__request['asserted_value'] != '' \
                 and (self.__target or self.__positions):
+            self.__validate_tag(self.__request['tag'])
+
             if self.__target:
                 annotation_ids = self.__get_annotation_ids_from_target(self.__request['target'])
                 annotation_ids = self.add_hash_sing_to_ids(annotation_ids)
