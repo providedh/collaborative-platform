@@ -91,9 +91,11 @@ class EntitiesExtractor:
             ))
 
             context = cls.__get_context(element)
-            location = ' '.join(
-                re.sub("<.*?>", "", str(et.tostring(element.find(".//tei:location", namespaces=cls.namespaces)),
-                                        'utf-8')).split())
+            location_element = element.find(".//tei:location", namespaces=cls.namespaces)
+            if location_element is not None:
+                location = ' '.join(re.sub("<.*?>", "", str(et.tostring(location_element), 'utf-8')).split())
+            else:
+                location = None
 
             return {'tag': 'place',
                     'id': id,
