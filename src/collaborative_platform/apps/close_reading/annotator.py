@@ -34,6 +34,18 @@ POSITION_PARAMS_V2 = [
     'end_pos',
 ]
 
+LEGAL_TYPES = [
+    # TODO: Enable when it will be possible to sent this tags
+    # 'ingredient',
+    # 'utensil',
+    # 'productionMethod',
+
+    # TODO: Remove when it will be possible to sent 'ingredient', 'utensil' and 'productionMethod' this tags
+    'placeName',
+    'country',
+    'time',
+]
+
 
 class Annotator:
     def __init__(self):
@@ -66,6 +78,8 @@ class Annotator:
         self.__file = File.objects.get(id=file_id)
         self.__annotator_xml_id = 'person' + str(annotator_guid)
 
+        request = self.__handle_types_in_request(request)
+
         self.__validate_request(request)
         self.__get_data_from_xml()
         self.__prepare_xml_parts()
@@ -81,6 +95,14 @@ class Annotator:
             self.__create_new_xml()
 
             return self.__xml_annotated
+
+    @staticmethod
+    def __handle_types_in_request(request):
+        if request['tag'] in LEGAL_TYPES:
+            request['type'] = request['tag']
+            request['tag'] = 'object'
+
+        return request
 
     def __validate_request(self, request):
 
@@ -189,9 +211,11 @@ class Annotator:
             'org',
             'person',
             'place',
-            'placeName',
-            'country',
-            'time',
+
+            # TODO: Uncoment when it will be possible to sent 'ingredient', 'utensil' and 'productionMethod' this tags
+            # 'placeName',
+            # 'country',
+            # 'time',
         ]
 
         if tag not in legal_tags:
@@ -232,6 +256,7 @@ class Annotator:
             'description',
             'tag',
             'attribute_name',
+            'type',
         ]
 
         filled_params = {}
@@ -635,6 +660,9 @@ class Annotator:
                             annotation_ids.append('#' + existing_id)
                             new_tag_to_move = tag_to_move
 
+                        if self.__request['tag'] == 'object':
+                            new_tag_to_move = self.__add_type_to_tag(new_tag_to_move)
+
                         new_annotated_fragment += new_tag_to_move
 
                     elif reference:
@@ -658,6 +686,9 @@ class Annotator:
 
                             annotation_ids.append('#' + id)
                             new_tag_to_move = tag_to_move.replace(existing_reference, updated_reference)
+
+                        if self.__request['tag'] == 'object':
+                            new_tag_to_move = self.__add_type_to_tag(new_tag_to_move)
 
                         new_annotated_fragment += new_tag_to_move
                 else:
@@ -693,6 +724,9 @@ class Annotator:
                     tag_open = f'<{tag}{attribute}>'
                     tag_close = f'</{tag}>'
 
+                    if self.__request['tag'] == 'object':
+                        tag_open = self.__add_type_to_tag(tag_open)
+
                     new_annotated_fragment += tag_open + text_to_move + tag_close
 
                     annotated_fragment = annotated_fragment[len(text_to_move):]
@@ -701,6 +735,12 @@ class Annotator:
                         self.__tag_xml_id_number += 1
 
         return new_annotated_fragment, annotation_ids
+
+    def __add_type_to_tag(self, tag):
+        if self.__request['tag'] == 'object' and self.__request['type'] in LEGAL_TYPES and 'type' not in tag:
+            tag = tag.replace('>', f' type="{self.__request["type"]}">')
+
+        return tag
 
     def __get_id_of_list_object_to_reference(self):
         xml_id_regex = r'object_[\w]+-[\d]+'
