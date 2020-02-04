@@ -526,7 +526,7 @@ class Annotator:
                 and (self.__target or self.__positions):
             if self.__target:
                 annotation_ids = self.__get_annotation_ids_from_target(self.__request['target'])
-                annotation_ids = self.add_hash_sing_to_ids(annotation_ids)
+                annotation_ids = self.add_hash_sign_to_ids(annotation_ids)
             else:
                 self.__fragment_annotated, annotation_ids = self.__add_tag(self.__fragment_to_annotate, 'ab',
                                                                            uncertainty=True)
@@ -544,7 +544,7 @@ class Annotator:
 
             if self.__target:
                 annotation_ids = self.__get_annotation_ids_from_target(self.__request['target'])
-                annotation_ids = self.add_hash_sing_to_ids(annotation_ids)
+                annotation_ids = self.add_hash_sign_to_ids(annotation_ids)
             else:
                 self.__fragment_annotated, annotation_ids = self.__add_tag(self.__fragment_to_annotate,
                                                                            self.__request["tag"], uncertainty=True)
@@ -562,7 +562,7 @@ class Annotator:
 
             if self.__target:
                 annotation_ids = self.__get_annotation_ids_from_target(self.__request['target'])
-                annotation_ids = self.add_hash_sing_to_ids(annotation_ids)
+                annotation_ids = self.add_hash_sign_to_ids(annotation_ids)
             else:
                 self.__fragment_annotated, annotation_ids = self.__add_tag(self.__fragment_to_annotate,
                                                                            self.__request["tag"], uncertainty=True)
@@ -584,7 +584,7 @@ class Annotator:
 
             if self.__target:
                 annotation_ids = self.__get_annotation_ids_from_target(self.__request['target'])
-                annotation_ids = self.add_hash_sing_to_ids(annotation_ids)
+                annotation_ids = self.add_hash_sign_to_ids(annotation_ids)
             else:
                 self.__fragment_annotated, annotation_ids = self.__add_tag(self.__fragment_to_annotate,
                                                                            self.__request["tag"], uncertainty=True)
@@ -612,7 +612,7 @@ class Annotator:
 
             if self.__target:
                 annotation_ids = self.__get_annotation_ids_from_target(self.__request['target'])
-                annotation_ids = self.add_hash_sing_to_ids(annotation_ids)
+                annotation_ids = self.add_hash_sign_to_ids(annotation_ids)
             else:
                 self.__fragment_annotated, annotation_ids = self.__add_tag(self.__fragment_to_annotate,
                                                                            self.__request["tag"], uncertainty=True)
@@ -765,7 +765,7 @@ class Annotator:
             return target
 
     @staticmethod
-    def add_hash_sing_to_ids(ids):
+    def add_hash_sign_to_ids(ids):
         new_ids = []
 
         for id in ids:
