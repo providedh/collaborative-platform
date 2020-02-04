@@ -5,6 +5,7 @@ Django==2.2.4
 psycopg2-binary==2.8.3
 
 # For tests
+mock==3.0.5
 pytest==5.3.5
 pytest-cov==2.8.1
 pytest-django==3.8.0
