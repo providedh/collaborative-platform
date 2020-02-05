@@ -9,6 +9,7 @@ button span, #alert{
 #breadcrumb{
   position: fixed;
   display: none;
+  z-index: 1000;
 }
 
 #editor p,
@@ -35,7 +36,7 @@ page {
   margin-bottom: 0.5cm;
   box-shadow: 0 1px 3px 1px rgba(60,64,67,.15);
   width: 21cm;
-  line-height: 2.35em;
+  line-height: 2.6em;
 }
 
 #alert{
