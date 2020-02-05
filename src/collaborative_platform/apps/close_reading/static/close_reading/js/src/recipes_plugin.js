@@ -176,14 +176,14 @@ let RecipesPlugin = function(args){
 			  <input class="form-check-input addNewType" type="checkbox" value="" id="${name}-tei-add-type">
 
 			  <div class="typeList">
-			    <label for="${name}-entity-type">Type
+			    <label for="${name}-entity-type">Reference
 			      <span class="help-tooltip" help="Select a type for the TEI selected entity.<br/>This 
 			      is only available for ingredient, utensil and productionMethod entities" />
 			    </label>
 			    <select class="form-control form-control-sm" id='${name}-entity-type'></select>
 			  </div>
 			  <div class="newType">
-			    <label for="${name}-type-name">New <span class="type"></span> entity name
+			    <label for="${name}-type-name">New entity name
 			      <span class="help-tooltip" help="Provide a name for a new TEI entity type.<br/>This is
 			      only available for ingredient, utensil and productionMethod entities." />
 			    </label>
