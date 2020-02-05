@@ -7,3 +7,4 @@ from django.core.management import call_command
 def django_db_setup(django_db_setup, django_db_blocker):
     with django_db_blocker.unblock():
         call_command('loaddata', 'apps/close_reading/tests/annotator_tests_db_fixture.json')
+        # call_command('loaddata', 'apps/core/fixtures/core_initial.json')
