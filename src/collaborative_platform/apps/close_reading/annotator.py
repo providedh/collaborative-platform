@@ -1284,4 +1284,4 @@ class Annotator:
         user_id = int(self.__annotator_xml_id.replace('person', ''))
         user = User.objects.get(id=user_id)
 
-        create_clique(request_data, project_id, user)
+        create_clique(request_data, project_id, user, created_in_annotator=True)
