@@ -1,11 +1,13 @@
-#toolbar input.addNewType{
+#toolbar input.addNewType,
+#toolbar input.useNewType{
 	position: initial;
 	margin: 0 0 0 5px;
 	width: initial;
 	align-self: flex-start;
 }
 
-#toolbar label.addNewTypeLabel{
+#toolbar label.addNewTypeLabel,
+#toolbar label.useNewTypeLabel{
 	padding-left: 5px;
 	font-size: .8em;
 	margin-top: -1.3em;
@@ -19,6 +21,14 @@
 
 .entityTypeFormGroup .newType{
 	display: none;
+}
+
+#toolbar .entityTypeFormGroup input.useNewType:checked{
+	margin-top: 2em;
+}
+
+.entityTypeFormGroup input.useNewType:checked ~ *{
+	display: none !important;
 }
 
 .entityTypeFormGroup input.addNewType:checked ~ .typeList{

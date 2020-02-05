@@ -102,6 +102,10 @@ let RecipesPlugin = function(args){
 		return inputId;		
 	}
 
+	function _getUsingId(name){
+		return `${name}-tei-use-type`;
+	}
+
 	function _getFormId(name){
 		return name + '-entity-type-form-group';
 	}
@@ -155,11 +159,17 @@ let RecipesPlugin = function(args){
 
 	function _createEntityTypeInput(name){
 		const inputHtml = `<div id="${name}-entity-type-form-group" class="entityTypeFormGroup" fromList="true">
-			  <label class="form-check-label addNewTypeLabel" for="teiAddType">
+			  <label class="form-check-label useNewTypeLabel" for="${name}-tei-use-type">
+			    <span class="type"></span> don't want to specify it? Close this control
+			    </label>
+			  <input class="form-check-input useNewType" type="checkbox" value="" id="${name}-tei-use-type">
+
+			  <label class="form-check-label addNewTypeLabel" for="${name}-tei-add-type">
 			    <span class="type"></span> not in the list?
 			    Add new <span class="type"></span>
 			    </label>
 			  <input class="form-check-input addNewType" type="checkbox" value="" id="${name}-tei-add-type">
+
 			  <div class="typeList">
 			    <label for="${name}-entity-type">Type
 			      <span class="help-tooltip" help="Select a type for the TEI selected entity.<br/>This 
@@ -345,13 +355,21 @@ let RecipesPlugin = function(args){
 			*/
 		}
 	}
+
+	function _getInputValue(type){
+		const usingInput = document.getElementById(_getUsingId(type)),
+			input = document.getElementById(_getInputId(type)),
+			value = input.value.startsWith(self.XML_EXTRA_CHAR_SPACER)? 
+					input.value.slice(self.XML_EXTRA_CHAR_SPACER.length):
+					input.value;
+		return (usingInput.checked===false)?value:null;
+	}
 	
 	function _handleAnnotationCreate(json){
 		/* uncomment for annotation object type 
 		const annotationInput = document.getElementById(_getInputId('annotation'));
 		*/
-		const teiInput = document.getElementById(_getInputId('tei')),
-			{usingRecipesPlugin} = _getSettings();
+		const {usingRecipesPlugin} = _getSettings();
 
 		if(usingRecipesPlugin === true){
 			if(json.hasOwnProperty('locus')){
@@ -364,11 +382,9 @@ let RecipesPlugin = function(args){
 				*/
 			} else {
 				// annotating tei
-				const asserted_value = teiInput.value.startsWith(self.XML_EXTRA_CHAR_SPACER)? 
-					teiInput.value.slice(self.XML_EXTRA_CHAR_SPACER.length):
-					teiInput.value;
+				const asserted_value = _getInputValue('tei');
 					
-				if(['ingredient', 'utensil', 'productionMethod'].includes(json['tag'])){
+				if(['ingredient', 'utensil', 'productionMethod'].includes(json['tag']) && asserted_value != null){
 					json['asserted_value'] = asserted_value
 					json['attribute_name'] = 'ref';
 					json['locus'] = 'value';
@@ -377,7 +393,7 @@ let RecipesPlugin = function(args){
 		}
 		
 		console.log('sent > ',JSON.stringify(json));
-		self.publish('recipesWebsocket/send', JSON.stringify(json));
+		//self.publish('recipesWebsocket/send', JSON.stringify(json));
 	}
 	
 	function _getSettings(){
