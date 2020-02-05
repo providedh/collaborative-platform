@@ -79,6 +79,9 @@ class Directory(FileNode):
         if self.parent_dir_id is None:
             raise ReferenceError("Cannot move parent dir!")
 
+        if self.id == directory_id:
+            raise ReferenceError("Cannot move dir into itself!")
+
         from apps.files_management.helpers import is_child
         if is_child(self.id, directory_id):
             raise ReferenceError("Moving parent dir to child dir is not allowed.")
