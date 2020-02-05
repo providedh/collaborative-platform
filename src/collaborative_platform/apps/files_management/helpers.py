@@ -117,7 +117,7 @@ def index_entities(entities):  # type: (List[dict]) -> None
         'place': Place,
         'ingredient': Ingredient,
         'utensil': Utensil,
-        'productionmethod': ProductionMethod
+        'productionMethod': ProductionMethod
     }
 
     for entity in copy.deepcopy(entities):

@@ -135,7 +135,7 @@ class Utensil(Entity):
 
 class ProductionMethod(Entity):
     class Index:
-        name = 'productionMethod'
+        name = 'productionmethod'
         settings = {
             'number_of_shards': 1,
             'number_of_replicas': 0
