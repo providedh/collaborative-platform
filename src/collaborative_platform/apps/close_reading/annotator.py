@@ -654,7 +654,7 @@ class Annotator:
                             annotation_ids.append('#' + existing_id)
                             new_tag_to_move = tag_to_move
 
-                        if self.__request['tag'] == 'object':
+                        if tag == 'object':
                             new_tag_to_move = self.__add_type_to_tag(new_tag_to_move)
 
                         new_annotated_fragment += new_tag_to_move
@@ -681,7 +681,7 @@ class Annotator:
                             annotation_ids.append('#' + id)
                             new_tag_to_move = tag_to_move.replace(existing_reference, updated_reference)
 
-                        if self.__request['tag'] == 'object':
+                        if tag == 'object':
                             new_tag_to_move = self.__add_type_to_tag(new_tag_to_move)
 
                         new_annotated_fragment += new_tag_to_move
@@ -718,7 +718,7 @@ class Annotator:
                     tag_open = f'<{tag}{attribute}>'
                     tag_close = f'</{tag}>'
 
-                    if self.__request['tag'] == 'object':
+                    if tag == 'object':
                         tag_open = self.__add_type_to_tag(tag_open)
 
                     new_annotated_fragment += tag_open + text_to_move + tag_close
@@ -811,13 +811,15 @@ class Annotator:
         return new_element
 
     def __create_list_element(self, json, annotation_ids):
+        type = json['type'] if json['type'] != '' else json['tag']
+
         xml_id = annotation_ids[0].replace('#', '')
 
         if xml_id == json['asserted_value']:
             return None
 
         else:
-            element = f'<object type="{json["tag"]}" xml:id="{xml_id}">{json["asserted_value"]}</object>'
+            element = f'<object type="{type}" xml:id="{xml_id}">{json["asserted_value"]}</object>'
             new_element = etree.fromstring(element)
 
             return new_element
@@ -1249,11 +1251,12 @@ class Annotator:
         asserted_entities = self.__request['asserted_value'].split(' ')
 
         for asserted_entity in asserted_entities:
-            if '#' not in asserted_entity:
-                entity = Entity.objects.filter(
+            # if '#' not in asserted_entity:
+            if asserted_entity.startswith('#'):
+                entity = Entity.objects.get(
                     project_id=self.__file.project_id,
                     file=self.__file,
-                    xml_id=asserted_entity,
+                    xml_id=asserted_entity.replace('#', ''),
                     deleted_on__isnull=True,
                 )
 
