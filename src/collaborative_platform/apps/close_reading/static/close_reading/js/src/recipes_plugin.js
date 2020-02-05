@@ -19,6 +19,7 @@
  * */
 import AjaxCalls from './utilities/ajax.js';
 import ColorScheme from './utilities/color.js';
+import CertaintyStyler from './utilities/certaintystyling.js';
 
 let RecipesPlugin = function(args){
 	let self = null;
@@ -226,6 +227,46 @@ let RecipesPlugin = function(args){
 		return $.parseHTML(tagHtml)[0];
 	}
 
+	function _styleAnnotatedTags(file, currentUser, XML_EXTRA_CHAR_SPACER){
+		const certaintyStyler = CertaintyStyler({currentUser}),
+			nodes_and_annotations = {};
+
+		Array.from(file.getElementsByTagName('teiHeader')[0].getElementsByTagName('certainty'), a=>a)
+            .forEach(annotation=>{
+                annotation.attributes['target'].value.trim().split(" ").forEach(target=>{
+					const id = XML_EXTRA_CHAR_SPACER+target.slice(1),
+                		node = document.getElementById(id);
+
+                    if(node != null && annotation.attributes.hasOwnProperty('ana')){   
+                    	if(! nodes_and_annotations.hasOwnProperty(id)){
+                    		nodes_and_annotations[id] = [];
+                    	}
+                    	
+                    	annotation.attributes['ana'].value.split(' ').forEach(source=>{
+                    		nodes_and_annotations[id].push([
+                    			source.split('#')[1], 
+                    			annotation.attributes['cert'].value,
+                    			annotation.attributes['resp'].value,
+                    			annotation.attributes['id'].value,
+                    			]);
+                    	})
+
+	                	if(!node.hasOwnProperty('_uncertainty_count')){
+	                		node._uncertainty_count = 1;
+		                	node.addEventListener('mouseenter', 
+		                		()=>self.publish('annotation/mouseenter', {target}))
+		                	node.addEventListener('mouseleave', 
+		                		()=>self.publish('annotation/mouseleave', {target}))
+	                	} else{
+	                		node._uncertainty_count += 1;
+	                	}
+                    }
+                })
+            });
+
+        certaintyStyler.applyScheme(Object.entries(nodes_and_annotations), 'eScheme');
+	}
+
 	function _handleDocumentRender(args){
 		const editor = document.getElementById('editor'),
 			divNodes = editor.getElementsByTagName('div');
@@ -246,7 +287,7 @@ let RecipesPlugin = function(args){
 		});
 
 		_styleRecipeEntities();
-
+		_styleAnnotatedTags(args.document, args.user, args.XML_EXTRA_CHAR_SPACER,)
 		_updateInputOptions();
 	}
 

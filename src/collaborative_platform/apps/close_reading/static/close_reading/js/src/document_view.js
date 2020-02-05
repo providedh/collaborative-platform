@@ -69,46 +69,6 @@ var DocumentView = function(args){
 	        return({body, parsed_tei});
 	}
 
-	function _styleAnnotatedTags(file, currentUser){
-		const certaintyStyler = CertaintyStyler({currentUser}),
-			nodes_and_annotations = {};
-
-		Array.from(file.getElementsByTagName('teiHeader')[0].getElementsByTagName('certainty'), a=>a)
-            .forEach(annotation=>{
-                annotation.attributes['target'].value.trim().split(" ").forEach(target=>{
-					const id = XML_EXTRA_CHAR_SPACER+target.slice(1),
-                		node = document.getElementById(id);
-
-                    if(node != null && annotation.attributes.hasOwnProperty('ana')){   
-                    	if(! nodes_and_annotations.hasOwnProperty(id)){
-                    		nodes_and_annotations[id] = [];
-                    	}
-                    	
-                    	annotation.attributes['ana'].value.split(' ').forEach(source=>{
-                    		nodes_and_annotations[id].push([
-                    			source.split('#')[1], 
-                    			annotation.attributes['cert'].value,
-                    			annotation.attributes['resp'].value,
-                    			annotation.attributes['id'].value,
-                    			]);
-                    	})
-
-	                	if(!node.hasOwnProperty('_uncertainty_count')){
-	                		node._uncertainty_count = 1;
-		                	node.addEventListener('mouseenter', 
-		                		()=>self.publish('annotation/mouseenter', {target}))
-		                	node.addEventListener('mouseleave', 
-		                		()=>self.publish('annotation/mouseleave', {target}))
-	                	} else{
-	                		node._uncertainty_count += 1;
-	                	}
-                    }
-                })
-            });
-
-        certaintyStyler.applyScheme(Object.entries(nodes_and_annotations), 'eScheme');
-	}
-
 	function _expandedEmptyTag(empty_tag){
 	    const tag_name = empty_tag.match(/[^ ,<,/,>]+/gm)[0],
 	        opening_tag = empty_tag.replace('/>','>'),
@@ -198,8 +158,8 @@ var DocumentView = function(args){
 			if(response.success === true)
 				user = response.content.id;
 
-			_styleAnnotatedTags(parsed_tei, user);
-			self.publish('document/render', {XML_EXTRA_CHAR_SPACER, document: parsed_tei});
+			//_styleAnnotatedTags(parsed_tei, user);
+			self.publish('document/render', {XML_EXTRA_CHAR_SPACER, user, document: parsed_tei});
 		})
 	}
 
