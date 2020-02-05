@@ -9,6 +9,7 @@ button span, #alert{
 #breadcrumb{
   position: fixed;
   display: none;
+  z-index: 1000;
 }
 
 #editor p,
