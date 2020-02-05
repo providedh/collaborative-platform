@@ -35,15 +35,9 @@ POSITION_PARAMS_V2 = [
 ]
 
 LEGAL_TYPES = [
-    # TODO: Enable when it will be possible to sent this tags
-    # 'ingredient',
-    # 'utensil',
-    # 'productionMethod',
-
-    # TODO: Remove when it will be possible to sent 'ingredient', 'utensil' and 'productionMethod' this tags
-    'placeName',
-    'country',
-    'time',
+    'ingredient',
+    'utensil',
+    'productionMethod',
 ]
 
 
@@ -211,12 +205,12 @@ class Annotator:
             'org',
             'person',
             'place',
-
-            # TODO: Uncoment when it will be possible to sent 'ingredient', 'utensil' and 'productionMethod' this tags
-            # 'placeName',
-            # 'country',
-            # 'time',
+            'placeName',
+            'country',
+            'time',
         ]
+
+        legal_tags += LEGAL_TYPES
 
         if tag not in legal_tags:
             raise BadRequest(f"Tag '{tag}' is illegal for TEI schema selected for this project.")
