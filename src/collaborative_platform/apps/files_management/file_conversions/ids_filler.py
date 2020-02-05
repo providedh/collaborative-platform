@@ -106,7 +106,7 @@ class IDsFiller:
 
         for old, new in ids_map.items():
             text = text.replace("='" + old, "='" + new).replace('="' + old, '="' + new)\
-                .replace("='#" + old, "='#" + new).replace('=#"' + old, '="#' + new)
+                .replace("='#" + old, "='#" + new).replace('="#' + old, '="#' + new)
         return text
 
     def process(self, initial=False):
