@@ -147,6 +147,9 @@ class File(FileNode):
         from apps.projects.helpers import create_new_project_version
         from apps.api_vis.helpers import fake_delete_entities, fake_delete_unifications
         from apps.api_vis.models import Entity
+        from apps.files_management.helpers import delete_es_docs
+
+        delete_es_docs(self.id)
 
         super().delete_fake()
 
