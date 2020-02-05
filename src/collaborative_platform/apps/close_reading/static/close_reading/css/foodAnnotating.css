@@ -23,6 +23,11 @@
 	display: none;
 }
 
+#ref-certainty-entity-type-form-group input.useNewType,
+#ref-certainty-entity-type-form-group label.useNewTypeLabel{
+	display: none;
+}
+
 #toolbar .entityTypeFormGroup input.useNewType:checked{
 	margin-top: 2em;
 }

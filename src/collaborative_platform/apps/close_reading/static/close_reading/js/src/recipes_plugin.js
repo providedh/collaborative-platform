@@ -79,17 +79,22 @@ let RecipesPlugin = function(args){
 		col.append(_createEntityTypeInput('tei'));
 		tei_first_col.insertAdjacentElement('afterend', col);
 
-		// 4) add entity input to tei tab
-		/* uncomment for annotation object type 
+		// 4) add entity input to tei tab 
+		/*
 		const annotation_left_col = document.getElementById('uncertainty-tab').children[0].children[2],
 			input = _createEntityTypeInput('annotation');
 		annotation_left_col.appendChild(input);
 		*/
 
-		// 5) add handler for settings change
+		// 5) add certainty asserted value
+		const ref_asserted_value = document.getElementById('uncertainty-tab').children[1].children[1],
+			ref_input = _createEntityTypeInput('ref-certainty');
+		ref_asserted_value.appendChild(ref_input);		
+
+		// 6) add handler for settings change
 		document.getElementById('using-recipes-plugin').addEventListener('change', _handleSettingsChange);
 
-		// 6) setup forms
+		// 7) setup forms
 		_updateEntitySelectOptions();
 		document.getElementById('using-recipes-plugin').addEventListener('change', _updateEntitySelectOptions);
 		document.getElementById('locus').addEventListener('change', _updateAssertedValueSelectOptions);
@@ -248,16 +253,21 @@ let RecipesPlugin = function(args){
 	function _updateAnnotationTypeInput(){
 		let show = true;
 
-		show = show && self.currentValues['locus'] == 'name';
-		show = show && ['ingredient', 'utensil', 'productionMethod'].includes(self.currentValues['asserted-value']);
+		show = show && self.currentValues['locus'] == 'value';
+		show = show && ['ingredient', 'utensil', 'productionMethod'].includes(self.currentValues['tag-name']);
+		show = show && self.currentValues['attribute-name'] == 'ref';
 		show = show && _getSettings()['usingRecipesPlugin'];
 
 		if(show === true){
-			document.getElementById(_getFormId('annotation'))
+			document.getElementById(_getFormId('ref-certainty'))
 				.classList.remove('d-none');
+			document.getElementById('uncertainty-tab').children[1].children[1].children[0].classList.add('d-none');
+			document.getElementById('uncertainty-tab').children[1].children[1].children[1].classList.add('d-none');
 		}else{
-			document.getElementById(_getFormId('annotation'))
+			document.getElementById(_getFormId('ref-certainty'))
 				.classList.add('d-none');
+			document.getElementById('uncertainty-tab').children[1].children[1].children[0].classList.remove('d-none');
+			document.getElementById('uncertainty-tab').children[1].children[1].children[1].classList.remove('d-none');
 		}
 	}
 
@@ -321,14 +331,11 @@ let RecipesPlugin = function(args){
 	function _handleOptionsChange(currentValues){
 		self.currentValues = currentValues;
 
-		/* uncomment for annotation object type 
 		_updateAnnotationTypeInput();
-		*/
 		_updateTeiTypeInput();
 
-		if(/* uncomment for annotation object type 
-			currentValues.modifiedField == 'asserted-value' ||
-			*/ 
+		if(
+			currentValues.modifiedField == 'tag-name' ||
 			currentValues.modifiedField == 'tei-tag-name'){
 			_updateInputOptions();
 		}
@@ -342,17 +349,14 @@ let RecipesPlugin = function(args){
 		_updateLegendVisibility(usingRecipesPlugin);
 
 		if(usingRecipesPlugin === false){
-			/* uncomment for annotation object type 
-			document.getElementById(_getFormId('annotation'))
+			document.getElementById(_getFormId('ref-certainty'))
 				.classList.add('d-none');
-			*/
+			
 			document.getElementById(_getFormId('tei'))
 				.classList.add('d-none');
 		}else{
 			_updateTeiTypeInput();
-			/* uncomment for annotation object type
 			_updateAnnotationTypeInput();
-			*/
 		}
 	}
 
@@ -366,20 +370,15 @@ let RecipesPlugin = function(args){
 	}
 	
 	function _handleAnnotationCreate(json){
-		/* uncomment for annotation object type 
-		const annotationInput = document.getElementById(_getInputId('annotation'));
-		*/
 		const {usingRecipesPlugin} = _getSettings();
 
 		if(usingRecipesPlugin === true){
 			if(json.hasOwnProperty('locus')){
 				// annotating uncertainty
-				/* uncomment for annotation object type 
-				if(['ingredient', 'utensil', 'productionMethod'].includes(json['tag'])){
-					json['asserted_value'] = annotationInput.value;
-					json['attribute_name'] = 'ref';
+				if(['ingredient', 'utensil', 'productionMethod'].includes(json['tag']) &&
+					json['attribute_name'] == 'ref'){
+						json['asserted_value'] = _getInputValue('ref-certainty');
 				}
-				*/
 			} else {
 				// annotating tei
 				const asserted_value = _getInputValue('tei');
@@ -393,7 +392,7 @@ let RecipesPlugin = function(args){
 		}
 		
 		console.log('sent > ',JSON.stringify(json));
-		//self.publish('recipesWebsocket/send', JSON.stringify(json));
+		self.publish('recipesWebsocket/send', JSON.stringify(json));
 	}
 	
 	function _getSettings(){
@@ -425,13 +424,11 @@ let RecipesPlugin = function(args){
 			_populateInputOptions('tei', self.currentValues['tei-tag-name']);
 		}
 
-		/* uncomment for annotation object type 
-		if(self.currentValues['locus'] == 'name'
-				&& self.currentValues['asserted-value'] != undefined
-				&& self.entityTypeOptions.hasOwnProperty(self.currentValues['asserted-value'])){
-			_populateInputOptions('annotation', self.currentValues['asserted-value']);
+		if(self.currentValues['locus'] == 'value'
+				&& ['ingredient', 'utensil', 'productionMethod'].includes(self.currentValues['tag-name'])
+				&& self.entityTypeOptions.hasOwnProperty(self.currentValues['tag-name'])){
+			_populateInputOptions('ref-certainty', self.currentValues['tag-name']);
 		}
-		*/
 	}
 
 	function _createStyles4Entities(){
