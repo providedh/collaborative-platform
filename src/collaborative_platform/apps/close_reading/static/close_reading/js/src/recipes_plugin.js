@@ -477,11 +477,12 @@ let RecipesPlugin = function(args){
 		      {
 		          content:"";
 		          position: absolute;
-		          font-size: 0.85em;
+		          font-size: 0.7em;
 		          padding-top: 1.3em;
 		          color:grey;
 		          font-family: "Font Awesome 5 Free";
 		          font-weight: 900;
+		          min-width: 5em;
 		      }
 		    `
 		    const hideRule = `

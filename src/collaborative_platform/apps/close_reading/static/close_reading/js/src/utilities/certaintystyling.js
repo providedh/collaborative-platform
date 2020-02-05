@@ -489,7 +489,7 @@ const fScheme = {
 		return '';
 	},
 	greyBefore: (id, annotations, currentUser, cssModule)=>{
-		return '';
+		return 'min-width: 5em;';
 	},
 	greyContent: (id, annotations, currentUser, cssModule)=>{
 		return 'background-color: lightgrey;';
