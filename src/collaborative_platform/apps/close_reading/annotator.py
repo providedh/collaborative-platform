@@ -68,10 +68,10 @@ class Annotator:
 
         self.__xml_annotated = ""
 
-    def add_annotation(self, xml, file_id, request, annotator_guid):
+    def add_annotation(self, xml, file_id, request, annotator_id):
         self.__xml = xml
         self.__file = File.objects.get(id=file_id)
-        self.__annotator_xml_id = 'person' + str(annotator_guid)
+        self.__annotator_xml_id = 'person' + str(annotator_id)
 
         request = self.__handle_types_in_request(request)
 
@@ -293,9 +293,9 @@ class Annotator:
             self.__tags = self.__get_adhering_tags_from_annotated_fragment(self.__fragment_to_annotate)
 
         self.__annotators_xml_ids = self.__get_annotators_xml_ids_from_file(self.__xml)
-        certainties = self.__get_certainties_from_file(self.__xml)
-        self.__tag_xml_id_number = self.__get_xml_id_number_for_tag(certainties, self.__request["tag"])
-        self.__certainty_xml_id_number = self.__get_xml_id_number_for_tag(certainties, 'certainty')
+
+        self.__tag_xml_id_number = self.__get_xml_id_number_for_tag(self.__request["tag"])
+        self.__certainty_xml_id_number = self.__get_xml_id_number_for_tag('certainty')
 
     def __get_fragment_position(self, xml, json):
         if 'start_pos' in json and json['start_pos'] is not None and 'end_pos' in json and json['end_pos'] is not None:
@@ -469,45 +469,18 @@ class Annotator:
 
         return xml_ids
 
-    def __get_xml_id_number_for_tag(self, certainties, tag='ab'):
+    def __get_xml_id_number_for_tag(self, tag):
+        # TODO: Max IDs for all tags in file should be keep in database
+
+        tag = 'ab' if tag == '' else tag
+
         if tag in ['event', 'org', 'person', 'place', 'certainty', 'object']:
             xml_id = self.__get_max_xml_id_from_database(tag)
 
-            return xml_id
-
-        # TODO: Max IDs for all tags in file should be keep in database
         else:
-            biggest_number = 0
+            xml_id = self.__get_max_xml_id_from_file(tag)
 
-            for certainty in certainties:
-                id_value = certainty.attrib['target']
-
-                if tag not in id_value:
-                    continue
-
-                id_value = id_value.strip()
-
-                split_values = id_value.split(' ')
-                for value in split_values:
-                    number = value.split('-')[-1]
-
-                    try:
-                        number = int(number)
-
-                    except ValueError:
-                        number_regex = r'\d+?$'
-                        match = re.search(number_regex, value)
-
-                        if match:
-                            number = match.group()
-                            number = int(number)
-                        else:
-                            number = 0
-
-                    if number > biggest_number:
-                        biggest_number = number
-
-            return biggest_number + 1
+        return xml_id
 
     def __get_max_xml_id_from_database(self, tag):
         file_mx_xml_id = FileMaxXmlIds.objects.get(file=self.__file)
@@ -516,6 +489,39 @@ class Annotator:
         file_mx_xml_id.save()
 
         return file_mx_xml_id.__dict__[tag]
+
+    def __get_max_xml_id_from_file(self, tag):
+        biggest_number = 0
+
+        elements_with_same_tag_and_xml_id = self.__get_elements_with_same_tag_and_xml_id(tag)
+
+        prefix = '{%s}' % NAMESPACES['xml']
+
+        for element in elements_with_same_tag_and_xml_id:
+            id = element.attrib[f'{prefix}id']
+
+            if '-' in id:
+                id_number = id.split('-')[-1]
+                id_number = int(id_number)
+
+                if id_number > biggest_number:
+                    biggest_number = id_number
+
+        return biggest_number + 1
+
+    def __get_elements_with_same_tag_and_xml_id(self, tag):
+        text_in_lines = self.__xml.splitlines()
+
+        if 'encoding=' in text_in_lines[0]:
+            text_to_parse = '\n'.join(text_in_lines[1:])
+        else:
+            text_to_parse = self.__xml
+
+        tree = etree.fromstring(text_to_parse)
+
+        elements_with_same_tag = tree.xpath(f'//default:{tag}[@xml:id]', namespaces=NAMESPACES)
+
+        return elements_with_same_tag
 
     def __prepare_xml_parts(self):
         # 1.Add tag to text
