@@ -10,6 +10,7 @@ from apps.api_vis.helpers import get_entity_from_int_or_dict, create_clique
 from apps.api_vis.models import Entity, Certainty, Unification
 from apps.exceptions import BadRequest, NotModified
 from apps.files_management.models import FileMaxXmlIds, File
+from apps.files_management.file_conversions.xml_formatter import XMLFormatter
 from apps.projects.helpers import get_ana_link
 from apps.projects.models import ProjectVersion
 
@@ -489,7 +490,19 @@ class Annotator:
                 split_values = id_value.split(' ')
                 for value in split_values:
                     number = value.split('-')[-1]
-                    number = int(number)
+
+                    try:
+                        number = int(number)
+
+                    except ValueError:
+                        number_regex = r'\d+?$'
+                        match = re.search(number_regex, value)
+
+                        if match:
+                            number = match.group()
+                            number = int(number)
+                        else:
+                            number = 0
 
                     if number > biggest_number:
                         biggest_number = number
@@ -996,13 +1009,11 @@ class Annotator:
             xml_annotated = self.__add_list_element(xml_annotated, self.__list_element_to_add)
             xml_annotated = self.__reorder_elements(xml_annotated)
 
-        xml_annotated = self.__reformat_xml(xml_annotated)
+        xml_formatter = XMLFormatter()
+        xml_annotated = xml_formatter.reformat_xml(xml_annotated)
 
         if 'encoding=' in xml_annotated_in_lines[0]:
             xml_annotated = '\n'.join((xml_annotated_in_lines[0], xml_annotated))
-
-        if 'xml version="' not in xml_annotated:
-            xml_annotated = '\n'.join((u'<?xml version="1.0"?>', xml_annotated))
 
         self.__xml_annotated = xml_annotated
 
@@ -1222,14 +1233,6 @@ class Annotator:
 
         return text
 
-    @staticmethod
-    def __reformat_xml(text):
-        parser = etree.XMLParser(remove_blank_text=True)
-        tree = etree.fromstring(text, parser=parser)
-        pretty_xml = etree.tounicode(tree, pretty_print=True)
-
-        return pretty_xml
-
     def __create_unification(self, annotation_ids):
         if len(annotation_ids) > 1:
             raise BadRequest("Entity to unify must have only one xml:id.")
@@ -1251,7 +1254,6 @@ class Annotator:
         asserted_entities = self.__request['asserted_value'].split(' ')
 
         for asserted_entity in asserted_entities:
-            # if '#' not in asserted_entity:
             if asserted_entity.startswith('#'):
                 entity = Entity.objects.get(
                     project_id=self.__file.project_id,

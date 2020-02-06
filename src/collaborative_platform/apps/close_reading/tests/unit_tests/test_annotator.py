@@ -21,27 +21,14 @@ def read_file(path):
     return text
 
 
-def fake_get_user_data_from_db(guid):
-    data = {
-        'forename': 'Tony',
-        'surname': 'Stark',
-        'email': 'tony.stark@zmyslonymail.com',
-        'link': 'https://providedh.ehum.psnc.pl/abcde/',
-    }
-
-    return data
-
-
-@mock.patch('apps.close_reading.annotator.Annotator._Annotator__get_user_data_from_db',
-            side_effect=fake_get_user_data_from_db)
 class TestAnnotator:
     @pytest.mark.django_db
-    def test_add_annotation__add_tag_to_text__fragment_without_tag__string(self, mock_get_user_data_from_db):
+    def test_add_annotation__add_tag_to_text__fragment_without_tag__string(self):
         json = {
-                "start_pos": 8585,
-                "end_pos": 8590,
-                "tag": "test"
-            }
+            'start_pos': 9455,
+            'end_pos': 9460,
+            'tag': 'date',
+        }
 
         input_file_path = os.path.join(DIRNAME, "test_files", "source_files", "source_file.xml")
         expected_file_path = os.path.join(DIRNAME, "test_files", "result_files",
@@ -53,42 +40,36 @@ class TestAnnotator:
         user_guid = 'abcde'
         file_id = 1
 
-        # input_text = input_text.decode('utf-8')
+        annotator = Annotator()
+        result = annotator.add_annotation(input_text, file_id, json, user_guid)
+
+        assert result == expected_text
+
+    @pytest.mark.django_db
+    def test_add_annotation__add_tag_to_text__fragment_with_other_tag__string(self):
+        json = {
+            "start_row": 221,
+            "start_col": 106,
+            "end_row": 221,
+            "end_col": 125,
+            "tag": "date"
+        }
+
+        input_file_path = os.path.join(DIRNAME, "test_files", "source_files", "source_file.xml")
+        expected_file_path = os.path.join(DIRNAME, "test_files", "result_files",
+                                          "add_tag_to_text__fragment_with_other_tag__result.xml")
+
+        input_text = read_file(input_file_path)
+        expected_text = read_file(expected_file_path)
+
+        user_guid = 'abcde'
+        file_id = 1
 
         annotator = Annotator()
         result = annotator.add_annotation(input_text, file_id, json, user_guid)
 
-        result = result.encode('utf-8')
-
         assert result == expected_text
 
-#     def test_add_annotation__add_tag_to_text__fragment_with_other_tag__string(self, mock_get_user_data_from_db):
-#         json = {
-#             "start_row": 218,
-#             "start_col": 73,
-#             "end_row": 218,
-#             "end_col": 92,
-#             "tag": "test"
-#         }
-#
-#         input_file_path = os.path.join(DIRNAME, "test_annotator_files", "source_files", "source_file.xml")
-#         expected_file_path = os.path.join(DIRNAME, "test_annotator_files", "result_files",
-#                                           "add_tag_to_text__fragment_with_other_tag__result.xml")
-#
-#         input_text = read_file(input_file_path)
-#         expected_text = read_file(expected_file_path)
-#
-#         user_guid = 'abcde'
-#
-#         input_text = input_text.decode('utf-8')
-#
-#         annotator = Annotator()
-#         result = annotator.add_annotation(input_text, json, user_guid)
-#
-#         result = result.encode('utf-8')
-#
-#         assert result == expected_text
-#
 #     def test_add_annotation__add_tag_to_text__fragment_with_same_tag__exception(self, mock_get_user_data_from_db):
 #         json = {
 #             "start_row": 218,
