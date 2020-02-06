@@ -111,6 +111,10 @@ class File(Document):
     id = Integer()
     project_id = Integer()
 
+    def save(self, using=None, index=None, validate=True, skip_empty=True, **kwargs):
+        self.meta.id = self.id
+        return super().save(using, index, validate, skip_empty, **kwargs)
+
     class Index:
         name = 'file'
         settings = {
