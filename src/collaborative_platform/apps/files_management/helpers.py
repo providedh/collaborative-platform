@@ -29,6 +29,8 @@ from apps.index_and_search.models import Person, Organization, Event, Place, Ing
 from apps.projects.helpers import log_activity
 from apps.projects.models import Project
 
+ALL_ES_ENTITIES = (Person, Organization, Event, Place, Ingredient, Utensil, ProductionMethod, es.File)
+
 
 def upload_file(uploaded_file, project, user, parent_dir=None):  # type: (UploadedFile, Project, User, int) -> File
     # I assume that the project exists, bc few level above we checked if user has permissions to write to it.
@@ -115,7 +117,7 @@ def index_entities(entities):  # type: (List[dict]) -> None
         'place': Place,
         'ingredient': Ingredient,
         'utensil': Utensil,
-        'productionmethod': ProductionMethod
+        'productionMethod': ProductionMethod
     }
 
     for entity in copy.deepcopy(entities):
@@ -182,11 +184,8 @@ def include_user(response):  # type: (JsonResponse) -> JsonResponse
 
 
 def delete_es_docs(file_id):  # type: (int) -> None
-    es.Person.search().filter('term', file_id=file_id).delete()
-    es.Place.search().filter('term', file_id=file_id).delete()
-    es.Organization.search().filter('term', file_id=file_id).delete()
-    es.Event.search().filter('term', file_id=file_id).delete()
-    es.File.search().filter('term', id=file_id).delete()
+    for entity_model in ALL_ES_ENTITIES:
+        entity_model.search().filter('term', file_id=file_id).delete()
 
 
 def index_file(dbfile, text):  # type: (File, str) -> None

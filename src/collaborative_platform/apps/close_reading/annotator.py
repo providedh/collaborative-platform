@@ -34,6 +34,12 @@ POSITION_PARAMS_V2 = [
     'end_pos',
 ]
 
+LEGAL_TYPES = [
+    'ingredient',
+    'utensil',
+    'productionMethod',
+]
+
 
 class Annotator:
     def __init__(self):
@@ -66,6 +72,8 @@ class Annotator:
         self.__file = File.objects.get(id=file_id)
         self.__annotator_xml_id = 'person' + str(annotator_guid)
 
+        request = self.__handle_types_in_request(request)
+
         self.__validate_request(request)
         self.__get_data_from_xml()
         self.__prepare_xml_parts()
@@ -81,6 +89,14 @@ class Annotator:
             self.__create_new_xml()
 
             return self.__xml_annotated
+
+    @staticmethod
+    def __handle_types_in_request(request):
+        if request['tag'] in LEGAL_TYPES:
+            request['type'] = request['tag']
+            request['tag'] = 'object'
+
+        return request
 
     def __validate_request(self, request):
 
@@ -194,6 +210,8 @@ class Annotator:
             'time',
         ]
 
+        legal_tags += LEGAL_TYPES
+
         if tag not in legal_tags:
             raise BadRequest(f"Tag '{tag}' is illegal for TEI schema selected for this project.")
 
@@ -232,6 +250,7 @@ class Annotator:
             'description',
             'tag',
             'attribute_name',
+            'type',
         ]
 
         filled_params = {}
@@ -501,7 +520,7 @@ class Annotator:
                 and (self.__target or self.__positions):
             if self.__target:
                 annotation_ids = self.__get_annotation_ids_from_target(self.__request['target'])
-                annotation_ids = self.add_hash_sing_to_ids(annotation_ids)
+                annotation_ids = self.add_hash_sign_to_ids(annotation_ids)
             else:
                 self.__fragment_annotated, annotation_ids = self.__add_tag(self.__fragment_to_annotate, 'ab',
                                                                            uncertainty=True)
@@ -519,7 +538,7 @@ class Annotator:
 
             if self.__target:
                 annotation_ids = self.__get_annotation_ids_from_target(self.__request['target'])
-                annotation_ids = self.add_hash_sing_to_ids(annotation_ids)
+                annotation_ids = self.add_hash_sign_to_ids(annotation_ids)
             else:
                 self.__fragment_annotated, annotation_ids = self.__add_tag(self.__fragment_to_annotate,
                                                                            self.__request["tag"], uncertainty=True)
@@ -537,7 +556,7 @@ class Annotator:
 
             if self.__target:
                 annotation_ids = self.__get_annotation_ids_from_target(self.__request['target'])
-                annotation_ids = self.add_hash_sing_to_ids(annotation_ids)
+                annotation_ids = self.add_hash_sign_to_ids(annotation_ids)
             else:
                 self.__fragment_annotated, annotation_ids = self.__add_tag(self.__fragment_to_annotate,
                                                                            self.__request["tag"], uncertainty=True)
@@ -559,7 +578,7 @@ class Annotator:
 
             if self.__target:
                 annotation_ids = self.__get_annotation_ids_from_target(self.__request['target'])
-                annotation_ids = self.add_hash_sing_to_ids(annotation_ids)
+                annotation_ids = self.add_hash_sign_to_ids(annotation_ids)
             else:
                 self.__fragment_annotated, annotation_ids = self.__add_tag(self.__fragment_to_annotate,
                                                                            self.__request["tag"], uncertainty=True)
@@ -587,7 +606,7 @@ class Annotator:
 
             if self.__target:
                 annotation_ids = self.__get_annotation_ids_from_target(self.__request['target'])
-                annotation_ids = self.add_hash_sing_to_ids(annotation_ids)
+                annotation_ids = self.add_hash_sign_to_ids(annotation_ids)
             else:
                 self.__fragment_annotated, annotation_ids = self.__add_tag(self.__fragment_to_annotate,
                                                                            self.__request["tag"], uncertainty=True)
@@ -635,6 +654,9 @@ class Annotator:
                             annotation_ids.append('#' + existing_id)
                             new_tag_to_move = tag_to_move
 
+                        if tag == 'object':
+                            new_tag_to_move = self.__add_type_to_tag(new_tag_to_move)
+
                         new_annotated_fragment += new_tag_to_move
 
                     elif reference:
@@ -658,6 +680,9 @@ class Annotator:
 
                             annotation_ids.append('#' + id)
                             new_tag_to_move = tag_to_move.replace(existing_reference, updated_reference)
+
+                        if tag == 'object':
+                            new_tag_to_move = self.__add_type_to_tag(new_tag_to_move)
 
                         new_annotated_fragment += new_tag_to_move
                 else:
@@ -693,6 +718,9 @@ class Annotator:
                     tag_open = f'<{tag}{attribute}>'
                     tag_close = f'</{tag}>'
 
+                    if tag == 'object':
+                        tag_open = self.__add_type_to_tag(tag_open)
+
                     new_annotated_fragment += tag_open + text_to_move + tag_close
 
                     annotated_fragment = annotated_fragment[len(text_to_move):]
@@ -701,6 +729,12 @@ class Annotator:
                         self.__tag_xml_id_number += 1
 
         return new_annotated_fragment, annotation_ids
+
+    def __add_type_to_tag(self, tag):
+        if self.__request['tag'] == 'object' and self.__request['type'] in LEGAL_TYPES and 'type' not in tag:
+            tag = tag.replace('>', f' type="{self.__request["type"]}">')
+
+        return tag
 
     def __get_id_of_list_object_to_reference(self):
         xml_id_regex = r'object_[\w]+-[\d]+'
@@ -725,7 +759,7 @@ class Annotator:
             return target
 
     @staticmethod
-    def add_hash_sing_to_ids(ids):
+    def add_hash_sign_to_ids(ids):
         new_ids = []
 
         for id in ids:
@@ -777,13 +811,15 @@ class Annotator:
         return new_element
 
     def __create_list_element(self, json, annotation_ids):
+        type = json['type'] if json['type'] != '' else json['tag']
+
         xml_id = annotation_ids[0].replace('#', '')
 
         if xml_id == json['asserted_value']:
             return None
 
         else:
-            element = f'<object type="{json["tag"]}" xml:id="{xml_id}">{json["asserted_value"]}</object>'
+            element = f'<object type="{type}" xml:id="{xml_id}">{json["asserted_value"]}</object>'
             new_element = etree.fromstring(element)
 
             return new_element
@@ -1215,11 +1251,12 @@ class Annotator:
         asserted_entities = self.__request['asserted_value'].split(' ')
 
         for asserted_entity in asserted_entities:
-            if '#' not in asserted_entity:
-                entity = Entity.objects.filter(
+            # if '#' not in asserted_entity:
+            if asserted_entity.startswith('#'):
+                entity = Entity.objects.get(
                     project_id=self.__file.project_id,
                     file=self.__file,
-                    xml_id=asserted_entity,
+                    xml_id=asserted_entity.replace('#', ''),
                     deleted_on__isnull=True,
                 )
 
@@ -1247,4 +1284,4 @@ class Annotator:
         user_id = int(self.__annotator_xml_id.replace('person', ''))
         user = User.objects.get(id=user_id)
 
-        create_clique(request_data, project_id, user)
+        create_clique(request_data, project_id, user, created_in_annotator=True)

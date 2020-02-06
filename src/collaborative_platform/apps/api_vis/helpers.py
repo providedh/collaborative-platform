@@ -10,7 +10,7 @@ from django.contrib.auth.models import User
 import apps.index_and_search.models as es
 
 from apps.api_vis.models import Clique, Commit, Entity, EventVersion, OrganizationVersion, PersonVersion, PlaceVersion, \
-    CertaintyVersion, Unification
+    CertaintyVersion, Unification, ObjectVersion
 from apps.exceptions import BadRequest
 from apps.files_management.models import Directory, File, FileMaxXmlIds, FileVersion
 from apps.projects.models import Project, ProjectVersion
@@ -148,6 +148,10 @@ def create_entities_in_database(entities, project, file_version):  # type: (list
             'event': EventVersion,
             'place': PlaceVersion,
             'certainty': CertaintyVersion,
+            'object': ObjectVersion,
+            'ingredient': ObjectVersion,
+            'utensil': ObjectVersion,
+            'productionMethod': ObjectVersion,
         }
 
         if entity['tag'] not in classes:

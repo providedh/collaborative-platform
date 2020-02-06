@@ -19,6 +19,7 @@
  * */
 import AjaxCalls from './utilities/ajax.js';
 import ColorScheme from './utilities/color.js';
+import CertaintyStyler from './utilities/certaintystyling.js';
 
 let RecipesPlugin = function(args){
 	let self = null;
@@ -79,17 +80,22 @@ let RecipesPlugin = function(args){
 		col.append(_createEntityTypeInput('tei'));
 		tei_first_col.insertAdjacentElement('afterend', col);
 
-		// 4) add entity input to tei tab
-		/* uncomment for annotation object type 
+		// 4) add entity input to tei tab 
+		/*
 		const annotation_left_col = document.getElementById('uncertainty-tab').children[0].children[2],
 			input = _createEntityTypeInput('annotation');
 		annotation_left_col.appendChild(input);
 		*/
 
-		// 5) add handler for settings change
+		// 5) add certainty asserted value
+		const ref_asserted_value = document.getElementById('uncertainty-tab').children[1].children[1],
+			ref_input = _createEntityTypeInput('ref-certainty');
+		ref_asserted_value.appendChild(ref_input);		
+
+		// 6) add handler for settings change
 		document.getElementById('using-recipes-plugin').addEventListener('change', _handleSettingsChange);
 
-		// 6) setup forms
+		// 7) setup forms
 		_updateEntitySelectOptions();
 		document.getElementById('using-recipes-plugin').addEventListener('change', _updateEntitySelectOptions);
 		document.getElementById('locus').addEventListener('change', _updateAssertedValueSelectOptions);
@@ -100,6 +106,10 @@ let RecipesPlugin = function(args){
 			creatingNewType = document.getElementById(creatingNewTypeCheckboxId).checked,
 			inputId = creatingNewType===true?`${name}-type-name`:`${name}-entity-type`;
 		return inputId;		
+	}
+
+	function _getUsingId(name){
+		return `${name}-tei-use-type`;
 	}
 
 	function _getFormId(name){
@@ -155,20 +165,26 @@ let RecipesPlugin = function(args){
 
 	function _createEntityTypeInput(name){
 		const inputHtml = `<div id="${name}-entity-type-form-group" class="entityTypeFormGroup" fromList="true">
-			  <label class="form-check-label addNewTypeLabel" for="teiAddType">
+			  <label class="form-check-label useNewTypeLabel" for="${name}-tei-use-type">
+			    <span class="type"></span> don't want to specify it? Close this control
+			    </label>
+			  <input class="form-check-input useNewType" type="checkbox" value="" id="${name}-tei-use-type">
+
+			  <label class="form-check-label addNewTypeLabel" for="${name}-tei-add-type">
 			    <span class="type"></span> not in the list?
 			    Add new <span class="type"></span>
 			    </label>
 			  <input class="form-check-input addNewType" type="checkbox" value="" id="${name}-tei-add-type">
+
 			  <div class="typeList">
-			    <label for="${name}-entity-type">Type
+			    <label for="${name}-entity-type">Reference
 			      <span class="help-tooltip" help="Select a type for the TEI selected entity.<br/>This 
 			      is only available for ingredient, utensil and productionMethod entities" />
 			    </label>
 			    <select class="form-control form-control-sm" id='${name}-entity-type'></select>
 			  </div>
 			  <div class="newType">
-			    <label for="${name}-type-name">New <span class="type"></span> entity name
+			    <label for="${name}-type-name">New entity name
 			      <span class="help-tooltip" help="Provide a name for a new TEI entity type.<br/>This is
 			      only available for ingredient, utensil and productionMethod entities." />
 			    </label>
@@ -211,6 +227,46 @@ let RecipesPlugin = function(args){
 		return $.parseHTML(tagHtml)[0];
 	}
 
+	function _styleAnnotatedTags(file, currentUser, XML_EXTRA_CHAR_SPACER){
+		const certaintyStyler = CertaintyStyler({currentUser}),
+			nodes_and_annotations = {};
+
+		Array.from(file.getElementsByTagName('teiHeader')[0].getElementsByTagName('certainty'), a=>a)
+            .forEach(annotation=>{
+                annotation.attributes['target'].value.trim().split(" ").forEach(target=>{
+					const id = XML_EXTRA_CHAR_SPACER+target.slice(1),
+                		node = document.getElementById(id);
+
+                    if(node != null && annotation.attributes.hasOwnProperty('ana')){   
+                    	if(! nodes_and_annotations.hasOwnProperty(id)){
+                    		nodes_and_annotations[id] = [];
+                    	}
+                    	
+                    	annotation.attributes['ana'].value.split(' ').forEach(source=>{
+                    		nodes_and_annotations[id].push([
+                    			source.split('#')[1], 
+                    			annotation.attributes['cert'].value,
+                    			annotation.attributes['resp'].value,
+                    			annotation.attributes['id'].value,
+                    			]);
+                    	})
+
+	                	if(!node.hasOwnProperty('_uncertainty_count')){
+	                		node._uncertainty_count = 1;
+		                	node.addEventListener('mouseenter', 
+		                		()=>self.publish('annotation/mouseenter', {target}))
+		                	node.addEventListener('mouseleave', 
+		                		()=>self.publish('annotation/mouseleave', {target}))
+	                	} else{
+	                		node._uncertainty_count += 1;
+	                	}
+                    }
+                })
+            });
+
+        certaintyStyler.applyScheme(Object.entries(nodes_and_annotations), 'eScheme');
+	}
+
 	function _handleDocumentRender(args){
 		const editor = document.getElementById('editor'),
 			divNodes = editor.getElementsByTagName('div');
@@ -231,23 +287,28 @@ let RecipesPlugin = function(args){
 		});
 
 		_styleRecipeEntities();
-
+		_styleAnnotatedTags(args.document, args.user, args.XML_EXTRA_CHAR_SPACER,)
 		_updateInputOptions();
 	}
 
 	function _updateAnnotationTypeInput(){
 		let show = true;
 
-		show = show && self.currentValues['locus'] == 'name';
-		show = show && ['ingredient', 'utensil', 'productionMethod'].includes(self.currentValues['asserted-value']);
+		show = show && self.currentValues['locus'] == 'value';
+		show = show && ['ingredient', 'utensil', 'productionMethod'].includes(self.currentValues['tag-name']);
+		show = show && self.currentValues['attribute-name'] == 'ref';
 		show = show && _getSettings()['usingRecipesPlugin'];
 
 		if(show === true){
-			document.getElementById(_getFormId('annotation'))
+			document.getElementById(_getFormId('ref-certainty'))
 				.classList.remove('d-none');
+			document.getElementById('uncertainty-tab').children[1].children[1].children[0].classList.add('d-none');
+			document.getElementById('uncertainty-tab').children[1].children[1].children[1].classList.add('d-none');
 		}else{
-			document.getElementById(_getFormId('annotation'))
+			document.getElementById(_getFormId('ref-certainty'))
 				.classList.add('d-none');
+			document.getElementById('uncertainty-tab').children[1].children[1].children[0].classList.remove('d-none');
+			document.getElementById('uncertainty-tab').children[1].children[1].children[1].classList.remove('d-none');
 		}
 	}
 
@@ -311,14 +372,11 @@ let RecipesPlugin = function(args){
 	function _handleOptionsChange(currentValues){
 		self.currentValues = currentValues;
 
-		/* uncomment for annotation object type 
 		_updateAnnotationTypeInput();
-		*/
 		_updateTeiTypeInput();
 
-		if(/* uncomment for annotation object type 
-			currentValues.modifiedField == 'asserted-value' ||
-			*/ 
+		if(
+			currentValues.modifiedField == 'tag-name' ||
 			currentValues.modifiedField == 'tei-tag-name'){
 			_updateInputOptions();
 		}
@@ -332,43 +390,41 @@ let RecipesPlugin = function(args){
 		_updateLegendVisibility(usingRecipesPlugin);
 
 		if(usingRecipesPlugin === false){
-			/* uncomment for annotation object type 
-			document.getElementById(_getFormId('annotation'))
+			document.getElementById(_getFormId('ref-certainty'))
 				.classList.add('d-none');
-			*/
+			
 			document.getElementById(_getFormId('tei'))
 				.classList.add('d-none');
 		}else{
 			_updateTeiTypeInput();
-			/* uncomment for annotation object type
 			_updateAnnotationTypeInput();
-			*/
 		}
+	}
+
+	function _getInputValue(type){
+		const usingInput = document.getElementById(_getUsingId(type)),
+			input = document.getElementById(_getInputId(type)),
+			value = input.value.startsWith(self.XML_EXTRA_CHAR_SPACER)? 
+					input.value.slice(self.XML_EXTRA_CHAR_SPACER.length):
+					input.value;
+		return (usingInput.checked===false)?value:null;
 	}
 	
 	function _handleAnnotationCreate(json){
-		/* uncomment for annotation object type 
-		const annotationInput = document.getElementById(_getInputId('annotation'));
-		*/
-		const teiInput = document.getElementById(_getInputId('tei')),
-			{usingRecipesPlugin} = _getSettings();
+		const {usingRecipesPlugin} = _getSettings();
 
 		if(usingRecipesPlugin === true){
 			if(json.hasOwnProperty('locus')){
 				// annotating uncertainty
-				/* uncomment for annotation object type 
-				if(['ingredient', 'utensil', 'productionMethod'].includes(json['tag'])){
-					json['asserted_value'] = annotationInput.value;
-					json['attribute_name'] = 'ref';
+				if(['ingredient', 'utensil', 'productionMethod'].includes(json['tag']) &&
+					json['attribute_name'] == 'ref'){
+						json['asserted_value'] = _getInputValue('ref-certainty');
 				}
-				*/
 			} else {
 				// annotating tei
-				const asserted_value = teiInput.value.startsWith(self.XML_EXTRA_CHAR_SPACER)? 
-					teiInput.value.slice(self.XML_EXTRA_CHAR_SPACER.length):
-					teiInput.value;
+				const asserted_value = _getInputValue('tei');
 					
-				if(['ingredient', 'utensil', 'productionMethod'].includes(json['tag'])){
+				if(['ingredient', 'utensil', 'productionMethod'].includes(json['tag']) && asserted_value != null){
 					json['asserted_value'] = asserted_value
 					json['attribute_name'] = 'ref';
 					json['locus'] = 'value';
@@ -409,13 +465,11 @@ let RecipesPlugin = function(args){
 			_populateInputOptions('tei', self.currentValues['tei-tag-name']);
 		}
 
-		/* uncomment for annotation object type 
-		if(self.currentValues['locus'] == 'name'
-				&& self.currentValues['asserted-value'] != undefined
-				&& self.entityTypeOptions.hasOwnProperty(self.currentValues['asserted-value'])){
-			_populateInputOptions('annotation', self.currentValues['asserted-value']);
+		if(self.currentValues['locus'] == 'value'
+				&& ['ingredient', 'utensil', 'productionMethod'].includes(self.currentValues['tag-name'])
+				&& self.entityTypeOptions.hasOwnProperty(self.currentValues['tag-name'])){
+			_populateInputOptions('ref-certainty', self.currentValues['tag-name']);
 		}
-		*/
 	}
 
 	function _createStyles4Entities(){
@@ -464,11 +518,12 @@ let RecipesPlugin = function(args){
 		      {
 		          content:"";
 		          position: absolute;
-		          font-size: 0.85em;
+		          font-size: 0.7em;
 		          padding-top: 1.3em;
 		          color:grey;
 		          font-family: "Font Awesome 5 Free";
 		          font-weight: 900;
+		          min-width: 5em;
 		      }
 		    `
 		    const hideRule = `

@@ -19,8 +19,7 @@ from .helpers import search_files_by_person_name, search_files_by_content, valid
     filter_entities_by_file_version, filter_entities_by_project_version, filter_unifications_by_project_version, \
     common_filter_cliques, common_filter_entities, create_clique
 from .models import Clique, CliqueToDelete, Commit, Entity, EventVersion, OrganizationVersion, PersonVersion, \
-    PlaceVersion, Unification, UnificationToDelete
-
+    PlaceVersion, Unification, UnificationToDelete, ObjectVersion
 
 NAMESPACES = {
     'default': 'http://www.tei-c.org/ns/1.0',
@@ -31,12 +30,15 @@ NAMESPACES = {
 ANNOTATION_TAGS = ['date', 'event', 'location', 'geolocation', 'name', 'occupation', 'object', 'org', 'person', 'place',
                    'country', 'time']
 
-
 ENTITY_CLASSES = {
     'event': EventVersion,
     'org': OrganizationVersion,
     'person': PersonVersion,
     'place': PlaceVersion,
+    'object': ObjectVersion,
+    'ingredient': ObjectVersion,
+    'utensil': ObjectVersion,
+    'productionMethod': ObjectVersion,
 }
 
 
@@ -66,7 +68,7 @@ def projects(request):  # type: (HttpRequest) -> JsonResponse
 @user_has_access()
 def project_history(request, project_id):  # type: (HttpRequest, int) -> JsonResponse
     if request.method == 'GET':
-        response = { # TODO: not implemented
+        response = {  # TODO: not implemented
             'info': 'Not implemented. Need to agree an appearance of response.'
         }
 
@@ -871,7 +873,7 @@ def project_unbounded_entities(request, project_id):  # type: (HttpRequest, int)
 
             if query_string['types']:
                 entities = entities.filter(type__in=query_string['types'])
-                unifications = unifications.filter(entity__type__in = query_string['types'])
+                unifications = unifications.filter(entity__type__in=query_string['types'])
 
             if query_string['users']:
                 unifications = unifications.filter(created_by_id__in=query_string['users'])
