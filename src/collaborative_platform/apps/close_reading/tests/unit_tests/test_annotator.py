@@ -4,11 +4,8 @@ import os
 import mock
 import pytest
 
-# from nose.tools import assert_raises
-# from nose_parameterized import parameterized
-
 from apps.close_reading.annotator import Annotator
-# from apps.close_reading.annotator import NotModifiedException
+from apps.exceptions import NotModified
 
 
 DIRNAME = os.path.dirname(__file__)
@@ -70,28 +67,28 @@ class TestAnnotator:
 
         assert result == expected_text
 
-#     def test_add_annotation__add_tag_to_text__fragment_with_same_tag__exception(self, mock_get_user_data_from_db):
-#         json = {
-#             "start_row": 218,
-#             "start_col": 73,
-#             "end_row": 218,
-#             "end_col": 92,
-#             "tag": "place"
-#         }
-#
-#         input_file_path = os.path.join(DIRNAME, "test_annotator_files", "source_files", "source_file.xml")
-#
-#         input_text = read_file(input_file_path)
-#
-#         user_guid = 'abcde'
-#
-#         input_text = input_text.decode('utf-8')
-#
-#         with assert_raises(NotModifiedException) as exception:
-#             annotator = Annotator()
-#             result = annotator.add_annotation(input_text, json, user_guid)
-#
-#         assert exception.exception.message == "This tag already exist."
+    @pytest.mark.django_db
+    def test_add_annotation__add_tag_to_text__fragment_with_same_tag__exception(self):
+        json = {
+            "start_row": 221,
+            "start_col": 106,
+            "end_row": 221,
+            "end_col": 125,
+            "tag": "place"
+        }
+
+        input_file_path = os.path.join(DIRNAME, "test_files", "source_files", "source_file.xml")
+
+        input_text = read_file(input_file_path)
+
+        user_guid = 'abcde'
+        file_id = 1
+
+        with pytest.raises(NotModified) as exception:
+            annotator = Annotator()
+            result = annotator.add_annotation(input_text, file_id, json, user_guid)
+
+        assert str(exception.value) == "This tag already exist."
 #
 #     def test_add_annotation__add_tag_to_text__fragment_with_same_tag_and_certainty__exception(self, mock_get_user_data_from_db):
 #         json = {
