@@ -80,7 +80,7 @@
           <!-- in API also tag date -->
           <certainty category="imprecision" locus="value" cert="unknown" resp="#personzuay9" target="#name000007" assertedValue="Maggie" xml:id="certainty_source_file_xml-6"/>
           <certainty category="imprecision" locus="name" cert="high" resp="#personercfd" target="#name000007" assertedValue="surname" xml:id="certainty_source_file_xml-7"/>
-          <certainty category="credibility" locus="value" cert="low" resp="#personercfd" target="#ab000008" xml:id="certainty_source_file_xml-8"/>
+          <certainty ana="https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#credibility" locus="value" cert="low" resp="#personercfd" target="#ab_source_file_xml-1" xml:id="certainty_source_file_xml-8"/>
           <certainty category="imprecision" locus="value" cert="high" resp="#personercfd" target="#ab000009" assertedValue="on" xml:id="certainty_source_file_xml-9"/>
           <certainty category="variation" locus="sameAs" cert="medium" resp="#personercfd" target="#person_source_file_xml-13" assertedValue="dep_835104r162_tei#person835104r162_1" xml:id="certainty_source_file_xml-10"/>
           <certainty category="variation" locus="sameAs" cert="medium" resp="#personercfd" target="#person_source_file_xml-15" assertedValue="dep_835104r162_tei#person835104r162_2" xml:id="certainty_source_file_xml-11"/>
