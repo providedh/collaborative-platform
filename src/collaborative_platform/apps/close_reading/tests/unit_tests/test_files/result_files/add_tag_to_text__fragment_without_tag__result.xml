@@ -68,7 +68,7 @@
           </certainty>
           <certainty category="imprecision" locus="value" cert="medium" resp="#personercfd" target="#country000004" assertedValue="Dublin" xml:id="certainty_source_file_xml-3"/>
           <certainty category="imprecision" locus="value" cert="unknown" resp="#personzuay9" target="#date000005" assertedValue="1998" xml:id="certainty_source_file_xml-4"/>
-          <certainty category="credibility" locus="name" cert="high" resp="#personzuay9" target="#date_source_file_xml-1" xml:id="certainty_source_file_xml-5"/>
+          <certainty ana="https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#credibility" locus="name" cert="high" resp="#personzuay9" target="#date_source_file_xml-1" xml:id="certainty_source_file_xml-5"/>
           <!-- in API also tag date -->
           <certainty category="imprecision" locus="value" cert="unknown" resp="#personzuay9" target="#name000007" assertedValue="Maggie" xml:id="certainty_source_file_xml-6"/>
           <certainty category="imprecision" locus="name" cert="high" resp="#personercfd" target="#name000007" assertedValue="surname" xml:id="certainty_source_file_xml-7"/>
