@@ -549,11 +549,11 @@ class TestAnnotator:
         user_id = 2
         file_id = 1
 
-        with pytest.raises(BadRequest) as error:
+        with pytest.raises(BadRequest) as exception:
             annotator = Annotator()
             result = annotator.add_annotation(input_text, file_id, json, user_id)
 
-        assert str(error.value) == "You can't add asserted value for tag name when you creating new tag."
+        assert str(exception.value) == "You can't add asserted value for tag name when you creating new tag."
 
     @pytest.mark.django_db
     def test_add_annotation__add_reference_to_tag__fragment_without_tag__string(self):
@@ -566,7 +566,7 @@ class TestAnnotator:
             "locus": "value",
             "certainty": "high",
             "attribute_name": "sameAs",
-            "asserted_value": "dep_835104r162_tei#person835104r162_1",
+            "asserted_value": "#person_source_file_xml-18",
             "description": "",
             "tag": "person"
         }
@@ -576,51 +576,49 @@ class TestAnnotator:
                                           "add_reference_to_tag__fragment_without_tag__result.xml")
 
         input_text = read_file(input_file_path)
-        expected_text = read_file(expected_file_path)
 
         user_id = 2
         file_id = 1
 
-        with pytest.raises(BadRequest) as error:
+        with pytest.raises(BadRequest) as exception:
             annotator = Annotator()
             result = annotator.add_annotation(input_text, file_id, json, user_id)
 
-        assert str(error.value) == "This entity doesn't exist in database. Add tag to marked text, save file and try " \
-                                   "again."
+        assert str(exception.value) == "This entity doesn't exist in database. Add tag to marked text, save file and " \
+                                       "try again."
 
-#     def test_add_annotation__add_reference_to_tag__fragment_with_other_tag__string(self, mock_get_user_data_from_db):
-#         json = {
-#             "start_row": 218,
-#             "start_col": 73,
-#             "end_row": 218,
-#             "end_col": 92,
-#             "category": "ignorance",
-#             "locus": "attribute",
-#             "certainty": "high",
-#             "attribute_name": "sameAs",
-#             "asserted_value": "dep_835104r162_tei#person835104r162_1",
-#             "description": "",
-#             "tag": "surname"
-#         }
-#
-#         input_file_path = os.path.join(DIRNAME, "test_annotator_files", "source_files", "source_file.xml")
-#         expected_file_path = os.path.join(DIRNAME, "test_annotator_files", "result_files",
-#                                           "add_reference_to_tag__fragment_with_other_tag__result.xml")
-#
-#         input_text = read_file(input_file_path)
-#         expected_text = read_file(expected_file_path)
-#
-#         user_guid = 'abcde'
-#
-#         input_text = input_text.decode('utf-8')
-#
-#         annotator = Annotator()
-#         result = annotator.add_annotation(input_text, json, user_guid)
-#
-#         result = result.encode('utf-8')
-#
-#         assert result == expected_text
-#
+    @pytest.mark.django_db
+    def test_add_annotation__add_reference_to_tag__fragment_with_other_tag__string(self):
+        json = {
+            "start_row": 221,
+            "start_col": 106,
+            "end_row": 221,
+            "end_col": 125,
+            "categories": ["ignorance"],
+            "locus": "value",
+            "certainty": "high",
+            "attribute_name": "sameAs",
+            "asserted_value": "person_source_file_xml-18",
+            "description": "",
+            "tag": "person"
+        }
+
+        input_file_path = os.path.join(DIRNAME, "test_files", "source_files", "source_file.xml")
+        expected_file_path = os.path.join(DIRNAME, "test_files", "result_files",
+                                          "add_reference_to_tag__fragment_with_other_tag__result.xml")
+
+        input_text = read_file(input_file_path)
+
+        user_id = 2
+        file_id = 1
+
+        with pytest.raises(BadRequest) as exception:
+            annotator = Annotator()
+            result = annotator.add_annotation(input_text, file_id, json, user_id)
+
+        assert str(exception.value) == "This entity doesn't exist in database. Add tag to marked text, save file and " \
+                                       "try again."
+
 #     def test_add_annotation__add_reference_to_tag__fragment_with_same_tag__string(self,  mock_get_user_data_from_db):
 #         json = {
 #             "start_row": 219,
