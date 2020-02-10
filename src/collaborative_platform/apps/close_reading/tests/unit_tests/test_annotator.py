@@ -5,7 +5,7 @@ import mock
 import pytest
 
 from apps.close_reading.annotator import Annotator
-from apps.exceptions import NotModified
+from apps.exceptions import BadRequest, NotModified
 
 
 DIRNAME = os.path.dirname(__file__)
@@ -527,34 +527,34 @@ class TestAnnotator:
 
         assert str(exception.value) == "This certainty already exist."
 
-#     def test_add_annotation__add_certainty_to_tag__add_new_tag_with_asserted_value_for_name__exception(self, mock_get_user_data_from_db):
-#         json = {
-#             "start_row": 217,
-#             "start_col": 7,
-#             "end_row": 217,
-#             "end_col": 11,
-#             "category": "credibility",
-#             "locus": "name",
-#             "certainty": "high",
-#             "asserted_value": "place",
-#             "description": "",
-#             "tag": "surname"
-#         }
-#
-#         input_file_path = os.path.join(DIRNAME, "test_annotator_files", "source_files", "source_file.xml")
-#
-#         input_text = read_file(input_file_path)
-#
-#         user_guid = 'abcde'
-#
-#         input_text = input_text.decode('utf-8')
-#
-#         with assert_raises(ValueError) as error:
-#             annotator = Annotator()
-#             result = annotator.add_annotation(input_text, json, user_guid)
-#
-#         assert error.exception.message == "You can't add asserted value for tag name when you creating new tag."
-#
+    @pytest.mark.django_db
+    def test_add_annotation__add_certainty_to_tag__add_new_tag_with_asserted_value_for_name__exception(self):
+        json = {
+            "start_row": 221,
+            "start_col": 7,
+            "end_row": 221,
+            "end_col": 11,
+            "category": "credibility",
+            "locus": "name",
+            "certainty": "high",
+            "asserted_value": "place",
+            "description": "",
+            "tag": "place"
+        }
+
+        input_file_path = os.path.join(DIRNAME, "test_files", "source_files", "source_file.xml")
+
+        input_text = read_file(input_file_path)
+
+        user_id = 2
+        file_id = 1
+
+        with pytest.raises(BadRequest) as error:
+            annotator = Annotator()
+            result = annotator.add_annotation(input_text, file_id, json, user_id)
+
+        assert str(error.value) == "You can't add asserted value for tag name when you creating new tag."
+
 #     def test_add_annotation__add_reference_to_tag__fragment_without_tag__string(self, mock_get_user_data_from_db):
 #         json = {
 #             "start_row": 218,
