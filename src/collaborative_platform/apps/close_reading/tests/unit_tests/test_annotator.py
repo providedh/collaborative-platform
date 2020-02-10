@@ -22,8 +22,8 @@ class TestAnnotator:
     @pytest.mark.django_db
     def test_add_annotation__add_tag_to_text__fragment_without_tag__string(self):
         json = {
-            'start_pos': 9581,
-            'end_pos': 9586,
+            'start_pos': 9644,
+            'end_pos': 9649,
             'tag': 'date',
         }
 
@@ -354,16 +354,16 @@ class TestAnnotator:
     @pytest.mark.django_db
     def test_add_annotation__add_certainty_with_tag_to_text__fragment_with_same_tag_and_same_certainty__exception(self):
         json = {
-            "start_row": 222,
-            "start_col": 127,
-            "end_row": 222,
-            "end_col": 133,
-            "categories": ["credibility"],
-            "locus": "name",
-            "certainty": "high",
-            "asserted_value": "",
+            "start_row": 221,
+            "start_col": 501,
+            "end_row": 221,
+            "end_col": 519,
+            "categories": ["imprecision"],
+            "locus": "value",
+            "certainty": "medium",
+            "asserted_value": "Dublin",
             "description": "",
-            "tag": "date"
+            "tag": "country"
         }
 
         input_file_path = os.path.join(DIRNAME, "test_files", "source_files", "source_file.xml")
