@@ -284,7 +284,7 @@ function setupInteractions(renderedData, overlayCanvas, ){
 }
 
 export default function render(container, canvas, overlayCanvas, data, overlay_data, render_overlay, barDirection){
-	if(container == null || canvas == null || data == null)
+	if(container == null || canvas == null || data == null || data.length == 0)
 		return
 
     const dimensions = Object.keys(data[0]);
