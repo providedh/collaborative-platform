@@ -30,6 +30,9 @@ export default function EntityDataSource(pubSubService, project){
 
 		pubSubService.register(self);
 		self.subscribe(`filter/xdim`, _handleAction);
+		self.subscribe(`filter/id`, _handleAction);
+		self.subscribe(`filter/name`, _handleAction);
+		self.subscribe(`filter/type`, _handleAction);
 
 		return self;
 	}
@@ -57,7 +60,7 @@ export default function EntityDataSource(pubSubService, project){
 	 *      
 	 */
 	function _filter(dimension, filter){
-		const filtered = self._data.filter(x=>filter(x[1]));
+		const filtered = self._data.filter(x=>filter(x[dimension]));
 		_publishData(filtered);
 	}
 
@@ -65,14 +68,25 @@ export default function EntityDataSource(pubSubService, project){
 	 * Retrieves data from the external source.
 	 */
 	function _retrieve(){
-		self._source.getFiles({project:self._project},{},null).then(files=>{
-			files.forEach(file=>{
-				self._source.getFileEntities({project:self._project, file:file.id},{},null).then(entities=>{
-					console.log(entities);
+		self._source.getFiles({project:self._project},{},null).then(response=>{
+			if(response.success === false)
+				throw('Failed to retrieve files for the current project.')
+			
+			response.content.forEach(file=>{
+				self._data = [];
+				let retrieved = 0;
+
+				self._source.getFileEntities({project:self._project, file:file.id},{},null).then(response=>{
+					if(response.success === false)
+						console.info('Failed to retrieve entities for file: '+file.id);
+					else
+						self._data.push(...response.content);
+					
+					if(++retrieved == response.content.length)
+						_publishData(self._data)
 				});
 			})
 		})
-		self._data = Object.entries({a:1, b:2, c:4, d:5, e:6, f:7});
 	}
 
 	return _init(pubSubService, project);
