@@ -31,9 +31,9 @@ export default function EntityDataSource(pubSubService, project){
 		*/
 		self._options = {};
 
-		_retrieve();
+		self._fetched = false;
 
-		self.get = ()=>({all:self._data.all(), filtered:self._data.allFiltered()});
+		self.get = _getData;
 
 		pubSubService.register(self);
 
@@ -51,6 +51,14 @@ export default function EntityDataSource(pubSubService, project){
 
 	function _handleAction(args){
 		_filter(args.dim, args.filter)
+	}
+
+	function _getData(){
+		if(self._fetched === false){
+			self._fetched = true;
+			_retrieve();
+		}
+		return({all:self._data.all(), filtered:self._data.allFiltered()});
 	}
 
 	/**
