@@ -26,7 +26,7 @@ export default (function DataService(){
 
 		self._sources = {
 			base: DataSource(self._pubSubService),
-			entity: EntityDataSource(self._pubSubService)
+			entity: EntityDataSource(self._pubSubService, window.project)
 		}
 
 		self.subscribe = _subscribe;
