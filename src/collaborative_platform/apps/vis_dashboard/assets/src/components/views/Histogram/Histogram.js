@@ -5,12 +5,42 @@ import dummy_data from './dummy_data';
 import dummy_overlay from './overlay_data';
 import render from './vis';
 
+import {DataClient} from '../../../data';
 
-function useData(dimension){
+function useData(dataClient, dimension){
 	const [data, setData] = useState(dummy_data[dimension]);
-
+    console.log(dataClient)
 	useEffect(()=>{
-		setData(dummy_data[dimension])
+        if(dimension == 'Number of entities per type'){
+            dataClient.unsubscribe('entity');
+            dataClient.subscribe('entity', data=>{
+                const count = {};
+                data.filtered.forEach(x=>count.hasOwnProperty(x.type)?count[x.type]++:count[x.type]=1);
+                const entries = Object.entries(count).map(x=>({type:x[0], count:x[1]}));
+                setData(entries);
+            });
+        }else if(dimension == 'Most common entities'){
+            dataClient.unsubscribe('entity');
+            dataClient.subscribe('entity', data=>{
+                const count = {};
+                data.filtered.forEach(x=>count.hasOwnProperty(x.name)?count[x.name]++:count[x.name]=1);
+                const entries = Object
+                    .entries(count)
+                    .map(x=>({name:x[0], count:x[1]}))
+                    .sort((x,y)=>x.count-y.count);
+                const mostCommon = [];
+
+                for(let i=0; i<entries.length && i<5; i++)
+                    mostCommon.push(entries.pop());
+                if(entries.length > 0)
+                    mostCommon.push({name:'other', count:entries.reduce((ac,dc)=>ac+dc.count, 0)});
+
+                setData(mostCommon);
+            });
+        }else{
+            dataClient.unsubscribe('entity');
+		    setData(dummy_data[dimension])
+        }
 	}, [dimension])
 
 	return data;
@@ -30,18 +60,19 @@ function Histogram({dimension, barDirection, renderOverlay, overlay, layout}) {
 	const [refContainer, refCanvas, refOverlayCanvas] = [useRef(), useRef(), useRef()];
 	const [width, height] = layout!=undefined?[layout.w, layout.h]:[4,4];
 
-	const data = useData(dimension);
-	const overlay_data = useOverlay(renderOverlay, dimension, overlay);
+    const [dataClient, _] = useState(DataClient());
+	const data = useData(dataClient, dimension);
+	//const overlay_data = useOverlay(renderOverlay, dimension, overlay);
 
     useEffect(()=>render(
     		refContainer.current, 
     		refCanvas.current, 
     		refOverlayCanvas.current, 
     		data, 
-    		overlay_data, 
+    		null, 
     		renderOverlay, 
     		barDirection), // Render 
-    	[width, height, barDirection, data, overlay_data]); // Conditions
+    	[width, height, barDirection, data]); // Conditions
 
     return(
         <div className={styles.histogram} ref={refContainer}>
@@ -64,6 +95,7 @@ Histogram.prototype.configOptions = [
     	options: [
 	    	'Number of entities per document',
 	    	'Number of entities per type',
+            'Most common entities',
 	    	'Number of annotations per document',
 	    	'Number of annotations per category',
 	    	"Frequency for an attribute's values",
