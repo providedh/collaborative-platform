@@ -68,7 +68,7 @@ export default class Dashboard extends React.Component {
 
     save() {
         const data = JSON.stringify(Object.assign(this.dashboardConfig, {lastChangesSaved: true}));
-        this.ajax.updateDashboard(window.project, window.dashboard, data).then(()=>{
+        this.ajax.updateDashboard({project:window.project, dashboard:window.dashboard}, {}, data).then(()=>{
             this.setState({lastChangesSaved: true});
             console.info('Dashboard saved.')
         });
