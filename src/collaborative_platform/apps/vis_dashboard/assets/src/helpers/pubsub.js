@@ -30,7 +30,7 @@ export default function PubSubService(){
 		return subId;
 	}
 
-	function _unsuscribe(channel, subId){
+	function _unsubscribe(channel, subId){
 		if(subscriptions.hasOwnProperty(channel) && 
 		   		subscriptions[channel].hasOwnProperty(subId)){
 			delete subscriptions[channel][subId];
@@ -45,6 +45,7 @@ export default function PubSubService(){
 
 	function _addToChannel(obj){
 		obj.subscribe = _suscribe;
+		obj.unsubscribe = _unsubscribe;
 		obj.publish = _publish;
 	}
 
