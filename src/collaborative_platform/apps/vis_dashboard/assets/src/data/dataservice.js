@@ -1,4 +1,4 @@
-import {DataSource} from './datasources';
+import {DataSource, EntityDataSource} from './datasources';
 import {PubSubService} from '../helpers';
 import Filter from './filter';
 import Subscription from './subscription';
@@ -25,7 +25,8 @@ export default (function DataService(){
 		self._pubSubService.register(self._pubSubClient);
 
 		self._sources = {
-			base: DataSource(self._pubSubService)
+			base: DataSource(self._pubSubService),
+			entity: EntityDataSource(self._pubSubService)
 		}
 
 		self.subscribe = _subscribe;

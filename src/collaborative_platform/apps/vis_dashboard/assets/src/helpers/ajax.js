@@ -1,3 +1,4 @@
+import $ from 'jquery';
 /* Module: AjaxCalls
  * Module for building full API call urls.
  *
@@ -69,7 +70,6 @@ var AjaxCalls = function(args){
 			getSearchContext: (options, params, data) => _createCall('GET', _createUrl(vis_context, options, params), data),
 		};
 
-		console.log(obj)
 		return obj;
 	}
 
@@ -115,7 +115,7 @@ var AjaxCalls = function(args){
 			$.ajax({
 		        url: url,
 		        type: method,   //type is any HTTP method
-		        data: {},      //Data as js object
+		        data: data,      //Data as js object
 		        statusCode: {
 					304: function() {
 				      resolve({success:false, content:'Not Modified.'});
