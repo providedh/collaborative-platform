@@ -89,8 +89,6 @@ export default function EntityDataSource(pubSubService, project){
 						console.info('Failed to retrieve entities for file: '+file.id);
 					else
 						self._data.add(response.content);
-					
-					if(++retrieved == response.content.length)
 						_publishData();
 				});
 			})
