@@ -1,2 +1,4 @@
 import DataService from './dataservice';
-export {DataService};
+import DataClient from './dataclient';
+
+export {DataService, DataClient};
