@@ -71,3 +71,9 @@
 #react-root{
 	height: calc(100vh - 104px)
 }
+
+input.form-control.nameInput:hover,
+textarea.form-control:hover {
+    background-color: var(--light);
+}
+
