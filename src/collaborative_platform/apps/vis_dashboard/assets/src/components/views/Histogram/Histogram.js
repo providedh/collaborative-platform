@@ -8,7 +8,7 @@ import render from './vis';
 import {DataClient} from '../../../data';
 
 function useData(dataClient, dimension){
-	const [data, setData] = useState(dummy_data[dimension]);
+	const [data, setData] = useState(null);
     console.log(dataClient)
 	useEffect(()=>{
         if(dimension == 'Number of entities per type'){
