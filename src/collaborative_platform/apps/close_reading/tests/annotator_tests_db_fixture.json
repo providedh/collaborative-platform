@@ -548,6 +548,15 @@
   }
 },
 {
+  "model": "api_vis.commit",
+  "pk": 1,
+  "fields": {
+    "project": 1,
+    "date": "2020-02-11T11:23:58.323Z",
+    "message": "first commit"
+  }
+},
+{
   "model": "files_management.directory",
   "pk": 1,
   "fields": {
@@ -590,7 +599,7 @@
     "event": 0,
     "org": 1,
     "place": 2,
-    "certainty": 14,
+    "certainty": 16,
     "object": 1
   }
 },
@@ -689,6 +698,21 @@
   }
 },
 {
+  "model": "projects.projectversion",
+  "pk": 6,
+  "fields": {
+    "project": 1,
+    "file_version_counter": 4,
+    "commit": 1,
+    "commit_counter": 1,
+    "date": "2020-02-11T11:23:58.331Z",
+    "file_versions": [
+      2,
+      4
+    ]
+  }
+},
+{
   "model": "projects.taxonomy",
   "pk": 1,
   "fields": {
@@ -734,7 +758,7 @@
   "pk": 2,
   "fields": {
     "password": "pbkdf2_sha256$150000$6qyzkLmHRq7K$NIY5Ag7c51FH77ffwvJ9ZS9KIpaFaFko2LrfY4FcpzE=",
-    "last_login": "2020-02-05T08:22:52.657Z",
+    "last_login": "2020-02-11T11:23:28.011Z",
     "is_superuser": false,
     "username": "tony_stark",
     "first_name": "Tony",
@@ -1405,6 +1429,65 @@
     "deleted_in_version": null,
     "deleted_by": null,
     "type": "org"
+  }
+},
+{
+  "model": "api_vis.clique",
+  "pk": 1,
+  "fields": {
+    "project": 1,
+    "asserted_name": "Rory Magwire",
+    "created_by": 2,
+    "created_on": "2020-02-11T11:23:36.039Z",
+    "created_in_commit": 1,
+    "created_in_annotator": false,
+    "deleted_by": null,
+    "deleted_on": null,
+    "deleted_in_commit": null
+  }
+},
+{
+  "model": "api_vis.unification",
+  "pk": 1,
+  "fields": {
+    "project": 1,
+    "entity": 13,
+    "clique": 1,
+    "created_by": 2,
+    "created_on": "2020-02-11T11:23:36.066Z",
+    "created_in_commit": 1,
+    "created_in_file_version": 2,
+    "created_in_annotator": false,
+    "deleted_by": null,
+    "deleted_on": null,
+    "deleted_in_commit": null,
+    "deleted_in_file_version": null,
+    "ana": "",
+    "certainty": "high",
+    "description": "",
+    "xml_id": "certainty_source_file_xml-15"
+  }
+},
+{
+  "model": "api_vis.unification",
+  "pk": 2,
+  "fields": {
+    "project": 1,
+    "entity": 15,
+    "clique": 1,
+    "created_by": 2,
+    "created_on": "2020-02-11T11:23:36.078Z",
+    "created_in_commit": 1,
+    "created_in_file_version": 2,
+    "created_in_annotator": false,
+    "deleted_by": null,
+    "deleted_on": null,
+    "deleted_in_commit": null,
+    "deleted_in_file_version": null,
+    "ana": "",
+    "certainty": "high",
+    "description": "",
+    "xml_id": "certainty_source_file_xml-16"
   }
 },
 {
