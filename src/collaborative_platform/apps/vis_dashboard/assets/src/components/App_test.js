@@ -10,8 +10,10 @@ import css from '../themes/theme.css';
 //import PixelDoc from './views/PixelDoc/PixelDoc.js';
 import Dashboard from './core/Dashboard/Dashboard';
 import TabContainer from './ui/TabContainer';
-import {DataService} from '../data';
-window.ds = DataService()
+import {DataService, DataClient} from '../data';
+console.log(DataClient)
+window.c1 = DataClient();
+window.c2 = DataClient();
 
 export default class App extends React.Component {
     constructor(props){
