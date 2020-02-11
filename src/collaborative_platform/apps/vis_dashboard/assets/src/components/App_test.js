@@ -11,7 +11,7 @@ import css from '../themes/theme.css';
 import Dashboard from './core/Dashboard/Dashboard';
 import TabContainer from './ui/TabContainer';
 import {DataService, DataClient} from '../data';
-console.log(DataClient)
+
 window.c1 = DataClient();
 window.c2 = DataClient();
 
