@@ -42,7 +42,7 @@ var AjaxCalls = function(args){
 	function _init(args){
 		const obj = {
 			// VIS DASHBOARD
-			updateDashboard: (options,params,data) => _createCall('POST', _createUrl(update_url, options, params), null),
+			updateDashboard: (options,params,data) => _createCall('POST', _createUrl(update_url, options, params), data),
 
 			// STATS
 			getStatEntities: (options, params, data) => _createCall('GET', _createUrl(stats_entities, options, params), data),
@@ -79,7 +79,7 @@ var AjaxCalls = function(args){
 		return url;
 	}
 
-	function _createCall(method,url,data){
+	function _createCall(method,url,data={}){
 		function getCookie(name) {
 		    let cookieValue = null;
 		    if (document.cookie && document.cookie !== '') {
