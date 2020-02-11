@@ -1,3 +1,5 @@
+import crossfilter from 'crossfilter2';
+
 import {AjaxCalls} from '../../helpers';
 
 /* Class: EntityDataSource
@@ -9,7 +11,12 @@ export default function EntityDataSource(pubSubService, project){
 
 	function _init(pubSubService, project){
 		self._sourceName = 'entity';
-	 	self._data = null;
+
+	 	self._data = crossfilter([]);
+	 	self._idDimension = self._data.dimension(x=>x.id);
+	 	self._nameDimension = self._data.dimension(x=>x.name);
+	 	self._typeDimension = self._data.dimension(x=>x.type);
+
 	 	self._project = project
 		
 		/**
@@ -26,18 +33,19 @@ export default function EntityDataSource(pubSubService, project){
 
 		_retrieve();
 
-		self.get = ()=>self._data;
+		self.get = ()=>({all:self._data.all(), filtered:self._data.allFiltered()});
 
 		pubSubService.register(self);
-		self.subscribe(`filter/xdim`, _handleAction);
-		self.subscribe(`filter/id`, _handleAction);
-		self.subscribe(`filter/name`, _handleAction);
-		self.subscribe(`filter/type`, _handleAction);
+
+		self.subscribe(`filter/id`, args=>_filterDimension(self._idDimension, args.filter));
+		self.subscribe(`filter/name`, args=>_filterDimension(self._nameDimension, args.filter));
+		self.subscribe(`filter/type`, args=>_filterDimension(self._typeDimension, args.filter));
 
 		return self;
 	}
 
-	function _publishData(data){
+	function _publishData(){
+		const data = {all:self._data.all(), filtered:self._data.allFiltered()};
 		self.publish(`data/${self._sourceName}`, data);
 	}
 
@@ -59,9 +67,9 @@ export default function EntityDataSource(pubSubService, project){
 	 * @param args
 	 *      
 	 */
-	function _filter(dimension, filter){
-		const filtered = self._data.filter(x=>filter(x[dimension]));
-		_publishData(filtered);
+	function _filterDimension(dimension, filter){
+		dimension.filterFunction(filter);
+		_publishData();
 	}
 
 	/**
@@ -73,17 +81,17 @@ export default function EntityDataSource(pubSubService, project){
 				throw('Failed to retrieve files for the current project.')
 			
 			response.content.forEach(file=>{
-				self._data = [];
+				self._data.remove(()=>true); // clear previous data
 				let retrieved = 0;
 
 				self._source.getFileEntities({project:self._project, file:file.id},{},null).then(response=>{
 					if(response.success === false)
 						console.info('Failed to retrieve entities for file: '+file.id);
 					else
-						self._data.push(...response.content);
+						self._data.add(response.content);
 					
 					if(++retrieved == response.content.length)
-						_publishData(self._data)
+						_publishData();
 				});
 			})
 		})
