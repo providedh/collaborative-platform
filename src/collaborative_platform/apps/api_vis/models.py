@@ -106,7 +106,9 @@ class Unification(models.Model):
     deleted_in_commit = models.ForeignKey(Commit, default=None, null=True, blank=True, on_delete=models.CASCADE)
     deleted_in_file_version = models.ForeignKey(FileVersion, default=None, null=True, blank=True,
                                                 on_delete=models.CASCADE)
+    ana = models.TextField(default='')
     certainty = models.CharField(max_length=10)
+    description = models.TextField(default='')
     xml_id = models.CharField(max_length=255)
 
 

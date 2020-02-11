@@ -814,8 +814,8 @@ class Annotator:
         target = " ".join(annotation_ids)
         xml_id = f"certainty_{self.__file.name}-{self.__certainty_xml_id_number}"
 
-        categories = " ".join([get_ana_link(self.__file.project_id, cat) for cat in json["categories"]])
-        certainty = f'<certainty ana="{categories}" locus="{json["locus"]}" cert="{json["certainty"]}" ' \
+        ana = self.__create_ana_from_categories(json['categories'])
+        certainty = f'<certainty ana="{ana}" locus="{json["locus"]}" cert="{json["certainty"]}" ' \
                     f'resp="#{user_uuid}" target="{target}" match="@{json["attribute_name"]}" ' \
                     f'assertedValue="{json["asserted_value"]}" xml:id="{xml_id}"/>'
 
@@ -1239,6 +1239,11 @@ class Annotator:
 
         return text
 
+    def __create_ana_from_categories(self, categories):
+        ana = " ".join([get_ana_link(self.__file.project_id, cat) for cat in categories])
+
+        return ana
+
     def __create_unification(self, annotation_ids):
         if len(annotation_ids) > 1:
             raise BadRequest("Entity to unify must have only one xml:id.")
@@ -1292,4 +1297,7 @@ class Annotator:
         user_id = int(self.__annotator_xml_id.replace('person', ''))
         user = User.objects.get(id=user_id)
 
-        create_clique(request_data, project_id, user, created_in_annotator=True)
+        ana = self.__create_ana_from_categories(self.__request['categories'])
+        description = self.__request['description']
+
+        create_clique(request_data, project_id, user, created_in_annotator=True, ana=ana, description=description)
