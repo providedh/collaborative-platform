@@ -930,39 +930,37 @@ class TestAnnotator:
 
         assert result == expected_text
 
-#     def test_add_annotation__add_attribute_to_tag__fragment_with_same_tag_and_other_certainty__string(self,  mock_get_user_data_from_db):
-#         json = {
-#             "start_row": 219,
-#             "start_col": 398,
-#             "end_row": 219,
-#             "end_col": 409,
-#             "category": "credibility",
-#             "locus": "attribute",
-#             "certainty": "high",
-#             "attribute_name": "sex",
-#             "asserted_value": "male",
-#             "description": "",
-#             "tag": "person"
-#         }
-#
-#         input_file_path = os.path.join(DIRNAME, "test_annotator_files", "source_files", "source_file.xml")
-#         expected_file_path = os.path.join(DIRNAME, "test_annotator_files", "result_files",
-#                                           "add_attribute_to_tag__fragment_with_same_tag_and_other_certainty__result.xml")
-#
-#         input_text = read_file(input_file_path)
-#         expected_text = read_file(expected_file_path)
-#
-#         user_guid = 'abcde'
-#
-#         input_text = input_text.decode('utf-8')
-#
-#         annotator = Annotator()
-#         result = annotator.add_annotation(input_text, json, user_guid)
-#
-#         result = result.encode('utf-8')
-#
-#         assert result == expected_text
-#
+    @pytest.mark.django_db
+    def test_add_annotation__add_attribute_to_tag__fragment_with_same_tag_and_other_certainty__string(self):
+        json = {
+            'start_row': 222,
+            'start_col': 423,
+            'end_row': 222,
+            'end_col': 434,
+            'categories': ['credibility'],
+            'locus': 'value',
+            'certainty': 'high',
+            'attribute_name': 'sex',
+            'asserted_value': 'male',
+            'description': '',
+            'tag': 'person',
+        }
+
+        input_file_path = os.path.join(DIRNAME, 'test_files', 'source_files', 'source_file.xml')
+        expected_file_path = os.path.join(DIRNAME, 'test_files', 'result_files',
+                                          'add_attribute_to_tag__fragment_with_same_tag_and_other_certainty__result.xml')
+
+        input_text = read_file(input_file_path)
+        expected_text = read_file(expected_file_path)
+
+        user_id = 2
+        file_id = 1
+
+        annotator = Annotator()
+        result = annotator.add_annotation(input_text, file_id, json, user_id)
+
+        assert result == expected_text
+
 #     def test_add_annotation__add_attribute_to_tag__fragment_with_same_tag_and_same_certainty__exception(self, mock_get_user_data_from_db):
 #         json = {
 #             "start_row": 219,
