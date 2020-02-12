@@ -11,9 +11,9 @@ function createScales(data, barDirection, height, width, padding=10, fontSize=12
         Math.max(...data.map(x=>String(x[yDim]).length))
         ]
 
-    const paddingLeft = padding + yTickLength*7,
+    const paddingLeft = padding + yTickLength*(fontSize/2.2),
         paddingBottom = padding + fontSize + 2,
-        paddingRight = padding + xDim.length*7,
+        paddingRight = padding + xDim.length*(fontSize/2.2),
         paddingTop = padding + fontSize + 2;
         
     const scaleWidth = width - paddingRight - paddingLeft,
