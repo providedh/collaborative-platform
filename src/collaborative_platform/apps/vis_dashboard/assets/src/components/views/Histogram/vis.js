@@ -11,9 +11,9 @@ function createScales(data, barDirection, height, width, padding=10, fontSize=12
         Math.max(...data.map(x=>String(x[yDim]).length))
         ]
 
-    const paddingLeft = padding + yTickLength*8,
+    const paddingLeft = padding + yTickLength*7,
         paddingBottom = padding + fontSize + 2,
-        paddingRight = padding + xDim.length*8,
+        paddingRight = padding + xDim.length*7,
         paddingTop = padding + fontSize + 2;
         
     const scaleWidth = width - paddingRight - paddingLeft,
@@ -22,8 +22,11 @@ function createScales(data, barDirection, height, width, padding=10, fontSize=12
     const xData = data.map(d=>d[xDim]),
         yData = data.map(d=>d[yDim]);
 
-    const xDomain = barDirection=='Vertical'?xData:[0, Math.max(...xData) + 10],
-        yDomain = barDirection=='Vertical'?[0, Math.max(...yData) + 10]:yData;
+    const xMax = Math.max(...xData),
+        yMax = Math.max(...yData);
+
+    const xDomain = barDirection=='Vertical'?xData:[0, xMax + xMax*.02],
+        yDomain = barDirection=='Vertical'?[0, yMax + yMax*.02]:yData;
 
     const xScale = barDirection=='Vertical'?d3.scaleBand().padding(0.1):d3.scaleLinear(),
         yScale = barDirection=='Vertical'?d3.scaleLinear():d3.scaleBand().padding(0.1);
@@ -263,7 +266,7 @@ function setupInteractions(renderedData, overlayCanvas, ){
 
         context.clearRect(0,0,overlayCanvas.width, overlayCanvas.height);
         if(node != null){
-            const label = `${node.data[1]} ${node.data[0]}`;
+            const label = `${node.data[0]}  (${node.data[1]})`;
             context.save()
             context.fillStyle = '#f8f9fa';
             context.strokeStyle = '#00b3b0';
