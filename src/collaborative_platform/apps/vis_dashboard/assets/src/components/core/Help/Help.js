@@ -18,7 +18,7 @@ export default function Help(props){
                         <h2>Bar chart</h2>
                     </div>
                     <div className="row ml-0 mr-0">
-                        <h5><i>Display distributions encoding the information with bars.</i></h5>
+                        <h5><i>Display distributions by encoding the information with bars.</i></h5>
                     </div>
                     <div className="row mt-2">
                         <div className="col-sm">
@@ -26,6 +26,14 @@ export default function Help(props){
                                 Bar charts allow to easily display distributions such as the
                                 named entities per document, common values for certain entity
                                 attribute, or the level of certainty associated to a category.
+                            </p>
+                            <p>
+                                Hovering over the bars will display a tooltip with the bar information.
+                            </p>
+                            <p>
+                                Filtering can be done by clicking on the bars. Once a bar has been selected,
+                                add more to the selection by clicking on more.<br/>
+                                Undo the filtering by clicking again on a selected bar.
                             </p>
                         </div>
                         <div className="col-sm">
@@ -52,10 +60,7 @@ export default function Help(props){
                             <ul className="list-group ">
                                 <li className="list-group-item">Number of entities per document</li>
                                 <li className="list-group-item">Number of entities per type</li>
-                                <li className="list-group-item">Number of annotations per document</li>
-                                <li className="list-group-item">Number of annotations per category</li>
-                                <li className="list-group-item">Frequency for an attribute's values</li>
-                                <li className="list-group-item">Frequency for most common attribute values</li>
+                                <li className="list-group-item">Most common entities</li>
                               </ul>
                         </div>
                     </div>
