@@ -808,6 +808,7 @@ class TestAnnotator:
 
         assert result_certainties == expected_certainties
 
+#     TODO: Enable this test after add checking if unification from request already exist in database
 #     @pytest.mark.django_db
 #     def test_add_annotation__add_reference_to_tag__fragment_with_same_tag_and_same_certainty__exception(self):
 #         json = {
@@ -1020,38 +1021,36 @@ class TestAnnotator:
 
         assert result == expected_text
 
-#     def test_add_annotation__add_first_annotator_and_certainty__string(self, mock_get_user_data_from_db):
-#         json = {
-#             "start_row": 54,
-#             "start_col": 7,
-#             "end_row": 54,
-#             "end_col": 11,
-#             "category": "ignorance",
-#             "locus": "value",
-#             "certainty": "high",
-#             "asserted_value": "",
-#             "description": "",
-#             "tag": ""
-#         }
-#
-#         input_file_path = os.path.join(DIRNAME, "test_annotator_files", "source_files", "source_file_without_annotators_and_certainties.xml")
-#         expected_file_path = os.path.join(DIRNAME, "test_annotator_files", "result_files",
-#                                           "add_first_annotator_and_certainty__result.xml")
-#
-#         input_text = read_file(input_file_path)
-#         expected_text = read_file(expected_file_path)
-#
-#         user_guid = 'abcde'
-#
-#         input_text = input_text.decode('utf-8')
-#
-#         annotator = Annotator()
-#         result = annotator.add_annotation(input_text, json, user_guid)
-#
-#         result = result.encode('utf-8')
-#
-#         assert result == expected_text
-#
+    @pytest.mark.django_db
+    def test_add_annotation__add_first_annotator_and_certainty__string(self):
+        json = {
+            'start_row': 57,
+            'start_col': 7,
+            'end_row': 57,
+            'end_col': 11,
+            'categories': ['ignorance'],
+            'locus': 'value',
+            'certainty': 'high',
+            'asserted_value': '',
+            'description': '',
+            'tag': '',
+        }
+
+        input_file_path = os.path.join(DIRNAME, 'test_files', 'source_files', 'source_file_without_annotators_and_certainties.xml')
+        expected_file_path = os.path.join(DIRNAME, 'test_files', 'result_files',
+                                          'add_first_annotator_and_certainty__result.xml')
+
+        input_text = read_file(input_file_path)
+        expected_text = read_file(expected_file_path)
+
+        user_id = 2
+        file_id = 1
+
+        annotator = Annotator()
+        result = annotator.add_annotation(input_text, file_id, json, user_id)
+
+        assert result == expected_text
+
 #     def test_add_annotation__position_in_request_with_adhering_tags__string(self, mock_get_user_data_from_db):
 #         json = {
 #             "start_row": 228,
