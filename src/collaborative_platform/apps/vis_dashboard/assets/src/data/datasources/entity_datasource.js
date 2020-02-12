@@ -16,6 +16,8 @@ export default function EntityDataSource(pubSubService, project){
 	 	self._idDimension = self._data.dimension(x=>x.id);
 	 	self._nameDimension = self._data.dimension(x=>x.name);
 	 	self._typeDimension = self._data.dimension(x=>x.type);
+	 	self._docNameDimension = self._data.dimension(x=>x.file_name);
+	 	self._docIdDimension = self._data.dimension(x=>x.file_id);
 
 	 	self._project = project
 		
@@ -37,9 +39,11 @@ export default function EntityDataSource(pubSubService, project){
 
 		pubSubService.register(self);
 
-		self.subscribe(`filter/id`, args=>_filterDimension(self._idDimension, args.filter));
-		self.subscribe(`filter/name`, args=>_filterDimension(self._nameDimension, args.filter));
-		self.subscribe(`filter/type`, args=>_filterDimension(self._typeDimension, args.filter));
+		self.subscribe(`filter/entityId`, args=>_filterDimension(self._idDimension, args.filter));
+		self.subscribe(`filter/entityName`, args=>_filterDimension(self._nameDimension, args.filter));
+		self.subscribe(`filter/entityType`, args=>_filterDimension(self._typeDimension, args.filter));
+		self.subscribe(`filter/fileName`, args=>_filterDimension(self._docNameDimension, args.filter));
+		self.subscribe(`filter/fileId`, args=>_filterDimension(self._docIdDimension, args.filter));
 
 		return self;
 	}
@@ -96,7 +100,7 @@ export default function EntityDataSource(pubSubService, project){
 					if(response.success === false)
 						console.info('Failed to retrieve entities for file: '+file.id);
 					else
-						self._data.add(response.content);
+						self._data.add(response.content.map(x=>({file_id:file.id, file_name:file.name, ...x})));
 						_publishData();
 				});
 			})
