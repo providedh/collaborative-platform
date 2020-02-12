@@ -25,8 +25,8 @@ class TestAnnotator:
     @pytest.mark.django_db
     def test_add_annotation__add_tag_to_text__fragment_without_tag__string(self):
         request = {
-            'start_pos': 9644,
-            'end_pos': 9649,
+            'start_pos': 9710,
+            'end_pos': 9715,
             'tag': 'date',
         }
 
@@ -961,35 +961,35 @@ class TestAnnotator:
 
         assert result == expected_text
 
-#     def test_add_annotation__add_attribute_to_tag__fragment_with_same_tag_and_same_certainty__exception(self, mock_get_user_data_from_db):
-#         json = {
-#             "start_row": 219,
-#             "start_col": 398,
-#             "end_row": 219,
-#             "end_col": 409,
-#             "category": "ignorance",
-#             "locus": "attribute",
-#             "certainty": "high",
-#             "attribute_name": "sex",
-#             "asserted_value": "male",
-#             "description": "",
-#             "tag": "person"
-#         }
-#
-#         input_file_path = os.path.join(DIRNAME, "test_annotator_files", "source_files", "source_file.xml")
-#
-#         input_text = read_file(input_file_path)
-#
-#         user_guid = 'abcde'
-#
-#         input_text = input_text.decode('utf-8')
-#
-#         with assert_raises(NotModifiedException) as exception:
-#             annotator = Annotator()
-#             result = annotator.add_annotation(input_text, json, user_guid)
-#
-#         assert exception.exception.message == "This certainty already exist."
-#
+    @pytest.mark.django_db
+    def test_add_annotation__add_attribute_to_tag__fragment_with_same_tag_and_same_certainty__exception(self):
+        json = {
+            'start_row': 222,
+            'start_col': 423,
+            'end_row': 222,
+            'end_col': 434,
+            'categories': ['ignorance'],
+            'locus': 'value',
+            'certainty': 'high',
+            'attribute_name': 'sex',
+            'asserted_value': 'male',
+            'description': '',
+            'tag': 'person',
+        }
+
+        input_file_path = os.path.join(DIRNAME, 'test_files', 'source_files', 'source_file.xml')
+
+        input_text = read_file(input_file_path)
+
+        user_id = 2
+        file_id = 1
+
+        with pytest.raises(NotModified) as exception:
+            annotator = Annotator()
+            result = annotator.add_annotation(input_text, file_id, json, user_id)
+
+        assert str(exception.value) == "This certainty already exist."
+
 #     def test_add_annotation__add_certainty_with_tag_to_text__fragment_with_same_tag_separated__string(self, mock_get_user_data_from_db):
 #         json = {
 #             "start_row": 219,

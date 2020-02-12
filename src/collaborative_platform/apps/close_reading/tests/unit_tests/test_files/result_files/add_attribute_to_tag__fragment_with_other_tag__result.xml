@@ -86,7 +86,7 @@
           <certainty category="variation" locus="sameAs" cert="medium" resp="#personercfd" target="#person_source_file_xml-15" assertedValue="dep_835104r162_tei#person835104r162_2" xml:id="certainty_source_file_xml-11"/>
           <certainty category="credibility" locus="value" cert="medium" resp="#personercfd" target="#desc000002" xml:id="certainty_source_file_xml-12"/>
           <certainty category="credibility" locus="value" cert="medium" resp="#personercfd" target="#ab000003 #ab000004" xml:id="certainty_source_file_xml-13"/>
-          <certainty category="ignorance" locus="sex" cert="high" resp="#personercfd" target="#person_source_file_xml-13" assertedValue="male" xml:id="certainty_source_file_xml-14"/>
+          <certainty ana="https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#ignorance" locus="value" cert="high" resp="#personercfd" target="#person_source_file_xml-13" match="@sex" assertedValue="male" xml:id="certainty_source_file_xml-14"/>
           <certainty ana="https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#ignorance" locus="value" cert="high" resp="#person2" target="#person_source_file_xml-19" match="@sex" assertedValue="female" xml:id="certainty_source_file_xml-17"/>
         </classCode>
         <keywords scheme="1641">
