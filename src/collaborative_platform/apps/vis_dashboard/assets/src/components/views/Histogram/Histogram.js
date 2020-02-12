@@ -37,6 +37,14 @@ function useData(dataClient, dimension){
 
                 setData(mostCommon);
             });
+        }else if(dimension == 'Number of entities per document'){
+            dataClient.unsubscribe('entity');
+            dataClient.subscribe('entity', data=>{
+                const count = {};
+                data.filtered.forEach(x=>count.hasOwnProperty(x.file_name)?count[x.file_name]++:count[x.file_name]=1);
+                const entries = Object.entries(count).map(x=>({file_name:x[0], count:x[1]}));
+                setData(entries);
+            });
         }else{
             dataClient.unsubscribe('entity');
 		    setData(dummy_data[dimension])
