@@ -10,6 +10,7 @@ from apps.api_vis.helpers import get_entity_from_int_or_dict, create_clique
 from apps.api_vis.models import Entity, Certainty, Unification
 from apps.exceptions import BadRequest, NotModified
 from apps.files_management.models import FileMaxXmlIds, File
+from apps.files_management.file_conversions.xml_formatter import XMLFormatter
 from apps.projects.helpers import get_ana_link
 from apps.projects.models import ProjectVersion
 
@@ -67,10 +68,10 @@ class Annotator:
 
         self.__xml_annotated = ""
 
-    def add_annotation(self, xml, file_id, request, annotator_guid):
+    def add_annotation(self, xml, file_id, request, annotator_id):
         self.__xml = xml
         self.__file = File.objects.get(id=file_id)
-        self.__annotator_xml_id = 'person' + str(annotator_guid)
+        self.__annotator_xml_id = 'person' + str(annotator_id)
 
         request = self.__handle_types_in_request(request)
 
@@ -292,9 +293,9 @@ class Annotator:
             self.__tags = self.__get_adhering_tags_from_annotated_fragment(self.__fragment_to_annotate)
 
         self.__annotators_xml_ids = self.__get_annotators_xml_ids_from_file(self.__xml)
-        certainties = self.__get_certainties_from_file(self.__xml)
-        self.__tag_xml_id_number = self.__get_xml_id_number_for_tag(certainties, self.__request["tag"])
-        self.__certainty_xml_id_number = self.__get_xml_id_number_for_tag(certainties, 'certainty')
+
+        self.__tag_xml_id_number = self.__get_xml_id_number_for_tag(self.__request["tag"])
+        self.__certainty_xml_id_number = self.__get_xml_id_number_for_tag('certainty')
 
     def __get_fragment_position(self, xml, json):
         if 'start_pos' in json and json['start_pos'] is not None and 'end_pos' in json and json['end_pos'] is not None:
@@ -468,33 +469,18 @@ class Annotator:
 
         return xml_ids
 
-    def __get_xml_id_number_for_tag(self, certainties, tag='ab'):
+    def __get_xml_id_number_for_tag(self, tag):
+        # TODO: Max IDs for all tags in file should be keep in database
+
+        tag = 'ab' if tag == '' else tag
+
         if tag in ['event', 'org', 'person', 'place', 'certainty', 'object']:
             xml_id = self.__get_max_xml_id_from_database(tag)
 
-            return xml_id
-
-        # TODO: Max IDs for all tags in file should be keep in database
         else:
-            biggest_number = 0
+            xml_id = self.__get_max_xml_id_from_file(tag)
 
-            for certainty in certainties:
-                id_value = certainty.attrib['target']
-
-                if tag not in id_value:
-                    continue
-
-                id_value = id_value.strip()
-
-                split_values = id_value.split(' ')
-                for value in split_values:
-                    number = value.split('-')[-1]
-                    number = int(number)
-
-                    if number > biggest_number:
-                        biggest_number = number
-
-            return biggest_number + 1
+        return xml_id
 
     def __get_max_xml_id_from_database(self, tag):
         file_mx_xml_id = FileMaxXmlIds.objects.get(file=self.__file)
@@ -503,6 +489,39 @@ class Annotator:
         file_mx_xml_id.save()
 
         return file_mx_xml_id.__dict__[tag]
+
+    def __get_max_xml_id_from_file(self, tag):
+        biggest_number = 0
+
+        elements_with_same_tag_and_xml_id = self.__get_elements_with_same_tag_and_xml_id(tag)
+
+        prefix = '{%s}' % NAMESPACES['xml']
+
+        for element in elements_with_same_tag_and_xml_id:
+            id = element.attrib[f'{prefix}id']
+
+            if '-' in id:
+                id_number = id.split('-')[-1]
+                id_number = int(id_number)
+
+                if id_number > biggest_number:
+                    biggest_number = id_number
+
+        return biggest_number + 1
+
+    def __get_elements_with_same_tag_and_xml_id(self, tag):
+        text_in_lines = self.__xml.splitlines()
+
+        if 'encoding=' in text_in_lines[0]:
+            text_to_parse = '\n'.join(text_in_lines[1:])
+        else:
+            text_to_parse = self.__xml
+
+        tree = etree.fromstring(text_to_parse)
+
+        elements_with_same_tag = tree.xpath(f'//default:{tag}[@xml:id]', namespaces=NAMESPACES)
+
+        return elements_with_same_tag
 
     def __prepare_xml_parts(self):
         # 1.Add tag to text
@@ -795,8 +814,8 @@ class Annotator:
         target = " ".join(annotation_ids)
         xml_id = f"certainty_{self.__file.name}-{self.__certainty_xml_id_number}"
 
-        categories = " ".join([get_ana_link(self.__file.project_id, cat) for cat in json["categories"]])
-        certainty = f'<certainty ana="{categories}" locus="{json["locus"]}" cert="{json["certainty"]}" ' \
+        ana = self.__create_ana_from_categories(json['categories'])
+        certainty = f'<certainty ana="{ana}" locus="{json["locus"]}" cert="{json["certainty"]}" ' \
                     f'resp="#{user_uuid}" target="{target}" match="@{json["attribute_name"]}" ' \
                     f'assertedValue="{json["asserted_value"]}" xml:id="{xml_id}"/>'
 
@@ -996,13 +1015,11 @@ class Annotator:
             xml_annotated = self.__add_list_element(xml_annotated, self.__list_element_to_add)
             xml_annotated = self.__reorder_elements(xml_annotated)
 
-        xml_annotated = self.__reformat_xml(xml_annotated)
+        xml_formatter = XMLFormatter()
+        xml_annotated = xml_formatter.reformat_xml(xml_annotated)
 
         if 'encoding=' in xml_annotated_in_lines[0]:
             xml_annotated = '\n'.join((xml_annotated_in_lines[0], xml_annotated))
-
-        if 'xml version="' not in xml_annotated:
-            xml_annotated = '\n'.join((u'<?xml version="1.0"?>', xml_annotated))
 
         self.__xml_annotated = xml_annotated
 
@@ -1222,13 +1239,10 @@ class Annotator:
 
         return text
 
-    @staticmethod
-    def __reformat_xml(text):
-        parser = etree.XMLParser(remove_blank_text=True)
-        tree = etree.fromstring(text, parser=parser)
-        pretty_xml = etree.tounicode(tree, pretty_print=True)
+    def __create_ana_from_categories(self, categories):
+        ana = " ".join([get_ana_link(self.__file.project_id, cat) for cat in categories])
 
-        return pretty_xml
+        return ana
 
     def __create_unification(self, annotation_ids):
         if len(annotation_ids) > 1:
@@ -1251,7 +1265,6 @@ class Annotator:
         asserted_entities = self.__request['asserted_value'].split(' ')
 
         for asserted_entity in asserted_entities:
-            # if '#' not in asserted_entity:
             if asserted_entity.startswith('#'):
                 entity = Entity.objects.get(
                     project_id=self.__file.project_id,
@@ -1284,4 +1297,7 @@ class Annotator:
         user_id = int(self.__annotator_xml_id.replace('person', ''))
         user = User.objects.get(id=user_id)
 
-        create_clique(request_data, project_id, user, created_in_annotator=True)
+        ana = self.__create_ana_from_categories(self.__request['categories'])
+        description = self.__request['description']
+
+        create_clique(request_data, project_id, user, created_in_annotator=True, ana=ana, description=description)

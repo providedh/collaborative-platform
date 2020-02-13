@@ -5,9 +5,10 @@ Django==2.2.4
 psycopg2-binary==2.8.3
 
 # For tests
-pytest==5.0.1
-pytest-cov==2.7.1
-pytest-django==3.5.1
+mock==3.0.5
+pytest==5.3.5
+pytest-cov==2.8.1
+pytest-django==3.8.0
 
 # For bots protection
 django-recaptcha==2.0.4

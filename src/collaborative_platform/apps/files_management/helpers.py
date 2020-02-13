@@ -333,7 +333,7 @@ def create_certainty_elements_from_unifications(internal_unifications, external_
             'xml': xml_namespace,
         }
 
-        ana = ''
+        ana = unification.ana
         locus = 'value'
         certainty = unification.certainty
         annotator_id = '#person' + str(unification.created_by_id)
@@ -351,6 +351,12 @@ def create_certainty_elements_from_unifications(internal_unifications, external_
 
         certainty_xml_id = unification.xml_id
         certainty.attrib[etree.QName(xml + 'id')] = certainty_xml_id
+
+        if unification.description:
+            description = etree.Element('desc', nsmap=ns_map)
+            description.text = unification.description
+
+            certainty.append(description)
 
         certainties.append(certainty)
 

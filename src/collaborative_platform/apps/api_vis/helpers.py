@@ -627,9 +627,12 @@ def common_filter_entities(query_string, project_id):
     return entities_to_return
 
 
-def create_clique(request_data, project_id, user, created_in_annotator=False):
-    # type: (dict, int, User, bool) -> (Clique, list)
+def create_clique(request_data, project_id, user, created_in_annotator=False, ana='', description=''):
+    # type: (dict, int, User, bool, str, str) -> (Clique, list)
     from apps.api_vis.api import ENTITY_CLASSES
+
+    if (ana or description) and not created_in_annotator:
+        raise BadRequest("'ana' and 'description' parameters are allowed only during unification in Annotator.")
 
     if 'name' in request_data and request_data['name'] != '':
         clique_name = request_data['name']
@@ -694,7 +697,9 @@ def create_clique(request_data, project_id, user, created_in_annotator=False):
                 entity=entity,
                 clique=clique,
                 created_by=user,
+                ana=ana,
                 certainty=request_data['certainty'],
+                description=description,
                 created_in_file_version=file_version,
                 created_in_annotator=created_in_annotator,
                 xml_id=f'certainty_{entity.file.name}-{file_max_xml_ids.certainty}',
