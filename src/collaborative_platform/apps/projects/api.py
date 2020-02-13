@@ -143,4 +143,4 @@ def get_taxonomy(request, project_id):
         return HttpResponseBadRequest("Invalid request method")
 
     project = Project.objects.get(id=project_id)
-    return HttpResponse(project.taxonomy.contents)
+    return HttpResponse(project.taxonomy.contents, content_type="application/xml")
