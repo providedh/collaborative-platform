@@ -852,7 +852,7 @@ def project_entities(request, project_id):  # type: (HttpRequest, int) -> HttpRe
 @login_required
 @objects_exists
 @user_has_access()
-def project_unbounded_entities(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
+def project_unbound_entities(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
     if request.method == 'GET':
         try:
             query_string = parse_query_string(request.GET)
@@ -913,12 +913,12 @@ def project_unbounded_entities(request, project_id):  # type: (HttpRequest, int)
             entities = set(entities)
             bounded_entities = set(bounded_entities)
 
-            unbounded_entities = entities - bounded_entities
-            unbounded_entities = Entity.objects.filter(id__in=unbounded_entities)
+            unbound_entities = entities - bounded_entities
+            unbound_entities = Entity.objects.filter(id__in=unbound_entities)
 
             entities_to_return = []
 
-            for entity in unbounded_entities:
+            for entity in unbound_entities:
                 if entity.type == 'certainty':
                     continue
 
@@ -1016,7 +1016,7 @@ def file_entities(request, project_id, file_id):  # type: (HttpRequest, int, int
             return JsonResponse(response, safe=False)
 
 
-def file_unbounded_entities(request, project_id, file_id):  # type: (HttpRequest, int, int) -> HttpResponse
+def file_unbound_entities(request, project_id, file_id):  # type: (HttpRequest, int, int) -> HttpResponse
     if request.method == 'GET':
         try:
             query_string = parse_query_string(request.GET)
@@ -1081,12 +1081,12 @@ def file_unbounded_entities(request, project_id, file_id):  # type: (HttpRequest
             entities = set(entities)
             bounded_entities = set(bounded_entities)
 
-            unbounded_entities = entities - bounded_entities
-            unbounded_entities = Entity.objects.filter(id__in=unbounded_entities)
+            unbound_entities = entities - bounded_entities
+            unbound_entities = Entity.objects.filter(id__in=unbound_entities)
 
             entities_to_return = []
 
-            for entity in unbounded_entities:
+            for entity in unbound_entities:
                 if entity.type == 'certainty':
                     continue
 
