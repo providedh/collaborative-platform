@@ -21,6 +21,7 @@ def read_file(path):
     return text
 
 
+@pytest.mark.unit_tests
 class TestAnnotator:
     @pytest.mark.django_db
     def test_add_annotation__add_tag_to_text__fragment_without_tag__string(self):
