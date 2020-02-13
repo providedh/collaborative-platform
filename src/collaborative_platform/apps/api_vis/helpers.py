@@ -617,7 +617,8 @@ def common_filter_entities(query_string, project_id):
 
         entity_to_return = {
             'id': entity.id,
-            'name': ENTITY_CLASSES[entity.type].objects.get(entity_id=entity.id).name,
+            'name': ENTITY_CLASSES[entity.type].objects.filter(entity_id=entity.id).order_by(
+                "entity__created_in_version").last().name,
             'type': entity.type,
         }
 
