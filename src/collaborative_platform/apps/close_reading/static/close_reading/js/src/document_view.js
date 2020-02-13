@@ -132,12 +132,27 @@ var DocumentView = function(args){
 	        }
 	    }
 
-	    for(let i=0; i<end_content.length; i++){
-	        if(original_text[i]!=end_content[i]){
-	            positions.push(self.TEIheaderLength + i);
-	            break;
-	        }
-	    }
+	    let textFound = '', skipping = false, currentChar = null;
+
+	    for(let i=positions[0] - self.TEIheaderLength; i<original_text.length; i++){
+	    	currentChar = original_text[i];
+
+	    	if(skipping === false){
+	    		if(currentChar == '<'){
+	    			skipping = true;
+	    		}else{
+	    			textFound += currentChar;
+		    		if(textFound == text){
+		    			positions.push(self.TEIheaderLength + i + 1);
+		    			break;
+		    		}
+	    		}
+	    	}else{
+	    		if(currentChar == '>'){
+	    			skipping = false;
+	    		}
+	    	}
+	    } 
 
 	    const abs_positions = {start: Math.min(...positions), end: Math.max(...positions)};
 
