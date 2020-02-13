@@ -6,7 +6,7 @@ before_install:
     -in providedh-key.enc -out providedh-key -d
   - chmod 600 providedh-key
 
-script: echo "We have no tests :("
+script: cd src/collaborative_platform/ && pytest
 
 deploy:
   skip_cleanup: true
