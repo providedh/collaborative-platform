@@ -12,6 +12,7 @@ before_install:
 
 install:
   - pip install -r requirements.txt
+  - cp src/collaborative_platform/collaborative_platform/settings_for_tests.py src/collaborative_platform/collaborative_platform/settings.py
 
 
 script: cd src/collaborative_platform && pytest
