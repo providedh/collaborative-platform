@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'apps.close_reading',
     'social_django',
     'django_cleanup',
+    'apps.vis_dashboard',
     # 'django_extensions',  # for SSL on localhost
 ]
 
