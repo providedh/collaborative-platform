@@ -1,12 +1,17 @@
 language: python
 python:
   - "3.8"
+
+services:
+  - postgresql
+
 before_install:
   - openssl aes-256-cbc -K $encrypted_1443f6b77812_key -iv $encrypted_1443f6b77812_iv
     -in providedh-key.enc -out providedh-key -d
   - chmod 600 providedh-key
 
-script: echo "Not yet"
+
+script: cd src/collaborative_platform && pytest
 
 deploy:
   skip_cleanup: true
