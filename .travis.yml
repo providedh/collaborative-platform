@@ -10,12 +10,8 @@ before_install:
     -in providedh-key.enc -out providedh-key -d
   - chmod 600 providedh-key
 
-install:
-  - pip install -r requirements.txt
-  - pip install -e .
 
-
-script: cd src/collaborative_platform && pytest
+script: cd src/collaborative_platform && python -m pytest
 
 deploy:
   skip_cleanup: true
