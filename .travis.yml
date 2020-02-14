@@ -12,7 +12,7 @@ before_install:
 
 install:
   - pip install -r requirements.txt
-  - pip install -e src/collaborative_platform
+  - pip install src/collaborative_platform
 
 
 script: cd src/collaborative_platform && pytest
