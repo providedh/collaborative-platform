@@ -10,6 +10,10 @@ before_install:
     -in providedh-key.enc -out providedh-key -d
   - chmod 600 providedh-key
 
+install:
+  - pip install -r requirements.txt
+  - pip install -e /src/collaborative_platform
+
 
 script: cd src/collaborative_platform && pytest
 
