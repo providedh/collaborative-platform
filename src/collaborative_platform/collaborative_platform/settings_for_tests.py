@@ -1,5 +1,4 @@
 from .settings import *
-import os
 
 
 # File storage
