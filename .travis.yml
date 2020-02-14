@@ -11,7 +11,7 @@ before_install:
   - chmod 600 providedh-key
 
 
-script: cd src/collaborative_platform && python -m pytest
+script: cd src/collaborative_platform && pytest
 
 deploy:
   skip_cleanup: true
