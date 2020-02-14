@@ -28,6 +28,7 @@ media/
 db_backup.json
 
 # Logs
+**/logs/*
 *.log
 
 # Local Django settings
