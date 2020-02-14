@@ -52,12 +52,10 @@ INSTALLED_APPS = [
     'apps.index_and_search',
     'apps.projects',
     'apps.close_reading',
+    'apps.vis_dashboard',
     'social_django',
     'django_cleanup',
-    'apps.vis_dashboard',
     # 'django_extensions',  # for SSL on localhost
-]
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

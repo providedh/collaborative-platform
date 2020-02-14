@@ -7,11 +7,11 @@ TAXONOMY_FILES_PATH = 'taxonomy_files/'
 
 
 class Project(models.Model):
-    title = models.CharField(max_length=150, blank=False)
-    description = models.CharField(max_length=150, null=True, blank=True)
+    title = models.CharField(max_length=255, blank=False)
+    description = models.CharField(max_length=255, null=True, blank=True)
     creation_date = models.DateTimeField(auto_now_add=True)
     modification_date = models.DateTimeField(auto_now=True)
-    license = models.CharField(max_length=16, null=True, blank=True, default='GPL')
+    license = models.CharField(max_length=255, null=True, blank=True, default='GPL')
     public = models.BooleanField(default=False)
 
     def clean(self):
