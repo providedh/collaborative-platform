@@ -1,0 +1,21 @@
+.tabSelector{
+
+}
+
+.rowOverride{
+	margin-left: 0;
+	margin-right: 0;
+}
+
+.option{
+	padding: 0 0 var(--space-s) 0;
+	cursor: pointer;
+}
+
+.selected{
+	border-bottom: solid 3px var(--blue);
+}
+
+.hr{
+	margin-top: 0;
+}
