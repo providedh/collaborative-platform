@@ -204,6 +204,21 @@ var Tooltips = function(args){
 					`<span class="tagId">ID : ${original_tag_id}</span><br/>( ${tag_name} )`:
 					`( ${tag_name} )`;
 
+				if(original_tag_id != ''){
+					node.addEventListener('click', ()=>{
+						const args = {
+							selection: {
+								text: original_tag_id,
+								abs_positions: null,
+								by_id: true,
+								target: original_tag_id
+							}
+						}
+
+						self.publish('sidepanel/selection', args);
+					})
+				}
+
 				node.addEventListener('mouseenter', e=>{
 					if(tag_name == 'objectName' && document.getElementById('using-recipes-plugin').checked === false)
 						return 
