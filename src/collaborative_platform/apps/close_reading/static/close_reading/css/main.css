@@ -58,6 +58,10 @@ page {
     z-index: 2;
 }
 
+#toolbar .form-control{
+  font-size: .7em;
+}
+
 #toolbar .toogle-button{
 	position: relative;
 	bottom: -6px;
@@ -496,5 +500,8 @@ div#history-popup span.color{
     #toolbar .nav-link{
       padding-top: .5rem;
       padding-bottom: .5rem;
+    }
+    #toolbar .form-control{
+      font-size: .875rem;
     }
 }
