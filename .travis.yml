@@ -33,6 +33,6 @@ script: pytest
 deploy:
   skip_cleanup: true
   provider: script
-  script: ssh -o "StrictHostKeyChecking no" ubuntu@providedh-test.ehum.psnc.pl -i providedh-key "cd collaborative-platform && ./prod_upgrade"
+  script: cd ../.. && ssh -o "StrictHostKeyChecking no" ubuntu@providedh-test.ehum.psnc.pl -i providedh-key "cd collaborative-platform && ./prod_upgrade"
   on:
     branch: develop
