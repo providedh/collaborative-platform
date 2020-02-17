@@ -27,7 +27,6 @@ install:
   - cp src/collaborative_platform/collaborative_platform/settings.py_template src/collaborative_platform/collaborative_platform/settings.py
 
 before_script:
-  - sudo cp /etc/postgresql/{9.6,11}/main/pg_hba.conf
   - sudo service postgresql restart 11
   - psql -U postgres -c "create extension postgis"
   - psql -c "create database ctest;" -U postgres
