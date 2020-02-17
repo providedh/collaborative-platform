@@ -2,6 +2,9 @@ language: python
 python:
   - "3.8"
 
+services:
+  - postgresql
+
 addons:
   postgresql: "11"
   apt:
@@ -27,6 +30,7 @@ before_script:
   - psql -h 127.0.0.1 -c "create database ctest;" -U postgres
   - psql -h 127.0.0.1 -c "create user ctest with encrypted password 'ctest';" -U postgres
   - psql -h 127.0.0.1 -c "grant all privileges on ctest to ctest;" -U postgres
+  - psql -h 127.0.0.1 -U postgres -c "create extension postgis"
 
 script: cd src/collaborative_platform && pytest
 
