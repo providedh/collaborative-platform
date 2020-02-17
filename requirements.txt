@@ -1,5 +1,5 @@
 # Framework
-Django==2.2.4
+Django==2.2.10
 
 # For Postgres database
 psycopg2-binary==2.8.3
