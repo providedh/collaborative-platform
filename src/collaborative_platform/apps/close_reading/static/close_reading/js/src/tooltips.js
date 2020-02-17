@@ -120,18 +120,19 @@ var Tooltips = function(args){
 			author = `( author : ${attrs.resp.value} )`;
 		let target = 'Uncertain regarding the ';
 
-		if(attrs.locus == 'name')
+		if(attrs.locus.value == 'name') {
 			target += 'tag name';
-		else if(attrs.hasOwnProperty('match'))
+		} else if(attrs.hasOwnProperty('match')) {
 			target += `${attrs.match.value.slice(1)} attribute`;
-		else
+		} else {
 			target += 'text content';
+		}
 
 		return `
 			${header}<br/>
 			<i class="author">${author}</i><br/>
 			${target}<br/>
-			Proposed value : ${attrs.assertedValue.value}
+			Proposed value : ${attrs.hasOwnProperty('assertedValue')?attrs.assertedValue.value:''}
 		`
 
 	}
