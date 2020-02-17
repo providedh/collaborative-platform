@@ -36,27 +36,38 @@ var Popup = function(args){
 			body: 'The body',
 			x: '50%',
 			y: '25%'
-		},args);
+		},args), 
+			popup = document.getElementById('popup');
 
-		document
-        	.getElementById('popup')
+		popup
         	.getElementsByClassName('card-title')[0]
         	.innerHTML = values.title;
 
-        document
-        	.getElementById('popup')
+        popup
         	.getElementsByClassName('card-subtitle')[0]
         	.innerHTML = values.subtitle;
 
-        document
-        	.getElementById('popup')
+        popup
         	.getElementsByClassName('card-text')[0]
         	.innerHTML = values.body;
 
-        document.getElementById('popup').style.setProperty('left',args.x);
-		document.getElementById('popup').style.setProperty('top',args.y);
+		popup.style.setProperty('display','initial');
+		const boundingRect = popup.getBoundingClientRect()
+		let x = '0px';
 
-		document.getElementById('popup').style.setProperty('display','initial');
+		if(args.x >= boundingRect.width/2)
+        	x = args.x - boundingRect.width/2 + 'px';
+
+        const scrollBarWidth = 16;
+        if(args.x >= (window.innerWidth - scrollBarWidth - boundingRect.width))
+        	x = window.innerWidth - scrollBarWidth - boundingRect.width + 'px';
+
+
+        popup.style.setProperty('left', x);
+		popup.style.setProperty('top',args.y);
+
+        const arrowLeft = Math.abs(boundingRect.x - args.x) + 'px';
+        document.getElementById('popup-arrow').style.setProperty('left', arrowLeft);
 	}
 
 	function _hidePopup(args){
@@ -223,14 +234,16 @@ var Tooltips = function(args){
 					if(tag_name == 'objectName' && document.getElementById('using-recipes-plugin').checked === false)
 						return 
 
+					const position = node.getBoundingClientRect();
+
 					self.publish('popup/render',{
 						title: (`<span class="teiLegendElement" id="${tag_name}">
 								<span class="color bg-${tag_name}"></span></span>`
 								+ node.textContent),
 						subtitle: subtitle,
 						body: body,
-						x: (e.clientX - 150)+'px',//(node.getBoundingClientRect().x+node.getBoundingClientRect().width/2 -150)+'px', 
-						y: (e.clientY + 40) +'px'
+						x: position.x + (position.width/2),//(node.getBoundingClientRect().x+node.getBoundingClientRect().width/2 -150)+'px', 
+						y: position.y + position.height*2 + 'px'
 					})
 				});
 				node.addEventListener('mouseout', ()=>self.publish('popup/hide',{}));
