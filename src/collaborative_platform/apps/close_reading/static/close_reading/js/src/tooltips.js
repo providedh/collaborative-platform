@@ -52,7 +52,7 @@ var Popup = function(args){
         	.innerHTML = values.body;
 
 		popup.style.setProperty('display','initial');
-		const boundingRect = popup.getBoundingClientRect()
+		const boundingRect = popup.getBoundingClientRect();
 		let x = '0px';
 
 		if(args.x >= boundingRect.width/2)
@@ -66,7 +66,8 @@ var Popup = function(args){
         popup.style.setProperty('left', x);
 		popup.style.setProperty('top',args.y);
 
-        const arrowLeft = Math.abs(boundingRect.x - args.x) + 'px';
+
+        const arrowLeft = Math.abs(popup.getBoundingClientRect().x - args.x) + 'px';
         document.getElementById('popup-arrow').style.setProperty('left', arrowLeft);
 	}
 
