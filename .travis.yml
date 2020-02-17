@@ -2,32 +2,25 @@ language: python
 python:
   - "3.8"
 
-services:
-  - postgresql
-
-addons:
-  postgresql: "11"
-  apt:
-    packages:
-      - postgresql-11
-      - postgresql-client-11
-      - postgresql-11-postgis-2.5
-      - postgresql-server-dev-11
-      - binutils
-      - libproj-dev
-      - gdal-bin
-
 before_install:
   - openssl aes-256-cbc -K $encrypted_1443f6b77812_key -iv $encrypted_1443f6b77812_iv
     -in providedh-key.enc -out providedh-key -d
   - chmod 600 providedh-key
+  - sudo service postgresql stop
+  - sudo apt-get --yes remove postgresql-10-postgis-2.4
+  - sudo apt install -yq --no-install-suggests --no-install-recommends postgresql-11-postgis-2.5-scripts postgresql-11 postgresql-client-11 postgresql-11-postgis-2.5
+  - sed -e 's/^port.*/port = 5432/' /etc/postgresql/11/main/postgresql.conf > postgresql.conf
+  - sudo chown postgres postgresql.conf
+  - sudo mv postgresql.conf /etc/postgresql/11/main
+  - sudo cp /etc/postgresql/{10,11}/main/pg_hba.conf
+  - sudo service postgresql restart 11
 
 install:
   - pip install -r requirements.txt
   - cp src/collaborative_platform/collaborative_platform/settings.py_template src/collaborative_platform/collaborative_platform/settings.py
 
 before_script:
-  - sudo service postgresql restart 11
+  - export PATH="/usr/lib/postgresql/11/bin:$PATH"
   - psql -U postgres -c "create extension postgis"
   - psql -c "create database ctest;" -U postgres
   - psql -c "create user ctest with encrypted password 'ctest';" -U postgres
