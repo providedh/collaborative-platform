@@ -64,56 +64,36 @@
         <main role="main" class="col-md-8 col-lg-8 px-4 justify-content-center d-flex"> 
           <div id="toolbar-container" class="col-auto">
             <section id="toolbar">
-              <nav aria-label="breadcrumb" id="top-breadcrumb">
-                <ol class="breadcrumb bg-transparent">
-                  <a href="{{ origin_url }}" class="breadcrumb-item">{{ origin }}</a>
-                  <li class="breadcrumb-item active" aria-current="page">Close Reading</li>
-                </ol>
-              </nav>
               <div id="alert" class="hide" role="alert"></div>
-              <div class="card card-body">
-              <h3 class="break-word">
-    {#             Split file name into two parts: with and without extension#}
-                <span>
-                  <span id="fileTitleEditable" title="{{ file.name }}">{{ file.name |truncatechars:40}}</span>
-                  <a id='versionLink'  class='scripted'>Version: {{ file.version_number }}</a>
-    {#              % if file_revision:#}
-    {#                <small>&nbsp;${file_revision | h}</small>#}
-    {#              % endif#}
-                </span>
-                <button class="btn btn-outline-primary btn-sm" href="" id="saveFile">Save current file</button>
-              </h3>
-              <div id="history-container">
-                <div id="history">
-                  <span id="history-legend">Uncertainty</span>
-                  <div>
-                    <canvas></canvas>
-                    <hr/>
-                    <div id="versions"></div>
-                    <div id="version-toltip"></div>
-                    <div id="history-popup">
+              <div class="card card-body" id="header-card">
+                <div class="col px-0 justify-space-between">
+                  <h3 class="break-word">
+                    <span>
+                      <nav aria-label="breadcrumb" id="top-breadcrumb">
+                          <a href="{{ origin_url }}" class="breadcrumb-item">(Back to {{ origin }})</a>
+                      </nav>
+                      <span id="fileTitleEditable" title="{{ file.name }}">{{ file.name |truncatechars:40}}</span>
+                      <a id='versionLink'  class='scripted'>Version: {{ file.version_number }}</a>
+                    </span>
+                    <button class="btn btn-outline-primary btn-sm" href="" id="saveFile">Save current file</button>
+                  </h3>
+                </div>  
+                <div id="history-container">
+                  <div id="history">
+                    <span id="history-legend">Uncertainty</span>
+                    <div>
+                      <canvas></canvas>
+                      <hr/>
+                      <div id="versions"></div>
+                      <div id="version-toltip"></div>
+                      <div id="history-popup">
+                    </div>
                   </div>
                 </div>
               </div>
               </div>
-              </div>
                 <div class="collapse p-2" id="example" class="card card-body">
                   <div>
-                    <div id="visual-options" class="d-flex justify-content-between">
-                      <button id="display-annotations" class="btn btn-outline-primary btn-sm active" data-toggle="button" aria-pressed="true" pressed="true" autocomplete="false">
-                        <span class="active-hide">Show</span><span class="active-show">Hide</span> annotations
-                      </button>
-                      <button id="display-uncertainty" class="btn btn-outline-primary btn-sm active" data-toggle="button" aria-pressed="true" pressed="true" autocomplete="false">
-                        <span class="active-hide">Show</span><span class="active-show">Hide</span> uncertainty
-                      </button>
-                      <button id="color-annotations" class="btn btn-outline-primary btn-sm active" data-toggle="button" aria-pressed="true" pressed="true" autocomplete="false">
-                        <span class="active-hide">Show</span><span class="active-show">Hide</span> color for annotations
-                      </button>
-                      <button id="color-uncertainty" class="btn btn-outline-primary btn-sm active" data-toggle="button" aria-pressed="true" pressed="true" autocomplete="false">
-                        <span class="active-hide">Show</span><span class="active-show">Hide</span> color for uncertainty
-                      </button>
-                    </div>
-                    <hr>
                     <div class="toolbarRow" id="toolbar-controls">
                         <span class="toolbar-control" id="annotation-options">
                           <ul class="nav nav-tabs" id="tab-controls" role="tablist">
@@ -122,6 +102,9 @@
                             </li>
                             <li class="nav-item">
                               <a class="nav-link" id="annotating-tei" data-toggle="tab" href="#tei-tab" role="tab" aria-controls="tei-tab" aria-selected="false">Add TEI annotations</a>
+                            </li>
+                            <li class="nav-item">
+                              <a class="nav-link" id="visual-options-tab" data-toggle="tab" href="#visual-tab" role="tab" aria-controls="visual-tab" aria-selected="false">Visual settings</a>
                             </li>
                           </ul>
                           <div class="tab-content" id="annotation-form">
@@ -139,8 +122,8 @@
                                     <span class="help-tooltip" help="Specify wether the annotation refers to the tag name (<i>name</i>) or the text value (<i>value</i>)." />
                                   </label>
                                   <select class="form-control form-control-sm" id='locus'>
-                                    <option value="value">Value</option>
                                     <option value="name">Name</option>
+                                    <option value="value">Value</option>
                                   </select>
                                 </div>
                                 <div class="col">
@@ -231,6 +214,22 @@
                                   <button class="btn btn-outline-success" id="create-tei-annotation">Create</button>
                                 </div>
                               </div>
+                            </div>
+                            <div class="tab-pane" id="visual-tab" role="tabpanel" aria-labelledby="visual-tab">
+                              <div id="visual-options" class="d-flex justify-content-between">
+                              <button id="display-annotations" class="btn btn-outline-primary btn-sm active" data-toggle="button" aria-pressed="true" pressed="true" autocomplete="false">
+                                <span class="active-hide">Show</span><span class="active-show">Hide</span> annotations
+                              </button>
+                              <button id="display-uncertainty" class="btn btn-outline-primary btn-sm active" data-toggle="button" aria-pressed="true" pressed="true" autocomplete="false">
+                                <span class="active-hide">Show</span><span class="active-show">Hide</span> uncertainty
+                              </button>
+                              <button id="color-annotations" class="btn btn-outline-primary btn-sm active" data-toggle="button" aria-pressed="true" pressed="true" autocomplete="false">
+                                <span class="active-hide">Show</span><span class="active-show">Hide</span> color for annotations
+                              </button>
+                              <button id="color-uncertainty" class="btn btn-outline-primary btn-sm active" data-toggle="button" aria-pressed="true" pressed="true" autocomplete="false">
+                                <span class="active-hide">Show</span><span class="active-show">Hide</span> color for uncertainty
+                              </button>
+                            </div>
                             </div>
                           </div>
                           <!-- 
