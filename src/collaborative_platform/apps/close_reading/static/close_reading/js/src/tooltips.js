@@ -114,6 +114,28 @@ var Tooltips = function(args){
 		return obj;
 	}
 
+	function _createAnnotationDescription(attrs){
+		const categories = attrs.ana.value.split(' ').map(x=>x.split('#')[1]),
+			header = `${attrs.cert.value} ${categories.join(', ')} certainty`,
+			author = `( author : ${attrs.resp.value} )`;
+		let target = 'Uncertain regarding the ';
+
+		if(attrs.locus == 'name')
+			target += 'tag name';
+		else if(attrs.hasOwnProperty('match'))
+			target += `${attrs.match.value.slice(1)} attribute`;
+		else
+			target += 'text content';
+
+		return `
+			${header}<br/>
+			<i class="author">${author}</i><br/>
+			${target}<br/>
+			Proposed value : ${attrs.assertedValue.value}
+		`
+
+	}
+
 	function _handleDocumentLoad(args){
 		const certaintyAnnotations = {};
 
@@ -122,7 +144,10 @@ var Tooltips = function(args){
                 annotation.attributes['target'].value.trim().split(" ").forEach(target=>{
                     const id = args.XML_EXTRA_CHAR_SPACER+target.slice(1);
                     if(id != args.XML_EXTRA_CHAR_SPACER && document.getElementById(id) != null){   
-                    	certaintyAnnotations[id] = annotation.attributes;
+                    	if(certaintyAnnotations.hasOwnProperty(id))
+                    		certaintyAnnotations[id].push(annotation.attributes);
+                    	else
+                    		certaintyAnnotations[id] = [annotation.attributes];
                     }
                 })
             });
@@ -150,18 +175,26 @@ var Tooltips = function(args){
 
 				attributes.push(...node.attributes);
 
-				if(tag_id != '' && certaintyAnnotations.hasOwnProperty(tag_id))
-					attributes.push(...certaintyAnnotations[tag_id]);
-
 				if(tag_id != '' && headerTags.hasOwnProperty(tag_id))
 					attributes.push(...headerTags[tag_id]);
 
-				const body = Array
+				const attributesContent = Array
 					.from(attributes.filter(x=>x.name != 'id').values())
 					.map(e=>e.name+' : '+e.value).join(', <br>');
 
+				let certaintyContent = '<i>No annotations.</i>'
+				if(certaintyAnnotations.hasOwnProperty(tag_id))
+					certaintyContent = certaintyAnnotations[tag_id]
+						.map(x=>_createAnnotationDescription(x))
+						.join('<hr>');
+
+				const body = `
+					<b class="title">Attributes <hr></b>${attributesContent}<br/>
+					<b class="title">Annotations <hr></b>${certaintyContent}
+				`
+
 				const subtitle = original_tag_id != ''?
-					`ID : ${original_tag_id}<br/>( ${tag_name} )`:
+					`<span class="tagId">ID : ${original_tag_id}</span><br/>( ${tag_name} )`:
 					`( ${tag_name} )`;
 
 				node.addEventListener('mouseenter', e=>{

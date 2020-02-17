@@ -323,6 +323,20 @@ div#history-popup span.color{
     position: fixed;
     display: none;}
 
+#popup .title hr{
+  margin-top: 0;
+}
+
+#popup .author {
+    font-size: .8em;
+    color: var(--primary);
+    font-weight: bold;
+}
+
+#popup .tagId{
+  font-size: .9em; 
+}
+
 #popup-arrow{
     width: 20px;
     height: 20px;
