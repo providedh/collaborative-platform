@@ -1,8 +1,14 @@
 from __future__ import unicode_literals
+
+import logging
+
 from celery import shared_task
 from datetime import datetime, timezone
 
 from .models import AnnotatingXmlContent, RoomPresence
+
+
+logger = logging.getLogger('celery')
 
 
 @shared_task(name='close_reading.tasks.prune_presence')
@@ -14,6 +20,8 @@ def prune_presence():
 
         if time_delta.total_seconds() > 60:
             presence.delete()
+
+    logger.info('TEST LOGÓW Z CELERY')
 
 
 @shared_task(name='close_reading.tasks.prune_orphaned_annotating_xml_contents')

@@ -10,8 +10,12 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
-from datetime import timedelta
+
 import os
+
+from datetime import timedelta
+from .log_filters import skip_logs_from_certain_modules
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -146,8 +150,12 @@ LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'loggers': {
-        'web_socket': {
-            'handlers': ['console', 'web_socket_file'],
+        'web_socket_annotator': {
+            'handlers': ['console', 'annotator_log_file'],
+            'level': 'DEBUG',
+        },
+        'celery': {
+            'handlers': ['console', 'annotator_log_file'],
             'level': 'DEBUG',
         },
     },
@@ -157,12 +165,13 @@ LOGGING = {
             'class': 'logging.StreamHandler',
             'formatter': 'long',
         },
-        'web_socket_file': {
+        'annotator_log_file': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
-            'filename': os.path.join(LOGS_ROOT, 'web_socket.log'),
+            'filename': os.path.join(LOGS_ROOT, 'annotator.log'),
             'formatter': 'long',
-        },
+            'filters': ['skip_logs_from_certain_modules'],
+        }
     },
     'formatters': {
         'long': {
@@ -170,7 +179,12 @@ LOGGING = {
             'style': '{',
         },
     },
-    'filters': {},
+    'filters': {
+        'skip_logs_from_certain_modules': {
+            '()': 'django.utils.log.CallbackFilter',
+            'callback': skip_logs_from_certain_modules,
+        },
+    },
 }
 
 

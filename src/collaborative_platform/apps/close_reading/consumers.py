@@ -15,7 +15,7 @@ from .helpers import verify_reference
 from .models import AnnotatingXmlContent, RoomPresence
 
 
-logger = logging.getLogger('web_socket')
+logger = logging.getLogger('web_socket_annotator')
 
 
 class AnnotatorConsumer(WebsocketConsumer):
