@@ -32,10 +32,10 @@ const AnnotatorWebSocket = function(){
         let wsPrefix = (window.location.protocol === 'https:') ? 'wss://' : 'ws://';
         let port = '';
 
-        if (window.location.hostname === '0.0.0.0' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
-        {
-            port = ':' + window.location.port
-        }
+        //if (window.location.hostname === '0.0.0.0' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+        //{
+        //}
+        port = ':' + window.location.port
 
         socket = new WebSocket(wsPrefix + window.location.host.split(':')[0] + port + '/ws/close_reading/' + project_id + '_' + file_id + '/');
 
