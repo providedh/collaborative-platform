@@ -12,6 +12,8 @@ button span, #alert{
   z-index: 1000;
 }
 
+#editor{padding-bottom: 15em;}
+
 #editor p,
 #editor div,
 #editor br{
