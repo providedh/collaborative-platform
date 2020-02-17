@@ -117,7 +117,8 @@ var Tooltips = function(args){
 	function _createAnnotationDescription(attrs){
 		const categories = attrs.ana.value.split(' ').map(x=>x.split('#')[1]),
 			header = `${attrs.cert.value} ${categories.join(', ')} certainty`,
-			author = `( author : ${attrs.resp.value} )`;
+			author = `( author : ${attrs.resp.value} )`,
+			description = attrs.hasOwnProperty('description')?`<br/>Comment: ${attrs.description.value}`:'';
 		let target = 'Uncertain regarding the ';
 
 		if(attrs.locus.value == 'name') {
@@ -133,6 +134,7 @@ var Tooltips = function(args){
 			<i class="author">${author}</i><br/>
 			${target}<br/>
 			Proposed value : ${attrs.hasOwnProperty('assertedValue')?attrs.assertedValue.value:''}
+			${description}
 		`
 
 	}
@@ -143,12 +145,16 @@ var Tooltips = function(args){
 		Array.from(args.document.getElementsByTagName('teiHeader')[0].getElementsByTagName('certainty'), a=>a)
             .forEach(annotation=>{
                 annotation.attributes['target'].value.trim().split(" ").forEach(target=>{
-                    const id = args.XML_EXTRA_CHAR_SPACER+target.slice(1);
+                    const id = args.XML_EXTRA_CHAR_SPACER+target.slice(1),
+                    	attributes = annotation.attributes;
+                    if(annotation.children.length == 1)
+                    	attributes.description =  {value: annotation.children[0].textContent};
+
                     if(id != args.XML_EXTRA_CHAR_SPACER && document.getElementById(id) != null){   
                     	if(certaintyAnnotations.hasOwnProperty(id))
-                    		certaintyAnnotations[id].push(annotation.attributes);
+                    		certaintyAnnotations[id].push(attributes);
                     	else
-                    		certaintyAnnotations[id] = [annotation.attributes];
+                    		certaintyAnnotations[id] = [attributes];
                     }
                 })
             });
