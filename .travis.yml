@@ -24,9 +24,9 @@ install:
   - cp src/collaborative_platform/collaborative_platform/settings.py_template src/collaborative_platform/collaborative_platform/settings.py
 
 before_script:
-  - psql -c "create database ctest;" -U postgres
-  - psql -c "create user ctest with encrypted password 'ctest';" -U postgres
-  - psql -c "grant all privileges on ctest to ctest;" -U postgres
+  - psql -h 127.0.0.1 -c "create database ctest;" -U postgres
+  - psql -h 127.0.0.1 -c "create user ctest with encrypted password 'ctest';" -U postgres
+  - psql -h 127.0.0.1 -c "grant all privileges on ctest to ctest;" -U postgres
 
 script: cd src/collaborative_platform && pytest
 
