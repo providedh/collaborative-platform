@@ -56,6 +56,8 @@ INSTALLED_APPS = [
     'social_django',
     'django_cleanup',
     # 'django_extensions',  # for SSL on localhost
+]
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -139,6 +141,37 @@ MEDIA_URL = "/media/"
 
 # Logging
 LOGS_ROOT = os.path.join(BASE_DIR, '..', '..', 'logs')
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'loggers': {
+        'web_socket': {
+            'handlers': ['console', 'web_socket_file'],
+            'level': 'DEBUG',
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'long',
+        },
+        'web_socket_file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(LOGS_ROOT, 'web_socket.log'),
+            'formatter': 'long',
+        },
+    },
+    'formatters': {
+        'long': {
+            'format': '{asctime} - {levelname} - {module} - {message}',
+            'style': '{',
+        },
+    },
+    'filters': {},
+}
 
 
 # ReCaptcha keys

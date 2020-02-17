@@ -1,4 +1,3 @@
-import logging
 import re
 
 from lxml import etree
@@ -14,8 +13,6 @@ from apps.files_management.file_conversions.xml_formatter import XMLFormatter
 from apps.projects.helpers import get_ana_link
 from apps.projects.models import ProjectVersion
 
-
-logger = logging.getLogger(__name__)
 
 NAMESPACES = {
     'default': 'http://www.tei-c.org/ns/1.0',
