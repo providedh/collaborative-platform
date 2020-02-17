@@ -151,7 +151,7 @@ LOGS_ROOT = os.path.join(BASE_DIR, '..', '..', 'logs')
 
 # Uncomment this setting for local testing
 # https://pypi.org/project/django-recaptcha/#local-development-and-functional-testing
-# SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
+SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
 
 
 # For WebSockets
