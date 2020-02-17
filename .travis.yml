@@ -23,9 +23,9 @@ install:
 before_script:
   - export PATH="/usr/lib/postgresql/11/bin:$PATH"
   - psql -U postgres -c "create extension postgis;"
-  - psql -c "create database ctest;" -U postgres
-  - psql -c "create user ctest with encrypted password 'ctest';" -U postgres
-  - psql -c "grant all privileges on database ctest to ctest;" -U postgres
+#  - psql -c "create database ctest;" -U postgres
+#  - psql -c "create user ctest with encrypted password 'ctest';" -U postgres
+#  - psql -c "grant all privileges on database ctest to ctest;" -U postgres
 
 script: cd src/collaborative_platform && pytest
 
