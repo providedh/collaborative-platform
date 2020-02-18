@@ -158,6 +158,10 @@ LOGGING = {
             'handlers': ['console', 'annotator_log_file'],
             'level': 'DEBUG',
         },
+        'upload': {
+            'handlers': ['console', 'upload_log_file'],
+            'level': 'DEBUG',
+        },
     },
     'handlers': {
         'console': {
@@ -171,6 +175,12 @@ LOGGING = {
             'filename': os.path.join(LOGS_ROOT, 'annotator.log'),
             'formatter': 'long',
             'filters': ['skip_logs_from_certain_modules'],
+        },
+        'upload_log_file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(LOGS_ROOT, 'upload.log'),
+            'formatter': 'long',
         }
     },
     'formatters': {
