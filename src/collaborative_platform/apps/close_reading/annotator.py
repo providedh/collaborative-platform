@@ -1,3 +1,4 @@
+import logging
 import re
 
 from lxml import etree
@@ -12,6 +13,9 @@ from apps.files_management.models import FileMaxXmlIds, File
 from apps.files_management.file_conversions.xml_formatter import XMLFormatter
 from apps.projects.helpers import get_ana_link
 from apps.projects.models import ProjectVersion
+
+
+logger = logging.getLogger('annotator')
 
 
 NAMESPACES = {
@@ -305,6 +309,20 @@ class Annotator:
 
         return start, end
 
+    def __get_fragment_rows_and_cols(self, xml, json):
+        if 'start_row' in json and json['start_row'] is not None and \
+                'start_col' in json and json['start_col'] is not None and \
+                'end_row' in json and json['end_row'] is not None and \
+                'end_col' in json and json['end_col'] is not None:
+            return json['start_row'], json['start_col'], json['end_row'], json['end_col']
+
+        else:
+            start_row, start_col, end_row, end_col = self.__convert_start_and_end_to_rows_and_cols(xml,
+                                                                                                   json['start_pos'],
+                                                                                                   json['end_pos'])
+
+            return start_row, start_col, end_row, end_col
+
     @staticmethod
     def __convert_rows_and_cols_to_start_and_end(text, start_row, start_col, end_row, end_col):
         text_in_lines = text.splitlines(True)
@@ -327,6 +345,39 @@ class Annotator:
         chars_to_end += end_col
 
         return chars_to_start, chars_to_end
+
+    @staticmethod
+    def __convert_start_and_end_to_rows_and_cols(text, start_pos, end_pos):
+        start_row = 0
+        start_col = 0
+        end_row = 0
+        end_col = 0
+
+        counted_chars = 0
+
+        text_in_lines = text.splitlines(True)
+
+        for i in range(0, len(text_in_lines)):
+            line_length = len(text_in_lines[i])
+
+            if counted_chars + line_length >= start_pos:
+                start_row = i
+                start_col = start_pos - counted_chars
+
+                break
+
+            counted_chars += len(text_in_lines[i])
+
+        for i in range(start_row, len(text_in_lines)):
+            if counted_chars + len(text_in_lines[i]) >= end_pos:
+                end_row = i
+                end_col = end_pos - counted_chars
+
+                break
+
+            counted_chars += len(text_in_lines[i])
+
+        return start_row + 1, start_col + 1, end_row + 1, end_col
 
     @staticmethod
     def __get_fragment_position_without_adhering_tags(string, start, end):
@@ -375,13 +426,18 @@ class Annotator:
 
         return start, end
 
-    @staticmethod
-    def __validate_selected_fragment(text):
+    def __validate_selected_fragment(self, text):
         tag_part_on_beginning_regex = r'^[^<]*>'
         tag_part_on_end_regex = r'<[^>]*$'
 
         tag_part_on_beginning = re.search(tag_part_on_beginning_regex, text)
         tag_part_on_end = re.search(tag_part_on_end_regex, text)
+
+        start_row, start_col, end_row, end_col = self.__convert_start_and_end_to_rows_and_cols(self.__xml, self.__start,
+                                                                                               self.__end)
+
+        logger.info(f"Selected fragment: '{text}' (start_row: {start_row}, start_col: {start_col}, end_row: {end_row}, "
+                    f"end_col: {end_col})")
 
         if tag_part_on_beginning or tag_part_on_end:
             raise BadRequest(f"Wrong positions in request. Position can't point to inside of the tag. "

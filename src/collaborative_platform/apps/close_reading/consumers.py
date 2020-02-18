@@ -15,7 +15,7 @@ from .helpers import verify_reference
 from .models import AnnotatingXmlContent, RoomPresence
 
 
-logger = logging.getLogger('web_socket_annotator')
+logger = logging.getLogger('annotator')
 
 
 class AnnotatorConsumer(WebsocketConsumer):
@@ -254,7 +254,7 @@ class AnnotatorConsumer(WebsocketConsumer):
             }
         )
 
-        logger.error(f"Send response to user: '{self.scope['user'].username}' with content: '{response}'")
+        logger.exception(f"Send response to user: '{self.scope['user'].username}' with content: '{response}'")
 
     # Receive message from room group
     def xml_modification(self, event):

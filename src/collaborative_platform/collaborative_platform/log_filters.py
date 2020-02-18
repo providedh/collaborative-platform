@@ -14,6 +14,4 @@ def skip_logs_from_certain_modules(record):
     if record.name in modules_to_skip:
         return False
     else:
-        pprint(vars(record))
-
         return True

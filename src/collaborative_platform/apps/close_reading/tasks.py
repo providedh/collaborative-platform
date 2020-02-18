@@ -21,7 +21,11 @@ def prune_presence():
         if time_delta.total_seconds() > 60:
             presence.delete()
 
-    logger.info('TEST LOGÓW Z CELERY')
+            logger.info(f"User: '{presence.user.username}' removed from 'room_presence' table due to inactivity")
+
+            remain_users = RoomPresence.objects.filter(room_symbol=presence.room_symbol)
+
+            logger.info(f"In room: '{presence.room_symbol}' left: {len(remain_users)} users")
 
 
 @shared_task(name='close_reading.tasks.prune_orphaned_annotating_xml_contents')
@@ -37,3 +41,5 @@ def prune_orphaned_annotating_xml_contents():
     for xml_content in annotating_xml_contents:
         if xml_content.file_symbol not in active_room_symbols:
             xml_content.delete()
+
+            logger.info(f"Content of file: '{xml_content.file_name}' removed from room: '{xml_content.file_symbol}'")
