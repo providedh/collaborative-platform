@@ -190,13 +190,13 @@ class AnnotatorConsumer(WebsocketConsumer):
                     room_symbol=self.room_name
                 )
 
-                for presence in room_presences:
-                    file = File.objects.get(id=file_id, deleted=False)
-                    file_version = FileVersion.objects.get(
-                        file=file,
-                        number=file.version_number,
-                    )
+                file = File.objects.get(id=file_id, deleted=False)
+                file_version = FileVersion.objects.get(
+                    file=file,
+                    number=file.version_number,
+                )
 
+                for presence in room_presences:
                     certainty_elements = create_certainty_elements_for_file_version(file_version,
                                                                                     include_uncommitted=True,
                                                                                     user=presence.user,
@@ -223,7 +223,7 @@ class AnnotatorConsumer(WebsocketConsumer):
 
                 user_names = ', '.join([f"'{presence.user.username}'" for presence in room_presences])
 
-                logger.info(f"Content of file: '{self.file_name}' updated with request from user: "
+                logger.info(f"Content of file: '{file.name}' updated with request from user: "
                             f"'{self.scope['user'].username}' was sent to users: {user_names}")
 
             except NotModified as exception:
@@ -232,7 +232,7 @@ class AnnotatorConsumer(WebsocketConsumer):
             except BadRequest as error:
                 self.send_response(400, error)
 
-            except Exception as exception:
+            except Exception:
                 self.send_response(500, "Unhandled exception.")
 
     def send_response(self, code, message):
