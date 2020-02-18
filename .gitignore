@@ -29,6 +29,7 @@ db_backup.json
 
 # Logs
 **/logs/*
+!**/logs/.gitignore
 *.log
 
 # Local Django settings
