@@ -23,7 +23,9 @@ install:
 before_script:
   - export PATH="/usr/lib/postgresql/11/bin:$PATH"
   - psql -U postgres -c "create extension postgis;"
-  - cd src/collaborative_platform && python manage.py makemigrations --settings=collaborative_platform.settings_for_tests
+  - cd src/collaborative_platform
+  - cat collaborative_platform/settings_for_travis.py >> collaborative_platform/settings_for_tests.py
+  - python manage.py makemigrations --settings=collaborative_platform.settings_for_tests
 #  - psql -c "create database ctest;" -U postgres
 #  - psql -c "create user ctest with encrypted password 'ctest';" -U postgres
 #  - psql -c "grant all privileges on database ctest to ctest;" -U postgres
