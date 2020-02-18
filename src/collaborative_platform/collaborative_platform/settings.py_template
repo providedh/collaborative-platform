@@ -150,7 +150,7 @@ LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'loggers': {
-        'web_socket_annotator': {
+        'annotator': {
             'handlers': ['console', 'annotator_log_file'],
             'level': 'DEBUG',
         },
