@@ -239,8 +239,20 @@ var HistoryView = function(args){
 		   </span>
 	      </div>
 	    `;
-	    popup.style.left = evt.target.style.left;
+
 	    popup.style.setProperty('display','block');
+
+	    const popupWidth = document.getElementById('history-popup').clientWidth,
+	    	historyWidth = document.getElementById('history').clientWidth;
+	    let left = ((+evt.target.style.left.slice(0,-2)) - popupWidth/2);
+
+	    left = Math.max(0, left);
+
+	    left = Math.min(left, historyWidth - popupWidth);
+
+	    popup.style.left = left + 'px';
+
+
 	}
 
     /*<span class="color variation" author="me" title="high" 
