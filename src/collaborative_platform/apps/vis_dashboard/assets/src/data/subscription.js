@@ -5,7 +5,7 @@
  * */
 export default function Subscription(channel, id){
 	function _init(channel, id){
-		self = {channel, id};
+		const self = {channel, id};
 		
 		self.toString = ()=>JSON.stringify({channel, id})
 

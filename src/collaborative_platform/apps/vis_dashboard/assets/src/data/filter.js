@@ -5,7 +5,7 @@
  * */
 export default function Filter(dim, id){
 	function _init(dim, id){
-		self = {dim, id};
+		const self = {dim, id};
 		
 		self.toString = ()=>JSON.stringify({dim, id})
 
