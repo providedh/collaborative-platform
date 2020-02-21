@@ -121,9 +121,13 @@ def upload(request, directory_id):  # type: (HttpRequest, int) -> HttpResponse
                     message = tei_handler.get_message()
                     migration_status = {'migrated': True, 'message': message}
                     upload_statuses[i].update(migration_status)
+                    dt = time.time()
                     create_entities_in_database(entities, project, file_version)
+                    logger.info(f"creating entities in db took {time.time() - dt} s")
+                    dt = time.time()
                     index_entities(entities)
                     index_file(dbfile, text)
+                    logger.info(f"indexing entities and file in es took {time.time() - dt} s")
 
                     log_activity(dbfile.project, request.user, "File migrated: {} ".format(message), dbfile)
 
