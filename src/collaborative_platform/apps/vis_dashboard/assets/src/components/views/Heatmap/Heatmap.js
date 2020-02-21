@@ -1,8 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import styles from './style.module.css';
 import css from './style.css';
-import render from './vis';
-
+import {RegularHeatmapBuilder, StairHeatmapBuilder, HeartHeatmapBuilder, Director} from './vis';
 import {DataClient} from '../../../data';
 
 function useData(dataClient, dimension){
@@ -73,23 +72,40 @@ function useData(dataClient, dimension){
 	return data;
 }
 
-function Heatmap({ layout, colorScale, numericalScale, dimension}) {
+function useHeatmap(layout, colorScale, rangeScale, eventCallback){
+    const [heatmap, setHeatmap] = useState(null)
+    useEffect(()=>{
+        let builder = RegularHeatmapBuilder();
+        if(layout == 'Split')
+            builder = StairHeatmapBuilder();
+        if(layout == 'Tilted')
+            builder = HeartHeatmapBuilder();
+
+        const director = Director(builder);
+        director.make(colorScale, rangeScale, eventCallback);
+        setHeatmap(builder.getResult())
+    }, [layout, colorScale, rangeScale])
+
+    return heatmap;
+}
+
+function useRender(width, height, heatmap, data, refContainer, refCanvas, refOverlayCanvas){
+    useEffect(()=>{
+        if(heatmap != null)
+            heatmap.render(data, refContainer, refCanvas, refOverlayCanvas)
+        }, // Render 
+        [width, height, heatmap, data]); // Conditions*/
+}
+
+function Heatmap({ layout, tileLayout, colorScale, rangeScale, dimension}) {
 	const [refContainer, refCanvas, refOverlayCanvas] = [useRef(), useRef(), useRef()];
 	const [width, height] = layout!=undefined?[layout.w, layout.h]:[4,4];
 
     const [dataClient, _] = useState(DataClient());
 	const data = useData(dataClient, dimension);
-
-    /*
-    useEffect(()=>render(
-    		refContainer.current, 
-    		refCanvas.current, 
-    		refOverlayCanvas.current, 
-    		data, 
-    		null, 
-    		renderOverlay, 
-    		barDirection), // Render 
-    	[width, height, barDirection, data]); // Conditions*/
+    const heatmap = useHeatmap(tileLayout, colorScale, rangeScale, event=>console.log(event));
+    
+    useRender(width, height, heatmap, data, refContainer, refCanvas, refOverlayCanvas);
 
     return(
         <div className={styles.heatmap} ref={refContainer}>
@@ -103,21 +119,21 @@ Heatmap.prototype.description = "Examine multivariate data, relationship among d
     "a generalized manner user a color encoded grid array."
 
 Heatmap.prototype.configOptions = [
-    {name: 'layout', type: 'selection', value: 'Regular', params: {
+    {name: 'tileLayout', type: 'selection', value: 'Regular', params: {
     	options: [
     		'Regular',
     		'Split',
             'Tilted',
     	]}
     },
-    {name: 'colorScale', type: 'selection', value: 'Certainty level', params: {
+    {name: 'colorScale', type: 'selection', value: 'Red and blue', params: {
     	options: [
-    		'Certainty level',
-    		'Author',
-    		'Time of last edit'
+    		'Red and blue',
+    		'Spectral',
+    		'Blues'
     	]}
     },
-    {name: 'numericalScale', type: 'selection', value: 'Linear', params: {
+    {name: 'rangeScale', type: 'selection', value: 'Linear', params: {
         options: [
             'Linear',
             'Logarithmic',
