@@ -51,7 +51,7 @@ def upload(request, directory_id):  # type: (HttpRequest, int) -> HttpResponse
             try:
                 start_uploading = time.time()
                 logger.info(f"Uploading file {file_name}: initiation done in "
-                            f"{round(start_uploading - start_processing, 2)} s")
+                            f"{round(start_uploading - start_extracting, 2)} s")
 
                 dbfile = upload_file(file, project, request.user, parent_dir)
 
