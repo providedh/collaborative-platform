@@ -3,6 +3,8 @@ import django
 
 from django.db import models
 from django.contrib.postgres.fields import JSONField
+from django.urls import reverse
+
 
 class Dashboard(models.Model):
     name = models.CharField(max_length=255)
