@@ -3,7 +3,7 @@ import styles from './style.module.css';
 import css from './style.css';
 import dummy_data from './dummy_data';
 import dummy_overlay from './overlay_data';
-import render from './vis';
+import render from './render';
 
 import {DataClient} from '../../../data';
 
