@@ -1,3 +1,4 @@
+import time
 from json import loads
 
 from django.contrib.auth.models import User
@@ -10,6 +11,9 @@ from django.urls import reverse
 from apps.api_vis.models import Commit
 from apps.files_management.models import Directory, File, FileVersion
 from apps.projects.models import Activity, Project, ProjectVersion, Contributor
+import logging
+
+logger = logging.getLogger('upload')
 
 
 def paginate_page_perpage(request, queryset):  # type: (HttpRequest, QuerySet) -> Page
@@ -83,6 +87,7 @@ def log_activity(project, user, action_text="", file=None, related_dir=None):
 
 def create_new_project_version(project, files_modification=False, commit=None):
     # type: (Project, bool, Commit) -> None
+    dt = time.time()
     latest_file_versions = FileVersion.objects.filter(file__project=project, file__version_number=F('number'))
     project_versions = ProjectVersion.objects.filter(project=project)
 
@@ -105,6 +110,7 @@ def create_new_project_version(project, files_modification=False, commit=None):
         new_project_version.save()
         new_project_version.file_versions.set(latest_file_versions)
         new_project_version.save()
+    logger.info(f"create_new_project_version took {time.time() - dt} s")
 
 
 def user_is_project_admin(project_id, user):  # type: (int, User) -> bool
