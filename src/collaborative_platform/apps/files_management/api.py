@@ -41,6 +41,7 @@ def upload(request, directory_id):  # type: (HttpRequest, int) -> HttpResponse
 
         upload_statuses = []
 
+        start_extracting = time.time()
         for i, file in enumerate(files_list):
             file_name = clean_name(file.name)
             file.name = file_name
