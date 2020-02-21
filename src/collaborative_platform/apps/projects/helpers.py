@@ -3,7 +3,7 @@ from json import loads
 from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.paginator import Paginator, Page
-from django.db.models import QuerySet
+from django.db.models import QuerySet, F
 from django.http import HttpRequest, JsonResponse
 from django.urls import reverse
 
@@ -83,40 +83,27 @@ def log_activity(project, user, action_text="", file=None, related_dir=None):
 
 def create_new_project_version(project, files_modification=False, commit=None):
     # type: (Project, bool, Commit) -> None
+    latest_file_versions = FileVersion.objects.filter(file__project=project, file__version_number=F('number'))
+    project_versions = ProjectVersion.objects.filter(project=project)
 
-    files = File.objects.filter(project=project, deleted=False)
-    file_versions = (FileVersion.objects.get(file=file, number=file.version_number) for file in files)
-    project_versions = ProjectVersion.objects.filter(project=project).order_by('-date')
+    if project_versions.exists():
+        latest_project_version = project_versions.latest('id')
 
-    if not project_versions:
-        new_project_version = ProjectVersion(file_version_counter=0, commit=commit, commit_counter=0,
+        file_version_counter = latest_project_version.file_version_counter + int(files_modification)
+        commit_counter = latest_project_version.commit_counter + int(commit is not None)
+
+        new_project_version = ProjectVersion(file_version_counter=file_version_counter,
+                                             commit=commit,
+                                             commit_counter=commit_counter,
                                              project=project)
         new_project_version.save()
-
-        for file_version in file_versions:
-            new_project_version.file_versions.add(file_version)
-
+        new_project_version.file_versions.set(latest_file_versions)
         new_project_version.save()
 
     else:
-        last_project_version = project_versions[0]
-
-        file_version_counter = last_project_version.file_version_counter
-        commit_counter = last_project_version.commit_counter
-
-        if files_modification:
-            file_version_counter += 1
-
-        if commit:
-            commit_counter += 1
-
-        new_project_version = ProjectVersion(file_version_counter=file_version_counter, commit=commit,
-                                             commit_counter=commit_counter, project=project)
+        new_project_version = ProjectVersion(file_version_counter=0, commit=commit, commit_counter=0, project=project)
         new_project_version.save()
-
-        for file_version in file_versions:
-            new_project_version.file_versions.add(file_version)
-
+        new_project_version.file_versions.set(latest_file_versions)
         new_project_version.save()
 
 
