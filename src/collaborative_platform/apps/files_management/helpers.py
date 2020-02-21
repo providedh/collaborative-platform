@@ -9,6 +9,9 @@ import xmltodict
 
 from io import BytesIO
 from json import loads
+
+from elasticsearch.helpers import bulk
+from elasticsearch_dsl import connections
 from lxml import etree
 from typing import List, Set
 
@@ -136,6 +139,7 @@ def index_entities(entities):  # type: (List[dict]) -> None
         'productionMethod': ProductionMethod
     }
 
+    es_entities = []
     for entity in copy.deepcopy(entities):
         if entity['tag'] not in classes:
             continue
@@ -147,8 +151,9 @@ def index_entities(entities):  # type: (List[dict]) -> None
         excessive_elements = set(entity.keys()).difference(tag_elements)
         tuple(map(entity.pop, excessive_elements))  # pop all excessive elements from entity
 
-        es_entity = classes[tag](**entity)
-        es_entity.save()
+        es_entities.append(classes[tag](**entity))
+
+    bulk(connections.get_connection(), (d.to_dict(True) for d in es_entities))
 
 
 def get_directory_content(dir, indent):  # type: (Directory, int) -> dict
