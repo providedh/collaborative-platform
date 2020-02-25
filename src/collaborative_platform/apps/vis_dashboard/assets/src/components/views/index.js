@@ -6,10 +6,10 @@ import Heatmap from './Heatmap';
 import DotMatrix from './DotMatrix';
 
 export default {
-    'DotMatrix': DotMatrix,
-    'PixelDoc': PixelDoc, 
     'Dummy': Dummy,
+    'PixelDoc': PixelDoc, 
     'Map': GeoMap,
 	'Histogram': Histogram,
 	'Heatmap': Heatmap,
+    'DotMatrix': DotMatrix,
 }
