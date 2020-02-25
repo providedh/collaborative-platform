@@ -4,6 +4,7 @@ import GeoMap from './GeoMap';
 import Histogram from './Histogram';
 import Heatmap from './Heatmap';
 import DotMatrix from './DotMatrix';
+import DocumentView from './DocumentView';
 
 export default {
     'Dummy': Dummy,
@@ -12,4 +13,5 @@ export default {
 	'Histogram': Histogram,
 	'Heatmap': Heatmap,
     'DotMatrix': DotMatrix,
+    'DocumentView':DocumentView,
 }
