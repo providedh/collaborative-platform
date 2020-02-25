@@ -2,6 +2,7 @@ import React from 'react';
 import styles from './style.module.css';
 import css from './style.css';
 import data from './data';
+import getConfig from './config';
 
 function PixelDoc({documentId, dimension}) {
     const dimension2index = {
@@ -51,9 +52,6 @@ function PixelDoc({documentId, dimension}) {
 
 PixelDoc.prototype.description = 'Display certainty, category, authorship and other information over a word-wise document representation.';
 
-PixelDoc.prototype.configOptions = [
-    {name: 'documentId', type: 'selection', value: '#1', params: {options: ['#1', '#2', '#3']}},
-    {name: 'dimension', type: 'selection', value: 'entityType', params: {options: ['entityType', 'certaintyType', 'certaintyLevel']}},
-];
+PixelDoc.prototype.getConfigOptions = getConfig;
 
 export default PixelDoc;

@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import styles from './style.module.css';
 import css from './style.css';
+import getConfig from './config';
 import {RegularHeatmapBuilder, StairHeatmapBuilder, HeartHeatmapBuilder, Director} from './vis';
 import {DataClient} from '../../../data';
 
@@ -118,34 +119,6 @@ function Heatmap({ layout, tileLayout, colorScale, rangeScale, dimension}) {
 Heatmap.prototype.description = "Examine multivariate data, relationship among data, and evolution through time in "+
     "a generalized manner user a color encoded grid array."
 
-Heatmap.prototype.configOptions = [
-    {name: 'tileLayout', type: 'selection', value: 'Regular', params: {
-    	options: [
-    		'Regular',
-    		'Split',
-            'Tilted',
-    	]}
-    },
-    {name: 'colorScale', type: 'selection', value: 'Red and blue', params: {
-    	options: [
-    		'Red and blue',
-    		'Spectral',
-    		'Blues'
-    	]}
-    },
-    {name: 'rangeScale', type: 'selection', value: 'Linear', params: {
-        options: [
-            'Linear',
-            'Logarithmic',
-            'Power'
-        ]}
-    },
-    {name: 'dimension', type: 'selection', value: 'Entities related by documents', params: {
-    	options: [
-	    	'Entities related by documents',
-	    	'Documents related by entities',
-    	]}
-    },
-];
+Heatmap.prototype.getConfigOptions = getConfig;
 
 export default Heatmap;

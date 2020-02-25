@@ -4,6 +4,7 @@ import css from './style.css';
 import dummy_data from './dummy_data';
 import dummy_overlay from './overlay_data';
 import render from './render';
+import getConfig from './config';
 
 import {DataClient} from '../../../data';
 
@@ -92,32 +93,6 @@ function Histogram({dimension, barDirection, renderOverlay, overlay, layout}) {
 
 Histogram.prototype.description = "Encode frequencies using horizontal or vertical bars."
 
-Histogram.prototype.configOptions = [
-    {name: 'barDirection', type: 'selection', value: 'Horizontal', params: {
-    	options: [
-    		'Horizontal',
-    		'Vertical'
-    	]}
-    },
-    {name: 'dimension', type: 'selection', value: 'entityType', params: {
-    	options: [
-	    	'Number of entities per document',
-	    	'Number of entities per type',
-            'Most common entities',
-	    	'Number of annotations per document',
-	    	'Number of annotations per category',
-	    	"Frequency for an attribute's values",
-	    	'Frequency for most common attribute values',
-    	]}
-    },
-    {name: 'renderOverlay', type: 'toogle', value: false},
-    {name: 'overlay', type: 'selection', value: 'Certainty level', params: {
-    	options: [
-    		'Certainty level',
-    		'Author',
-    		'Time of last edit'
-    	]}
-    },
-];
+Histogram.prototype.getConfigOptions = getConfig;
 
 export default Histogram;

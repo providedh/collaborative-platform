@@ -3,6 +3,7 @@ import styles from './style.module.css';
 import css from './style.css';
 import data from './data';
 import * as d3 from 'd3';
+import getConfig from './config';
 
 function useProjectionUpdates(){}
 function useDataUpdates(){}
@@ -21,9 +22,6 @@ function GeoMap({documentId, dimension}) {
 
 GeoMap.prototype.description = 'Display entities, documents and other data in a geographical projection.';
 
-GeoMap.prototype.configOptions = [
-    {name: 'documentId', type: 'selection', value: '#1', params: {options: ['#1', '#2', '#3']}},
-    {name: 'dimension', type: 'selection', value: 'entityType', params: {options: ['entityType', 'certaintyType', 'certaintyLevel']}},
-];
+GeoMap.prototype.getConfigOptions = getConfig;
 
 export default GeoMap;

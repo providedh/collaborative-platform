@@ -28,12 +28,12 @@ export default function Heatmap(){
 	}
 
 	function _render(data, refContainer, refCanvas, refOverlayCanvas){
-		console.log('rendering', {
-			colorScale: self._colorScale,
-			rangeScale: self._rangeScale,
-			gridRenderer: self._gridRenderer,
-			axisRenderer: self._axisRenderer,
-			});
+		//console.log('rendering', {
+		//	colorScale: self._colorScale,
+		//	rangeScale: self._rangeScale,
+		//	gridRenderer: self._gridRenderer,
+		//	axisRenderer: self._axisRenderer,
+		//	});
 	}
 
 	return _init();
