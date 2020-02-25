@@ -8,10 +8,16 @@ export default function MultipleSelectionControl({name, value=[], onValueChange,
         onValueChange(newValue)
     };
 
+    function createLabel(name){
+        const separated = name.replace(/[A-Z]/g, x=>' '+x),
+            capitalized = separated[0].toUpperCase() + separated.slice(1).toLowerCase();
+        return capitalized;
+    }
+
     return(
         <div className={styles.multipleSelectionControl}>
             <div className={"form-group "+styles.formGroupOverride}>
-                <label>{name}</label>
+                <label>{createLabel(name)}</label>
                 <div className={styles.options}>
                     {params.options.map((o, i) => (
                         <div key={i} className={"form-group form-check "+styles.formGroupOverride}>
