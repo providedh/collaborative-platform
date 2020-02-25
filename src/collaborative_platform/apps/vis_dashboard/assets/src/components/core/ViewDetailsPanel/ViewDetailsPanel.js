@@ -6,17 +6,19 @@ import Views from '../../views';
 import Form from '../../ui/Form';
 
 export default function ViewDetailsPanel({view, display, updateView, close}) {
-
-    const options = Views[view.type].prototype.configOptions;
-    for(let option of options)
-        option.value = view.config[option.name];
-
+    const form = Object.entries(view.config).map(([key, value])=>{
+        const entry = {};
+        entry.name = key;
+        entry.value = value;
+        return entry;
+    });
+    const options = Views[view.type].prototype.getConfigOptions(form);
+    
     function handleUpdateView(formValues){
         const newConfig = {};
-
-        for(let formValue of formValues)
-            newConfig[formValue.name] = formValue.value;
-        updateView(newConfig)
+        formValues.forEach(x=>newConfig[x.name]=x.value);
+        console.log(view.config, view.type, newConfig, formValues)
+        updateView(newConfig);
     }
 
     return(
