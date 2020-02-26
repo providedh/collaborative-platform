@@ -6,8 +6,12 @@ psycopg2-binary==2.8.3
 
 # For tests
 pytest==5.3.5
+pytest-asyncio==0.10.0
 pytest-cov==2.8.1
 pytest-django==3.8.0
+
+# Web browser handler
+selenium<4.0.0
 
 # For bots protection
 django-recaptcha==2.0.4
