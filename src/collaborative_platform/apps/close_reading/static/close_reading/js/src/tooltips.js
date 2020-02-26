@@ -220,7 +220,7 @@ var Tooltips = function(args){
 					node.addEventListener('click', ()=>{
 						const args = {
 							selection: {
-								text: original_tag_id,
+								text: node.textContent,
 								abs_positions: null,
 								by_id: true,
 								target: original_tag_id
