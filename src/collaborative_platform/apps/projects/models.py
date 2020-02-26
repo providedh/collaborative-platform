@@ -81,6 +81,7 @@ class Taxonomy(models.Model):
     contents = models.TextField(null=True, blank=True)
 
     def update_contents(self):
+        # TODO: implement
         raise NotImplementedError
 
 
