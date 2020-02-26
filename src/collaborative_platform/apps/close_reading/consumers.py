@@ -19,68 +19,81 @@ logger = logging.getLogger('annotator')
 
 
 class AnnotatorConsumer(WebsocketConsumer):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.room_name = ''
+        self.room_group_name = ''
+
+        self.project_id = ''
+        self.file_id = ''
+
+        self.annotating_xml_content = None
+
     def connect(self):
-        self.room_name = self.scope['url_route']['kwargs']['room_name']
-        self.room_group_name = 'close_reading_{}'.format(self.room_name)
-
-        project_id, file_id = self.room_name.split('_')
-
         try:
-            project = Project.objects.get(id=project_id)
+            self.room_name = self.scope['url_route']['kwargs']['room_name']
+            self.room_group_name = 'close_reading_{}'.format(self.room_name)
+            self.project_id, self.file_id = self.room_name.split('_')
+
+            self.check_if_project_exist()
+            self.check_if_user_is_contributor()
+
+            self.load_xml_content()
+            self.add_user_to_room()
+            self.add_user_too_presence_table()
+
+            certainties_from_db = self.get_certainties_from_db()
+
+            response = {
+                'status': 200,
+                'message': 'OK',
+                'xml_content': self.annotating_xml_content.xml_content,
+                'certainties_from_db': certainties_from_db,
+            }
+
+            response = json.dumps(response)
+
+            self.send(text_data=response)
+
+        except BadRequest as error:
+            self.send_response(400, error)
+
+    def check_if_project_exist(self):
+        try:
+            project = Project.objects.get(id=self.project_id)
         except Project.DoesNotExist:
-            response = {
-                'status': 404,
-                'message': "Project with id: {} doesn't exist.".format(project_id),
-                'xml_content': None,
-            }
+            raise BadRequest(f"Project with id: {self.project_id} doesn't exist.")
 
-            response = json.dumps(response)
-            self.send(text_data=response)
-            return
+    def check_if_user_is_contributor(self):
+        contributor = Contributor.objects.filter(project_id=self.project_id, user_id=self.scope['user'].pk)
 
-        contributor = Contributor.objects.filter(project_id=project_id, user_id=self.scope['user'].pk)
         if not contributor:
-            response = {
-                'status': 403,
-                'message': "You aren't contributor in project with id: {}.".format(project_id),
-                'xml_content': None,
-            }
+            raise BadRequest(f"You aren't contributor in project with id: {self.project_id}.")
 
-            response = json.dumps(response)
-            self.send(text_data=response)
-            return
-
+    def load_xml_content(self):
         try:
-            annotating_xml_content = AnnotatingXmlContent.objects.get(file_symbol=self.room_name)
+            self.annotating_xml_content = AnnotatingXmlContent.objects.get(file_symbol=self.room_name)
 
         except AnnotatingXmlContent.DoesNotExist:
             try:
-                file_version = FileVersion.objects.filter(file_id=file_id).order_by('-number')[0]
+                file_version = FileVersion.objects.filter(file_id=self.file_id).order_by('-number')[0]
             except FileVersion.DoesNotExist:
-                response = {
-                    'status': 404,
-                    'message': 'File not found.',
-                    'xml_content': None,
-                }
-
-                response = json.dumps(response)
-                self.send(text_data=response)
-                return
+                raise BadRequest(f"File with id: {self.file_id} doesn't exist.")
 
             file = File.objects.get(id=file_version.file_id, deleted=False)
 
             with open(file_version.upload.path) as file_version:
                 xml_content = file_version.read()
-                self.file_name = file.name
 
-                annotating_xml_content = AnnotatingXmlContent(file_symbol=self.room_name, file_name=self.file_name,
-                                                              xml_content=xml_content)
-                annotating_xml_content.save()
+                self.annotating_xml_content = AnnotatingXmlContent(file_symbol=self.room_name, file_name=file.name,
+                                                                   xml_content=xml_content)
+                self.annotating_xml_content.save()
 
-                logger.info(f"Load content of file: '{self.file_name}' in version: {file.version_number} "
+                logger.info(f"Load content of file: '{file.name}' in version: {file.version_number} "
                             f"to room: '{self.room_name}'")
 
-        # Join room group
+    def add_user_to_room(self):
         async_to_sync(self.channel_layer.group_add)(
             self.room_group_name,
             self.channel_name
@@ -90,6 +103,7 @@ class AnnotatorConsumer(WebsocketConsumer):
 
         logger.info(f"User: '{self.scope['user'].username}' join to room: '{self.room_name}'")
 
+    def add_user_too_presence_table(self):
         room_presence, created = RoomPresence.objects.get_or_create(
             room_symbol=self.room_name,
             user=self.scope['user'],
@@ -100,7 +114,8 @@ class AnnotatorConsumer(WebsocketConsumer):
 
         logger.info(f"User: '{self.scope['user'].username}' added to 'room_presence' table")
 
-        file = File.objects.get(id=file_id, deleted=False)
+    def get_certainties_from_db(self):
+        file = File.objects.get(id=self.file_id, deleted=False)
         file_version = FileVersion.objects.get(
             file=file,
             number=file.version_number,
@@ -110,16 +125,7 @@ class AnnotatorConsumer(WebsocketConsumer):
                                                                         user=self.scope['user'], for_annotator=True)
         certainties_from_db = certainty_elements_to_json(certainty_elements)
 
-        response = {
-            'status': 200,
-            'message': 'OK',
-            'xml_content': annotating_xml_content.xml_content,
-            'certainties_from_db': certainties_from_db,
-        }
-
-        response = json.dumps(response)
-
-        self.send(text_data=response)
+        return certainties_from_db
 
     def disconnect(self, code):
         # Leave room group
