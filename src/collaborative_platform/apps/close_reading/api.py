@@ -63,9 +63,9 @@ def save(request, project_id, file_id):  # type: (HttpRequest, int, int) -> Http
         project = Project.objects.get(id=project_id)
         dbfile = File.objects.get(name=uploaded_file.name, parent_dir_id=file.parent_dir, project=project,
                                   deleted=False)
-        file_overwrited = overwrite_file(dbfile, uploaded_file, request.user)
+        file_overwritten = overwrite_file(dbfile, uploaded_file, request.user)
 
-        version_nr_new = file_overwrited.version_number
+        version_nr_new = file_overwritten.version_number
 
         unifications = Unification.objects.filter(
             deleted_on__isnull=True,
@@ -92,8 +92,8 @@ def save(request, project_id, file_id):  # type: (HttpRequest, int, int) -> Http
             message = ''
 
             if version_nr_old < version_nr_new:
-                text, entities = extract_text_and_entities(xml_content, project.id, file_overwrited.id)
-                file_version = FileVersion.objects.get(file=file_overwrited, number=file_overwrited.version_number)
+                text, entities = extract_text_and_entities(xml_content, project.id, file_overwritten.id)
+                file_version = FileVersion.objects.get(file=file_overwritten, number=file_overwritten.version_number)
                 create_entities_in_database(entities, project, file_version)
                 index_entities(entities)
                 index_file(dbfile, text)

@@ -68,6 +68,9 @@ class ProjectVersion(models.Model):
     commit_counter = models.IntegerField(default=0)
     date = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        unique_together = ('project', 'file_version_counter', 'commit_counter')
+
     def __str__(self):
         return f"{self.file_version_counter}.{self.commit_counter}"
 
