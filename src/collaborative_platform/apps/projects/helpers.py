@@ -114,17 +114,11 @@ def create_new_project_version(project, files_modification=False, commit=None):
 
 
 def user_is_project_admin(project_id, user):  # type: (int, User) -> bool
-    try:
-        Contributor.objects.get(
-            project_id=project_id,
-            user=user,
-            permissions='AD',
-        )
-
-        return True
-
-    except Contributor.DoesNotExist:
-        return False
+    return Contributor.objects.filter(
+        project_id=project_id,
+        user=user,
+        permissions='AD',
+    ).exists()
 
 
 def get_ana_link(project_id, uncertainty_type):  # type: (int, str) -> str
@@ -135,4 +129,4 @@ def get_ana_link(project_id, uncertainty_type):  # type: (int, str) -> str
 
 
 def ana_link_to_type(link):  # type: (str) -> str
-    return link.split('#')[1]
+    return link.split('#')[-1]
