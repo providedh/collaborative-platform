@@ -6,7 +6,7 @@ from channels.generic.websocket import WebsocketConsumer
 from channels.layers import get_channel_layer
 
 from apps.projects.models import Contributor, Project
-from apps.exceptions import BadRequest, NotModified
+from apps.exceptions import BadRequest, Forbidden, NotModified
 from apps.files_management.helpers import create_certainty_elements_for_file_version, certainty_elements_to_json
 from apps.files_management.models import FileVersion, File
 
@@ -57,11 +57,18 @@ class AnnotatorConsumer(WebsocketConsumer):
             self.send(text_data=response)
 
         except BadRequest as error:
-            self.send_response(400, error)
+            self.accept()
+            self.send_error(400, error)
+            self.close()
+
+        except Forbidden as error:
+            self.accept()
+            self.send_error(403, error)
+            self.close()
 
     def check_if_project_exist(self):
         try:
-            project = Project.objects.get(id=self.project_id)
+            _ = Project.objects.get(id=self.project_id)
         except Project.DoesNotExist:
             raise BadRequest(f"Project with id: {self.project_id} doesn't exist.")
 
@@ -69,7 +76,7 @@ class AnnotatorConsumer(WebsocketConsumer):
         contributor = Contributor.objects.filter(project_id=self.project_id, user_id=self.scope['user'].pk)
 
         if not contributor:
-            raise BadRequest(f"You aren't contributor in project with id: {self.project_id}.")
+            raise Forbidden(f"You aren't contributor in project with id: {self.project_id}.")
 
     def load_xml_content(self):
         try:
@@ -155,7 +162,6 @@ class AnnotatorConsumer(WebsocketConsumer):
 
             logger.info(f"Remove file content from room: '{self.room_name}'")
 
-    # Receive message from WebSocket
     def receive(self, text_data=None, bytes_data=None):
         if text_data == '"heartbeat"':
             if self.scope['user'].pk is not None:
@@ -167,6 +173,9 @@ class AnnotatorConsumer(WebsocketConsumer):
                 if room_presences:
                     room_presence = room_presences[0]
                     room_presence.save()
+
+        elif text_data == 'ping':
+            self.send(text_data='pong')
 
         else:
             try:
@@ -233,15 +242,15 @@ class AnnotatorConsumer(WebsocketConsumer):
                             f"'{self.scope['user'].username}' was sent to users: {user_names}")
 
             except NotModified as exception:
-                self.send_response(304, exception)
+                self.send_error(304, exception)
 
             except BadRequest as error:
-                self.send_response(400, error)
+                self.send_error(400, error)
 
             except Exception:
-                self.send_response(500, "Unhandled exception.")
+                self.send_error(500, "Unhandled exception.")
 
-    def send_response(self, code, message):
+    def send_error(self, code, message):
         response = {
             'status': code,
             'message': str(message),
@@ -249,22 +258,10 @@ class AnnotatorConsumer(WebsocketConsumer):
         }
 
         response = json.dumps(response)
-
-        # Send individual message to request's author
-        channel_layer = get_channel_layer()
-        async_to_sync(channel_layer.send)(
-            self.channel_name,
-            {
-                'type': 'xml_modification',
-                'message': response,
-            }
-        )
+        self.send(text_data=response)
 
         logger.exception(f"Send response to user: '{self.scope['user'].username}' with content: '{response}'")
 
-    # Receive message from room group
     def xml_modification(self, event):
         message = event['message']
-
-        # Send message to WebSocket
         self.send(text_data=message)

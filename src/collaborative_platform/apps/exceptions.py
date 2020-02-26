@@ -4,3 +4,7 @@ class BadRequest(Exception):
 
 class NotModified(Exception):
     pass
+
+
+class Forbidden(Exception):
+    pass
