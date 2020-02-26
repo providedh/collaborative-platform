@@ -35,22 +35,7 @@ def create(request):  # type: (HttpRequest) -> HttpResponse
             project = Project(title=project_name, description=data["description"])
             project.save()
 
-            taxonomy_data = data['taxonomy']
-            for cat in taxonomy_data:
-                cat["xml_id"] = '-'.join(cat['name'].lower().strip().split())
-
-            taxonomy = Taxonomy(project=project)
-            taxonomy.save()
-
-            UncertaintyCategory.objects.bulk_create(
-                UncertaintyCategory(taxonomy=taxonomy, **cat) for cat in taxonomy_data
-            )
-
-            taxonomy.update_contents()
-
-            EntitySchema.objects.bulk_create(
-                EntitySchema(taxonomy=taxonomy, **entity) for entity in data['entities']
-            )
+            create_taxonomy(data, project)
 
             profile = Profile.objects.get(user=request.user)
 
@@ -66,6 +51,24 @@ def create(request):  # type: (HttpRequest) -> HttpResponse
             return HttpResponseBadRequest(dumps({"message": "Invalid value"}))
 
     return HttpResponseBadRequest(dumps({"message": "Invalid request type or empty request"}))
+
+
+def create_taxonomy(data, project):
+    taxonomy_data = data['taxonomy']
+    for cat in taxonomy_data:
+        cat["xml_id"] = '-'.join(cat['name'].lower().strip().split())
+    taxonomy = Taxonomy(project=project)
+    taxonomy.save()
+
+    UncertaintyCategory.objects.bulk_create(
+        UncertaintyCategory(taxonomy=taxonomy, **cat) for cat in taxonomy_data
+    )
+
+    taxonomy.update_contents()
+
+    EntitySchema.objects.bulk_create(
+        EntitySchema(taxonomy=taxonomy, **entity) for entity in data['entities']
+    )
 
 
 @login_required
