@@ -15,6 +15,26 @@ TEST_CHANNEL_LAYERS = {
 }
 
 
+@pytest.mark.asyncio
+@pytest.mark.django_db
+@pytest.mark.integration_tests
+class TestAnnotatorWithWebsocketsAndDatabase:
+    async def test_authorized_user_can_connect(self, settings):
+        settings.CHANNEL_LAYERS = TEST_CHANNEL_LAYERS
+
+        user_id = 2
+        project_id = 1
+        file_id = 1
+
+        communicator = get_communicator_for_logged_in_user(user_id, project_id, file_id)
+
+        connected, _ = await communicator.connect()
+
+        assert connected is True
+
+        await communicator.disconnect()
+
+
 def get_communicator_for_logged_in_user(user_id, project_id, file_id):
     client = Client()
     user = User.objects.get(id=user_id)
@@ -36,21 +56,3 @@ def get_communicator_for_logged_in_user(user_id, project_id, file_id):
     communicator.scope['user'] = user
 
     return communicator
-
-
-@pytest.mark.asyncio
-@pytest.mark.django_db
-async def test_authorized_user_can_connect(settings):
-    settings.CHANNEL_LAYERS = TEST_CHANNEL_LAYERS
-
-    user_1_id = 2
-    project_id = 1
-    file_id = 1
-
-    communicator_1 = get_communicator_for_logged_in_user(user_1_id, project_id, file_id)
-
-    connected, _ = await communicator_1.connect()
-
-    assert connected is True
-
-    await communicator_1.disconnect()
