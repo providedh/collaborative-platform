@@ -78,7 +78,10 @@ class ProjectVersion(models.Model):
 
 class Taxonomy(models.Model):
     project = models.OneToOneField(Project, primary_key=True, related_name='taxonomy', on_delete=models.CASCADE)
-    contents = models.TextField()
+    contents = models.TextField(null=True, blank=True)
+
+    def update_contents(self):
+        raise NotImplementedError
 
 
 class UncertaintyCategory(models.Model):
@@ -86,11 +89,13 @@ class UncertaintyCategory(models.Model):
     name = models.CharField(max_length=255)
     xml_id = models.CharField(max_length=255)
     color = models.CharField(max_length=7)
-    desc = models.TextField(null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
+    icon = models.CharField(max_length=12)
 
 
 class EntitySchema(models.Model):
     taxonomy = models.ForeignKey(Taxonomy, related_name="entities", on_delete=models.CASCADE)
+    name = models.CharField(max_length=255)
     color = models.CharField(max_length=7)
     icon = models.CharField(max_length=12)
     properties = fields.JSONField()
