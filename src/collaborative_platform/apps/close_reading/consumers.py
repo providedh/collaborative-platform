@@ -5,6 +5,8 @@ from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 from channels.layers import get_channel_layer
 
+from django.contrib.auth.models import User
+
 from apps.projects.models import Contributor, Project
 from apps.exceptions import BadRequest, Forbidden, NotModified
 from apps.files_management.helpers import create_certainty_elements_for_file_version, certainty_elements_to_json
@@ -33,22 +35,25 @@ class AnnotatorConsumer(WebsocketConsumer):
     def connect(self):
         try:
             self.room_name = self.scope['url_route']['kwargs']['room_name']
-            self.room_group_name = 'close_reading_{}'.format(self.room_name)
+            self.room_group_name = f'close_reading_{self.room_name}'
             self.project_id, self.file_id = self.room_name.split('_')
 
             self.check_if_project_exist()
             self.check_if_user_is_contributor()
 
             self.load_xml_content()
-            self.add_user_to_room()
-            self.add_user_too_presence_table()
+            self.add_user_to_room_group()
+            self.add_user_to_presence_table()
+
+            self.accept()
 
             certainties_from_db = self.get_certainties_from_db()
+            xml_content = self.annotating_xml_content.xml_content
 
             response = {
                 'status': 200,
                 'message': 'OK',
-                'xml_content': self.annotating_xml_content.xml_content,
+                'xml_content': xml_content,
                 'certainties_from_db': certainties_from_db,
             }
 
@@ -100,17 +105,15 @@ class AnnotatorConsumer(WebsocketConsumer):
                 logger.info(f"Load content of file: '{file.name}' in version: {file.version_number} "
                             f"to room: '{self.room_name}'")
 
-    def add_user_to_room(self):
+    def add_user_to_room_group(self):
         async_to_sync(self.channel_layer.group_add)(
             self.room_group_name,
             self.channel_name
         )
 
-        self.accept()
+        logger.info(f"User: '{self.scope['user'].username}' join to room group: '{self.room_group_name}'")
 
-        logger.info(f"User: '{self.scope['user'].username}' join to room: '{self.room_name}'")
-
-    def add_user_too_presence_table(self):
+    def add_user_to_presence_table(self):
         room_presence, created = RoomPresence.objects.get_or_create(
             room_symbol=self.room_name,
             user=self.scope['user'],
@@ -135,32 +138,51 @@ class AnnotatorConsumer(WebsocketConsumer):
         return certainties_from_db
 
     def disconnect(self, code):
-        # Leave room group
-        async_to_sync(self.channel_layer.group_discard)(
-            self.room_group_name,
-            self.channel_name
-        )
+        self.remove_user_from_room_group()
+        self.remove_user_from_presence_table()
 
-        logger.info(f"User: '{self.scope['user'].username}' left room: '{self.room_name}'")
+        self.close()
 
-        room_presences = RoomPresence.objects.filter(
-            room_symbol=self.room_name,
-            user=self.scope['user'],
-        )
+        remain_users = self.count_remain_users()
 
-        for presence in room_presences:
-            presence.delete()
+        if not remain_users:
+            self.remove_xml_content()
 
-        logger.info(f"User: '{self.scope['user'].username}' removed from 'room_presence' table")
+    def remove_user_from_room_group(self):
+        if self.groups and self.channel_name in self.groups[self.room_group_name]:
+            async_to_sync(self.channel_layer.group_discard)(
+                self.room_group_name,
+                self.channel_name
+            )
 
+            logger.info(f"User: '{self.scope['user'].username}' left room group: '{self.room_group_name}'")
+
+    def remove_user_from_presence_table(self):
+        if isinstance(self.scope['user'], User):
+            room_presences = RoomPresence.objects.filter(
+                room_symbol=self.room_name,
+                user=self.scope['user'],
+            )
+
+            for presence in room_presences:
+                presence.delete()
+
+            logger.info(f"User: '{self.scope['user'].username}' removed from 'room_presence' table")
+
+    def count_remain_users(self):
         remain_users = RoomPresence.objects.filter(room_symbol=self.room_name)
 
         logger.info(f"In room: '{self.room_name}' left: {len(remain_users)} users")
 
-        if not remain_users:
+        return len(remain_users)
+
+    def remove_xml_content(self):
+        try:
             AnnotatingXmlContent.objects.get(file_symbol=self.room_name).delete()
 
             logger.info(f"Remove file content from room: '{self.room_name}'")
+        except AnnotatingXmlContent.DoesNotExist:
+            pass
 
     def receive(self, text_data=None, bytes_data=None):
         if text_data == '"heartbeat"':
