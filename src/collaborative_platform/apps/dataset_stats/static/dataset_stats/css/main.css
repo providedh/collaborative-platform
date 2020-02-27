@@ -147,6 +147,7 @@ rect.day:nth-of-type(2n + 1) {
 }
 .ellapsed text{
     font-size: initial;
+    text-anchor: middle;
 }
 #patternLine{stroke: var(--blue);}
 .timeSpan{fill: url(#diagonal-stripe);}

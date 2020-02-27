@@ -43,7 +43,7 @@ export default function Timeline(args){
 	function _processVersions(versions){
 		versions.forEach((x, i)=>x.i=i);
 		const dates = {},
-			timeSpanPadding = 5;
+			timeSpanPadding = 4;
 
 		for(let i=0; i<versions.length; i++){
 		 	const date = versions[i].date.slice(0, 10);
@@ -218,16 +218,16 @@ export default function Timeline(args){
 		const spanText = d=>`${d.days} days`;
 
 		ellapsedG = self._timeG.selectAll('g.ellapsed')
-			.attr('transform', d=>`translate(${self._xScale(d.i - self._timeSpanPadding/2) - (spanText(d).length / 2)}, 0)`)
+			.attr('transform', d=>`translate(${self._xScale(d.i - self._timeSpanPadding + 1)}, 0)`)
 			.each(function(d){
 				d3.select(this).append('svg:rect')
-					.attr('x', -10)
+					.attr('x', 0)
 					.attr('y', -35)
-					.attr('width', spanText(d).length*11)
+					.attr('width', self._xScale(self._timeSpanPadding / 2))
 					.attr('height', 25)
 
 				d3.select(this).append('svg:text')
-					.attr('x', 0)
+					.attr('x', self._xScale(self._timeSpanPadding / 2)/2)
 					.attr('y', -15)
 					.text(spanText(d));
 			})
@@ -246,7 +246,13 @@ export default function Timeline(args){
 
       	const spanText = d=>`${d.days} days`;
       	self._timeG.selectAll('g.ellapsed')
-			.attr('transform', d=>`translate(${x + self._xScale(d.i - self._timeSpanPadding/2)*k - (spanText(d).length / 2)}, 0)`);
+			.attr('transform', d=>`translate(${x + self._xScale(d.i - self._timeSpanPadding + 1)*k}, 0)`)
+			.each(function(d){
+				d3.select(this).select('rect')
+					.attr('width', self._xScale(self._timeSpanPadding / 2)*k);
+				d3.select(this).select('text')
+					.attr('x', (self._xScale(self._timeSpanPadding / 2)*k)/2);
+			});
 	}
 
 	function _setupZoom(){
