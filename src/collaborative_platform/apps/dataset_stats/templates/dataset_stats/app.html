@@ -53,6 +53,24 @@
     <div class="col-12">
       <div class="box">
         <div class="box__header">
+          <h3 class="box__text--title">Project versions</h3>
+        </div>
+        <div id="timeline" class="box__content">
+          <div class="d-flex justify-content-center">
+            <div class="spinner-grow text-primary" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+            <div class="spinner-grow text-primary" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+            <div class="spinner-grow text-primary" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="box">
+        <div class="box__header">
           <h3 class="box__text--title">Entity and attribute coverage of the dataset</h3>
         </div>
         <div class="box__content">
@@ -176,6 +194,7 @@
 <div id="react-root"></div>
 
 <script type="text/javascript">
+window.project_id = {{ project_id }};
 window.onload = function() {
 var csrftoken = $("[name=csrfmiddlewaretoken]").val();
 $.ajaxSetup({
