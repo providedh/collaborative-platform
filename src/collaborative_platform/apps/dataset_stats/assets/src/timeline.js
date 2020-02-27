@@ -80,7 +80,7 @@ export default function Timeline(args){
 			</svg>`;
 
 		self._width = self._container.clientWidth - (paddingPixels*2);
-		self._height = 150;
+		self._height = 170;
 		self._legendY = self._height - 40;
 
 		self._svg = d3.select(self._container).select('svg')
@@ -91,7 +91,7 @@ export default function Timeline(args){
 		self._legendG = self._svg.append('svg:g').attr('class', 'legendG');
 		self._timeG = self._svg.append('svg:g').attr('class', 'timeG');
 		self._versionsG = self._svg.append('svg:g')
-			.attr('transform', 'translate(0,0)');
+			.attr('transform', 'translate(0,20)');
 
 	}
 
@@ -111,6 +111,15 @@ export default function Timeline(args){
 
 		self._pVersions = self._versionsG.selectAll('g.pVersion')
 			.attr('transform', d=>`translate(${self._xScale(d.i)}, 0)`);
+
+		let labels = self._pVersions.selectAll('text.projectVersionLabel').data(d=>d.files);
+		labels.exit().remove();
+		labels.enter().append('svg:text').attr('class', 'projectVersionLabel');
+
+		self._fVersions = self._pVersions.selectAll('text.projectVersionLabel')
+			.attr('x', 0)
+			.attr('y', -5)
+			.text(d=>'V.'+d.version);
 
 		let fVersions = self._pVersions.selectAll('rect.fVersion').data(d=>d.files);
 		fVersions.exit().remove();
@@ -146,7 +155,7 @@ export default function Timeline(args){
 	}
 
 	function _renderTimeline(){
-		const height = 40;
+		const height = 60;
 		self._timeG.attr('transform', `translate(0, ${self._legendY - height})`);
 
 		let dayR = self._timeG.selectAll('rect.day').data(self._dates);
@@ -195,8 +204,8 @@ export default function Timeline(args){
 	}
 
 	function _renderTimeSpans(){
-		const height = 40;
-		self._timeG.attr('transform', `translate(0, ${self._legendY - height})`);
+		const height = 60;
+		self._timeG.attr('transform', `translate(0, ${self._legendY - height + 20})`);
 
 		const timeSpans = self._dates.filter(d=>d.days > 1);
 
@@ -271,8 +280,8 @@ export default function Timeline(args){
 		      	_repositionTimeSpans(event.transform);
 		    })
 		  
-		self._svg.call(zoom)
-		self._svg.call(zoom.scaleBy, self._width/self._height)
+		self._timeG.call(zoom)
+		self._timeG.call(zoom.scaleBy, self._width/self._height)
 	}
 
 	function _setupTooltips(){
