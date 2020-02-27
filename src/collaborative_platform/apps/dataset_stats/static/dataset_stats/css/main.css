@@ -128,3 +128,25 @@
   top: 1.7em;
   right: 2em;
 }
+
+/* TIMELINE */
+.legendG text, .timeG text{font-size: 13px}
+.timeG text{fill: var(--blue);}
+.timeG line{
+  stroke-width: 2px;
+  stroke: var(--blue);
+}
+rect.day {
+    fill: transparent;
+}
+rect.day:nth-of-type(2n + 1) {
+    fill: #f5f5f5;
+}
+text.ellapsed {
+    text-anchor: middle;
+}
+#patternLine{stroke: var(--blue);}
+.timeSpan{fill: url(#diagonal-stripe);}
+.timeG{}
+
+.legendG{}

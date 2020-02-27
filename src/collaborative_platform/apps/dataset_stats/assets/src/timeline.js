@@ -42,7 +42,8 @@ export default function Timeline(args){
 
 	function _processVersions(versions){
 		versions.forEach((x, i)=>x.i=i);
-		const dates = {};
+		const dates = {},
+			timeSpanPadding = 5;
 
 		for(let i=0; i<versions.length; i++){
 		 	const date = versions[i].date.slice(0, 10);
@@ -53,36 +54,45 @@ export default function Timeline(args){
 		      		days = _days_difference(versions[i-1].date, versions[i].date);
 		      		if(days > 1){
 		      		  	for(let j=i; j<versions.length; j++){
-		      		    	versions[j].i = versions[j].i + 5;
+		      		    	versions[j].i = versions[j].i + timeSpanPadding;
 		      		  	}
 		      		}
 		    	}
-		    	dates[date] = {days, i: versions[i].i};
+		    	dates[date] = {date, days, i: versions[i].i};
 		  	}
 		}
 
-		return [versions, dates];
+		return [versions, Object.values(dates), timeSpanPadding];
 	}
 
 	function _setupContainer(){
 		const paddingStyle = window.getComputedStyle(self._container)['padding'],
 			paddingPixels = +(paddingStyle.slice(0, -2));
 
-		self._container.innerHTML = '';
+		self._container.innerHTML = `
+			<svg height="10" width="10" xmlns="http://www.w3.org/2000/svg" version="1.1"> 
+				<defs> 
+					<pattern id="diagonal-stripe" patternUnits="userSpaceOnUse" width="10" height="10"> 
+						<rect x="0" y="0" width="10" height="10" fill="white"/>
+						<line x1="0" x2="10" y1="10" y2="0" id="patternLine"/>
+					</pattern> 
+				</defs> 
+			</svg>`;
 
 		self._width = self._container.clientWidth - (paddingPixels*2);
 		self._height = 150;
+		self._legendY = self._height - 40;
 
-		self._svg = d3.select(self._container)
-			.append('svg')
+		self._svg = d3.select(self._container).select('svg')
 			.attr('viewBox', [0, 0, self._width, self._height])
 			.attr('width', self._width + 'px')
 			.attr('height', self._height + 'px');
 
+		self._legendG = self._svg.append('svg:g').attr('class', 'legendG');
+		self._timeG = self._svg.append('svg:g').attr('class', 'timeG');
 		self._versionsG = self._svg.append('svg:g')
 			.attr('transform', 'translate(0,0)');
 
-		self._legendG = self._svg.append('svg:g');
 	}
 
 	function _setupScales(){
@@ -113,6 +123,10 @@ export default function Timeline(args){
 			.attr('height', 20);
 	}
 
+	function _repositionProjectVersions({x, y, k}){
+		self._pVersions.attr('transform', d=>`translate(${x + self._xScale(d.i) * k}, 0)`);
+	}
+
 	function _fillByAuthor(){
 		const colorScale = d3.scaleOrdinal()
 			.range(d3.schemeTableau10);
@@ -127,8 +141,98 @@ export default function Timeline(args){
 		  .scale(colorScale);
 
 		self._legendG
-			.attr('transform', `translate(30,${self._height - 40})`)
+			.attr('transform', `translate(30,${self._legendY})`)
 			.call(legendOrdinal);
+	}
+
+	function _renderTimeline(){
+		const height = 40;
+		self._timeG.attr('transform', `translate(0, ${self._legendY - height})`);
+
+		let dayR = self._timeG.selectAll('rect.day').data(self._dates);
+		dayR.exit().remove();
+		dayR.enter().append('svg:rect').attr('class', 'day');
+
+		dayR = self._timeG.selectAll('rect.day');
+		dayR
+			.attr('y', height-self._legendY)
+			.attr('height', self._legendY - height + 20)
+			.attr('x', d=>self._xScale(d.i))
+			.attr('width', (d,i)=>{
+				const nextX = (i+1 < self._dates.length)?
+					self._xScale(self._dates[i+1].i):
+					self._width;
+
+				//console.log(self._xScale(d.i), nextX)
+				return nextX-self._xScale(d.i);
+			});
+
+		let dateT = self._timeG.selectAll('text.date').data(self._dates);
+		dateT.exit().remove();
+		dateT.enter().append('svg:text').attr('class', 'date');
+
+		dateT = self._timeG.selectAll('text.date');
+		dateT
+			.text(d=>d.date)
+			.attr('x', d=>self._xScale(d.i))
+			.attr('y', 35);
+
+	}
+
+	function _repositionTimeline({k, x, y}){
+		self._timeG.selectAll('text.date').attr('x', d=>x + self._xScale(d.i)*k);
+		self._timeG.selectAll('rect.day')
+      		.attr('x', d=>x + self._xScale(d.i)*k)
+      		.attr('width', (d,i)=>{
+				const nextX = x + k * ((i+1 < self._dates.length)?
+					self._xScale(self._dates[i+1].i):
+					self._width);
+
+      			console.log(self._xScale(d.i), nextX)
+
+				return nextX-(x + k * self._xScale(d.i));
+			});
+	}
+
+	function _renderTimeSpans(){
+		const height = 40;
+		self._timeG.attr('transform', `translate(0, ${self._legendY - height})`);
+
+		const timeSpans = self._dates.filter(d=>d.days > 1);
+
+		let spanR = self._timeG.selectAll('rect.timeSpan').data(timeSpans);
+		spanR.exit().remove();
+		spanR.enter().append('svg:rect').attr('class', 'timeSpan');
+
+		spanR = self._timeG.selectAll('rect.timeSpan');
+		spanR
+			.attr('y', height-self._legendY)
+			.attr('height', self._legendY - height + 20)
+			.attr('x', d=>self._xScale(d.i - self._timeSpanPadding))
+			.attr('width', (d,i)=>self._xScale(self._timeSpanPadding));
+
+		let text = self._timeG.selectAll('text.ellapsed').data(timeSpans);
+		text.exit().remove();
+		text.enter().append('svg:text').attr('class', 'ellapsed');
+
+		text = self._timeG.selectAll('text.ellapsed');
+		text
+			.attr('x', d=>self._xScale(d.i - self._timeSpanPadding/2))
+			.text(d=>`${d.days} days`);
+		
+		self._timeG.append('svg:line')
+			.attr('x1', 0)
+			.attr('x2', self._width)
+			.attr('y1', 20)
+			.attr('y2', 20);
+	}
+
+	function _repositionTimeSpans({k, x, y}){
+		self._timeG.selectAll('rect.timeSpan')
+      		.attr('x', d=>x + self._xScale(d.i - self._timeSpanPadding)*k)
+      		.attr('width', (d,i)=>k * self._xScale(self._timeSpanPadding));
+      	self._timeG.selectAll('text.ellapsed')
+      		.attr('x', d=>x + self._xScale(d.i - self._timeSpanPadding/2)*k);
 	}
 
 	function _setupZoom(){
@@ -142,8 +246,9 @@ export default function Timeline(args){
 		    .translateExtent(translateExtent)
 		    .on('zoom', () => {
 		    	const event = d3.getEvent();
-		      	const {k, x, y} = event.transform;
-		      	self._pVersions.attr('transform', d=>`translate(${x + self._xScale(d.i) * k}, 0)`);
+		      	_repositionProjectVersions(event.transform);
+		      	_repositionTimeline(event.transform);
+		      	_repositionTimeSpans(event.transform);
 		    })
 		  
 		self._svg.call(zoom)
@@ -183,8 +288,10 @@ export default function Timeline(args){
 	function _load(){
 		self.ajax.getVersions(window.project_id).then(d=>{
 			_setupContainer();
-			[self._versions, self._days] = _processVersions(d.content.project_versions);
+			[self._versions, self._dates, self._timeSpanPadding] = _processVersions(d.content.project_versions);
 			_setupScales();
+			_renderTimeline();
+			_renderTimeSpans();
 			_renderProjectVersions(self._versions);
 			_fillByAuthor();
 			_setupTooltips();
