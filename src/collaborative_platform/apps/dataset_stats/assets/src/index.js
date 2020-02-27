@@ -10,7 +10,7 @@ import Chart from 'chart.js';
 import Timeline from './timeline';
 
 const timeline = Timeline()
-	.onVersionSelect(version=>console.log('selected version '+version))
+	.onVersionSelect(p=>alert('selected version '+p.version))
 	.load();
 
 function toggle(e){

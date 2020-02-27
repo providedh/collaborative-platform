@@ -119,7 +119,8 @@ export default function Timeline(args){
 		self._fVersions = self._pVersions.selectAll('text.projectVersionLabel')
 			.attr('x', 0)
 			.attr('y', -5)
-			.text(d=>'V.'+d.version);
+			.text(d=>'V.'+d.version)
+			.on('click', d=>self._onVersionSelect(d));
 
 		let fVersions = self._pVersions.selectAll('rect.fVersion').data(d=>d.files);
 		fVersions.exit().remove();
