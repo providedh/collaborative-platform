@@ -3,6 +3,7 @@ from django.db import models
 from django.contrib.postgres import fields
 
 from apps.core.models import Profile
+from apps.projects.taxonomy_template import taxonomy_template_string, category_template_string
 
 TAXONOMY_FILES_PATH = 'taxonomy_files/'
 
@@ -81,8 +82,11 @@ class Taxonomy(models.Model):
     contents = models.TextField(null=True, blank=True)
 
     def update_contents(self):
-        # TODO: implement
-        raise NotImplementedError
+        cats_string = ""
+        for cat in self.categories.all():
+            cats_string += category_template_string.format(cat.xml_id, cat.name, cat.description)
+        self.contents = taxonomy_template_string.format(cats_string)
+        self.save()
 
 
 class UncertaintyCategory(models.Model):
