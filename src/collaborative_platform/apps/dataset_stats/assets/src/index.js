@@ -7,6 +7,12 @@ render(<App />, document.getElementById('react-root'));*/
 //alert('hi');
 import Chart from 'chart.js';
 
+import Timeline from './timeline';
+
+const timeline = Timeline()
+	.onVersionSelect(version=>console.log('selected version '+version))
+	.load();
+
 function toggle(e){
   e.addEventListener('click',evt=>{
     let entity = e.parentNode.parentNode;
