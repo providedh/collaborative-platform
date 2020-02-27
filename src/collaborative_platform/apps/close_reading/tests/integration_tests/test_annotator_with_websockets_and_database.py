@@ -29,7 +29,6 @@ class TestAnnotatorWithWebsocketsAndDatabase:
         communicator = get_communicator(project_id, file_id, user_id)
 
         connected, _ = await communicator.connect()
-
         assert connected is True
 
         response = await communicator.receive_json_from()
@@ -38,31 +37,34 @@ class TestAnnotatorWithWebsocketsAndDatabase:
 
         await communicator.send_to(text_data='ping')
         response = await communicator.receive_from()
-
         assert response == 'pong'
 
         await communicator.disconnect()
 
-    async def test_unauthorized_user_cant_connect(self, settings):
+    test_parameters_names = "project_id, file_id, user_id, response_status, response_message"
+    test_parameters_list = [
+        (999, 1, 2, 400, "Project with id: 999 doesn't exist."),
+        (1, 1, None, 403, "You aren't contributor in project with id: 1."),
+        (1, 999, 2, 400, "File with id: 999 doesn't exist."),
+    ]
+
+    @pytest.mark.parametrize(test_parameters_names, test_parameters_list)
+    async def test_connecting_exceptions(self, project_id, file_id, user_id, response_status, response_message,
+                                         settings):
         settings.CHANNEL_LAYERS = TEST_CHANNEL_LAYERS
 
-        project_id = 1
-        file_id = 1
-
-        communicator = get_communicator(project_id, file_id)
+        communicator = get_communicator(project_id, file_id, user_id)
 
         connected, _ = await communicator.connect()
-
         assert connected is True
 
         response = await communicator.receive_json_from()
-        assert response['status'] == 403
-        assert response['message'] == "You aren't contributor in project with id: 1."
+        assert response['status'] == response_status
+        assert response['message'] == response_message
 
         await communicator.send_to(text_data='ping')
-
         with pytest.raises(AssertionError):
-            response = await communicator.receive_from()
+            _ = await communicator.receive_from()
 
 
 def get_communicator(project_id, file_id, user_id=None):

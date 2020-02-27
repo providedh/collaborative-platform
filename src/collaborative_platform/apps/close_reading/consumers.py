@@ -85,7 +85,7 @@ class AnnotatorConsumer(WebsocketConsumer):
         except AnnotatingXmlContent.DoesNotExist:
             try:
                 file_version = FileVersion.objects.filter(file_id=self.file_id).order_by('-number')[0]
-            except FileVersion.DoesNotExist:
+            except IndexError:
                 raise BadRequest(f"File with id: {self.file_id} doesn't exist.")
 
             file = File.objects.get(id=file_version.file_id, deleted=False)
