@@ -1,11 +1,40 @@
 from typing import Iterable, Dict
 
+from apps.files_management.models import File, FileVersion
+from apps.projects.models import Project, ProjectVersion
+
 import pandas as pd
 from lxml import etree as et
 from tqdm import tqdm
 import json
 
 NAMESPACES = {'tei': 'http://www.tei-c.org/ns/1.0', 'xml': 'http://www.w3.org/XML/1998/namespace'}
+
+# pv = project version, fv = file version
+def get_project_versions_files(project_id):
+    project_versions = ProjectVersion.objects.filter(project=project_id)
+    data = []
+
+    get_fv_data = lambda fv: {'file': fv.file.name, 'version': fv.number, 'date': fv.creation_date, 'author': fv.created_by.username}
+    get_files_for_pv = lambda pv: tuple(map(lambda fv: get_fv_data(fv), pv.file_versions.all()))
+
+    for pv in project_versions:
+        files = {f['file']: f for f in get_files_for_pv(pv)}
+        data.append({'version': str(pv), 'date': pv.date, 'files': {}, 'pv_files': files})
+
+    for idx in range(len(data)-1, 0, -1):
+        entry = data[idx]
+        prev_version = data[idx-1]
+        
+        for filename in entry['pv_files'].keys():
+            if not(filename in prev_version['pv_files']) or not(prev_version['pv_files'][filename]['version'] == entry['pv_files'][filename]['version']):
+                entry['files'][filename] = entry['pv_files'][filename]
+    
+    for entry in data:
+        entry.pop('pv_files')
+        entry['files'] = tuple(entry['files'].values())
+
+    return data
 
 def create_fast_stats_for_document_collection(doc_gen: Iterable[str])->pd.DataFrame: 
     stats_df = pd.DataFrame(columns=['body', 'header', 'count', 'attr_count'])
