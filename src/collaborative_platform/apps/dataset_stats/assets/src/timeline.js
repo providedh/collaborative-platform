@@ -211,14 +211,26 @@ export default function Timeline(args){
 			.attr('x', d=>self._xScale(d.i - self._timeSpanPadding))
 			.attr('width', (d,i)=>self._xScale(self._timeSpanPadding));
 
-		let text = self._timeG.selectAll('text.ellapsed').data(timeSpans);
-		text.exit().remove();
-		text.enter().append('svg:text').attr('class', 'ellapsed');
+		let ellapsedG = self._timeG.selectAll('g.ellapsed').data(timeSpans);
+		ellapsedG.exit().remove();
+		ellapsedG.enter().append('svg:g').attr('class', 'ellapsed');
 
-		text = self._timeG.selectAll('text.ellapsed');
-		text
-			.attr('x', d=>self._xScale(d.i - self._timeSpanPadding/2))
-			.text(d=>`${d.days} days`);
+		const spanText = d=>`${d.days} days`;
+
+		ellapsedG = self._timeG.selectAll('g.ellapsed')
+			.attr('transform', d=>`translate(${self._xScale(d.i - self._timeSpanPadding/2) - (spanText(d).length / 2)}, 0)`)
+			.each(function(d){
+				d3.select(this).append('svg:rect')
+					.attr('x', -10)
+					.attr('y', -35)
+					.attr('width', spanText(d).length*11)
+					.attr('height', 25)
+
+				d3.select(this).append('svg:text')
+					.attr('x', 0)
+					.attr('y', -15)
+					.text(spanText(d));
+			})
 		
 		self._timeG.append('svg:line')
 			.attr('x1', 0)
@@ -231,14 +243,16 @@ export default function Timeline(args){
 		self._timeG.selectAll('rect.timeSpan')
       		.attr('x', d=>x + self._xScale(d.i - self._timeSpanPadding)*k)
       		.attr('width', (d,i)=>k * self._xScale(self._timeSpanPadding));
-      	self._timeG.selectAll('text.ellapsed')
-      		.attr('x', d=>x + self._xScale(d.i - self._timeSpanPadding/2)*k);
+
+      	const spanText = d=>`${d.days} days`;
+      	self._timeG.selectAll('g.ellapsed')
+			.attr('transform', d=>`translate(${x + self._xScale(d.i - self._timeSpanPadding/2)*k - (spanText(d).length / 2)}, 0)`);
 	}
 
 	function _setupZoom(){
 		const extent = [[0,0], [self._width, 0]],
 			scaleExtent = [1, 4],
-			translateExtent = [[0,0], [self._width, 0]];
+			translateExtent = [[0,0], [self._width*2, 0]];
 
 		const zoom = d3.zoom()
 		    .extent(extent)
