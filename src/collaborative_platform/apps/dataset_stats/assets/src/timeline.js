@@ -171,8 +171,6 @@ export default function Timeline(args){
 				const nextX = (i+1 < self._dates.length)?
 					self._xScale(self._dates[i+1].i):
 					self._width;
-
-				//console.log(self._xScale(d.i), nextX)
 				return nextX-self._xScale(d.i);
 			});
 
@@ -196,9 +194,6 @@ export default function Timeline(args){
 				const nextX = x + k * ((i+1 < self._dates.length)?
 					self._xScale(self._dates[i+1].i):
 					self._width);
-
-      			console.log(self._xScale(d.i), nextX)
-
 				return nextX-(x + k * self._xScale(d.i));
 			});
 	}
@@ -325,9 +320,6 @@ export default function Timeline(args){
 			_fillByAuthor();
 			_setupTooltips();
 			_setupZoom();
-			console.log(d.content)
-
-			console.info('loaded');
 		});
 	}
 
