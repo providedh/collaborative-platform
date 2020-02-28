@@ -3,6 +3,7 @@ import React from 'react';
 import taxonomy from './def_taxonomy.js';
 import ProjectDescriptionSection from './ProjectDescriptionSection.js';
 import TaxonomySection from './TaxonomySection.js';
+import TEIentitiesSection from './TEIentitiesSection.js';
 
 class App extends React.Component {
   constructor(props){
@@ -12,10 +13,12 @@ class App extends React.Component {
       title: '',
       description: '',
       certScheme: Object.entries(taxonomy.taxonomy),
+      teiScheme: Object.entries(taxonomy.entities),
     };
 
     this.createProject = this.createProject.bind(this);
     this.updateCertScheme = this.updateCertScheme.bind(this);
+    this.updateTEIScheme = this.updateTEIScheme.bind(this);
   }
 
   componentDidMount(){
@@ -26,6 +29,10 @@ class App extends React.Component {
 
   updateCertScheme(scheme){
     this.setState({certScheme: scheme});
+  }
+
+  updateTEIScheme(scheme){
+    this.setState({teiScheme: scheme});
   }
 
   createProject(e){
@@ -83,6 +90,10 @@ class App extends React.Component {
           description={this.state.description}
           setTitle={title=>this.setState({title:title})}
           setDescription={description=>this.setState({description:description})}
+          />
+        <TEIentitiesSection
+          scheme={this.state.teiScheme}
+          updateScheme={this.updateTEIScheme}
           />
         <TaxonomySection
           scheme={this.state.certScheme}
