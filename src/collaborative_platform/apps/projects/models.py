@@ -95,7 +95,6 @@ class UncertaintyCategory(models.Model):
     xml_id = models.CharField(max_length=255)
     color = models.CharField(max_length=7)
     description = models.TextField(null=True, blank=True)
-    icon = models.CharField(max_length=12)
 
 
 class EntitySchema(models.Model):
