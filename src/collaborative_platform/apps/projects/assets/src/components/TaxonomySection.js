@@ -121,8 +121,9 @@ class TaxonomySection extends React.PureComponent {
   }
   
   handleRemoveEntry(index){
-    this.props.scheme.splice(index,1);
-    this.props.updateScheme(this.props.scheme);
+    const newScheme = this.props.scheme.map(x=>x);
+    newScheme.splice(index,1);
+    this.props.updateScheme(newScheme);
   }
   
   handleValueChange(index, key, value){
