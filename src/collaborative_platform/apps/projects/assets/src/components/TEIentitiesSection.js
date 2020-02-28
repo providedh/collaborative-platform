@@ -119,7 +119,7 @@ class TEIentitiesSection extends React.PureComponent {
   render(){
     return(
       <div>
-        <div className="row mt-4 bg-light">
+        <div id="teiSection" className="row mt-4 bg-light">
           <div className="col-2">
             <b>TEI entities</b>
           </div>
