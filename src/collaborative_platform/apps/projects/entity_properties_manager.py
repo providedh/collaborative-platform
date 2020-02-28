@@ -68,8 +68,10 @@ class EntityPropertiesManager:
         "time": {},
     }
 
-    def __init__(self):
-        self.entities = [self.deserialize(name, contains) for name, contains in self.entities_schema.items()]
+    def __init__(self, entities_schema=None):
+        if entities_schema is None:
+            entities_schema = self.entities_schema
+        self.entities = [self.deserialize(name, contains) for name, contains in entities_schema.items()]
 
     @classmethod
     def deserialize(cls, name: str, entity: dict) -> Element:
