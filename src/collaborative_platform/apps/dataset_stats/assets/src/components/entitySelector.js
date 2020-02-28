@@ -3,9 +3,9 @@ import React from 'react';
 import LoadingComponent from './loading';
 
 export default function({currentSelection}){
-	let selector = ''
+	let content = ''
 	if(currentSelection == null){
-		selector = <LoadingComponent />;
+		content = <LoadingComponent />;
 	}else{
 		// create inputs
 	}
@@ -16,7 +16,7 @@ export default function({currentSelection}){
 	          	<h3 className="box__text--title">Available entities</h3>
 	        </div>
 	        <div id="entitySelector" className="box__content">
-	          	{selector}
+	          	{content}
 	        </div>
       	</div>
 	);
