@@ -57,8 +57,7 @@ class TaxonomySection extends React.PureComponent {
         </div>
         <button type="button" 
                 className="close" 
-                aria-label="Close" 
-                style={{display: 'none'}}
+                aria-label="Close"
                 onClick={()=>this.handleRemoveEntry(i)}>
           <span aria-hidden="true">&times;</span>
         </button>
