@@ -95,6 +95,11 @@ input[type="color"]{
   background-color: white;
 }
 
+.entity{
+  display: inline-block;
+  padding: 0 5px;
+}
+
 .exampleText{
   line-height: 2.3em;
 }
