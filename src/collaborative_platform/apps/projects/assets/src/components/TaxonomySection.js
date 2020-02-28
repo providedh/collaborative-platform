@@ -153,6 +153,7 @@ class TaxonomySection extends React.PureComponent {
             <label>Category name</label>
             <ul className="noListStyle">
                 {this.categoryListEntries()}
+                {this.categoryNewEntryField()}
             </ul>
           </div>
           <div className="col">
