@@ -1,22 +1,18 @@
 export default {
 	"taxonomy" : {
 		"ignorance": {
-			"icon": "\uf04b",
 			"color": "#9270a8",
 			"description": ""
 		},
 		"credibility": {
-			"icon": "\uf0c8",
 			"color": "#cc4c3b",
 			"description": ""
 		},
 		"imprecision": {
-			"icon": "\uf005",
 			"color": "#f1d155",
 			"description": ""
 		},
 		"incompleteness": {
-			"icon": "\uf0c2",
 			"color": "#67b2ac",
 			"description": ""
 		},
