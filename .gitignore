@@ -15,7 +15,8 @@ venv/
 **/*.egg-info/
 
 # Uploaded files
-media/
+/media/
+/media_for_tests/
 
 # Testing framework temporary files
 .pytest_cache/
