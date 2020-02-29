@@ -18,7 +18,7 @@ TEST_CHANNEL_LAYERS = {
 @pytest.mark.asyncio
 @pytest.mark.django_db
 @pytest.mark.integration_tests
-class TestAnnotatorWithWebsocketsAndDatabase:
+class TestAnnotatorWithWsAndDb:
     async def test_authorized_user_can_connect(self, settings):
         settings.CHANNEL_LAYERS = TEST_CHANNEL_LAYERS
 
@@ -76,7 +76,7 @@ def get_communicator(project_id, file_id, user_id=None):
     if user_id:
         client = Client()
         user = User.objects.get(id=user_id)
-        client.force_login(user=user)
+        client.force_login(user)
 
         communicator.scope['user'] = user
 

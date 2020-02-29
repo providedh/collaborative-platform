@@ -1,0 +1,199 @@
+[
+{
+  "model": "sites.site",
+  "pk": 1,
+  "fields": {
+    "domain": "providedh.ehum.psnc.pl",
+    "name": "providedh.ehum.psnc.pl"
+  }
+},
+{
+  "model": "files_management.directory",
+  "pk": 1,
+  "fields": {
+    "project": 1,
+    "name": "Project_1",
+    "deleted": false,
+    "deleted_on": null,
+    "parent_dir": null
+  }
+},
+{
+  "model": "projects.project",
+  "pk": 1,
+  "fields": {
+    "title": "Project_1",
+    "description": "",
+    "creation_date": "2020-02-28T10:06:43.730Z",
+    "modification_date": "2020-02-28T10:06:43.730Z",
+    "license": "GPL",
+    "public": false
+  }
+},
+{
+  "model": "projects.projectversion",
+  "pk": 1,
+  "fields": {
+    "project": 1,
+    "file_version_counter": 0,
+    "commit": null,
+    "commit_counter": 0,
+    "date": "2020-02-28T10:06:43.745Z",
+    "file_versions": []
+  }
+},
+{
+  "model": "projects.taxonomy",
+  "pk": 1,
+  "fields": {
+    "xml_id_1": "ignorance",
+    "name_1": "ignorance",
+    "desc_1": "",
+    "color_1": "#9270a8",
+    "xml_id_2": "credibility",
+    "name_2": "credibility",
+    "desc_2": "",
+    "color_2": "#cc4c3b",
+    "xml_id_3": "imprecision",
+    "name_3": "imprecision",
+    "desc_3": "",
+    "color_3": "#f1d155",
+    "xml_id_4": "incompleteness",
+    "name_4": "incompleteness",
+    "desc_4": "",
+    "color_4": "#67b2ac",
+    "contents": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<TEI xmlns=\"http://www.tei-c.org/ns/1.0\">\n  <teiHeader>\n    <fileDesc>\n      <titleStmt>\n        <title>Uncertainty Taxonomy for project Project_1</title>\n      </titleStmt>\n    </fileDesc>\n    <encodingDesc>\n      <classDecl>\n        <taxonomy>\n          <category>\n            <catDesc>User recognized uncertainty</catDesc>\n            <category xml:id=\"ignorance\">\n              <catDesc>ignorance</catDesc>\n              <desc></desc>\n            </category>\n            <category xml:id=\"credibility\">\n              <catDesc>credibility</catDesc>\n              <desc></desc>\n            </category>\n            <category xml:id=\"imprecision\">\n              <catDesc>imprecision</catDesc>\n              <desc></desc>\n            </category>\n            <category xml:id=\"incompleteness\">\n              <catDesc>incompleteness</catDesc>\n              <desc></desc>\n            </category>\n          </category>\n          <category>\n            <catDesc>Machine generated uncertainty</catDesc>\n            <category xml:id=\"algorithmic\">\n              <catDesc>Algorithmic</catDesc>\n            </category>\n          </category>\n        </taxonomy>\n      </classDecl>\n    </encodingDesc>\n  </teiHeader>\n</TEI>"
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 1,
+  "fields": {
+    "password": "pbkdf2_sha256$150000$OFTrgAFpeWke$d9rYa8Mlc2uIzOP+VkNJ+GO3SiQlM3R4lUgh2YflD7Q=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "anonymous",
+    "first_name": "None",
+    "last_name": "None",
+    "email": "None",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "1970-01-01T00:00:00Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 2,
+  "fields": {
+    "password": "pbkdf2_sha256$150000$WLnWh84ElCQc$25ZbsN1j+omyb06+JZFn9E2voKNcXKYX69WAW8qlCfE=",
+    "last_login": "2020-02-28T10:08:18.490Z",
+    "is_superuser": false,
+    "username": "tony_stark",
+    "first_name": "Tony",
+    "last_name": "Stark",
+    "email": "tony_stark@zmyslonymail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2020-02-28T10:06:28.379Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 3,
+  "fields": {
+    "password": "pbkdf2_sha256$150000$NaYGi3VPXk1Q$Y+M4fvyU/SFi0ZuEK+s/8DeehnIePzA31BPFG5ia2DA=",
+    "last_login": "2020-02-28T10:07:56.023Z",
+    "is_superuser": false,
+    "username": "pepper_potts",
+    "first_name": "Pepper",
+    "last_name": "Potts",
+    "email": "pepper_potts@zmyslonymail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2020-02-28T10:07:55.740Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "core.profile",
+  "pk": 1,
+  "fields": {
+    "agree_to_terms": true,
+    "is_scientist": false,
+    "orcid": null,
+    "twitter": null,
+    "github": null,
+    "scholar": null,
+    "researchgate": null,
+    "about": null
+  }
+},
+{
+  "model": "core.profile",
+  "pk": 2,
+  "fields": {
+    "agree_to_terms": true,
+    "is_scientist": false,
+    "orcid": null,
+    "twitter": null,
+    "github": null,
+    "scholar": null,
+    "researchgate": null,
+    "about": null
+  }
+},
+{
+  "model": "core.profile",
+  "pk": 3,
+  "fields": {
+    "agree_to_terms": true,
+    "is_scientist": false,
+    "orcid": null,
+    "twitter": null,
+    "github": null,
+    "scholar": null,
+    "researchgate": null,
+    "about": null
+  }
+},
+{
+  "model": "projects.contributor",
+  "pk": 1,
+  "fields": {
+    "project": 1,
+    "user": 2,
+    "profile": 2,
+    "permissions": "AD"
+  }
+},
+{
+  "model": "projects.contributor",
+  "pk": 2,
+  "fields": {
+    "project": 1,
+    "user": 3,
+    "profile": 3,
+    "permissions": "RW"
+  }
+},
+{
+  "model": "projects.activity",
+  "pk": 1,
+  "fields": {
+    "project": 1,
+    "date": "2020-02-28T10:06:43.774Z",
+    "related_file": null,
+    "related_file_name": null,
+    "related_dir": null,
+    "related_dir_name": null,
+    "user": 2,
+    "user_name": "Tony Stark",
+    "action_text": "created project"
+  }
+}
+]
