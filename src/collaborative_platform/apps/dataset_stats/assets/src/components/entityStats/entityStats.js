@@ -8,7 +8,7 @@ export default ({data})=>{
 
 	return(
 		<li className="list-group-item">
-		    <ul className="list-group entity rounded {expanded===true?'expanded':''}">
+		    <ul className={`list-group entity rounded ${expanded===true?'expanded':''}`}>
 		      <Header data={data} onClick={()=>setExpanded(!expanded)}/>
 		      <Body data={data}/>
 		    </ul>
