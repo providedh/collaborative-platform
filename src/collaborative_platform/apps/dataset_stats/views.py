@@ -54,11 +54,43 @@ def versions(request, project_id=1):  # type: (HttpRequest, int, float) -> JSONR
 
 @login_required
 @user_has_access()
-def stats(request, project_id, version):  # type: (HttpRequest, int, float) -> JSONResponse
-    versions = ProjectVersion.objects.filter(project=project_id)
-    version_info = lambda v: {'commit': v.commit_counter, 'date': v.date}
-    data = {v: version_info(v) for v in versions}
+def stats(request, project_id, project_version):  # type: (HttpRequest, int, float) -> JSONResponse
+    data = {}
 
+    try:
+        version_num = float(project_version)
+        #versions = ProjectVersion.objects.filter()
+        data = {'version': version_num, 'entities': [
+            {
+                'name': 'place',
+                'count': 12,
+                'coverage': 30,
+                'location': 'header',
+                'distinct_doc_occurrences': 3,
+                'document_count': 10,
+                'attributes': []
+            },
+            {
+                'name': 'person',
+                'count': 22,
+                'coverage': 80,
+                'location': 'body',
+                'distinct_doc_occurrences': 8,
+                'document_count': 10,
+                'attributes': [
+                    {
+                        'name': 'age',
+                        'distinct_values': 3,
+                        'trend_percentage': 80,
+                        'trend_value': 35,
+                        'coverage': 30
+                    }
+                ]
+            }
+            ]}
+    except ValueError:
+        data = {v: project_version, entities: []}
+    
     return JsonResponse(data)
 
 @login_required
