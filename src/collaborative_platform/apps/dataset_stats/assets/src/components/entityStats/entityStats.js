@@ -4,8 +4,8 @@ import Header from './header';
 import Body from './body';
 
 export default ({data})=>{
-  const [expanded, setExpanded] = useState(false);
-  	
+  	const [expanded, setExpanded] = useState(false);
+
 	return(
 		<li id={data.long_name} className="list-group-item">
 		    <ul className={`list-group entity rounded ${expanded===true?'expanded':''}`}>
