@@ -49,7 +49,7 @@ export default function App(){
 
 	return(
 		<div>
-			<EntitySelector currentSelection={null}/>
+			<EntitySelector stats={stats}/>
 			<ProjectStats stats={stats}/>
 		</div>
 	);
