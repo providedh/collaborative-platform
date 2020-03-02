@@ -1,13 +1,17 @@
 import React from 'react';
-export default ()=>(
-	<div className="d-flex justify-content-center">
-	    <div className="spinner-grow text-primary" role="status">
-	      <span className="sr-only">Loading...</span>
-	    </div>
-	    <div className="spinner-grow text-primary" role="status">
-	      <span className="sr-only">Loading...</span>
-	    </div>
-	    <div className="spinner-grow text-primary" role="status">
-	      <span className="sr-only">Loading...</span>
-	    </div>
-    </div>);
+
+import AttributeDetails from './attributeDetails';
+
+export default ({data})=>{
+
+	let attributes = <h4>No attributes found for this entity</h4>;
+
+	if(data.attributes.length > 0)
+	attributes = data.attributes.map(
+		attr=><AttributeDetails key={attr.name} tag={data.name} attribute={attr}/>);
+
+	return(
+		<li className="list-group-item onExpanded">
+        	{attributes}              
+		</li>);
+};
