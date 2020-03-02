@@ -3,7 +3,8 @@ import {useState, useEffect} from 'react';
 
 import LoadingComponent from './loading';
 
-const entityPreset = ['person', 'place', 'date'];
+const entityPreset = 
+	['person', 'event', 'org', 'object', 'place', 'date', 'time'];
 
 function useEntities(stats){
 	const [entities, setEntities] = useState([]);
