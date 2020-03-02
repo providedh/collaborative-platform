@@ -23,8 +23,6 @@ function renderChart(node){
 	const data_str = node.attributes['data'].value,
 		  data = JSON.parse(data_str)['data'];
 
-	console.log(data)
-
 	node.setAttribute('height', 100 + (25*data.length))
 
 	const ctx = document.getElementById(id).getContext('2d');
