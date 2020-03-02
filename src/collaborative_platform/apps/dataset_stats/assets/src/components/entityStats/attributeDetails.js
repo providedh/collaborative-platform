@@ -9,14 +9,15 @@ export default ({attribute, tag})=>{
 		coverage
 	} = attribute;
 
+  const shorttened = t=>t.slice(0, Math.min(t.length, 20)) + (t.length>20?'...':'');
+
 	return(<div className="row">
         <div className="col-3">
           <h4>{name}</h4>
           <p>
             {distinct_values} distinct values <br/>
-            <span title="{trend_value}">
-            	{trend_percentage}% with value 
-            	{String(trend_value).slice(Math.min(String(trend_value).length, 40))} <br/>
+            <span title={trend_value}>
+            	{trend_percentage}% with value {shorttened(trend_value + '')} <br/>
             	{coverage}% tags have it<br/>
             </span>
           </p>
