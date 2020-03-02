@@ -5,7 +5,7 @@ import EntityStats from './entityStats';
 
 export default function({stats}){
 	let content = ''
-	if(stats == null){
+	if(stats == null || stats.length == 0){
 		content = <LoadingComponent />;
 	}else{
 		content = stats.map((entity,i)=><EntityStats key={i} data={entity}/>);
