@@ -22,9 +22,9 @@ export default ({data})=>{
             <p>
               <b>
                 { coverage > 20?'':
-                <div className="alert alert-danger" role="alert">
+                <span className="alert alert-danger d-block" role="alert">
                   Too few documents ({ coverage }%) have this entity. Analysis based on this tag can leave information out.
-                </div>
+                </span>
                 }
               </b>
             </p>

@@ -30,27 +30,27 @@ export default ({attribute, tag})=>{
         </div>
         <div className="col-3">
         	{coverage > 34?'':
-	            <div className="alert alert-danger" role="alert">
+	            <span className="alert alert-danger d-block" role="alert">
 	              Only a third or less of the entities have this.  Analysis based on this attribute can leave information out.
-	            </div>
+	            </span>
         	}
 
         	{distinct_values != 1?'':
-	            <div className="alert alert-danger" role="alert">
+	            <span className="alert alert-danger d-block" role="alert">
 	              This attribute takes only one different value. Analysis based on this attribute will not provide extra information.
-	            </div>
+	            </span>
         	}
 
         	{distinct_values != 2 || trend_percentage < 60?'':
-	            <div className="alert alert-danger" role="alert">
+	            <span className="alert alert-danger d-block" role="alert">
 	              This attribute takes only two different values and one is over-representated. Analysis based on this attribute can be biased.
-	            </div>
+	            </span>
         	}
 
         	{distinct_values < 2 || trend_percentage < 50?'':
-	            <div className="alert alert-danger" role="alert">
+	            <span className="alert alert-danger d-block" role="alert">
 	              This attribute has an imbalanced value distribution. Analysis based on this attribute can be biased.
-	            </div>
+	            </span>
         	}
         </div>
       </div>);
