@@ -6,7 +6,7 @@ from django.contrib.auth.models import AnonymousUser, User
 from django.core.exceptions import ValidationError, FieldError
 from django.core.paginator import InvalidPage, EmptyPage
 from django.db.models import QuerySet, Q
-from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, HttpResponseNotFound
+from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, HttpResponseNotFound, JsonResponse
 
 from apps.core.models import Profile
 from apps.files_management.helpers import clean_name
@@ -157,3 +157,18 @@ def get_taxonomy(request, project_id):
 
     project = Project.objects.get(id=project_id)
     return HttpResponse(project.taxonomy.contents, content_type="application/xml")
+
+
+@login_required
+@objects_exists
+@user_has_access()
+def get_settings(request, project_id):
+    entities = EntitySchema.objects.filter(taxonomy__project_id=project_id).values("name", "color", "icon")
+    uncertainty_cats = UncertaintyCategory.objects.filter(taxonomy__project_id=project_id).values("name", "xml_id",
+                                                                                                  "color",
+                                                                                                  "description")
+
+    resp = {"entities": list(entities),
+            "taxonomy": list(uncertainty_cats)}
+
+    return JsonResponse(resp)
