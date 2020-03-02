@@ -1,47 +1,56 @@
 import React from 'react';
+import {useEffect, useState} from 'react';
 
 import EntitySelector from './entitySelector';
 import ProjectStats from './projectStats';
 import Timeline from '../helpers/timeline';
+import Ajax from '../helpers/ajax';
 
+const ajax = Ajax();
 
-const timeline = Timeline()
-	.onVersionSelect(p=>alert('selected version '+p.version))
-	.load();
+function useTimeline(setVersion){
+	useEffect(()=>{
+		Timeline()
+			.onVersionSelect(p=>setVersion(p.version))
+			.load()
+			.then(versions=>setVersion(versions[versions.length-1].version));
+		},[]);
+}
+
+function useProjectVersion(){
+	const [projectVersion, setProjectVersion] = useState('loading versions . . .');
+	const [stats, setStats] = useState([]);
+
+	function setVersion(v){
+		setProjectVersion(`fetching data . . .`);
+		setStats([]);
+		ajax.getStats(window.project_id, v).then(res=>{
+			if(res.success === true){
+				setProjectVersion(`v.${v}`);
+				setStats(res.content.entities);
+			}
+		});
+	}
+
+	return [projectVersion, stats, setVersion];
+}
+
+function useProjectVersionLabel(projectVersion){
+	useEffect(()=>{
+			document.getElementById('project-version-label').innerText = projectVersion;
+		}, 
+		[projectVersion]);
+}
 
 export default function App(){
-	
+	const [projectVersion, stats, setVersion] = useProjectVersion();
+	useTimeline(setVersion);
+	useProjectVersionLabel(projectVersion)
+
 	return(
 		<div>
 			<EntitySelector currentSelection={null}/>
-			<ProjectStats stats={[
-				{
-					name: 'place',
-					count: 12,
-					coverage: 30,
-					location: 'header',
-					distinct_doc_occurrences: 3,
-					document_count: 10,
-					attributes: []
-				},
-				{
-					name: 'person',
-					count: 22,
-					coverage: 80,
-					location: 'body',
-					distinct_doc_occurrences: 8,
-					document_count: 10,
-					attributes: [
-						{
-							name: 'age',
-							distinct_values: 3,
-							trend_percentage: 80,
-							trend_value: 35,
-							coverage: 30
-						}
-					]
-				}
-				]}/>
+			<ProjectStats stats={stats}/>
 		</div>
 	);
 }
