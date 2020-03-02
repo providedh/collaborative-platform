@@ -112,7 +112,7 @@ def get_stats(stats_df):
             .value_counts()
     
     stats = tuple({
-        #'name': row[0],
+        'long_name': row[0],
         'name': row[0].split('}')[1] if '}' in row[0] else row[0],
         'count': int(row[1]['tag_id']['unique']),
         'coverage': float(round(100*row[1]['document']['unique'] / n_docs, 2)),
