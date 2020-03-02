@@ -96,9 +96,10 @@ export default function Timeline(args){
 	}
 
 	function _setupScales(){
+		const lastIndex = self._versions[self._versions.length-1].i;
 		self._xScale = d3.scaleLinear()
-			.domain([0, self._versions[self._versions.length-1].i])
-			.range([0, self._width]);
+			.domain([0, lastIndex])
+			.range([0, Math.max(self._width, lastIndex*50)]);
 	}
 
 	function _renderProjectVersions(projectVersions){
@@ -110,17 +111,16 @@ export default function Timeline(args){
 		pVersions.enter().append('g').attr('class', 'pVersion');
 
 		self._pVersions = self._versionsG.selectAll('g.pVersion')
-			.attr('transform', d=>`translate(${self._xScale(d.i)}, 0)`);
-
-		let labels = self._pVersions.selectAll('text.projectVersionLabel').data(d=>d.files);
-		labels.exit().remove();
-		labels.enter().append('svg:text').attr('class', 'projectVersionLabel');
-
-		self._fVersions = self._pVersions.selectAll('text.projectVersionLabel')
-			.attr('x', 0)
-			.attr('y', -5)
-			.text(d=>'V.'+d.version)
-			.on('click', d=>self._onVersionSelect(d));
+			.attr('transform', d=>`translate(${self._xScale(d.i)}, 0)`)
+			.each(function(d){
+				d3.select(this)
+					.append('svg:text')
+					.attr('class', 'projectVersionLabel')
+					.attr('x', 0)
+					.attr('y', -5)
+					.text(d=>'V.'+d.version)
+					.on('click', d=>self._onVersionSelect(d))
+			});
 
 		let fVersions = self._pVersions.selectAll('rect.fVersion').data(d=>d.files);
 		fVersions.exit().remove();
@@ -169,10 +169,15 @@ export default function Timeline(args){
 			.attr('height', self._legendY - height + 20)
 			.attr('x', d=>self._xScale(d.i))
 			.attr('width', (d,i)=>{
-				const nextX = (i+1 < self._dates.length)?
-					self._xScale(self._dates[i+1].i):
-					self._width;
-				return nextX-self._xScale(d.i);
+				const lastDay = (i+1 == self._dates.length),
+					nextX = lastDay === false?
+						self._xScale(self._dates[i+1].i):
+						self._width,
+					width = lastDay === false?
+						nextX-self._xScale(d.i):
+						0;
+
+				return width;
 			});
 
 		let dateT = self._timeG.selectAll('text.date').data(self._dates);
@@ -192,10 +197,14 @@ export default function Timeline(args){
 		self._timeG.selectAll('rect.day')
       		.attr('x', d=>x + self._xScale(d.i)*k)
       		.attr('width', (d,i)=>{
-				const nextX = x + k * ((i+1 < self._dates.length)?
-					self._xScale(self._dates[i+1].i):
-					self._width);
-				return nextX-(x + k * self._xScale(d.i));
+      			const lastDay = (i+1 == self._dates.length),
+					nextX = lastDay === false?
+						k*self._xScale(self._dates[i+1].i):
+						self._width,
+					width = lastDay === false?
+						nextX - k*self._xScale(d.i):
+						0;
+				return width;
 			});
 	}
 
@@ -311,16 +320,19 @@ export default function Timeline(args){
 	}
 
 	function _load(){
-		self.ajax.getVersions(window.project_id).then(d=>{
-			_setupContainer();
-			[self._versions, self._dates, self._timeSpanPadding] = _processVersions(d.content.project_versions);
-			_setupScales();
-			_renderTimeline();
-			_renderTimeSpans();
-			_renderProjectVersions(self._versions);
-			_fillByAuthor();
-			_setupTooltips();
-			_setupZoom();
+		return new Promise((resolve, error)=>{
+			self.ajax.getVersions(window.project_id).then(d=>{
+				_setupContainer();
+				[self._versions, self._dates, self._timeSpanPadding] = _processVersions(d.content.project_versions);
+				_setupScales();
+				_renderTimeline();
+				_renderTimeSpans();
+				_renderProjectVersions(self._versions);
+				_fillByAuthor();
+				_setupTooltips();
+				_setupZoom();
+				resolve(self._versions);
+			});
 		});
 	}
 
