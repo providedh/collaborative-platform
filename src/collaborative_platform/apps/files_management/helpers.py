@@ -1,11 +1,17 @@
 import copy
 import hashlib
 import json
+import logging
 import re
+import time
+
 import xmltodict
 
 from io import BytesIO
 from json import loads
+
+from elasticsearch.helpers import bulk
+from elasticsearch_dsl import connections
 from lxml import etree
 from typing import List, Set
 
@@ -25,26 +31,41 @@ from apps.files_management.file_conversions.xml_formatter import XMLFormatter
 from apps.files_management.models import File, FileVersion, Directory, FileMaxXmlIds
 from apps.index_and_search.content_extractor import ContentExtractor
 from apps.index_and_search.entities_extractor import EntitiesExtractor
-from apps.index_and_search.models import Person, Organization, Event, Place
+from apps.index_and_search.models import Person, Organization, Event, Place, Ingredient, Utensil, ProductionMethod
 from apps.projects.helpers import log_activity
 from apps.projects.models import Project
+
+logger = logging.getLogger('upload')
+
+ALL_ES_ENTITIES = (Person, Organization, Event, Place, Ingredient, Utensil, ProductionMethod, es.File)
 
 
 def upload_file(uploaded_file, project, user, parent_dir=None):  # type: (UploadedFile, Project, User, int) -> File
     # I assume that the project exists, bc few level above we checked if user has permissions to write to it.
 
+    st = time.time()
     try:
         File.objects.get(name=uploaded_file.name, parent_dir_id=parent_dir, project=project, deleted=False)
+        t = time.time()
+        logger.info(f"Got File object from DB in {round(t - st, 2)} s")
     except File.DoesNotExist:
         dbfile = File(name=uploaded_file.name, parent_dir_id=parent_dir, project=project, version_number=1)
         dbfile.save()
+        t = time.time()
+        logger.info(f"Created and saved new file object to DB in {round(t - st, 2)} s")
 
         try:
+            st = time.time()
             hash = hash_file(dbfile, uploaded_file)
+            t = time.time()
+            logger.info(f"Hashed file info in {round(t - st, 2)} s")
             uploaded_file.name = hash
+            st = time.time()
             file_version = FileVersion(upload=uploaded_file, number=1, hash=hash, file=dbfile, created_by=user)
             file_version.save()
             FileMaxXmlIds(file=dbfile).save()
+            t = time.time()
+            logger.info(f"Created and saved Fv and XMLMaxIDs to DB in {round(t - st, 2)} s")
         except Exception as e:
             dbfile.delete()
             raise e
@@ -112,11 +133,15 @@ def index_entities(entities):  # type: (List[dict]) -> None
         'person': Person,
         'org': Organization,
         'event': Event,
-        'place': Place
+        'place': Place,
+        'ingredient': Ingredient,
+        'utensil': Utensil,
+        'productionMethod': ProductionMethod
     }
 
+    es_entities = []
     for entity in copy.deepcopy(entities):
-        if entity['tag'] == 'certainty':
+        if entity['tag'] not in classes:
             continue
 
         tag = entity.pop('tag')
@@ -126,8 +151,9 @@ def index_entities(entities):  # type: (List[dict]) -> None
         excessive_elements = set(entity.keys()).difference(tag_elements)
         tuple(map(entity.pop, excessive_elements))  # pop all excessive elements from entity
 
-        es_entity = classes[tag](**entity)
-        es_entity.save()
+        es_entities.append(classes[tag](**entity))
+
+    bulk(connections.get_connection(), (d.to_dict(True) for d in es_entities))
 
 
 def get_directory_content(dir, indent):  # type: (Directory, int) -> dict
@@ -179,11 +205,8 @@ def include_user(response):  # type: (JsonResponse) -> JsonResponse
 
 
 def delete_es_docs(file_id):  # type: (int) -> None
-    es.Person.search().filter('term', file_id=file_id).delete()
-    es.Place.search().filter('term', file_id=file_id).delete()
-    es.Organization.search().filter('term', file_id=file_id).delete()
-    es.Event.search().filter('term', file_id=file_id).delete()
-    es.File.search().filter('term', id=file_id).delete()
+    for entity_model in ALL_ES_ENTITIES:
+        entity_model.search().filter('term', file_id=file_id).delete()
 
 
 def index_file(dbfile, text):  # type: (File, str) -> None
@@ -331,7 +354,7 @@ def create_certainty_elements_from_unifications(internal_unifications, external_
             'xml': xml_namespace,
         }
 
-        ana = ''
+        ana = unification.ana
         locus = 'value'
         certainty = unification.certainty
         annotator_id = '#person' + str(unification.created_by_id)
@@ -349,6 +372,12 @@ def create_certainty_elements_from_unifications(internal_unifications, external_
 
         certainty_xml_id = unification.xml_id
         certainty.attrib[etree.QName(xml + 'id')] = certainty_xml_id
+
+        if unification.description:
+            description = etree.Element('desc', nsmap=ns_map)
+            description.text = unification.description
+
+            certainty.append(description)
 
         certainties.append(certainty)
 

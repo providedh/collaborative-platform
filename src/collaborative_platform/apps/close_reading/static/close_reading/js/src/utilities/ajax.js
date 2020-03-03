@@ -2,10 +2,10 @@
  * Module for building full API call urls.
  *
  * API endpoints:
- * - get_save_url
- * - get_add_annotation_url
- * - get_history_url
- * - get_autocomplete_url
+ * - save_url
+ * - history_url
+ * - search_url
+ * - user_url
  * */
 var AjaxCalls = function(args){
 	const base_url = [window.location.protocol + '/', window.location.hostname+':'+window.location.port].join('/');
@@ -63,9 +63,17 @@ var AjaxCalls = function(args){
 		        url: url,
 		        type: method,   //type is any HTTP method
 		        data: {},      //Data as js object
-		        success: function (a) {
-		            resolve({success:true, content:a});
-		        },
+		        statusCode: {
+					304: function() {
+				      resolve({success:false, content:'Not Modified.'});
+				    },
+				    202: function() {
+				      resolve({success:false, content:'Request Accepted But Not Completed.'});
+				    },
+				    200: function(a) {
+				      resolve({success:true, content:a});
+				    }
+				},
 		        error: function (a) {
 		            resolve({success:false, content:a});
 		        }

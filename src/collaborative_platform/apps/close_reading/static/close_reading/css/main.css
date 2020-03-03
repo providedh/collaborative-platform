@@ -2,16 +2,17 @@ button span, #alert{
     pointer-events: none;
 }
 
-#versionLink{font-size: 0.5em;}
+.hidden{display: none !important;}
 
-#editor{
-    margin-top: 155px;
-    line-height: 2.3em;
-}
+#versionLink{font-size: 0.5em;}
 
 #breadcrumb{
   position: fixed;
+  display: none;
+  z-index: 1000;
 }
+
+#editor{padding-bottom: 15em;}
 
 #editor p,
 #editor div,
@@ -26,6 +27,7 @@ button span, #alert{
 /*#annotator-root{max-width: 23.7cm;}*/
 #versionLink:first-of-type{font-size: 0.7em;}
 .break-word {
+  font-size: 1.2em;
   display: flex;
   align-items: end;
   justify-content: space-between;
@@ -37,6 +39,7 @@ page {
   margin-bottom: 0.5cm;
   box-shadow: 0 1px 3px 1px rgba(60,64,67,.15);
   width: 21cm;
+  line-height: 2.6em;
 }
 
 #alert{
@@ -57,9 +60,13 @@ page {
     z-index: 2;
 }
 
+#toolbar .form-control{
+  font-size: .7em;
+}
+
 #toolbar .toogle-button{
 	position: relative;
-	bottom: -15px;
+	bottom: -6px;
 	z-index: 1;
 }
 #toolbar .toogle-button .btn-primary{
@@ -69,6 +76,8 @@ page {
     background-color: #f7f7f7;
     border-color: #dee2e6 #dee2e6 #f7f7f7;
     border-bottom: solid 1px #dee2e6;
+    padding-top: .2em;
+    padding-bottom: .2em;
 }
 #toolbar .nav-link.active{
     background-color: #fff;
@@ -88,6 +97,8 @@ page {
 .btn .active-show{display: none;}
 .btn.active .active-show{display: initial;}
 .btn.active .active-hide{display: none;}
+
+.btn{line-height: 1.2em;}
 
 #toolbar{
 	width: 23cm; 
@@ -120,17 +131,60 @@ page {
 
 #asserted-value-input-options{display: none;}
 
-div#legend i.fas{
+#annotator-root #legend,
+#annotator-root #left-sidebar{
+  display: none;
+}
+
+#legend i.fas{
     color:grey;
     font-weight: 900;
     font-size: 0.9em;
 }
 
-div#legend span.teiLegendElement{
+#legend span.teiLegendElement,
+#legend span.certLegendElement{
     display:block;
 }
 
-span.teiLegendElement span.color{
+#top-breadcrumb{
+  display: inline-block;
+  font-size: .8em;
+  margin-right: .5em;
+}
+
+#top-legend hr{margin-top: -.5em;}
+
+#legend-topbar{
+  padding: 0px 0.8em 0.1em;
+}
+
+#top-legend button{
+  text-align: end;
+}
+
+#top-legend ul{
+  padding-left: 0;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+#top-legend span.teiLegendElement{
+  min-width: 20%;
+}
+
+#top-breadcrumb ol{
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+span.certLegendElement {
+  margin-right: 10px;
+}
+
+span.teiLegendElement span.color,
+span.certLegendElement span.color{
     display: inline-block;
     height:1em;
     width:1em;
@@ -200,8 +254,7 @@ input#references-autocomplete {
 }
 
 #history-container{
-    padding-top:10px;
-    padding-bottom:8px;
+    padding-top:7px;
 }
 
 #history.hovered{
@@ -276,6 +329,20 @@ div#history-popup span.color{
     position: fixed;
     display: none;}
 
+#popup .title hr{
+  margin-top: 0;
+}
+
+#popup .author {
+    font-size: .8em;
+    color: var(--primary);
+    font-weight: bold;
+}
+
+#popup .tagId{
+  font-size: .9em; 
+}
+
 #popup-arrow{
     width: 20px;
     height: 20px;
@@ -314,7 +381,7 @@ div#history-popup span.color{
   width: 100%;
 }
 
-.btn-collapse.collapsed{
+#legend .btn-collapse.collapsed{
   display: initial;
   width: initial;
 }
@@ -325,6 +392,14 @@ div#history-popup span.color{
 
 .btn-collapse.collapsed .onCollapse{
   display: initial;
+}
+
+.btn-collapse .onShow{
+  display: initial;
+}
+
+.btn-collapse.collapsed .onShow{
+  display: none;
 }
 
 .sidebar > div, 
@@ -410,6 +485,25 @@ div#history-popup span.color{
   margin-bottom: 12em;
 }
 
+#toolbar #header-card{padding-top: .6em;}
+
+*::before, *::after{pointer-events: none;}
+
 @media (min-width: 1800px) {
+    .break-word {font-size: 1.4em;}
+    .btn{line-height: 1.5em;}
+    #toolbar .toogle-button{bottom: -15px;}
+    #toolbar #header-card{padding-top: 1rem;}
     #left-sidebar{max-width: 25%;}
+    #annotator-root #legend,
+    #annotator-root #left-sidebar{display: initial;}
+    #top-legend, #top-breadcrumb{display: none;}
+    #breadcrumb{display: initial;}
+    #toolbar .nav-link{
+      padding-top: .5rem;
+      padding-bottom: .5rem;
+    }
+    #toolbar .form-control{
+      font-size: .875rem;
+    }
 }

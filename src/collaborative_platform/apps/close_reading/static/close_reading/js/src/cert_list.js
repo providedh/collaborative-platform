@@ -42,7 +42,7 @@ let CertaintyList = function(args){
 	}
 
 	function _createCard(data, nested=false){
-		const card_text = `<div class="card w-100 card_${data.target}" id="card_${data.target}_${data.count}">
+		const card_text = `<div class="card w-100 card_${data.id}" id="card_${data.id}_${data.count}">
                 <div class="card-header">
                   <div>
                     <div>
@@ -114,9 +114,12 @@ let CertaintyList = function(args){
 
 		const target = e.target.attributes['annotation-target'].value.split('#')[1];
 
+    const node = document.getElementById('xxxx'+target),
+      text = node==null?target:node.textContent;
+
 		const args = {
 			selection: {
-				text: target,
+				text,
 				abs_positions: null,
 				by_id: true,
 				target: target
@@ -127,17 +130,23 @@ let CertaintyList = function(args){
 	}
 
 	function _handleDocumentRender(args){
+    const seen = {};
+    const annotations = {};
+    self.target2card = {};
+
 		document.getElementById('certaintyList').innerHTML = '';
 
     const getAttribute = (json, attr)=>json.hasOwnProperty(attr)?json[attr].value:'';
 
-    const seen = {};
-    const annotations = {};
 
 		Array.from(args.document.getElementsByTagName('teiHeader')[0].getElementsByTagName('certainty'), a=>a)
             .forEach(annotation=>annotation.attributes['target'].value.trim().split(" ")
-            .forEach(target=>annotations[annotation.attributes['id'].value] = [annotation, target]));
+            .forEach(target=>{
+              annotations[annotation.attributes['id'].value] = [annotation, target];
+              self.target2card[target] = annotation.attributes['id'].value;
+            }));
 
+    
     Object.entries(annotations).sort((a,b)=>a[1][1]>b[1][1]?1:-1).forEach(item=>{
       const [id, [annotation, target]] = item;
 
@@ -190,14 +199,18 @@ let CertaintyList = function(args){
   function _handleAnnotationHover(args){
     _toggleCardHighliht(args);
 
-    const card_target_id = 'card_' + args.target.id + '_1',
+    const card_target_id = _getTargetCard(args) + '_1',
       card_target_node = document.getElementById(card_target_id);
     
     document.getElementById('certaintyList').scrollTop = card_target_node.offsetTop - 5;
   }
 
+  function _getTargetCard({target}){
+    return 'card_' + self.target2card[target];
+  }
+
   function _toggleCardHighliht(args){
-    const card_target_class = 'card_' + args.target.id,
+    const card_target_class = _getTargetCard(args),
       card_target_nodes = document.getElementsByClassName(card_target_class);
     
     Array.from(card_target_nodes).forEach(card_target_node=>{

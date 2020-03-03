@@ -1,3 +1,6 @@
+import json
+import logging
+
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, HttpResponse, JsonResponse, HttpResponseNotModified
 
@@ -14,12 +17,21 @@ from .annotation_history_handler import AnnotationHistoryHandler
 from .models import AnnotatingXmlContent
 
 
+logger = logging.getLogger('annotator')
+
+
 @login_required
 @objects_exists
 @user_has_access('RW')
 def save(request, project_id, file_id):  # type: (HttpRequest, int, int) -> HttpResponse
     if request.method == "PUT":
         file_symbol = '{0}_{1}'.format(project_id, file_id)
+
+        file = File.objects.get(id=file_id, deleted=False)
+        version_nr_old = file.version_number
+
+        logger.info(f"Get request from user: '{request.user.username}' to save a file: '{file.name}' "
+                    f"in room: '{file_symbol}'")
 
         try:
             annotating_xml_content = AnnotatingXmlContent.objects.get(file_symbol=file_symbol)
@@ -32,10 +44,10 @@ def save(request, project_id, file_id):  # type: (HttpRequest, int, int) -> Http
                 'data': None,
             }
 
-            return JsonResponse(response, status=status)
+            logger.error(f"Saving file '{file.name}' in room: '{file_symbol}' failed")
+            logger.error(f"Send response to user: '{request.user.username}' with content: '{json.dumps(response)}")
 
-        file = File.objects.get(id=file_id, deleted=False)
-        version_nr_old = file.version_number
+            return JsonResponse(response, status=status)
 
         xml_content = annotating_xml_content.xml_content
         file_name = annotating_xml_content.file_name
@@ -51,9 +63,9 @@ def save(request, project_id, file_id):  # type: (HttpRequest, int, int) -> Http
         project = Project.objects.get(id=project_id)
         dbfile = File.objects.get(name=uploaded_file.name, parent_dir_id=file.parent_dir, project=project,
                                   deleted=False)
-        file_overwrited = overwrite_file(dbfile, uploaded_file, request.user)
+        file_overwritten = overwrite_file(dbfile, uploaded_file, request.user)
 
-        version_nr_new = file_overwrited.version_number
+        version_nr_new = file_overwritten.version_number
 
         unifications = Unification.objects.filter(
             deleted_on__isnull=True,
@@ -71,14 +83,17 @@ def save(request, project_id, file_id):  # type: (HttpRequest, int, int) -> Http
                 'data': None,
             }
 
+            logger.error(f"Saving file '{file.name}' in room: '{file_symbol}' failed")
+            logger.error(f"Send response to user: '{request.user.username}' with content: '{json.dumps(response)}")
+
             return JsonResponse(response, status=status)
 
         if version_nr_old < version_nr_new or unifications:
             message = ''
 
             if version_nr_old < version_nr_new:
-                text, entities = extract_text_and_entities(xml_content, project.id, file_overwrited.id)
-                file_version = FileVersion.objects.get(file=file_overwrited, number=file_overwrited.version_number)
+                text, entities = extract_text_and_entities(xml_content, project.id, file_overwritten.id)
+                file_version = FileVersion.objects.get(file=file_overwritten, number=file_overwritten.version_number)
                 create_entities_in_database(entities, project, file_version)
                 index_entities(entities)
                 index_file(dbfile, text)
@@ -123,6 +138,10 @@ def save(request, project_id, file_id):  # type: (HttpRequest, int, int) -> Http
                 'version': version_nr_new,
                 'data': None
             }
+
+            logger.info(f"Successfully saved file '{file.name}' in room: '{file_symbol}'. "
+                        f"New file version is: '{version_nr_new}'")
+            logger.info(f"Send response to user: '{request.user.username}' with content: '{json.dumps(response)}")
 
             return JsonResponse(response, status=status)
 

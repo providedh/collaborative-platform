@@ -1,0 +1,1688 @@
+[
+{
+  "model": "sites.site",
+  "pk": 1,
+  "fields": {
+    "domain": "providedh.ehum.psnc.pl",
+    "name": "providedh.ehum.psnc.pl"
+  }
+},
+{
+  "model": "api_vis.personversion",
+  "pk": 1,
+  "fields": {
+    "entity": 1,
+    "fileversion": 1,
+    "name": "Ellen Adams",
+    "xml": "<person xmlns=\"http://www.tei-c.org/ns/1.0\" xmlns:xi=\"http://www.w3.org/2001/XInclude\" xml:id=\"person_source_file_xml-1\" sex=\"2\">\n            <persName>\n              <roleName type=\"Deponent\"/>\n              <forename>Ellen</forename>\n              <surname>Adams</surname>\n            </persName>\n            <residence>\n              <placeName type=\"Placename\">Waterdrum</placeName>\n              <region type=\"County\">Fermanagh</region>\n              <country key=\"IRL\">Ireland</country>\n            </residence>\n            <occupation>Widow</occupation>\n          </person>\n          ",
+    "context": "Ellen Adams Waterdrum Fermanagh Ireland Widow Thomas Adams Clergy John Adams Joseph Berry William Berry Tary Brunt Richard Cary Ellen Adams Geo: Brunt Rory Magwire Donnogh Magwire Lord Magwire",
+    "forename": "Ellen",
+    "surname": "Adams"
+  }
+},
+{
+  "model": "api_vis.personversion",
+  "pk": 2,
+  "fields": {
+    "entity": 2,
+    "fileversion": 1,
+    "name": "Thomas Adams",
+    "xml": "<person xmlns=\"http://www.tei-c.org/ns/1.0\" xmlns:xi=\"http://www.w3.org/2001/XInclude\" xml:id=\"person_source_file_xml-2\" sex=\"1\">\n            <persName>\n              <roleName type=\"Victim\"/>\n              <forename>Thomas</forename>\n              <surname>Adams</surname>\n            </persName>\n            <occupation>Clergy</occupation>\n          </person>\n          ",
+    "context": "Ellen Adams Waterdrum Fermanagh Ireland Widow Thomas Adams Clergy John Adams Joseph Berry William Berry Tary Brunt Richard Cary Ellen Adams Geo: Brunt Rory Magwire Donnogh Magwire Lord Magwire",
+    "forename": "Thomas",
+    "surname": "Adams"
+  }
+},
+{
+  "model": "api_vis.personversion",
+  "pk": 3,
+  "fields": {
+    "entity": 3,
+    "fileversion": 1,
+    "name": "John Adams",
+    "xml": "<person xmlns=\"http://www.tei-c.org/ns/1.0\" xmlns:xi=\"http://www.w3.org/2001/XInclude\" xml:id=\"person_source_file_xml-3\" sex=\"3\">\n            <persName>\n              <roleName type=\"Victim\"/>\n              <forename>John</forename>\n              <surname>Adams</surname>\n            </persName>\n          </person>\n          ",
+    "context": "Ellen Adams Waterdrum Fermanagh Ireland Widow Thomas Adams Clergy John Adams Joseph Berry William Berry Tary Brunt Richard Cary Ellen Adams Geo: Brunt Rory Magwire Donnogh Magwire Lord Magwire",
+    "forename": "John",
+    "surname": "Adams"
+  }
+},
+{
+  "model": "api_vis.personversion",
+  "pk": 4,
+  "fields": {
+    "entity": 4,
+    "fileversion": 1,
+    "name": "Joseph Berry",
+    "xml": "<person xmlns=\"http://www.tei-c.org/ns/1.0\" xmlns:xi=\"http://www.w3.org/2001/XInclude\" xml:id=\"person_source_file_xml-4\" sex=\"3\">\n            <persName>\n              <roleName type=\"Victim\"/>\n              <forename>Joseph</forename>\n              <surname>Berry</surname>\n            </persName>\n          </person>\n          ",
+    "context": "Ellen Adams Waterdrum Fermanagh Ireland Widow Thomas Adams Clergy John Adams Joseph Berry William Berry Tary Brunt Richard Cary Ellen Adams Geo: Brunt Rory Magwire Donnogh Magwire Lord Magwire",
+    "forename": "Joseph",
+    "surname": "Berry"
+  }
+},
+{
+  "model": "api_vis.personversion",
+  "pk": 5,
+  "fields": {
+    "entity": 5,
+    "fileversion": 1,
+    "name": "William Berry",
+    "xml": "<person xmlns=\"http://www.tei-c.org/ns/1.0\" xmlns:xi=\"http://www.w3.org/2001/XInclude\" xml:id=\"person_source_file_xml-5\" sex=\"3\">\n            <persName>\n              <roleName type=\"Victim\"/>\n              <forename>William</forename>\n              <surname>Berry</surname>\n            </persName>\n          </person>\n          ",
+    "context": "Ellen Adams Waterdrum Fermanagh Ireland Widow Thomas Adams Clergy John Adams Joseph Berry William Berry Tary Brunt Richard Cary Ellen Adams Geo: Brunt Rory Magwire Donnogh Magwire Lord Magwire",
+    "forename": "William",
+    "surname": "Berry"
+  }
+},
+{
+  "model": "api_vis.personversion",
+  "pk": 6,
+  "fields": {
+    "entity": 6,
+    "fileversion": 1,
+    "name": "Tary Brunt",
+    "xml": "<person xmlns=\"http://www.tei-c.org/ns/1.0\" xmlns:xi=\"http://www.w3.org/2001/XInclude\" xml:id=\"person_source_file_xml-6\" sex=\"3\">\n            <persName>\n              <roleName type=\"Victim\"/>\n              <forename>Tary</forename>\n              <surname>Brunt</surname>\n            </persName>\n          </person>\n          ",
+    "context": "Ellen Adams Waterdrum Fermanagh Ireland Widow Thomas Adams Clergy John Adams Joseph Berry William Berry Tary Brunt Richard Cary Ellen Adams Geo: Brunt Rory Magwire Donnogh Magwire Lord Magwire",
+    "forename": "Tary",
+    "surname": "Brunt"
+  }
+},
+{
+  "model": "api_vis.personversion",
+  "pk": 7,
+  "fields": {
+    "entity": 7,
+    "fileversion": 1,
+    "name": "Richard Cary",
+    "xml": "<person xmlns=\"http://www.tei-c.org/ns/1.0\" xmlns:xi=\"http://www.w3.org/2001/XInclude\" xml:id=\"person_source_file_xml-7\" sex=\"3\">\n            <persName>\n              <roleName type=\"Victim\"/>\n              <forename>Richard</forename>\n              <surname>Cary</surname>\n            </persName>\n          </person>\n          ",
+    "context": "Ellen Adams Waterdrum Fermanagh Ireland Widow Thomas Adams Clergy John Adams Joseph Berry William Berry Tary Brunt Richard Cary Ellen Adams Geo: Brunt Rory Magwire Donnogh Magwire Lord Magwire",
+    "forename": "Richard",
+    "surname": "Cary"
+  }
+},
+{
+  "model": "api_vis.personversion",
+  "pk": 8,
+  "fields": {
+    "entity": 8,
+    "fileversion": 1,
+    "name": "Ellen Adams",
+    "xml": "<person xmlns=\"http://www.tei-c.org/ns/1.0\" xmlns:xi=\"http://www.w3.org/2001/XInclude\" xml:id=\"person_source_file_xml-8\" sex=\"3\">\n            <persName>\n              <roleName type=\"Victim\"/>\n              <forename>Ellen</forename>\n              <surname>Adams</surname>\n            </persName>\n          </person>\n          ",
+    "context": "Ellen Adams Waterdrum Fermanagh Ireland Widow Thomas Adams Clergy John Adams Joseph Berry William Berry Tary Brunt Richard Cary Ellen Adams Geo: Brunt Rory Magwire Donnogh Magwire Lord Magwire",
+    "forename": "Ellen",
+    "surname": "Adams"
+  }
+},
+{
+  "model": "api_vis.personversion",
+  "pk": 9,
+  "fields": {
+    "entity": 9,
+    "fileversion": 1,
+    "name": "Geo: Brunt",
+    "xml": "<person xmlns=\"http://www.tei-c.org/ns/1.0\" xmlns:xi=\"http://www.w3.org/2001/XInclude\" xml:id=\"person_source_file_xml-9\" sex=\"1\">\n            <persName>\n              <roleName type=\"Mentioned\"/>\n              <forename>Geo:</forename>\n              <surname>Brunt</surname>\n            </persName>\n          </person>\n          ",
+    "context": "Ellen Adams Waterdrum Fermanagh Ireland Widow Thomas Adams Clergy John Adams Joseph Berry William Berry Tary Brunt Richard Cary Ellen Adams Geo: Brunt Rory Magwire Donnogh Magwire Lord Magwire",
+    "forename": "Geo:",
+    "surname": "Brunt"
+  }
+},
+{
+  "model": "api_vis.personversion",
+  "pk": 10,
+  "fields": {
+    "entity": 10,
+    "fileversion": 1,
+    "name": "Rory Magwire",
+    "xml": "<person xmlns=\"http://www.tei-c.org/ns/1.0\" xmlns:xi=\"http://www.w3.org/2001/XInclude\" xml:id=\"person_source_file_xml-10\" sex=\"1\">\n            <persName>\n              <roleName type=\"Rebel\"/>\n              <forename>Rory</forename>\n              <surname>Magwire</surname>\n            </persName>\n          </person>\n          ",
+    "context": "Ellen Adams Waterdrum Fermanagh Ireland Widow Thomas Adams Clergy John Adams Joseph Berry William Berry Tary Brunt Richard Cary Ellen Adams Geo: Brunt Rory Magwire Donnogh Magwire Lord Magwire",
+    "forename": "Rory",
+    "surname": "Magwire"
+  }
+},
+{
+  "model": "api_vis.personversion",
+  "pk": 11,
+  "fields": {
+    "entity": 11,
+    "fileversion": 1,
+    "name": "Donnogh Magwire",
+    "xml": "<person xmlns=\"http://www.tei-c.org/ns/1.0\" xmlns:xi=\"http://www.w3.org/2001/XInclude\" xml:id=\"person_source_file_xml-11\" sex=\"3\">\n            <persName>\n              <roleName type=\"Rebel\"/>\n              <forename>Donnogh</forename>\n              <surname>Magwire</surname>\n            </persName>\n          </person>\n          ",
+    "context": "Ellen Adams Waterdrum Fermanagh Ireland Widow Thomas Adams Clergy John Adams Joseph Berry William Berry Tary Brunt Richard Cary Ellen Adams Geo: Brunt Rory Magwire Donnogh Magwire Lord Magwire",
+    "forename": "Donnogh",
+    "surname": "Magwire"
+  }
+},
+{
+  "model": "api_vis.personversion",
+  "pk": 12,
+  "fields": {
+    "entity": 12,
+    "fileversion": 1,
+    "name": "Lord Magwire",
+    "xml": "<person xmlns=\"http://www.tei-c.org/ns/1.0\" xmlns:xi=\"http://www.w3.org/2001/XInclude\" xml:id=\"person_source_file_xml-12\" sex=\"1\">\n            <persName>\n              <roleName type=\"Mentioned\"/>\n              <forename>Lord</forename>\n              <surname>Magwire</surname>\n            </persName>\n          </person>\n        ",
+    "context": "Ellen Adams Waterdrum Fermanagh Ireland Widow Thomas Adams Clergy John Adams Joseph Berry William Berry Tary Brunt Richard Cary Ellen Adams Geo: Brunt Rory Magwire Donnogh Magwire Lord Magwire",
+    "forename": "Lord",
+    "surname": "Magwire"
+  }
+},
+{
+  "model": "api_vis.personversion",
+  "pk": 13,
+  "fields": {
+    "entity": 13,
+    "fileversion": 1,
+    "name": "Rory Magwire",
+    "xml": "<person xmlns=\"http://www.tei-c.org/ns/1.0\" xmlns:xi=\"http://www.w3.org/2001/XInclude\" xml:id=\"person_source_file_xml-13\"><name>Rory Magwire</name></person> the late ",
+    "context": "613 Ellen Adams (the Relict of Thomas Adams late of Waterdrum in the County of ffermanagh preacher of Gods word) being duely sworne &amp; examined before vs by vertue of a Comission to us and others directed for the enquiry &amp; examination of the Losses &amp; that is not really true sufferings of the Brittish &amp; protestantes within this Kingdome of Ireland; deposeth &amp; saith That about the 24 th day of October 1641 the deponents said husband lost &amp; was forceably dispoiled of his Catle, Corne and Chatles to the value of Two hundred pounds &amp; vpwards This examinant being further examined saith That uppon the foure &amp; twentieth day of October aforesaid, the deponents said husband Thomas Adams &amp; her sonn John Adams together with seuerall other protestants liveing in or neere Waterdrum aforesaid, were suddenly surprised aboute Twelue a clocke at night, by Rory Magwire the late Lord Magwires brother, accompanyed with Donnogh Magwire of Rossbegg in the said County gent, and a number of armed Rebells, who with swords drawen in a Cruell &amp; barbarous manner, murthered the said Thomas &amp; John Adams, and not therewith satisfied but then and there inhumanely murthered Joseph Berry an ancient adged man, past foure scoure yeres of adge takeing noe Compassion of his weaknes nor gray haires, &amp; together with him they massacred his sonn William Berry The deponent further saith that the said Rory Magwires Confederates, or some of them (whose names she doth not remember) finding one Tary Brunt the wife of Geo: Brunt at Waterdrum aforesaid, she being bigg with child and at the very last of her time, did barbarously murther the said Tary, first stripping of her naked and then seriously examining where her mony was, one of the said Rebells draweing his skyne swore a greate oath that vnles she confessed where her cash Lay, he would with his said skyne ripp vpp her belly, which he accordingly performed, for he presently vppon that ran the skyne into her body and the child dropped from her gasping Twice or thrice vppon the ground This examinant further saith That (as she is credibly informed) one Richard Cary &amp; his wife together with many other stripped protestants to the",
+    "forename": "",
+    "surname": ""
+  }
+},
+{
+  "model": "api_vis.personversion",
+  "pk": 14,
+  "fields": {
+    "entity": 14,
+    "fileversion": 1,
+    "name": "Magwires",
+    "xml": "<person xmlns=\"http://www.tei-c.org/ns/1.0\" xmlns:xi=\"http://www.w3.org/2001/XInclude\" xml:id=\"person_source_file_xml-14\">Lord <name xml:id=\"name_source_file_xml-0\">Magwires</name><name/></person> brother, accompanyed with ",
+    "context": "613 Ellen Adams (the Relict of Thomas Adams late of Waterdrum in the County of ffermanagh preacher of Gods word) being duely sworne &amp; examined before vs by vertue of a Comission to us and others directed for the enquiry &amp; examination of the Losses &amp; that is not really true sufferings of the Brittish &amp; protestantes within this Kingdome of Ireland; deposeth &amp; saith That about the 24 th day of October 1641 the deponents said husband lost &amp; was forceably dispoiled of his Catle, Corne and Chatles to the value of Two hundred pounds &amp; vpwards This examinant being further examined saith That uppon the foure &amp; twentieth day of October aforesaid, the deponents said husband Thomas Adams &amp; her sonn John Adams together with seuerall other protestants liveing in or neere Waterdrum aforesaid, were suddenly surprised aboute Twelue a clocke at night, by Rory Magwire the late Lord Magwires brother, accompanyed with Donnogh Magwire of Rossbegg in the said County gent, and a number of armed Rebells, who with swords drawen in a Cruell &amp; barbarous manner, murthered the said Thomas &amp; John Adams, and not therewith satisfied but then and there inhumanely murthered Joseph Berry an ancient adged man, past foure scoure yeres of adge takeing noe Compassion of his weaknes nor gray haires, &amp; together with him they massacred his sonn William Berry The deponent further saith that the said Rory Magwires Confederates, or some of them (whose names she doth not remember) finding one Tary Brunt the wife of Geo: Brunt at Waterdrum aforesaid, she being bigg with child and at the very last of her time, did barbarously murther the said Tary, first stripping of her naked and then seriously examining where her mony was, one of the said Rebells draweing his skyne swore a greate oath that vnles she confessed where her cash Lay, he would with his said skyne ripp vpp her belly, which he accordingly performed, for he presently vppon that ran the skyne into her body and the child dropped from her gasping Twice or thrice vppon the ground This examinant further saith That (as she is credibly informed) one Richard Cary &amp; his wife together with many other stripped protestants to the",
+    "forename": "",
+    "surname": ""
+  }
+},
+{
+  "model": "api_vis.personversion",
+  "pk": 15,
+  "fields": {
+    "entity": 15,
+    "fileversion": 1,
+    "name": "Donnogh Magwire of Rossbegg",
+    "xml": "<person xmlns=\"http://www.tei-c.org/ns/1.0\" xmlns:xi=\"http://www.w3.org/2001/XInclude\" xml:id=\"person_source_file_xml-15\">Donnogh Magwire of Rossbegg</person> in the said County gent, and a number of armed Rebells, who with swords drawen in a Cruell &amp; barbarous manner, murthered the said Thomas &amp; ",
+    "context": "613 Ellen Adams (the Relict of Thomas Adams late of Waterdrum in the County of ffermanagh preacher of Gods word) being duely sworne &amp; examined before vs by vertue of a Comission to us and others directed for the enquiry &amp; examination of the Losses &amp; that is not really true sufferings of the Brittish &amp; protestantes within this Kingdome of Ireland; deposeth &amp; saith That about the 24 th day of October 1641 the deponents said husband lost &amp; was forceably dispoiled of his Catle, Corne and Chatles to the value of Two hundred pounds &amp; vpwards This examinant being further examined saith That uppon the foure &amp; twentieth day of October aforesaid, the deponents said husband Thomas Adams &amp; her sonn John Adams together with seuerall other protestants liveing in or neere Waterdrum aforesaid, were suddenly surprised aboute Twelue a clocke at night, by Rory Magwire the late Lord Magwires brother, accompanyed with Donnogh Magwire of Rossbegg in the said County gent, and a number of armed Rebells, who with swords drawen in a Cruell &amp; barbarous manner, murthered the said Thomas &amp; John Adams, and not therewith satisfied but then and there inhumanely murthered Joseph Berry an ancient adged man, past foure scoure yeres of adge takeing noe Compassion of his weaknes nor gray haires, &amp; together with him they massacred his sonn William Berry The deponent further saith that the said Rory Magwires Confederates, or some of them (whose names she doth not remember) finding one Tary Brunt the wife of Geo: Brunt at Waterdrum aforesaid, she being bigg with child and at the very last of her time, did barbarously murther the said Tary, first stripping of her naked and then seriously examining where her mony was, one of the said Rebells draweing his skyne swore a greate oath that vnles she confessed where her cash Lay, he would with his said skyne ripp vpp her belly, which he accordingly performed, for he presently vppon that ran the skyne into her body and the child dropped from her gasping Twice or thrice vppon the ground This examinant further saith That (as she is credibly informed) one Richard Cary &amp; his wife together with many other stripped protestants to the",
+    "forename": "",
+    "surname": ""
+  }
+},
+{
+  "model": "api_vis.personversion",
+  "pk": 16,
+  "fields": {
+    "entity": 16,
+    "fileversion": 1,
+    "name": "John Adams",
+    "xml": "<person xmlns=\"http://www.tei-c.org/ns/1.0\" xmlns:xi=\"http://www.w3.org/2001/XInclude\" xml:id=\"person_source_file_xml-16\"><name>John Adams</name></person>, and not therewith satisfied but then and there inhumanely murthered ",
+    "context": "613 Ellen Adams (the Relict of Thomas Adams late of Waterdrum in the County of ffermanagh preacher of Gods word) being duely sworne &amp; examined before vs by vertue of a Comission to us and others directed for the enquiry &amp; examination of the Losses &amp; that is not really true sufferings of the Brittish &amp; protestantes within this Kingdome of Ireland; deposeth &amp; saith That about the 24 th day of October 1641 the deponents said husband lost &amp; was forceably dispoiled of his Catle, Corne and Chatles to the value of Two hundred pounds &amp; vpwards This examinant being further examined saith That uppon the foure &amp; twentieth day of October aforesaid, the deponents said husband Thomas Adams &amp; her sonn John Adams together with seuerall other protestants liveing in or neere Waterdrum aforesaid, were suddenly surprised aboute Twelue a clocke at night, by Rory Magwire the late Lord Magwires brother, accompanyed with Donnogh Magwire of Rossbegg in the said County gent, and a number of armed Rebells, who with swords drawen in a Cruell &amp; barbarous manner, murthered the said Thomas &amp; John Adams, and not therewith satisfied but then and there inhumanely murthered Joseph Berry an ancient adged man, past foure scoure yeres of adge takeing noe Compassion of his weaknes nor gray haires, &amp; together with him they massacred his sonn William Berry The deponent further saith that the said Rory Magwires Confederates, or some of them (whose names she doth not remember) finding one Tary Brunt the wife of Geo: Brunt at Waterdrum aforesaid, she being bigg with child and at the very last of her time, did barbarously murther the said Tary, first stripping of her naked and then seriously examining where her mony was, one of the said Rebells draweing his skyne swore a greate oath that vnles she confessed where her cash Lay, he would with his said skyne ripp vpp her belly, which he accordingly performed, for he presently vppon that ran the skyne into her body and the child dropped from her gasping Twice or thrice vppon the ground This examinant further saith That (as she is credibly informed) one Richard Cary &amp; his wife together with many other stripped protestants to the",
+    "forename": "",
+    "surname": ""
+  }
+},
+{
+  "model": "api_vis.personversion",
+  "pk": 17,
+  "fields": {
+    "entity": 17,
+    "fileversion": 1,
+    "name": "Joseph",
+    "xml": "<person xmlns=\"http://www.tei-c.org/ns/1.0\" xmlns:xi=\"http://www.w3.org/2001/XInclude\" xml:id=\"person_source_file_xml-17\"><name>Joseph</name> Berry</person> an ancient adged man, past foure scoure yeres of adge takeing noe Compassion of his weaknes nor gray haires, &amp; together with him they massacred his sonn William Berry The deponent further saith that the said ",
+    "context": "613 Ellen Adams (the Relict of Thomas Adams late of Waterdrum in the County of ffermanagh preacher of Gods word) being duely sworne &amp; examined before vs by vertue of a Comission to us and others directed for the enquiry &amp; examination of the Losses &amp; that is not really true sufferings of the Brittish &amp; protestantes within this Kingdome of Ireland; deposeth &amp; saith That about the 24 th day of October 1641 the deponents said husband lost &amp; was forceably dispoiled of his Catle, Corne and Chatles to the value of Two hundred pounds &amp; vpwards This examinant being further examined saith That uppon the foure &amp; twentieth day of October aforesaid, the deponents said husband Thomas Adams &amp; her sonn John Adams together with seuerall other protestants liveing in or neere Waterdrum aforesaid, were suddenly surprised aboute Twelue a clocke at night, by Rory Magwire the late Lord Magwires brother, accompanyed with Donnogh Magwire of Rossbegg in the said County gent, and a number of armed Rebells, who with swords drawen in a Cruell &amp; barbarous manner, murthered the said Thomas &amp; John Adams, and not therewith satisfied but then and there inhumanely murthered Joseph Berry an ancient adged man, past foure scoure yeres of adge takeing noe Compassion of his weaknes nor gray haires, &amp; together with him they massacred his sonn William Berry The deponent further saith that the said Rory Magwires Confederates, or some of them (whose names she doth not remember) finding one Tary Brunt the wife of Geo: Brunt at Waterdrum aforesaid, she being bigg with child and at the very last of her time, did barbarously murther the said Tary, first stripping of her naked and then seriously examining where her mony was, one of the said Rebells draweing his skyne swore a greate oath that vnles she confessed where her cash Lay, he would with his said skyne ripp vpp her belly, which he accordingly performed, for he presently vppon that ran the skyne into her body and the child dropped from her gasping Twice or thrice vppon the ground This examinant further saith That (as she is credibly informed) one Richard Cary &amp; his wife together with many other stripped protestants to the",
+    "forename": "",
+    "surname": ""
+  }
+},
+{
+  "model": "api_vis.personversion",
+  "pk": 18,
+  "fields": {
+    "entity": 18,
+    "fileversion": 1,
+    "name": "Ellen Adams",
+    "xml": "<person xmlns=\"http://www.tei-c.org/ns/1.0\" xmlns:xi=\"http://www.w3.org/2001/XInclude\" xml:id=\"person_source_file_xml-18\"><name>Ellen Adams</name></person> was then soe pittifully cut &amp; mangled that for a longe time after she was not able to goe or stirr, this examinant her selfe through the wounds &amp; the extreame vsage ",
+    "context": "614 that is not really true sufferings Number of persons were all murthered at or neere Ballyshanon being thither Conveyed by the Rebells and that this deponents daughter Ellen Adams was then soe pittifully cut &amp; mangled that for a longe time after she was not able to goe or stirr, this examinant her selfe through the wounds &amp; the extreame vsage of the Rebells then towardes her, wilbe weake and Impotent while she liues, for besides seuerall wounds she receaved in her hands, sides &amp; skull (searching for mony as they pretended) one of them gave this examinant a deepe wounde with his skynie vnder one of her jaw bones, threatening there to pull downe this examinants tongue. And further deposeth not that is not really true sufferings Ellen [mark] Adams marke Jurat coram nobis 23o Aug 1647 Hen: Clogher Hen: Brereton",
+    "forename": "",
+    "surname": ""
+  }
+},
+{
+  "model": "api_vis.personversion",
+  "pk": 19,
+  "fields": {
+    "entity": 36,
+    "fileversion": 3,
+    "name": "Rory Magwire",
+    "xml": "<person xmlns=\"http://www.tei-c.org/ns/1.0\" xmlns:xi=\"http://www.w3.org/2001/XInclude\" xml:id=\"person_source_file_without_annotators_and_certainties_xml-1\"><name>Rory Magwire</name></person> the late ",
+    "context": "613 Ellen Adams (the Relict of Thomas Adams late of Waterdrum in the County of ffermanagh preacher of Gods word) being duely sworne &amp; examined before vs by vertue of a Comission to us and others directed for the enquiry &amp; examination of the Losses &amp; that is not really true sufferings of the Brittish &amp; protestantes within this Kingdome of Ireland; deposeth &amp; saith That about the 24 th day of October 1641 the deponents said husband lost &amp; was forceably dispoiled of his Catle, Corne and Chatles to the value of Two hundred pounds &amp; vpwards This examinant being further examined saith That uppon the foure &amp; twentieth day of October aforesaid, the deponents said husband Thomas Adams &amp; her sonn John Adams together with seuerall other protestants liveing in or neere Waterdrum aforesaid, were suddenly surprised aboute Twelue a clocke at night, by Rory Magwire the late Lord Magwires brother, accompanyed with Donnogh Magwire of Rossbegg in the said County gent, and a number of armed Rebells, who with swords drawen in a Cruell &amp; barbarous manner, murthered the said Thomas &amp; John Adams, and not therewith satisfied but then and there inhumanely murthered Joseph Berry an ancient adged man, past foure scoure yeres of adge takeing noe Compassion of his weaknes nor gray haires, &amp; together with him they massacred his sonn William Berry The deponent further saith that the said Rory Magwires Confederates, or some of them (whose names she doth not remember) finding one Tary Brunt the wife of Geo: Brunt at Waterdrum aforesaid, she being bigg with child and at the very last of her time, did barbarously murther the said Tary, first stripping of her naked and then seriously examining where her mony was, one of the said Rebells draweing his skyne swore a greate oath that vnles she confessed where her cash Lay, he would with his said skyne ripp vpp her belly, which he accordingly performed, for he presently vppon that ran the skyne into her body and the child dropped from her gasping Twice or thrice vppon the ground This examinant further saith That (as she is credibly informed) one Richard Cary &amp; his wife together with many other stripped protestants to the",
+    "forename": "",
+    "surname": ""
+  }
+},
+{
+  "model": "api_vis.personversion",
+  "pk": 20,
+  "fields": {
+    "entity": 37,
+    "fileversion": 3,
+    "name": "Magwires",
+    "xml": "<person xmlns=\"http://www.tei-c.org/ns/1.0\" xmlns:xi=\"http://www.w3.org/2001/XInclude\" xml:id=\"person_source_file_without_annotators_and_certainties_xml-2\">Lord <name>Magwires</name><name/></person> brother, accompanyed with ",
+    "context": "613 Ellen Adams (the Relict of Thomas Adams late of Waterdrum in the County of ffermanagh preacher of Gods word) being duely sworne &amp; examined before vs by vertue of a Comission to us and others directed for the enquiry &amp; examination of the Losses &amp; that is not really true sufferings of the Brittish &amp; protestantes within this Kingdome of Ireland; deposeth &amp; saith That about the 24 th day of October 1641 the deponents said husband lost &amp; was forceably dispoiled of his Catle, Corne and Chatles to the value of Two hundred pounds &amp; vpwards This examinant being further examined saith That uppon the foure &amp; twentieth day of October aforesaid, the deponents said husband Thomas Adams &amp; her sonn John Adams together with seuerall other protestants liveing in or neere Waterdrum aforesaid, were suddenly surprised aboute Twelue a clocke at night, by Rory Magwire the late Lord Magwires brother, accompanyed with Donnogh Magwire of Rossbegg in the said County gent, and a number of armed Rebells, who with swords drawen in a Cruell &amp; barbarous manner, murthered the said Thomas &amp; John Adams, and not therewith satisfied but then and there inhumanely murthered Joseph Berry an ancient adged man, past foure scoure yeres of adge takeing noe Compassion of his weaknes nor gray haires, &amp; together with him they massacred his sonn William Berry The deponent further saith that the said Rory Magwires Confederates, or some of them (whose names she doth not remember) finding one Tary Brunt the wife of Geo: Brunt at Waterdrum aforesaid, she being bigg with child and at the very last of her time, did barbarously murther the said Tary, first stripping of her naked and then seriously examining where her mony was, one of the said Rebells draweing his skyne swore a greate oath that vnles she confessed where her cash Lay, he would with his said skyne ripp vpp her belly, which he accordingly performed, for he presently vppon that ran the skyne into her body and the child dropped from her gasping Twice or thrice vppon the ground This examinant further saith That (as she is credibly informed) one Richard Cary &amp; his wife together with many other stripped protestants to the",
+    "forename": "",
+    "surname": ""
+  }
+},
+{
+  "model": "api_vis.personversion",
+  "pk": 21,
+  "fields": {
+    "entity": 38,
+    "fileversion": 3,
+    "name": "Donnogh Magwire of Rossbegg",
+    "xml": "<person xmlns=\"http://www.tei-c.org/ns/1.0\" xmlns:xi=\"http://www.w3.org/2001/XInclude\" xml:id=\"person_source_file_without_annotators_and_certainties_xml-3\">Donnogh Magwire of Rossbegg</person> in the said County gent, and a number of armed Rebells, who with swords drawen in a Cruell &amp; barbarous manner, murthered the said Thomas &amp; ",
+    "context": "613 Ellen Adams (the Relict of Thomas Adams late of Waterdrum in the County of ffermanagh preacher of Gods word) being duely sworne &amp; examined before vs by vertue of a Comission to us and others directed for the enquiry &amp; examination of the Losses &amp; that is not really true sufferings of the Brittish &amp; protestantes within this Kingdome of Ireland; deposeth &amp; saith That about the 24 th day of October 1641 the deponents said husband lost &amp; was forceably dispoiled of his Catle, Corne and Chatles to the value of Two hundred pounds &amp; vpwards This examinant being further examined saith That uppon the foure &amp; twentieth day of October aforesaid, the deponents said husband Thomas Adams &amp; her sonn John Adams together with seuerall other protestants liveing in or neere Waterdrum aforesaid, were suddenly surprised aboute Twelue a clocke at night, by Rory Magwire the late Lord Magwires brother, accompanyed with Donnogh Magwire of Rossbegg in the said County gent, and a number of armed Rebells, who with swords drawen in a Cruell &amp; barbarous manner, murthered the said Thomas &amp; John Adams, and not therewith satisfied but then and there inhumanely murthered Joseph Berry an ancient adged man, past foure scoure yeres of adge takeing noe Compassion of his weaknes nor gray haires, &amp; together with him they massacred his sonn William Berry The deponent further saith that the said Rory Magwires Confederates, or some of them (whose names she doth not remember) finding one Tary Brunt the wife of Geo: Brunt at Waterdrum aforesaid, she being bigg with child and at the very last of her time, did barbarously murther the said Tary, first stripping of her naked and then seriously examining where her mony was, one of the said Rebells draweing his skyne swore a greate oath that vnles she confessed where her cash Lay, he would with his said skyne ripp vpp her belly, which he accordingly performed, for he presently vppon that ran the skyne into her body and the child dropped from her gasping Twice or thrice vppon the ground This examinant further saith That (as she is credibly informed) one Richard Cary &amp; his wife together with many other stripped protestants to the",
+    "forename": "",
+    "surname": ""
+  }
+},
+{
+  "model": "api_vis.personversion",
+  "pk": 22,
+  "fields": {
+    "entity": 39,
+    "fileversion": 3,
+    "name": "John Adams",
+    "xml": "<person xmlns=\"http://www.tei-c.org/ns/1.0\" xmlns:xi=\"http://www.w3.org/2001/XInclude\" xml:id=\"person_source_file_without_annotators_and_certainties_xml-4\"><name>John Adams</name></person>, and not therewith satisfied but then and there inhumanely murthered ",
+    "context": "613 Ellen Adams (the Relict of Thomas Adams late of Waterdrum in the County of ffermanagh preacher of Gods word) being duely sworne &amp; examined before vs by vertue of a Comission to us and others directed for the enquiry &amp; examination of the Losses &amp; that is not really true sufferings of the Brittish &amp; protestantes within this Kingdome of Ireland; deposeth &amp; saith That about the 24 th day of October 1641 the deponents said husband lost &amp; was forceably dispoiled of his Catle, Corne and Chatles to the value of Two hundred pounds &amp; vpwards This examinant being further examined saith That uppon the foure &amp; twentieth day of October aforesaid, the deponents said husband Thomas Adams &amp; her sonn John Adams together with seuerall other protestants liveing in or neere Waterdrum aforesaid, were suddenly surprised aboute Twelue a clocke at night, by Rory Magwire the late Lord Magwires brother, accompanyed with Donnogh Magwire of Rossbegg in the said County gent, and a number of armed Rebells, who with swords drawen in a Cruell &amp; barbarous manner, murthered the said Thomas &amp; John Adams, and not therewith satisfied but then and there inhumanely murthered Joseph Berry an ancient adged man, past foure scoure yeres of adge takeing noe Compassion of his weaknes nor gray haires, &amp; together with him they massacred his sonn William Berry The deponent further saith that the said Rory Magwires Confederates, or some of them (whose names she doth not remember) finding one Tary Brunt the wife of Geo: Brunt at Waterdrum aforesaid, she being bigg with child and at the very last of her time, did barbarously murther the said Tary, first stripping of her naked and then seriously examining where her mony was, one of the said Rebells draweing his skyne swore a greate oath that vnles she confessed where her cash Lay, he would with his said skyne ripp vpp her belly, which he accordingly performed, for he presently vppon that ran the skyne into her body and the child dropped from her gasping Twice or thrice vppon the ground This examinant further saith That (as she is credibly informed) one Richard Cary &amp; his wife together with many other stripped protestants to the",
+    "forename": "",
+    "surname": ""
+  }
+},
+{
+  "model": "api_vis.personversion",
+  "pk": 23,
+  "fields": {
+    "entity": 40,
+    "fileversion": 3,
+    "name": "Joseph",
+    "xml": "<person xmlns=\"http://www.tei-c.org/ns/1.0\" xmlns:xi=\"http://www.w3.org/2001/XInclude\" xml:id=\"person_source_file_without_annotators_and_certainties_xml-5\"><name>Joseph</name> Berry</person> an ancient adged man, past foure scoure yeres of adge takeing noe Compassion of his weaknes nor gray haires, &amp; together with him they massacred his sonn William Berry The deponent further saith that the said ",
+    "context": "613 Ellen Adams (the Relict of Thomas Adams late of Waterdrum in the County of ffermanagh preacher of Gods word) being duely sworne &amp; examined before vs by vertue of a Comission to us and others directed for the enquiry &amp; examination of the Losses &amp; that is not really true sufferings of the Brittish &amp; protestantes within this Kingdome of Ireland; deposeth &amp; saith That about the 24 th day of October 1641 the deponents said husband lost &amp; was forceably dispoiled of his Catle, Corne and Chatles to the value of Two hundred pounds &amp; vpwards This examinant being further examined saith That uppon the foure &amp; twentieth day of October aforesaid, the deponents said husband Thomas Adams &amp; her sonn John Adams together with seuerall other protestants liveing in or neere Waterdrum aforesaid, were suddenly surprised aboute Twelue a clocke at night, by Rory Magwire the late Lord Magwires brother, accompanyed with Donnogh Magwire of Rossbegg in the said County gent, and a number of armed Rebells, who with swords drawen in a Cruell &amp; barbarous manner, murthered the said Thomas &amp; John Adams, and not therewith satisfied but then and there inhumanely murthered Joseph Berry an ancient adged man, past foure scoure yeres of adge takeing noe Compassion of his weaknes nor gray haires, &amp; together with him they massacred his sonn William Berry The deponent further saith that the said Rory Magwires Confederates, or some of them (whose names she doth not remember) finding one Tary Brunt the wife of Geo: Brunt at Waterdrum aforesaid, she being bigg with child and at the very last of her time, did barbarously murther the said Tary, first stripping of her naked and then seriously examining where her mony was, one of the said Rebells draweing his skyne swore a greate oath that vnles she confessed where her cash Lay, he would with his said skyne ripp vpp her belly, which he accordingly performed, for he presently vppon that ran the skyne into her body and the child dropped from her gasping Twice or thrice vppon the ground This examinant further saith That (as she is credibly informed) one Richard Cary &amp; his wife together with many other stripped protestants to the",
+    "forename": "",
+    "surname": ""
+  }
+},
+{
+  "model": "api_vis.personversion",
+  "pk": 24,
+  "fields": {
+    "entity": 41,
+    "fileversion": 3,
+    "name": "Ellen Adams",
+    "xml": "<person xmlns=\"http://www.tei-c.org/ns/1.0\" xmlns:xi=\"http://www.w3.org/2001/XInclude\" xml:id=\"person_source_file_without_annotators_and_certainties_xml-6\"><name>Ellen Adams</name></person> was then soe pittifully cut &amp; mangled that for a longe time after she was not able to goe or stirr, this examinant her selfe through the wounds &amp; the extreame vsage of the Rebells then towardes her, wilbe weake and Impotent while she liues, for besides seuerall wounds she receaved in her hands, sides &amp; skull (searching for mony as they pretended) one of them gave this examinant a deepe wounde with his skynie vnder one of her jaw bones, threatening there to pull downe this examinants tongue. And further deposeth not \n",
+    "context": "614 that is not really true sufferings Number of persons were all murthered at or neere Ballyshanon being thither Conveyed by the Rebells and that this deponents daughter Ellen Adams was then soe pittifully cut &amp; mangled that for a longe time after she was not able to goe or stirr, this examinant her selfe through the wounds &amp; the extreame vsage of the Rebells then towardes her, wilbe weake and Impotent while she liues, for besides seuerall wounds she receaved in her hands, sides &amp; skull (searching for mony as they pretended) one of them gave this examinant a deepe wounde with his skynie vnder one of her jaw bones, threatening there to pull downe this examinants tongue. And further deposeth not that is not really true sufferings Ellen [mark] Adams marke Jurat coram nobis 23o Aug 1647 Hen: Clogher Hen: Brereton",
+    "forename": "",
+    "surname": ""
+  }
+},
+{
+  "model": "api_vis.organizationversion",
+  "pk": 1,
+  "fields": {
+    "entity": 21,
+    "fileversion": 1,
+    "name": "Rory Magwires Confederates",
+    "xml": "<org xmlns=\"http://www.tei-c.org/ns/1.0\" xmlns:xi=\"http://www.w3.org/2001/XInclude\" xml:id=\"org_source_file_xml-1\">Rory Magwires Confederates</org>, or some of them (whose names she doth not remember) finding one Tary Brunt the wife of Geo: Brunt at ",
+    "context": "613 Ellen Adams (the Relict of Thomas Adams late of Waterdrum in the County of ffermanagh preacher of Gods word) being duely sworne &amp; examined before vs by vertue of a Comission to us and others directed for the enquiry &amp; examination of the Losses &amp; that is not really true sufferings of the Brittish &amp; protestantes within this Kingdome of Ireland; deposeth &amp; saith That about the 24 th day of October 1641 the deponents said husband lost &amp; was forceably dispoiled of his Catle, Corne and Chatles to the value of Two hundred pounds &amp; vpwards This examinant being further examined saith That uppon the foure &amp; twentieth day of October aforesaid, the deponents said husband Thomas Adams &amp; her sonn John Adams together with seuerall other protestants liveing in or neere Waterdrum aforesaid, were suddenly surprised aboute Twelue a clocke at night, by Rory Magwire the late Lord Magwires brother, accompanyed with Donnogh Magwire of Rossbegg in the said County gent, and a number of armed Rebells, who with swords drawen in a Cruell &amp; barbarous manner, murthered the said Thomas &amp; John Adams, and not therewith satisfied but then and there inhumanely murthered Joseph Berry an ancient adged man, past foure scoure yeres of adge takeing noe Compassion of his weaknes nor gray haires, &amp; together with him they massacred his sonn William Berry The deponent further saith that the said Rory Magwires Confederates, or some of them (whose names she doth not remember) finding one Tary Brunt the wife of Geo: Brunt at Waterdrum aforesaid, she being bigg with child and at the very last of her time, did barbarously murther the said Tary, first stripping of her naked and then seriously examining where her mony was, one of the said Rebells draweing his skyne swore a greate oath that vnles she confessed where her cash Lay, he would with his said skyne ripp vpp her belly, which he accordingly performed, for he presently vppon that ran the skyne into her body and the child dropped from her gasping Twice or thrice vppon the ground This examinant further saith That (as she is credibly informed) one Richard Cary &amp; his wife together with many other stripped protestants to the"
+  }
+},
+{
+  "model": "api_vis.organizationversion",
+  "pk": 2,
+  "fields": {
+    "entity": 44,
+    "fileversion": 3,
+    "name": "Rory Magwires Confederates",
+    "xml": "<org xmlns=\"http://www.tei-c.org/ns/1.0\" xmlns:xi=\"http://www.w3.org/2001/XInclude\" xml:id=\"org_source_file_without_annotators_and_certainties_xml-1\">Rory Magwires Confederates</org>, or some of them (whose names she doth not remember) finding one Tary Brunt the wife of Geo: Brunt at ",
+    "context": "613 Ellen Adams (the Relict of Thomas Adams late of Waterdrum in the County of ffermanagh preacher of Gods word) being duely sworne &amp; examined before vs by vertue of a Comission to us and others directed for the enquiry &amp; examination of the Losses &amp; that is not really true sufferings of the Brittish &amp; protestantes within this Kingdome of Ireland; deposeth &amp; saith That about the 24 th day of October 1641 the deponents said husband lost &amp; was forceably dispoiled of his Catle, Corne and Chatles to the value of Two hundred pounds &amp; vpwards This examinant being further examined saith That uppon the foure &amp; twentieth day of October aforesaid, the deponents said husband Thomas Adams &amp; her sonn John Adams together with seuerall other protestants liveing in or neere Waterdrum aforesaid, were suddenly surprised aboute Twelue a clocke at night, by Rory Magwire the late Lord Magwires brother, accompanyed with Donnogh Magwire of Rossbegg in the said County gent, and a number of armed Rebells, who with swords drawen in a Cruell &amp; barbarous manner, murthered the said Thomas &amp; John Adams, and not therewith satisfied but then and there inhumanely murthered Joseph Berry an ancient adged man, past foure scoure yeres of adge takeing noe Compassion of his weaknes nor gray haires, &amp; together with him they massacred his sonn William Berry The deponent further saith that the said Rory Magwires Confederates, or some of them (whose names she doth not remember) finding one Tary Brunt the wife of Geo: Brunt at Waterdrum aforesaid, she being bigg with child and at the very last of her time, did barbarously murther the said Tary, first stripping of her naked and then seriously examining where her mony was, one of the said Rebells draweing his skyne swore a greate oath that vnles she confessed where her cash Lay, he would with his said skyne ripp vpp her belly, which he accordingly performed, for he presently vppon that ran the skyne into her body and the child dropped from her gasping Twice or thrice vppon the ground This examinant further saith That (as she is credibly informed) one Richard Cary &amp; his wife together with many other stripped protestants to the"
+  }
+},
+{
+  "model": "api_vis.placeversion",
+  "pk": 1,
+  "fields": {
+    "entity": 19,
+    "fileversion": 1,
+    "name": "County of ffermanagh",
+    "xml": "<place xmlns=\"http://www.tei-c.org/ns/1.0\" xmlns:xi=\"http://www.w3.org/2001/XInclude\" xml:id=\"place_source_file_xml-1\">County of ffermanagh</place> preacher of Gods word) being duely sworne &amp; examined before vs by vertue of a Comission to us and others directed for the enquiry &amp; examination of the Losses &amp; ",
+    "context": "613 Ellen Adams (the Relict of Thomas Adams late of Waterdrum in the County of ffermanagh preacher of Gods word) being duely sworne &amp; examined before vs by vertue of a Comission to us and others directed for the enquiry &amp; examination of the Losses &amp; that is not really true sufferings of the Brittish &amp; protestantes within this Kingdome of Ireland; deposeth &amp; saith That about the 24 th day of October 1641 the deponents said husband lost &amp; was forceably dispoiled of his Catle, Corne and Chatles to the value of Two hundred pounds &amp; vpwards This examinant being further examined saith That uppon the foure &amp; twentieth day of October aforesaid, the deponents said husband Thomas Adams &amp; her sonn John Adams together with seuerall other protestants liveing in or neere Waterdrum aforesaid, were suddenly surprised aboute Twelue a clocke at night, by Rory Magwire the late Lord Magwires brother, accompanyed with Donnogh Magwire of Rossbegg in the said County gent, and a number of armed Rebells, who with swords drawen in a Cruell &amp; barbarous manner, murthered the said Thomas &amp; John Adams, and not therewith satisfied but then and there inhumanely murthered Joseph Berry an ancient adged man, past foure scoure yeres of adge takeing noe Compassion of his weaknes nor gray haires, &amp; together with him they massacred his sonn William Berry The deponent further saith that the said Rory Magwires Confederates, or some of them (whose names she doth not remember) finding one Tary Brunt the wife of Geo: Brunt at Waterdrum aforesaid, she being bigg with child and at the very last of her time, did barbarously murther the said Tary, first stripping of her naked and then seriously examining where her mony was, one of the said Rebells draweing his skyne swore a greate oath that vnles she confessed where her cash Lay, he would with his said skyne ripp vpp her belly, which he accordingly performed, for he presently vppon that ran the skyne into her body and the child dropped from her gasping Twice or thrice vppon the ground This examinant further saith That (as she is credibly informed) one Richard Cary &amp; his wife together with many other stripped protestants to the",
+    "location": null,
+    "country": ""
+  }
+},
+{
+  "model": "api_vis.placeversion",
+  "pk": 2,
+  "fields": {
+    "entity": 20,
+    "fileversion": 1,
+    "name": "Waterdrum",
+    "xml": "<place xmlns=\"http://www.tei-c.org/ns/1.0\" xmlns:xi=\"http://www.w3.org/2001/XInclude\" xml:id=\"place_source_file_xml-2\">Waterdrum</place> aforesaid, she being bigg with child and at the very last of her time, did barbarously murther the said Tary, first stripping of her naked and then seriously examining where her mony was, one of the said Rebells draweing his skyne swore a greate oath that vnles she confessed where her cash Lay, he would with his said skyne ripp vpp her belly, which he accordingly performed, for he presently vppon that ran the skyne into her body and the child dropped from her gasping Twice or thrice vppon the ground This examinant further saith That (",
+    "context": "613 Ellen Adams (the Relict of Thomas Adams late of Waterdrum in the County of ffermanagh preacher of Gods word) being duely sworne &amp; examined before vs by vertue of a Comission to us and others directed for the enquiry &amp; examination of the Losses &amp; that is not really true sufferings of the Brittish &amp; protestantes within this Kingdome of Ireland; deposeth &amp; saith That about the 24 th day of October 1641 the deponents said husband lost &amp; was forceably dispoiled of his Catle, Corne and Chatles to the value of Two hundred pounds &amp; vpwards This examinant being further examined saith That uppon the foure &amp; twentieth day of October aforesaid, the deponents said husband Thomas Adams &amp; her sonn John Adams together with seuerall other protestants liveing in or neere Waterdrum aforesaid, were suddenly surprised aboute Twelue a clocke at night, by Rory Magwire the late Lord Magwires brother, accompanyed with Donnogh Magwire of Rossbegg in the said County gent, and a number of armed Rebells, who with swords drawen in a Cruell &amp; barbarous manner, murthered the said Thomas &amp; John Adams, and not therewith satisfied but then and there inhumanely murthered Joseph Berry an ancient adged man, past foure scoure yeres of adge takeing noe Compassion of his weaknes nor gray haires, &amp; together with him they massacred his sonn William Berry The deponent further saith that the said Rory Magwires Confederates, or some of them (whose names she doth not remember) finding one Tary Brunt the wife of Geo: Brunt at Waterdrum aforesaid, she being bigg with child and at the very last of her time, did barbarously murther the said Tary, first stripping of her naked and then seriously examining where her mony was, one of the said Rebells draweing his skyne swore a greate oath that vnles she confessed where her cash Lay, he would with his said skyne ripp vpp her belly, which he accordingly performed, for he presently vppon that ran the skyne into her body and the child dropped from her gasping Twice or thrice vppon the ground This examinant further saith That (as she is credibly informed) one Richard Cary &amp; his wife together with many other stripped protestants to the",
+    "location": null,
+    "country": ""
+  }
+},
+{
+  "model": "api_vis.placeversion",
+  "pk": 3,
+  "fields": {
+    "entity": 42,
+    "fileversion": 3,
+    "name": "County of ffermanagh",
+    "xml": "<place xmlns=\"http://www.tei-c.org/ns/1.0\" xmlns:xi=\"http://www.w3.org/2001/XInclude\" xml:id=\"place_source_file_without_annotators_and_certainties_xml-1\">County of ffermanagh</place> preacher of Gods word) being duely sworne &amp; examined before vs by vertue of a Comission to us and others directed for the enquiry &amp; examination of the Losses &amp; that is not really    true",
+    "context": "613 Ellen Adams (the Relict of Thomas Adams late of Waterdrum in the County of ffermanagh preacher of Gods word) being duely sworne &amp; examined before vs by vertue of a Comission to us and others directed for the enquiry &amp; examination of the Losses &amp; that is not really true sufferings of the Brittish &amp; protestantes within this Kingdome of Ireland; deposeth &amp; saith That about the 24 th day of October 1641 the deponents said husband lost &amp; was forceably dispoiled of his Catle, Corne and Chatles to the value of Two hundred pounds &amp; vpwards This examinant being further examined saith That uppon the foure &amp; twentieth day of October aforesaid, the deponents said husband Thomas Adams &amp; her sonn John Adams together with seuerall other protestants liveing in or neere Waterdrum aforesaid, were suddenly surprised aboute Twelue a clocke at night, by Rory Magwire the late Lord Magwires brother, accompanyed with Donnogh Magwire of Rossbegg in the said County gent, and a number of armed Rebells, who with swords drawen in a Cruell &amp; barbarous manner, murthered the said Thomas &amp; John Adams, and not therewith satisfied but then and there inhumanely murthered Joseph Berry an ancient adged man, past foure scoure yeres of adge takeing noe Compassion of his weaknes nor gray haires, &amp; together with him they massacred his sonn William Berry The deponent further saith that the said Rory Magwires Confederates, or some of them (whose names she doth not remember) finding one Tary Brunt the wife of Geo: Brunt at Waterdrum aforesaid, she being bigg with child and at the very last of her time, did barbarously murther the said Tary, first stripping of her naked and then seriously examining where her mony was, one of the said Rebells draweing his skyne swore a greate oath that vnles she confessed where her cash Lay, he would with his said skyne ripp vpp her belly, which he accordingly performed, for he presently vppon that ran the skyne into her body and the child dropped from her gasping Twice or thrice vppon the ground This examinant further saith That (as she is credibly informed) one Richard Cary &amp; his wife together with many other stripped protestants to the",
+    "location": null,
+    "country": ""
+  }
+},
+{
+  "model": "api_vis.placeversion",
+  "pk": 4,
+  "fields": {
+    "entity": 43,
+    "fileversion": 3,
+    "name": "Waterdrum",
+    "xml": "<place xmlns=\"http://www.tei-c.org/ns/1.0\" xmlns:xi=\"http://www.w3.org/2001/XInclude\" xml:id=\"place_source_file_without_annotators_and_certainties_xml-2\">Waterdrum</place> aforesaid, she being bigg with child and at the very last of her time, did barbarously murther the said Tary, first stripping of her naked and then seriously examining where her mony was, one of the said Rebells draweing his skyne swore a greate oath that vnles she confessed where her cash Lay, he would with his said skyne ripp vpp her belly, which he accordingly performed, for he presently vppon that ran the skyne into her body and the child dropped from her gasping Twice or thrice vppon the ground This examinant further saith That (as she is credibly informed) one Richard Cary &amp; his wife together with many other stripped protestants to the\n\n",
+    "context": "613 Ellen Adams (the Relict of Thomas Adams late of Waterdrum in the County of ffermanagh preacher of Gods word) being duely sworne &amp; examined before vs by vertue of a Comission to us and others directed for the enquiry &amp; examination of the Losses &amp; that is not really true sufferings of the Brittish &amp; protestantes within this Kingdome of Ireland; deposeth &amp; saith That about the 24 th day of October 1641 the deponents said husband lost &amp; was forceably dispoiled of his Catle, Corne and Chatles to the value of Two hundred pounds &amp; vpwards This examinant being further examined saith That uppon the foure &amp; twentieth day of October aforesaid, the deponents said husband Thomas Adams &amp; her sonn John Adams together with seuerall other protestants liveing in or neere Waterdrum aforesaid, were suddenly surprised aboute Twelue a clocke at night, by Rory Magwire the late Lord Magwires brother, accompanyed with Donnogh Magwire of Rossbegg in the said County gent, and a number of armed Rebells, who with swords drawen in a Cruell &amp; barbarous manner, murthered the said Thomas &amp; John Adams, and not therewith satisfied but then and there inhumanely murthered Joseph Berry an ancient adged man, past foure scoure yeres of adge takeing noe Compassion of his weaknes nor gray haires, &amp; together with him they massacred his sonn William Berry The deponent further saith that the said Rory Magwires Confederates, or some of them (whose names she doth not remember) finding one Tary Brunt the wife of Geo: Brunt at Waterdrum aforesaid, she being bigg with child and at the very last of her time, did barbarously murther the said Tary, first stripping of her naked and then seriously examining where her mony was, one of the said Rebells draweing his skyne swore a greate oath that vnles she confessed where her cash Lay, he would with his said skyne ripp vpp her belly, which he accordingly performed, for he presently vppon that ran the skyne into her body and the child dropped from her gasping Twice or thrice vppon the ground This examinant further saith That (as she is credibly informed) one Richard Cary &amp; his wife together with many other stripped protestants to the",
+    "location": null,
+    "country": ""
+  }
+},
+{
+  "model": "api_vis.certaintyversion",
+  "pk": 1,
+  "fields": {
+    "entity": 22,
+    "fileversion": 1,
+    "name": "",
+    "xml": "<certainty xmlns=\"http://www.tei-c.org/ns/1.0\" xmlns:xi=\"http://www.w3.org/2001/XInclude\" category=\"credibility\" locus=\"value\" cert=\"medium\" resp=\"#personercfd\" target=\"#ab000001\" xml:id=\"certainty_source_file_xml-1\"/>\n          ",
+    "context": ""
+  }
+},
+{
+  "model": "api_vis.certaintyversion",
+  "pk": 2,
+  "fields": {
+    "entity": 23,
+    "fileversion": 1,
+    "name": "",
+    "xml": "<certainty xmlns=\"http://www.tei-c.org/ns/1.0\" xmlns:xi=\"http://www.w3.org/2001/XInclude\" category=\"imprecision\" locus=\"value\" cert=\"medium\" resp=\"#personzuay9\" target=\"#country000004\" xml:id=\"certainty_source_file_xml-2\">\n            <desc>should be better</desc>\n          </certainty>\n          ",
+    "context": ""
+  }
+},
+{
+  "model": "api_vis.certaintyversion",
+  "pk": 3,
+  "fields": {
+    "entity": 24,
+    "fileversion": 1,
+    "name": "",
+    "xml": "<certainty xmlns=\"http://www.tei-c.org/ns/1.0\" xmlns:xi=\"http://www.w3.org/2001/XInclude\" category=\"imprecision\" locus=\"value\" cert=\"medium\" resp=\"#personercfd\" target=\"#country000004\" assertedValue=\"Dublin\" xml:id=\"certainty_source_file_xml-3\"/>\n          ",
+    "context": ""
+  }
+},
+{
+  "model": "api_vis.certaintyversion",
+  "pk": 4,
+  "fields": {
+    "entity": 25,
+    "fileversion": 1,
+    "name": "",
+    "xml": "<certainty xmlns=\"http://www.tei-c.org/ns/1.0\" xmlns:xi=\"http://www.w3.org/2001/XInclude\" category=\"imprecision\" locus=\"value\" cert=\"unknown\" resp=\"#personzuay9\" target=\"#date000005\" assertedValue=\"1998\" xml:id=\"certainty_source_file_xml-4\"/>\n          ",
+    "context": ""
+  }
+},
+{
+  "model": "api_vis.certaintyversion",
+  "pk": 5,
+  "fields": {
+    "entity": 26,
+    "fileversion": 1,
+    "name": "",
+    "xml": "<certainty xmlns=\"http://www.tei-c.org/ns/1.0\" xmlns:xi=\"http://www.w3.org/2001/XInclude\" category=\"credibility\" locus=\"name\" cert=\"high\" resp=\"#personzuay9\" target=\"#date000006\" xml:id=\"certainty_source_file_xml-5\"/>\n          ",
+    "context": ""
+  }
+},
+{
+  "model": "api_vis.certaintyversion",
+  "pk": 6,
+  "fields": {
+    "entity": 27,
+    "fileversion": 1,
+    "name": "",
+    "xml": "<certainty xmlns=\"http://www.tei-c.org/ns/1.0\" xmlns:xi=\"http://www.w3.org/2001/XInclude\" category=\"imprecision\" locus=\"value\" cert=\"unknown\" resp=\"#personzuay9\" target=\"#name000007\" assertedValue=\"Maggie\" xml:id=\"certainty_source_file_xml-6\"/>\n          ",
+    "context": ""
+  }
+},
+{
+  "model": "api_vis.certaintyversion",
+  "pk": 7,
+  "fields": {
+    "entity": 28,
+    "fileversion": 1,
+    "name": "",
+    "xml": "<certainty xmlns=\"http://www.tei-c.org/ns/1.0\" xmlns:xi=\"http://www.w3.org/2001/XInclude\" category=\"imprecision\" locus=\"name\" cert=\"high\" resp=\"#personercfd\" target=\"#name000007\" assertedValue=\"surname\" xml:id=\"certainty_source_file_xml-7\"/>\n          ",
+    "context": ""
+  }
+},
+{
+  "model": "api_vis.certaintyversion",
+  "pk": 8,
+  "fields": {
+    "entity": 29,
+    "fileversion": 1,
+    "name": "",
+    "xml": "<certainty xmlns=\"http://www.tei-c.org/ns/1.0\" xmlns:xi=\"http://www.w3.org/2001/XInclude\" category=\"credibility\" locus=\"value\" cert=\"low\" resp=\"#personercfd\" target=\"#ab000008\" xml:id=\"certainty_source_file_xml-8\"/>\n          ",
+    "context": ""
+  }
+},
+{
+  "model": "api_vis.certaintyversion",
+  "pk": 9,
+  "fields": {
+    "entity": 30,
+    "fileversion": 1,
+    "name": "",
+    "xml": "<certainty xmlns=\"http://www.tei-c.org/ns/1.0\" xmlns:xi=\"http://www.w3.org/2001/XInclude\" category=\"imprecision\" locus=\"value\" cert=\"high\" resp=\"#personercfd\" target=\"#ab000009\" assertedValue=\"on\" xml:id=\"certainty_source_file_xml-9\"/>\n          ",
+    "context": ""
+  }
+},
+{
+  "model": "api_vis.certaintyversion",
+  "pk": 10,
+  "fields": {
+    "entity": 31,
+    "fileversion": 1,
+    "name": "",
+    "xml": "<certainty xmlns=\"http://www.tei-c.org/ns/1.0\" xmlns:xi=\"http://www.w3.org/2001/XInclude\" category=\"variation\" locus=\"sameAs\" cert=\"medium\" resp=\"#personercfd\" target=\"#person_source_file_xml-13\" assertedValue=\"dep_835104r162_tei#person835104r162_1\" xml:id=\"certainty_source_file_xml-10\"/>\n          ",
+    "context": ""
+  }
+},
+{
+  "model": "api_vis.certaintyversion",
+  "pk": 11,
+  "fields": {
+    "entity": 32,
+    "fileversion": 1,
+    "name": "",
+    "xml": "<certainty xmlns=\"http://www.tei-c.org/ns/1.0\" xmlns:xi=\"http://www.w3.org/2001/XInclude\" category=\"variation\" locus=\"sameAs\" cert=\"medium\" resp=\"#personercfd\" target=\"#person_source_file_xml-15\" assertedValue=\"dep_835104r162_tei#person835104r162_2\" xml:id=\"certainty_source_file_xml-11\"/>\n          ",
+    "context": ""
+  }
+},
+{
+  "model": "api_vis.certaintyversion",
+  "pk": 12,
+  "fields": {
+    "entity": 33,
+    "fileversion": 1,
+    "name": "",
+    "xml": "<certainty xmlns=\"http://www.tei-c.org/ns/1.0\" xmlns:xi=\"http://www.w3.org/2001/XInclude\" category=\"credibility\" locus=\"value\" cert=\"medium\" resp=\"#personercfd\" target=\"#desc000002\" xml:id=\"certainty_source_file_xml-12\"/>\n          ",
+    "context": ""
+  }
+},
+{
+  "model": "api_vis.certaintyversion",
+  "pk": 13,
+  "fields": {
+    "entity": 34,
+    "fileversion": 1,
+    "name": "",
+    "xml": "<certainty xmlns=\"http://www.tei-c.org/ns/1.0\" xmlns:xi=\"http://www.w3.org/2001/XInclude\" category=\"credibility\" locus=\"value\" cert=\"medium\" resp=\"#personercfd\" target=\"#ab000003 #ab000004\" xml:id=\"certainty_source_file_xml-13\"/>\n          ",
+    "context": ""
+  }
+},
+{
+  "model": "api_vis.certaintyversion",
+  "pk": 14,
+  "fields": {
+    "entity": 35,
+    "fileversion": 1,
+    "name": "",
+    "xml": "<certainty xmlns=\"http://www.tei-c.org/ns/1.0\" xmlns:xi=\"http://www.w3.org/2001/XInclude\" category=\"ignorance\" locus=\"sex\" cert=\"high\" resp=\"#personercfd\" target=\"#person_source_file_xml-13\" assertedValue=\"male\" xml:id=\"certainty_source_file_xml-14\"/>\n        ",
+    "context": ""
+  }
+},
+{
+  "model": "api_vis.commit",
+  "pk": 1,
+  "fields": {
+    "project": 1,
+    "date": "2020-02-11T11:23:58.323Z",
+    "message": "first commit"
+  }
+},
+{
+  "model": "files_management.directory",
+  "pk": 1,
+  "fields": {
+    "project": 1,
+    "name": "tests_annotator",
+    "deleted": false,
+    "deleted_on": null,
+    "parent_dir": null
+  }
+},
+{
+  "model": "files_management.file",
+  "pk": 1,
+  "fields": {
+    "project": 1,
+    "name": "source_file_xml",
+    "deleted": false,
+    "deleted_on": null,
+    "version_number": 2,
+    "parent_dir": 1
+  }
+},
+{
+  "model": "files_management.file",
+  "pk": 2,
+  "fields": {
+    "project": 1,
+    "name": "source_file_without_annotators_and_certainties_xml",
+    "deleted": false,
+    "deleted_on": null,
+    "version_number": 2,
+    "parent_dir": 1
+  }
+},
+{
+  "model": "files_management.filemaxxmlids",
+  "pk": 1,
+  "fields": {
+    "person": 18,
+    "event": 0,
+    "org": 1,
+    "place": 2,
+    "certainty": 16,
+    "object": 1
+  }
+},
+{
+  "model": "files_management.filemaxxmlids",
+  "pk": 2,
+  "fields": {
+    "person": 6,
+    "event": 0,
+    "org": 1,
+    "place": 2,
+    "certainty": 0,
+    "object": 1
+  }
+},
+{
+  "model": "projects.project",
+  "pk": 1,
+  "fields": {
+    "title": "tests_annotator",
+    "description": "",
+    "creation_date": "2020-02-05T08:31:53.226Z",
+    "modification_date": "2020-02-05T08:31:53.226Z",
+    "license": "GPL",
+    "public": false
+  }
+},
+{
+  "model": "projects.projectversion",
+  "pk": 1,
+  "fields": {
+    "project": 1,
+    "file_version_counter": 0,
+    "commit": null,
+    "commit_counter": 0,
+    "date": "2020-02-05T08:31:53.254Z",
+    "file_versions": []
+  }
+},
+{
+  "model": "projects.projectversion",
+  "pk": 2,
+  "fields": {
+    "project": 1,
+    "file_version_counter": 1,
+    "commit": null,
+    "commit_counter": 0,
+    "date": "2020-02-05T08:32:36.730Z",
+    "file_versions": [
+      1
+    ]
+  }
+},
+{
+  "model": "projects.projectversion",
+  "pk": 3,
+  "fields": {
+    "project": 1,
+    "file_version_counter": 2,
+    "commit": null,
+    "commit_counter": 0,
+    "date": "2020-02-05T08:32:36.811Z",
+    "file_versions": [
+      2
+    ]
+  }
+},
+{
+  "model": "projects.projectversion",
+  "pk": 4,
+  "fields": {
+    "project": 1,
+    "file_version_counter": 3,
+    "commit": null,
+    "commit_counter": 0,
+    "date": "2020-02-05T08:32:42.196Z",
+    "file_versions": [
+      2,
+      3
+    ]
+  }
+},
+{
+  "model": "projects.projectversion",
+  "pk": 5,
+  "fields": {
+    "project": 1,
+    "file_version_counter": 4,
+    "commit": null,
+    "commit_counter": 0,
+    "date": "2020-02-05T08:32:42.278Z",
+    "file_versions": [
+      2,
+      4
+    ]
+  }
+},
+{
+  "model": "projects.projectversion",
+  "pk": 6,
+  "fields": {
+    "project": 1,
+    "file_version_counter": 4,
+    "commit": 1,
+    "commit_counter": 1,
+    "date": "2020-02-11T11:23:58.331Z",
+    "file_versions": [
+      2,
+      4
+    ]
+  }
+},
+{
+  "model": "projects.taxonomy",
+  "pk": 1,
+  "fields": {
+    "xml_id_1": "ignorance",
+    "name_1": "ignorance",
+    "desc_1": "",
+    "color_1": "#9270a8",
+    "xml_id_2": "credibility",
+    "name_2": "credibility",
+    "desc_2": "",
+    "color_2": "#cc4c3b",
+    "xml_id_3": "imprecision",
+    "name_3": "imprecision",
+    "desc_3": "",
+    "color_3": "#f1d155",
+    "xml_id_4": "incompleteness",
+    "name_4": "incompleteness",
+    "desc_4": "",
+    "color_4": "#67b2ac",
+    "contents": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<TEI xmlns=\"http://www.tei-c.org/ns/1.0\">\n  <teiHeader>\n    <fileDesc>\n      <titleStmt>\n        <title>Uncertainty Taxonomy for project tests_annotator</title>\n      </titleStmt>\n    </fileDesc>\n    <encodingDesc>\n      <classDecl>\n        <taxonomy>\n          <category>\n            <catDesc>User recognized uncertainty</catDesc>\n            <category xml:id=\"ignorance\">\n              <catDesc>ignorance</catDesc>\n              <desc></desc>\n            </category>\n            <category xml:id=\"credibility\">\n              <catDesc>credibility</catDesc>\n              <desc></desc>\n            </category>\n            <category xml:id=\"imprecision\">\n              <catDesc>imprecision</catDesc>\n              <desc></desc>\n            </category>\n            <category xml:id=\"incompleteness\">\n              <catDesc>incompleteness</catDesc>\n              <desc></desc>\n            </category>\n          </category>\n          <category>\n            <catDesc>Machine generated uncertainty</catDesc>\n            <category xml:id=\"algorithmic\">\n              <catDesc>Algorithmic</catDesc>\n            </category>\n          </category>\n        </taxonomy>\n      </classDecl>\n    </encodingDesc>\n  </teiHeader>\n</TEI>"
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 1,
+  "fields": {
+    "password": "pbkdf2_sha256$150000$OFTrgAFpeWke$d9rYa8Mlc2uIzOP+VkNJ+GO3SiQlM3R4lUgh2YflD7Q=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "anonymous",
+    "first_name": "None",
+    "last_name": "None",
+    "email": "None",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "1970-01-01T00:00:00Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 2,
+  "fields": {
+    "password": "pbkdf2_sha256$150000$6qyzkLmHRq7K$NIY5Ag7c51FH77ffwvJ9ZS9KIpaFaFko2LrfY4FcpzE=",
+    "last_login": "2020-02-11T11:23:28.011Z",
+    "is_superuser": false,
+    "username": "tony_stark",
+    "first_name": "Tony",
+    "last_name": "Stark",
+    "email": "tony_stark@zmyslonymail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2020-02-05T08:22:52.260Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api_vis.entity",
+  "pk": 1,
+  "fields": {
+    "project": 1,
+    "file": 1,
+    "xml_id": "person_source_file_xml-1",
+    "created_by": null,
+    "created_in_version": 1,
+    "deleted_on": null,
+    "deleted_in_version": null,
+    "deleted_by": null,
+    "type": "person"
+  }
+},
+{
+  "model": "api_vis.entity",
+  "pk": 2,
+  "fields": {
+    "project": 1,
+    "file": 1,
+    "xml_id": "person_source_file_xml-2",
+    "created_by": null,
+    "created_in_version": 1,
+    "deleted_on": null,
+    "deleted_in_version": null,
+    "deleted_by": null,
+    "type": "person"
+  }
+},
+{
+  "model": "api_vis.entity",
+  "pk": 3,
+  "fields": {
+    "project": 1,
+    "file": 1,
+    "xml_id": "person_source_file_xml-3",
+    "created_by": null,
+    "created_in_version": 1,
+    "deleted_on": null,
+    "deleted_in_version": null,
+    "deleted_by": null,
+    "type": "person"
+  }
+},
+{
+  "model": "api_vis.entity",
+  "pk": 4,
+  "fields": {
+    "project": 1,
+    "file": 1,
+    "xml_id": "person_source_file_xml-4",
+    "created_by": null,
+    "created_in_version": 1,
+    "deleted_on": null,
+    "deleted_in_version": null,
+    "deleted_by": null,
+    "type": "person"
+  }
+},
+{
+  "model": "api_vis.entity",
+  "pk": 5,
+  "fields": {
+    "project": 1,
+    "file": 1,
+    "xml_id": "person_source_file_xml-5",
+    "created_by": null,
+    "created_in_version": 1,
+    "deleted_on": null,
+    "deleted_in_version": null,
+    "deleted_by": null,
+    "type": "person"
+  }
+},
+{
+  "model": "api_vis.entity",
+  "pk": 6,
+  "fields": {
+    "project": 1,
+    "file": 1,
+    "xml_id": "person_source_file_xml-6",
+    "created_by": null,
+    "created_in_version": 1,
+    "deleted_on": null,
+    "deleted_in_version": null,
+    "deleted_by": null,
+    "type": "person"
+  }
+},
+{
+  "model": "api_vis.entity",
+  "pk": 7,
+  "fields": {
+    "project": 1,
+    "file": 1,
+    "xml_id": "person_source_file_xml-7",
+    "created_by": null,
+    "created_in_version": 1,
+    "deleted_on": null,
+    "deleted_in_version": null,
+    "deleted_by": null,
+    "type": "person"
+  }
+},
+{
+  "model": "api_vis.entity",
+  "pk": 8,
+  "fields": {
+    "project": 1,
+    "file": 1,
+    "xml_id": "person_source_file_xml-8",
+    "created_by": null,
+    "created_in_version": 1,
+    "deleted_on": null,
+    "deleted_in_version": null,
+    "deleted_by": null,
+    "type": "person"
+  }
+},
+{
+  "model": "api_vis.entity",
+  "pk": 9,
+  "fields": {
+    "project": 1,
+    "file": 1,
+    "xml_id": "person_source_file_xml-9",
+    "created_by": null,
+    "created_in_version": 1,
+    "deleted_on": null,
+    "deleted_in_version": null,
+    "deleted_by": null,
+    "type": "person"
+  }
+},
+{
+  "model": "api_vis.entity",
+  "pk": 10,
+  "fields": {
+    "project": 1,
+    "file": 1,
+    "xml_id": "person_source_file_xml-10",
+    "created_by": null,
+    "created_in_version": 1,
+    "deleted_on": null,
+    "deleted_in_version": null,
+    "deleted_by": null,
+    "type": "person"
+  }
+},
+{
+  "model": "api_vis.entity",
+  "pk": 11,
+  "fields": {
+    "project": 1,
+    "file": 1,
+    "xml_id": "person_source_file_xml-11",
+    "created_by": null,
+    "created_in_version": 1,
+    "deleted_on": null,
+    "deleted_in_version": null,
+    "deleted_by": null,
+    "type": "person"
+  }
+},
+{
+  "model": "api_vis.entity",
+  "pk": 12,
+  "fields": {
+    "project": 1,
+    "file": 1,
+    "xml_id": "person_source_file_xml-12",
+    "created_by": null,
+    "created_in_version": 1,
+    "deleted_on": null,
+    "deleted_in_version": null,
+    "deleted_by": null,
+    "type": "person"
+  }
+},
+{
+  "model": "api_vis.entity",
+  "pk": 13,
+  "fields": {
+    "project": 1,
+    "file": 1,
+    "xml_id": "person_source_file_xml-13",
+    "created_by": null,
+    "created_in_version": 1,
+    "deleted_on": null,
+    "deleted_in_version": null,
+    "deleted_by": null,
+    "type": "person"
+  }
+},
+{
+  "model": "api_vis.entity",
+  "pk": 14,
+  "fields": {
+    "project": 1,
+    "file": 1,
+    "xml_id": "person_source_file_xml-14",
+    "created_by": null,
+    "created_in_version": 1,
+    "deleted_on": null,
+    "deleted_in_version": null,
+    "deleted_by": null,
+    "type": "person"
+  }
+},
+{
+  "model": "api_vis.entity",
+  "pk": 15,
+  "fields": {
+    "project": 1,
+    "file": 1,
+    "xml_id": "person_source_file_xml-15",
+    "created_by": null,
+    "created_in_version": 1,
+    "deleted_on": null,
+    "deleted_in_version": null,
+    "deleted_by": null,
+    "type": "person"
+  }
+},
+{
+  "model": "api_vis.entity",
+  "pk": 16,
+  "fields": {
+    "project": 1,
+    "file": 1,
+    "xml_id": "person_source_file_xml-16",
+    "created_by": null,
+    "created_in_version": 1,
+    "deleted_on": null,
+    "deleted_in_version": null,
+    "deleted_by": null,
+    "type": "person"
+  }
+},
+{
+  "model": "api_vis.entity",
+  "pk": 17,
+  "fields": {
+    "project": 1,
+    "file": 1,
+    "xml_id": "person_source_file_xml-17",
+    "created_by": null,
+    "created_in_version": 1,
+    "deleted_on": null,
+    "deleted_in_version": null,
+    "deleted_by": null,
+    "type": "person"
+  }
+},
+{
+  "model": "api_vis.entity",
+  "pk": 18,
+  "fields": {
+    "project": 1,
+    "file": 1,
+    "xml_id": "person_source_file_xml-18",
+    "created_by": null,
+    "created_in_version": 1,
+    "deleted_on": null,
+    "deleted_in_version": null,
+    "deleted_by": null,
+    "type": "person"
+  }
+},
+{
+  "model": "api_vis.entity",
+  "pk": 19,
+  "fields": {
+    "project": 1,
+    "file": 1,
+    "xml_id": "place_source_file_xml-1",
+    "created_by": null,
+    "created_in_version": 1,
+    "deleted_on": null,
+    "deleted_in_version": null,
+    "deleted_by": null,
+    "type": "place"
+  }
+},
+{
+  "model": "api_vis.entity",
+  "pk": 20,
+  "fields": {
+    "project": 1,
+    "file": 1,
+    "xml_id": "place_source_file_xml-2",
+    "created_by": null,
+    "created_in_version": 1,
+    "deleted_on": null,
+    "deleted_in_version": null,
+    "deleted_by": null,
+    "type": "place"
+  }
+},
+{
+  "model": "api_vis.entity",
+  "pk": 21,
+  "fields": {
+    "project": 1,
+    "file": 1,
+    "xml_id": "org_source_file_xml-1",
+    "created_by": null,
+    "created_in_version": 1,
+    "deleted_on": null,
+    "deleted_in_version": null,
+    "deleted_by": null,
+    "type": "org"
+  }
+},
+{
+  "model": "api_vis.entity",
+  "pk": 22,
+  "fields": {
+    "project": 1,
+    "file": 1,
+    "xml_id": "certainty_source_file_xml-1",
+    "created_by": null,
+    "created_in_version": 1,
+    "deleted_on": null,
+    "deleted_in_version": null,
+    "deleted_by": null,
+    "type": "certainty"
+  }
+},
+{
+  "model": "api_vis.entity",
+  "pk": 23,
+  "fields": {
+    "project": 1,
+    "file": 1,
+    "xml_id": "certainty_source_file_xml-2",
+    "created_by": null,
+    "created_in_version": 1,
+    "deleted_on": null,
+    "deleted_in_version": null,
+    "deleted_by": null,
+    "type": "certainty"
+  }
+},
+{
+  "model": "api_vis.entity",
+  "pk": 24,
+  "fields": {
+    "project": 1,
+    "file": 1,
+    "xml_id": "certainty_source_file_xml-3",
+    "created_by": null,
+    "created_in_version": 1,
+    "deleted_on": null,
+    "deleted_in_version": null,
+    "deleted_by": null,
+    "type": "certainty"
+  }
+},
+{
+  "model": "api_vis.entity",
+  "pk": 25,
+  "fields": {
+    "project": 1,
+    "file": 1,
+    "xml_id": "certainty_source_file_xml-4",
+    "created_by": null,
+    "created_in_version": 1,
+    "deleted_on": null,
+    "deleted_in_version": null,
+    "deleted_by": null,
+    "type": "certainty"
+  }
+},
+{
+  "model": "api_vis.entity",
+  "pk": 26,
+  "fields": {
+    "project": 1,
+    "file": 1,
+    "xml_id": "certainty_source_file_xml-5",
+    "created_by": null,
+    "created_in_version": 1,
+    "deleted_on": null,
+    "deleted_in_version": null,
+    "deleted_by": null,
+    "type": "certainty"
+  }
+},
+{
+  "model": "api_vis.entity",
+  "pk": 27,
+  "fields": {
+    "project": 1,
+    "file": 1,
+    "xml_id": "certainty_source_file_xml-6",
+    "created_by": null,
+    "created_in_version": 1,
+    "deleted_on": null,
+    "deleted_in_version": null,
+    "deleted_by": null,
+    "type": "certainty"
+  }
+},
+{
+  "model": "api_vis.entity",
+  "pk": 28,
+  "fields": {
+    "project": 1,
+    "file": 1,
+    "xml_id": "certainty_source_file_xml-7",
+    "created_by": null,
+    "created_in_version": 1,
+    "deleted_on": null,
+    "deleted_in_version": null,
+    "deleted_by": null,
+    "type": "certainty"
+  }
+},
+{
+  "model": "api_vis.entity",
+  "pk": 29,
+  "fields": {
+    "project": 1,
+    "file": 1,
+    "xml_id": "certainty_source_file_xml-8",
+    "created_by": null,
+    "created_in_version": 1,
+    "deleted_on": null,
+    "deleted_in_version": null,
+    "deleted_by": null,
+    "type": "certainty"
+  }
+},
+{
+  "model": "api_vis.entity",
+  "pk": 30,
+  "fields": {
+    "project": 1,
+    "file": 1,
+    "xml_id": "certainty_source_file_xml-9",
+    "created_by": null,
+    "created_in_version": 1,
+    "deleted_on": null,
+    "deleted_in_version": null,
+    "deleted_by": null,
+    "type": "certainty"
+  }
+},
+{
+  "model": "api_vis.entity",
+  "pk": 31,
+  "fields": {
+    "project": 1,
+    "file": 1,
+    "xml_id": "certainty_source_file_xml-10",
+    "created_by": null,
+    "created_in_version": 1,
+    "deleted_on": null,
+    "deleted_in_version": null,
+    "deleted_by": null,
+    "type": "certainty"
+  }
+},
+{
+  "model": "api_vis.entity",
+  "pk": 32,
+  "fields": {
+    "project": 1,
+    "file": 1,
+    "xml_id": "certainty_source_file_xml-11",
+    "created_by": null,
+    "created_in_version": 1,
+    "deleted_on": null,
+    "deleted_in_version": null,
+    "deleted_by": null,
+    "type": "certainty"
+  }
+},
+{
+  "model": "api_vis.entity",
+  "pk": 33,
+  "fields": {
+    "project": 1,
+    "file": 1,
+    "xml_id": "certainty_source_file_xml-12",
+    "created_by": null,
+    "created_in_version": 1,
+    "deleted_on": null,
+    "deleted_in_version": null,
+    "deleted_by": null,
+    "type": "certainty"
+  }
+},
+{
+  "model": "api_vis.entity",
+  "pk": 34,
+  "fields": {
+    "project": 1,
+    "file": 1,
+    "xml_id": "certainty_source_file_xml-13",
+    "created_by": null,
+    "created_in_version": 1,
+    "deleted_on": null,
+    "deleted_in_version": null,
+    "deleted_by": null,
+    "type": "certainty"
+  }
+},
+{
+  "model": "api_vis.entity",
+  "pk": 35,
+  "fields": {
+    "project": 1,
+    "file": 1,
+    "xml_id": "certainty_source_file_xml-14",
+    "created_by": null,
+    "created_in_version": 1,
+    "deleted_on": null,
+    "deleted_in_version": null,
+    "deleted_by": null,
+    "type": "certainty"
+  }
+},
+{
+  "model": "api_vis.entity",
+  "pk": 36,
+  "fields": {
+    "project": 1,
+    "file": 2,
+    "xml_id": "person_source_file_without_annotators_and_certainties_xml-1",
+    "created_by": null,
+    "created_in_version": 1,
+    "deleted_on": null,
+    "deleted_in_version": null,
+    "deleted_by": null,
+    "type": "person"
+  }
+},
+{
+  "model": "api_vis.entity",
+  "pk": 37,
+  "fields": {
+    "project": 1,
+    "file": 2,
+    "xml_id": "person_source_file_without_annotators_and_certainties_xml-2",
+    "created_by": null,
+    "created_in_version": 1,
+    "deleted_on": null,
+    "deleted_in_version": null,
+    "deleted_by": null,
+    "type": "person"
+  }
+},
+{
+  "model": "api_vis.entity",
+  "pk": 38,
+  "fields": {
+    "project": 1,
+    "file": 2,
+    "xml_id": "person_source_file_without_annotators_and_certainties_xml-3",
+    "created_by": null,
+    "created_in_version": 1,
+    "deleted_on": null,
+    "deleted_in_version": null,
+    "deleted_by": null,
+    "type": "person"
+  }
+},
+{
+  "model": "api_vis.entity",
+  "pk": 39,
+  "fields": {
+    "project": 1,
+    "file": 2,
+    "xml_id": "person_source_file_without_annotators_and_certainties_xml-4",
+    "created_by": null,
+    "created_in_version": 1,
+    "deleted_on": null,
+    "deleted_in_version": null,
+    "deleted_by": null,
+    "type": "person"
+  }
+},
+{
+  "model": "api_vis.entity",
+  "pk": 40,
+  "fields": {
+    "project": 1,
+    "file": 2,
+    "xml_id": "person_source_file_without_annotators_and_certainties_xml-5",
+    "created_by": null,
+    "created_in_version": 1,
+    "deleted_on": null,
+    "deleted_in_version": null,
+    "deleted_by": null,
+    "type": "person"
+  }
+},
+{
+  "model": "api_vis.entity",
+  "pk": 41,
+  "fields": {
+    "project": 1,
+    "file": 2,
+    "xml_id": "person_source_file_without_annotators_and_certainties_xml-6",
+    "created_by": null,
+    "created_in_version": 1,
+    "deleted_on": null,
+    "deleted_in_version": null,
+    "deleted_by": null,
+    "type": "person"
+  }
+},
+{
+  "model": "api_vis.entity",
+  "pk": 42,
+  "fields": {
+    "project": 1,
+    "file": 2,
+    "xml_id": "place_source_file_without_annotators_and_certainties_xml-1",
+    "created_by": null,
+    "created_in_version": 1,
+    "deleted_on": null,
+    "deleted_in_version": null,
+    "deleted_by": null,
+    "type": "place"
+  }
+},
+{
+  "model": "api_vis.entity",
+  "pk": 43,
+  "fields": {
+    "project": 1,
+    "file": 2,
+    "xml_id": "place_source_file_without_annotators_and_certainties_xml-2",
+    "created_by": null,
+    "created_in_version": 1,
+    "deleted_on": null,
+    "deleted_in_version": null,
+    "deleted_by": null,
+    "type": "place"
+  }
+},
+{
+  "model": "api_vis.entity",
+  "pk": 44,
+  "fields": {
+    "project": 1,
+    "file": 2,
+    "xml_id": "org_source_file_without_annotators_and_certainties_xml-1",
+    "created_by": null,
+    "created_in_version": 1,
+    "deleted_on": null,
+    "deleted_in_version": null,
+    "deleted_by": null,
+    "type": "org"
+  }
+},
+{
+  "model": "api_vis.clique",
+  "pk": 1,
+  "fields": {
+    "project": 1,
+    "asserted_name": "Rory Magwire",
+    "created_by": 2,
+    "created_on": "2020-02-11T11:23:36.039Z",
+    "created_in_commit": 1,
+    "created_in_annotator": false,
+    "deleted_by": null,
+    "deleted_on": null,
+    "deleted_in_commit": null
+  }
+},
+{
+  "model": "api_vis.unification",
+  "pk": 1,
+  "fields": {
+    "project": 1,
+    "entity": 13,
+    "clique": 1,
+    "created_by": 2,
+    "created_on": "2020-02-11T11:23:36.066Z",
+    "created_in_commit": 1,
+    "created_in_file_version": 2,
+    "created_in_annotator": false,
+    "deleted_by": null,
+    "deleted_on": null,
+    "deleted_in_commit": null,
+    "deleted_in_file_version": null,
+    "ana": "",
+    "certainty": "high",
+    "description": "",
+    "xml_id": "certainty_source_file_xml-15"
+  }
+},
+{
+  "model": "api_vis.unification",
+  "pk": 2,
+  "fields": {
+    "project": 1,
+    "entity": 15,
+    "clique": 1,
+    "created_by": 2,
+    "created_on": "2020-02-11T11:23:36.078Z",
+    "created_in_commit": 1,
+    "created_in_file_version": 2,
+    "created_in_annotator": false,
+    "deleted_by": null,
+    "deleted_on": null,
+    "deleted_in_commit": null,
+    "deleted_in_file_version": null,
+    "ana": "",
+    "certainty": "high",
+    "description": "",
+    "xml_id": "certainty_source_file_xml-16"
+  }
+},
+{
+  "model": "core.profile",
+  "pk": 1,
+  "fields": {
+    "agree_to_terms": true,
+    "is_scientist": false,
+    "orcid": null,
+    "twitter": null,
+    "github": null,
+    "scholar": null,
+    "researchgate": null,
+    "about": null
+  }
+},
+{
+  "model": "core.profile",
+  "pk": 2,
+  "fields": {
+    "agree_to_terms": true,
+    "is_scientist": false,
+    "orcid": null,
+    "twitter": null,
+    "github": null,
+    "scholar": null,
+    "researchgate": null,
+    "about": null
+  }
+},
+{
+  "model": "files_management.fileversion",
+  "pk": 1,
+  "fields": {
+    "upload": "uploaded_files/a48f5e89919d3dd1d97df7b58fc657418c5d7f5e2f910898a642a166730256121f29626bb7f9a_0Hc8Ftp",
+    "hash": "a48f5e89919d3dd1d97df7b58fc657418c5d7f5e2f910898a642a166730256121f29626bb7f9a30438f20f91c6ba156e99e3290c1f1678aba9b587862582aa83",
+    "file": 1,
+    "number": 1,
+    "creation_date": "2020-02-05T08:32:36.724Z",
+    "created_by": 2,
+    "message": null
+  }
+},
+{
+  "model": "files_management.fileversion",
+  "pk": 2,
+  "fields": {
+    "upload": "uploaded_files/6a67ddd204baa02d8c10dff923e9e590ad9b47d5b9868db1bea3b46a6dd3653133efc15286396_I5SDNa7",
+    "hash": "6a67ddd204baa02d8c10dff923e9e590ad9b47d5b9868db1bea3b46a6dd3653133efc15286396f60a49fab9221901fc0f339a2fb036e978e4f2a3940111a1dd9",
+    "file": 1,
+    "number": 2,
+    "creation_date": "2020-02-05T08:32:36.796Z",
+    "created_by": 2,
+    "message": null
+  }
+},
+{
+  "model": "files_management.fileversion",
+  "pk": 3,
+  "fields": {
+    "upload": "uploaded_files/66a6c37ea3ecadb6f1797eb79566a12cde1f33c23fc0efafd753cd43d3e423d4cf8d751404c5e_KguvUNl",
+    "hash": "66a6c37ea3ecadb6f1797eb79566a12cde1f33c23fc0efafd753cd43d3e423d4cf8d751404c5e8cc4fde3fb96f3bbf20fe239020193c048f7c4f4ed09f8219d7",
+    "file": 2,
+    "number": 1,
+    "creation_date": "2020-02-05T08:32:42.190Z",
+    "created_by": 2,
+    "message": null
+  }
+},
+{
+  "model": "files_management.fileversion",
+  "pk": 4,
+  "fields": {
+    "upload": "uploaded_files/8505ca8219e21e0259567de35b96ca029b6464d9069a8ef9c39e411a235d1ccb1861e8b043b99_0PAKdMV",
+    "hash": "8505ca8219e21e0259567de35b96ca029b6464d9069a8ef9c39e411a235d1ccb1861e8b043b993e4d0c5ff0e7159c9ff78934bfea3694797bda09ae9c61b59f4",
+    "file": 2,
+    "number": 2,
+    "creation_date": "2020-02-05T08:32:42.265Z",
+    "created_by": 2,
+    "message": null
+  }
+},
+{
+  "model": "projects.contributor",
+  "pk": 1,
+  "fields": {
+    "project": 1,
+    "user": 2,
+    "profile": 2,
+    "permissions": "AD"
+  }
+},
+{
+  "model": "projects.activity",
+  "pk": 1,
+  "fields": {
+    "project": 1,
+    "date": "2020-02-05T08:31:53.295Z",
+    "related_file": null,
+    "related_file_name": null,
+    "related_dir": null,
+    "related_dir_name": null,
+    "user": 2,
+    "user_name": "Tony Stark",
+    "action_text": "created project"
+  }
+},
+{
+  "model": "projects.activity",
+  "pk": 2,
+  "fields": {
+    "project": 1,
+    "date": "2020-02-05T08:32:36.746Z",
+    "related_file": 1,
+    "related_file_name": "source_file_xml",
+    "related_dir": null,
+    "related_dir_name": null,
+    "user": 2,
+    "user_name": "Tony Stark",
+    "action_text": "created"
+  }
+},
+{
+  "model": "projects.activity",
+  "pk": 3,
+  "fields": {
+    "project": 1,
+    "date": "2020-02-05T08:32:36.828Z",
+    "related_file": 1,
+    "related_file_name": "source_file_xml",
+    "related_dir": null,
+    "related_dir_name": null,
+    "user": 2,
+    "user_name": "Tony Stark",
+    "action_text": "created version number 2 of"
+  }
+},
+{
+  "model": "projects.activity",
+  "pk": 4,
+  "fields": {
+    "project": 1,
+    "date": "2020-02-05T08:32:37.322Z",
+    "related_file": 1,
+    "related_file_name": "source_file_xml",
+    "related_dir": null,
+    "related_dir_name": null,
+    "user": 2,
+    "user_name": "Tony Stark",
+    "action_text": "File migrated: Changed CR/LF character codes to <lb/> tags. Appended TEI ProvideDH schema. Reformatted xml. "
+  }
+},
+{
+  "model": "projects.activity",
+  "pk": 5,
+  "fields": {
+    "project": 1,
+    "date": "2020-02-05T08:32:42.222Z",
+    "related_file": 2,
+    "related_file_name": "source_file_without_annotators_and_certainties_xml",
+    "related_dir": null,
+    "related_dir_name": null,
+    "user": 2,
+    "user_name": "Tony Stark",
+    "action_text": "created"
+  }
+},
+{
+  "model": "projects.activity",
+  "pk": 6,
+  "fields": {
+    "project": 1,
+    "date": "2020-02-05T08:32:42.303Z",
+    "related_file": 2,
+    "related_file_name": "source_file_without_annotators_and_certainties_xml",
+    "related_dir": null,
+    "related_dir_name": null,
+    "user": 2,
+    "user_name": "Tony Stark",
+    "action_text": "created version number 2 of"
+  }
+},
+{
+  "model": "projects.activity",
+  "pk": 7,
+  "fields": {
+    "project": 1,
+    "date": "2020-02-05T08:32:42.496Z",
+    "related_file": 2,
+    "related_file_name": "source_file_without_annotators_and_certainties_xml",
+    "related_dir": null,
+    "related_dir_name": null,
+    "user": 2,
+    "user_name": "Tony Stark",
+    "action_text": "File migrated: Changed CR/LF character codes to <lb/> tags. Appended TEI ProvideDH schema. Reformatted xml. "
+  }
+}
+]

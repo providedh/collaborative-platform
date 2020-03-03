@@ -7,14 +7,14 @@ from lxml.etree import Element
 
 
 class EntitiesExtractor:
-    tags = ('person', 'place', 'org', 'event', 'certainty')
+    tags = ('person', 'place', 'org', 'event', 'certainty', 'object')
     namespaces = {'tei': 'http://www.tei-c.org/ns/1.0', 'xml': 'http://www.w3.org/XML/1998/namespace'}
 
     @classmethod
     def extract_entities_elements(cls, parsed_et):  # type: (et) -> Dict[str, Element]
         entites_elements = {
             tag: parsed_et.xpath(".//tei:{}".format(tag), namespaces=cls.namespaces)
-            for tag in ('person', 'place', 'org', 'event', 'certainty')}
+            for tag in cls.tags}
 
         for elem in entites_elements['person'].copy():
             if elem.getparent().attrib.get("type", "") == 'PROVIDEDH Annotators':
@@ -91,9 +91,11 @@ class EntitiesExtractor:
             ))
 
             context = cls.__get_context(element)
-            location = ' '.join(
-                re.sub("<.*?>", "", str(et.tostring(element.find(".//tei:location", namespaces=cls.namespaces)),
-                                        'utf-8')).split())
+            location_element = element.find(".//tei:location", namespaces=cls.namespaces)
+            if location_element is not None:
+                location = ' '.join(re.sub("<.*?>", "", str(et.tostring(location_element), 'utf-8')).split())
+            else:
+                location = None
 
             return {'tag': 'place',
                     'id': id,
@@ -145,12 +147,25 @@ class EntitiesExtractor:
         return map(process_certainty_tag, elements)
 
     @classmethod
+    def __process_object_tags(cls, elements):  # type: (List[Element]) -> map
+        def process_object_tag(element):
+            id = cls.__extract_tag_id(element)
+            name = element.text.strip() if element.text is not None else ""
+            xml = str(et.tostring(element), 'utf-8')
+            context = cls.__get_context(element)
+            type = element.attrib.get("type")
+            return {'tag': type, 'id': id, 'name': name, 'xml': xml, 'context': context}
+
+        return map(process_object_tag, elements)
+
+    @classmethod
     def __process_tags(cls, tag, elements):  # type: (str, List[Element]) -> map
         functions = (cls.__process_person_tags,
                      cls.__process_place_tags,
                      cls.__process_org_tags,
                      cls.__process_event_tags,
-                     cls.__process_certainty_tags)
+                     cls.__process_certainty_tags,
+                     cls.__process_object_tags)
 
         return dict(zip(cls.tags, functions))[tag](elements)
 

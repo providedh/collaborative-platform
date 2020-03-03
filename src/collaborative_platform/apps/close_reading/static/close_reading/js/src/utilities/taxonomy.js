@@ -42,6 +42,10 @@ export default {
 			"icon": "\\f466", 
 			"color": "#b4d38d"
 		},
+		"objectName": {
+			"icon": "\\f466", 
+			"color": "#b4d38d"
+		},
 		"org": {
 			"icon": "\\f1ad", 
 			"color": "#b4edfc"

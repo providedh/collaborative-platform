@@ -1,13 +1,13 @@
 # Framework
-Django==2.2.4
+Django==2.2.10
 
 # For Postgres database
 psycopg2-binary==2.8.3
 
 # For tests
-pytest==5.0.1
-pytest-cov==2.7.1
-pytest-django==3.5.1
+pytest==5.3.5
+pytest-cov==2.8.1
+pytest-django==3.8.0
 
 # For bots protection
 django-recaptcha==2.0.4
@@ -48,6 +48,7 @@ django-autocomplete-light==3.4.1
 django-cleanup==4.0.0
 
 asgiref==3.2.0
+
 
 # For NLP
 pandas

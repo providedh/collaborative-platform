@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{%  load static %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'vis_dashboard/css/main.css' %}">
+{% endblock %}
+
+{% block submenu %}
+<ul class="submenu__list">
+  <li class="submenu__item">
+    <a href="{% url 'projects:project' project_id %}" class="submenu__link">{{ dashboard.project.title }}</a>
+  </li>
+  <li class="submenu__item">
+    <a href="{% url 'projects:files' project_id %}" class="submenu__link">Files</a>
+  </li>
+  <li class="submenu__item--active">
+    <a href="{% url 'vis_dashboard:list' project_id %}" class="submenu__link">Dashboard</a>
+  </li>
+  <li class="submenu__item">
+    <a href="{% url 'projects:project_settings' project_id %}" class="submenu__link">Settings</a>
+  </li>
+</ul>
+{% endblock %}
+
+{% block content %}
+{% csrf_token %}
+<div class="submenu">
+  <div class="container">
+    <ul class="submenu__list d-flex">
+      <li class="submenu__item">
+        <a href="{% url 'projects:project' project_id %}" class="submenu__link">{{ dashboard.project.title }}</a>
+      </li>
+      <li class="submenu__item submenu__item">
+        <a href="{% url 'projects:files' project_id %}" class="submenu__link">Files</a>
+      </li>
+      <li class="submenu__item submenu__item--active">
+        <a href="{% url 'vis_dashboard:list' project_id %}" class="submenu__link">Dashboard</a>
+      </li>
+      <li class="submenu__item">
+        <a href="{% url 'projects:project_settings' project_id %}" class="submenu__link">Settings</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<nav aria-label="breadcrumb" id="breadcrumb">
+  <ol class="breadcrumb bg-transparent">
+    <a href="{% url 'vis_dashboard:list' project_id %}" class="breadcrumb-item">Dashboards</a>
+    <li class="breadcrumb-item active" aria-current="page">{{ dashboard.name }}</li>
+  </ol>
+</nav>
+
+<div id="react-root"></div>
+
+<script type="text/javascript">
+  window.project = {{ project_id }};
+  window.dashboard = {{ dashboard.id }};
+  window.config = JSON.parse('{{dashboard_config}}'.replace(/&quot;/g, '"'));
+</script>
+
+{% if DEVELOPMENT is True %}
+  <script type="text/javascript" src="http://localhost:3000/main.js"></script>
+{% else %}
+  <script type="text/javascript" src="{% static 'projects/js/main.js' %}"></script>
+  <script type="text/javascript" src="{% static 'projects/js/main.js.map' %}"></script>
+{% endif %}
+{% endblock %}

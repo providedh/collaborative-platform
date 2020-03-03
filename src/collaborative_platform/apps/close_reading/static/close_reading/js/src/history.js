@@ -8,69 +8,14 @@
  * - panel/display_options
  * */
 import AjaxCalls from './utilities/ajax.js';
+import ColorScheme from './utilities/color.js';
 
 var HistoryView = function(args){
 	let self = null;
 	let ajaxCalls = AjaxCalls();
 	const canvasHeight=60;
 
-	let versions = [
-		/*{
-			contributor: "alex@alex.com",
-			credibility: 0,
-			ignorance: 0,
-			imprecision: 0,
-			incompleteness: 0,
-			timestamp: "2019-09-01 15:42:58.714838+00:00",
-			url: "https://example.com/files/1/version/1/",
-			variation: 0,
-			version: 1
-		},
-		{
-			contributor: "alex@alex.com",
-			credibility: 0,
-			ignorance: 1,
-			imprecision: 2,
-			incompleteness: 0,
-			timestamp: "2019-09-02 08:30:00.411063+00:00",
-			url: "https://example.com/files/1/version/2/",
-			variation: 0,
-			version: 2
-		},
-		{
-			contributor: "alex@alex.com",
-			credibility: 0,
-			ignorance: 2,
-			imprecision: 3,
-			incompleteness: 1,
-			timestamp: "2019-09-03 08:30:06.786190+00:00",
-			url: "https://example.com/files/1/version/3/",
-			variation: 0,
-			version: 3
-		},
-		{
-			contributor: "alex@alex.com",
-			credibility: 2,
-			ignorance: 2,
-			imprecision: 3,
-			incompleteness: 4,
-			timestamp: "2019-09-04 08:30:07.047789+00:00",
-			url: "https://example.com/files/1/version/4/",
-			variation: 0,
-			version: 4
-		},
-		{
-			contributor: "alex@alex.com",
-			credibility: 3,
-			ignorance: 4,
-			imprecision: 5,
-			incompleteness: 5,
-			timestamp: "2019-09-04 14:04:55.617754+00:00",
-			url: "https://example.com/files/1/version/5/",
-			variation: 0,
-			version: 5
-		},*/
-	];
+	let versions = [];
 
 	function _init(args){
 		const obj = {
@@ -255,8 +200,9 @@ var HistoryView = function(args){
 	function _handleVersionHoverIn(evt, timestamp){
 	    const popup = document.getElementById('history-popup');
 	    const max = Math.max(timestamp.imprecision,timestamp.incompleteness,
-	        timestamp.ignorance,timestamp.credibility, timestamp.variation),
-	        xScale = d=>6*d/max;
+	        timestamp.ignorance,timestamp.credibility),
+	        xScale = d=>6*d/max,
+	        style = dim => `width:${xScale(timestamp[dim])}em; margin-left: calc(100% - ${xScale(timestamp[dim])}em); background-color: ${ColorScheme.scheme.taxonomy[dim].color};`;
 
 	    popup.innerHTML=`
 	      Version ${timestamp.version}<br>
@@ -270,25 +216,43 @@ var HistoryView = function(args){
 	        Ignorance<br/>
 	      </span>
 	      <span>
-	        <span class="color uncertainty" author="me" title="high"
-	            style="width:${xScale(timestamp.imprecision)}em;" category="imprecision" cert="high"></span></br>
-	        <span class="color uncertainty" author="me" title="high" 
-	            style="width:${xScale(timestamp.incompleteness)}em;" category="incompleteness" cert="high"></span></br>
-	        <span class="color uncertainty" author="me" title="high" 
-	            style="width:${xScale(timestamp.ignorance)}em;" category="ignorance" cert="high"></span></br>
-	        <span class="color uncertainty" author="me" title="high" 
-	            style="width:${xScale(timestamp.credibility)}em;" category="credibility" cert="high"></span></br>
-	      </span>
-	      <span>
-	        ${timestamp.imprecision}</br> 
-	        ${timestamp.incompleteness}</br> 
-	        ${timestamp.ignorance}</br> 
-	        ${timestamp.credibility}</br>
-	      </span>
+		      <span>
+		        <span class="color uncertainty" author="me" title="high"
+		            style="${style('imprecision')}" 
+		            category="imprecision" cert="high"></span></br>
+		        <span class="color uncertainty" author="me" title="high" 
+		            style="${style('incompleteness')}" 
+		            category="incompleteness" cert="high"></span></br>
+		        <span class="color uncertainty" author="me" title="high" 
+		            style="${style('ignorance')}" 
+		            category="ignorance" cert="high"></span></br>
+		        <span class="color uncertainty" author="me" title="high" 
+		            style="${style('credibility')}" 
+		            category="credibility" cert="high"></span></br>
+		      </span>
+		      <span>
+		        ${timestamp.imprecision}</br> 
+		        ${timestamp.incompleteness}</br> 
+		        ${timestamp.ignorance}</br> 
+		        ${timestamp.credibility}</br>
+		      </span>
+		   </span>
 	      </div>
 	    `;
-	    popup.style.left = evt.target.style.left;
+
 	    popup.style.setProperty('display','block');
+
+	    const popupWidth = document.getElementById('history-popup').clientWidth,
+	    	historyWidth = document.getElementById('history').clientWidth;
+	    let left = ((+evt.target.style.left.slice(0,-2)) - popupWidth/2);
+
+	    left = Math.max(0, left);
+
+	    left = Math.min(left, historyWidth - popupWidth);
+
+	    popup.style.left = left + 'px';
+
+
 	}
 
     /*<span class="color variation" author="me" title="high" 

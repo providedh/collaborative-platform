@@ -19,8 +19,7 @@ from .helpers import search_files_by_person_name, search_files_by_content, valid
     filter_entities_by_file_version, filter_entities_by_project_version, filter_unifications_by_project_version, \
     common_filter_cliques, common_filter_entities, create_clique
 from .models import Clique, CliqueToDelete, Commit, Entity, EventVersion, OrganizationVersion, PersonVersion, \
-    PlaceVersion, Unification, UnificationToDelete
-
+    PlaceVersion, Unification, UnificationToDelete, ObjectVersion
 
 NAMESPACES = {
     'default': 'http://www.tei-c.org/ns/1.0',
@@ -31,12 +30,15 @@ NAMESPACES = {
 ANNOTATION_TAGS = ['date', 'event', 'location', 'geolocation', 'name', 'occupation', 'object', 'org', 'person', 'place',
                    'country', 'time']
 
-
 ENTITY_CLASSES = {
     'event': EventVersion,
     'org': OrganizationVersion,
     'person': PersonVersion,
     'place': PlaceVersion,
+    'object': ObjectVersion,
+    'ingredient': ObjectVersion,
+    'utensil': ObjectVersion,
+    'productionMethod': ObjectVersion,
 }
 
 
@@ -66,7 +68,7 @@ def projects(request):  # type: (HttpRequest) -> JsonResponse
 @user_has_access()
 def project_history(request, project_id):  # type: (HttpRequest, int) -> JsonResponse
     if request.method == 'GET':
-        response = { # TODO: not implemented
+        response = {  # TODO: not implemented
             'info': 'Not implemented. Need to agree an appearance of response.'
         }
 
@@ -850,7 +852,7 @@ def project_entities(request, project_id):  # type: (HttpRequest, int) -> HttpRe
 @login_required
 @objects_exists
 @user_has_access()
-def project_unbounded_entities(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
+def project_unbound_entities(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
     if request.method == 'GET':
         try:
             query_string = parse_query_string(request.GET)
@@ -871,7 +873,7 @@ def project_unbounded_entities(request, project_id):  # type: (HttpRequest, int)
 
             if query_string['types']:
                 entities = entities.filter(type__in=query_string['types'])
-                unifications = unifications.filter(entity__type__in = query_string['types'])
+                unifications = unifications.filter(entity__type__in=query_string['types'])
 
             if query_string['users']:
                 unifications = unifications.filter(created_by_id__in=query_string['users'])
@@ -911,12 +913,12 @@ def project_unbounded_entities(request, project_id):  # type: (HttpRequest, int)
             entities = set(entities)
             bounded_entities = set(bounded_entities)
 
-            unbounded_entities = entities - bounded_entities
-            unbounded_entities = Entity.objects.filter(id__in=unbounded_entities)
+            unbound_entities = entities - bounded_entities
+            unbound_entities = Entity.objects.filter(id__in=unbound_entities)
 
             entities_to_return = []
 
-            for entity in unbounded_entities:
+            for entity in unbound_entities:
                 if entity.type == 'certainty':
                     continue
 
@@ -1014,7 +1016,7 @@ def file_entities(request, project_id, file_id):  # type: (HttpRequest, int, int
             return JsonResponse(response, safe=False)
 
 
-def file_unbounded_entities(request, project_id, file_id):  # type: (HttpRequest, int, int) -> HttpResponse
+def file_unbound_entities(request, project_id, file_id):  # type: (HttpRequest, int, int) -> HttpResponse
     if request.method == 'GET':
         try:
             query_string = parse_query_string(request.GET)
@@ -1079,12 +1081,12 @@ def file_unbounded_entities(request, project_id, file_id):  # type: (HttpRequest
             entities = set(entities)
             bounded_entities = set(bounded_entities)
 
-            unbounded_entities = entities - bounded_entities
-            unbounded_entities = Entity.objects.filter(id__in=unbounded_entities)
+            unbound_entities = entities - bounded_entities
+            unbound_entities = Entity.objects.filter(id__in=unbound_entities)
 
             entities_to_return = []
 
-            for entity in unbounded_entities:
+            for entity in unbound_entities:
                 if entity.type == 'certainty':
                     continue
 

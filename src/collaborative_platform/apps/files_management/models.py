@@ -79,6 +79,9 @@ class Directory(FileNode):
         if self.parent_dir_id is None:
             raise ReferenceError("Cannot move parent dir!")
 
+        if self.id == directory_id:
+            raise ReferenceError("Cannot move dir into itself!")
+
         from apps.files_management.helpers import is_child
         if is_child(self.id, directory_id):
             raise ReferenceError("Moving parent dir to child dir is not allowed.")
@@ -147,6 +150,9 @@ class File(FileNode):
         from apps.projects.helpers import create_new_project_version
         from apps.api_vis.helpers import fake_delete_entities, fake_delete_unifications
         from apps.api_vis.models import Entity
+        from apps.files_management.helpers import delete_es_docs
+
+        delete_es_docs(self.id)
 
         super().delete_fake()
 
@@ -157,7 +163,7 @@ class File(FileNode):
 
 class FileVersion(models.Model):
     upload = models.FileField(upload_to=UPLOADED_FILES_PATH)
-    hash = models.CharField(max_length=128)
+    hash = models.CharField(max_length=255)
     file = models.ForeignKey(File, related_name='versions', on_delete=models.CASCADE)
     number = models.PositiveIntegerField()
     creation_date = models.DateTimeField(auto_now_add=True)
@@ -202,3 +208,4 @@ class FileMaxXmlIds(models.Model):
     org = models.IntegerField(default=0)
     place = models.IntegerField(default=0)
     certainty = models.IntegerField(default=0)
+    object = models.IntegerField(default=0)

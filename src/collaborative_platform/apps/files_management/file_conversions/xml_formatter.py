@@ -18,6 +18,8 @@ class XMLFormatter:
 
         if text_to_reformat != text_reformatted:
             return True
+        else:
+            return False
 
     def reformat_xml(self, text):
         parser = etree.XMLParser(remove_blank_text=True)

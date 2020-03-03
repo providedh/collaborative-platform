@@ -9,7 +9,7 @@
  * Listens:
  * - panel/display_options
  * */
-import ColorScheme from './utilities/color.js';
+import CertaintyStyler from './utilities/certaintystyling.js';
 import AjaxCalls from './utilities/ajax.js';
 
 var DocumentView = function(args){
@@ -69,78 +69,6 @@ var DocumentView = function(args){
 	        return({body, parsed_tei});
 	}
 
-	function _styleAnnotatedTags(file, currentUser){
-		function addStyle(id, category, cert, resp, currentUser, annotations){
-		    const currentUserGreyRule = 'div#annotator-root[display-uncertainty=true] ' 
-		        + '#'+id
-		        + '{background-color: lightgrey;}';
-		    const currentUserColorRule = 'div#annotator-root[display-uncertainty=true][color-uncertainty=true] ' 
-		        + '#'+id
-		        + `{background-color: ${ColorScheme.calculate(category, cert)};}`;
-
-		    const greyRule = 'div#annotator-root[display-uncertainty=true] ' 
-		        + '#'+id
-		        + '{background: linear-gradient(180deg, #fff 50%, lightgrey 50%);}';
-		    const colorRule = 'div#annotator-root[display-uncertainty=true][color-uncertainty=true] ' 
-		        + '#'+id
-		        + `{background: linear-gradient(180deg, #fff 50%, ${ColorScheme.calculate(category, cert)} 50%);}`;
-
-		    const annotationsRule = ('div#annotator-root[display-uncertainty=true] ' 
-		        + '#'+id+'::after'
-		        + `{content: "${annotations} \\f591";`
-			    +'border: solid 2px var(--primary); border-radius: 0 0 50% 50%; color: black;'
-			    +'height: 20px; text-align: center; width: 28px; vertical-align: bottom;'
-			    +'display: table-cell; font-weight: bold; line-height: 1em; position: relative;'
-			    +'top: -0.6em; font-family: "Font Awesome 5 Free"; font-size: .7em; left: 2px;'
-			    +'padding-bottom: 5px; background-color: white;}');
-
-		        /* position: relative; top: -.6em; width: 1.5em; height: 1.5em;`
-		        + `border: solid 2px var(--primary); border-radius: 50%; display: inline-block; text-anchor: middle;}`;*/
-
-		    document.getElementById('style').innerText += (annotationsRule);
-		    if(resp == ('#' + currentUser)){
-		    	document.getElementById('style').innerText += (currentUserGreyRule);
-	    		document.getElementById('style').innerText += (currentUserColorRule);
-		    }else{
-			    document.getElementById('style').innerText += (greyRule);
-	    		document.getElementById('style').innerText += (colorRule);
-		    }
-		}
-
-		document.getElementById('style').innerText = '';
-
-		Array.from(file.getElementsByTagName('teiHeader')[0].getElementsByTagName('certainty'), a=>a)
-            .forEach(annotation=>{
-                annotation.attributes['target'].value.trim().split(" ").forEach(target=>{
-                	const node = document.getElementById(XML_EXTRA_CHAR_SPACER+target.slice(1));
-
-                    if(node != null){   
-	                	if(!node.hasOwnProperty('_uncertainty_count')){
-	                		node._uncertainty_count = 1;
-		                	node.addEventListener('mouseenter', 
-		                		()=>self.publish('annotation/mouseenter', {target: node}))
-		                	node.addEventListener('mouseleave', 
-		                		()=>self.publish('annotation/mouseleave', {target: node}))
-	                	}
-	                	else{
-	                		node._uncertainty_count += 1;
-	                	}
-
-	                	if(annotation.attributes.hasOwnProperty('category')){
-	                        addStyle(
-	                            XML_EXTRA_CHAR_SPACER+target.slice(1), 
-	                            annotation.attributes['category'].value, 
-	                            annotation.attributes['cert'].value,
-	                            annotation.attributes['resp'].value,
-	                            currentUser,
-	                            node._uncertainty_count
-	                            );
-	                	}
-                    }
-                })
-            });
-	}
-
 	function _expandedEmptyTag(empty_tag){
 	    const tag_name = empty_tag.match(/[^ ,<,/,>]+/gm)[0],
 	        opening_tag = empty_tag.replace('/>','>'),
@@ -174,6 +102,9 @@ var DocumentView = function(args){
 	        text = document.selection.createRange().text;
 	    }
 
+	    if(selection.isCollased === true)
+	    	return
+
 	    const selection_range = selection.getRangeAt(0);
 
 	    let start_content = _contentsFromRange($('#editor page')[0], 0, selection_range.startContainer,selection_range.startOffset),
@@ -201,12 +132,27 @@ var DocumentView = function(args){
 	        }
 	    }
 
-	    for(let i=0; i<end_content.length; i++){
-	        if(original_text[i]!=end_content[i]){
-	            positions.push(self.TEIheaderLength + i);
-	            break;
-	        }
-	    }
+	    let textFound = '', skipping = false, currentChar = null;
+
+	    for(let i=positions[0] - self.TEIheaderLength; i<original_text.length; i++){
+	    	currentChar = original_text[i];
+
+	    	if(skipping === false){
+	    		if(currentChar == '<'){
+	    			skipping = true;
+	    		}else{
+	    			textFound += currentChar;
+		    		if(textFound == text){
+		    			positions.push(self.TEIheaderLength + i + 1);
+		    			break;
+		    		}
+	    		}
+	    	}else{
+	    		if(currentChar == '>'){
+	    			skipping = false;
+	    		}
+	    	}
+	    } 
 
 	    const abs_positions = {start: Math.min(...positions), end: Math.max(...positions)};
 
@@ -220,13 +166,15 @@ var DocumentView = function(args){
 		document.getElementById('editor').innerHTML='';
 		document.getElementById('editor').appendChild(body);
 
+		console.log(certainties)
+
 		ajaxCalls.getUser().then(response=>{
 			let user = 'none';
 			if(response.success === true)
 				user = response.content.id;
 
-			_styleAnnotatedTags(parsed_tei, user);
-			self.publish('document/render', {XML_EXTRA_CHAR_SPACER, document: parsed_tei});
+			//_styleAnnotatedTags(parsed_tei, user);
+			self.publish('document/render', {XML_EXTRA_CHAR_SPACER, user, document: parsed_tei});
 		})
 	}
 

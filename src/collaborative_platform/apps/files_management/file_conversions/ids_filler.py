@@ -9,7 +9,7 @@ from apps.index_and_search.entities_extractor import EntitiesExtractor
 
 
 class IDsFiller:
-    _tags = ('person', 'place', 'org', 'event', 'certainty')
+    _tags = ('person', 'place', 'org', 'event', 'certainty', 'object')
     _namespaces = {'tei': 'http://www.tei-c.org/ns/1.0', 'xml': 'http://www.w3.org/XML/1998/namespace'}
 
     def __init__(self, contents, filename, file_id=None):
@@ -52,7 +52,7 @@ class IDsFiller:
         if self._file_id is None:
             raise ResourceWarning("No file_id given on initialization, cannot retrieve max_ids from database.")
         dbo = FileMaxXmlIds.objects.get(file_id=self._file_id)  # type: FileMaxXmlIds
-        self._maxid = dict(zip(self._tags, (dbo.person, dbo.place, dbo.org, dbo.event, dbo.certainty)))
+        self._maxid = dict(zip(self._tags, (dbo.person, dbo.place, dbo.org, dbo.event, dbo.certainty, dbo.object)))
 
     def __update_max_ids(self):
         if self._file_id is None:
@@ -63,6 +63,7 @@ class IDsFiller:
         dbo.place = self._maxid["place"]
         dbo.org = self._maxid["org"]
         dbo.certainty = self._maxid["certainty"]
+        dbo.object = self._maxid["object"]
         dbo.save()
 
     def __replace_all(self):
@@ -104,7 +105,8 @@ class IDsFiller:
                       process_match, text)
 
         for old, new in ids_map.items():
-            text = text.replace("='" + old, "='" + new).replace('="' + old, '="' + new)
+            text = text.replace("='" + old, "='" + new).replace('="' + old, '="' + new)\
+                .replace("='#" + old, "='#" + new).replace('="#' + old, '="#' + new)
         return text
 
     def process(self, initial=False):
@@ -114,7 +116,8 @@ class IDsFiller:
             text = et.tostring(self._parsed, pretty_print=True, encoding='utf-8').decode('utf-8')
 
             for old, new in ids_map.items():
-                text = text.replace("='" + old, "='" + new).replace('="' + old, '="' + new)
+                text = text.replace("='" + old, "='" + new).replace('="' + old, '="' + new)\
+                    .replace("='#" + old, "='#" + new).replace('="#' + old, '="#' + new)
 
             text = self.__alter_not_indexed_ids(text)
 

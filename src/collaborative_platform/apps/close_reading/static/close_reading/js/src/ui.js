@@ -18,30 +18,55 @@ let UISetup = function(args){
 			args.channel.addToChannel(obj);
 
     _setupFormControls();
-    _setupLegend();
+    _setupSideLegend();
+    _setupTopLegend();
     _setupEntityStyles();
+    _setupEditorPlacement();
+    _updateEditorSpacing(0);
+
+    obj.publish('ui/loaded');
 
 		self = obj;
 		return obj;
 	}
+
+  function _updateEditorSpacing(delay=380){
+    // Delay allows to adjust the height after an animation has finished
+    setTimeout(()=>{
+      const panelHeight = document.getElementById('toolbar-container').clientHeight + 'px';
+      document.getElementById('editor').style.setProperty('margin-top', panelHeight);      
+    }, delay);
+  }
+
+  function _setupEditorPlacement(){
+    window.addEventListener('resize', ()=>_updateEditorSpacing());
+    document.getElementById('toggle-panel').addEventListener('click', ()=>_updateEditorSpacing());
+    document.getElementById('top-legend-toggle').addEventListener('click', ()=>_updateEditorSpacing());
+    Array.from(document.getElementById('tab-controls').children).forEach(
+      nav=>nav.addEventListener('click', ()=>_updateEditorSpacing()));
+  }
 
   function _setupFormControls(){
     
     let select_form = document
       .getElementById('asserted-value-input-options')
       .getElementsByTagName('select')[0];
+    select_form.innerHTML = '';
     _createEntitiesFormOptions().forEach(opt=>select_form.appendChild(opt));
 
     select_form = document
       .getElementById('tag-name');
+    select_form.innerHTML = '';
     _createEntitiesFormOptions().forEach(opt=>select_form.appendChild(opt));
 
     select_form = document
       .getElementById('tei-tag-name');
+    select_form.innerHTML = '';
     _createEntitiesFormOptions().forEach(opt=>select_form.appendChild(opt));
 
     select_form = document
       .getElementById('category');
+    select_form.innerHTML = '';
     _createCertFormOptions().forEach(opt=>select_form.appendChild(opt));
   }
 
@@ -61,12 +86,13 @@ let UISetup = function(args){
     return options;
   }
 
-  function _setupLegend(){
+  function _setupSideLegend(){
     const legend = document
       .getElementById('legend-sidebar');
 
     const entityEntries = Object
       .entries(ColorScheme.scheme['entities'])
+      .filter(e=>!['ingredient', 'productionMethod', 'utensil'].includes(e[0]))
       .map(e=>_createEntityLegendEntry(e))
       .join('\n');
 
@@ -76,12 +102,46 @@ let UISetup = function(args){
       .join('\n');
     
     const legendContent = $.parseHTML(`
-      <ul class="nav flex-column">
-        <b>Annotation color scheme</b><br/>
-        ${entityEntries}
-        <b>Uncertainty notion color scheme</b><br/>
-        ${certEntries}
-      </ul>
+      <div>
+        <b>Annotation color scheme</b>
+        <ul class="nav flex-column">
+          ${entityEntries}
+        </ul>
+        <b>Uncertainty notion color scheme</b>
+        <ul class="nav flex-column">
+          ${certEntries}
+        </ul>
+      </div>
+      `)[1];
+    legend.appendChild(legendContent)
+  }
+
+  function _setupTopLegend(){
+    const legend = document
+      .getElementById('legend-topbar');
+
+    const entityEntries = Object
+      .entries(ColorScheme.scheme['entities'])
+      .filter(e=>!['ingredient', 'productionMethod', 'utensil'].includes(e[0]))
+      .map(e=>_createEntityLegendEntry(e))
+      .join('\n');
+
+    const certEntries = Object
+      .entries(ColorScheme.scheme['taxonomy'])
+      .map(e=>_createCertLegendEntry(e))
+      .join('\n');
+    
+    const legendContent = $.parseHTML(`
+      <div>
+        <b>Annotation color scheme</b>
+        <ul>
+          ${entityEntries}
+        </ul>
+        <b>Uncertainty notion color scheme</b>
+        <ul>
+          ${certEntries}
+        </ul>
+      </div>
       `)[1];
     legend.appendChild(legendContent)
   }
@@ -105,7 +165,7 @@ let UISetup = function(args){
 
   function _createCertLegendEntry(cert){
     const entry = (
-      `<span class="teiLegendElement">
+      `<span class="certLegendElement">
         <span class="color" 
               title="unknown" 
               style="background-color: ${ColorScheme.calculate(cert[0], 'unknown')}">
@@ -151,11 +211,12 @@ let UISetup = function(args){
       {
           content:"";
           position: absolute;
-          font-size: 0.9em;
-          padding-top:1.45em;
+          font-size: 0.7em;
+          padding-top: 1.3em;
           color:grey;
           font-family: "Font Awesome 5 Free";
           font-weight: 900;
+          min-width: 5em;
       }
     `
 
@@ -174,11 +235,12 @@ let UISetup = function(args){
     const tagRule = `
       ${selectors}
       {
-          min-height: 4px;
-          margin: 2px 0;
           border-bottom: solid 2px white;
           cursor: default;
           background-color: white;
+          display: inline-block;
+          height: 1.7em;
+          position: relative;
       }
     `
 

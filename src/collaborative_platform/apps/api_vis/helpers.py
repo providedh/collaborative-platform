@@ -10,7 +10,7 @@ from django.contrib.auth.models import User
 import apps.index_and_search.models as es
 
 from apps.api_vis.models import Clique, Commit, Entity, EventVersion, OrganizationVersion, PersonVersion, PlaceVersion, \
-    CertaintyVersion, Unification
+    CertaintyVersion, Unification, ObjectVersion
 from apps.exceptions import BadRequest
 from apps.files_management.models import Directory, File, FileMaxXmlIds, FileVersion
 from apps.projects.models import Project, ProjectVersion
@@ -141,7 +141,24 @@ def reformat_attribute(item, namespaces):
 
 
 def create_entities_in_database(entities, project, file_version):  # type: (list, Project, FileVersion) -> None
+    classes = {
+        'person': PersonVersion,
+        'org': OrganizationVersion,
+        'event': EventVersion,
+        'place': PlaceVersion,
+        'certainty': CertaintyVersion,
+        'object': ObjectVersion,
+        'ingredient': ObjectVersion,
+        'utensil': ObjectVersion,
+        'productionMethod': ObjectVersion,
+    }
+
+    db_entities = {key: [] for key in classes}
+
     for entity in copy.deepcopy(entities):
+        if entity['tag'] not in classes:
+            continue
+
         entity["xml_id"] = entity.pop("id")
         try:
             entity_db = Entity.objects.get(
@@ -160,14 +177,6 @@ def create_entities_in_database(entities, project, file_version):  # type: (list
                 type=entity['tag'],
             )
 
-        classes = {
-            'person': PersonVersion,
-            'org': OrganizationVersion,
-            'event': EventVersion,
-            'place': PlaceVersion,
-            'certainty': CertaintyVersion,
-        }
-
         tag = entity.pop("tag")
 
         # make sure we're not passing excessive keyword arguments to constructor, as that would cause an error
@@ -175,7 +184,10 @@ def create_entities_in_database(entities, project, file_version):  # type: (list
         excessive_elements = set(entity.keys()).difference(tag_elements)
         tuple(map(entity.pop, excessive_elements))  # pop all excessive elements from entity
 
-        classes[tag](entity=entity_db, fileversion=file_version, **entity).save()
+        db_entities[tag].append(classes[tag](entity=entity_db, fileversion=file_version, **entity))
+
+    for tag, objects in db_entities.items():
+        classes[tag].objects.bulk_create(objects)
 
 
 def fake_delete_entities(file, user):  # type: (File, User) -> list
@@ -260,7 +272,7 @@ def get_file_id_from_path(project_id, file_path, parent_directory_id=None):  # t
                 parent_dir_id=parent_directory_id,
                 name=file_name,
                 deleted=False
-             )
+            )
 
             return file.id
 
@@ -610,7 +622,8 @@ def common_filter_entities(query_string, project_id):
 
         entity_to_return = {
             'id': entity.id,
-            'name': ENTITY_CLASSES[entity.type].objects.get(entity_id=entity.id).name,
+            'name': ENTITY_CLASSES[entity.type].objects.filter(entity_id=entity.id).order_by(
+                "entity__created_in_version").last().name,
             'type': entity.type,
         }
 
@@ -619,9 +632,12 @@ def common_filter_entities(query_string, project_id):
     return entities_to_return
 
 
-def create_clique(request_data, project_id, user, created_in_annotator=False):
-    # type: (dict, int, User, bool) -> (Clique, list)
+def create_clique(request_data, project_id, user, created_in_annotator=False, ana='', description=''):
+    # type: (dict, int, User, bool, str, str) -> (Clique, list)
     from apps.api_vis.api import ENTITY_CLASSES
+
+    if (ana or description) and not created_in_annotator:
+        raise BadRequest("'ana' and 'description' parameters are allowed only during unification in Annotator.")
 
     if 'name' in request_data and request_data['name'] != '':
         clique_name = request_data['name']
@@ -686,7 +702,9 @@ def create_clique(request_data, project_id, user, created_in_annotator=False):
                 entity=entity,
                 clique=clique,
                 created_by=user,
+                ana=ana,
                 certainty=request_data['certainty'],
+                description=description,
                 created_in_file_version=file_version,
                 created_in_annotator=created_in_annotator,
                 xml_id=f'certainty_{entity.file.name}-{file_max_xml_ids.certainty}',

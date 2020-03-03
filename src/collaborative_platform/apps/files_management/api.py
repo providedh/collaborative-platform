@@ -1,3 +1,6 @@
+import logging
+
+import time
 from json import dumps, loads
 from os import mkdir
 from zipfile import ZipFile
@@ -20,12 +23,16 @@ from .helpers import append_unifications, extract_text_and_entities, index_entit
     delete_directory_with_contents_fake, overwrite_file, clean_name
 
 
+logger = logging.getLogger('upload')
+
+
 @login_required
 @objects_exists
 @user_has_access("RW")
 def upload(request, directory_id):  # type: (HttpRequest, int) -> HttpResponse
     if request.method == "POST" and request.FILES:
         files_list = request.FILES.getlist("file")
+
         if not files_list:
             return HttpResponseBadRequest("File not attached properly")
 
@@ -34,6 +41,7 @@ def upload(request, directory_id):  # type: (HttpRequest, int) -> HttpResponse
 
         upload_statuses = []
 
+        start_extracting = time.time()
         for i, file in enumerate(files_list):
             file_name = clean_name(file.name)
             file.name = file_name
@@ -42,10 +50,18 @@ def upload(request, directory_id):  # type: (HttpRequest, int) -> HttpResponse
             upload_statuses.append(upload_status)
 
             try:
+                start_uploading = time.time()
+                logger.info(f"Uploading file {file_name}: initiation done in "
+                            f"{round(start_uploading - start_extracting, 2)} s")
+
                 dbfile = upload_file(file, project, request.user, parent_dir)
 
                 upload_status = {'uploaded': True}
                 upload_statuses[i].update(upload_status)
+
+                start_recognizing = time.time()
+                logger.info(f"Uploading file {file_name}: upload done in "
+                            f"{round(start_recognizing - start_uploading, 2)} s")
 
                 file_version = FileVersion.objects.get(file_id=dbfile.id, number=dbfile.version_number)
                 path_to_file = file_version.upload.path
@@ -61,8 +77,16 @@ def upload(request, directory_id):  # type: (HttpRequest, int) -> HttpResponse
                     dbfile.delete()
                     continue
 
+                start_migrating = time.time()
+                logger.info(f"Uploading file {file_name}: migration recognizing done in "
+                            f"{round(start_migrating - start_recognizing, 2)} s")
+
                 if migration:
                     tei_handler.migrate()
+
+                start_ids_filling = time.time()
+                logger.info(f"Uploading file {file_name}: migration done in "
+                            f"{round(start_ids_filling - start_migrating, 2)} s")
 
                 try:
                     tei_handler = IDsFiller(tei_handler, file_name, dbfile.pk)
@@ -71,10 +95,18 @@ def upload(request, directory_id):  # type: (HttpRequest, int) -> HttpResponse
                 else:
                     is_id_filled = tei_handler.process(initial=True)
 
+                start_extracting = time.time()
+                logger.info(f"Uploading file {file_name}: filling ID's done in "
+                            f"{round(start_extracting - start_ids_filling, 2)} s")
+
                 if migration or is_id_filled:
                     migrated_string = tei_handler.text.read()
 
                     text, entities = extract_text_and_entities(migrated_string, project.id, dbfile.id)
+
+                    finish_extracting = time.time()
+                    logger.info(f"Uploading file {file_name}: extracted text and entities in "
+                                f"{round(finish_extracting - start_extracting, 2)} s")
 
                     uploaded_file = create_uploaded_file_object_from_string(migrated_string, file_name)
 
@@ -82,20 +114,39 @@ def upload(request, directory_id):  # type: (HttpRequest, int) -> HttpResponse
                                               deleted=False)
                     dbfile = overwrite_file(dbfile, uploaded_file, request.user)
 
+                    saved_ver2 = time.time()
+                    logger.info(f"Uploading file {file_name}: created second fileversion in db "
+                                f"{round(saved_ver2 - finish_extracting, 2)} s")
+
                     message = tei_handler.get_message()
                     migration_status = {'migrated': True, 'message': message}
                     upload_statuses[i].update(migration_status)
+                    dt = time.time()
                     create_entities_in_database(entities, project, file_version)
+                    logger.info(f"creating entities in db took {time.time() - dt} s")
+                    dt = time.time()
                     index_entities(entities)
                     index_file(dbfile, text)
+                    logger.info(f"indexing entities and file in es took {time.time() - dt} s")
 
                     log_activity(dbfile.project, request.user, "File migrated: {} ".format(message), dbfile)
+
+                    finish_indexing = time.time()
+                    logger.info(f"Uploading file {file_name}: indexing entities done in "
+                                f"{round(finish_indexing - saved_ver2, 2)} s")
                 else:
                     file.seek(0)
                     text, entities = extract_text_and_entities(file.read(), project.id, dbfile.id)
                     create_entities_in_database(entities, project, file_version)
                     index_entities(entities)
                     index_file(dbfile, text)
+
+                    finish_indexing = time.time()
+                    logger.info(f"Uploading file {file_name}: extarcted, indexed entities and filled IDs in "
+                                f"{round(finish_indexing - start_extracting, 2)} s")
+
+                logger.info(f"Uploading file {file_name}: file processing done in "
+                            f"{round(finish_indexing - start_extracting, 2)} s")
 
             except Exception as exception:
                 upload_status = {'message': str(exception)}

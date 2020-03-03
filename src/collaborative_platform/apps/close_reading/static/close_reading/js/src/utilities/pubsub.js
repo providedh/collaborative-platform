@@ -9,7 +9,7 @@
 var Channel = function(){
 	let subscribers = {};
 
-	function _suscribe(event, callback){
+	function _subscribe(event, callback){
 		if(subscribers.hasOwnProperty(event))
 			subscribers[event].push(callback);
 		else
@@ -22,7 +22,7 @@ var Channel = function(){
 	}
 
 	function _addToChannel(obj){
-		obj.subscribe = _suscribe;
+		obj.subscribe = _subscribe;
 		obj.publish = _publish;
 	}
 

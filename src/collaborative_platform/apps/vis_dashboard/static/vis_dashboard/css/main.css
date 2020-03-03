@@ -1,0 +1,73 @@
+#create-form {
+ height: 18.5em;
+ margin-bottom: 2em;
+}
+
+#create-form textarea{
+ width: 100%;
+ height: 4em;
+}
+
+.dashboardCard textarea{
+ width: 100%;
+ height: 4em;
+ border: none;
+ padding: 0;
+}
+
+.dashboardCard .card-body{
+	padding: 0;
+}
+
+.dashboardCard .card-body .card-form{
+	padding: 1.25em;
+	padding-bottom: 0;
+}
+
+.dashboardCard .nameInput{
+ border: none;
+ font-size: larger;
+ padding: 0;
+} 
+
+.dashboardCard{
+ height: 18.5em;
+ margin-bottom: 2em;
+}
+
+.dashboardCard p.card-text {
+ height: 5em;
+ overflow-y: scroll;
+}
+
+.editSubmit{
+ visibility: hidden;
+ position: absolute;
+ right: 1rem;
+ bottom: 0;
+}
+
+.dashboardCard:focus-within .editSubmit{
+ visibility: visible;
+}
+
+.dashboardCard hr{
+	margin-bottom: 1px;
+}
+
+.dashboardCard input[type="submit"]{
+ height: 2em;
+ font-size: 1em;
+ padding: 0 2px;
+ border-color: transparent;
+}
+
+#breadcrumb{
+ position: absolute;
+ top: 102.3px;
+ z-index: 1000;
+}
+
+#react-root{
+	height: calc(100vh - 104px)
+}

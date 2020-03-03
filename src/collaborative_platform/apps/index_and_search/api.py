@@ -13,7 +13,8 @@ from apps.views_decorators import objects_exists, user_has_access
 @objects_exists
 @user_has_access()
 def entity_completion(request, project_id, entity_type, query):  # type: (HttpRequest, int, str, str) -> HttpResponse
-    if entity_type not in ('person', 'event', 'place', 'organization'):
+    entity_type = entity_type.lower()
+    if entity_type not in ('person', 'event', 'place', 'organization', 'ingredient', 'utensil', 'productionmethod'):
         return HttpResponseBadRequest(dumps({"message": "Invalid entity type"}))
     r = Search(index=entity_type).suggest('ac', query, completion={'field': 'suggest', 'fuzzy': True}).execute()
     result = {

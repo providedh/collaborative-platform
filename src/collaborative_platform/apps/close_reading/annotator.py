@@ -1,6 +1,5 @@
 import logging
 import re
-from typing import Callable
 
 from lxml import etree
 
@@ -11,11 +10,13 @@ from apps.api_vis.helpers import get_entity_from_int_or_dict, create_clique
 from apps.api_vis.models import Entity, Certainty, Unification
 from apps.exceptions import BadRequest, NotModified
 from apps.files_management.models import FileMaxXmlIds, File
+from apps.files_management.file_conversions.xml_formatter import XMLFormatter
 from apps.projects.helpers import get_ana_link
 from apps.projects.models import ProjectVersion
 
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('annotator')
+
 
 NAMESPACES = {
     'default': 'http://www.tei-c.org/ns/1.0',
@@ -35,6 +36,12 @@ POSITION_PARAMS_V2 = [
     'end_pos',
 ]
 
+LEGAL_TYPES = [
+    'ingredient',
+    'utensil',
+    'productionMethod',
+]
+
 
 class Annotator:
     def __init__(self):
@@ -46,6 +53,7 @@ class Annotator:
         self.__target = False
         self.__target_in_db = False
         self.__positions = False
+        self.__reference = False
         self.__start = 0
         self.__end = 0
         self.__fragment_to_annotate = ""
@@ -57,13 +65,16 @@ class Annotator:
         self.__fragment_annotated = ""
         self.__certainty_to_add = None
         self.__annotator_to_add = None
+        self.__list_element_to_add = None
 
         self.__xml_annotated = ""
 
-    def add_annotation(self, xml, file_id, request, annotator_guid):
+    def add_annotation(self, xml, file_id, request, annotator_id):
         self.__xml = xml
         self.__file = File.objects.get(id=file_id)
-        self.__annotator_xml_id = 'person' + str(annotator_guid)
+        self.__annotator_xml_id = 'person' + str(annotator_id)
+
+        request = self.__handle_types_in_request(request)
 
         self.__validate_request(request)
         self.__get_data_from_xml()
@@ -81,9 +92,24 @@ class Annotator:
 
             return self.__xml_annotated
 
+    @staticmethod
+    def __handle_types_in_request(request):
+        if request['tag'] in LEGAL_TYPES:
+            request['type'] = request['tag']
+            request['tag'] = 'object'
+
+        return request
+
     def __validate_request(self, request):
+
+        # TODO: Delete after fix issue #47
+        if 'attribute-name' in request:
+            correction = {'attribute_name': request['attribute-name']}
+            request.update(correction)
+
         self.__check_target_in_request(request)
         self.__check_positions_in_request(request)
+        self.__check_reference_to_list_in_request(request)
 
         if self.__target and self.__positions:
             raise BadRequest("Provided reference parameters are ambiguous. Provide 'target' parameter for reference to "
@@ -98,6 +124,9 @@ class Annotator:
         elif self.__positions:
             self.__validate_positions(request)
 
+        if self.__reference:
+            self.__validate_list_element_id(request)
+
         self.__fill_in_optional_params(request)
         # self.__validate_closed_list_parameters() # TODO rewrite validation in suitable way
 
@@ -111,6 +140,11 @@ class Annotator:
 
         if position_v1 or position_v2:
             self.__positions = True
+
+    def __check_reference_to_list_in_request(self, request):
+        xml_id_regex = r'object_[\w]+-[\d]+'
+        if 'asserted_value' in request and re.match(xml_id_regex, request['asserted_value']):
+            self.__reference = True
 
     def __validate_target(self, request):
         text_in_lines = self.__xml.splitlines()
@@ -143,6 +177,45 @@ class Annotator:
                 self.__target_in_db = True
 
         self.__request.update({'target': request['target']})
+
+    def __validate_list_element_id(self, request):
+        text_in_lines = self.__xml.splitlines()
+
+        if 'encoding=' in text_in_lines[0]:
+            text_to_parse = '\n'.join(text_in_lines[1:])
+        else:
+            text_to_parse = self.__xml
+
+        tree = etree.fromstring(text_to_parse)
+        list_element_id = request['asserted_value']
+
+        matching_xml_element = tree.xpath(f'//*[@xml:id="{list_element_id}"]', namespaces=NAMESPACES)
+
+        if not matching_xml_element:
+            raise BadRequest(f"There is no element with xml:id: {list_element_id} on any list in file "
+                             f"with id: {self.__file.id}.")
+
+    @staticmethod
+    def __validate_tag(tag):
+        legal_tags = [
+            'date',
+            'event',
+            'location',
+            'geolocation',
+            'occupation',
+            'object',
+            'org',
+            'person',
+            'place',
+            'placeName',
+            'country',
+            'time',
+        ]
+
+        legal_tags += LEGAL_TYPES
+
+        if tag not in legal_tags:
+            raise BadRequest(f"Tag '{tag}' is illegal for TEI schema selected for this project.")
 
     def __validate_positions(self, request):
         position_v1 = all(elements in request.keys() for elements in POSITION_PARAMS_V1)
@@ -179,6 +252,7 @@ class Annotator:
             'description',
             'tag',
             'attribute_name',
+            'type',
         ]
 
         filled_params = {}
@@ -208,6 +282,10 @@ class Annotator:
     def __get_data_from_xml(self):
         if self.__positions:
             self.__start, self.__end = self.__get_fragment_position(self.__xml, self.__request)
+
+            selected_fragment = self.__xml[self.__start: self.__end]
+            self.__validate_selected_fragment(selected_fragment)
+
             self.__start, self.__end = self.__get_fragment_position_without_adhering_tags(self.__xml, self.__start,
                                                                                           self.__end)
             self.__start, self.__end = self.__get_fragment_position_with_adhering_tags(self.__xml, self.__start,
@@ -216,9 +294,9 @@ class Annotator:
             self.__tags = self.__get_adhering_tags_from_annotated_fragment(self.__fragment_to_annotate)
 
         self.__annotators_xml_ids = self.__get_annotators_xml_ids_from_file(self.__xml)
-        certainties = self.__get_certainties_from_file(self.__xml)
-        self.__tag_xml_id_number = self.__get_xml_id_number_for_tag(certainties, self.__request["tag"])
-        self.__certainty_xml_id_number = self.__get_xml_id_number_for_tag(certainties, 'certainty')
+
+        self.__tag_xml_id_number = self.__get_xml_id_number_for_tag(self.__request["tag"])
+        self.__certainty_xml_id_number = self.__get_xml_id_number_for_tag('certainty')
 
     def __get_fragment_position(self, xml, json):
         if 'start_pos' in json and json['start_pos'] is not None and 'end_pos' in json and json['end_pos'] is not None:
@@ -230,6 +308,20 @@ class Annotator:
                                                                        json["end_row"], json["end_col"])
 
         return start, end
+
+    def __get_fragment_rows_and_cols(self, xml, json):
+        if 'start_row' in json and json['start_row'] is not None and \
+                'start_col' in json and json['start_col'] is not None and \
+                'end_row' in json and json['end_row'] is not None and \
+                'end_col' in json and json['end_col'] is not None:
+            return json['start_row'], json['start_col'], json['end_row'], json['end_col']
+
+        else:
+            start_row, start_col, end_row, end_col = self.__convert_start_and_end_to_rows_and_cols(xml,
+                                                                                                   json['start_pos'],
+                                                                                                   json['end_pos'])
+
+            return start_row, start_col, end_row, end_col
 
     @staticmethod
     def __convert_rows_and_cols_to_start_and_end(text, start_row, start_col, end_row, end_col):
@@ -253,6 +345,39 @@ class Annotator:
         chars_to_end += end_col
 
         return chars_to_start, chars_to_end
+
+    @staticmethod
+    def __convert_start_and_end_to_rows_and_cols(text, start_pos, end_pos):
+        start_row = 0
+        start_col = 0
+        end_row = 0
+        end_col = 0
+
+        counted_chars = 0
+
+        text_in_lines = text.splitlines(True)
+
+        for i in range(0, len(text_in_lines)):
+            line_length = len(text_in_lines[i])
+
+            if counted_chars + line_length >= start_pos:
+                start_row = i
+                start_col = start_pos - counted_chars
+
+                break
+
+            counted_chars += len(text_in_lines[i])
+
+        for i in range(start_row, len(text_in_lines)):
+            if counted_chars + len(text_in_lines[i]) >= end_pos:
+                end_row = i
+                end_col = end_pos - counted_chars
+
+                break
+
+            counted_chars += len(text_in_lines[i])
+
+        return start_row + 1, start_col + 1, end_row + 1, end_col
 
     @staticmethod
     def __get_fragment_position_without_adhering_tags(string, start, end):
@@ -300,6 +425,23 @@ class Annotator:
                 found_tag = True
 
         return start, end
+
+    def __validate_selected_fragment(self, text):
+        tag_part_on_beginning_regex = r'^[^<]*>'
+        tag_part_on_end_regex = r'<[^>]*$'
+
+        tag_part_on_beginning = re.search(tag_part_on_beginning_regex, text)
+        tag_part_on_end = re.search(tag_part_on_end_regex, text)
+
+        start_row, start_col, end_row, end_col = self.__convert_start_and_end_to_rows_and_cols(self.__xml, self.__start,
+                                                                                               self.__end)
+
+        logger.info(f"Selected fragment: '{text}' (start_row: {start_row}, start_col: {start_col}, end_row: {end_row}, "
+                    f"end_col: {end_col})")
+
+        if tag_part_on_beginning or tag_part_on_end:
+            raise BadRequest(f"Wrong positions in request. Position can't point to inside of the tag. "
+                             f"Positions from current request pointing to fragment: '{text}'.")
 
     @staticmethod
     def __get_adhering_tags_from_annotated_fragment(fragment):
@@ -380,36 +522,59 @@ class Annotator:
 
         return xml_ids
 
-    def __get_xml_id_number_for_tag(self, certainties, tag='ab'):
-        if tag in ['event', 'org', 'person', 'place', 'certainty']:
-            file_mx_xml_id = FileMaxXmlIds.objects.get(file=self.__file)
-
-            file_mx_xml_id.__dict__[tag] += 1
-            file_mx_xml_id.save()
-
-            return file_mx_xml_id.__dict__[tag]
-
+    def __get_xml_id_number_for_tag(self, tag):
         # TODO: Max IDs for all tags in file should be keep in database
+
+        tag = 'ab' if tag == '' else tag
+
+        if tag in ['event', 'org', 'person', 'place', 'certainty', 'object']:
+            xml_id = self.__get_max_xml_id_from_database(tag)
+
         else:
-            biggest_number = 0
+            xml_id = self.__get_max_xml_id_from_file(tag)
 
-            for certainty in certainties:
-                id_value = certainty.attrib['target']
+        return xml_id
 
-                if tag not in id_value:
-                    continue
+    def __get_max_xml_id_from_database(self, tag):
+        file_mx_xml_id = FileMaxXmlIds.objects.get(file=self.__file)
 
-                id_value = id_value.strip()
+        file_mx_xml_id.__dict__[tag] += 1
+        file_mx_xml_id.save()
 
-                split_values = id_value.split(' ')
-                for value in split_values:
-                    number = value.split('-')[-1]
-                    number = int(number)
+        return file_mx_xml_id.__dict__[tag]
 
-                    if number > biggest_number:
-                        biggest_number = number
+    def __get_max_xml_id_from_file(self, tag):
+        biggest_number = 0
 
-            return biggest_number + 1
+        elements_with_same_tag_and_xml_id = self.__get_elements_with_same_tag_and_xml_id(tag)
+
+        prefix = '{%s}' % NAMESPACES['xml']
+
+        for element in elements_with_same_tag_and_xml_id:
+            id = element.attrib[f'{prefix}id']
+
+            if '-' in id:
+                id_number = id.split('-')[-1]
+                id_number = int(id_number)
+
+                if id_number > biggest_number:
+                    biggest_number = id_number
+
+        return biggest_number + 1
+
+    def __get_elements_with_same_tag_and_xml_id(self, tag):
+        text_in_lines = self.__xml.splitlines()
+
+        if 'encoding=' in text_in_lines[0]:
+            text_to_parse = '\n'.join(text_in_lines[1:])
+        else:
+            text_to_parse = self.__xml
+
+        tree = etree.fromstring(text_to_parse)
+
+        elements_with_same_tag = tree.xpath(f'//default:{tag}[@xml:id]', namespaces=NAMESPACES)
+
+        return elements_with_same_tag
 
     def __prepare_xml_parts(self):
         # 1.Add tag to text
@@ -417,7 +582,8 @@ class Annotator:
                 and self.__request['tag'] != '' \
                 and self.__request['attribute_name'] == '' \
                 and self.__positions:
-            self.__fragment_annotated, _ = self.__add_tag(self.__fragment_to_annotate, self.__request["tag"])
+            self.__validate_tag(self.__request['tag'])
+            self.__fragment_annotated, _ = self.__add_tag(self.__fragment_to_annotate, self.__request['tag'])
 
         # 2.Add certainty without tag to text
         elif self.__request['locus'] == 'value' \
@@ -426,6 +592,7 @@ class Annotator:
                 and (self.__target or self.__positions):
             if self.__target:
                 annotation_ids = self.__get_annotation_ids_from_target(self.__request['target'])
+                annotation_ids = self.add_hash_sign_to_ids(annotation_ids)
             else:
                 self.__fragment_annotated, annotation_ids = self.__add_tag(self.__fragment_to_annotate, 'ab',
                                                                            uncertainty=True)
@@ -439,8 +606,11 @@ class Annotator:
                 and self.__request['tag'] != '' \
                 and self.__request['attribute_name'] == '' \
                 and (self.__target or self.__positions):
+            self.__validate_tag(self.__request['tag'])
+
             if self.__target:
                 annotation_ids = self.__get_annotation_ids_from_target(self.__request['target'])
+                annotation_ids = self.add_hash_sign_to_ids(annotation_ids)
             else:
                 self.__fragment_annotated, annotation_ids = self.__add_tag(self.__fragment_to_annotate,
                                                                            self.__request["tag"], uncertainty=True)
@@ -454,8 +624,11 @@ class Annotator:
                 and self.__request['tag'] != '' \
                 and self.__request['attribute_name'] == '' \
                 and (self.__target or self.__positions):
+            self.__validate_tag(self.__request['tag'])
+
             if self.__target:
                 annotation_ids = self.__get_annotation_ids_from_target(self.__request['target'])
+                annotation_ids = self.add_hash_sign_to_ids(annotation_ids)
             else:
                 self.__fragment_annotated, annotation_ids = self.__add_tag(self.__fragment_to_annotate,
                                                                            self.__request["tag"], uncertainty=True)
@@ -473,13 +646,27 @@ class Annotator:
                 and self.__request['attribute_name'] == 'sameAs' \
                 and self.__request['asserted_value'] != '' \
                 and (self.__target or self.__positions):
+            self.__validate_tag(self.__request['tag'])
+
             if self.__target:
                 annotation_ids = self.__get_annotation_ids_from_target(self.__request['target'])
+                annotation_ids = self.add_hash_sign_to_ids(annotation_ids)
             else:
                 self.__fragment_annotated, annotation_ids = self.__add_tag(self.__fragment_to_annotate,
                                                                            self.__request["tag"], uncertainty=True)
 
             self.__create_unification(annotation_ids)
+
+        # 7.Add reference to element of the list
+        elif self.__request['locus'] == 'value' \
+                and self.__request['tag'] != '' \
+                and self.__request['attribute_name'] == 'ref' \
+                and self.__request['asserted_value'] != '' \
+                and self.__positions:
+            self.__fragment_annotated, annotation_ids = self.__add_tag(self.__fragment_to_annotate, 'objectName',
+                                                                       reference=True)
+
+            self.__list_element_to_add = self.__create_list_element(self.__request, annotation_ids)
 
         # 6.Add attribute to tag
         elif self.__request['locus'] == 'value' \
@@ -487,8 +674,11 @@ class Annotator:
                 and self.__request['attribute_name'] != '' \
                 and self.__request['asserted_value'] != '' \
                 and (self.__target or self.__positions):
+            self.__validate_tag(self.__request['tag'])
+
             if self.__target:
                 annotation_ids = self.__get_annotation_ids_from_target(self.__request['target'])
+                annotation_ids = self.add_hash_sign_to_ids(annotation_ids)
             else:
                 self.__fragment_annotated, annotation_ids = self.__add_tag(self.__fragment_to_annotate,
                                                                            self.__request["tag"], uncertainty=True)
@@ -500,7 +690,7 @@ class Annotator:
         else:
             raise BadRequest("There is no method to modify xml according to given parameters.")
 
-    def __add_tag(self, annotated_fragment, tag, uncertainty=False):
+    def __add_tag(self, annotated_fragment, tag, uncertainty=False, reference=False):
         new_annotated_fragment = ''
         annotation_ids = []
 
@@ -517,25 +707,56 @@ class Annotator:
                     match = re.search(r'<[^>\s]+', tag_to_move)
                     tag_begin = match.group()
 
-                    if 'xml:id="' not in tag_to_move:
-                        id = f"{tag}_{self.__file.name}-{self.__tag_xml_id_number}"
-                        attribute = f' xml:id="{id}"'
+                    if uncertainty:
+                        if 'xml:id="' not in tag_to_move:
+                            id = f"{tag}_{self.__file.name}-{self.__tag_xml_id_number}"
+                            attribute = f' xml:id="{id}"'
 
-                        annotation_ids.append('#' + id)
+                            annotation_ids.append('#' + id)
 
-                        new_tag_to_move = tag_to_move[:len(tag_begin)] + attribute + tag_to_move[len(tag_begin):]
+                            new_tag_to_move = tag_to_move[:len(tag_begin)] + attribute + tag_to_move[len(tag_begin):]
 
-                        self.__tag_xml_id_number += 1
-                    else:
-                        match = re.search(r'xml:id=".*?"', tag_to_move)
-                        existing_id = match.group()
-                        existing_id = existing_id.replace('xml:id="', '')
-                        existing_id = existing_id.replace('"', '')
+                            self.__tag_xml_id_number += 1
+                        else:
+                            match = re.search(r'xml:id=".*?"', tag_to_move)
+                            existing_id = match.group()
+                            existing_id = existing_id.replace('xml:id="', '')
+                            existing_id = existing_id.replace('"', '')
 
-                        annotation_ids.append('#' + existing_id)
-                        new_tag_to_move = tag_to_move
+                            annotation_ids.append('#' + existing_id)
+                            new_tag_to_move = tag_to_move
 
-                    new_annotated_fragment += new_tag_to_move
+                        if tag == 'object':
+                            new_tag_to_move = self.__add_type_to_tag(new_tag_to_move)
+
+                        new_annotated_fragment += new_tag_to_move
+
+                    elif reference:
+                        if 'ref="' not in tag_to_move:
+                            id = self.__get_id_of_list_object_to_reference()
+                            attribute = f' ref="#{id}"'
+
+                            annotation_ids.append('#' + id)
+                            new_tag_to_move = tag_to_move[:len(tag_begin)] + attribute + tag_to_move[len(tag_begin):]
+
+                        else:
+                            match = re.search(r'ref=".*?"', tag_to_move)
+                            existing_reference = match.group()
+
+                            id = self.__get_id_of_list_object_to_reference()
+
+                            if id in existing_reference:
+                                raise NotModified(f"Reference to element with xml:id: {id} already exist.")
+
+                            updated_reference = f'{existing_reference[:-1]} #{id}"'
+
+                            annotation_ids.append('#' + id)
+                            new_tag_to_move = tag_to_move.replace(existing_reference, updated_reference)
+
+                        if tag == 'object':
+                            new_tag_to_move = self.__add_type_to_tag(new_tag_to_move)
+
+                        new_annotated_fragment += new_tag_to_move
                 else:
                     new_annotated_fragment += tag_to_move
 
@@ -560,8 +781,17 @@ class Annotator:
 
                         annotation_ids.append('#' + id)
 
+                    elif reference:
+                        id = self.__get_id_of_list_object_to_reference()
+                        attribute = f' ref="#{id}"'
+
+                        annotation_ids.append('#' + id)
+
                     tag_open = f'<{tag}{attribute}>'
                     tag_close = f'</{tag}>'
+
+                    if tag == 'object':
+                        tag_open = self.__add_type_to_tag(tag_open)
 
                     new_annotated_fragment += tag_open + text_to_move + tag_close
 
@@ -572,14 +802,45 @@ class Annotator:
 
         return new_annotated_fragment, annotation_ids
 
+    def __add_type_to_tag(self, tag):
+        if self.__request['tag'] == 'object' and self.__request['type'] in LEGAL_TYPES and 'type' not in tag:
+            tag = tag.replace('>', f' type="{self.__request["type"]}">')
+
+        return tag
+
+    def __get_id_of_list_object_to_reference(self):
+        xml_id_regex = r'object_[\w]+-[\d]+'
+        if re.match(xml_id_regex, self.__request['asserted_value']):
+            id = self.__request['asserted_value'].replace('#', '')
+
+        else:
+            xml_id_number = self.__get_max_xml_id_from_database('object')
+            id = f"object_{self.__file.name}-{xml_id_number}"
+
+        return id
+
     @staticmethod
     def __get_annotation_ids_from_target(target):
         if type(target) == list:
+
             return target
 
         elif type(target) == str:
             target = target.split(' ')
+
             return target
+
+    @staticmethod
+    def add_hash_sign_to_ids(ids):
+        new_ids = []
+
+        for id in ids:
+            if id[0] != '#':
+                id = '#' + id
+
+            new_ids.append(id)
+
+        return new_ids
 
     def __create_certainty_description(self, json, annotation_ids, user_uuid):
         target = " ".join(annotation_ids)
@@ -606,9 +867,9 @@ class Annotator:
         target = " ".join(annotation_ids)
         xml_id = f"certainty_{self.__file.name}-{self.__certainty_xml_id_number}"
 
-        categories = " ".join([get_ana_link(self.__file.project_id, cat) for cat in json["categories"]])
-        certainty = f'<certainty ana="{categories}" locus="{json["locus"]}" cert="{json["certainty"]}" ' \
-                    f'resp="#{user_uuid}" target="{target}" match="@{json["attribute_name"]}"' \
+        ana = self.__create_ana_from_categories(json['categories'])
+        certainty = f'<certainty ana="{ana}" locus="{json["locus"]}" cert="{json["certainty"]}" ' \
+                    f'resp="#{user_uuid}" target="{target}" match="@{json["attribute_name"]}" ' \
                     f'assertedValue="{json["asserted_value"]}" xml:id="{xml_id}"/>'
 
         new_element = etree.fromstring(certainty)
@@ -620,6 +881,20 @@ class Annotator:
             new_element.append(description)
 
         return new_element
+
+    def __create_list_element(self, json, annotation_ids):
+        type = json['type'] if json['type'] != '' else json['tag']
+
+        xml_id = annotation_ids[0].replace('#', '')
+
+        if xml_id == json['asserted_value']:
+            return None
+
+        else:
+            element = f'<object type="{type}" xml:id="{xml_id}">{json["asserted_value"]}</object>'
+            new_element = etree.fromstring(element)
+
+            return new_element
 
     def __create_annotator(self, user_xml_id):
         user_guid = user_xml_id.replace('person', '')
@@ -721,6 +996,31 @@ class Annotator:
             elif existing_certainties and not self.__request['description']:
                 raise NotModified('This certainty already exist.')
 
+        if not self.__reference and self.__request['attribute_name'] == 'ref' and self.__request['locus'] == 'value':
+            xml = self.__xml
+
+            xml_in_lines = xml.splitlines()
+            if 'encoding=' in xml_in_lines[0]:
+                xml = '\n'.join(xml_in_lines[1:])
+
+            tree = etree.fromstring(xml)
+            xpath = f'//default:text' \
+                    f'//default:body' \
+                    f'//default:div[@type="{self.__request["tag"]}"]' \
+                    f'//default:listObject' \
+                    f'//default:object[@type="{self.__request["tag"]}" and text()="{self.__request["asserted_value"]}"]'
+
+            existing_element = tree.xpath(xpath, namespaces=NAMESPACES)
+
+            if existing_element:
+                xml_namespace = NAMESPACES['xml']
+                xml = '{%s}' % xml_namespace
+
+                xml_id = existing_element[0].attrib[etree.QName(xml + 'id')]
+
+                raise BadRequest(f"Item: {self.__request['asserted_value']} already exist on: "
+                                 f"{self.__request['tag']} list and have id: {xml_id}")
+
     def __create_new_certainty_in_db(self):
         certainty = self.__certainty_to_add.attrib
         desc = self.__certainty_to_add.xpath('.//desc', namespaces=NAMESPACES)
@@ -764,13 +1064,15 @@ class Annotator:
         if self.__certainty_to_add is not None:
             xml_annotated = self.__add_certainty(xml_annotated, self.__certainty_to_add)
 
-        xml_annotated = self.__reformat_xml(xml_annotated)
+        if self.__list_element_to_add is not None:
+            xml_annotated = self.__add_list_element(xml_annotated, self.__list_element_to_add)
+            xml_annotated = self.__reorder_elements(xml_annotated)
+
+        xml_formatter = XMLFormatter()
+        xml_annotated = xml_formatter.reformat_xml(xml_annotated)
 
         if 'encoding=' in xml_annotated_in_lines[0]:
             xml_annotated = '\n'.join((xml_annotated_in_lines[0], xml_annotated))
-
-        if 'xml version="' not in xml_annotated:
-            xml_annotated = '\n'.join((u'<?xml version="1.0"?>', xml_annotated))
 
         self.__xml_annotated = xml_annotated
 
@@ -884,13 +1186,116 @@ class Annotator:
 
         return tree
 
-    @staticmethod
-    def __reformat_xml(text):
-        parser = etree.XMLParser(remove_blank_text=True)
-        tree = etree.fromstring(text, parser=parser)
-        pretty_xml = etree.tounicode(tree, pretty_print=True)
+    def __add_list_element(self, text, element):
+        tree = etree.fromstring(text)
+        element_type = element.get('type')
+        list_xpath = f'/default:TEI/default:text/default:body/default:div[@type="{element_type}"]/default:listObject'
 
-        return pretty_xml
+        list = tree.xpath(list_xpath, namespaces=NAMESPACES)
+
+        if not list:
+            tree = self.__create_elements_from_xpath(tree, list_xpath)
+            list = tree.xpath(list_xpath, namespaces=NAMESPACES)
+
+        list[0].append(element)
+
+        text = etree.tounicode(tree)
+
+        return text
+
+    @staticmethod
+    def __create_elements_from_xpath(tree, xpath):
+        default_namespace = NAMESPACES['default']
+
+        ns_map = {
+            None: default_namespace
+        }
+
+        path_steps = xpath.split('/')
+        path_steps = [step for step in path_steps if step != '']
+
+        for i in range(len(path_steps)):
+            i += 1
+
+            element_xpath = '/' + '/'.join(path_steps[:i])
+            element = tree.xpath(element_xpath, namespaces=NAMESPACES)
+
+            if not element:
+                parent_xpath = '/' + '/'.join(path_steps[:i-1])
+                parent = tree.xpath(parent_xpath, namespaces=NAMESPACES)
+
+                step = path_steps[i-1]
+
+                attributes_regex = r'\[.*?\]'
+                attributes_dict = {}
+                match = re.search(attributes_regex, step)
+
+                if match:
+                    attributes_part = match.group()
+                    step = step.replace(attributes_part, '')
+
+                    attribute_regex = r'@\w*?=[\'"].*?[\'"]'
+                    attributes = re.findall(attribute_regex, attributes_part)
+
+                    for attribute in attributes:
+                        key = attribute.split('=')[0]
+                        key = key.replace('@', '')
+
+                        value = attribute.split('=')[1]
+                        value = re.sub(r'[\'"]', '', value)
+
+                        attributes_dict.update({key: value})
+
+                if ':' in step:
+                    prefix = step.split(':')[0]
+                    name = step.split(':')[1]
+
+                else:
+                    prefix = ''
+                    name = step
+
+                namespace = '{%s}' % NAMESPACES[prefix]
+
+                element = etree.Element(namespace + name, nsmap=ns_map)
+
+                if attributes_dict:
+                    for key, value in attributes_dict.items():
+                        element.set(key, value)
+
+                parent[0].append(element)
+
+        return tree
+
+    @staticmethod
+    def __reorder_elements(text):
+        parent_xpath = f'/default:TEI/default:text/default:body'
+
+        # TODO: Hardcoded order for workshop with recipes. During generalization change this to use types selected
+        #  by user
+        order = ['ingredient', 'utensil', 'dietetic', 'productionMethod', 'recipe']
+
+        tree = etree.fromstring(text)
+        parent = tree.xpath(parent_xpath, namespaces=NAMESPACES)[0]
+        children_queue = []
+
+        for type in order:
+            children = parent.findall(f'default:div[@type="{type}"]', namespaces=NAMESPACES)
+            children_queue += children
+
+            for child in children:
+                parent.remove(child)
+
+        for child in reversed(children_queue):
+            parent.insert(0, child)
+
+        text = etree.tounicode(tree)
+
+        return text
+
+    def __create_ana_from_categories(self, categories):
+        ana = " ".join([get_ana_link(self.__file.project_id, cat) for cat in categories])
+
+        return ana
 
     def __create_unification(self, annotation_ids):
         if len(annotation_ids) > 1:
@@ -913,11 +1318,11 @@ class Annotator:
         asserted_entities = self.__request['asserted_value'].split(' ')
 
         for asserted_entity in asserted_entities:
-            if '#' not in asserted_entity:
-                entity = Entity.objects.filter(
+            if asserted_entity.startswith('#'):
+                entity = Entity.objects.get(
                     project_id=self.__file.project_id,
                     file=self.__file,
-                    xml_id=asserted_entity,
+                    xml_id=asserted_entity.replace('#', ''),
                     deleted_on__isnull=True,
                 )
 
@@ -945,4 +1350,7 @@ class Annotator:
         user_id = int(self.__annotator_xml_id.replace('person', ''))
         user = User.objects.get(id=user_id)
 
-        create_clique(request_data, project_id, user)
+        ana = self.__create_ana_from_categories(self.__request['categories'])
+        description = self.__request['description']
+
+        create_clique(request_data, project_id, user, created_in_annotator=True, ana=ana, description=description)
