@@ -5,24 +5,13 @@ import getConfig from './config';
 
 import {DataClient} from '../../../data';
 
-function useOverlay(renderOverlay, dimension, overlay){
-	const [overlayData, setOverlayData] = useState(dummy_overlay[overlay][dimension]);
-
-	useEffect(()=>{
-		setOverlayData(renderOverlay===true?dummy_overlay[overlay][dimension]:null)
-	}, [renderOverlay, dimension, overlay])
-
-	return overlayData;
-}
 
 function DocumentView({layout, syncWithViews, documentId}) {
 	const [width, height] = layout!=undefined?[layout.w, layout.h]:[4,4];
-
-    const [dataClient, _] = useState(DataClient());
-	//const overlay_data = useOverlay(renderOverlay, dimension, overlay);
+	const viewRef = useRef();
 
     return(
-        <div className={styles.documentView}>
+        <div className={styles.documentView} ref={viewRef}>
         </div>
     )
 }
