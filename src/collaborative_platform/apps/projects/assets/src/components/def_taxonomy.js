@@ -22,15 +22,6 @@ export default {
 			"body_list": "false",
 			"icon": "\uf007", 
 			"color": "#ff7f00",
-			"properties": [
-				"forename",
-				"surname",
-				"occupation",
-				"sex",
-				"birth",
-				"death",
-				"age"
-			]
 		},
 		"event": {
 			"body_list": "false",
@@ -51,11 +42,6 @@ export default {
 			"body_list": "false",
 			"icon": "\uf279", 
 			"color": "#204191",
-			"properties": [
-				"country",
-				"settlement",
-				"[geo]location"
-			]
 		},
 		"date": {
 			"body_list": "false",
@@ -97,5 +83,21 @@ export default {
 			"icon": "\uf279", 
 			"color": "#204191"
 		},*/
+	},
+	"properties": {
+		"person": [
+			"forename",
+			"surname",
+			"occupation",
+			"sex",
+			"birth",
+			"death",
+			"age"
+		],
+		"place": [
+			"country",
+			"settlement",
+			"[geo]location"
+		]
 	}
 };

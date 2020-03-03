@@ -41,11 +41,18 @@ class TEIentitiesSection extends React.PureComponent {
     });
     return <p className="exampleText">{fragments}</p>
   }
+
+  entityProperties(name){
+    let properties = '';
+    if(taxonomy.properties.hasOwnProperty(name)){
+          properties = (<p className="px-5 text-muted small mb-0">
+            This entity has: {taxonomy.properties[name].join(', ')}
+          </p>);
+        }
+    return properties;
+  }
   
   entityListEntries(){
-    const propertyList = (e) => (!e.hasOwnProperty('properties'))?'':
-      <p className="px-5 text-muted small mb-0">This entity has: {e.properties.join(', ')}</p>;
-
     const entries = this.props.scheme.map((e, i)=>(
       <li key={i}>
         <input type="color" 
@@ -66,7 +73,7 @@ class TEIentitiesSection extends React.PureComponent {
                 onClick={()=>this.handleRemoveEntry(i)}>
           <span aria-hidden="true">&times;</span>
         </button>
-        {propertyList(e[1])}
+        {this.entityProperties(e[0])}
         <div className="small d-block px-5">
           <span className="d-block">List existing {e[0]}s in the documents?</span>
           <div className="form-check form-check-inline">
@@ -144,11 +151,6 @@ class TEIentitiesSection extends React.PureComponent {
   handleAddEntity(){
     const {color, icon, body_list} = this.state;
     const newEntity = [this.state.name, {color, icon, body_list}];
-    if(taxonomy.entities.hasOwnProperty(this.state.name) &&
-        taxonomy.entities[this.state.name].hasOwnProperty('properties')){
-      newEntity[1].properties = taxonomy.entities[this.state.name].properties;
-    }
-
     const newScheme = [...this.props.scheme, newEntity];
     this.props.updateScheme(newScheme);
     this.setState(this.defState);
