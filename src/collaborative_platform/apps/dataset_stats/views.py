@@ -17,7 +17,7 @@ def main(request, project_id=1):  # type: (HttpRequest, int, int) -> HttpRespons
     return render(request, "dataset_stats/app.html", {
         "title":project.title, 
         "project_id":project_id,
-        "DEVELOPMENT":True,
+        "DEVELOPMENT":False,
     })
         
 @login_required
