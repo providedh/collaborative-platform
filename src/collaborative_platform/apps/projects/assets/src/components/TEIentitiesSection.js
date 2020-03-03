@@ -43,7 +43,7 @@ class TEIentitiesSection extends React.PureComponent {
   
   entityListEntries(){
     const propertyList = (e) => (!e.hasOwnProperty('properties'))?'':
-      <p class="px-5 text-muted small">This entity has: {e.properties.join(', ')}</p>;
+      <p className="px-5 text-muted small">This entity has: {e.properties.join(', ')}</p>;
 
     const entries = this.props.scheme.map((e, i)=>(
       <li key={i}>
@@ -102,7 +102,7 @@ class TEIentitiesSection extends React.PureComponent {
         taxonomy.entities[this.state.name].hasOwnProperty('properties')){
       newEntity[1].properties = taxonomy.entities[this.state.name].properties;
     }
-    
+
     const newScheme = [...this.props.scheme, newEntity];
     this.props.updateScheme(newScheme);
     this.setState(this.defState);
