@@ -2,6 +2,9 @@ import DataService from './dataservice';
 import Filter from './filter';
 import Subscription from './subscription';
 
+
+window.dataClient = DataClient();
+
 /**
   * class DataClient
   * Components interact with an instance of this class
@@ -19,6 +22,7 @@ export default function DataClient(){
 		self.unsubscribe = _unsubscribe;
 		self.filter = _filter;
 		self.unfilter = _unfilter;
+		self.focusDocument = _focus;
 
 		return self;
 	}
@@ -79,6 +83,13 @@ export default function DataClient(){
 		}else{
 			console.info('Attempted to unfilter an already unfiltered dimension: '+dim);
 		}
+	}
+
+	/**
+	 * Receives a document id.
+	 */
+	function _focus(documentId){
+		DataService.focusDocument(documentId);
 	}
 
 	return _init();

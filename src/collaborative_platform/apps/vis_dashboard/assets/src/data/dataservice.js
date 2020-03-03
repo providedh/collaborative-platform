@@ -1,4 +1,4 @@
-import {DataSource, EntityDataSource} from './datasources';
+import {DataSource, EntityDataSource, DocumentDataSource} from './datasources';
 import {PubSubService} from '../helpers';
 import Filter from './filter';
 import Subscription from './subscription';
@@ -26,13 +26,15 @@ export default (function DataService(){
 
 		self._sources = {
 			base: DataSource(self._pubSubService),
-			entity: EntityDataSource(self._pubSubService, window.project)
+			entity: EntityDataSource(self._pubSubService, window.project),
+			document: DocumentDataSource(self._pubSubService, window.project),
 		}
 
 		self.subscribe = _subscribe;
 		self.unsubscribe = _unsubscribe;
 		self.filter = _filter;
 		self.unfilter = _unfilter;
+		self.focusDocument = _focus;
 
 		return self;
 	}
@@ -129,6 +131,10 @@ export default (function DataService(){
 	function _applyFilters4Dim(dim){
 		const filter = _createDimFilter(dim);
 		self._pubSubClient.publish('filter/'+dim, {dim, filter});
+	}
+
+	function _focus(documentId){
+		self._pubSubClient.publish('focus/document', {documentId})
 	}
 
 	return _init();
