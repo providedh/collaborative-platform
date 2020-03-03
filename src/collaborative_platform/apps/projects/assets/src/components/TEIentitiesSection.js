@@ -1,4 +1,5 @@
 import React from 'react';
+import taxonomy from './def_taxonomy.js';
 
 import IconPicker from './IconPicker.js';
 
@@ -41,6 +42,9 @@ class TEIentitiesSection extends React.PureComponent {
   }
   
   entityListEntries(){
+    const propertyList = (e) => (!e.hasOwnProperty('properties'))?'':
+      <p class="px-5 text-muted small">This entity has: {e.properties.join(', ')}</p>;
+
     const entries = this.props.scheme.map((e, i)=>(
       <li key={i}>
         <input type="color" 
@@ -62,6 +66,8 @@ class TEIentitiesSection extends React.PureComponent {
                 onClick={()=>this.handleRemoveEntry(i)}>
           <span aria-hidden="true">&times;</span>
         </button>
+        {propertyList(e[1])}
+        <hr />
       </li>
     ));
     
@@ -91,7 +97,13 @@ class TEIentitiesSection extends React.PureComponent {
   }
   
   handleAddEntity(){
-    const newScheme = [...this.props.scheme, [this.state.name, {color:this.state.color, icon: this.state.icon}]];
+    const newEntity = [this.state.name, {color:this.state.color, icon: this.state.icon}];
+    if(taxonomy.entities.hasOwnProperty(this.state.name) &&
+        taxonomy.entities[this.state.name].hasOwnProperty('properties')){
+      newEntity[1].properties = taxonomy.entities[this.state.name].properties;
+    }
+    
+    const newScheme = [...this.props.scheme, newEntity];
     this.props.updateScheme(newScheme);
     this.setState(this.defState);
   }
