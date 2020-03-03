@@ -4,7 +4,7 @@ import logging
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, HttpResponse, JsonResponse, HttpResponseNotModified
 
-from apps.api_vis.helpers import create_entities_in_database
+# from apps.api_vis.helpers import create_entities_in_database
 from apps.api_vis.models import Clique, Commit, Unification
 from apps.files_management.file_conversions.ids_filler import IDsFiller
 from apps.files_management.helpers import create_uploaded_file_object_from_string, overwrite_file, \
@@ -94,7 +94,7 @@ def save(request, project_id, file_id):  # type: (HttpRequest, int, int) -> Http
             if version_nr_old < version_nr_new:
                 text, entities = extract_text_and_entities(xml_content, project.id, file_overwrited.id)
                 file_version = FileVersion.objects.get(file=file_overwrited, number=file_overwrited.version_number)
-                create_entities_in_database(entities, project, file_version)
+                # create_entities_in_database(entities, project, file_version)
                 index_entities(entities)
                 index_file(dbfile, text)
 

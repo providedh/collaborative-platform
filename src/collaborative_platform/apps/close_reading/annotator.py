@@ -6,7 +6,8 @@ from lxml import etree
 from django.contrib.auth.models import User
 from django.db.models import Q
 
-from apps.api_vis.helpers import get_entity_from_int_or_dict, create_clique
+# from apps.api_vis.helpers import get_entity_from_int_or_dict, create_clique
+from apps.api_vis.helpers import get_entity_from_int_or_dict
 from apps.api_vis.models import Entity, Certainty, Unification
 from apps.exceptions import BadRequest, NotModified
 from apps.files_management.models import FileMaxXmlIds, File
@@ -1353,4 +1354,4 @@ class Annotator:
         ana = self.__create_ana_from_categories(self.__request['categories'])
         description = self.__request['description']
 
-        create_clique(request_data, project_id, user, created_in_annotator=True, ana=ana, description=description)
+        # create_clique(request_data, project_id, user, created_in_annotator=True, ana=ana, description=description)

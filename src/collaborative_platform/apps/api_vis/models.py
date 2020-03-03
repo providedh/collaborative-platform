@@ -93,30 +93,30 @@ class EntityProperty(models.Model):
             return self.value_point
 
 
-class PersonVersion(EntityVersion):
-    forename = models.CharField(max_length=255, blank=True, null=True)
-    surname = models.CharField(max_length=255, blank=True, null=True)
+# class PersonVersion(EntityVersion):
+#     forename = models.CharField(max_length=255, blank=True, null=True)
+#     surname = models.CharField(max_length=255, blank=True, null=True)
 
 
-class EventVersion(EntityVersion):
-    when = models.DateTimeField(blank=True, null=True)
+# class EventVersion(EntityVersion):
+#     when = models.DateTimeField(blank=True, null=True)
 
 
-class OrganizationVersion(EntityVersion):
-    pass
+# class OrganizationVersion(EntityVersion):
+#     pass
 
 
-class PlaceVersion(EntityVersion):
-    location = PointField(geography=True, blank=True, null=True)
-    country = models.CharField(max_length=255, blank=True, null=True)
+# class PlaceVersion(EntityVersion):
+#     location = PointField(geography=True, blank=True, null=True)
+#     country = models.CharField(max_length=255, blank=True, null=True)
 
 
-class CertaintyVersion(EntityVersion):
-    pass
+# class CertaintyVersion(EntityVersion):
+#     pass
 
 
-class ObjectVersion(EntityVersion):
-    pass
+# class ObjectVersion(EntityVersion):
+#     pass
 
 
 class Commit(models.Model):

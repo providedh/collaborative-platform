@@ -9,8 +9,9 @@ from django.contrib.auth.models import User
 
 import apps.index_and_search.models as es
 
-from apps.api_vis.models import Clique, Commit, Entity, EventVersion, OrganizationVersion, PersonVersion, PlaceVersion, \
-    CertaintyVersion, Unification, ObjectVersion
+# from apps.api_vis.models import Clique, Commit, Entity, EventVersion, OrganizationVersion, PersonVersion, PlaceVersion, \
+#     CertaintyVersion, Unification, ObjectVersion
+from apps.api_vis.models import Clique, Commit, Entity, Unification
 from apps.exceptions import BadRequest
 from apps.files_management.models import Directory, File, FileMaxXmlIds, FileVersion
 from apps.projects.models import Project, ProjectVersion
@@ -140,49 +141,49 @@ def reformat_attribute(item, namespaces):
     return attribute
 
 
-def create_entities_in_database(entities, project, file_version):  # type: (list, Project, FileVersion) -> None
-    for entity in copy.deepcopy(entities):
-        classes = {
-            'person': PersonVersion,
-            'org': OrganizationVersion,
-            'event': EventVersion,
-            'place': PlaceVersion,
-            'certainty': CertaintyVersion,
-            'object': ObjectVersion,
-            'ingredient': ObjectVersion,
-            'utensil': ObjectVersion,
-            'productionMethod': ObjectVersion,
-        }
-
-        if entity['tag'] not in classes:
-            continue
-
-        entity["xml_id"] = entity.pop("id")
-        try:
-            entity_db = Entity.objects.get(
-                project=project,
-                file=file_version.file,
-                xml_id=entity['xml_id'],
-                type=entity['tag']
-            )
-
-        except Entity.DoesNotExist:
-            entity_db = Entity.objects.create(
-                project=project,
-                file=file_version.file,
-                xml_id=entity['xml_id'],
-                created_in_version=file_version.number,
-                type=entity['tag'],
-            )
-
-        tag = entity.pop("tag")
-
-        # make sure we're not passing excessive keyword arguments to constructor, as that would cause an error
-        tag_elements = {field.name for field in classes[tag]._meta.fields}
-        excessive_elements = set(entity.keys()).difference(tag_elements)
-        tuple(map(entity.pop, excessive_elements))  # pop all excessive elements from entity
-
-        classes[tag](entity=entity_db, fileversion=file_version, **entity).save()
+# def create_entities_in_database(entities, project, file_version):  # type: (list, Project, FileVersion) -> None
+#     for entity in copy.deepcopy(entities):
+#         classes = {
+#             'person': PersonVersion,
+#             'org': OrganizationVersion,
+#             'event': EventVersion,
+#             'place': PlaceVersion,
+#             'certainty': CertaintyVersion,
+#             'object': ObjectVersion,
+#             'ingredient': ObjectVersion,
+#             'utensil': ObjectVersion,
+#             'productionMethod': ObjectVersion,
+#         }
+#
+#         if entity['tag'] not in classes:
+#             continue
+#
+#         entity["xml_id"] = entity.pop("id")
+#         try:
+#             entity_db = Entity.objects.get(
+#                 project=project,
+#                 file=file_version.file,
+#                 xml_id=entity['xml_id'],
+#                 type=entity['tag']
+#             )
+#
+#         except Entity.DoesNotExist:
+#             entity_db = Entity.objects.create(
+#                 project=project,
+#                 file=file_version.file,
+#                 xml_id=entity['xml_id'],
+#                 created_in_version=file_version.number,
+#                 type=entity['tag'],
+#             )
+#
+#         tag = entity.pop("tag")
+#
+#         # make sure we're not passing excessive keyword arguments to constructor, as that would cause an error
+#         tag_elements = {field.name for field in classes[tag]._meta.fields}
+#         excessive_elements = set(entity.keys()).difference(tag_elements)
+#         tuple(map(entity.pop, excessive_elements))  # pop all excessive elements from entity
+#
+#         classes[tag](entity=entity_db, fileversion=file_version, **entity).save()
 
 
 def fake_delete_entities(file, user):  # type: (File, User) -> list
@@ -574,148 +575,148 @@ def common_filter_cliques(query_string, project_id):
     return cliques
 
 
-def common_filter_entities(query_string, project_id):
-    from apps.api_vis.api import ENTITY_CLASSES
+# def common_filter_entities(query_string, project_id):
+#     from apps.api_vis.api import ENTITY_CLASSES
+#
+#     if query_string['project_version'] and query_string['date']:
+#         raise BadRequest("Provided timestamp parameters are ambiguous. Provide 'project_version' "
+#                          "for reference to specific project version, OR 'date' for reference to "
+#                          "latest project version on given time.")
+#
+#     entities = Entity.objects.filter(project_id=project_id)
+#
+#     if query_string['types']:
+#         entities = entities.filter(type__in=query_string['types'])
+#
+#     # TODO: Update filtering by user after adding field for responsible user to entity model
+#     # if query_string['users']:
+#     #     entities = entities.filter()
+#
+#     if query_string['project_version']:
+#         entities = filter_entities_by_project_version(entities, project_id, query_string['project_version'])
+#
+#     elif query_string['date']:
+#         project_versions = ProjectVersion.objects.filter(
+#             project_id=project_id,
+#             date__lte=query_string['date'],
+#         ).order_by('-date')
+#
+#         if project_versions:
+#             project_version = project_versions[0]
+#         else:
+#             raise BadRequest(f"There is no project version before date: {query_string['date']}.")
+#
+#         entities = filter_entities_by_project_version(entities, project_id, str(project_version))
+#     else:
+#         entities = entities.filter(deleted_on__isnull=True)
+#
+#     entities_to_return = []
+#
+#     for entity in entities:
+#         if entity.type == 'certainty':
+#             continue
+#
+#         entity_to_return = {
+#             'id': entity.id,
+#             'name': ENTITY_CLASSES[entity.type].objects.filter(entity_id=entity.id).order_by(
+#                 "entity__created_in_version").last().name,
+#             'type': entity.type,
+#         }
+#
+#         entities_to_return.append(entity_to_return)
+#
+#     return entities_to_return
 
-    if query_string['project_version'] and query_string['date']:
-        raise BadRequest("Provided timestamp parameters are ambiguous. Provide 'project_version' "
-                         "for reference to specific project version, OR 'date' for reference to "
-                         "latest project version on given time.")
 
-    entities = Entity.objects.filter(project_id=project_id)
-
-    if query_string['types']:
-        entities = entities.filter(type__in=query_string['types'])
-
-    # TODO: Update filtering by user after adding field for responsible user to entity model
-    # if query_string['users']:
-    #     entities = entities.filter()
-
-    if query_string['project_version']:
-        entities = filter_entities_by_project_version(entities, project_id, query_string['project_version'])
-
-    elif query_string['date']:
-        project_versions = ProjectVersion.objects.filter(
-            project_id=project_id,
-            date__lte=query_string['date'],
-        ).order_by('-date')
-
-        if project_versions:
-            project_version = project_versions[0]
-        else:
-            raise BadRequest(f"There is no project version before date: {query_string['date']}.")
-
-        entities = filter_entities_by_project_version(entities, project_id, str(project_version))
-    else:
-        entities = entities.filter(deleted_on__isnull=True)
-
-    entities_to_return = []
-
-    for entity in entities:
-        if entity.type == 'certainty':
-            continue
-
-        entity_to_return = {
-            'id': entity.id,
-            'name': ENTITY_CLASSES[entity.type].objects.filter(entity_id=entity.id).order_by(
-                "entity__created_in_version").last().name,
-            'type': entity.type,
-        }
-
-        entities_to_return.append(entity_to_return)
-
-    return entities_to_return
-
-
-def create_clique(request_data, project_id, user, created_in_annotator=False, ana='', description=''):
-    # type: (dict, int, User, bool, str, str) -> (Clique, list)
-    from apps.api_vis.api import ENTITY_CLASSES
-
-    if (ana or description) and not created_in_annotator:
-        raise BadRequest("'ana' and 'description' parameters are allowed only during unification in Annotator.")
-
-    if 'name' in request_data and request_data['name'] != '':
-        clique_name = request_data['name']
-    elif len(request_data['entities']) > 0:
-        request_entity = request_data['entities'][0]
-        entity = get_entity_from_int_or_dict(request_entity, project_id)
-        entity_version = ENTITY_CLASSES[entity.type].objects.filter(entity=entity).order_by('-fileversion')[0]
-        clique_name = entity_version.name
-    else:
-        raise BadRequest(f"Missing name for a clique. Provide name in 'name' parameter or at least one entity.")
-
-    clique = Clique.objects.create(
-        asserted_name=clique_name,
-        created_by=user,
-        project_id=project_id,
-        created_in_annotator=created_in_annotator,
-    )
-
-    file_version_counter, commit_counter = parse_project_version(request_data['project_version'])
-
-    try:
-        project_version = ProjectVersion.objects.get(
-            project_id=project_id,
-            file_version_counter=file_version_counter,
-            commit_counter=commit_counter,
-        )
-    except ProjectVersion.DoesNotExist:
-        raise BadRequest(f"Version: {request_data['project_version']} of project with id: {project_id} "
-                         f"doesn't exist.")
-
-    unification_statuses = []
-
-    for i, entity in enumerate(request_data['entities']):
-        if type(entity) == int:
-            unification_statuses.append({'id': entity})
-        else:
-            unification_statuses.append(entity)
-
-        try:
-            entity = get_entity_from_int_or_dict(entity, project_id)
-
-            try:
-                file_version = FileVersion.objects.get(
-                    projectversion=project_version,
-                    file=entity.file
-                )
-            except FileVersion.DoesNotExist:
-                raise BadRequest(f"Source file of entity with id: {entity.id} doesn't exist in version: "
-                                 f"{request_data['project_version']} of the project with id: {project_id}.")
-
-            if entity.created_in_version > file_version.number or \
-                    entity.deleted_in_version and entity.deleted_in_version < file_version.number:
-                raise BadRequest(f"Entity with id: {entity.id} doesn't exist in version: "
-                                 f"{request_data['project_version']} of the project with id: {project_id}.")
-
-            file_max_xml_ids = FileMaxXmlIds.objects.get(file=entity.file)
-            file_max_xml_ids.certainty += 1
-            file_max_xml_ids.save()
-
-            Unification.objects.create(
-                project_id=project_id,
-                entity=entity,
-                clique=clique,
-                created_by=user,
-                ana=ana,
-                certainty=request_data['certainty'],
-                description=description,
-                created_in_file_version=file_version,
-                created_in_annotator=created_in_annotator,
-                xml_id=f'certainty_{entity.file.name}-{file_max_xml_ids.certainty}',
-            )
-
-            unification_statuses[i].update({
-                'status': 200,
-                'message': 'OK'
-            })
-
-        except BadRequest as exception:
-            status = HttpResponseBadRequest.status_code
-
-            unification_statuses[i].update({
-                'status': status,
-                'message': str(exception)
-            })
-
-    return clique, unification_statuses
+# def create_clique(request_data, project_id, user, created_in_annotator=False, ana='', description=''):
+#     # type: (dict, int, User, bool, str, str) -> (Clique, list)
+#     from apps.api_vis.api import ENTITY_CLASSES
+#
+#     if (ana or description) and not created_in_annotator:
+#         raise BadRequest("'ana' and 'description' parameters are allowed only during unification in Annotator.")
+#
+#     if 'name' in request_data and request_data['name'] != '':
+#         clique_name = request_data['name']
+#     elif len(request_data['entities']) > 0:
+#         request_entity = request_data['entities'][0]
+#         entity = get_entity_from_int_or_dict(request_entity, project_id)
+#         entity_version = ENTITY_CLASSES[entity.type].objects.filter(entity=entity).order_by('-fileversion')[0]
+#         clique_name = entity_version.name
+#     else:
+#         raise BadRequest(f"Missing name for a clique. Provide name in 'name' parameter or at least one entity.")
+#
+#     clique = Clique.objects.create(
+#         asserted_name=clique_name,
+#         created_by=user,
+#         project_id=project_id,
+#         created_in_annotator=created_in_annotator,
+#     )
+#
+#     file_version_counter, commit_counter = parse_project_version(request_data['project_version'])
+#
+#     try:
+#         project_version = ProjectVersion.objects.get(
+#             project_id=project_id,
+#             file_version_counter=file_version_counter,
+#             commit_counter=commit_counter,
+#         )
+#     except ProjectVersion.DoesNotExist:
+#         raise BadRequest(f"Version: {request_data['project_version']} of project with id: {project_id} "
+#                          f"doesn't exist.")
+#
+#     unification_statuses = []
+#
+#     for i, entity in enumerate(request_data['entities']):
+#         if type(entity) == int:
+#             unification_statuses.append({'id': entity})
+#         else:
+#             unification_statuses.append(entity)
+#
+#         try:
+#             entity = get_entity_from_int_or_dict(entity, project_id)
+#
+#             try:
+#                 file_version = FileVersion.objects.get(
+#                     projectversion=project_version,
+#                     file=entity.file
+#                 )
+#             except FileVersion.DoesNotExist:
+#                 raise BadRequest(f"Source file of entity with id: {entity.id} doesn't exist in version: "
+#                                  f"{request_data['project_version']} of the project with id: {project_id}.")
+#
+#             if entity.created_in_version > file_version.number or \
+#                     entity.deleted_in_version and entity.deleted_in_version < file_version.number:
+#                 raise BadRequest(f"Entity with id: {entity.id} doesn't exist in version: "
+#                                  f"{request_data['project_version']} of the project with id: {project_id}.")
+#
+#             file_max_xml_ids = FileMaxXmlIds.objects.get(file=entity.file)
+#             file_max_xml_ids.certainty += 1
+#             file_max_xml_ids.save()
+#
+#             Unification.objects.create(
+#                 project_id=project_id,
+#                 entity=entity,
+#                 clique=clique,
+#                 created_by=user,
+#                 ana=ana,
+#                 certainty=request_data['certainty'],
+#                 description=description,
+#                 created_in_file_version=file_version,
+#                 created_in_annotator=created_in_annotator,
+#                 xml_id=f'certainty_{entity.file.name}-{file_max_xml_ids.certainty}',
+#             )
+#
+#             unification_statuses[i].update({
+#                 'status': 200,
+#                 'message': 'OK'
+#             })
+#
+#         except BadRequest as exception:
+#             status = HttpResponseBadRequest.status_code
+#
+#             unification_statuses[i].update({
+#                 'status': status,
+#                 'message': str(exception)
+#             })
+#
+#     return clique, unification_statuses
