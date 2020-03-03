@@ -1,5 +1,10 @@
+from enum import Enum
+
+from datetime import date, time
+
 from django.contrib.auth.models import User
 from django.contrib.gis.db.models import PointField
+from django.contrib.gis.geos import Point
 from django.db import models
 
 from apps.files_management.models import File, FileVersion
@@ -31,7 +36,61 @@ class EntityVersion(models.Model):
 
     class Meta:
         unique_together = ("fileversion", "entity")
-        abstract = True
+        # abstract = True
+
+
+class EntityProperty(models.Model):
+    class TypeChoice(Enum):
+        str = str
+        int = int
+        float = float
+        date = date
+        time = time
+        point = Point
+
+    entity_version = models.ForeignKey(EntityVersion, on_delete=models.CASCADE)
+    name = models.CharField(max_length=255)
+    type = models.CharField(max_length=255, choices=[(tag, tag.value) for tag in TypeChoice])
+    value_str = models.CharField(max_length=255)
+    value_int = models.IntegerField()
+    value_float = models.FloatField()
+    value_date = models.DateField()
+    value_time = models.TimeField()
+    value_point = PointField(geography=True, blank=True, null=True)
+    created_by = models.ForeignKey(User, related_name='created_properties', on_delete=models.SET_NULL, null=True)
+    created_in_version = models.IntegerField()
+    deleted_by = models.ForeignKey(User, related_name='deleted_properties', on_delete=models.SET_NULL, null=True)
+    deleted_in_version = models.IntegerField()
+
+    def set_value(self, value):
+        if self.type == self.TypeChoice.str:
+            self.value_str = value
+        elif self.type == self.TypeChoice.int:
+            self.value_int = value
+        elif self.type == self.TypeChoice.float:
+            self.value_float = value
+        elif self.type == self.TypeChoice.date:
+            self.value_date = value
+        elif self.type == self.TypeChoice.time:
+            self.value_time = value
+        elif self.type == self.TypeChoice.point:
+            self.value_point = value
+
+        self.save()
+
+    def get_value(self):
+        if self.type == self.TypeChoice.str:
+            return self.value_str
+        elif self.type == self.TypeChoice.int:
+            return self.value_int
+        elif self.type == self.TypeChoice.float:
+            return self.value_float
+        elif self.type == self.TypeChoice.date:
+            return self.value_date
+        elif self.type == self.TypeChoice.time:
+            return self.value_time
+        elif self.type == self.TypeChoice.point:
+            return self.value_point
 
 
 class PersonVersion(EntityVersion):
