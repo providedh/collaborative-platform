@@ -5,10 +5,12 @@ from typing import Dict, List
 from lxml import etree as et
 from lxml.etree import Element
 
+from django.conf import settings
+
 
 class EntitiesExtractor:
     tags = ('person', 'place', 'org', 'event', 'certainty', 'object')
-    namespaces = {'tei': 'http://www.tei-c.org/ns/1.0', 'xml': 'http://www.w3.org/XML/1998/namespace'}
+    namespaces = settings.XML_NAMESPACES
 
     @classmethod
     def extract_entities_elements(cls, parsed_et):  # type: (et) -> Dict[str, Element]

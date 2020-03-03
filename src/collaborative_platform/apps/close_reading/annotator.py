@@ -5,6 +5,7 @@ from lxml import etree
 
 from django.contrib.auth.models import User
 from django.db.models import Q
+from django.conf import settings
 
 # from apps.api_vis.helpers import get_entity_from_int_or_dict, create_clique
 from apps.api_vis.helpers import get_entity_from_int_or_dict
@@ -19,11 +20,8 @@ from apps.projects.models import ProjectVersion
 logger = logging.getLogger('annotator')
 
 
-NAMESPACES = {
-    'default': 'http://www.tei-c.org/ns/1.0',
-    'xml': 'http://www.w3.org/XML/1998/namespace',
-    'xi': 'http://www.w3.org/2001/XInclude',
-}
+NAMESPACES = settings.XML_NAMESPACES
+
 
 POSITION_PARAMS_V1 = [
     'start_row',

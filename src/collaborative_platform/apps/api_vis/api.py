@@ -5,6 +5,7 @@ import apps.index_and_search.models as es
 from json.decoder import JSONDecodeError
 from lxml import etree
 
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpRequest, HttpResponse, HttpResponseBadRequest, HttpResponseNotModified
 
@@ -26,11 +27,9 @@ from .helpers import search_files_by_person_name, search_files_by_content, valid
 #     PlaceVersion, Unification, UnificationToDelete, ObjectVersion
 from .models import Clique, CliqueToDelete, Commit, Entity, Unification, UnificationToDelete
 
-NAMESPACES = {
-    'default': 'http://www.tei-c.org/ns/1.0',
-    'xml': 'http://www.w3.org/XML/1998/namespace',
-    'xi': 'http://www.w3.org/2001/XInclude',
-}
+
+NAMESPACES = settings.XML_NAMESPACES
+
 
 ANNOTATION_TAGS = ['date', 'event', 'location', 'geolocation', 'name', 'occupation', 'object', 'org', 'person', 'place',
                    'country', 'time']

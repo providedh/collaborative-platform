@@ -1,11 +1,16 @@
+from lxml import etree
+
 from django.contrib.sites.shortcuts import get_current_site
 from django.db import connection
-from lxml import etree
+from django.conf import settings
 
 from apps.files_management.models import FileVersion
 from apps.projects.models import Taxonomy
 
 from .models import AnnotationHistory
+
+
+NAMESPACES = settings.XML_NAMESPACES
 
 
 class NoVersionException(Exception):
@@ -144,10 +149,6 @@ class AnnotationHistoryHandler:
         text = self.__remove_encoding_line(text)
         tree = etree.fromstring(text)
 
-        namespaces = {
-            'default': "http://www.tei-c.org/ns/1.0",
-        }
-
         uncertainties = {name: 0 for name in uncertainties_names}
 
         for key in uncertainties:
@@ -155,7 +156,7 @@ class AnnotationHistoryHandler:
                                  f"default:certainty[contains(concat(' ', @ana, ' '), " \
                                  f"' https://{site}/api/projects/{self.__project_id}/taxonomy/#{key} ')]"
 
-            number_of_uncertainties = len(tree.xpath(xpath_to_certainty, namespaces=namespaces))
+            number_of_uncertainties = len(tree.xpath(xpath_to_certainty, namespaces=NAMESPACES))
 
             uncertainties[key] = number_of_uncertainties
 

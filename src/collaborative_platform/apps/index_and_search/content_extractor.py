@@ -1,12 +1,10 @@
 from lxml import etree as et
 
+from django.conf import settings
+
 
 class ContentExtractor:
-    namespaces = {
-        'default': 'http://www.tei-c.org/ns/1.0',
-        'xml': 'http://www.w3.org/XML/1998/namespace',
-        'xi': 'http://www.w3.org/2001/XInclude',
-    }
+    namespaces = settings.XML_NAMESPACES
 
     @classmethod
     def tei_contents_to_text(cls, contents):
