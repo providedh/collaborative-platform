@@ -65,12 +65,19 @@ function useOverlay(renderOverlay, dimension, overlay){
 	return overlayData;
 }
 
+function getOnEventCallback(dataClient, dimension, barDirection){
+    return (event)=>{
+        console.log(event);
+    };
+}
+
 function Histogram({dimension, barDirection, renderOverlay, overlay, layout}) {
 	const [refContainer, refCanvas, refOverlayCanvas] = [useRef(), useRef(), useRef()];
 	const [width, height] = layout!=undefined?[layout.w, layout.h]:[4,4];
 
     const [dataClient, _] = useState(DataClient());
 	const data = useData(dataClient, dimension);
+    const onEvent = getOnEventCallback(dataClient, dimension, barDirection);
 	//const overlay_data = useOverlay(renderOverlay, dimension, overlay);
 
     useEffect(()=>render(
@@ -80,7 +87,8 @@ function Histogram({dimension, barDirection, renderOverlay, overlay, layout}) {
     		data, 
     		null, 
     		renderOverlay, 
-    		barDirection), // Render 
+    		barDirection,
+            onEvent), // Render 
     	[width, height, barDirection, data]); // Conditions
 
     return(

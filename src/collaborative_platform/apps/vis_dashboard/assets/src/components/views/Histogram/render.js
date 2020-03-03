@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 
-function createScales(data, barDirection, height, width, padding=10, fontSize=12){
+function createScales(data, barDirection, height, width, onEvent, padding=10, fontSize=12){
     let scales = {xScale:null, yScale: null};
 
     const dimensions = Object.keys(data[0]),
