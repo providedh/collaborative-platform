@@ -26,11 +26,13 @@ class TEIentitiesSection extends React.PureComponent {
         return(
           <span key={e[0]}>
             {preWords}
-            <span className="tagIcon" style={{color:e[1].color}} data-icon={e[1].icon}>
-            </span>
-            <span className="tag" style={{borderColor:e[1].color}}>
-              {` some ${e[0]} `}
-            </span>
+            <div className="entity">
+              <span className="tagIcon" style={{color:e[1].color}} data-icon={e[1].icon}>
+              </span>
+              <span className="tag" style={{borderColor:e[1].color}}>
+                {` some ${e[0]} `}
+              </span>
+            </div>
             {postWords}
           </span>
         );
@@ -102,8 +104,9 @@ class TEIentitiesSection extends React.PureComponent {
   }
   
   handleRemoveEntry(index){
-    this.props.scheme.splice(index,1);
-    this.props.updateScheme(this.props.scheme);
+    const newScheme = this.props.scheme.map(x=>x);
+    newScheme.splice(index,1);
+    this.props.updateScheme(newScheme);
   }
   
   handleValueChange(index, key, value){
@@ -116,7 +119,7 @@ class TEIentitiesSection extends React.PureComponent {
   render(){
     return(
       <div>
-        <div className="row mt-4 bg-light">
+        <div id="teiSection" className="row mt-4 bg-light">
           <div className="col-2">
             <b>TEI entities</b>
           </div>

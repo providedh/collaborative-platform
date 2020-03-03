@@ -142,19 +142,21 @@ def reformat_attribute(item, namespaces):
 
 
 # def create_entities_in_database(entities, project, file_version):  # type: (list, Project, FileVersion) -> None
-#     for entity in copy.deepcopy(entities):
-#         classes = {
-#             'person': PersonVersion,
-#             'org': OrganizationVersion,
-#             'event': EventVersion,
-#             'place': PlaceVersion,
-#             'certainty': CertaintyVersion,
-#             'object': ObjectVersion,
-#             'ingredient': ObjectVersion,
-#             'utensil': ObjectVersion,
-#             'productionMethod': ObjectVersion,
-#         }
+#     classes = {
+#         'person': PersonVersion,
+#         'org': OrganizationVersion,
+#         'event': EventVersion,
+#         'place': PlaceVersion,
+#         'certainty': CertaintyVersion,
+#         'object': ObjectVersion,
+#         'ingredient': ObjectVersion,
+#         'utensil': ObjectVersion,
+#         'productionMethod': ObjectVersion,
+#     }
 #
+#     db_entities = {key: [] for key in classes}
+#
+#     for entity in copy.deepcopy(entities):
 #         if entity['tag'] not in classes:
 #             continue
 #
@@ -183,7 +185,10 @@ def reformat_attribute(item, namespaces):
 #         excessive_elements = set(entity.keys()).difference(tag_elements)
 #         tuple(map(entity.pop, excessive_elements))  # pop all excessive elements from entity
 #
-#         classes[tag](entity=entity_db, fileversion=file_version, **entity).save()
+#         db_entities[tag].append(classes[tag](entity=entity_db, fileversion=file_version, **entity))
+#
+#     for tag, objects in db_entities.items():
+#         classes[tag].objects.bulk_create(objects)
 
 
 def fake_delete_entities(file, user):  # type: (File, User) -> list

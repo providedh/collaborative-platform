@@ -8,4 +8,5 @@ urlpatterns = [
     path('get_users/<int:user_id>/', api.get_users, name='get_users'),
     path('<int:project_id>/activities/', api.get_activities, name='activities'),
     path('<int:project_id>/taxonomy/', api.get_taxonomy, name='taxonomy'),
+    path('<int:project_id>/settings/', api.get_settings, name='settings'),
 ]

@@ -95,6 +95,19 @@ input[type="color"]{
   background-color: white;
 }
 
+.entity{
+  display: inline-block;
+  padding: 0 5px;
+}
+
+ul.noListStyle li:last-child .categoryNameInput{
+  width: 60%;
+}
+
+.categoryNameInput input{
+  margin-left: 1.9em;
+}
+
 .exampleText{
   line-height: 2.3em;
 }

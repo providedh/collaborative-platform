@@ -7,7 +7,6 @@ class TaxonomySection extends React.PureComponent {
     super(props);
     
     this.defState = {
-      icon: "\uf042",
       color: '',
       name: '',
       description: ''
@@ -27,9 +26,7 @@ class TaxonomySection extends React.PureComponent {
         return(
           <span key={e[0]}>
             {preWords}
-            <span className="tagIcon" style={{color:e[1].color}} data-icon={e[1].icon}>
-            </span>
-            <span className="tag" style={{borderColor:e[1].color}}>
+            <span className="annotation" style={{backgroundColor:e[1].color}}>
               {` some ${e[0]} `}
             </span>
             {postWords}
@@ -47,8 +44,7 @@ class TaxonomySection extends React.PureComponent {
                className="colorScheme border"
                onChange={event=>this.handleValueChange(i, 'color', event.target.value)}>
         </input>
-        <IconPicker icon={e[1].icon} iconKey={'cert'+i} onChange={icon=>this.handleValueChange(i, 'icon', icon)}/>
-        <div className="form-group d-inline-block">
+        <div className="form-group d-inline-block categoryNameInput">
           <input type="text" 
                  className="form-control" 
                  id="staticEmail2" 
@@ -57,8 +53,7 @@ class TaxonomySection extends React.PureComponent {
         </div>
         <button type="button" 
                 className="close" 
-                aria-label="Close" 
-                style={{display: 'none'}}
+                aria-label="Close"
                 onClick={()=>this.handleRemoveEntry(i)}>
           <span aria-hidden="true">&times;</span>
         </button>
@@ -84,15 +79,14 @@ class TaxonomySection extends React.PureComponent {
                  className="colorScheme border"
                  onChange={event=>this.setState({color: event.target.value})}>
           </input>
-          <IconPicker icon={this.state.icon} iconKey={'newcaticon'} onChange={icon=>this.setState({icon})}/>
-          <div className="form-group d-inline-block">
+          <div className="form-group d-inline-block categoryNameInput">
             <input type="text" 
                    className="form-control" 
                    id="staticEmail2" 
                    value={this.state.name} 
                    onChange={event=>this.setState({name: event.target.value})}/>
           </div>
-          <button type="button" className="btn btn-light ml-4" onClick={()=>this.handleAddCategory()}>Add</button>
+          <button type="button" className="btn btn-light ml-5" onClick={()=>this.handleAddCategory()}>Add</button>
           <br/>
         <div className="form-group d-inline-block">
           <input type="text" 
@@ -121,8 +115,9 @@ class TaxonomySection extends React.PureComponent {
   }
   
   handleRemoveEntry(index){
-    this.props.scheme.splice(index,1);
-    this.props.updateScheme(this.props.scheme);
+    const newScheme = this.props.scheme.map(x=>x);
+    newScheme.splice(index,1);
+    this.props.updateScheme(newScheme);
   }
   
   handleValueChange(index, key, value){
@@ -135,7 +130,7 @@ class TaxonomySection extends React.PureComponent {
   render(){
     return(
       <div>
-        <div className="row mt-4 bg-light">
+        <div id="taxonomySection" className="row mt-4 bg-light">
           <div className="col-2">
             <b>Certainty taxonomy</b>
           </div>
@@ -152,6 +147,7 @@ class TaxonomySection extends React.PureComponent {
             <label>Category name</label>
             <ul className="noListStyle">
                 {this.categoryListEntries()}
+                {this.categoryNewEntryField()}
             </ul>
           </div>
           <div className="col">

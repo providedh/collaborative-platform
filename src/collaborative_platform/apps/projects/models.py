@@ -1,7 +1,9 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.contrib.postgres import fields
 
 from apps.core.models import Profile
+from apps.projects.taxonomy_template import taxonomy_template_string, category_template_string
 
 TAXONOMY_FILES_PATH = 'taxonomy_files/'
 
@@ -68,46 +70,35 @@ class ProjectVersion(models.Model):
     commit_counter = models.IntegerField(default=0)
     date = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        unique_together = ('project', 'file_version_counter', 'commit_counter')
+
     def __str__(self):
         return f"{self.file_version_counter}.{self.commit_counter}"
 
 
 class Taxonomy(models.Model):
     project = models.OneToOneField(Project, primary_key=True, related_name='taxonomy', on_delete=models.CASCADE)
-    xml_id_1 = models.CharField(max_length=255)
-    name_1 = models.CharField(max_length=255)
-    desc_1 = models.TextField(null=True, blank=True)
-    color_1 = models.CharField(max_length=7)
-    xml_id_2 = models.CharField(max_length=255)
-    name_2 = models.CharField(max_length=255)
-    desc_2 = models.TextField(null=True, blank=True)
-    color_2 = models.CharField(max_length=7)
-    xml_id_3 = models.CharField(max_length=255)
-    name_3 = models.CharField(max_length=255)
-    desc_3 = models.TextField(null=True, blank=True)
-    color_3 = models.CharField(max_length=7)
-    xml_id_4 = models.CharField(max_length=255)
-    name_4 = models.CharField(max_length=255)
-    desc_4 = models.TextField(null=True, blank=True)
-    color_4 = models.CharField(max_length=7)
-    contents = models.TextField()
+    contents = models.TextField(null=True, blank=True)
 
-    def save(self, *args, **kwargs):
-        if self.pk is not None:
-            from .taxonomy_template import template_string
-            self.contents = template_string.format(
-                self.project.title,
-                self.xml_id_1,
-                self.name_1,
-                self.desc_1,
-                self.xml_id_2,
-                self.name_2,
-                self.desc_2,
-                self.xml_id_3,
-                self.name_3,
-                self.desc_3,
-                self.xml_id_4,
-                self.name_4,
-                self.desc_4,
-            )
-        super(Taxonomy, self).save(*args, **kwargs)
+    def update_contents(self):
+        cats_string = ""
+        for cat in self.categories.all():
+            cats_string += category_template_string.format(cat.xml_id, cat.name, cat.description)
+        self.contents = taxonomy_template_string.format(cats_string)
+        self.save()
+
+
+class UncertaintyCategory(models.Model):
+    taxonomy = models.ForeignKey(Taxonomy, related_name="categories", on_delete=models.CASCADE)
+    name = models.CharField(max_length=255)
+    xml_id = models.CharField(max_length=255)
+    color = models.CharField(max_length=7)
+    description = models.TextField(null=True, blank=True)
+
+
+class EntitySchema(models.Model):
+    taxonomy = models.ForeignKey(Taxonomy, related_name="entities", on_delete=models.CASCADE)
+    name = models.CharField(max_length=255)
+    color = models.CharField(max_length=7)
+    icon = models.CharField(max_length=12)

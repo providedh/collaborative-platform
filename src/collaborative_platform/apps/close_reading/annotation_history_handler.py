@@ -27,7 +27,7 @@ class AnnotationHistoryHandler:
 
         if version > len(self.__history):
             raise NoVersionException("There is no version {0} for this file. Latest file version is {1}.".format(
-                    version, self.__last_file_version_nr))
+                version, self.__last_file_version_nr))
         else:
             history = self.__history[:version]
 
@@ -136,12 +136,9 @@ class AnnotationHistoryHandler:
 
     def __get_uncertainties_names(self):
         taxonomy = Taxonomy.objects.get(project_id=self.__project_id)
-        taxonomy_fields = taxonomy._meta.get_fields()
-
-        uncertainties_names_fields = [field.name for field in taxonomy_fields if field.name.startswith('name_')]
-        uncertainties_names = [taxonomy.__dict__[name] for name in uncertainties_names_fields]
-
-        return uncertainties_names
+        names = taxonomy.categories.values_list("name", flat=True)
+        # TODO test this
+        return names
 
     def __count_uncertainties(self, text, uncertainties_names, site):
         text = self.__remove_encoding_line(text)
