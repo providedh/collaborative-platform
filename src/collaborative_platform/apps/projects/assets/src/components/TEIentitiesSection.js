@@ -120,6 +120,7 @@ class TEIentitiesSection extends React.PureComponent {
                    value={this.state.name} 
                    onChange={event=>this.setState({name: event.target.value})}/>
           </div>
+          <button type="button" className="btn btn-light ml-3" onClick={()=>this.handleAddEntity()}>Add</button>
           <div className="small d-block px-5">
             <span className="d-block">List existing {this.state.name}s in the documents?</span>
             <div className="form-check form-check-inline">
@@ -142,7 +143,6 @@ class TEIentitiesSection extends React.PureComponent {
               <label className="form-check-label" htmlFor={this.state.name+'hideList'}>no</label>
             </div>
           </div>
-          <button type="button" className="btn btn-light ml-4" onClick={()=>this.handleAddEntity()}>Add</button>
       </li>
     );
     
