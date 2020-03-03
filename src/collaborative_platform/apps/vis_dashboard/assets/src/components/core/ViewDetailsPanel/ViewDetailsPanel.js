@@ -17,7 +17,7 @@ export default function ViewDetailsPanel({view, display, updateView, close}) {
     function handleUpdateView(formValues){
         const newConfig = {};
         formValues.forEach(x=>newConfig[x.name]=x.value);
-        console.log(view.config, view.type, newConfig, formValues)
+        //console.log(view.config, view.type, newConfig, formValues)
         updateView(newConfig);
     }
 
