@@ -36,24 +36,15 @@ class App extends React.Component {
   }
 
   createProject(e){
+    const key2name = array=>({...array[1], name:array[0]});
+    const body_list2boolean = ({name, color, icon, body_list})=>
+      ({name, color, icon, body_list:body_list=='true'})
+
     const data = {
       title: this.state.title,
       description: this.state.description,
-      categories: this.state.certScheme,
-      taxonomy: {
-              name_1: this.state.certScheme[0][0],
-              color_1: this.state.certScheme[0][1].color,
-              desc_1: this.state.certScheme[0][1].description,
-              name_2: this.state.certScheme[1][0],
-              color_2: this.state.certScheme[1][1].color,
-              desc_2: this.state.certScheme[1][1].description,
-              name_3: this.state.certScheme[2][0],
-              color_3: this.state.certScheme[2][1].color,
-              desc_3: this.state.certScheme[2][1].description,
-              name_4: this.state.certScheme[3][0],
-              color_4: this.state.certScheme[3][1].color,
-              desc_4: this.state.certScheme[3][1].description
-          }
+      taxonomy: this.state.certScheme.map(key2name),
+      entities: this.state.teiScheme.map(key2name).map(body_list2boolean)
     };
 
     e.preventDefault()
