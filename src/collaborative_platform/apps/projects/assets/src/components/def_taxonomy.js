@@ -18,14 +18,48 @@ export default {
 		},
 	},
 	"entities" : {
-		"date": {
-			"icon": "\uf073", 
-			"color": "#868788"
+		"person": {
+			"icon": "\uf007", 
+			"color": "#ff7f00",
+			"properties": [
+				"forename",
+				"surname",
+				"occupation",
+				"sex",
+				"birth",
+				"death",
+				"age"
+			]
 		},
 		"event": {
 			"icon": "\uf274", 
 			"color": "#cecece"
 		},
+		"org": {
+			"icon": "\uf1ad", 
+			"color": "#b4edfc"
+		},
+		"object": {
+			"icon": "\uf466", 
+			"color": "#b4d38d"
+		},
+		"place": {
+			"icon": "\uf279", 
+			"color": "#204191",
+			"properties": [
+				"country",
+				"settlement",
+				"[geo]location"
+			]
+		},
+		"date": {
+			"icon": "\uf073", 
+			"color": "#868788"
+		},
+		"time": {
+			"icon": "\uf017", 
+			"color": "#eab9e4"
+		}/*
 		"location": {
 			"icon": "\uf5a0", 
 			"color": "#ff6464"
@@ -42,22 +76,6 @@ export default {
 			"icon": "\uf0b1", 
 			"color": "#3c8745"
 		},
-		"object": {
-			"icon": "\uf466", 
-			"color": "#b4d38d"
-		},
-		"org": {
-			"icon": "\uf1ad", 
-			"color": "#b4edfc"
-		},
-		"person": {
-			"icon": "\uf007", 
-			"color": "#ff7f00"
-		},
-		"place": {
-			"icon": "\uf279", 
-			"color": "#204191"
-		},
 		"placeName": {
 			"icon": "\uf279", 
 			"color": "#204191"
@@ -65,10 +83,6 @@ export default {
 		"country": {
 			"icon": "\uf279", 
 			"color": "#204191"
-		},
-		"time": {
-			"icon": "\uf017", 
-			"color": "#eab9e4"
-		}
+		},*/
 	}
 };
