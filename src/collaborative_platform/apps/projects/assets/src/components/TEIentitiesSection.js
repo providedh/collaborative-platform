@@ -11,6 +11,7 @@ class TEIentitiesSection extends React.PureComponent {
       icon: "\uf042",
       color: '',
       name: '',
+      body_list: "false"
     };
     this.state = this.defState;
   }
@@ -67,14 +68,26 @@ class TEIentitiesSection extends React.PureComponent {
         </button>
         {propertyList(e[1])}
         <div className="small d-block px-5">
-          <span>List existing {e[0]}s in the documents?</span>
+          <span className="d-block">List existing {e[0]}s in the documents?</span>
           <div className="form-check form-check-inline">
-            <input className="form-check-input" type="radio" name={e[0]+'list'} id={e[0]+'showList'} value={true}/>
+            <input className="form-check-input" 
+              checked={e[1].body_list == "true"} 
+              type="radio" 
+              name={e[0]+'list'} 
+              id={e[0]+'showList'} 
+              onChange={event=>this.handleBodyListChange(i, event.target.value)}
+              value="true"/>
             <label className="form-check-label" htmlFor={e[0]+'showList'}>yes</label>
           </div>
           <div className="form-check form-check-inline">
-            <input className="form-check-input" type="radio" name={e[0]+'list'} id={e[0]+'hideList'} value={false}/>
-            <label className="form-check-label" htmlFor={e[0]+'hideList'}>no</label>
+            <input className="form-check-input" 
+              checked={e[1].body_list == "false"} 
+              type="radio" 
+              name={e[0]+'list'} 
+              id={e[0]+'hideList'} 
+              onChange={event=>this.handleBodyListChange(i, event.target.value)}
+              value="false"/>
+              <label className="form-check-label" htmlFor={e[0]+'hideList'}>no</label>
           </div>
         </div>
         <hr />
@@ -100,6 +113,28 @@ class TEIentitiesSection extends React.PureComponent {
                    value={this.state.name} 
                    onChange={event=>this.setState({name: event.target.value})}/>
           </div>
+          <div className="small d-block px-5">
+            <span className="d-block">List existing {this.state.name}s in the documents?</span>
+            <div className="form-check form-check-inline">
+              <input className="form-check-input" 
+                checked={this.state.body_list == "true"} 
+                onChange={()=>this.setState({body_list: "true"})}
+                type="radio" 
+                name={this.state.name+'list'} 
+                id={this.state.name+'showList'}
+                value="true"/>
+              <label className="form-check-label" htmlFor={this.state.name+'showList'}>yes</label>
+            </div>
+            <div className="form-check form-check-inline">
+              <input className="form-check-input" 
+                checked={this.state.body_list == "false"} type="radio" 
+                onChange={()=>this.setState({body_list: "false"})}
+                name={this.state.name+'list'} 
+                id={this.state.name+'hideList'}
+                value="false"/>
+              <label className="form-check-label" htmlFor={this.state.name+'hideList'}>no</label>
+            </div>
+          </div>
           <button type="button" className="btn btn-light ml-4" onClick={()=>this.handleAddEntity()}>Add</button>
       </li>
     );
@@ -107,7 +142,8 @@ class TEIentitiesSection extends React.PureComponent {
   }
   
   handleAddEntity(){
-    const newEntity = [this.state.name, {color:this.state.color, icon: this.state.icon}];
+    const {color, icon, body_list} = this.state;
+    const newEntity = [this.state.name, {color, icon, body_list}];
     if(taxonomy.entities.hasOwnProperty(this.state.name) &&
         taxonomy.entities[this.state.name].hasOwnProperty('properties')){
       newEntity[1].properties = taxonomy.entities[this.state.name].properties;
@@ -121,6 +157,13 @@ class TEIentitiesSection extends React.PureComponent {
   handleNameChange(index, newName){
     const newValue = this.props.scheme[index];
     newValue[0] = newName;
+    const newScheme = this.props.scheme.map((x,i)=>i!=index?x:newValue);
+    this.props.updateScheme(newScheme);
+  }
+
+  handleBodyListChange(index, body_list){
+    const newValue = this.props.scheme[index];
+    newValue[1].body_list = body_list;
     const newScheme = this.props.scheme.map((x,i)=>i!=index?x:newValue);
     this.props.updateScheme(newScheme);
   }
