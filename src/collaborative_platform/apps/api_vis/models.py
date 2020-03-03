@@ -1,14 +1,10 @@
-from enum import Enum
-
-from datetime import date, time
-
 from django.contrib.auth.models import User
 from django.contrib.gis.db.models import PointField
-from django.contrib.gis.geos import Point
 from django.db import models
 
 from apps.files_management.models import File, FileVersion
 from apps.projects.models import Project, ProjectVersion
+from apps.api_vis.enums import TypeChoice
 
 
 class Entity(models.Model):
@@ -40,14 +36,6 @@ class EntityVersion(models.Model):
 
 
 class EntityProperty(models.Model):
-    class TypeChoice(Enum):
-        str = str
-        int = int
-        float = float
-        date = date
-        time = time
-        point = Point
-
     entity_version = models.ForeignKey(EntityVersion, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     type = models.CharField(max_length=255, choices=[(tag, tag.value) for tag in TypeChoice])
@@ -63,33 +51,33 @@ class EntityProperty(models.Model):
     deleted_in_version = models.IntegerField()
 
     def set_value(self, value):
-        if self.type == self.TypeChoice.str:
+        if self.type == TypeChoice.str:
             self.value_str = value
-        elif self.type == self.TypeChoice.int:
+        elif self.type == TypeChoice.int:
             self.value_int = value
-        elif self.type == self.TypeChoice.float:
+        elif self.type == TypeChoice.float:
             self.value_float = value
-        elif self.type == self.TypeChoice.date:
+        elif self.type == TypeChoice.date:
             self.value_date = value
-        elif self.type == self.TypeChoice.time:
+        elif self.type == TypeChoice.time:
             self.value_time = value
-        elif self.type == self.TypeChoice.point:
+        elif self.type == TypeChoice.point:
             self.value_point = value
 
         self.save()
 
     def get_value(self):
-        if self.type == self.TypeChoice.str:
+        if self.type == TypeChoice.str:
             return self.value_str
-        elif self.type == self.TypeChoice.int:
+        elif self.type == TypeChoice.int:
             return self.value_int
-        elif self.type == self.TypeChoice.float:
+        elif self.type == TypeChoice.float:
             return self.value_float
-        elif self.type == self.TypeChoice.date:
+        elif self.type == TypeChoice.date:
             return self.value_date
-        elif self.type == self.TypeChoice.time:
+        elif self.type == TypeChoice.time:
             return self.value_time
-        elif self.type == self.TypeChoice.point:
+        elif self.type == TypeChoice.point:
             return self.value_point
 
 
