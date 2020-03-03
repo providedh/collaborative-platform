@@ -47,7 +47,6 @@ class TaxonomySection extends React.PureComponent {
         <div className="form-group d-inline-block categoryNameInput">
           <input type="text" 
                  className="form-control" 
-                 id="staticEmail2" 
                  value={e[0]} 
                  onChange={event=>this.handleNameChange(i, event.target.value)}/>
         </div>
@@ -82,7 +81,6 @@ class TaxonomySection extends React.PureComponent {
           <div className="form-group d-inline-block categoryNameInput">
             <input type="text" 
                    className="form-control" 
-                   id="staticEmail2" 
                    value={this.state.name} 
                    onChange={event=>this.setState({name: event.target.value})}/>
           </div>

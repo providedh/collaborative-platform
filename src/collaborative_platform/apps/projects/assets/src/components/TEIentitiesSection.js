@@ -27,13 +27,13 @@ class TEIentitiesSection extends React.PureComponent {
         return(
           <span key={e[0]}>
             {preWords}
-            <div className="entity">
+            <span className="entity">
               <span className="tagIcon" style={{color:e[1].color}} data-icon={e[1].icon}>
               </span>
               <span className="tag" style={{borderColor:e[1].color}}>
                 {` some ${e[0]} `}
               </span>
-            </div>
+            </span>
             {postWords}
           </span>
         );
@@ -56,7 +56,6 @@ class TEIentitiesSection extends React.PureComponent {
         <div className="form-group d-inline-block">
           <input type="text" 
                  className="form-control" 
-                 id="staticEmail2" 
                  value={e[0]} 
                  onChange={event=>this.handleNameChange(i, event.target.value)}/>
         </div>
@@ -67,15 +66,15 @@ class TEIentitiesSection extends React.PureComponent {
           <span aria-hidden="true">&times;</span>
         </button>
         {propertyList(e[1])}
-        <div class="small d-block px-5">
+        <div className="small d-block px-5">
           <span>List existing {e[0]}s in the documents?</span>
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"/>
-            <label class="form-check-label" for="inlineRadio1">yes</label>
+          <div className="form-check form-check-inline">
+            <input className="form-check-input" type="radio" name={e[0]+'list'} id={e[0]+'showList'} value={true}/>
+            <label className="form-check-label" htmlFor={e[0]+'showList'}>yes</label>
           </div>
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"/>
-            <label class="form-check-label" for="inlineRadio2">no</label>
+          <div className="form-check form-check-inline">
+            <input className="form-check-input" type="radio" name={e[0]+'list'} id={e[0]+'hideList'} value={false}/>
+            <label className="form-check-label" htmlFor={e[0]+'hideList'}>no</label>
           </div>
         </div>
         <hr />
