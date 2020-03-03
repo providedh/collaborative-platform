@@ -43,7 +43,7 @@ class TEIentitiesSection extends React.PureComponent {
   
   entityListEntries(){
     const propertyList = (e) => (!e.hasOwnProperty('properties'))?'':
-      <p className="px-5 text-muted small">This entity has: {e.properties.join(', ')}</p>;
+      <p className="px-5 text-muted small mb-0">This entity has: {e.properties.join(', ')}</p>;
 
     const entries = this.props.scheme.map((e, i)=>(
       <li key={i}>
@@ -67,6 +67,17 @@ class TEIentitiesSection extends React.PureComponent {
           <span aria-hidden="true">&times;</span>
         </button>
         {propertyList(e[1])}
+        <div class="small d-block px-5">
+          <span>List existing {e[0]}s in the documents?</span>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"/>
+            <label class="form-check-label" for="inlineRadio1">yes</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"/>
+            <label class="form-check-label" for="inlineRadio2">no</label>
+          </div>
+        </div>
         <hr />
       </li>
     ));
