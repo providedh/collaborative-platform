@@ -172,3 +172,16 @@ def get_settings(request, project_id):
             "taxonomy": list(uncertainty_cats)}
 
     return JsonResponse(resp)
+
+
+@login_required
+def get_default_properties(request):
+    from collaborative_platform.settings import ENTITIES
+    entites = ENTITIES
+
+    for key, entity in entites.items():
+        entity['properties'] = list(set(entity['properties'].keys()).difference('text'))
+        entity.pop('list_tag')
+        entity.pop('text_tag')
+
+    return JsonResponse(entites)

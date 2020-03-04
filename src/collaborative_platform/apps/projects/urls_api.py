@@ -9,4 +9,5 @@ urlpatterns = [
     path('<int:project_id>/activities/', api.get_activities, name='activities'),
     path('<int:project_id>/taxonomy/', api.get_taxonomy, name='taxonomy'),
     path('<int:project_id>/settings/', api.get_settings, name='settings'),
+    path('default_properties/', api.get_default_properties, name='default_properties'),
 ]
