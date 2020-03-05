@@ -11,6 +11,7 @@ class TestIDsFiller:
         monkeypatch.setattr(IDsFiller, 'get_entities_schemes_from_db', fake_get_entities_schemes_from_db)
         monkeypatch.setattr(IDsFiller, 'correct_unlistable_entities_ids', do_nothing)
         monkeypatch.setattr(IDsFiller, 'correct_custom_entities_ids', do_nothing)
+        monkeypatch.setattr(IDsFiller, 'correct_collision_xml_ids', do_nothing)
 
         source_file_path = os.path.join(DIRNAME, 'test_files', 'source_files', 'ids_filler_test_file.xml')
         expected_file_path = os.path.join(DIRNAME, 'test_files', 'expected_files',
@@ -31,6 +32,7 @@ class TestIDsFiller:
         monkeypatch.setattr(IDsFiller, 'get_entities_schemes_from_db', fake_get_entities_schemes_from_db)
         monkeypatch.setattr(IDsFiller, 'correct_listable_entities_ids', do_nothing)
         monkeypatch.setattr(IDsFiller, 'correct_custom_entities_ids', do_nothing)
+        monkeypatch.setattr(IDsFiller, 'correct_collision_xml_ids', do_nothing)
 
         source_file_path = os.path.join(DIRNAME, 'test_files', 'source_files', 'ids_filler_test_file.xml')
         expected_file_path = os.path.join(DIRNAME, 'test_files', 'expected_files',
@@ -51,10 +53,32 @@ class TestIDsFiller:
         monkeypatch.setattr(IDsFiller, 'get_entities_schemes_from_db', fake_get_entities_schemes_from_db)
         monkeypatch.setattr(IDsFiller, 'correct_listable_entities_ids', do_nothing)
         monkeypatch.setattr(IDsFiller, 'correct_unlistable_entities_ids', do_nothing)
+        monkeypatch.setattr(IDsFiller, 'correct_collision_xml_ids', do_nothing)
 
         source_file_path = os.path.join(DIRNAME, 'test_files', 'source_files', 'ids_filler_test_file.xml')
         expected_file_path = os.path.join(DIRNAME, 'test_files', 'expected_files',
                                           'correct_ids__correct_custom_entities.xml')
+
+        source_xml = read_file(source_file_path)
+        expected_xml = read_file(expected_file_path)
+
+        project_id = 1
+
+        ids_filler = IDsFiller()
+
+        result_xml = ids_filler.correct_ids(source_xml, project_id)
+
+        assert result_xml == expected_xml
+
+    def test_correct_ids__correct_conflictual_xml_ids__string(self, monkeypatch):
+        monkeypatch.setattr(IDsFiller, 'get_entities_schemes_from_db', fake_get_entities_schemes_from_db)
+        monkeypatch.setattr(IDsFiller, 'correct_listable_entities_ids', do_nothing)
+        monkeypatch.setattr(IDsFiller, 'correct_unlistable_entities_ids', do_nothing)
+        monkeypatch.setattr(IDsFiller, 'correct_custom_entities_ids', do_nothing)
+
+        source_file_path = os.path.join(DIRNAME, 'test_files', 'source_files', 'ids_filler_test_file.xml')
+        expected_file_path = os.path.join(DIRNAME, 'test_files', 'expected_files',
+                                          'correct_ids__correct_conflictual_xml_ids.xml')
 
         source_xml = read_file(source_file_path)
         expected_xml = read_file(expected_file_path)

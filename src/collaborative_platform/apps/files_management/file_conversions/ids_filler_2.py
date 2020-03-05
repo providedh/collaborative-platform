@@ -23,6 +23,8 @@ class IDsFiller:
         self.initiate_max_xml_ids()
 
         self.create_tree(xml_content)
+
+        self.correct_collision_xml_ids()
         self.correct_listable_entities_ids()
         self.correct_unlistable_entities_ids()
         self.correct_custom_entities_ids()
@@ -81,39 +83,71 @@ class IDsFiller:
 
             self.correct_entities_ids(xpath, entity.name)
 
-    def correct_entities_ids(self, xpath, entity_name):
+    def correct_collision_xml_ids(self):
+        tags_to_correct = self.get_tags_to_correct()
+
+        for tag_name in tags_to_correct:
+            xpath = f"//*[contains(@xml:id, '{tag_name}-')]"
+
+            self.correct_entities_ids(xpath, tag_name, collision=True)
+
+    def get_tags_to_correct(self):
+        entities = self.listable_entities + self.unlistable_entities + self.custom_entities
+        default_entities_names = settings.ENTITIES.keys()
+
+        tags_to_correct = []
+
+        for entity in entities:
+            tags_to_correct.append(entity.name)
+
+            if entity.name in default_entities_names:
+                entity_text_tag = settings.ENTITIES[entity.name]['text_tag']
+                tags_to_correct.append(entity_text_tag)
+
+        tags_to_correct = set(tags_to_correct)
+
+        return tags_to_correct
+
+    def correct_entities_ids(self, xpath, entity_name, collision=False):
         elements = self.tree.xpath(xpath, namespaces=self.namespaces)
 
         for element in elements:
             if self.xml_id_key in element.attrib:
-                self.update_element_xml_id_and_refs(element, entity_name)
+                self.update_element_xml_id_and_references(element, entity_name, collision)
 
             else:
                 self.update_element_xml_id(element, entity_name)
 
-    def update_element_xml_id_and_refs(self, element, entity_name):
+    def update_element_xml_id_and_references(self, element, entity_name, collision=False):
         old_xml_id = element.attrib[self.xml_id_key]
-        new_xml_id = self.update_element_xml_id(element, entity_name)
+        new_xml_id = self.update_element_xml_id(element, entity_name, collision=collision)
 
-        xpath = f"//*[contains(concat(' ', @ref, ' '), ' #{old_xml_id} ')]"
+        reference_attributes = ['ref', 'target']
 
-        elements = self.tree.xpath(xpath, namespaces=self.namespaces)
+        for attribute in reference_attributes:
+            xpath = f"//*[contains(concat(' ', @{attribute}, ' '), ' #{old_xml_id} ')]"
 
-        for element in elements:
-            self.update_element_ref(element, old_xml_id, new_xml_id)
+            elements = self.tree.xpath(xpath, namespaces=self.namespaces)
 
-    def update_element_xml_id(self, element, entity_name):
-        xml_id_number = self.get_next_xml_id_number(entity_name)
-        new_xml_id = f'{entity_name}-{xml_id_number}'
+            for element in elements:
+                self.update_element_attribute(element, attribute, old_xml_id, new_xml_id)
+
+    def update_element_xml_id(self, element, entity_name, collision=False):
+        if not collision:
+            xml_id_number = self.get_next_xml_id_number(entity_name)
+            new_xml_id = f'{entity_name}-{xml_id_number}'
+        else:
+            old_xml_id = element.attrib[self.xml_id_key]
+            new_xml_id = f'old-{old_xml_id}'
 
         element.attrib[self.xml_id_key] = new_xml_id
 
         return new_xml_id
 
-    def update_element_ref(self, element, old_xml_id, new_xml_id):
-        old_ref = element.attrib['ref']
-        new_ref = old_ref.replace(f'#{old_xml_id}', f'#{new_xml_id}')
-        element.attrib['ref'] = new_ref
+    def update_element_attribute(self, element, attribute, old_value, new_value):
+        old_reference = element.attrib[attribute]
+        new_reference = old_reference.replace(f'#{old_value}', f'#{new_value}')
+        element.attrib[attribute] = new_reference
 
     def get_next_xml_id_number(self, entity_name):
         xml_id_number = self.max_xml_ids[entity_name]
