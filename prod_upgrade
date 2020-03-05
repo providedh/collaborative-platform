@@ -3,7 +3,7 @@ cd /home/ubuntu/collaborative-platform
 pkill screen
 git pull --rebase
 cd src/collaborative_platform/
-cp collaborative_platform/settings.py_template collaborative_platform/settings.py
+cp collaborative_platform/settings_template.py collaborative_platform/settings.py
 cat /home/ubuntu/secrets >> collaborative_platform/settings.py
 python3 manage.py makemigrations
 python3 manage.py migrate

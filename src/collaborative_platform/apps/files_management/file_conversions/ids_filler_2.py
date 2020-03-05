@@ -13,7 +13,7 @@ class IDsFiller:
         self.tree = None
 
         self.listable_entities = []
-        self.non_listable_entities = []
+        self.unlistable_entities = []
         self.custom_entities = []
 
         self.max_xml_ids = {}
@@ -24,7 +24,7 @@ class IDsFiller:
 
         self.create_tree(xml_content)
         self.correct_listable_entities_ids()
-        self.correct_non_listable_entities_ids()
+        self.correct_unlistable_entities_ids()
         self.correct_custom_entities_ids()
 
         xml_content = self.create_xml_content()
@@ -43,7 +43,7 @@ class IDsFiller:
                 if settings.ENTITIES[entity.name]['listable']:
                     self.listable_entities.append(entity)
                 else:
-                    self.non_listable_entities.append(entity)
+                    self.unlistable_entities.append(entity)
 
     @staticmethod
     def get_entities_schemes_from_db(project_id):
@@ -52,7 +52,7 @@ class IDsFiller:
         return entities_schemes
 
     def initiate_max_xml_ids(self):
-        entities = self.listable_entities + self.non_listable_entities + self.custom_entities
+        entities = self.listable_entities + self.unlistable_entities + self.custom_entities
 
         for entity in entities:
             self.max_xml_ids.update({entity.name: 0})
@@ -69,8 +69,8 @@ class IDsFiller:
 
             self.correct_entities_ids(xpath, entity.name)
 
-    def correct_non_listable_entities_ids(self):
-        for entity in self.non_listable_entities:
+    def correct_unlistable_entities_ids(self):
+        for entity in self.unlistable_entities:
             xpath = f'//default:text//default:body//default:{entity.name}'
 
             self.correct_entities_ids(xpath, entity.name)

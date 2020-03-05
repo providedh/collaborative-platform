@@ -18,7 +18,7 @@ before_install:
 
 install:
   - pip install -r requirements.txt
-  - cp src/collaborative_platform/collaborative_platform/settings.py_template src/collaborative_platform/collaborative_platform/settings.py
+  - cp src/collaborative_platform/collaborative_platform/settings_template.py src/collaborative_platform/collaborative_platform/settings.py
 
 before_script:
   - export PATH="/usr/lib/postgresql/11/bin:$PATH"
