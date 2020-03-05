@@ -103,3 +103,6 @@ class EntitySchema(models.Model):
     color = models.CharField(max_length=7)
     icon = models.CharField(max_length=12)
     body_list = models.BooleanField(default=False)
+
+    class Meta:
+        unique_together = ("taxonomy", "name")

@@ -14,6 +14,7 @@ from lxml.etree import XMLSyntaxError
 
 # from apps.api_vis.helpers import create_entities_in_database
 from apps.files_management.file_conversions.ids_filler import IDsFiller
+from apps.files_management.file_conversions.ids_filler_2 import IDsFiller
 from apps.projects.helpers import log_activity, paginate_start_length, page_to_json_response
 from apps.files_management.models import File, FileVersion, Directory
 from apps.views_decorators import objects_exists, user_has_access
@@ -88,12 +89,29 @@ def upload(request, directory_id):  # type: (HttpRequest, int) -> HttpResponse
                 logger.info(f"Uploading file {file_name}: migration done in "
                             f"{round(start_ids_filling - start_migrating, 2)} s")
 
+
+
+
+
                 try:
-                    tei_handler = IDsFiller(tei_handler, file_name, dbfile.pk)
+                    # tei_handler = IDsFiller(tei_handler, file_name, dbfile.pk)
+
+                    ids_filler = IDsFiller()
+
+                    xml_content = file_version.get_content()
+
+                    xml_content = ids_filler.correct_ids(xml_content, project.id)
+
                 except XMLSyntaxError:
                     is_id_filled = False
                 else:
                     is_id_filled = tei_handler.process(initial=True)
+
+
+
+
+
+
 
                 start_extracting = time.time()
                 logger.info(f"Uploading file {file_name}: filling ID's done in "

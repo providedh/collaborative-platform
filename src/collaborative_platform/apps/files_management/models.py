@@ -203,9 +203,5 @@ class FileVersion(models.Model):
 
 class FileMaxXmlIds(models.Model):
     file = models.OneToOneField(File, on_delete=models.CASCADE, primary_key=True)
-    person = models.IntegerField(default=0)
-    event = models.IntegerField(default=0)
-    org = models.IntegerField(default=0)
-    place = models.IntegerField(default=0)
-    certainty = models.IntegerField(default=0)
-    object = models.IntegerField(default=0)
+    xml_id_base = models.CharField(max_length=255)
+    xml_id_number = models.IntegerField(default=0)
