@@ -115,6 +115,24 @@ class TestIDsCorrector:
 
         assert result_xml == expected_xml
 
+    def test_correct_ids__correct_all__string(self, monkeypatch):
+        monkeypatch.setattr(IDsCorrector, 'get_entities_schemes_from_db', fake_get_entities_schemes_from_db)
+
+        source_file_path = os.path.join(DIRNAME, 'test_files', 'source_files',
+                                        'correct_ids__correct_all__source.xml')
+        expected_file_path = os.path.join(DIRNAME, 'test_files', 'expected_files',
+                                          'correct_ids__correct_all__expected.xml')
+
+        source_xml = read_file(source_file_path)
+        expected_xml = read_file(expected_file_path)
+
+        project_id = 1
+
+        ids_corrector = IDsCorrector()
+        result_xml = ids_corrector.correct_ids(source_xml, project_id)
+
+        assert result_xml == expected_xml
+
 
 def read_file(path):
     with open(path, 'r') as file:
