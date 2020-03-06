@@ -102,28 +102,28 @@ class IDsCorrector:
             text_tag = settings.ENTITIES[entity.name]['text_tag']
 
             xpath_body = f'//default:text//default:body//default:{text_tag}'
-            elements_in_body = self.tree.xpath(xpath_body, namespaces=self.namespaces)
-
             xpath_list = f'//default:{list_tag}[@type="{entity.name}List"]//default:{text_tag}'
-            elements_in_list = self.tree.xpath(xpath_list, namespaces=self.namespaces)
 
-            elements = set(elements_in_body) - set(elements_in_list)
-            elements = list(elements)
-            elements = sorted(elements, key=lambda element: str(element.sourceline) + element.text + element.tail)
+            elements = self.get_difference_of_elements(xpath_body, xpath_list)
 
             self.correct_elements_ids(elements, text_tag)
 
         xpath_body = f'//default:text//default:body//default:objectName'
-        elements_in_body = self.tree.xpath(xpath_body, namespaces=self.namespaces)
-
         xpath_list = f'//default:listObject//default:objectName'
-        elements_in_list = self.tree.xpath(xpath_list, namespaces=self.namespaces)
 
-        elements = set(elements_in_body) - set(elements_in_list)
+        elements = self.get_difference_of_elements(xpath_body, xpath_list)
+
+        self.correct_elements_ids(elements, 'objectName')
+
+    def get_difference_of_elements(self, xpath_a, xpath_b):
+        elements_a = self.tree.xpath(xpath_a, namespaces=self.namespaces)
+        elements_b = self.tree.xpath(xpath_b, namespaces=self.namespaces)
+
+        elements = set(elements_a) - set(elements_b)
         elements = list(elements)
         elements = sorted(elements, key=lambda element: str(element.sourceline) + element.text + element.tail)
 
-        self.correct_elements_ids(elements, 'objectName')
+        return elements
 
     def get_usable_tags(self):
         entities = self.listable_entities + self.unlistable_entities + self.custom_entities
@@ -171,7 +171,8 @@ class IDsCorrector:
             new_xml_id = f'{entity_name}-{xml_id_number}'
         else:
             old_xml_id = element.attrib[self.xml_id_key]
-            new_xml_id = f'old-{old_xml_id}'
+            old_xml_id = old_xml_id.replace('-', '_')
+            new_xml_id = f'old_{old_xml_id}'
 
         element.attrib[self.xml_id_key] = new_xml_id
 
