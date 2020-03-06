@@ -29,6 +29,7 @@ class IDsCorrector:
         self.correct_unlistable_entities_ids()
         self.correct_custom_entities_ids()
         self.correct_tags_ids_in_body_text_related_to_entities()
+        self.correct_certainties_xml_ids()
 
         xml_content = self.create_xml_content()
 
@@ -114,6 +115,13 @@ class IDsCorrector:
         elements = self.get_difference_of_elements(xpath_body, xpath_list)
 
         self.correct_elements_ids(elements, 'objectName')
+
+    def correct_certainties_xml_ids(self):
+        xpath = f'//default:teiHeader//default:classCode[@scheme="http://providedh.eu/uncertainty/ns/1.0"]' \
+                f'//default:certainty'
+        elements = self.tree.xpath(xpath, namespaces=self.namespaces)
+
+        self.correct_elements_ids(elements, 'certainty')
 
     def get_difference_of_elements(self, xpath_a, xpath_b):
         elements_a = self.tree.xpath(xpath_a, namespaces=self.namespaces)
