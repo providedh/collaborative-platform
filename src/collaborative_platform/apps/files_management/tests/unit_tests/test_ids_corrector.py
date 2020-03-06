@@ -8,7 +8,7 @@ DIRNAME = os.path.dirname(__file__)
 
 class TestIDsCorrector:
     def test_correct_ids__correct_listable_entities_ids__string(self, monkeypatch):
-        monkeypatch.setattr(IDsCorrector, 'get_entities_schemes_from_db', fake_get_entities_schemes_from_db)
+        monkeypatch.setattr(IDsCorrector, '_get_entities_schemes_from_db', fake_get_entities_schemes_from_db)
 
         source_file_path = os.path.join(DIRNAME, 'test_files', 'source_files',
                                         'correct_ids__correct_listable_entities_ids__source.xml')
@@ -26,7 +26,7 @@ class TestIDsCorrector:
         assert result_xml == expected_xml
 
     def test_correct_ids__correct_unlistable_entities_ids__string(self, monkeypatch):
-        monkeypatch.setattr(IDsCorrector, 'get_entities_schemes_from_db', fake_get_entities_schemes_from_db)
+        monkeypatch.setattr(IDsCorrector, '_get_entities_schemes_from_db', fake_get_entities_schemes_from_db)
 
         source_file_path = os.path.join(DIRNAME, 'test_files', 'source_files',
                                         'correct_ids__correct_unlistable_entities_ids__source.xml')
@@ -44,7 +44,7 @@ class TestIDsCorrector:
         assert result_xml == expected_xml
 
     def test_correct_ids__correct_custom_entities_ids__string(self, monkeypatch):
-        monkeypatch.setattr(IDsCorrector, 'get_entities_schemes_from_db', fake_get_entities_schemes_from_db)
+        monkeypatch.setattr(IDsCorrector, '_get_entities_schemes_from_db', fake_get_entities_schemes_from_db)
 
         source_file_path = os.path.join(DIRNAME, 'test_files', 'source_files',
                                         'correct_ids__correct_custom_entities_ids__source.xml')
@@ -62,7 +62,7 @@ class TestIDsCorrector:
         assert result_xml == expected_xml
 
     def test_correct_ids__correct_collision_xml_ids__string(self, monkeypatch):
-        monkeypatch.setattr(IDsCorrector, 'get_entities_schemes_from_db', fake_get_entities_schemes_from_db)
+        monkeypatch.setattr(IDsCorrector, '_get_entities_schemes_from_db', fake_get_entities_schemes_from_db)
 
         source_file_path = os.path.join(DIRNAME, 'test_files', 'source_files',
                                         'correct_ids__correct_collision_xml_ids__source.xml')
@@ -80,7 +80,7 @@ class TestIDsCorrector:
         assert result_xml == expected_xml
 
     def test_correct_ids__correct_tags_ids_in_body_related_to_entities__string(self, monkeypatch):
-        monkeypatch.setattr(IDsCorrector, 'get_entities_schemes_from_db', fake_get_entities_schemes_from_db)
+        monkeypatch.setattr(IDsCorrector, '_get_entities_schemes_from_db', fake_get_entities_schemes_from_db)
 
         source_file_path = os.path.join(DIRNAME, 'test_files', 'source_files',
                                         'correct_ids__correct_tags_ids_in_body_related_to_entities__source.xml')
@@ -98,7 +98,7 @@ class TestIDsCorrector:
         assert result_xml == expected_xml
 
     def test_correct_ids__correct_certainties_ids__string(self, monkeypatch):
-        monkeypatch.setattr(IDsCorrector, 'get_entities_schemes_from_db', fake_get_entities_schemes_from_db)
+        monkeypatch.setattr(IDsCorrector, '_get_entities_schemes_from_db', fake_get_entities_schemes_from_db)
 
         source_file_path = os.path.join(DIRNAME, 'test_files', 'source_files',
                                         'correct_ids__correct_certainties_ids__source.xml')
@@ -116,7 +116,7 @@ class TestIDsCorrector:
         assert result_xml == expected_xml
 
     def test_correct_ids__correct_all__string(self, monkeypatch):
-        monkeypatch.setattr(IDsCorrector, 'get_entities_schemes_from_db', fake_get_entities_schemes_from_db)
+        monkeypatch.setattr(IDsCorrector, '_get_entities_schemes_from_db', fake_get_entities_schemes_from_db)
 
         source_file_path = os.path.join(DIRNAME, 'test_files', 'source_files',
                                         'correct_ids__correct_all__source.xml')
