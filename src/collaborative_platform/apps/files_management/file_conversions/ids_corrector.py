@@ -5,7 +5,7 @@ from django.conf import settings
 from apps.projects.models import EntitySchema
 
 
-class IDsFiller:
+class IDsCorrector:
     def __init__(self):
         self.namespaces = settings.XML_NAMESPACES
         self.xml_id_key = f"{{{self.namespaces['xml']}}}id"
@@ -28,6 +28,7 @@ class IDsFiller:
         self.correct_listable_entities_ids()
         self.correct_unlistable_entities_ids()
         self.correct_custom_entities_ids()
+        self.correct_tags_ids_in_body_text_related_to_entities()
 
         xml_content = self.create_xml_content()
 
@@ -54,10 +55,10 @@ class IDsFiller:
         return entities_schemes
 
     def initiate_max_xml_ids(self):
-        entities = self.listable_entities + self.unlistable_entities + self.custom_entities
+        usable_tags = self.get_usable_tags()
 
-        for entity in entities:
-            self.max_xml_ids.update({entity.name: 0})
+        for tag_name in usable_tags:
+            self.max_xml_ids.update({tag_name: 0})
 
     def create_tree(self, xml_content):
         parser = etree.XMLParser(remove_blank_text=True)
@@ -68,49 +69,81 @@ class IDsFiller:
         for entity in self.listable_entities:
             list_tag = settings.ENTITIES[entity.name]['list_tag']
             xpath = f'//default:{list_tag}[@type="{entity.name}List"]//default:{entity.name}'
+            elements = self.tree.xpath(xpath, namespaces=self.namespaces)
 
-            self.correct_entities_ids(xpath, entity.name)
+            self.correct_elements_ids(elements, entity.name)
 
     def correct_unlistable_entities_ids(self):
         for entity in self.unlistable_entities:
             xpath = f'//default:text//default:body//default:{entity.name}'
+            elements = self.tree.xpath(xpath, namespaces=self.namespaces)
 
-            self.correct_entities_ids(xpath, entity.name)
+            self.correct_elements_ids(elements, entity.name)
 
     def correct_custom_entities_ids(self):
         for entity in self.custom_entities:
             xpath = f'//default:listObject[@type="{entity.name}List"]//default:object[@type="{entity.name}"]'
+            elements = self.tree.xpath(xpath, namespaces=self.namespaces)
 
-            self.correct_entities_ids(xpath, entity.name)
+            self.correct_elements_ids(elements, entity.name)
 
     def correct_collision_xml_ids(self):
-        tags_to_correct = self.get_tags_to_correct()
+        usable_tags = self.get_usable_tags()
 
-        for tag_name in tags_to_correct:
+        for tag_name in usable_tags:
             xpath = f"//*[contains(@xml:id, '{tag_name}-')]"
+            elements = self.tree.xpath(xpath, namespaces=self.namespaces)
 
-            self.correct_entities_ids(xpath, tag_name, collision=True)
+            self.correct_elements_ids(elements, tag_name, collision=True)
 
-    def get_tags_to_correct(self):
+    def correct_tags_ids_in_body_text_related_to_entities(self):
+        for entity in self.listable_entities:
+            list_tag = settings.ENTITIES[entity.name]['list_tag']
+            text_tag = settings.ENTITIES[entity.name]['text_tag']
+
+            xpath_body = f'//default:text//default:body//default:{text_tag}'
+            elements_in_body = self.tree.xpath(xpath_body, namespaces=self.namespaces)
+
+            xpath_list = f'//default:{list_tag}[@type="{entity.name}List"]//default:{text_tag}'
+            elements_in_list = self.tree.xpath(xpath_list, namespaces=self.namespaces)
+
+            elements = set(elements_in_body) - set(elements_in_list)
+            elements = list(elements)
+            elements = sorted(elements, key=lambda element: str(element.sourceline) + element.text + element.tail)
+
+            self.correct_elements_ids(elements, text_tag)
+
+        xpath_body = f'//default:text//default:body//default:objectName'
+        elements_in_body = self.tree.xpath(xpath_body, namespaces=self.namespaces)
+
+        xpath_list = f'//default:listObject//default:objectName'
+        elements_in_list = self.tree.xpath(xpath_list, namespaces=self.namespaces)
+
+        elements = set(elements_in_body) - set(elements_in_list)
+        elements = list(elements)
+        elements = sorted(elements, key=lambda element: str(element.sourceline) + element.text + element.tail)
+
+        self.correct_elements_ids(elements, 'objectName')
+
+    def get_usable_tags(self):
         entities = self.listable_entities + self.unlistable_entities + self.custom_entities
         default_entities_names = settings.ENTITIES.keys()
 
-        tags_to_correct = []
+        usable_tags = []
 
         for entity in entities:
-            tags_to_correct.append(entity.name)
+            usable_tags.append(entity.name)
 
             if entity.name in default_entities_names:
                 entity_text_tag = settings.ENTITIES[entity.name]['text_tag']
-                tags_to_correct.append(entity_text_tag)
+                usable_tags.append(entity_text_tag)
 
-        tags_to_correct = set(tags_to_correct)
+        usable_tags += settings.ADDITIONAL_USABLE_TAGS
+        usable_tags = set(usable_tags)
 
-        return tags_to_correct
+        return usable_tags
 
-    def correct_entities_ids(self, xpath, entity_name, collision=False):
-        elements = self.tree.xpath(xpath, namespaces=self.namespaces)
-
+    def correct_elements_ids(self, elements, entity_name, collision=False):
         for element in elements:
             if self.xml_id_key in element.attrib:
                 self.update_element_xml_id_and_references(element, entity_name, collision)
