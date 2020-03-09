@@ -2,6 +2,7 @@ from lxml import etree
 
 from django.conf import settings
 
+from apps.files_management.models import File, FileMaxXmlIds
 from apps.projects.models import EntitySchema
 
 
@@ -9,6 +10,9 @@ class IDsCorrector:
     def __init__(self):
         self.__namespaces = settings.XML_NAMESPACES
         self.__xml_id_key = f"{{{self.__namespaces['xml']}}}id"
+
+        self.__old_xml_content = ''
+        self.__new_xml_content = ''
 
         self.__tree = None
 
@@ -18,25 +22,31 @@ class IDsCorrector:
 
         self.__max_xml_ids = {}
 
-    def correct_ids(self, xml_content, project_id):
-        self.__load_entities_schemes(project_id)
+        self.__is_changed = False
+
+    def correct_ids(self, xml_content, file_id):
+        self.__old_xml_content = xml_content
+
+        self.__load_entities_schemes(file_id)
         self.__initiate_max_xml_ids()
 
-        self.__create_tree(xml_content)
-
+        self.__create_tree()
         self.__correct_collision_xml_ids()
         self.__correct_listable_entities_ids()
         self.__correct_unlistable_entities_ids()
         self.__correct_custom_entities_ids()
         self.__correct_tags_ids_in_body_text_related_to_entities()
         self.__correct_certainties_xml_ids()
+        self.__create_xml_content()
 
-        xml_content = self.__create_xml_content()
+        self._dump_max_xml_ids_to_db(file_id)
 
-        return xml_content
+        self.__check_if_changed()
 
-    def __load_entities_schemes(self, project_id):
-        entities_schemes = self._get_entities_schemes_from_db(project_id)
+        return self.__new_xml_content, self.__is_changed
+
+    def __load_entities_schemes(self, file_id):
+        entities_schemes = self._get_entities_schemes_from_db(file_id)
 
         default_entities_names = settings.ENTITIES.keys()
 
@@ -50,8 +60,9 @@ class IDsCorrector:
                     self.__unlistable_entities.append(entity)
 
     @staticmethod
-    def _get_entities_schemes_from_db(project_id):
-        entities_schemes = EntitySchema.objects.filter(taxonomy__project_id=project_id)
+    def _get_entities_schemes_from_db(file_id):
+        file = File.objects.get(id=file_id)
+        entities_schemes = EntitySchema.objects.filter(taxonomy__project_id=file.project.id)
 
         return entities_schemes
 
@@ -79,10 +90,10 @@ class IDsCorrector:
 
         return usable_tags
 
-    def __create_tree(self, xml_content):
+    def __create_tree(self):
         parser = etree.XMLParser(remove_blank_text=True)
 
-        self.__tree = etree.fromstring(xml_content, parser=parser)
+        self.__tree = etree.fromstring(self.__old_xml_content, parser=parser)
 
     def __correct_collision_xml_ids(self):
         usable_tags = self.__get_usable_tags()
@@ -193,12 +204,23 @@ class IDsCorrector:
 
         return xml_id_number
 
-    def __update_element_attribute(self, element, attribute, old_value, new_value):
+    @staticmethod
+    def __update_element_attribute(element, attribute, old_value, new_value):
         old_reference = element.attrib[attribute]
         new_reference = old_reference.replace(f'#{old_value}', f'#{new_value}')
         element.attrib[attribute] = new_reference
 
     def __create_xml_content(self):
-        xml_content = etree.tounicode(self.__tree, pretty_print=True)
+        self.__new_xml_content = etree.tounicode(self.__tree, pretty_print=True)
 
-        return xml_content
+    def _dump_max_xml_ids_to_db(self, file_id):
+        for xml_id_base, xml_id_number in self.__max_xml_ids.items():
+            FileMaxXmlIds.objects.create(
+                file_id=file_id,
+                xml_id_base=xml_id_base,
+                xml_id_number=xml_id_number,
+            )
+
+    def __check_if_changed(self):
+        if self.__old_xml_content != self.__new_xml_content:
+            self.__is_changed = True

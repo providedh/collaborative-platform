@@ -21,11 +21,10 @@ logger = logging.getLogger(__name__)
 class TeiHandler:
     """Stream-like handler that recognizes TEI/CSV files and migrate them to TEI P5."""
 
-    def __init__(self, file_path, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, file_path):
         self.__file_path = file_path
         self.__encoding = None
-        self.text = io.StringIO()
+        self.text = ''
 
         self.__text_binary = None
         self.__text_utf_8 = ""
@@ -106,15 +105,7 @@ class TeiHandler:
     def __load_text_binary(self):
         try:
             with open(self.__file_path, 'rb') as file:
-                chunk = file.read()
-
-                temp = io.BytesIO()
-
-                while chunk:
-                    temp.write(chunk)
-                    chunk = file.read()
-
-                self.__text_binary = temp.getvalue()
+                self.__text_binary = file.read()
 
         except Exception as exc:
             self.error = exc
@@ -219,8 +210,7 @@ class TeiHandler:
         if self.__need_reformat:
             migrated_text = xml_formatter.reformat_xml(migrated_text)
 
-        self.text.write(migrated_text)
-        self.text.seek(io.SEEK_SET)
+        self.text = migrated_text
         self.__prepare_message()
         self.__migrated = True
 
@@ -284,22 +274,8 @@ class TeiHandler:
     def get_message(self):
         return self.__message
 
-    def close(self):
-        self.text.close()
-
-    async def read(self, size=-1):
-        chunk = self.text.read(size)
-
-        return bytes(chunk, "utf-8")
-
-    async def _read(self, size):
-        pass
-
-    def size(self):
-        pass
-
     def get_text(self):
-        return self.text.getvalue() or self.__text_utf_8
+        return self.text or self.__text_utf_8
 
     def is_migrated(self):
         return self.__migrated

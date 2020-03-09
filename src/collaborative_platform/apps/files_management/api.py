@@ -85,48 +85,42 @@ def upload(request, directory_id):  # type: (HttpRequest, int) -> HttpResponse
                 if migration:
                     tei_handler.migrate()
 
+                xml_content = tei_handler.get_text()
+
                 start_ids_filling = time.time()
                 logger.info(f"Uploading file {file_name}: migration done in "
                             f"{round(start_ids_filling - start_migrating, 2)} s")
 
-
-
-
-
                 try:
-                    # tei_handler = IDsFiller(tei_handler, file_name, dbfile.pk)
+                    file_id = file_version.file.id
 
                     ids_corrector = IDsCorrector()
-
-                    xml_content = file_version.get_content()
-
-                    xml_content = ids_corrector.correct_ids(xml_content, project.id)
+                    xml_content, correction = ids_corrector.correct_ids(xml_content, file_id)
 
                 except XMLSyntaxError:
-                    is_id_filled = False
-                else:
-                    is_id_filled = tei_handler.process(initial=True)
-
-
-
-
-
-
+                    correction = False
 
                 start_extracting = time.time()
                 logger.info(f"Uploading file {file_name}: filling ID's done in "
                             f"{round(start_extracting - start_ids_filling, 2)} s")
 
-                if migration or is_id_filled:
-                    migrated_string = tei_handler.text.read()
 
-                    text, entities = extract_text_and_entities(migrated_string, project.id, dbfile.id)
+
+
+
+
+
+
+
+
+                if migration or correction:
+                    text, entities = extract_text_and_entities(xml_content, project.id, dbfile.id)
 
                     finish_extracting = time.time()
                     logger.info(f"Uploading file {file_name}: extracted text and entities in "
                                 f"{round(finish_extracting - start_extracting, 2)} s")
 
-                    uploaded_file = create_uploaded_file_object_from_string(migrated_string, file_name)
+                    uploaded_file = create_uploaded_file_object_from_string(xml_content, file_name)
 
                     dbfile = File.objects.get(name=uploaded_file.name, parent_dir_id=parent_dir, project=project,
                                               deleted=False)
