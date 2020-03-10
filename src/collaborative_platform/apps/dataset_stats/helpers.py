@@ -16,7 +16,7 @@ def get_project_versions_files(project_id):
     data = []
 
     get_fv_data = lambda fv: {'file': fv.file.name, 'version': fv.number, 'date': fv.creation_date, 'author': fv.created_by.username}
-    get_files_for_pv = lambda pv: tuple(map(lambda fv: get_fv_data(fv), pv.file_versions.all()))
+    get_files_for_pv = lambda pv: tuple(get_fv_data(fv) for fv in pv.file_versions.all())
 
     for pv in project_versions:
         files = {f['file']: f for f in get_files_for_pv(pv)}
