@@ -151,8 +151,12 @@ class TEIentitiesSection extends React.PureComponent {
   }
   
   handleAddEntity(){
-    const {color, icon, body_list} = this.state;
-    const newEntity = [this.state.name, {color, icon, body_list}];
+    const {name, color, icon, body_list} = this.state;
+    const alreadyIncluded = this.props.scheme.some(([name,..._])=>name == this.state.name);
+    if(alreadyIncluded===true)
+      return;
+
+    const newEntity = [name, {color, icon, body_list}];
     const newScheme = [...this.props.scheme, newEntity];
     this.props.updateScheme(newScheme);
     this.setState(this.defState);
