@@ -50,12 +50,14 @@ class TaxonomySection extends React.PureComponent {
                  value={e[0]} 
                  onChange={event=>this.handleNameChange(i, event.target.value)}/>
         </div>
-        <button type="button" 
-                className="close" 
-                aria-label="Close"
-                onClick={()=>this.handleRemoveEntry(i)}>
-          <span aria-hidden="true">&times;</span>
-        </button>
+        {this.props.scheme.length==1?'':(
+          <button type="button" 
+                  className="close" 
+                  aria-label="Close" 
+                  onClick={()=>this.handleRemoveEntry(i)}>
+            <span aria-hidden="true">&times;</span>
+          </button>
+        )}
         <br/>
         <div className="form-group d-inline-block">
           <input type="text" 
