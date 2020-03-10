@@ -69,7 +69,7 @@ def get_project_versions_files(project_id):
 
 
 
-def files_for_project_version(project: str, version: float)->Iterable[FileVersion]:
+def files_for_project_version(project: int, version: float)->Iterable[FileVersion]:
     [file_version_counter, commit_counter] = str(version).split('.')
 
     project_version = ProjectVersion.objects.get(
