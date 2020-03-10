@@ -10,32 +10,64 @@ import json
 
 NAMESPACES = {'tei': 'http://www.tei-c.org/ns/1.0', 'xml': 'http://www.w3.org/XML/1998/namespace'}
 
+def file_version_is_present(file, files):
+    is_present = False
+    filename, fv = file
+    
+    for filename_2, fv_2 in files:
+        if filename == filename_2 and fv['version'] == fv_2['version']:
+            is_present = True
+            break
+
+    return is_present
+
+def get_unique_files_per_pv(files_per_pv):
+    unique_files_dict_per_pv = {}
+
+    data = tuple(files_per_pv.items())
+    for idx in range(len(data)-1, 0, -1):
+        pv, files = data[idx]
+        _, prev_files = data[idx-1]
+        
+        unique_files_dict_per_pv[pv] = {
+            filename: fv
+            for filename, fv
+            in files 
+            if not file_version_is_present((filename, fv), prev_files)
+        }
+
+    unique_files_lists_per_pv = {
+        key: tuple(value.values()) 
+        for key,value 
+        in unique_files_dict_per_pv.items()
+    }
+
+    return unique_files_lists_per_pv
+
 # pv = project version, fv = file version
 def get_project_versions_files(project_id):
     project_versions = ProjectVersion.objects.filter(project=project_id)
-    data = []
-
-    get_fv_data = lambda fv: {'file': fv.file.name, 'version': fv.number, 'date': fv.creation_date, 'author': fv.created_by.username}
-    get_files_for_pv = lambda pv: tuple(get_fv_data(fv) for fv in pv.file_versions.all())
-
-    for pv in project_versions:
-        files = {f['file']: f for f in get_files_for_pv(pv)}
-        data.append({'version': str(pv), 'date': pv.date, 'files': {}, 'pv_files': files})
-
-    for idx in range(len(data)-1, 0, -1):
-        entry = data[idx]
-        prev_version = data[idx-1]
-        
-        for filename in entry['pv_files'].keys():
-            if not(filename in prev_version['pv_files']) or \
-                    not(prev_version['pv_files'][filename]['version'] == entry['pv_files'][filename]['version']):
-                entry['files'][filename] = entry['pv_files'][filename]
     
-    for entry in data:
-        entry.pop('pv_files')
-        entry['files'] = tuple(entry['files'].values())
+    get_fv_data = lambda fv: (fv.file.name, {'file': fv.file.name,
+                                             'version': fv.number,
+                                             'date': fv.creation_date,
+                                             'author': fv.created_by.username})
+    get_files_for_pv = lambda pv: tuple(map(get_fv_data, pv.file_versions.all()))
+
+    files_per_pv = {str(pv): get_files_for_pv(pv) for pv in project_versions}
+    unique_files_per_pv = get_unique_files_per_pv(files_per_pv)
+
+    data = [
+        {
+            'version': str(pv),
+            'date': pv.date,
+            'files': unique_files_per_pv[str(pv)] if str(pv) in unique_files_per_pv else []
+        } for pv in project_versions
+    ]
 
     return data
+
+
 
 def files_for_project_version(project: str, version: float)->Iterable[FileVersion]:
     [file_version_counter, commit_counter] = str(version).split('.')
