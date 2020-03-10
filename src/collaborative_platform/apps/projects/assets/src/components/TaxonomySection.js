@@ -101,6 +101,9 @@ class TaxonomySection extends React.PureComponent {
   }
   
   handleAddCategory(){
+    if(this.state.name.length == 0)
+      return;
+    
     const alreadyIncluded = this.props.scheme.some(([name,..._])=>name == this.state.name);
     if(alreadyIncluded===true)
       return;
