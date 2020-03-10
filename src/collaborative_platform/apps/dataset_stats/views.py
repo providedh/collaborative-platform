@@ -12,7 +12,7 @@ from . import helpers
 
 @login_required
 @user_has_access()
-def main(request, project_id=1):  # type: (HttpRequest, int, int) -> HttpResponse
+def main(request, project_id):  # type: (HttpRequest, int, int) -> HttpResponse
     project = Project.objects.get(pk=project_id)
     return render(request, "dataset_stats/app.html", {
         "title":project.title, 
@@ -22,7 +22,7 @@ def main(request, project_id=1):  # type: (HttpRequest, int, int) -> HttpRespons
         
 @login_required
 @user_has_access()
-def versions(request, project_id=1):  # type: (HttpRequest, int, float) -> JSONResponse
+def versions(request, project_id):  # type: (HttpRequest, int, float) -> JSONResponse
     data = {'project_versions': helpers.get_project_versions_files(project_id)}
 
     return JsonResponse(data)
