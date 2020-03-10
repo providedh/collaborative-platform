@@ -169,6 +169,8 @@ export default function Timeline(args){
 			.attr('height', self._legendY - height + 20)
 			.attr('x', d=>self._xScale(d.i))
 			.attr('width', (d,i)=>{
+				if(self._dates.length == 1)
+					return self._xScale.range()[1];
 				const lastDay = (i+1 == self._dates.length),
 					nextX = lastDay === false?
 						self._xScale(self._dates[i+1].i):
@@ -197,6 +199,9 @@ export default function Timeline(args){
 		self._timeG.selectAll('rect.day')
       		.attr('x', d=>x + self._xScale(d.i)*k)
       		.attr('width', (d,i)=>{
+      			if(self._dates.length == 1)
+					return self._xScale.range()[1]*k;
+
       			const lastDay = (i+1 == self._dates.length),
 					nextX = lastDay === false?
 						k*self._xScale(self._dates[i+1].i):
