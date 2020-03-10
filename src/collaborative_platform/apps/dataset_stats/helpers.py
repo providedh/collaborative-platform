@@ -8,7 +8,9 @@ from lxml import etree as et
 from tqdm import tqdm
 import json
 
+
 NAMESPACES = {'tei': 'http://www.tei-c.org/ns/1.0', 'xml': 'http://www.w3.org/XML/1998/namespace'}
+
 
 def file_version_is_present(file, files):
     is_present = False
@@ -20,6 +22,7 @@ def file_version_is_present(file, files):
             break
 
     return is_present
+
 
 def get_unique_files_per_pv(files_per_pv):
     unique_files_dict_per_pv = {}
@@ -43,6 +46,7 @@ def get_unique_files_per_pv(files_per_pv):
     }
 
     return unique_files_lists_per_pv
+
 
 # pv = project version, fv = file version
 def get_project_versions_files(project_id):
@@ -68,7 +72,6 @@ def get_project_versions_files(project_id):
     return data
 
 
-
 def files_for_project_version(project: int, version: float)->Iterable[FileVersion]:
     [file_version_counter, commit_counter] = str(version).split('.')
 
@@ -88,6 +91,7 @@ def files_for_project_version(project: int, version: float)->Iterable[FileVersio
     #    .distinct('file')
 
     return file_contents        
+
 
 def create_summary_for_document(doc_raw: str, doc_name:str='undefined')->pd.DataFrame: 
     doc_tree = et.fromstring(doc_raw.encode())
@@ -124,6 +128,7 @@ def create_summary_for_document(doc_raw: str, doc_name:str='undefined')->pd.Data
 
     return stats_df
 
+
 def create_summary_for_document_collection(doc_gen: Iterable[str])->pd.DataFrame: 
     stats_df = pd.DataFrame(columns=['document', 'tag', 'tag_id', 'location', 'attr_name', 'attr_value'])
 
@@ -132,6 +137,7 @@ def create_summary_for_document_collection(doc_gen: Iterable[str])->pd.DataFrame
         stats_df = stats_df.append(stats)
 
     return stats_df
+
 
 def get_stats(stats_df):
     n_docs = len(stats_df['document'].unique())
