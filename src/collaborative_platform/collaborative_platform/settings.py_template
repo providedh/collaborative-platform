@@ -14,6 +14,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 import os
 
 from datetime import timedelta, date, time
+from django.contrib.gis.geos import Point
 from .log_filters import skip_logs_from_certain_modules
 
 
