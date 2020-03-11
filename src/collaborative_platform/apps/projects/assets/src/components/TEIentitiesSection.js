@@ -64,29 +64,27 @@ class TEIentitiesSection extends React.PureComponent {
 
       return(
       <li key={i}>
-        <div className="d-flex align-items-baseline">
-          <input type="color" 
-                 value={e[1].color} 
-                 className="colorScheme border"
-                 onChange={event=>this.handleValueChange(i, 'color', event.target.value)}>
-          </input>
-          <IconPicker icon={e[1].icon} iconKey={'icon'+i} onChange={icon=>this.handleValueChange(i, 'icon', icon)}/>
-          <div className="form-group d-inline-block">
-            <input type="text" 
-                   className={`form-control ${isValid>0?'':'is-invalid'}`}
-                   value={e[0]} 
-                   onChange={event=>this.handleNameChange(i, event.target.value)}/>
-            {isValid?'':<div className="invalid-feedback">{msg}</div>}
-          </div>
-          {this.props.scheme.length==1?'':(
-            <button type="button" 
-                    className="close ml-3" 
-                    aria-label="Close" 
-                    onClick={()=>this.handleRemoveEntry(i)}>
-              <span aria-hidden="true">&times;</span>
-            </button>
-          )}
+        <input type="color" 
+               value={e[1].color} 
+               className="colorScheme border"
+               onChange={event=>this.handleValueChange(i, 'color', event.target.value)}>
+        </input>
+        <IconPicker icon={e[1].icon} iconKey={'icon'+i} onChange={icon=>this.handleValueChange(i, 'icon', icon)}/>
+        <div className="form-group d-inline-flex flex-column">
+          <input type="text" 
+                 className={`form-control ${isValid?'':'is-invalid'}`}
+                 value={e[0]} 
+                 onChange={event=>this.handleNameChange(i, event.target.value)}/>
+          {isValid?'':<div className="invalid-feedback">{msg}</div>}
         </div>
+        {this.props.scheme.length==1?'':(
+          <button type="button" 
+                  className="close" 
+                  aria-label="Close" 
+                  onClick={()=>this.handleRemoveEntry(i)}>
+            <span aria-hidden="true">&times;</span>
+          </button>
+        )}
         {this.entityProperties(e[0])}
         <div className="small d-block px-5">
           <span className="d-block">List existing {e[0]}s in the documents?</span>
@@ -119,6 +117,10 @@ class TEIentitiesSection extends React.PureComponent {
   }
   
   entityNewEntryField(){
+    const names = this.props.scheme.map(x=>x[0]);
+    const isValid = names.reduce((ac,dc)=>ac+(dc==this.state.name),0) == 0;
+    const msg = isValid?'':"Entities can't be repeated";
+
       return( 
         <li>
           <input type="color" 
@@ -127,12 +129,12 @@ class TEIentitiesSection extends React.PureComponent {
                  onChange={event=>this.setState({color: event.target.value})}>
           </input>
           <IconPicker icon={this.state.icon} iconKey={'newicon'} onChange={icon=>this.setState({icon})}/>
-          <div className="form-group d-inline-block">
+          <div className="form-group d-inline-flex flex-column">
             <input type="text" 
-                   className="form-control" 
-                   id="staticEmail2" 
+                   className={`form-control ${isValid?'':'is-invalid'}`}
                    value={this.state.name} 
                    onChange={event=>this.setState({name: event.target.value})}/>
+            {isValid?'':<div className="invalid-feedback">{msg}</div>}
           </div>
           <button type="button" className="btn btn-light ml-3" onClick={()=>this.handleAddEntity()}>Add</button>
           <div className="small d-block px-5">
