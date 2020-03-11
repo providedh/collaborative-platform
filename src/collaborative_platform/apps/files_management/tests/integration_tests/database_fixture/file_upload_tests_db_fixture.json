@@ -46,22 +46,6 @@
   "model": "projects.taxonomy",
   "pk": 1,
   "fields": {
-    "xml_id_1": "ignorance",
-    "name_1": "ignorance",
-    "desc_1": "",
-    "color_1": "#9270a8",
-    "xml_id_2": "credibility",
-    "name_2": "credibility",
-    "desc_2": "",
-    "color_2": "#cc4c3b",
-    "xml_id_3": "imprecision",
-    "name_3": "imprecision",
-    "desc_3": "",
-    "color_3": "#f1d155",
-    "xml_id_4": "incompleteness",
-    "name_4": "incompleteness",
-    "desc_4": "",
-    "color_4": "#67b2ac",
     "contents": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<TEI xmlns=\"http://www.tei-c.org/ns/1.0\">\n  <teiHeader>\n    <fileDesc>\n      <titleStmt>\n        <title>Uncertainty Taxonomy for project Project_1</title>\n      </titleStmt>\n    </fileDesc>\n    <encodingDesc>\n      <classDecl>\n        <taxonomy>\n          <category>\n            <catDesc>User recognized uncertainty</catDesc>\n            <category xml:id=\"ignorance\">\n              <catDesc>ignorance</catDesc>\n              <desc></desc>\n            </category>\n            <category xml:id=\"credibility\">\n              <catDesc>credibility</catDesc>\n              <desc></desc>\n            </category>\n            <category xml:id=\"imprecision\">\n              <catDesc>imprecision</catDesc>\n              <desc></desc>\n            </category>\n            <category xml:id=\"incompleteness\">\n              <catDesc>incompleteness</catDesc>\n              <desc></desc>\n            </category>\n          </category>\n          <category>\n            <catDesc>Machine generated uncertainty</catDesc>\n            <category xml:id=\"algorithmic\">\n              <catDesc>Algorithmic</catDesc>\n            </category>\n          </category>\n        </taxonomy>\n      </classDecl>\n    </encodingDesc>\n  </teiHeader>\n</TEI>"
   }
 },

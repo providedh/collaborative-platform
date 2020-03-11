@@ -10,4 +10,4 @@ class TypeChoice(Enum):
     float = float
     date = date
     time = time
-    point = Point
+    Point = Point

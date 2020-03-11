@@ -166,7 +166,9 @@ class IDsCorrector:
 
         elements = set(elements_a) - set(elements_b)
         elements = list(elements)
-        elements = sorted(elements, key=lambda element: str(element.sourceline) + element.text + element.tail)
+
+        elements = sorted(elements, key=lambda element: str(element.sourceline) + (element.text or '')
+                                                        + (element.tail or ''))
 
         return elements
 

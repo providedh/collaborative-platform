@@ -13,8 +13,8 @@ from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, JsonR
 from lxml.etree import XMLSyntaxError
 
 # from apps.api_vis.helpers import create_entities_in_database
-from apps.files_management.file_conversions.ids_filler import IDsFiller
 from apps.files_management.file_conversions.ids_corrector import IDsCorrector
+from apps.files_management.file_conversions.extractor import Extractor
 from apps.projects.helpers import log_activity, paginate_start_length, page_to_json_response
 from apps.files_management.models import File, FileVersion, Directory
 from apps.views_decorators import objects_exists, user_has_access
@@ -91,9 +91,9 @@ def upload(request, directory_id):  # type: (HttpRequest, int) -> HttpResponse
                 logger.info(f"Uploading file {file_name}: migration done in "
                             f"{round(start_ids_filling - start_migrating, 2)} s")
 
-                try:
-                    file_id = file_version.file.id
+                file_id = file_version.file.id
 
+                try:
                     ids_corrector = IDsCorrector()
                     xml_content, correction = ids_corrector.correct_ids(xml_content, file_id)
 
@@ -104,7 +104,8 @@ def upload(request, directory_id):  # type: (HttpRequest, int) -> HttpResponse
                 logger.info(f"Uploading file {file_name}: filling ID's done in "
                             f"{round(start_extracting - start_ids_filling, 2)} s")
 
-
+                extractor = Extractor()
+                xml_content, extraction = extractor.move_elements_to_db(xml_content, file_id)
 
 
 
@@ -160,7 +161,8 @@ def upload(request, directory_id):  # type: (HttpRequest, int) -> HttpResponse
                 logger.info(f"Uploading file {file_name}: file processing done in "
                             f"{round(finish_indexing - start_extracting, 2)} s")
 
-            except Exception as exception:
+            # except Exception as exception:
+            except ValueError as exception:
                 upload_status = {'message': str(exception)}
                 upload_statuses[i].update(upload_status)
 

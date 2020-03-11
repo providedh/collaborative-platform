@@ -1,5 +1,8 @@
+from datetime import date, time
+
 from django.contrib.auth.models import User
 from django.contrib.gis.db.models import PointField
+from django.contrib.gis.geos import Point
 from django.db import models
 
 from apps.files_management.models import File, FileVersion
@@ -26,29 +29,27 @@ class Entity(models.Model):
 class EntityVersion(models.Model):
     entity = models.ForeignKey(Entity, on_delete=models.CASCADE)
     fileversion = models.ForeignKey(FileVersion, on_delete=models.CASCADE)
-    name = models.TextField()
     xml = models.TextField(blank=True, null=True)
     context = models.TextField(blank=True, null=True)
 
     class Meta:
         unique_together = ("fileversion", "entity")
-        # abstract = True
 
 
 class EntityProperty(models.Model):
     entity_version = models.ForeignKey(EntityVersion, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     type = models.CharField(max_length=255, choices=[(tag, tag.value) for tag in TypeChoice])
-    value_str = models.CharField(max_length=255)
-    value_int = models.IntegerField()
-    value_float = models.FloatField()
-    value_date = models.DateField()
-    value_time = models.TimeField()
-    value_point = PointField(geography=True, blank=True, null=True)
+    value_str = models.CharField(max_length=255, blank=True, null=True)
+    value_int = models.IntegerField(null=True)
+    value_float = models.FloatField(null=True)
+    value_date = models.DateField(null=True)
+    value_time = models.TimeField(null=True)
+    value_point = PointField(geography=True, null=True)
     created_by = models.ForeignKey(User, related_name='created_properties', on_delete=models.SET_NULL, null=True)
     created_in_version = models.IntegerField()
     deleted_by = models.ForeignKey(User, related_name='deleted_properties', on_delete=models.SET_NULL, null=True)
-    deleted_in_version = models.IntegerField()
+    deleted_in_version = models.IntegerField(null=True)
 
     def set_value(self, value):
         if self.type == TypeChoice.str:
@@ -58,13 +59,14 @@ class EntityProperty(models.Model):
         elif self.type == TypeChoice.float:
             self.value_float = value
         elif self.type == TypeChoice.date:
-            self.value_date = value
+            self.value_date = date.fromisoformat(value)
         elif self.type == TypeChoice.time:
-            self.value_time = value
-        elif self.type == TypeChoice.point:
-            self.value_point = value
+            self.value_time = time.fromisoformat(value)
+        elif self.type == TypeChoice.Point:
+            value = value.replace(',', ' ')
+            values = value.split(' ')
 
-        self.save()
+            self.value_point = Point(float(values[0]), float(values[1]))
 
     def get_value(self):
         if self.type == TypeChoice.str:
@@ -77,7 +79,7 @@ class EntityProperty(models.Model):
             return self.value_date
         elif self.type == TypeChoice.time:
             return self.value_time
-        elif self.type == TypeChoice.point:
+        elif self.type == TypeChoice.Point:
             return self.value_point
 
 
