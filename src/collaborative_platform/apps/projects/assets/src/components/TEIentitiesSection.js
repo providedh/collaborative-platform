@@ -53,28 +53,40 @@ class TEIentitiesSection extends React.PureComponent {
   }
   
   entityListEntries(){
-    const entries = this.props.scheme.map((e, i)=>(
+    const names = this.props.scheme.map(x=>x[0]);
+    const entries = this.props.scheme.map((e, i)=>{
+      const isValid = e[0].length > 0 && names.reduce((ac,dc)=>ac+(dc==e[0]),0) == 1;
+      let msg = '';
+      if(!isValid && e[0].length==0)
+        msg = "Entities can't be empty";
+      else
+        msg = "Entities can't be repeated";
+
+      return(
       <li key={i}>
-        <input type="color" 
-               value={e[1].color} 
-               className="colorScheme border"
-               onChange={event=>this.handleValueChange(i, 'color', event.target.value)}>
-        </input>
-        <IconPicker icon={e[1].icon} iconKey={'icon'+i} onChange={icon=>this.handleValueChange(i, 'icon', icon)}/>
-        <div className="form-group d-inline-block">
-          <input type="text" 
-                 className="form-control" 
-                 value={e[0]} 
-                 onChange={event=>this.handleNameChange(i, event.target.value)}/>
+        <div className="d-flex align-items-baseline">
+          <input type="color" 
+                 value={e[1].color} 
+                 className="colorScheme border"
+                 onChange={event=>this.handleValueChange(i, 'color', event.target.value)}>
+          </input>
+          <IconPicker icon={e[1].icon} iconKey={'icon'+i} onChange={icon=>this.handleValueChange(i, 'icon', icon)}/>
+          <div className="form-group d-inline-block">
+            <input type="text" 
+                   className={`form-control ${isValid>0?'':'is-invalid'}`}
+                   value={e[0]} 
+                   onChange={event=>this.handleNameChange(i, event.target.value)}/>
+            {isValid?'':<div className="invalid-feedback">{msg}</div>}
+          </div>
+          {this.props.scheme.length==1?'':(
+            <button type="button" 
+                    className="close ml-3" 
+                    aria-label="Close" 
+                    onClick={()=>this.handleRemoveEntry(i)}>
+              <span aria-hidden="true">&times;</span>
+            </button>
+          )}
         </div>
-        {this.props.scheme.length==1?'':(
-          <button type="button" 
-                  className="close" 
-                  aria-label="Close" 
-                  onClick={()=>this.handleRemoveEntry(i)}>
-            <span aria-hidden="true">&times;</span>
-          </button>
-        )}
         {this.entityProperties(e[0])}
         <div className="small d-block px-5">
           <span className="d-block">List existing {e[0]}s in the documents?</span>
@@ -101,7 +113,7 @@ class TEIentitiesSection extends React.PureComponent {
         </div>
         <hr />
       </li>
-    ));
+    )});
     
     return entries;
   }

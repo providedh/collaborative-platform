@@ -113,3 +113,5 @@ ul.noListStyle li:last-child .categoryNameInput{
 }
 
 .ml-34{margin-left: 3.4em;}
+
+.is-invalid{background-image: none !important;}
