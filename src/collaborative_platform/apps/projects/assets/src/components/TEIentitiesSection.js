@@ -9,7 +9,7 @@ class TEIentitiesSection extends React.PureComponent {
     
     this.defState = {
       icon: "\uf042",
-      color: '',
+      color: '#aaaaaa',
       name: '',
       body_list: "false"
     };

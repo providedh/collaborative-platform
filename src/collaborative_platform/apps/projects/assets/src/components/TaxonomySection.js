@@ -7,7 +7,7 @@ class TaxonomySection extends React.PureComponent {
     super(props);
     
     this.defState = {
-      color: '',
+      color: '#aaaaaa',
       name: '',
       description: ''
     };
