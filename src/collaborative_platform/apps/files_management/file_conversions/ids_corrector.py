@@ -127,23 +127,21 @@ class IDsCorrector:
             self.__correct_elements_ids(elements, entity.name)
 
     def __correct_tags_ids_in_body_text_related_to_entities(self):
+        elements_on_lists = []
+
         for entity in self.__listable_entities:
             list_tag = settings.ENTITIES[entity.name]['list_tag']
-            text_tag = settings.ENTITIES[entity.name]['text_tag']
+            xpath_list = f'//default:{list_tag}[@type="{entity.name}List"]//default:name'
+            elements = self.__tree.xpath(xpath_list, namespaces=self.__namespaces)
 
-            xpath_body = f'//default:text//default:body//default:{text_tag}'
-            xpath_list = f'//default:{list_tag}[@type="{entity.name}List"]//default:{text_tag}'
+            elements_on_lists.extend(elements)
 
-            elements = self.__get_difference_of_elements(xpath_body, xpath_list)
+        xpath_body = f'//default:text//default:body//default:name'
+        elements_in_body = self.__tree.xpath(xpath_body, namespaces=self.__namespaces)
 
-            self.__correct_elements_ids(elements, text_tag)
+        elements = self.__get_difference_of_elements(elements_in_body, elements_on_lists)
 
-        xpath_body = f'//default:text//default:body//default:objectName'
-        xpath_list = f'//default:listObject//default:objectName'
-
-        elements = self.__get_difference_of_elements(xpath_body, xpath_list)
-
-        self.__correct_elements_ids(elements, 'objectName')
+        self.__correct_elements_ids(elements, 'name')
 
     def __correct_certainties_xml_ids(self):
         xpath = f'//default:teiHeader//default:classCode[@scheme="http://providedh.eu/uncertainty/ns/1.0"]' \
@@ -160,10 +158,7 @@ class IDsCorrector:
             else:
                 self.__update_element_xml_id(element, entity_name)
 
-    def __get_difference_of_elements(self, xpath_a, xpath_b):
-        elements_a = self.__tree.xpath(xpath_a, namespaces=self.__namespaces)
-        elements_b = self.__tree.xpath(xpath_b, namespaces=self.__namespaces)
-
+    def __get_difference_of_elements(self, elements_a, elements_b):
         elements = set(elements_a) - set(elements_b)
         elements = list(elements)
 
