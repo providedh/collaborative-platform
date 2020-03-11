@@ -90,28 +90,28 @@ function useHeatmap(layout, colorScale, rangeScale, eventCallback){
     return heatmap;
 }
 
-function useRender(width, height, heatmap, data, refContainer, refCanvas, refOverlayCanvas){
+function useRender(width, height, heatmap, data, containerRef, canvasRef, overlayCanvasRef){
     useEffect(()=>{
         if(heatmap != null)
-            heatmap.render(data, refContainer, refCanvas, refOverlayCanvas)
+            heatmap.render(data, containerRef.current, canvasRef.current, overlayCanvasRef.current)
         }, // Render 
         [width, height, heatmap, data]); // Conditions*/
 }
 
 function Heatmap({ layout, tileLayout, colorScale, rangeScale, dimension}) {
-	const [refContainer, refCanvas, refOverlayCanvas] = [useRef(), useRef(), useRef()];
+	const [containerRef, canvasRef, overlayCanvasRef] = [useRef(), useRef(), useRef()];
 	const [width, height] = layout!=undefined?[layout.w, layout.h]:[4,4];
 
     const [dataClient, _] = useState(DataClient());
 	const data = useData(dataClient, dimension);
     const heatmap = useHeatmap(tileLayout, colorScale, rangeScale, event=>console.log(event));
     
-    useRender(width, height, heatmap, data, refContainer, refCanvas, refOverlayCanvas);
+    useRender(width, height, heatmap, data, containerRef, canvasRef, overlayCanvasRef);
 
     return(
-        <div className={styles.heatmap} ref={refContainer}>
-	        <canvas ref={refCanvas}/>
-	        <canvas className={styles.overlayCanvas} ref={refOverlayCanvas}/>
+        <div className={styles.heatmap} ref={containerRef}>
+	        <canvas ref={canvasRef}/>
+	        <canvas className={styles.overlayCanvas} ref={overlayCanvasRef}/>
         </div>
     )
 }
