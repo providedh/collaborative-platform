@@ -37,8 +37,8 @@ class App extends React.Component {
 
   validateScheme(){
     function hasEmptyNames(names){return names.some(x=>x.length == 0);}
-    function hasRepeatedNames(names){return (new Set(names)).length != names.length;}
-
+    function hasRepeatedNames(names){return (new Set(names)).size != names.length;}
+    
     const isValid = (true &&
       !hasEmptyNames(this.state.teiScheme.map(x=>x[0])) &&
       !hasRepeatedNames(this.state.teiScheme.map(x=>x[0])) &&
