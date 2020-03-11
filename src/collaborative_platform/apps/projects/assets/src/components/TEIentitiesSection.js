@@ -117,9 +117,9 @@ class TEIentitiesSection extends React.PureComponent {
   }
   
   entityNewEntryField(){
-    const names = this.props.scheme.map(x=>x[0]);
-    const isValid = names.reduce((ac,dc)=>ac+(dc==this.state.name),0) == 0;
-    const msg = isValid?'':"Entities can't be repeated";
+    const names = this.props.scheme.map(x=>x[0]),
+      isInvalid = this.state.name.length > 0 && names.reduce((ac,dc)=>ac+(dc==this.state.name),0) > 0,
+      msg = isInvalid?"Entities can't be repeated":'';
 
       return( 
         <li>
@@ -131,10 +131,10 @@ class TEIentitiesSection extends React.PureComponent {
           <IconPicker icon={this.state.icon} iconKey={'newicon'} onChange={icon=>this.setState({icon})}/>
           <div className="form-group d-inline-flex flex-column">
             <input type="text" 
-                   className={`form-control ${isValid?'':'is-invalid'}`}
+                   className={`form-control ${isInvalid?'is-invalid':''}`}
                    value={this.state.name} 
                    onChange={event=>this.setState({name: event.target.value})}/>
-            {isValid?'':<div className="invalid-feedback">{msg}</div>}
+            {isInvalid?<div className="invalid-feedback">{msg}</div>:''}
           </div>
           <button type="button" className="btn btn-light ml-3" onClick={()=>this.handleAddEntity()}>Add</button>
           <div className="small d-block px-5">
