@@ -82,21 +82,21 @@ class TEIentitiesSection extends React.PureComponent {
             <input className="form-check-input" 
               checked={e[1].body_list == "true"} 
               type="radio" 
-              name={e[0]+'list'} 
-              id={e[0]+'showList'} 
+              name={e[0]+'list'+i} 
+              id={e[0]+'showList'+i} 
               onChange={event=>this.handleBodyListChange(i, event.target.value)}
               value="true"/>
-            <label className="form-check-label" htmlFor={e[0]+'showList'}>yes</label>
+            <label className="form-check-label" htmlFor={e[0]+'showList'+i}>yes</label>
           </div>
           <div className="form-check form-check-inline">
             <input className="form-check-input" 
               checked={e[1].body_list == "false"} 
               type="radio" 
-              name={e[0]+'list'} 
-              id={e[0]+'hideList'} 
+              name={e[0]+'list'+i} 
+              id={e[0]+'hideList'+i} 
               onChange={event=>this.handleBodyListChange(i, event.target.value)}
               value="false"/>
-              <label className="form-check-label" htmlFor={e[0]+'hideList'}>no</label>
+              <label className="form-check-label" htmlFor={e[0]+'hideList'+i}>no</label>
           </div>
         </div>
         <hr />
@@ -133,7 +133,7 @@ class TEIentitiesSection extends React.PureComponent {
                 name={this.state.name+'list'} 
                 id={this.state.name+'showList'}
                 value="true"/>
-              <label className="form-check-label" htmlFor={this.state.name+'showList'}>yes</label>
+              <label className="form-check-label" htmlFor='teiShow'>yes</label>
             </div>
             <div className="form-check form-check-inline">
               <input className="form-check-input" 
@@ -142,7 +142,7 @@ class TEIentitiesSection extends React.PureComponent {
                 name={this.state.name+'list'} 
                 id={this.state.name+'hideList'}
                 value="false"/>
-              <label className="form-check-label" htmlFor={this.state.name+'hideList'}>no</label>
+              <label className="form-check-label" htmlFor='teiHide'>no</label>
             </div>
           </div>
       </li>
