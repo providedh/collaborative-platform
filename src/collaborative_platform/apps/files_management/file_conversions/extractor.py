@@ -38,6 +38,7 @@ class Extractor:
 
         self.__create_tree()
         self.__move_listable_entities()
+        self.__copy_unlistable_entities()
 
         self.__create_xml_content()
 
@@ -87,6 +88,13 @@ class Extractor:
             lists = self.__tree.xpath(xpath, namespaces=self.__namespaces)
 
             self.__remove_list_from_tree(lists)
+
+    def __copy_unlistable_entities(self):
+        for entity in self.__unlistable_entities:
+            xpath = f'//default:text//default:body//default:{entity.name}'
+            elements = self.__tree.xpath(xpath, namespaces=self.__namespaces)
+
+            self.__create_entities_in_db(elements, entity.name)
 
     def __create_entities_in_db(self, elements, entity_name):
         for element in elements:
