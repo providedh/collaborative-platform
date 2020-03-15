@@ -12,7 +12,7 @@ from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, JsonR
 
 from apps.exceptions import BadRequest
 from apps.files_management.file_conversions.ids_corrector import IDsCorrector
-from apps.files_management.file_conversions.extractor import Extractor
+from apps.files_management.file_conversions.elements_extractor import ElementsExtractor
 from apps.projects.helpers import log_activity, paginate_start_length, page_to_json_response
 from apps.files_management.models import File, FileVersion, Directory
 from apps.views_decorators import objects_exists, user_has_access
@@ -97,8 +97,8 @@ def __update_file_content(file_object):
     ids_corrector = IDsCorrector()
     xml_content, correction, correction_message = ids_corrector.correct_ids(xml_content, file_object.id)
 
-    extractor = Extractor()
-    xml_content, extraction, extraction_message = extractor.move_elements_to_db(xml_content, file_object.id)
+    elements_extractor = ElementsExtractor()
+    xml_content, extraction, extraction_message = elements_extractor.move_elements_to_db(xml_content, file_object.id)
 
     if migration or correction or extraction:
         content_updated = True
@@ -106,6 +106,7 @@ def __update_file_content(file_object):
         content_updated = False
 
     message = ' '.join([migration_message, correction_message, extraction_message])
+    message = message.strip()
 
     return xml_content, content_updated, message
 

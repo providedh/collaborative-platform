@@ -50,13 +50,13 @@
     <profileDesc>
       <particDesc>
         <listPerson type="PROVIDEDH Annotators">
-          <person xml:id="recipe_levenshtein_matching">
+          <personIgnore xml:id="recipe_levenshtein_matching">
             <persName>
               <forename>Algorithm</forename>
               <surname>Levenshtein distance match</surname>
               <email/>
             </persName>
-          </person>
+          </personIgnore>
         </listPerson>
       </particDesc>
       <textClass>

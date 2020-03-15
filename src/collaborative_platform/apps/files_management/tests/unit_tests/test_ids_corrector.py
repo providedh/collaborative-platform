@@ -24,7 +24,7 @@ class TestIDsCorrector:
         file_id = 1
 
         ids_corrector = IDsCorrector()
-        result_xml, _ = ids_corrector.correct_ids(source_xml, file_id)
+        result_xml, _, _ = ids_corrector.correct_ids(source_xml, file_id)
 
         assert result_xml == expected_xml
 
@@ -43,7 +43,7 @@ class TestIDsCorrector:
         file_id = 1
 
         ids_corrector = IDsCorrector()
-        result_xml, _ = ids_corrector.correct_ids(source_xml, file_id)
+        result_xml, _, _ = ids_corrector.correct_ids(source_xml, file_id)
 
         assert result_xml == expected_xml
 
@@ -62,7 +62,7 @@ class TestIDsCorrector:
         file_id = 1
 
         ids_corrector = IDsCorrector()
-        result_xml, _ = ids_corrector.correct_ids(source_xml, file_id)
+        result_xml, _, _ = ids_corrector.correct_ids(source_xml, file_id)
 
         assert result_xml == expected_xml
 
@@ -81,7 +81,7 @@ class TestIDsCorrector:
         file_id = 1
 
         ids_correcor = IDsCorrector()
-        result_xml, _ = ids_correcor.correct_ids(source_xml, file_id)
+        result_xml, _, _ = ids_correcor.correct_ids(source_xml, file_id)
 
         assert result_xml == expected_xml
 
@@ -100,7 +100,7 @@ class TestIDsCorrector:
         file_id = 1
 
         ids_corrector = IDsCorrector()
-        result_xml, _ = ids_corrector.correct_ids(source_xml, file_id)
+        result_xml, _, _ = ids_corrector.correct_ids(source_xml, file_id)
 
         assert result_xml == expected_xml
 
@@ -119,7 +119,26 @@ class TestIDsCorrector:
         file_id = 1
 
         ids_corrector = IDsCorrector()
-        result_xml, _ = ids_corrector.correct_ids(source_xml, file_id)
+        result_xml, _, _ = ids_corrector.correct_ids(source_xml, file_id)
+
+        assert result_xml == expected_xml
+
+    def test_correct_ids__correct_annotators_ids__string(self, monkeypatch):
+        monkeypatch.setattr(IDsCorrector, '_get_entities_schemes_from_db', fake_get_entities_schemes_from_db)
+        monkeypatch.setattr(IDsCorrector, '_dump_max_xml_ids_to_db', do_nothing)
+
+        source_file_path = os.path.join(DIRNAME, 'test_files', 'source_files',
+                                        'correct_ids__correct_annotators_ids__source.xml')
+        expected_file_path = os.path.join(DIRNAME, 'test_files', 'expected_files',
+                                          'correct_ids__correct_annotators_ids__expected.xml')
+
+        source_xml = read_file(source_file_path)
+        expected_xml = read_file(expected_file_path)
+
+        file_id = 1
+
+        ids_corrector = IDsCorrector()
+        result_xml, _, _ = ids_corrector.correct_ids(source_xml, file_id)
 
         assert result_xml == expected_xml
 
@@ -138,7 +157,7 @@ class TestIDsCorrector:
         file_id = 1
 
         ids_corrector = IDsCorrector()
-        result_xml, _ = ids_corrector.correct_ids(source_xml, file_id)
+        result_xml, _, _ = ids_corrector.correct_ids(source_xml, file_id)
 
         assert result_xml == expected_xml
 
@@ -162,7 +181,7 @@ class TestIDsCorrector:
         file_id = 1
 
         ids_corrector = IDsCorrector()
-        result_xml, correction = ids_corrector.correct_ids(source_xml, file_id)
+        result_xml, correction, _ = ids_corrector.correct_ids(source_xml, file_id)
 
         if not expected:
             assert result_xml == expected_xml

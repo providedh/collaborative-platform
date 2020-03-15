@@ -50,13 +50,13 @@
     <profileDesc>
       <particDesc>
         <listPerson type="PROVIDEDH Annotators">
-          <personIgnore xml:id="recipe_levenshtein_matching">
+          <person xml:id="recipe_levenshtein_matching">
             <persName>
               <forename>Algorithm</forename>
               <surname>Levenshtein distance match</surname>
               <email/>
             </persName>
-          </personIgnore>
+          </person>
         </listPerson>
       </particDesc>
       <textClass>
@@ -83,17 +83,17 @@
     <body>
       <div type="person">
         <listPerson type="personList">
-          <person xml:id="person-0">
+          <personIgnore xml:id="potato">
             <persName>
               <forename>Jerry</forename>
               <surname>Maguire</surname>
             </persName>
-          </person>
-          <person xml:id="person-1">Ingwer</person>
-          <person xml:id="person-2">Grieben</person>
-          <person xml:id="person-3">Met</person>
-          <person xml:id="person-4">Butter</person>
-          <person xml:id="person-5">Sand</person>
+          </personIgnore>
+          <personIgnore>Ingwer</personIgnore>
+          <personIgnore xml:id="grieben1">Grieben</personIgnore>
+          <personIgnore xml:id="met1">Met</personIgnore>
+          <personIgnore>Butter</personIgnore>
+          <personIgnore xml:id="sand1">Sand</personIgnore>
         </listPerson>
       </div>
       <div type="ingredient">
@@ -115,7 +115,7 @@
         <listObject/>
       </div>
       <div type="recipe">
-        <p>Put three or four Pounds of <nameIgnore ref="#person-0">Jerry Maguire's</nameIgnore> coarse Beef , with three Pints of Pease , into two Gallons of <nameIgnore ref="#person-0 #onion">Hank Moody's</nameIgnore> Water ; let it boil till the <nameIgnore xml:id="ingredient0" ref="#met">Meat</nameIgnore> is all to <nameIgnore xml:id="ingredient1" ref="#rag">Rags</nameIgnore> ; <nameIgnore xml:id="ingredient2" ref="#sand">and</nameIgnore> Half an Hour before you strain it out , put in two or three Anchovies ; then strain it from the <nameIgnore xml:id="ingredient3" ref="#met">Meat</nameIgnore> <nameIgnore xml:id="ingredient4" ref="#sand">and</nameIgnore> Husks , <nameIgnore xml:id="ingredient5" ref="#sand">and</nameIgnore> put in as much as you want <nameIgnore xml:id="utensil-6" ref="#form">for</nameIgnore> the Meal into a Sauce-pan , with an Onion stuck with Cloves , a Race of <nameIgnore xml:id="ingredient7" ref="#ingwer">Ginger</nameIgnore> bruis 'd , a little Fagot of Thyme , Savory , Parsley , <nameIgnore xml:id="ingredient8" ref="#sand">and</nameIgnore> a little Pepper . Let it boil near Half an Hour ; stir in a Piece of <nameIgnore xml:id="ingredient9" ref="#butter">Butter</nameIgnore> , <nameIgnore xml:id="ingredient10" ref="#sand">and</nameIgnore> fry some forc 'd <nameIgnore xml:id="ingredient11" ref="#met">Meat</nameIgnore> Balls , Bacon <nameIgnore xml:id="ingredient12" ref="#sand">and</nameIgnore> French Bread cut in Dice , with Spinage boil 'd <nameIgnore xml:id="ingredient13" ref="#grieben">green</nameIgnore> , to put to it in the Dish .</p>
+        <p>Put three or four Pounds of <nameIgnore ref="#potato">Jerry Maguire's</nameIgnore> coarse Beef , with three Pints of Pease , into two Gallons of <nameIgnore ref="#potato #onion">Hank Moody's</nameIgnore> Water ; let it boil till the <nameIgnore xml:id="ingredient0" ref="#met">Meat</nameIgnore> is all to <nameIgnore xml:id="ingredient1" ref="#rag">Rags</nameIgnore> ; <nameIgnore xml:id="ingredient2" ref="#sand">and</nameIgnore> Half an Hour before you strain it out , put in two or three Anchovies ; then strain it from the <nameIgnore xml:id="ingredient3" ref="#met">Meat</nameIgnore> <nameIgnore xml:id="ingredient4" ref="#sand">and</nameIgnore> Husks , <nameIgnore xml:id="ingredient5" ref="#sand">and</nameIgnore> put in as much as you want <nameIgnore xml:id="utensil-6" ref="#form">for</nameIgnore> the Meal into a Sauce-pan , with an Onion stuck with Cloves , a Race of <nameIgnore xml:id="ingredient7" ref="#ingwer">Ginger</nameIgnore> bruis 'd , a little Fagot of Thyme , Savory , Parsley , <nameIgnore xml:id="ingredient8" ref="#sand">and</nameIgnore> a little Pepper . Let it boil near Half an Hour ; stir in a Piece of <nameIgnore xml:id="ingredient9" ref="#butter">Butter</nameIgnore> , <nameIgnore xml:id="ingredient10" ref="#sand">and</nameIgnore> fry some forc 'd <nameIgnore xml:id="ingredient11" ref="#met">Meat</nameIgnore> Balls , Bacon <nameIgnore xml:id="ingredient12" ref="#sand">and</nameIgnore> French Bread cut in Dice , with Spinage boil 'd <nameIgnore xml:id="ingredient13" ref="#grieben">green</nameIgnore> , to put to it in the Dish .</p>
         <p>Some random date <dateIgnore xml:id="random-date">4th of july 2010</dateIgnore> for test unlistable entities, and reference to this date <dateIgnore ref="#random-date">the exact same day</dateIgnore></p>
       </div>
     </body>

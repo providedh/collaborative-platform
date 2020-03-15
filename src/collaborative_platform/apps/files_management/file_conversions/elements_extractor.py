@@ -12,7 +12,7 @@ from apps.projects.models import EntitySchema
 XML_ID_KEY = f"{{{XML_NAMESPACES['xml']}}}id"
 
 
-class Extractor:
+class ElementsExtractor:
     def __init__(self):
         self.__old_xml_content = ''
         self.__new_xml_content = ''
@@ -39,6 +39,7 @@ class Extractor:
         self.__move_listable_entities()
         self.__copy_unlistable_entities()
         self.__move_custom_entities()
+        self.__move_annotators()
         self.__create_xml_content()
 
         self.__check_if_changed()
@@ -104,6 +105,9 @@ class Extractor:
             lists = self.__tree.xpath(xpath, namespaces=XML_NAMESPACES)
 
             self.__remove_list_from_tree(lists)
+
+    def __move_annotators(self):
+        pass
 
     def __create_entities_in_db(self, elements, entity_name, custom=False):
         for element in elements:
@@ -187,3 +191,5 @@ class Extractor:
     def __check_if_changed(self):
         if self.__old_xml_content != self.__new_xml_content:
             self.__is_changed = True
+
+            self.__message = "Moved elements from file to database."

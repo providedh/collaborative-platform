@@ -1,6 +1,7 @@
 from lxml import etree
 
-from collaborative_platform.settings import ADDITIONAL_USABLE_TAGS, DEFAULT_ENTITIES, XML_NAMESPACES
+from collaborative_platform.settings import ADDITIONAL_XML_ID_BASES, ADDITIONAL_USABLE_TAGS, DEFAULT_ENTITIES, \
+    XML_NAMESPACES
 
 from apps.files_management.models import File, FileMaxXmlIds
 from apps.projects.models import EntitySchema
@@ -36,6 +37,7 @@ class IDsCorrector:
         self.__correct_unlistable_entities_ids()
         self.__correct_custom_entities_ids()
         self.__correct_tags_ids_in_body_text_related_to_entities()
+        self.__correct_annotators_ids()
         self.__correct_certainties_xml_ids()
         self.__create_xml_content()
 
@@ -69,8 +71,10 @@ class IDsCorrector:
     def __initiate_max_xml_ids(self):
         usable_tags = self.__get_usable_tags()
 
-        for tag_name in usable_tags:
-            self.__max_xml_ids.update({tag_name: 0})
+        xml_ids_bases = usable_tags | set(ADDITIONAL_XML_ID_BASES)
+
+        for xml_id_base in xml_ids_bases:
+            self.__max_xml_ids.update({xml_id_base: 0})
 
     def __get_usable_tags(self):
         entities = self.__listable_entities + self.__unlistable_entities + self.__custom_entities
@@ -143,6 +147,15 @@ class IDsCorrector:
 
         self.__correct_elements_ids(elements, 'name')
 
+    def __correct_annotators_ids(self):
+        xpath = f'//default:teiHeader//default:profileDesc//default:particDesc//' \
+                f'default:listPerson[@type="PROVIDEDH Annotators"]/default:person'
+
+        elements = self.__tree.xpath(xpath, namespaces=XML_NAMESPACES)
+
+        self.__correct_elements_ids(elements, 'annotator')
+
+
     def __correct_certainties_xml_ids(self):
         xpath = f'//default:teiHeader//default:classCode[@scheme="http://providedh.eu/uncertainty/ns/1.0"]' \
                 f'//default:certainty'
@@ -150,13 +163,13 @@ class IDsCorrector:
 
         self.__correct_elements_ids(elements, 'certainty')
 
-    def __correct_elements_ids(self, elements, entity_name, collision=False):
+    def __correct_elements_ids(self, elements, xml_id_base, collision=False):
         for element in elements:
             if self.__xml_id_key in element.attrib:
-                self.__update_element_xml_id_and_references(element, entity_name, collision)
+                self.__update_element_xml_id_and_references(element, xml_id_base, collision)
 
             else:
-                self.__update_element_xml_id(element, entity_name)
+                self.__update_element_xml_id(element, xml_id_base)
 
     def __get_difference_of_elements(self, elements_a, elements_b):
         elements = set(elements_a) - set(elements_b)
@@ -167,11 +180,11 @@ class IDsCorrector:
 
         return elements
 
-    def __update_element_xml_id_and_references(self, element, entity_name, collision=False):
+    def __update_element_xml_id_and_references(self, element, xml_id_base, collision=False):
         old_xml_id = element.attrib[self.__xml_id_key]
-        new_xml_id = self.__update_element_xml_id(element, entity_name, collision=collision)
+        new_xml_id = self.__update_element_xml_id(element, xml_id_base, collision=collision)
 
-        reference_attributes = ['ref', 'target']
+        reference_attributes = ['ref', 'resp', 'target']
 
         for attribute in reference_attributes:
             xpath = f"//*[contains(concat(' ', @{attribute}, ' '), ' #{old_xml_id} ')]"
@@ -181,10 +194,10 @@ class IDsCorrector:
             for element in elements:
                 self.__update_element_attribute(element, attribute, old_xml_id, new_xml_id)
 
-    def __update_element_xml_id(self, element, entity_name, collision=False):
+    def __update_element_xml_id(self, element, xml_id_base, collision=False):
         if not collision:
-            xml_id_number = self.__get_next_xml_id_number(entity_name)
-            new_xml_id = f'{entity_name}-{xml_id_number}'
+            xml_id_number = self.__get_next_xml_id_number(xml_id_base)
+            new_xml_id = f'{xml_id_base}-{xml_id_number}'
         else:
             old_xml_id = element.attrib[self.__xml_id_key]
             old_xml_id = old_xml_id.replace('-', '_')
@@ -194,10 +207,10 @@ class IDsCorrector:
 
         return new_xml_id
 
-    def __get_next_xml_id_number(self, entity_name):
-        xml_id_number = self.__max_xml_ids[entity_name]
+    def __get_next_xml_id_number(self, xml_id_base):
+        xml_id_number = self.__max_xml_ids[xml_id_base]
 
-        self.__max_xml_ids[entity_name] += 1
+        self.__max_xml_ids[xml_id_base] += 1
 
         return xml_id_number
 
@@ -221,3 +234,5 @@ class IDsCorrector:
     def __check_if_changed(self):
         if self.__old_xml_content != self.__new_xml_content:
             self.__is_changed = True
+
+            self.__message = "Corrected xml:ids for project entities."
