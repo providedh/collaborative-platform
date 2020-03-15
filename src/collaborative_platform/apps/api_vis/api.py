@@ -5,9 +5,10 @@ import apps.index_and_search.models as es
 from json.decoder import JSONDecodeError
 from lxml import etree
 
-from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpRequest, HttpResponse, HttpResponseBadRequest, HttpResponseNotModified
+
+from collaborative_platform.settings import XML_NAMESPACES
 
 from apps.exceptions import BadRequest, NotModified
 from apps.files_management.models import File, FileVersion, FileMaxXmlIds
@@ -26,9 +27,6 @@ from .helpers import search_files_by_person_name, search_files_by_content, valid
 # from .models import Clique, CliqueToDelete, Commit, Entity, EventVersion, OrganizationVersion, PersonVersion, \
 #     PlaceVersion, Unification, UnificationToDelete, ObjectVersion
 from .models import Clique, CliqueToDelete, Commit, Entity, Unification, UnificationToDelete
-
-
-NAMESPACES = settings.XML_NAMESPACES
 
 
 ANNOTATION_TAGS = ['date', 'event', 'location', 'geolocation', 'name', 'occupation', 'object', 'org', 'person', 'place',
@@ -134,7 +132,7 @@ def file_body(request, project_id, file_id):  # type: (HttpRequest, int, int) ->
             xml_content = file.read()
 
         tree = etree.fromstring(xml_content)
-        body = tree.xpath('//default:text/default:body', namespaces=NAMESPACES)[0]
+        body = tree.xpath('//default:text/default:body', namespaces=XML_NAMESPACES)[0]
         text_nodes = body.xpath('.//text()')
         plain_text = ''.join(text_nodes)
 
@@ -179,7 +177,7 @@ def file_annotations(request, project_id, file_id):  # type: (HttpRequest, int, 
         file = File.objects.get(id=file_id, deleted=False)
         file_version = FileVersion.objects.get(file=file, number=file.version_number)
 
-        annotations = get_annotations_from_file_version_body(file_version, NAMESPACES, ANNOTATION_TAGS)
+        annotations = get_annotations_from_file_version_body(file_version, XML_NAMESPACES, ANNOTATION_TAGS)
 
         return JsonResponse(annotations, status=HttpResponse.status_code, safe=False)
 
@@ -194,7 +192,7 @@ def file_people(request, project_id, file_id):  # type: (HttpRequest, int, int) 
 
         annotation_tags = ['persName', 'person', 'name']
 
-        annotations = get_annotations_from_file_version_body(file_version, NAMESPACES, annotation_tags)
+        annotations = get_annotations_from_file_version_body(file_version, XML_NAMESPACES, annotation_tags)
 
         return JsonResponse(annotations, status=HttpResponse.status_code, safe=False)
 

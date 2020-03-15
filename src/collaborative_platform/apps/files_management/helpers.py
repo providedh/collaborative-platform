@@ -23,10 +23,11 @@ from django.forms import model_to_dict
 from django.http import JsonResponse
 from django.utils import timezone
 
+from collaborative_platform.settings import XML_NAMESPACES
+
 import apps.index_and_search.models as es
 
 from apps.api_vis.models import Clique, Unification, Certainty
-from apps.close_reading.annotator import NAMESPACES
 from apps.files_management.file_conversions.xml_formatter import XMLFormatter
 from apps.files_management.models import File, FileVersion, Directory, FileMaxXmlIds
 from apps.index_and_search.content_extractor import ContentExtractor
@@ -344,8 +345,8 @@ def create_certainty_elements_from_unifications(internal_unifications, external_
     certainties = []
 
     for unification in internal_unifications:
-        default_namespace = NAMESPACES['default']
-        xml_namespace = NAMESPACES['xml']
+        default_namespace = XML_NAMESPACES['default']
+        xml_namespace = XML_NAMESPACES['xml']
         default = '{%s}' % default_namespace
         xml = '{%s}' % xml_namespace
 
@@ -388,8 +389,8 @@ def create_certainty_elements_from_certainties(certainties):
     certainties_to_return = []
 
     for certainty in certainties:
-        default_namespace = NAMESPACES['default']
-        xml_namespace = NAMESPACES['xml']
+        default_namespace = XML_NAMESPACES['default']
+        xml_namespace = XML_NAMESPACES['xml']
         default = '{%s}' % default_namespace
         xml = '{%s}' % xml_namespace
 
@@ -454,13 +455,13 @@ def certainty_elements_to_json(unifications):
 def add_certainties_to_xml_tree(certainty_elements, xml_tree):
     certainties_node = xml_tree.xpath('//default:teiHeader'
                                       '//default:classCode[@scheme="http://providedh.eu/uncertainty/ns/1.0"]',
-                                      namespaces=NAMESPACES)
+                                      namespaces=XML_NAMESPACES)
 
     if not certainties_node:
         xml_tree = create_annotation_list(xml_tree)
         certainties_node = xml_tree.xpath('//default:teiHeader'
                                           '//default:classCode[@scheme="http://providedh.eu/uncertainty/ns/1.0"]',
-                                          namespaces=NAMESPACES)
+                                          namespaces=XML_NAMESPACES)
 
     for certainty in certainty_elements:
         xpath = f'//default:teiHeader' \
@@ -475,16 +476,16 @@ def add_certainties_to_xml_tree(certainty_elements, xml_tree):
 
         xpath += ']'
 
-        existing_certainties = xml_tree.xpath(xpath, namespaces=NAMESPACES)
+        existing_certainties = xml_tree.xpath(xpath, namespaces=XML_NAMESPACES)
 
-        desc = certainty.xpath('.//desc', namespaces=NAMESPACES)
+        desc = certainty.xpath('.//desc', namespaces=XML_NAMESPACES)
 
         if not existing_certainties:
             certainties_node[0].append(certainty)
 
         else:
             for existing_certainty in existing_certainties:
-                existing_desc = existing_certainty.xpath('.//desc', namespaces=NAMESPACES)
+                existing_desc = existing_certainty.xpath('.//desc', namespaces=XML_NAMESPACES)
 
                 if desc and existing_desc:
                     if desc.text() != existing_desc.text():
@@ -494,33 +495,33 @@ def add_certainties_to_xml_tree(certainty_elements, xml_tree):
 
 
 def create_annotation_list(tree):
-    default_namespace = NAMESPACES['default']
+    default_namespace = XML_NAMESPACES['default']
     default = "{%s}" % default_namespace
 
     ns_map = {
         None: default_namespace
     }
 
-    profile_desc = tree.xpath('//default:teiHeader/default:profileDesc', namespaces=NAMESPACES)
+    profile_desc = tree.xpath('//default:teiHeader/default:profileDesc', namespaces=XML_NAMESPACES)
 
     if not profile_desc:
-        tei_header = tree.xpath('//default:teiHeader', namespaces=NAMESPACES)
+        tei_header = tree.xpath('//default:teiHeader', namespaces=XML_NAMESPACES)
         profile_desc = etree.Element(default + 'profileDesc', nsmap=ns_map)
         tei_header[0].append(profile_desc)
 
-    text_class = tree.xpath('//default:teiHeader/default:profileDesc/default:textClass', namespaces=NAMESPACES)
+    text_class = tree.xpath('//default:teiHeader/default:profileDesc/default:textClass', namespaces=XML_NAMESPACES)
 
     if not text_class:
-        profile_desc = tree.xpath('//default:teiHeader/default:profileDesc', namespaces=NAMESPACES)
+        profile_desc = tree.xpath('//default:teiHeader/default:profileDesc', namespaces=XML_NAMESPACES)
         text_class = etree.Element(default + 'textClass', nsmap=ns_map)
         profile_desc[0].append(text_class)
 
     class_code = tree.xpath(
         '//default:teiHeader/default:profileDesc/default:textClass/default:classCode[@scheme="http://providedh.eu/uncertainty/ns/1.0"]',
-        namespaces=NAMESPACES)
+        namespaces=XML_NAMESPACES)
 
     if not class_code:
-        text_class = tree.xpath('//default:teiHeader/default:profileDesc/default:textClass', namespaces=NAMESPACES)
+        text_class = tree.xpath('//default:teiHeader/default:profileDesc/default:textClass', namespaces=XML_NAMESPACES)
         class_code = etree.Element(default + 'classCode', scheme="http://providedh.eu/uncertainty/ns/1.0",
                                    nsmap=ns_map)
         text_class[0].append(class_code)
@@ -530,22 +531,22 @@ def create_annotation_list(tree):
 
 def fill_up_certainty_authors_list(xml_tree):
     list_person = xml_tree.xpath('//default:teiHeader'
-                                 '//default:listPerson[@type="PROVIDEDH Annotators"]', namespaces=NAMESPACES)
+                                 '//default:listPerson[@type="PROVIDEDH Annotators"]', namespaces=XML_NAMESPACES)
 
     if not list_person:
         xml_tree = create_list_person(xml_tree)
         list_person = xml_tree.xpath('//default:teiHeader'
-                                     '//default:listPerson[@type="PROVIDEDH Annotators"]', namespaces=NAMESPACES)
+                                     '//default:listPerson[@type="PROVIDEDH Annotators"]', namespaces=XML_NAMESPACES)
 
     certainty_authors = xml_tree.xpath('//default:teiHeader'
                                        '//default:classCode[@scheme="http://providedh.eu/uncertainty/ns/1.0"]'
                                        '//default:certainty/@resp',
-                                       namespaces=NAMESPACES)
+                                       namespaces=XML_NAMESPACES)
     certainty_authors = set(certainty_authors)
 
     for author in certainty_authors:
         author = author.replace('#', '')
-        author_in_list = list_person[0].xpath(f'./default:person[@xml:id="{author}"]', namespaces=NAMESPACES)
+        author_in_list = list_person[0].xpath(f'./default:person[@xml:id="{author}"]', namespaces=XML_NAMESPACES)
 
         if not author_in_list:
             author_element = create_author_element(author)
@@ -555,33 +556,33 @@ def fill_up_certainty_authors_list(xml_tree):
 
 
 def create_list_person(xml_tree):
-    prefix = "{%s}" % NAMESPACES['default']
+    prefix = "{%s}" % XML_NAMESPACES['default']
 
     ns_map = {
-        None: NAMESPACES['default']
+        None: XML_NAMESPACES['default']
     }
 
-    profile_desc = xml_tree.xpath('//default:teiHeader/default:profileDesc', namespaces=NAMESPACES)
+    profile_desc = xml_tree.xpath('//default:teiHeader/default:profileDesc', namespaces=XML_NAMESPACES)
 
     if not profile_desc:
-        tei_header = xml_tree.xpath('//default:teiHeader', namespaces=NAMESPACES)
+        tei_header = xml_tree.xpath('//default:teiHeader', namespaces=XML_NAMESPACES)
         profile_desc = etree.Element(prefix + 'profileDesc', nsmap=ns_map)
         tei_header[0].append(profile_desc)
 
-    partic_desc = xml_tree.xpath('//default:teiHeader/default:profileDesc/default:particDesc', namespaces=NAMESPACES)
+    partic_desc = xml_tree.xpath('//default:teiHeader/default:profileDesc/default:particDesc', namespaces=XML_NAMESPACES)
 
     if not partic_desc:
-        profile_desc = xml_tree.xpath('//default:teiHeader/default:profileDesc', namespaces=NAMESPACES)
+        profile_desc = xml_tree.xpath('//default:teiHeader/default:profileDesc', namespaces=XML_NAMESPACES)
         partic_desc = etree.Element(prefix + 'particDesc', nsmap=ns_map)
         profile_desc[0].append(partic_desc)
 
     list_person = xml_tree.xpath(
         '//default:teiHeader/default:profileDesc/default:particDesc/default:listPerson[@type="PROVIDEDH Annotators"]',
-        namespaces=NAMESPACES)
+        namespaces=XML_NAMESPACES)
 
     if not list_person:
         partic_desc = xml_tree.xpath('//default:teiHeader/default:profileDesc/default:particDesc',
-                                     namespaces=NAMESPACES)
+                                     namespaces=XML_NAMESPACES)
         list_person = etree.Element(prefix + 'listPerson', type="PROVIDEDH Annotators", nsmap=ns_map)
         partic_desc[0].append(list_person)
 

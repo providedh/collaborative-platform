@@ -1,6 +1,6 @@
 from lxml import etree
 
-from django.conf import settings
+from collaborative_platform.settings import ADDITIONAL_USABLE_TAGS, DEFAULT_ENTITIES, XML_NAMESPACES
 
 from apps.files_management.models import File, FileMaxXmlIds
 from apps.projects.models import EntitySchema
@@ -8,8 +8,7 @@ from apps.projects.models import EntitySchema
 
 class IDsCorrector:
     def __init__(self):
-        self.__namespaces = settings.XML_NAMESPACES
-        self.__xml_id_key = f"{{{self.__namespaces['xml']}}}id"
+        self.__xml_id_key = f"{{{XML_NAMESPACES['xml']}}}id"
 
         self.__old_xml_content = ''
         self.__new_xml_content = ''
@@ -23,6 +22,7 @@ class IDsCorrector:
         self.__max_xml_ids = {}
 
         self.__is_changed = False
+        self.__message = ''
 
     def correct_ids(self, xml_content, file_id):
         self.__old_xml_content = xml_content
@@ -43,18 +43,18 @@ class IDsCorrector:
 
         self.__check_if_changed()
 
-        return self.__new_xml_content, self.__is_changed
+        return self.__new_xml_content, self.__is_changed, self.__message
 
     def __load_entities_schemes(self, file_id):
         entities_schemes = self._get_entities_schemes_from_db(file_id)
 
-        default_entities_names = settings.ENTITIES.keys()
+        default_entities_names = DEFAULT_ENTITIES.keys()
 
         for entity in entities_schemes:
             if entity.name not in default_entities_names:
                 self.__custom_entities.append(entity)
             else:
-                if settings.ENTITIES[entity.name]['listable']:
+                if DEFAULT_ENTITIES[entity.name]['listable']:
                     self.__listable_entities.append(entity)
                 else:
                     self.__unlistable_entities.append(entity)
@@ -74,7 +74,7 @@ class IDsCorrector:
 
     def __get_usable_tags(self):
         entities = self.__listable_entities + self.__unlistable_entities + self.__custom_entities
-        default_entities_names = settings.ENTITIES.keys()
+        default_entities_names = DEFAULT_ENTITIES.keys()
 
         usable_tags = []
 
@@ -82,10 +82,10 @@ class IDsCorrector:
             usable_tags.append(entity.name)
 
             if entity.name in default_entities_names:
-                entity_text_tag = settings.ENTITIES[entity.name]['text_tag']
+                entity_text_tag = DEFAULT_ENTITIES[entity.name]['text_tag']
                 usable_tags.append(entity_text_tag)
 
-        usable_tags += settings.ADDITIONAL_USABLE_TAGS
+        usable_tags += ADDITIONAL_USABLE_TAGS
         usable_tags = set(usable_tags)
 
         return usable_tags
@@ -100,29 +100,29 @@ class IDsCorrector:
 
         for tag_name in usable_tags:
             xpath = f"//*[contains(@xml:id, '{tag_name}-')]"
-            elements = self.__tree.xpath(xpath, namespaces=self.__namespaces)
+            elements = self.__tree.xpath(xpath, namespaces=XML_NAMESPACES)
 
             self.__correct_elements_ids(elements, tag_name, collision=True)
 
     def __correct_listable_entities_ids(self):
         for entity in self.__listable_entities:
-            list_tag = settings.ENTITIES[entity.name]['list_tag']
+            list_tag = DEFAULT_ENTITIES[entity.name]['list_tag']
             xpath = f'//default:{list_tag}[@type="{entity.name}List"]//default:{entity.name}'
-            elements = self.__tree.xpath(xpath, namespaces=self.__namespaces)
+            elements = self.__tree.xpath(xpath, namespaces=XML_NAMESPACES)
 
             self.__correct_elements_ids(elements, entity.name)
 
     def __correct_unlistable_entities_ids(self):
         for entity in self.__unlistable_entities:
             xpath = f'//default:text//default:body//default:{entity.name}'
-            elements = self.__tree.xpath(xpath, namespaces=self.__namespaces)
+            elements = self.__tree.xpath(xpath, namespaces=XML_NAMESPACES)
 
             self.__correct_elements_ids(elements, entity.name)
 
     def __correct_custom_entities_ids(self):
         for entity in self.__custom_entities:
             xpath = f'//default:listObject[@type="{entity.name}List"]//default:object[@type="{entity.name}"]'
-            elements = self.__tree.xpath(xpath, namespaces=self.__namespaces)
+            elements = self.__tree.xpath(xpath, namespaces=XML_NAMESPACES)
 
             self.__correct_elements_ids(elements, entity.name)
 
@@ -130,14 +130,14 @@ class IDsCorrector:
         elements_on_lists = []
 
         for entity in self.__listable_entities:
-            list_tag = settings.ENTITIES[entity.name]['list_tag']
+            list_tag = DEFAULT_ENTITIES[entity.name]['list_tag']
             xpath_list = f'//default:{list_tag}[@type="{entity.name}List"]//default:name'
-            elements = self.__tree.xpath(xpath_list, namespaces=self.__namespaces)
+            elements = self.__tree.xpath(xpath_list, namespaces=XML_NAMESPACES)
 
             elements_on_lists.extend(elements)
 
         xpath_body = f'//default:text//default:body//default:name'
-        elements_in_body = self.__tree.xpath(xpath_body, namespaces=self.__namespaces)
+        elements_in_body = self.__tree.xpath(xpath_body, namespaces=XML_NAMESPACES)
 
         elements = self.__get_difference_of_elements(elements_in_body, elements_on_lists)
 
@@ -146,7 +146,7 @@ class IDsCorrector:
     def __correct_certainties_xml_ids(self):
         xpath = f'//default:teiHeader//default:classCode[@scheme="http://providedh.eu/uncertainty/ns/1.0"]' \
                 f'//default:certainty'
-        elements = self.__tree.xpath(xpath, namespaces=self.__namespaces)
+        elements = self.__tree.xpath(xpath, namespaces=XML_NAMESPACES)
 
         self.__correct_elements_ids(elements, 'certainty')
 
@@ -176,7 +176,7 @@ class IDsCorrector:
         for attribute in reference_attributes:
             xpath = f"//*[contains(concat(' ', @{attribute}, ' '), ' #{old_xml_id} ')]"
 
-            elements = self.__tree.xpath(xpath, namespaces=self.__namespaces)
+            elements = self.__tree.xpath(xpath, namespaces=XML_NAMESPACES)
 
             for element in elements:
                 self.__update_element_attribute(element, attribute, old_xml_id, new_xml_id)

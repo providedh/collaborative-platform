@@ -1,6 +1,5 @@
 import logging
 
-import time
 from json import dumps, loads
 from os import mkdir
 from zipfile import ZipFile
@@ -10,9 +9,8 @@ from django.contrib.auth.models import User
 from django.db import IntegrityError
 from django.forms import model_to_dict
 from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, JsonResponse, HttpResponseServerError
-from lxml.etree import XMLSyntaxError
 
-# from apps.api_vis.helpers import create_entities_in_database
+from apps.exceptions import BadRequest
 from apps.files_management.file_conversions.ids_corrector import IDsCorrector
 from apps.files_management.file_conversions.extractor import Extractor
 from apps.projects.helpers import log_activity, paginate_start_length, page_to_json_response
@@ -31,146 +29,114 @@ logger = logging.getLogger('upload')
 @objects_exists
 @user_has_access("RW")
 def upload(request, directory_id):  # type: (HttpRequest, int) -> HttpResponse
-    if request.method == "POST" and request.FILES:
-        files_list = request.FILES.getlist("file")
+    if request.method == "POST":
+        try:
+            files_list = __get_files_list(request)
+            directory = Directory.objects.get(id=directory_id, deleted=False)
+            user = request.user
 
-        if not files_list:
-            return HttpResponseBadRequest("File not attached properly")
+            upload_statuses = []
 
-        parent_dir = directory_id
-        project = Directory.objects.get(id=parent_dir, deleted=False).project
+            for file in files_list:
+                upload_status = __process_file(file, directory, user)
+                upload_statuses.append(upload_status)
 
-        upload_statuses = []
+            response = dumps(upload_statuses)
 
-        start_extracting = time.time()
-        for i, file in enumerate(files_list):
-            file_name = clean_name(file.name)
-            file.name = file_name
+            return HttpResponse(response, status=200, content_type='application/json')
 
-            upload_status = {'file_name': file_name, 'uploaded': False, 'migrated': False, 'message': None}
-            upload_statuses.append(upload_status)
-
-            try:
-                start_uploading = time.time()
-                logger.info(f"Uploading file {file_name}: initiation done in "
-                            f"{round(start_uploading - start_extracting, 2)} s")
-
-                dbfile = upload_file(file, project, request.user, parent_dir)
-
-                upload_status = {'uploaded': True}
-                upload_statuses[i].update(upload_status)
-
-                start_recognizing = time.time()
-                logger.info(f"Uploading file {file_name}: upload done in "
-                            f"{round(start_recognizing - start_uploading, 2)} s")
-
-                file_version = FileVersion.objects.get(file_id=dbfile.id, number=dbfile.version_number)
-                path_to_file = file_version.upload.path
-
-                tei_handler = TeiHandler(path_to_file)
-                migration, is_tei_p5_unprefixed = tei_handler.recognize()
-
-                if not migration and not is_tei_p5_unprefixed:
-                    upload_status = {"message": "Invalid filetype, please provide TEI file or compatible ones.",
-                                     "uploaded": False}
-                    upload_statuses[i].update(upload_status)
-                    dbfile.activities.get().delete()
-                    dbfile.delete()
-                    continue
-
-                start_migrating = time.time()
-                logger.info(f"Uploading file {file_name}: migration recognizing done in "
-                            f"{round(start_migrating - start_recognizing, 2)} s")
-
-                if migration:
-                    tei_handler.migrate()
-
-                xml_content = tei_handler.get_text()
-
-                start_ids_filling = time.time()
-                logger.info(f"Uploading file {file_name}: migration done in "
-                            f"{round(start_ids_filling - start_migrating, 2)} s")
-
-                file_id = file_version.file.id
-
-                try:
-                    ids_corrector = IDsCorrector()
-                    xml_content, correction = ids_corrector.correct_ids(xml_content, file_id)
-
-                except XMLSyntaxError:
-                    correction = False
-
-                start_extracting = time.time()
-                logger.info(f"Uploading file {file_name}: filling ID's done in "
-                            f"{round(start_extracting - start_ids_filling, 2)} s")
-
-                extractor = Extractor()
-                xml_content, extraction = extractor.move_elements_to_db(xml_content, file_id)
+        except BadRequest as exception:
+            return HttpResponseBadRequest(str(exception))
 
 
+def __get_files_list(request):
+    if not request.FILES:
+        raise BadRequest("File not attached")
+
+    files_list = request.FILES.getlist("file")
+
+    if not files_list:
+        raise BadRequest("File not attached properly")
+
+    return files_list
 
 
+def __process_file(file, directory, user):
+    file.name = clean_name(file.name)
+    file_object = None
+    upload_status = {'file_name': file.name, 'uploaded': False, 'migrated': False, 'message': None}
+
+    try:
+        file_object = upload_file(file, directory.project, user, directory.id)
+        upload_status.update({'uploaded': True})
+
+        xml_content, content_updated, message = __update_file_content(file_object)
+
+        if content_updated:
+            file_object = __update_file_object(xml_content, file_object, user)
+            upload_status.update({'migrated': True, 'message': message})
+
+            log_activity(directory.project, user, f"File migrated: {message} ", file_object)
+
+        return upload_status
+
+    except BadRequest as exception:
+        if file_object:
+            __remove_file(file_object)
+        upload_status.update({'uploaded': False, 'migrated': False, 'message': str(exception)})
+
+        return upload_status
 
 
+def __update_file_content(file_object):
+    tei_handler = TeiHandler()
+    content_binary = __get_content_binary(file_object)
+    migration, is_tei_p5_unprefixed = tei_handler.recognize(content_binary)
+
+    if not migration and not is_tei_p5_unprefixed:
+        raise BadRequest("Invalid filetype, please provide TEI file or compatible ones.")
+
+    if migration:
+        tei_handler.migrate()
+
+    xml_content = tei_handler.get_text()
+    migration_message = tei_handler.get_message()
+
+    ids_corrector = IDsCorrector()
+    xml_content, correction, correction_message = ids_corrector.correct_ids(xml_content, file_object.id)
+
+    extractor = Extractor()
+    xml_content, extraction, extraction_message = extractor.move_elements_to_db(xml_content, file_object.id)
+
+    if migration or correction or extraction:
+        content_updated = True
+    else:
+        content_updated = False
+
+    message = ' '.join([migration_message, correction_message, extraction_message])
+
+    return xml_content, content_updated, message
 
 
-                if migration or correction:
-                    text, entities = extract_text_and_entities(xml_content, project.id, dbfile.id)
+def __get_content_binary(file_object):
+    file_version = FileVersion.objects.get(file_id=file_object.id, number=file_object.version_number)
+    content_binary = file_version.get_content_binary()
 
-                    finish_extracting = time.time()
-                    logger.info(f"Uploading file {file_name}: extracted text and entities in "
-                                f"{round(finish_extracting - start_extracting, 2)} s")
+    return content_binary
 
-                    uploaded_file = create_uploaded_file_object_from_string(xml_content, file_name)
 
-                    dbfile = File.objects.get(name=uploaded_file.name, parent_dir_id=parent_dir, project=project,
-                                              deleted=False)
-                    dbfile = overwrite_file(dbfile, uploaded_file, request.user)
+def __remove_file(file_object):
+    file_object.activities.get().delete()
+    file_object.delete()
 
-                    saved_ver2 = time.time()
-                    logger.info(f"Uploading file {file_name}: created second fileversion in db "
-                                f"{round(saved_ver2 - finish_extracting, 2)} s")
 
-                    message = tei_handler.get_message()
-                    migration_status = {'migrated': True, 'message': message}
-                    upload_statuses[i].update(migration_status)
-                    dt = time.time()
-                    # create_entities_in_database(entities, project, file_version)
-                    logger.info(f"creating entities in db took {time.time() - dt} s")
-                    dt = time.time()
-                    index_entities(entities)
-                    index_file(dbfile, text)
-                    logger.info(f"indexing entities and file in es took {time.time() - dt} s")
+def __update_file_object(xml_content, old_file, user):
+    new_file = create_uploaded_file_object_from_string(xml_content, old_file.name)
 
-                    log_activity(dbfile.project, request.user, "File migrated: {} ".format(message), dbfile)
+    file = File.objects.get(name=new_file.name, parent_dir=old_file.parent_dir, project=old_file.project, deleted=False)
+    updated_file = overwrite_file(file, new_file, user)
 
-                    finish_indexing = time.time()
-                    logger.info(f"Uploading file {file_name}: indexing entities done in "
-                                f"{round(finish_indexing - saved_ver2, 2)} s")
-                else:
-                    file.seek(0)
-                    text, entities = extract_text_and_entities(file.read(), project.id, dbfile.id)
-                    # create_entities_in_database(entities, project, file_version)
-                    index_entities(entities)
-                    index_file(dbfile, text)
-
-                    finish_indexing = time.time()
-                    logger.info(f"Uploading file {file_name}: extarcted, indexed entities and filled IDs in "
-                                f"{round(finish_indexing - start_extracting, 2)} s")
-
-                logger.info(f"Uploading file {file_name}: file processing done in "
-                            f"{round(finish_indexing - start_extracting, 2)} s")
-
-            # except Exception as exception:
-            except ValueError as exception:
-                upload_status = {'message': str(exception)}
-                upload_statuses[i].update(upload_status)
-
-        response = dumps(upload_statuses)
-
-        return HttpResponse(response, status=200, content_type='application/json')
-
-    return HttpResponseBadRequest("Invalid request method or files not attached")
+    return updated_file
 
 
 @login_required

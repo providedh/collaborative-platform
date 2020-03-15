@@ -5,7 +5,8 @@ from lxml import etree
 
 from django.contrib.auth.models import User
 from django.db.models import Q
-from django.conf import settings
+
+from collaborative_platform.settings import XML_NAMESPACES
 
 # from apps.api_vis.helpers import get_entity_from_int_or_dict, create_clique
 from apps.api_vis.helpers import get_entity_from_int_or_dict
@@ -18,9 +19,6 @@ from apps.projects.models import ProjectVersion
 
 
 logger = logging.getLogger('annotator')
-
-
-NAMESPACES = settings.XML_NAMESPACES
 
 
 POSITION_PARAMS_V1 = [
@@ -188,7 +186,7 @@ class Annotator:
         tree = etree.fromstring(text_to_parse)
         list_element_id = request['asserted_value']
 
-        matching_xml_element = tree.xpath(f'//*[@xml:id="{list_element_id}"]', namespaces=NAMESPACES)
+        matching_xml_element = tree.xpath(f'//*[@xml:id="{list_element_id}"]', namespaces=XML_NAMESPACES)
 
         if not matching_xml_element:
             raise BadRequest(f"There is no element with xml:id: {list_element_id} on any list in file "
@@ -493,7 +491,7 @@ class Annotator:
 
         certainties = tree.xpath('//default:teiHeader'
                                  '//default:classCode[@scheme="http://providedh.eu/uncertainty/ns/1.0"]'
-                                 '/default:certainty', namespaces=NAMESPACES)
+                                 '/default:certainty', namespaces=XML_NAMESPACES)
 
         return certainties
 
@@ -510,11 +508,11 @@ class Annotator:
 
         annotators = tree.xpath('//default:teiHeader'
                                 '//default:listPerson[@type="PROVIDEDH Annotators"]'
-                                '/default:person', namespaces=NAMESPACES)
+                                '/default:person', namespaces=XML_NAMESPACES)
 
         xml_ids = []
         for annotator in annotators:
-            prefix = '{%s}' % NAMESPACES['xml']
+            prefix = '{%s}' % XML_NAMESPACES['xml']
             xml_id = annotator.get(prefix + 'id')
 
             xml_ids.append(xml_id)
@@ -547,7 +545,7 @@ class Annotator:
 
         elements_with_same_tag_and_xml_id = self.__get_elements_with_same_tag_and_xml_id(tag)
 
-        prefix = '{%s}' % NAMESPACES['xml']
+        prefix = '{%s}' % XML_NAMESPACES['xml']
 
         for element in elements_with_same_tag_and_xml_id:
             id = element.attrib[f'{prefix}id']
@@ -571,7 +569,7 @@ class Annotator:
 
         tree = etree.fromstring(text_to_parse)
 
-        elements_with_same_tag = tree.xpath(f'//default:{tag}[@xml:id]', namespaces=NAMESPACES)
+        elements_with_same_tag = tree.xpath(f'//default:{tag}[@xml:id]', namespaces=XML_NAMESPACES)
 
         return elements_with_same_tag
 
@@ -930,7 +928,7 @@ class Annotator:
 
     def __check_if_new_elements_already_exist_in_db(self):
         certainty = self.__certainty_to_add.attrib
-        desc = self.__certainty_to_add.xpath('.//desc', namespaces=NAMESPACES)
+        desc = self.__certainty_to_add.xpath('.//desc', namespaces=XML_NAMESPACES)
 
         user_id = int(self.__annotator_xml_id.replace('person', ''))
         annotation_ids = self.__get_annotation_ids_from_target(self.__request['target'])
@@ -983,10 +981,10 @@ class Annotator:
 
             xpath += ']'
 
-            existing_certainties = tree.xpath(xpath, namespaces=NAMESPACES)
+            existing_certainties = tree.xpath(xpath, namespaces=XML_NAMESPACES)
 
             if existing_certainties and self.__request['description']:
-                descriptions = tree.xpath(xpath + '/default:desc', namespaces=NAMESPACES)
+                descriptions = tree.xpath(xpath + '/default:desc', namespaces=XML_NAMESPACES)
 
                 for desc in descriptions:
                     if desc.text == self.__request['description']:
@@ -1009,10 +1007,10 @@ class Annotator:
                     f'//default:listObject' \
                     f'//default:object[@type="{self.__request["tag"]}" and text()="{self.__request["asserted_value"]}"]'
 
-            existing_element = tree.xpath(xpath, namespaces=NAMESPACES)
+            existing_element = tree.xpath(xpath, namespaces=XML_NAMESPACES)
 
             if existing_element:
-                xml_namespace = NAMESPACES['xml']
+                xml_namespace = XML_NAMESPACES['xml']
                 xml = '{%s}' % xml_namespace
 
                 xml_id = existing_element[0].attrib[etree.QName(xml + 'id')]
@@ -1022,8 +1020,8 @@ class Annotator:
 
     def __create_new_certainty_in_db(self):
         certainty = self.__certainty_to_add.attrib
-        desc = self.__certainty_to_add.xpath('.//desc', namespaces=NAMESPACES)
-        prefix = '{%s}' % NAMESPACES['xml']
+        desc = self.__certainty_to_add.xpath('.//desc', namespaces=XML_NAMESPACES)
+        prefix = '{%s}' % XML_NAMESPACES['xml']
 
         user_id = int(self.__annotator_xml_id.replace('person', ''))
         xml_id = certainty[prefix + 'id']
@@ -1084,12 +1082,12 @@ class Annotator:
         tree = etree.fromstring(text)
 
         list_person = tree.xpath('//default:teiHeader'
-                                 '//default:listPerson[@type="PROVIDEDH Annotators"]', namespaces=NAMESPACES)
+                                 '//default:listPerson[@type="PROVIDEDH Annotators"]', namespaces=XML_NAMESPACES)
 
         if not list_person:
             tree = self.__create_list_person(tree)
             list_person = tree.xpath('//default:teiHeader'
-                                     '//default:listPerson[@type="PROVIDEDH Annotators"]', namespaces=NAMESPACES)
+                                     '//default:listPerson[@type="PROVIDEDH Annotators"]', namespaces=XML_NAMESPACES)
 
         list_person[0].append(annotator)
 
@@ -1099,33 +1097,33 @@ class Annotator:
 
     @staticmethod
     def __create_list_person(tree):
-        prefix = "{%s}" % NAMESPACES['default']
+        prefix = "{%s}" % XML_NAMESPACES['default']
 
         ns_map = {
-            None: NAMESPACES['default']
+            None: XML_NAMESPACES['default']
         }
 
-        profile_desc = tree.xpath('//default:teiHeader/default:profileDesc', namespaces=NAMESPACES)
+        profile_desc = tree.xpath('//default:teiHeader/default:profileDesc', namespaces=XML_NAMESPACES)
 
         if not profile_desc:
-            tei_header = tree.xpath('//default:teiHeader', namespaces=NAMESPACES)
+            tei_header = tree.xpath('//default:teiHeader', namespaces=XML_NAMESPACES)
             profile_desc = etree.Element(prefix + 'profileDesc', nsmap=ns_map)
             tei_header[0].append(profile_desc)
 
-        partic_desc = tree.xpath('//default:teiHeader/default:profileDesc/default:particDesc', namespaces=NAMESPACES)
+        partic_desc = tree.xpath('//default:teiHeader/default:profileDesc/default:particDesc', namespaces=XML_NAMESPACES)
 
         if not partic_desc:
-            profile_desc = tree.xpath('//default:teiHeader/default:profileDesc', namespaces=NAMESPACES)
+            profile_desc = tree.xpath('//default:teiHeader/default:profileDesc', namespaces=XML_NAMESPACES)
             partic_desc = etree.Element(prefix + 'particDesc', nsmap=ns_map)
             profile_desc[0].append(partic_desc)
 
         list_person = tree.xpath(
             '//default:teiHeader/default:profileDesc/default:particDesc/default:listPerson[@type="PROVIDEDH Annotators"]',
-            namespaces=NAMESPACES)
+            namespaces=XML_NAMESPACES)
 
         if not list_person:
             partic_desc = tree.xpath('//default:teiHeader/default:profileDesc/default:particDesc',
-                                     namespaces=NAMESPACES)
+                                     namespaces=XML_NAMESPACES)
             list_person = etree.Element(prefix + 'listPerson', type="PROVIDEDH Annotators", nsmap=ns_map)
             partic_desc[0].append(list_person)
 
@@ -1136,13 +1134,13 @@ class Annotator:
 
         certainties = tree.xpath('//default:teiHeader'
                                  '//default:classCode[@scheme="http://providedh.eu/uncertainty/ns/1.0"]',
-                                 namespaces=NAMESPACES)
+                                 namespaces=XML_NAMESPACES)
 
         if not certainties:
             tree = self.__create_annotation_list(tree)
             certainties = tree.xpath('//default:teiHeader'
                                      '//default:classCode[@scheme="http://providedh.eu/uncertainty/ns/1.0"]',
-                                     namespaces=NAMESPACES)
+                                     namespaces=XML_NAMESPACES)
 
         certainties[0].append(certainty)
 
@@ -1152,33 +1150,33 @@ class Annotator:
 
     @staticmethod
     def __create_annotation_list(tree):
-        default_namespace = NAMESPACES['default']
+        default_namespace = XML_NAMESPACES['default']
         default = "{%s}" % default_namespace
 
         ns_map = {
             None: default_namespace
         }
 
-        profile_desc = tree.xpath('//default:teiHeader/default:profileDesc', namespaces=NAMESPACES)
+        profile_desc = tree.xpath('//default:teiHeader/default:profileDesc', namespaces=XML_NAMESPACES)
 
         if not profile_desc:
-            tei_header = tree.xpath('//default:teiHeader', namespaces=NAMESPACES)
+            tei_header = tree.xpath('//default:teiHeader', namespaces=XML_NAMESPACES)
             profile_desc = etree.Element(default + 'profileDesc', nsmap=ns_map)
             tei_header[0].append(profile_desc)
 
-        text_class = tree.xpath('//default:teiHeader/default:profileDesc/default:textClass', namespaces=NAMESPACES)
+        text_class = tree.xpath('//default:teiHeader/default:profileDesc/default:textClass', namespaces=XML_NAMESPACES)
 
         if not text_class:
-            profile_desc = tree.xpath('//default:teiHeader/default:profileDesc', namespaces=NAMESPACES)
+            profile_desc = tree.xpath('//default:teiHeader/default:profileDesc', namespaces=XML_NAMESPACES)
             text_class = etree.Element(default + 'textClass', nsmap=ns_map)
             profile_desc[0].append(text_class)
 
         class_code = tree.xpath(
             '//default:teiHeader/default:profileDesc/default:textClass/default:classCode[@scheme="http://providedh.eu/uncertainty/ns/1.0"]',
-            namespaces=NAMESPACES)
+            namespaces=XML_NAMESPACES)
 
         if not class_code:
-            text_class = tree.xpath('//default:teiHeader/default:profileDesc/default:textClass', namespaces=NAMESPACES)
+            text_class = tree.xpath('//default:teiHeader/default:profileDesc/default:textClass', namespaces=XML_NAMESPACES)
             class_code = etree.Element(default + 'classCode', scheme="http://providedh.eu/uncertainty/ns/1.0",
                                        nsmap=ns_map)
             text_class[0].append(class_code)
@@ -1190,11 +1188,11 @@ class Annotator:
         element_type = element.get('type')
         list_xpath = f'/default:TEI/default:text/default:body/default:div[@type="{element_type}"]/default:listObject'
 
-        list = tree.xpath(list_xpath, namespaces=NAMESPACES)
+        list = tree.xpath(list_xpath, namespaces=XML_NAMESPACES)
 
         if not list:
             tree = self.__create_elements_from_xpath(tree, list_xpath)
-            list = tree.xpath(list_xpath, namespaces=NAMESPACES)
+            list = tree.xpath(list_xpath, namespaces=XML_NAMESPACES)
 
         list[0].append(element)
 
@@ -1204,7 +1202,7 @@ class Annotator:
 
     @staticmethod
     def __create_elements_from_xpath(tree, xpath):
-        default_namespace = NAMESPACES['default']
+        default_namespace = XML_NAMESPACES['default']
 
         ns_map = {
             None: default_namespace
@@ -1217,11 +1215,11 @@ class Annotator:
             i += 1
 
             element_xpath = '/' + '/'.join(path_steps[:i])
-            element = tree.xpath(element_xpath, namespaces=NAMESPACES)
+            element = tree.xpath(element_xpath, namespaces=XML_NAMESPACES)
 
             if not element:
                 parent_xpath = '/' + '/'.join(path_steps[:i-1])
-                parent = tree.xpath(parent_xpath, namespaces=NAMESPACES)
+                parent = tree.xpath(parent_xpath, namespaces=XML_NAMESPACES)
 
                 step = path_steps[i-1]
 
@@ -1253,7 +1251,7 @@ class Annotator:
                     prefix = ''
                     name = step
 
-                namespace = '{%s}' % NAMESPACES[prefix]
+                namespace = '{%s}' % XML_NAMESPACES[prefix]
 
                 element = etree.Element(namespace + name, nsmap=ns_map)
 
@@ -1274,11 +1272,11 @@ class Annotator:
         order = ['ingredient', 'utensil', 'dietetic', 'productionMethod', 'recipe']
 
         tree = etree.fromstring(text)
-        parent = tree.xpath(parent_xpath, namespaces=NAMESPACES)[0]
+        parent = tree.xpath(parent_xpath, namespaces=XML_NAMESPACES)[0]
         children_queue = []
 
         for type in order:
-            children = parent.findall(f'default:div[@type="{type}"]', namespaces=NAMESPACES)
+            children = parent.findall(f'default:div[@type="{type}"]', namespaces=XML_NAMESPACES)
             children_queue += children
 
             for child in children:

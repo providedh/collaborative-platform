@@ -18,6 +18,7 @@ from datetime import date, time, timedelta
 from django.contrib.gis.geos import Point
 
 from .log_filters import skip_logs_from_certain_modules
+from apps.api_vis.enums import TypeChoice
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -306,79 +307,83 @@ XML_NAMESPACES = {
 
 
 # Entities structure
-ENTITIES = {
+DEFAULT_ENTITIES = {
     'person': {
         'properties': {
             'sex': {
-                'type': [str],
+                'type': TypeChoice.str,
                 'xpath': '@sex',
             },
             'age': {
-                'type': [int],
+                'type': TypeChoice.str,
                 'xpath': '@age',
             },
             'forename': {
-                'type': [str],
-                'xpath': '/persName/forename'
+                'type': TypeChoice.str,
+                'xpath': './default:persName/default:forename/text()'
             },
             'surname': {
-                'type': [str],
-                'xpath': '/persName/surname',
+                'type': TypeChoice.str,
+                'xpath': './default:persName/default:surname/text()',
             },
             'occupation': {
-                'type': [str],
-                'xpath': '/occupation',
+                'type': TypeChoice.str,
+                'xpath': './default:occupation/text()',
             },
             'birth': {
-                'type': [date],
-                'xpath': '/birth@when',
+                'type': TypeChoice.date,
+                'xpath': './default:birth/@when',
             },
             'death': {
-                'type': [date],
-                'xpath': '/death@when',
-            }
+                'type': TypeChoice.date,
+                'xpath': './default:death/@when',
+            },
+            'name': {
+                'type': TypeChoice.str,
+                'xpath': './default:name/text()',
+            },
         },
         'listable': True,
-        'text_tag': 'persName',
+        'text_tag': 'name',
         'list_tag': 'listPerson',
         'color': '#ff7f00',
         'icon': r'\f007',
     },
     'event': {
         'properties': {
-            'text': {
-                'type': [str],
-                'xpath': '/',
-            }
+            'name': {
+                'type': TypeChoice.str,
+                'xpath': './text()',
+            },
         },
         'listable': True,
-        'text_tag': 'event',
+        'text_tag': 'name',
         'list_tag': 'listEvent',
         'color': '#cecece',
         'icon': r'\f274',
     },
     'org': {
         'properties': {
-            'text': {
-                'type': [str],
-                'xpath': '/',
-            }
+            'name': {
+                'type': TypeChoice.str,
+                'xpath': './text()',
+            },
         },
         'listable': True,
-        'text_tag': 'orgName',
+        'text_tag': 'name',
         'list_tag': 'listOrg',
         'color': '#b4edfc',
         'icon': r'\f1ad',
     },
     'object': {
         'properties': {
-            'text': {
-                'type': [str],
-                'xpath': '/',
-            }
+            'name': {
+                'type': TypeChoice.str,
+                'xpath': './text()',
+            },
         },
         'listable': True,
-        'text_tag': 'objectName',
+        'text_tag': 'name',
         'list_tag': 'listOrg',
         'color': '#b4d38d',
         'icon': r'\f466',
@@ -386,20 +391,24 @@ ENTITIES = {
     'place': {
         'properties': {
             'country': {
-                'type': [str],
-                'xpath': '/country',
+                'type': TypeChoice.str,
+                'xpath': './default:country/text()',
             },
             'settlement': {
-                'type': [str],
-                'xpath': '/settlement',
+                'type': TypeChoice.str,
+                'xpath': './default:settlement/text()',
             },
             'geo': {
-                'type': [Point],
-                'xpath': '/location/geo',
-            }
+                'type': TypeChoice.Point,
+                'xpath': './default:location/default:geo/text()',
+            },
+            'name': {
+                'type': TypeChoice.str,
+                'xpath': './default:placeName/default:name/text()'
+            },
         },
         'listable': True,
-        'text_tag': 'placeName',
+        'text_tag': 'name',
         'list_tag': 'listPlace',
         'color': '#204191',
         'icon': r'\f279',
@@ -407,9 +416,13 @@ ENTITIES = {
     'date': {
         'properties': {
             'when': {
-                'type': [date],
+                'type': TypeChoice.date,
                 'xpath': '@when',
-            }
+            },
+            'name': {
+                'type': TypeChoice.str,
+                'xpath': './text()'
+            },
         },
         'listable': False,
         'text_tag': 'date',
@@ -420,8 +433,12 @@ ENTITIES = {
     'time': {
         'properties': {
             'when': {
-                'type': [time],
+                'type': TypeChoice.time,
                 'xpath': '@when',
+            },
+            'name': {
+                'type': TypeChoice.str,
+                'xpath': './text()'
             }
         },
         'listable': False,
@@ -431,3 +448,16 @@ ENTITIES = {
         'icon': r'\f017',
     },
 }
+
+CUSTOM_ENTITY = {
+    'properties': {
+        'name': {
+            'type': TypeChoice.str,
+            'xpath': './text()'
+        }
+    },
+    'listable': True,
+    'text_tag': 'name',
+}
+
+ADDITIONAL_USABLE_TAGS = ['certainty', 'name']

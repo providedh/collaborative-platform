@@ -21,13 +21,12 @@ logger = logging.getLogger(__name__)
 class TeiHandler:
     """Stream-like handler that recognizes TEI/CSV files and migrate them to TEI P5."""
 
-    def __init__(self, file_path):
-        self.__file_path = file_path
+    def __init__(self):
         self.__encoding = None
         self.text = ''
 
         self.__text_binary = None
-        self.__text_utf_8 = ""
+        self.__text_utf_8 = ''
 
         self.__file_type = FileType.PLAIN_TEXT
         self.__xml_type = XMLType.OTHER
@@ -41,12 +40,12 @@ class TeiHandler:
         self.__recognized = False
         self.__migrated = False
         self.__migrate = False
-        self.__message = ""
+        self.__message = ''
 
         self.__is_tei_p5_unprefixed = False
 
-    def recognize(self):
-        self.__load_text_binary()
+    def recognize(self, text_binary):
+        self.__text_binary = text_binary
 
         if self.__is_default_encoded_xml(self.__text_binary):
             self.__encoding = 'utf-8'
@@ -101,15 +100,6 @@ class TeiHandler:
         self.__recognized = True
 
         return self.__migrate, self.__is_tei_p5_unprefixed
-
-    def __load_text_binary(self):
-        try:
-            with open(self.__file_path, 'rb') as file:
-                self.__text_binary = file.read()
-
-        except Exception as exc:
-            self.error = exc
-            return FileType.PLAIN_TEXT
 
     def __is_default_encoded_xml(self, text):
         if text:

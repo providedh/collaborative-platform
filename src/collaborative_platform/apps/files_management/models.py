@@ -180,6 +180,13 @@ class FileVersion(models.Model):
         self.upload.close()
         return content
 
+    def get_content_binary(self):
+        self.upload.open(mode='rb')
+        content_binary = self.upload.read()
+        self.upload.close()
+        return content_binary
+
+
     def download(self):
         from apps.files_management.helpers import append_unifications
 
