@@ -89,18 +89,10 @@ def __process_file(file, directory, user):
 
 
 def __update_file_content(file_object):
-    tei_handler = TeiHandler()
     content_binary = __get_content_binary(file_object)
-    migration, is_tei_p5_unprefixed = tei_handler.recognize(content_binary)
 
-    if not migration and not is_tei_p5_unprefixed:
-        raise BadRequest("Invalid filetype, please provide TEI file or compatible ones.")
-
-    if migration:
-        tei_handler.migrate()
-
-    xml_content = tei_handler.get_text()
-    migration_message = tei_handler.get_message()
+    tei_handler = TeiHandler()
+    xml_content, migration, migration_message = tei_handler.migrate_to_tei_p5(content_binary)
 
     ids_corrector = IDsCorrector()
     xml_content, correction, correction_message = ids_corrector.correct_ids(xml_content, file_object.id)

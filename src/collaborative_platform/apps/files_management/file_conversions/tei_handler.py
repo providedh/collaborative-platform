@@ -4,6 +4,8 @@ import logging
 
 from bs4 import UnicodeDammit
 
+from apps.exceptions import BadRequest
+
 from .migrator_tei import MigratorTEI
 from .migrator_csv import MigratorCSV
 from .migrator_tsv import MigratorTSV
@@ -39,14 +41,27 @@ class TeiHandler:
 
         self.__recognized = False
         self.__migrated = False
-        self.__migrate = False
+        self.__migration_needed = False
         self.__message = ''
 
         self.__is_tei_p5_unprefixed = False
 
-    def recognize(self, text_binary):
+    def migrate_to_tei_p5(self, text_binary):
         self.__text_binary = text_binary
 
+        self.__recognize()
+
+        if not self.__migration_needed and not self.__is_tei_p5_unprefixed:
+            raise BadRequest("Invalid filetype, please provide TEI file or compatible ones.")
+
+        if self.__migration_needed:
+            self.__migrate()
+
+        xml_content = self.text or self.__text_utf_8
+
+        return xml_content, self.__migrated, self.__message
+
+    def __recognize(self):
         if self.__is_default_encoded_xml(self.__text_binary):
             self.__encoding = 'utf-8'
             self.__text_utf_8 = self.__text_binary.decode(self.__encoding)
@@ -64,7 +79,7 @@ class TeiHandler:
             except Exception as ex:
                 logger.info("Text encoding searching: {}".format(ex))
 
-                return self.__migrate, self.__is_tei_p5_unprefixed
+                return self.__migration_needed, self.__is_tei_p5_unprefixed
 
         entities_decoder = EntitiesDecoder()
         text_utf_8_without_entities = entities_decoder.remove_non_xml_entities(self.__text_utf_8)
@@ -95,11 +110,8 @@ class TeiHandler:
             self.__need_reformat = xml_formatter.check_if_reformat_is_needed(self.__text_utf_8)
             self.__tei_providedh_schema_missing = xml_formatter.check_if_tei_providedh_schema_missing(self.__text_utf_8)
 
-        self.__migrate = self.__make_decision()
+        self.__migration_needed = self.__make_decision()
         self.__is_tei_p5_unprefixed = self.__check_if_tei_p5_unprefixed()
-        self.__recognized = True
-
-        return self.__migrate, self.__is_tei_p5_unprefixed
 
     def __is_default_encoded_xml(self, text):
         if text:
@@ -157,13 +169,7 @@ class TeiHandler:
         else:
             return False
 
-    def migrate(self):
-        if not self.__recognized:
-            raise Exception("File recognition needed. Use \"recognize()\" method first.")
-
-        elif not self.__migrate:
-            raise Exception("No migration needed.")
-
+    def __migrate(self):
         migrated_text = self.__text_utf_8
 
         if self.__file_type == FileType.XML:
@@ -260,12 +266,3 @@ class TeiHandler:
             message += "Reformatted xml."
 
         self.__message = message
-
-    def get_message(self):
-        return self.__message
-
-    def get_text(self):
-        return self.text or self.__text_utf_8
-
-    def is_migrated(self):
-        return self.__migrated
