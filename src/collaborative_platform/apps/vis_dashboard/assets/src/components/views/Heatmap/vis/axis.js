@@ -53,7 +53,7 @@ function regularAxis(canvas, padding, axisWidth, legendWidth, data){
 			x = leftOffset +  bandMiddle*Math.cos(Math.PI/4),
 			y = sideLength + padding,
 			translatedX = x,
-			translatedY = y - bandMiddle*Math.sin(Math.PI/4);
+			translatedY = y - bandMiddle*Math.sin(Math.PI/4) +  padding;
 
 		ctx.fillText(shorttenedLabel(entity, bottomLabelLength), translatedX, translatedY);
 	});
