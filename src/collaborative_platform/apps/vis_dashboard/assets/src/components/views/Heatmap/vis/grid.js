@@ -1,11 +1,18 @@
 import * as d3 from 'd3';
 
-function regularGrid(canvas, overlayCanvas, padding, axisWidth, data, colorScale, rangeScale){
-	const names = Object.keys(data);
+function regularGrid(canvas, overlayCanvas, padding, axisWidth, legendWidth, data, colorScale, rangeScale){
+	const [concurrenceMatrix, maxRelated] = data,
+		names = Object.keys(concurrenceMatrix);
 
-	const width = Math.min(canvas.width, canvas.height) - 2*padding - axisWidth;
+	const width = Math.min(canvas.width - legendWidth, canvas.height) - 2*padding - axisWidth,
+		leftOffset = canvas.width - (width + 2*padding + axisWidth + legendWidth);
 
-	const gridScale = d3.scaleBand()
+	const gridScaleX = d3.scaleBand()
+		.domain(names)
+		.range([padding + axisWidth + leftOffset, width + leftOffset])
+		.round(true)
+		.padding(.1);
+	const gridScaleY = d3.scaleBand()
 		.domain(names)
 		.range([padding + axisWidth, width])
 		.round(true)
@@ -14,15 +21,14 @@ function regularGrid(canvas, overlayCanvas, padding, axisWidth, data, colorScale
 	const context = canvas.getContext("2d");
 	context.save();
 
-	Object.entries(data).forEach(([entity, intersections])=>{
+	Object.entries(concurrenceMatrix).forEach(([entity, intersections])=>{
 		//console.log(entity, intersections)
 		intersections.forEach((intersection, i)=>{
 			//context.moveTo(gridScale(entity), gridScale(names[i]));
-
-			//console.log(intersection.length, rangeScale(intersection.length), colorScale(intersection.length), colorScale(rangeScale(intersection.length)))
-			context.fillStyle = colorScale(intersection.length);
+			//console.log(intersection.length, rangeScale(intersection.length), colorScale(intersection.length), )
+			context.fillStyle = colorScale(rangeScale(intersection.length));
 			//console.log(gridScale(entity), gridScale(names[i]), gridScale.bandwidth(), gridScale.bandwidth())
-			context.fillRect(gridScale(entity), gridScale(names[i]), gridScale.bandwidth(), gridScale.bandwidth());
+			context.fillRect(gridScaleX(entity), gridScaleY(names[i]), gridScaleX.bandwidth(), gridScaleX.bandwidth());
 		});
 	});
 

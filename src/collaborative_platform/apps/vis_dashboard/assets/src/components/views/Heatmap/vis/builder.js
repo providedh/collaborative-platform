@@ -43,7 +43,7 @@ function Builder(){
 	function _setRangeScale(rangeScaleName){
 		if(self._currentHeatmap != null &&
 				RangeScales.hasOwnProperty(rangeScaleName)){
-			const scale = RangeScales[rangeScaleName];
+			const scale = RangeScales[rangeScaleName]();
 			self._currentHeatmap.setRangeScale(scale);
 		}
 	}

@@ -15,6 +15,7 @@ function useData(dataClient, dimension){
                 if(data == null || data.all.length == 0 || data.filtered.length == 0)
                     return 0;
                 const entities = Array.from(new Set(data.filtered.map(x=>x.name)).values());
+                let maxRelated = 0;
 
                 const entitiesInDoc = {};
                 data.filtered.forEach(x=>{
@@ -32,11 +33,14 @@ function useData(dataClient, dimension){
                 for(let [doc, relatedEntities] of Object.entries(entitiesInDoc)){
                     const relatedEntitiesArray = Array.from(relatedEntities.values());
                     for(let entity of relatedEntitiesArray){
-                        relatedEntitiesArray.forEach(e=>concurrenceMatrix[entity][entities.indexOf(e)].push(doc));
+                        relatedEntitiesArray.forEach(e=>{
+                            concurrenceMatrix[entity][entities.indexOf(e)].push(doc);
+                            maxRelated = Math.max(concurrenceMatrix[entity][entities.indexOf(e)].length, maxRelated);
+                        });
                     }
                 }
 
-                setData(concurrenceMatrix);
+                setData([concurrenceMatrix, maxRelated]);
             });
         }else if(dimension == 'Documents related by entities'){
             dataClient.unsubscribe('entity');
@@ -44,6 +48,7 @@ function useData(dataClient, dimension){
                 if(data == null || data.all.length == 0 || data.filtered.length == 0)
                     return 0;
                 const documents = Array.from(new Set(data.filtered.map(x=>x.file_name)).values());
+                let maxRelated = 0;
 
                 const entitiesInDoc = {};
                 data.filtered.forEach(x=>{
@@ -61,11 +66,14 @@ function useData(dataClient, dimension){
                 for(let [entity, relatedDocuments] of Object.entries(entitiesInDoc)){
                     const relatedDocumentsArray = Array.from(relatedDocuments.values());
                     for(let doc of relatedDocumentsArray){
-                        relatedDocumentsArray.forEach(e=>concurrenceMatrix[doc][documents.indexOf(e)].push(entity));
+                        relatedDocumentsArray.forEach(e=>{
+                            concurrenceMatrix[doc][documents.indexOf(e)].push(entity);
+                            maxRelated = Math.max(concurrenceMatrix[doc][documents.indexOf(e)].length, maxRelated);
+                        });
                     }
                 }
 
-                setData(concurrenceMatrix);
+                setData([concurrenceMatrix, maxRelated]);
             });
         }
 	}, [dimension])
