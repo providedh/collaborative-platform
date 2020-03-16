@@ -1,6 +1,7 @@
 import ColorScales from './color_scales';
 import RangeScales from './range_scales';
 import GridRenderers from './grid';
+import AxisRenderers from './axis';
 import Heatmap from './heatmap';
 
 /* Class: Builder
@@ -73,7 +74,7 @@ function RegularHeatmapBuilder(){
 		if(self._currentHeatmap != null){
 			//console.log('layout', self._currentHeatmap)
 			self._currentHeatmap.setGridRenderer(GridRenderers.regularGrid);
-			self._currentHeatmap.setAxisRenderer('regularAxis');
+			self._currentHeatmap.setAxisRenderer(AxisRenderers.regularAxis);
 		}
 	}
 
@@ -96,7 +97,7 @@ function StairHeatmapBuilder(){
 	function _setLayout(){
 		if(self._currentHeatmap != null){
 			self._currentHeatmap.setGridRenderer(GridRenderers.stairGrid);
-			self._currentHeatmap.setAxisRenderer('regularAxis');
+			self._currentHeatmap.setAxisRenderer(AxisRenderers.regularAxis);
 		}
 	}
 
@@ -119,7 +120,7 @@ function HeartHeatmapBuilder(){
 	function _setLayout(){
 		if(self._currentHeatmap != null){
 			self._currentHeatmap.setGridRenderer(GridRenderers.tiltedGrid);
-			self._currentHeatmap.setAxisRenderer('tiltedAxis');
+			self._currentHeatmap.setAxisRenderer(AxisRenderers.tiltedAxis);
 		}
 	}
 

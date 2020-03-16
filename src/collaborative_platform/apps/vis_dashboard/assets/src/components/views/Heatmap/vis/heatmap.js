@@ -11,8 +11,8 @@ export default function Heatmap(){
 		_axisRenderer: null,
 		_eventCallback: null,
 		_padding: 10,
-		_axisWidth: 30,
-		_legendWidth: 80
+		_axisWidth: 150,
+		_legendWidth: 120
 	};
 
 	function _init(){
@@ -38,8 +38,8 @@ export default function Heatmap(){
 			titleHeight = 25,
 			colorWidth = 30,
 			colorHeight = height-titleHeight,
-			x = canvas.width - self._padding - self._legendWidth,
-			y = self._padding + self._axisWidth + titleHeight + topPadding,
+			x = canvas.width - self._padding - self._legendWidth + 15,
+			y = self._padding + titleHeight + topPadding,
 			legendscale = i=>i/colorHeight,
 			ticks = 7;
 
@@ -104,6 +104,13 @@ export default function Heatmap(){
     		data, 
     		self._colorScale, 
     		self._rangeScale);
+
+	    self._axisRenderer(
+    		canvas, 
+    		self._padding, 
+    		self._axisWidth, 
+    		self._legendWidth,
+    		data);
 
 		//console.log('rendering', {
 		//	data,

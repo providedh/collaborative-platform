@@ -1,34 +1,27 @@
 import * as d3 from 'd3';
 
 function regularGrid(canvas, overlayCanvas, padding, axisWidth, legendWidth, data, colorScale, rangeScale){
-	const [concurrenceMatrix, maxRelated] = data,
-		names = Object.keys(concurrenceMatrix);
+	const [concurrenceMatrix, maxRelated] = data;
 
-	const width = Math.min(canvas.width - legendWidth, canvas.height) - 2*padding - axisWidth,
-		leftOffset = canvas.width - (width + 2*padding + axisWidth + legendWidth);
+	const minSpacingX = 2*padding + axisWidth + legendWidth,
+		minSpacingY = 2*padding + (axisWidth * Math.cos(Math.PI / 4)),
+		sideLength = Math.min(canvas.width - minSpacingX, canvas.height - minSpacingY),
+		leftOffset = canvas.width - (sideLength + legendWidth + padding),
+		maxLabels = Math.max(Object.keys(concurrenceMatrix).length, Object.values(concurrenceMatrix)[0].length);
 
-	const gridScaleX = d3.scaleBand()
-		.domain(names)
-		.range([padding + axisWidth + leftOffset, width + leftOffset])
-		.round(true)
-		.padding(.1);
-	const gridScaleY = d3.scaleBand()
-		.domain(names)
-		.range([padding + axisWidth, width])
+	const gridScale = d3.scaleBand()
+		.domain(d3.range(maxLabels))
+		.range([0, sideLength])
 		.round(true)
 		.padding(.1);
 
 	const context = canvas.getContext("2d");
 	context.save();
 
-	Object.entries(concurrenceMatrix).forEach(([entity, intersections])=>{
-		//console.log(entity, intersections)
-		intersections.forEach((intersection, i)=>{
-			//context.moveTo(gridScale(entity), gridScale(names[i]));
-			//console.log(intersection.length, rangeScale(intersection.length), colorScale(intersection.length), )
+	Object.entries(concurrenceMatrix).forEach(([entity, intersections], i)=>{
+		intersections.forEach((intersection, j)=>{
 			context.fillStyle = colorScale(rangeScale(intersection.length));
-			//console.log(gridScale(entity), gridScale(names[i]), gridScale.bandwidth(), gridScale.bandwidth())
-			context.fillRect(gridScaleX(entity), gridScaleY(names[i]), gridScaleX.bandwidth(), gridScaleX.bandwidth());
+			context.fillRect(leftOffset + gridScale(i), padding + gridScale(j), gridScale.bandwidth(), gridScale.bandwidth());
 		});
 	});
 
