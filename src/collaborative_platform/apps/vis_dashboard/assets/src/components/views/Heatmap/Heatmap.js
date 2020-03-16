@@ -98,28 +98,35 @@ function useHeatmap(layout, colorScale, rangeScale, eventCallback){
     return heatmap;
 }
 
-function useRender(width, height, heatmap, data, containerRef, canvasRef, overlayCanvasRef){
+function useRender(width, height, heatmap, data, containerRef, canvasRef, overlayCanvasRef, legendRef){
     useEffect(()=>{
         if(heatmap != null)
-            heatmap.render(data, containerRef.current, canvasRef.current, overlayCanvasRef.current)
+            heatmap.render(data, containerRef.current, canvasRef.current, overlayCanvasRef.current, legendRef.current)
         }, // Render 
         [width, height, heatmap, data]); // Conditions*/
 }
 
+function handleFilter([min, max], data, dataClient){
+    function inRange(entry){
+        
+    }
+}
+
 function Heatmap({ layout, tileLayout, colorScale, rangeScale, dimension}) {
-	const [containerRef, canvasRef, overlayCanvasRef] = [useRef(), useRef(), useRef()];
+	const [containerRef, canvasRef, overlayCanvasRef, legendRef] = [useRef(), useRef(), useRef(), useRef()];
 	const [width, height] = layout!=undefined?[layout.w, layout.h]:[4,4];
 
     const [dataClient, _] = useState(DataClient());
 	const data = useData(dataClient, dimension);
     const heatmap = useHeatmap(tileLayout, colorScale, rangeScale, event=>console.log(event));
     
-    useRender(width, height, heatmap, data, containerRef, canvasRef, overlayCanvasRef);
+    useRender(width, height, heatmap, data, containerRef, canvasRef, overlayCanvasRef, legendRef);
 
     return(
         <div className={styles.heatmap} ref={containerRef}>
-	        <canvas ref={canvasRef}/>
+	        <canvas ref={canvasRef} className={styles.canvas}/>
 	        <canvas className={styles.overlayCanvas} ref={overlayCanvasRef}/>
+            <svg ref={legendRef} className={styles.legendBrush}/>
         </div>
     )
 }

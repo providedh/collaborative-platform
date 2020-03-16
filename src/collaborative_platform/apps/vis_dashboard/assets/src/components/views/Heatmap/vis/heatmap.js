@@ -1,4 +1,5 @@
 import * as d3 from 'd3';
+import setupBrush from './brush';
 /* Class: Heatmap
  *
  * 
@@ -31,7 +32,7 @@ export default function Heatmap(){
 		return (value)=>self[key]=value;
 	}
 
-	function _renderColorLegend(canvas){
+	function _renderColorLegend(canvas, legendbrush){
 		const width = 60, 
 			height = 200,
 			topPadding = 10,
@@ -54,6 +55,11 @@ export default function Heatmap(){
 		    ctx.lineTo(x+colorWidth, y+i);
 		    ctx.stroke();
 		  });
+
+		setupBrush(legendbrush, x, y, colorWidth, colorHeight, 
+			([y0,y1])=>self._eventCallback([
+					self._rangeScale.invert(y0/colorHeight), 
+					self._rangeScale.invert(y1/colorHeight)]));
 
 		ctx.moveTo(0,0);
 		ctx.strokeStyle = 'black';
@@ -78,7 +84,7 @@ export default function Heatmap(){
 		ctx.restore();
 	}
 
-	function _render(data, container, canvas, overlayCanvas){
+	function _render(data, container, canvas, overlayCanvas, legendbrush){
 		if(container == null || canvas == null || overlayCanvas == null || data == null || data.length == 0)
 			return;
 
@@ -93,7 +99,7 @@ export default function Heatmap(){
 	    const context = canvas.getContext("2d");
 	    context.clearRect(0, 0, canvas.width, canvas.height);
 
-	    _renderColorLegend(canvas);
+	    _renderColorLegend(canvas, legendbrush);
 
 	    self._gridRenderer(
     		canvas, 
@@ -111,14 +117,6 @@ export default function Heatmap(){
     		self._axisWidth, 
     		self._legendWidth,
     		data);
-
-		//console.log('rendering', {
-		//	data,
-		//	colorScale: self._colorScale,
-		//	rangeScale: self._rangeScale,
-		//	gridRenderer: self._gridRenderer,
-		//	axisRenderer: self._axisRenderer,
-		//	});
 	}
 
 	return _init();
