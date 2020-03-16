@@ -3,6 +3,7 @@
 }
 
 .overlayCanvas{
+	pointer-events: none;
 	position: absolute;
 	left: 5px;
 }

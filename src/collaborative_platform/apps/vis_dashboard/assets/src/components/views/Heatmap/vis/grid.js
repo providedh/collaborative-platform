@@ -26,6 +26,47 @@ function regularGrid(canvas, overlayCanvas, padding, axisWidth, legendWidth, dat
 	});
 
 	context.restore();
+
+	setupInteractions(concurrenceMatrix, canvas, overlayCanvas, leftOffset, padding, gridScale);
+}
+
+function setupInteractions(matrix, canvas, overlayCanvas, leftOffset, padding, gridScale){
+    const context = overlayCanvas.getContext("2d");
+
+    function handleOverlayHover(e){
+        const [x, y] = d3.mouse(this),
+        	xAxisIndex = Math.floor((y - padding) / gridScale.step()),
+        	yAxisIndex = Math.floor((x - leftOffset) / gridScale.step());
+
+        let shared = null;
+        if(yAxisIndex >= 0 && yAxisIndex < Object.keys(matrix).length){
+			if(xAxisIndex >= 0 && xAxisIndex < Object.values(matrix)[yAxisIndex].length){
+        		shared = Object.values(matrix)[yAxisIndex][xAxisIndex];
+        	}        	
+        }
+
+        if(shared == null)
+        	return;
+
+        context.clearRect(0,0,overlayCanvas.width, overlayCanvas.height);
+        
+        context.save()
+        context.fillStyle = '#f8f9fa';
+        context.strokeStyle = '#00b3b0';
+        context.beginPath();
+        context.rect(x+5, y-10, Math.max(...shared.map(x=>x.length))*6+5,shared.length*20)
+        context.stroke();
+        context.fill();
+        context.closePath();
+        context.textBaseline = 'bottom';
+        context.fillStyle = '#00b3b0';
+        shared.forEach((t,i)=>
+        	context.fillText(t,x+10, y+5+(i*20)));
+        context.restore()
+    }
+
+    d3.select(canvas)
+        .on('mousemove', handleOverlayHover);
 }
 
 function stairGrid(canvas, overlayCanvas, padding, axisWidth, data, colorScale, rangeScale){
