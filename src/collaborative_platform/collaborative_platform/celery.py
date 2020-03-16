@@ -1,6 +1,6 @@
 from __future__ import absolute_import, unicode_literals
 import os
-from celery import Celery
+from celery import Celery, signals
 
 from django.conf import settings  # for celery 3.xx
 
@@ -22,3 +22,8 @@ app.autodiscover_tasks()  # for celery 4.3
 @app.task(bind=True)
 def debug_task(self):
     print('Request: {0!r}'.format(self.request))
+
+
+@signals.setup_logging.connect
+def on_celery_setup_logging(**kwargs):
+    pass

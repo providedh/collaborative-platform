@@ -1,11 +1,17 @@
 import copy
 import hashlib
 import json
+import logging
 import re
+import time
+
 import xmltodict
 
 from io import BytesIO
 from json import loads
+
+from elasticsearch.helpers import bulk
+from elasticsearch_dsl import connections
 from lxml import etree
 from typing import List, Set
 
@@ -29,24 +35,37 @@ from apps.index_and_search.models import Person, Organization, Event, Place, Ing
 from apps.projects.helpers import log_activity
 from apps.projects.models import Project
 
+logger = logging.getLogger('upload')
+
 ALL_ES_ENTITIES = (Person, Organization, Event, Place, Ingredient, Utensil, ProductionMethod, es.File)
 
 
 def upload_file(uploaded_file, project, user, parent_dir=None):  # type: (UploadedFile, Project, User, int) -> File
     # I assume that the project exists, bc few level above we checked if user has permissions to write to it.
 
+    st = time.time()
     try:
         File.objects.get(name=uploaded_file.name, parent_dir_id=parent_dir, project=project, deleted=False)
+        t = time.time()
+        logger.info(f"Got File object from DB in {round(t - st, 2)} s")
     except File.DoesNotExist:
         dbfile = File(name=uploaded_file.name, parent_dir_id=parent_dir, project=project, version_number=1)
         dbfile.save()
+        t = time.time()
+        logger.info(f"Created and saved new file object to DB in {round(t - st, 2)} s")
 
         try:
+            st = time.time()
             hash = hash_file(dbfile, uploaded_file)
+            t = time.time()
+            logger.info(f"Hashed file info in {round(t - st, 2)} s")
             uploaded_file.name = hash
+            st = time.time()
             file_version = FileVersion(upload=uploaded_file, number=1, hash=hash, file=dbfile, created_by=user)
             file_version.save()
             FileMaxXmlIds(file=dbfile).save()
+            t = time.time()
+            logger.info(f"Created and saved Fv and XMLMaxIDs to DB in {round(t - st, 2)} s")
         except Exception as e:
             dbfile.delete()
             raise e
@@ -120,6 +139,7 @@ def index_entities(entities):  # type: (List[dict]) -> None
         'productionMethod': ProductionMethod
     }
 
+    es_entities = []
     for entity in copy.deepcopy(entities):
         if entity['tag'] not in classes:
             continue
@@ -131,8 +151,9 @@ def index_entities(entities):  # type: (List[dict]) -> None
         excessive_elements = set(entity.keys()).difference(tag_elements)
         tuple(map(entity.pop, excessive_elements))  # pop all excessive elements from entity
 
-        es_entity = classes[tag](**entity)
-        es_entity.save()
+        es_entities.append(classes[tag](**entity))
+
+    bulk(connections.get_connection(), (d.to_dict(True) for d in es_entities))
 
 
 def get_directory_content(dir, indent):  # type: (Directory, int) -> dict

@@ -114,9 +114,12 @@ let CertaintyList = function(args){
 
 		const target = e.target.attributes['annotation-target'].value.split('#')[1];
 
+    const node = document.getElementById('xxxx'+target),
+      text = node==null?target:node.textContent;
+
 		const args = {
 			selection: {
-				text: target,
+				text,
 				abs_positions: null,
 				by_id: true,
 				target: target

@@ -27,6 +27,7 @@ urlpatterns = [
     path('api/search/', include('apps.index_and_search.urls_api')),
     path('social_auth/', include('social_django.urls', namespace='social')),
     path('api/vis/', include('apps.api_vis.urls_api')),
+    path('stats/', include('apps.dataset_stats.urls')),
     path('dashboard/', include('apps.vis_dashboard.urls')),
     path('', include('apps.core.urls')),
 ]

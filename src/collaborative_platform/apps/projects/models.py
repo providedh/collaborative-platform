@@ -7,11 +7,11 @@ TAXONOMY_FILES_PATH = 'taxonomy_files/'
 
 
 class Project(models.Model):
-    title = models.CharField(max_length=150, blank=False)
-    description = models.CharField(max_length=150, null=True, blank=True)
+    title = models.CharField(max_length=255, blank=False)
+    description = models.CharField(max_length=255, null=True, blank=True)
     creation_date = models.DateTimeField(auto_now_add=True)
     modification_date = models.DateTimeField(auto_now=True)
-    license = models.CharField(max_length=16, null=True, blank=True, default='GPL')
+    license = models.CharField(max_length=255, null=True, blank=True, default='GPL')
     public = models.BooleanField(default=False)
 
     def clean(self):
@@ -67,6 +67,9 @@ class ProjectVersion(models.Model):
     commit = models.ForeignKey('api_vis.Commit', on_delete=models.SET_NULL, null=True, blank=True)
     commit_counter = models.IntegerField(default=0)
     date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('project', 'file_version_counter', 'commit_counter')
 
     def __str__(self):
         return f"{self.file_version_counter}.{self.commit_counter}"

@@ -16,7 +16,7 @@ class Entity(models.Model):
     deleted_in_version = models.IntegerField(null=True)
     deleted_by = models.ForeignKey(User, related_name="deleted_entities", default=None, on_delete=models.SET_NULL,
                                    null=True)
-    type = models.CharField(max_length=12)
+    type = models.CharField(max_length=255)
 
     class Meta:
         unique_together = ("file", "xml_id")
@@ -107,7 +107,7 @@ class Unification(models.Model):
     deleted_in_file_version = models.ForeignKey(FileVersion, default=None, null=True, blank=True,
                                                 on_delete=models.CASCADE)
     ana = models.TextField(default='')
-    certainty = models.CharField(max_length=10)
+    certainty = models.CharField(max_length=255)
     description = models.TextField(default='')
     xml_id = models.CharField(max_length=255)
 
