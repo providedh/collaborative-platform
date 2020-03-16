@@ -19,6 +19,12 @@ class Profile(models.Model):
         return "{0} {1} ({2})".format(self.user.first_name, self.user.last_name, self.user.username)
 
 
+class VirtualUser(models.Model):
+    first_name = models.CharField(max_length=255, blank=True)
+    last_name = models.CharField(max_length=255, blank=True)
+    email = models.EmailField(max_length=255, blank=True, unique=True)
+
+
 @receiver(post_save, sender=User)
 def update_user_profile(sender, instance, created, **kwargs):
     if created:

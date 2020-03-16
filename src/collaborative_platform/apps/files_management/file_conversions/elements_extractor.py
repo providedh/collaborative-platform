@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from collaborative_platform.settings import CUSTOM_ENTITY, DEFAULT_ENTITIES, XML_NAMESPACES
 
 from apps.api_vis.models import Entity, EntityProperty, EntityVersion
+from apps.core.models import VirtualUser
 from apps.files_management.models import File, FileVersion
 from apps.projects.models import EntitySchema
 
@@ -39,7 +40,7 @@ class ElementsExtractor:
         self.__move_listable_entities()
         self.__copy_unlistable_entities()
         self.__move_custom_entities()
-        self.__move_annotators()
+        self.__extract_annotators()
         self.__create_xml_content()
 
         self.__check_if_changed()
@@ -85,7 +86,7 @@ class ElementsExtractor:
             xpath = f'//default:{list_tag}[@type="{entity.name}List"]'
             lists = self.__tree.xpath(xpath, namespaces=XML_NAMESPACES)
 
-            self.__remove_list_from_tree(lists)
+            self.__remove_elements_from_tree(lists)
 
     def __copy_unlistable_entities(self):
         for entity in self.__unlistable_entities:
@@ -104,10 +105,32 @@ class ElementsExtractor:
             xpath = f'//default:listObject[@type="{entity.name}List"]'
             lists = self.__tree.xpath(xpath, namespaces=XML_NAMESPACES)
 
-            self.__remove_list_from_tree(lists)
+            self.__remove_elements_from_tree(lists)
 
-    def __move_annotators(self):
-        pass
+    def __extract_annotators(self):
+        annotators_map = {}
+
+        xpath = '//default:teiHeader//default:profileDesc//default:particDesc' \
+                '//default:listPerson[@type="PROVIDEDH Annotators"]/default:person'
+        elements = self.__tree.xpath(xpath, namespaces=XML_NAMESPACES)
+
+        for element in elements:
+            email = self.__get_first_xpath_match(element, './/default:email/text()', XML_NAMESPACES)
+            forename = self.__get_first_xpath_match(element, './/default:forename/text()', XML_NAMESPACES)
+            surname = self.__get_first_xpath_match(element, './/default:surname/text()', XML_NAMESPACES)
+            xml_id = self.__get_first_xpath_match(element, '@xml:id', XML_NAMESPACES)
+
+            user = self.__get_user(forename, surname, email)
+
+            annotators_map.update({xml_id: user})
+
+        xpath = '//default:teiHeader//default:profileDesc//default:particDesc' \
+                '//default:listPerson[@type="PROVIDEDH Annotators"]'
+        lists = self.__tree.xpath(xpath, namespaces=XML_NAMESPACES)
+
+        self.__remove_elements_from_tree(lists)
+
+        return annotators_map
 
     def __create_entities_in_db(self, elements, entity_name, custom=False):
         for element in elements:
@@ -181,9 +204,44 @@ class ElementsExtractor:
         return entity_property_object
 
     @staticmethod
-    def __remove_list_from_tree(lists):
-        for list in lists:
-            list.getparent().remove(list)
+    def __get_first_xpath_match(root, xpath, namespaces):
+        matches = root.xpath(xpath, namespaces=namespaces)
+
+        if matches:
+            match = matches[0]
+
+            return match
+        else:
+            return None
+
+    @staticmethod
+    def __get_user(forename, surname, email):
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            try:
+                if email:
+                    user = VirtualUser.objects.get(email=email)
+                else:
+                    user = VirtualUser.objects.get(first_name=forename, last_name=surname)
+            except VirtualUser.DoesNotExist:
+                user = VirtualUser(
+                    first_name=forename,
+                    last_name=surname,
+                    email=email,
+                )
+        return user
+
+    def __remove_elements_from_tree(self, elements):
+        for element in elements:
+            self.remove_element(element, clean_up_parent=True)
+
+    def remove_element(self, element, clean_up_parent=False):
+        parent = element.getparent()
+        parent.remove(element)
+
+        if len(parent) == 0 and clean_up_parent:
+            self.remove_element(parent)
 
     def __create_xml_content(self):
         self.__new_xml_content = etree.tounicode(self.__tree, pretty_print=True)

@@ -7,10 +7,11 @@ from apps.files_management.models import File, FileMaxXmlIds
 from apps.projects.models import EntitySchema
 
 
+XML_ID_KEY = f"{{{XML_NAMESPACES['xml']}}}id"
+
+
 class IDsCorrector:
     def __init__(self):
-        self.__xml_id_key = f"{{{XML_NAMESPACES['xml']}}}id"
-
         self.__old_xml_content = ''
         self.__new_xml_content = ''
 
@@ -165,7 +166,7 @@ class IDsCorrector:
 
     def __correct_elements_ids(self, elements, xml_id_base, collision=False):
         for element in elements:
-            if self.__xml_id_key in element.attrib:
+            if XML_ID_KEY in element.attrib:
                 self.__update_element_xml_id_and_references(element, xml_id_base, collision)
 
             else:
@@ -181,7 +182,7 @@ class IDsCorrector:
         return elements
 
     def __update_element_xml_id_and_references(self, element, xml_id_base, collision=False):
-        old_xml_id = element.attrib[self.__xml_id_key]
+        old_xml_id = element.attrib[XML_ID_KEY]
         new_xml_id = self.__update_element_xml_id(element, xml_id_base, collision=collision)
 
         reference_attributes = ['ref', 'resp', 'target']
@@ -199,11 +200,11 @@ class IDsCorrector:
             xml_id_number = self.__get_next_xml_id_number(xml_id_base)
             new_xml_id = f'{xml_id_base}-{xml_id_number}'
         else:
-            old_xml_id = element.attrib[self.__xml_id_key]
+            old_xml_id = element.attrib[XML_ID_KEY]
             old_xml_id = old_xml_id.replace('-', '_')
             new_xml_id = f'old_{old_xml_id}'
 
-        element.attrib[self.__xml_id_key] = new_xml_id
+        element.attrib[XML_ID_KEY] = new_xml_id
 
         return new_xml_id
 
