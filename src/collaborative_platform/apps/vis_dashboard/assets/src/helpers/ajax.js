@@ -47,9 +47,9 @@ var AjaxCalls = function(args){
 	function _init(args){
 		const obj = {
 			// PROJECT SETTINGS
-			getCollaborators: (options,params,data) => _createCall('GET', _createUrl(collaborators_url, options, params), data),
-			getTaxonomy: (options,params,data) => _createCall('GET', _createUrl(taxonomy_url, options, params), data),
-			getProjectVersions: (options,params,data) => _createCall('GET', _createUrl(project_versions_url, options, params), data),
+			getCollaborators: (options,params,data) => _createDummyResponse({}),//_createCall('GET', _createUrl(collaborators_url, options, params), data),
+			getTaxonomy: (options,params,data) => _createDummyResponse({}),//_createCall('GET', _createUrl(taxonomy_url, options, params), data),
+			getProjectVersions: (options,params,data) => _createDummyResponse({}),//_createCall('GET', _createUrl(project_versions_url, options, params), data),
 
 			// VIS DASHBOARD
 			updateDashboard: (options,params,data) => _createCall('POST', _createUrl(update_url, options, params), data),
@@ -87,6 +87,12 @@ var AjaxCalls = function(args){
 		const paramsString = Object.entries(params).map(([key, value])=>`?${key}=${value}`).join('');
 		const url = base_url + resource(options) + paramsString + '/';
 		return url;
+	}
+
+	function _createDummyResponse(content){
+		return new Promise((resolve, error)=>{
+			resolve({success:true, content});
+		});
 	}
 
 	function _createCall(method,url,data={}){
