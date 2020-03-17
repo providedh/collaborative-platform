@@ -1,6 +1,6 @@
 import React from "react";
 import { render } from "react-dom";
-import App from "./components/App_test";
+import App from "./components/App";
 
 const dashboardConfig = typeof window.hasOwnProperty('config')?
     Object.assign({views:[], layout:[], authors:[], version: '',},window.config):

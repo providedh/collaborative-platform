@@ -11,6 +11,11 @@ import $ from 'jquery';
 var AjaxCalls = function(args){
 	const base_url = [window.location.protocol + '/', window.location.hostname+':'+window.location.port].join('/');
 
+	// PROJECT SETTINGS
+	const collaborators_url = ({project, dashboard}) => ['/dashboard', 'project', project, 'vis', dashboard, 'update'].join('/');
+	const taxonomy_url = ({project, dashboard}) => ['/dashboard', 'project', project, 'vis', dashboard, 'update'].join('/');
+	const project_versions_url = ({project, dashboard}) => ['/dashboard', 'project', project, 'vis', dashboard, 'update'].join('/');
+
 	// VIS DASHBOARD
 	const update_url = ({project, dashboard}) => ['/dashboard', 'project', project, 'vis', dashboard, 'update'].join('/');
 
@@ -41,6 +46,11 @@ var AjaxCalls = function(args){
 
 	function _init(args){
 		const obj = {
+			// PROJECT SETTINGS
+			getCollaborators: (options,params,data) => _createCall('GET', _createUrl(collaborators_url, options, params), data),
+			getTaxonomy: (options,params,data) => _createCall('GET', _createUrl(taxonomy_url, options, params), data),
+			getProjectVersions: (options,params,data) => _createCall('GET', _createUrl(project_versions_url, options, params), data),
+
 			// VIS DASHBOARD
 			updateDashboard: (options,params,data) => _createCall('POST', _createUrl(update_url, options, params), data),
 
@@ -111,26 +121,29 @@ var AjaxCalls = function(args){
 			        }
 			    }
 			});
-
-			$.ajax({
-		        url: url,
-		        type: method,   //type is any HTTP method
-		        data: data,      //Data as js object
-		        statusCode: {
-					304: function() {
-				      resolve({success:false, content:'Not Modified.'});
-				    },
-				    202: function() {
-				      resolve({success:false, content:'Request Accepted But Not Completed.'});
-				    },
-				    200: function(a) {
-				      resolve({success:true, content:a});
-				    }
-				},
-		        error: function (a) {
-		            resolve({success:false, content:a});
-		        }
-		    })
+			try{
+				$.ajax({
+			        url: url,
+			        type: method,   //type is any HTTP method
+			        data: data,      //Data as js object
+			        statusCode: {
+						304: function() {
+					      resolve({success:false, content:'Not Modified.'});
+					    },
+					    202: function() {
+					      resolve({success:false, content:'Request Accepted But Not Completed.'});
+					    },
+					    200: function(a) {
+					      resolve({success:true, content:a});
+					    }
+					},
+			        error: function (a) {
+			            resolve({success:false, content:a});
+			        }
+			    })
+			}catch(error){
+				resolve({success:false, content:null});
+			}
 		})
 	}
 
