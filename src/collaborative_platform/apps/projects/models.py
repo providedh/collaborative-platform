@@ -85,7 +85,7 @@ class Taxonomy(models.Model):
         cats_string = ""
         for cat in self.categories.all():
             cats_string += category_template_string.format(cat.xml_id, cat.name, cat.description)
-        self.contents = taxonomy_template_string.format(cats_string)
+        self.contents = taxonomy_template_string.format(self.project.title, cats_string)
         self.save()
 
 

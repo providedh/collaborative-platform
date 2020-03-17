@@ -9,7 +9,7 @@ class TEIentitiesSection extends React.PureComponent {
     
     this.defState = {
       icon: "\uf042",
-      color: '',
+      color: '#aaaaaa',
       name: '',
       body_list: "false"
     };
@@ -53,7 +53,16 @@ class TEIentitiesSection extends React.PureComponent {
   }
   
   entityListEntries(){
-    const entries = this.props.scheme.map((e, i)=>(
+    const names = this.props.scheme.map(x=>x[0]);
+    const entries = this.props.scheme.map((e, i)=>{
+      const isValid = e[0].length > 0 && names.reduce((ac,dc)=>ac+(dc==e[0]),0) == 1;
+      let msg = '';
+      if(!isValid && e[0].length==0)
+        msg = "Entities can't be empty";
+      else
+        msg = "Entities can't be repeated";
+
+      return(
       <li key={i}>
         <input type="color" 
                value={e[1].color} 
@@ -61,18 +70,21 @@ class TEIentitiesSection extends React.PureComponent {
                onChange={event=>this.handleValueChange(i, 'color', event.target.value)}>
         </input>
         <IconPicker icon={e[1].icon} iconKey={'icon'+i} onChange={icon=>this.handleValueChange(i, 'icon', icon)}/>
-        <div className="form-group d-inline-block">
+        <div className="form-group d-inline-flex flex-column">
           <input type="text" 
-                 className="form-control" 
+                 className={`form-control ${isValid?'':'is-invalid'}`}
                  value={e[0]} 
                  onChange={event=>this.handleNameChange(i, event.target.value)}/>
+          {isValid?'':<div className="invalid-feedback">{msg}</div>}
         </div>
-        <button type="button" 
-                className="close" 
-                aria-label="Close" 
-                onClick={()=>this.handleRemoveEntry(i)}>
-          <span aria-hidden="true">&times;</span>
-        </button>
+        {this.props.scheme.length==1?'':(
+          <button type="button" 
+                  className="close" 
+                  aria-label="Close" 
+                  onClick={()=>this.handleRemoveEntry(i)}>
+            <span aria-hidden="true">&times;</span>
+          </button>
+        )}
         {this.entityProperties(e[0])}
         <div className="small d-block px-5">
           <span className="d-block">List existing {e[0]}s in the documents?</span>
@@ -80,31 +92,35 @@ class TEIentitiesSection extends React.PureComponent {
             <input className="form-check-input" 
               checked={e[1].body_list == "true"} 
               type="radio" 
-              name={e[0]+'list'} 
-              id={e[0]+'showList'} 
+              name={e[0]+'list'+i} 
+              id={e[0]+'showList'+i} 
               onChange={event=>this.handleBodyListChange(i, event.target.value)}
               value="true"/>
-            <label className="form-check-label" htmlFor={e[0]+'showList'}>yes</label>
+            <label className="form-check-label" htmlFor={e[0]+'showList'+i}>yes</label>
           </div>
           <div className="form-check form-check-inline">
             <input className="form-check-input" 
               checked={e[1].body_list == "false"} 
               type="radio" 
-              name={e[0]+'list'} 
-              id={e[0]+'hideList'} 
+              name={e[0]+'list'+i} 
+              id={e[0]+'hideList'+i} 
               onChange={event=>this.handleBodyListChange(i, event.target.value)}
               value="false"/>
-              <label className="form-check-label" htmlFor={e[0]+'hideList'}>no</label>
+              <label className="form-check-label" htmlFor={e[0]+'hideList'+i}>no</label>
           </div>
         </div>
         <hr />
       </li>
-    ));
+    )});
     
     return entries;
   }
   
   entityNewEntryField(){
+    const names = this.props.scheme.map(x=>x[0]),
+      isInvalid = this.state.name.length > 0 && names.reduce((ac,dc)=>ac+(dc==this.state.name),0) > 0,
+      msg = isInvalid?"Entities can't be repeated":'';
+
       return( 
         <li>
           <input type="color" 
@@ -113,12 +129,12 @@ class TEIentitiesSection extends React.PureComponent {
                  onChange={event=>this.setState({color: event.target.value})}>
           </input>
           <IconPicker icon={this.state.icon} iconKey={'newicon'} onChange={icon=>this.setState({icon})}/>
-          <div className="form-group d-inline-block">
+          <div className="form-group d-inline-flex flex-column">
             <input type="text" 
-                   className="form-control" 
-                   id="staticEmail2" 
+                   className={`form-control ${isInvalid?'is-invalid':''}`}
                    value={this.state.name} 
                    onChange={event=>this.setState({name: event.target.value})}/>
+            {isInvalid?<div className="invalid-feedback">{msg}</div>:''}
           </div>
           <button type="button" className="btn btn-light ml-3" onClick={()=>this.handleAddEntity()}>Add</button>
           <div className="small d-block px-5">
@@ -131,7 +147,7 @@ class TEIentitiesSection extends React.PureComponent {
                 name={this.state.name+'list'} 
                 id={this.state.name+'showList'}
                 value="true"/>
-              <label className="form-check-label" htmlFor={this.state.name+'showList'}>yes</label>
+              <label className="form-check-label" htmlFor='teiShow'>yes</label>
             </div>
             <div className="form-check form-check-inline">
               <input className="form-check-input" 
@@ -140,7 +156,7 @@ class TEIentitiesSection extends React.PureComponent {
                 name={this.state.name+'list'} 
                 id={this.state.name+'hideList'}
                 value="false"/>
-              <label className="form-check-label" htmlFor={this.state.name+'hideList'}>no</label>
+              <label className="form-check-label" htmlFor='teiHide'>no</label>
             </div>
           </div>
       </li>
@@ -149,8 +165,16 @@ class TEIentitiesSection extends React.PureComponent {
   }
   
   handleAddEntity(){
-    const {color, icon, body_list} = this.state;
-    const newEntity = [this.state.name, {color, icon, body_list}];
+    const {name, color, icon, body_list} = this.state;
+
+    if(name.length == 0)
+      return;
+
+    const alreadyIncluded = this.props.scheme.some(([name,..._])=>name == this.state.name);
+    if(alreadyIncluded===true)
+      return;
+
+    const newEntity = [name, {color, icon, body_list}];
     const newScheme = [...this.props.scheme, newEntity];
     this.props.updateScheme(newScheme);
     this.setState(this.defState);

@@ -7,7 +7,7 @@ class TaxonomySection extends React.PureComponent {
     super(props);
     
     this.defState = {
-      color: '',
+      color: '#aaaaaa',
       name: '',
       description: ''
     };
@@ -37,25 +37,38 @@ class TaxonomySection extends React.PureComponent {
   }
   
   categoryListEntries(){
-    const entries = this.props.scheme.map((e, i)=>(
+    const names = this.props.scheme.map(x=>x[0]);
+
+    const entries = this.props.scheme.map((e, i)=>{
+      const isValid = e[0].length > 0 && names.reduce((ac,dc)=>ac+(dc==e[0]),0) == 1;
+      let msg = '';
+      if(!isValid && e[0].length==0)
+        msg = "Category names can't be empty";
+      else
+        msg = "Categories can't be repeated";
+
+      return(
       <li key={i}>
         <input type="color" 
                value={e[1].color} 
                className="colorScheme border"
                onChange={event=>this.handleValueChange(i, 'color', event.target.value)}>
         </input>
-        <div className="form-group d-inline-block categoryNameInput">
+        <div className="form-group d-inline-flex flex-column categoryNameInput">
           <input type="text" 
-                 className="form-control" 
+                 className={`form-control ${isValid>0?'':'is-invalid'}`}
                  value={e[0]} 
                  onChange={event=>this.handleNameChange(i, event.target.value)}/>
+          {isValid?'':<div className="invalid-feedback ml-4 pl-2">{msg}</div>}
         </div>
-        <button type="button" 
-                className="close" 
-                aria-label="Close"
-                onClick={()=>this.handleRemoveEntry(i)}>
-          <span aria-hidden="true">&times;</span>
-        </button>
+        {this.props.scheme.length==1?'':(
+          <button type="button" 
+                  className="close" 
+                  aria-label="Close" 
+                  onClick={()=>this.handleRemoveEntry(i)}>
+            <span aria-hidden="true">&times;</span>
+          </button>
+        )}
         <br/>
         <div className="form-group d-inline-block">
           <input type="text" 
@@ -65,12 +78,16 @@ class TaxonomySection extends React.PureComponent {
                  onChange={event=>this.handleValueChange(i, 'description', event.target.value)}/>
         </div>
       </li>
-    ));
+    )});
     
     return entries;
   }
   
   categoryNewEntryField(){
+    const names = this.props.scheme.map(x=>x[0]),
+      isInvalid = this.state.name.length > 0 && names.reduce((ac,dc)=>ac+(dc==this.state.name),0) > 0,
+      msg = isInvalid?"Categories can't be repeated":'';
+
       return( 
         <li>
           <input type="color" 
@@ -78,11 +95,12 @@ class TaxonomySection extends React.PureComponent {
                  className="colorScheme border"
                  onChange={event=>this.setState({color: event.target.value})}>
           </input>
-          <div className="form-group d-inline-block categoryNameInput">
+          <div className="form-group d-inline-flex flex-column categoryNameInput">
             <input type="text" 
-                   className="form-control" 
+                   className={`form-control ${isInvalid?'is-invalid':''}`} 
                    value={this.state.name} 
                    onChange={event=>this.setState({name: event.target.value})}/>
+            {isInvalid?<div className="invalid-feedback ml-4 pl-2">{msg}</div>:''}
           </div>
           <button type="button" className="btn btn-light ml-5" onClick={()=>this.handleAddCategory()}>Add</button>
           <br/>
@@ -99,6 +117,13 @@ class TaxonomySection extends React.PureComponent {
   }
   
   handleAddCategory(){
+    if(this.state.name.length == 0)
+      return;
+    
+    const alreadyIncluded = this.props.scheme.some(([name,..._])=>name == this.state.name);
+    if(alreadyIncluded===true)
+      return;
+
     const newScheme = [...this.props.scheme, [this.state.name,
        {color:this.state.color, icon: this.state.icon, description: this.state.description}]];
     this.props.updateScheme(newScheme);

@@ -140,7 +140,6 @@ class AnnotationHistoryHandler:
     def __get_uncertainties_names(self):
         taxonomy = Taxonomy.objects.get(project_id=self.__project_id)
         names = taxonomy.categories.values_list("name", flat=True)
-        # TODO test this
         return names
 
     def __count_uncertainties(self, text, uncertainties_names, site):
