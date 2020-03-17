@@ -48,11 +48,13 @@ export default function DocumentDataSource(pubSubService, project){
 	 * Retrieves data from the external source.
 	 */
 	function _retrieve(){
+		self.publish('status',{action:'fetching'});
 		self._source.getFile({project:self._project, file:self._focused},{},null).then(response=>{
 			if(response.success === false)
 				throw('Failed to retrieve files for the current project.')
 			
 			self._document = response.content;
+			self.publish('status',{action:'fetched'});
 			_publishData();
 		})
 	}

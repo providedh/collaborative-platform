@@ -118,7 +118,7 @@ function Heatmap({ layout, tileLayout, colorScale, rangeScale, dimension}) {
 
     const [dataClient, _] = useState(DataClient());
 	const data = useData(dataClient, dimension);
-    const heatmap = useHeatmap(tileLayout, colorScale, rangeScale, event=>console.log(event));
+    const heatmap = useHeatmap(tileLayout, colorScale, rangeScale, event=>event);
     
     useRender(width, height, heatmap, data, containerRef, canvasRef, overlayCanvasRef, legendRef);
 

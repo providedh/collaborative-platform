@@ -88,13 +88,14 @@ export default function EntityDataSource(pubSubService, project){
 	 * Retrieves data from the external source.
 	 */
 	function _retrieve(){
+		self.publish('status',{action:'fetching'});
 		self._source.getFiles({project:self._project},{},null).then(response=>{
 			if(response.success === false)
 				throw('Failed to retrieve files for the current project.')
 			
+			let retrieved = 0, retrieving = response.content.length;
 			response.content.forEach(file=>{
 				self._data.remove(()=>true); // clear previous data
-				let retrieved = 0;
 
 				self._source.getFileEntities({project:self._project, file:file.id},{},null).then(response=>{
 					if(response.success === false)
@@ -102,6 +103,9 @@ export default function EntityDataSource(pubSubService, project){
 					else
 						self._data.add(response.content.map(x=>({file_id:file.id, file_name:file.name, ...x})));
 						_publishData();
+					if(++retrieved == retrieving){
+						self.publish('status',{action:'fetched'});
+					}
 				});
 			})
 		})

@@ -35,8 +35,13 @@ export default (function DataService(){
 		self.filter = _filter;
 		self.unfilter = _unfilter;
 		self.focusDocument = _focus;
+		self.subscribeToStatus = _subscribeToStatus;
 
 		return self;
+	}
+
+	function _subscribeToStatus(callable){
+		return self._pubSubClient.subscribe('status', callable);
 	}
 
 	/**

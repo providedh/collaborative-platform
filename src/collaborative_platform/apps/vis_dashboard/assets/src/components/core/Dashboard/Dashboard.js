@@ -3,6 +3,7 @@ import { ParentSize } from '@vx/responsive';
 
 import styles from './style.module.css';
 
+import Status from './Status';
 import DashboardControlPanel from '../DashboardControlPanel';
 import ViewDetailsPanel from '../ViewDetailsPanel';
 import Workspace from '../Workspace';
@@ -111,6 +112,7 @@ export default class Dashboard extends React.Component {
                         <div className={"row " + styles.heightInherit}>
                             <div className={`col ${styles.heightInherit} ${styles.leftContainer}`}>
                                 <div className="row justify-content-end align-items-baseline pr-3">
+                                    <Status />
                                     <button onClick={()=>document.getElementById('help').classList.toggle('hidden')}
                                         type="button" 
                                         className="btn btn-primary h-75 mr-3">
