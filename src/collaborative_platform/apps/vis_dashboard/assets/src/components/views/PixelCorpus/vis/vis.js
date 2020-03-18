@@ -1,4 +1,9 @@
 import * as d3 from 'd3';
+
+import renderLegend from './legend';
+import renderEntities from './entities';
+import renderCertainty from './certainty';
+
 /* Class: Vis
  *
  * 
@@ -9,6 +14,8 @@ export default function Vis(){
 		_docSortingCriteria: null,
 		_entitySortingCriteria: null,
 		_colorCertaintyBy: null,
+		_entityColorScale: null,
+		_certaintyColorScale: null,
 		_eventCallback: null,
 		_padding: 10,
 		_innerMargin: 30,
@@ -19,7 +26,7 @@ export default function Vis(){
 	};
 
 	function _init(){
-		self.setTaxonomy = _getParameterSetter('_taxonomy');
+		self.setTaxonomy = _setTaxonomy;
 		self.setDocSortingCriteria = _getParameterSetter('_docSortingCriteria');
 		self.setEntitySortingCriteria = _getParameterSetter('_entitySortingCriteria');
 		self.setColorCertaintyBy = _getParameterSetter('_colorCertaintyBy');
@@ -33,6 +40,18 @@ export default function Vis(){
 		return (value)=>self[key]=value;
 	}
 
+	function _setTaxonomy(taxonomy){
+		self._taxonomy = taxonomy;
+		self._entityColorScale = d3.scaleOrdinal()
+			.domain(Object.keys(taxonomy.entities))
+			.range(Object.values(taxonomy.entities).map(e=>e.color));
+	}
+
+	function _setColorCertaintyBy(colorCertaintyBy){
+		self._colorCertaintyBy = colorCertaintyBy;
+		self._certaintyColorScale = d3.interpolateOrRd;
+	}
+
 	function _render(svg, entityData, certaintyData){
 		if(svg == null  || entityData == null || certaintyData == null)
 			return;
@@ -43,9 +62,9 @@ export default function Vis(){
 			columnWidth = freeSpace/2,
 			args = {svg, width:svg.width, maxItemCount, docOrder, margin:self._innerMargin, taxonomy:self._taxonomy, entitySorting: self._entitySortingCriteria};
 
-		//renderEntities(Object.assign({}, args, {data: entityData}));
-		//renderCertainty(Object.assign({}, args, {data: certaintyData}));
-		//renderLegend(svg, _legendWidth, padding);
+		renderEntities(Object.assign({}, args, {data: entityData}));
+		renderCertainty(Object.assign({}, args, {data: certaintyData}));
+		renderLegend(svg, self._legendWidth, self._padding, self._entityColorScale, self._certaintyColorScale, self._colorCertaintyBy);
 	}
 
 	return _init();
