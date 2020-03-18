@@ -1,15 +1,14 @@
 import * as d3 from 'd3';
-import setupBrush from './brush';
-/* Class: Heatmap
+/* Class: Vis
  *
  * 
  * */
-export default function Heatmap(){
+export default function Vis(){
 	const self = {
 		_taxonomy: null,
 		_docSortingCriteria: null,
 		_entitySortingCriteria: null,
-		_certaintyProperty: null,
+		_colorCertaintyBy: null,
 		_eventCallback: null,
 		_padding: 10,
 		_innerMargin: 30,
@@ -23,7 +22,7 @@ export default function Heatmap(){
 		self.setTaxonomy = _getParameterSetter('_taxonomy');
 		self.setDocSortingCriteria = _getParameterSetter('_docSortingCriteria');
 		self.setEntitySortingCriteria = _getParameterSetter('_entitySortingCriteria');
-		self.setCertaintyProperty = _getParameterSetter('_certaintyProperty');
+		self.setColorCertaintyBy = _getParameterSetter('_colorCertaintyBy');
 		self.setEventCallback = _getParameterSetter('_eventCallback');
 		self.render = _render;
 
@@ -35,17 +34,18 @@ export default function Heatmap(){
 	}
 
 	function _render(svg, entityData, certaintyData){
-		if(svg == null  || data == null || data.length == 0)
+		if(svg == null  || entityData == null || certaintyData == null)
 			return;
 
-		const [docOrder, maxItemCount] = sortDocuments(entityData, self._docSortingCriteria),
+		const sortDocuments = x=>[x, 10],
+			[docOrder, maxItemCount] = sortDocuments(entityData, self._docSortingCriteria),
 			freeSpace = svg.width - (self._padding*2 + self._innerMargin + self._legendWidth),
 			columnWidth = freeSpace/2,
-			args = {svg, width, maxItemCount, docOrder, margin:_innerMargin, taxonomy:self._taxonomy, entitySorting: self._entitySortingCriteria};
+			args = {svg, width:svg.width, maxItemCount, docOrder, margin:self._innerMargin, taxonomy:self._taxonomy, entitySorting: self._entitySortingCriteria};
 
-		renderEntities(Object.assign({}, args, {data: entityData}));
-		renderCertainty(Object.assign({}, args, {data: certaintyData}));
-		renderLegend(svg, _legendWidth, padding)
+		//renderEntities(Object.assign({}, args, {data: entityData}));
+		//renderCertainty(Object.assign({}, args, {data: certaintyData}));
+		//renderLegend(svg, _legendWidth, padding);
 	}
 
 	return _init();
