@@ -1,4 +1,4 @@
-import PixelDoc from './PixelDoc';
+import PixelCorpus from './PixelCorpus';
 import Dummy from './Dummy';
 import GeoMap from './GeoMap';
 import Histogram from './Histogram';
@@ -8,7 +8,7 @@ import DocumentView from './DocumentView';
 
 export default {
     'Dummy': Dummy,
-    'PixelDoc': PixelDoc, 
+    'PixelCorpus': PixelCorpus, 
     'Map': GeoMap,
 	'Histogram': Histogram,
 	'Heatmap': Heatmap,

@@ -91,7 +91,7 @@ var AjaxCalls = function(args){
 
 	function _createDummyResponse(content){
 		return new Promise((resolve, error)=>{
-			resolve({success:true, content});
+			setTimeout(()=>resolve({success:true, content}), 0);
 		});
 	}
 
