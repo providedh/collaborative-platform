@@ -6,12 +6,13 @@ from django.contrib.auth.models import AnonymousUser, User
 from django.core.exceptions import ValidationError, FieldError
 from django.core.paginator import InvalidPage, EmptyPage
 from django.db.models import QuerySet, Q
-from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, HttpResponseNotFound
+from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, HttpResponseNotFound, JsonResponse
 
 from apps.core.models import Profile
 from apps.files_management.helpers import clean_name
 from apps.files_management.models import Directory
-from apps.projects.helpers import page_to_json_response, include_contributors, log_activity, paginate_start_length
+from apps.projects.helpers import page_to_json_response, include_contributors, log_activity, paginate_start_length, \
+    get_contributors_list
 from apps.views_decorators import objects_exists, user_has_access
 
 from .helpers import paginate_page_perpage, order_queryset
@@ -133,6 +134,15 @@ def get_users(request, user_id):  # type: (HttpRequest, int) -> HttpResponse
     projects = order_queryset(request, projects)
     page = paginate_start_length(request, projects)
     return include_contributors(page_to_json_response(page))
+
+
+@login_required
+@objects_exists
+@user_has_access()
+def get_contributors(request, project_id):
+    if request.method != "GET":
+        return HttpResponseBadRequest("Invalid request method")
+    return JsonResponse(get_contributors_list(project_id))
 
 
 @login_required

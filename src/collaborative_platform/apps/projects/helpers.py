@@ -65,9 +65,13 @@ def get_project_contributors(project_id):  # type: (int) -> QuerySet
 def include_contributors(response):  # type: (JsonResponse) -> JsonResponse
     json = loads(response.content)
     for project in json['data']:
-        project['contributors'] = list(get_project_contributors(project['id']).values('id', 'first_name', 'last_name'))
+        project['contributors'] = get_contributors_list(project['id'])
 
     return JsonResponse(json)
+
+
+def get_contributors_list(project_id):
+    return list(get_project_contributors(project_id).values('id', 'first_name', 'last_name'))
 
 
 def log_activity(project, user, action_text="", file=None, related_dir=None):
