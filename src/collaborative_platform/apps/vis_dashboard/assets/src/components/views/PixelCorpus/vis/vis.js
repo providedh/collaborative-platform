@@ -49,12 +49,15 @@ export default function Vis(){
 
 	function _setColorCertaintyBy(colorCertaintyBy){
 		self._colorCertaintyBy = colorCertaintyBy;
-		self._certaintyColorScale = d3.interpolateOrRd;
+		self._certaintyColorScale = d3.scaleSequential(d3.interpolateOrRd);
 	}
 
-	function _render(svg, entityData, certaintyData){
+	function _render(container, svg, entityData, certaintyData){
 		if(svg == null  || entityData == null || certaintyData == null)
 			return;
+
+		svg.setAttribute('width', container.clientWidth);
+		svg.setAttribute('height', container.clientHeight);
 
 		const sortDocuments = x=>[x, 10],
 			[docOrder, maxItemCount] = sortDocuments(entityData, self._docSortingCriteria),

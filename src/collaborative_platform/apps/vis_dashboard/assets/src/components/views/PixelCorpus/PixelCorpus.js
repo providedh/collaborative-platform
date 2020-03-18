@@ -38,7 +38,7 @@ function useVis(sortDocumentsBy, colorCertaintyBy){
 }
 
 function PixelCorpus({sortDocumentsBy, colorCertaintyBy, layout}) {
-    const svgRef = useRef();
+    const [svgRef, containerRef] = [useRef(), useRef()];
     const [width, height] = layout!=undefined?[layout.w, layout.h]:[4,4];
 
     const [dataClient, _] = useState(DataClient()),
@@ -46,13 +46,17 @@ function PixelCorpus({sortDocumentsBy, colorCertaintyBy, layout}) {
         vis = useVis(sortDocumentsBy, colorCertaintyBy);
 
     useEffect(()=>vis.render(
+            containerRef.current,
             svgRef.current,
             data, data), // Render 
         [width, height, sortDocumentsBy, colorCertaintyBy, data]); // Conditions
 
     return(
-        <div className={styles.pixelDoc}>
-            <svg ref={svgRef}></svg>
+        <div className={styles.container} ref={containerRef}>
+            <svg ref={svgRef}>
+                <g className="entityLegend"></g>
+                <g className="certaintyLegend"></g>
+            </svg>
         </div>
     )
 }
