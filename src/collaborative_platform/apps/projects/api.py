@@ -142,7 +142,7 @@ def get_users(request, user_id):  # type: (HttpRequest, int) -> HttpResponse
 def get_contributors(request, project_id):
     if request.method != "GET":
         return HttpResponseBadRequest("Invalid request method")
-    return JsonResponse(get_contributors_list(project_id))
+    return JsonResponse(get_contributors_list(project_id), safe=False)
 
 
 @login_required
