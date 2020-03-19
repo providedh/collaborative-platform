@@ -56,8 +56,16 @@ function PixelCorpus({sortDocumentsBy, colorCertaintyBy, layout}) {
             <svg ref={svgRef}>
                 <g className="entityLegend"></g>
                 <g className="certaintyLegend"></g>
-                <g className="entities"></g>
-                <g className="certainty"></g>
+                <g className="entities">
+                    <text className="title"></text>
+                    <g className="docLabels"></g>
+                    <g className="entityCells"></g>
+                </g>
+                <g className="certainty">
+                    <text className="title"></text>
+                    <g className="docLabels"></g>
+                    <g className="entityCells"></g>
+                </g>
             </svg>
         </div>
     )
