@@ -59,17 +59,20 @@ export default function Vis(){
 		svg.setAttribute('width', container.clientWidth);
 		svg.setAttribute('height', container.clientHeight);
 
-		const sortDocuments = x=>[x, 10],
+		const docNames = [...(new Set(entityData.all.map(e=>e.file_name))).values()],
+			sortDocuments = x=>[docNames, 10],
 			[docOrder, maxItemCount] = sortDocuments(entityData, self._docSortingCriteria),
 			freeSpace = container.clientWidth - (self._padding*2 + self._innerMargin + self._legendWidth),
 			columnWidth = freeSpace/2;
+
+		console.log(Object.assign({}, self, {svg, docOrder, columnWidth, data: entityData}))
 
 		if(entityData.all.length > 0){
 			renderEntities(Object.assign({}, self, {svg, docOrder, columnWidth, data: entityData}));
 		}
 
-		if(certaintyData.all.length > 0){
-			renderCertainty(Object.assign({}, self, {svg, docOrder, columnWidth, data: certaintyData}));
+		if(entityData.all.length > 0){
+			renderCertainty(Object.assign({}, self, {svg, docOrder, columnWidth, data: entityData}));
 		}
 
 		renderLegend(svg, self._legendWidth, self._padding, self._entityColorScale, self._certaintyColorScale, self._colorCertaintyBy);
