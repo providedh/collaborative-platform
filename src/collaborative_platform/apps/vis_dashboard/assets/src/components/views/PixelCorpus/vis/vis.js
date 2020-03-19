@@ -21,7 +21,7 @@ export default function Vis(){
 		_innerMargin: 30,
 		_legendWidth: 120,
 		_titleHeight: 60,
-		_maxRowItems: 30,
+		_maxRowItems: 20,
 		_docNameWidth: 50,
 	};
 
@@ -61,12 +61,17 @@ export default function Vis(){
 
 		const sortDocuments = x=>[x, 10],
 			[docOrder, maxItemCount] = sortDocuments(entityData, self._docSortingCriteria),
-			freeSpace = svg.width - (self._padding*2 + self._innerMargin + self._legendWidth),
-			columnWidth = freeSpace/2,
-			args = {svg, width:svg.width, maxItemCount, docOrder, margin:self._innerMargin, taxonomy:self._taxonomy, entitySorting: self._entitySortingCriteria};
+			freeSpace = container.clientWidth - (self._padding*2 + self._innerMargin + self._legendWidth),
+			columnWidth = freeSpace/2;
 
-		renderEntities(Object.assign({}, args, {data: entityData}));
-		renderCertainty(Object.assign({}, args, {data: certaintyData}));
+		if(entityData.all.length > 0){
+			renderEntities(Object.assign({}, self, {svg, docOrder, columnWidth, data: entityData}));
+		}
+
+		if(certaintyData.all.length > 0){
+			renderCertainty(Object.assign({}, self, {svg, docOrder, columnWidth, data: certaintyData}));
+		}
+
 		renderLegend(svg, self._legendWidth, self._padding, self._entityColorScale, self._certaintyColorScale, self._colorCertaintyBy);
 	}
 
