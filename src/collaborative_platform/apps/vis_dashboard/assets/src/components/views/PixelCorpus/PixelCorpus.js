@@ -9,7 +9,7 @@ import taxonomy from './taxonomy';
 import {Vis} from './vis';
 
 function useData(dataClient){
-    const [data, setData] = useState([]);
+    const [data, setData] = useState({all: [], filtered: []});
 
     useEffect(()=>{
             dataClient.subscribe('entity', data=>{
@@ -56,6 +56,8 @@ function PixelCorpus({sortDocumentsBy, colorCertaintyBy, layout}) {
             <svg ref={svgRef}>
                 <g className="entityLegend"></g>
                 <g className="certaintyLegend"></g>
+                <g className="entities"></g>
+                <g className="certainty"></g>
             </svg>
         </div>
     )
