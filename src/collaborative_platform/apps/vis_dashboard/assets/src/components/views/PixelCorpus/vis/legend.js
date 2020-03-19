@@ -5,8 +5,6 @@ const d3 = Object.assign(_d3, d3_legend);
 export default function renderLegend(svg, legendWidth, padding, entityColorScale, certaintyColorScale, colorCertaintyBy){
 	const {width, height} = svg.getBoundingClientRect();
 
-	console.log(certaintyColorScale)
-
 	const tempScale = d3.scaleThreshold()
 	  .domain([0, 5, 10, 15, 20 ])
 	  .range(d3.range(5).map(x=>certaintyColorScale(x/5)));
