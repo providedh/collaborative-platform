@@ -29,7 +29,7 @@ export default function Vis(){
 		self.setTaxonomy = _setTaxonomy;
 		self.setDocSortingCriteria = _getParameterSetter('_docSortingCriteria');
 		self.setEntitySortingCriteria = _getParameterSetter('_entitySortingCriteria');
-		self.setColorCertaintyBy = _getParameterSetter('_colorCertaintyBy');
+		self.setColorCertaintyBy = _setColorCertaintyBy;
 		self.setEventCallback = _getParameterSetter('_eventCallback');
 		self.render = _render;
 
@@ -49,7 +49,7 @@ export default function Vis(){
 
 	function _setColorCertaintyBy(colorCertaintyBy){
 		self._colorCertaintyBy = colorCertaintyBy;
-		self._certaintyColorScale = d3.scaleSequential(d3.interpolateOrRd);
+		self._certaintyColorScale = d3.interpolateOrRd;
 	}
 
 	function _render(container, svg, entityData, certaintyData){

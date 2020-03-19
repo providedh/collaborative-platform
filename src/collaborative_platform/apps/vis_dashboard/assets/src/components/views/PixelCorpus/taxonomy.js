@@ -30,18 +30,6 @@ export default {
 			"icon": "\uf274", 
 			"color": "#cecece"
 		},
-		"location": {
-			"icon": "\uf5a0", 
-			"color": "#ff6464"
-		},
-		"geolocation": {
-			"icon": "\uf5a0", 
-			"color": "#ff6464"
-		},
-		"name": {
-			"icon": "\uf007", 
-			"color": "#ff7f00"
-		},
 		"occupation": {
 			"icon": "\uf0b1", 
 			"color": "#3c8745"
@@ -59,14 +47,6 @@ export default {
 			"color": "#ff7f00"
 		},
 		"place": {
-			"icon": "\uf279", 
-			"color": "#204191"
-		},
-		"placeName": {
-			"icon": "\uf279", 
-			"color": "#204191"
-		},
-		"country": {
 			"icon": "\uf279", 
 			"color": "#204191"
 		},
