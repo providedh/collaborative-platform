@@ -5,9 +5,18 @@ from django.contrib.gis.db.models import PointField
 from django.contrib.gis.geos import Point
 from django.db import models
 
+from collaborative_platform.settings import ANONYMOUS_USER_ID
+
+from apps.core.models import VirtualUser
 from apps.files_management.models import File, FileVersion
-from apps.projects.models import Project, ProjectVersion
+from apps.projects.models import Project, ProjectVersion, UncertaintyCategory
 from apps.api_vis.enums import TypeChoice
+
+
+def get_anonymous_user():
+    anonymous_user = User.objects.get(ANONYMOUS_USER_ID)
+
+    return anonymous_user
 
 
 class Entity(models.Model):
@@ -38,6 +47,7 @@ class EntityVersion(models.Model):
 
 class EntityProperty(models.Model):
     entity_version = models.ForeignKey(EntityVersion, on_delete=models.CASCADE)
+    xpath = models.CharField(max_length=255)
     name = models.CharField(max_length=255)
     type = models.CharField(max_length=255, choices=[(tag, tag.value) for tag in TypeChoice])
     value_str = models.CharField(max_length=255, blank=True, null=True)
@@ -53,15 +63,15 @@ class EntityProperty(models.Model):
 
     def set_value(self, value):
         if self.type == TypeChoice.str:
-            self.value_str = value
+            self.value_str = str(value)
         elif self.type == TypeChoice.int:
-            self.value_int = value
+            self.value_int = int(value)
         elif self.type == TypeChoice.float:
-            self.value_float = value
+            self.value_float = float(value)
         elif self.type == TypeChoice.date:
-            self.value_date = date.fromisoformat(value)
+            self.value_date = date.fromisoformat(str(value))
         elif self.type == TypeChoice.time:
-            self.value_time = time.fromisoformat(value)
+            self.value_time = time.fromisoformat(str(value))
         elif self.type == TypeChoice.Point:
             value = value.replace(',', ' ')
             values = value.split(' ')
@@ -176,12 +186,35 @@ class UnificationToDelete(models.Model):
 
 
 class Certainty(models.Model):
-    ana = models.CharField(max_length=255)
-    locus = models.CharField(max_length=255)
-    cert = models.CharField(max_length=255)
-    asserted_value = models.CharField(max_length=255, null=True)
-    resp = models.CharField(max_length=255)
-    target = models.CharField(max_length=255)
+    file = models.ForeignKey(File, on_delete=models.CASCADE)
     xml_id = models.CharField(max_length=255)
+    categories = models.ManyToManyField(UncertaintyCategory)
+    locus = models.CharField(max_length=255)
+    cert = models.CharField(max_length=255, null=True)
+    degree = models.FloatField(null=True)
+    target_xml_id = models.CharField(max_length=255)
+    target_match = models.CharField(max_length=255, null=True)
+    asserted_value = models.CharField(max_length=255, null=True)
     description = models.CharField(max_length=255, null=True)
-    unification = models.ForeignKey(Unification, related_name='certainties', on_delete=models.CASCADE)
+    created_by_user = models.ForeignKey(User, on_delete=models.SET(get_anonymous_user), null=True)
+    created_by_virtual_user = models.ForeignKey(VirtualUser, on_delete=models.CASCADE, null=True)
+    created_in_file_version = models.ForeignKey(FileVersion, related_name="certainties", on_delete=models.CASCADE)
+    deleted_by = models.ForeignKey(User, related_name="deleted_certainties", default=None, on_delete=models.SET_NULL,
+                                   null=True)
+    deleted_in_file_version = models.ForeignKey(FileVersion, default=None, null=True, blank=True,
+                                                on_delete=models.CASCADE)
+
+    def set_created_by(self, user):
+        if isinstance(user, User):
+            self.created_by_user = user
+            self.created_by_virtual_user = None
+        elif isinstance(user, VirtualUser):
+            self.created_by_user = None
+            self.created_by_virtual_user = user
+        else:
+            raise TypeError("Unhandled user's type.")
+
+        self.save()
+
+    def get_created_by(self):
+        return self.created_by_user or self.created_by_virtual_user

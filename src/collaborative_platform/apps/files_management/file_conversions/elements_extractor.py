@@ -1,16 +1,29 @@
+import re
+
 from lxml import etree
 
 from django.contrib.auth.models import User
 
-from collaborative_platform.settings import CUSTOM_ENTITY, DEFAULT_ENTITIES, XML_NAMESPACES
+from collaborative_platform.settings import ANONYMOUS_USER_ID, CUSTOM_ENTITY, DEFAULT_ENTITIES, XML_NAMESPACES
 
-from apps.api_vis.models import Entity, EntityProperty, EntityVersion
+from apps.api_vis.models import Certainty, Entity, EntityProperty, EntityVersion
 from apps.core.models import VirtualUser
 from apps.files_management.models import File, FileVersion
-from apps.projects.models import EntitySchema
+from apps.projects.models import EntitySchema, UncertaintyCategory
 
 
 XML_ID_KEY = f"{{{XML_NAMESPACES['xml']}}}id"
+
+
+def get_first_xpath_match(root, xpath, namespaces):
+    matches = root.xpath(xpath, namespaces=namespaces)
+
+    if matches:
+        match = matches[0]
+
+        return match
+    else:
+        return None
 
 
 class ElementsExtractor:
@@ -40,7 +53,8 @@ class ElementsExtractor:
         self.__move_listable_entities()
         self.__copy_unlistable_entities()
         self.__move_custom_entities()
-        self.__extract_annotators()
+        annotators_map = self.__move_annotators()
+        self.__move_certainties(annotators_map)
         self.__create_xml_content()
 
         self.__check_if_changed()
@@ -107,22 +121,12 @@ class ElementsExtractor:
 
             self.__remove_elements_from_tree(lists)
 
-    def __extract_annotators(self):
-        annotators_map = {}
-
+    def __move_annotators(self):
         xpath = '//default:teiHeader//default:profileDesc//default:particDesc' \
                 '//default:listPerson[@type="PROVIDEDH Annotators"]/default:person'
-        elements = self.__tree.xpath(xpath, namespaces=XML_NAMESPACES)
+        annotators = self.__tree.xpath(xpath, namespaces=XML_NAMESPACES)
 
-        for element in elements:
-            email = self.__get_first_xpath_match(element, './/default:email/text()', XML_NAMESPACES)
-            forename = self.__get_first_xpath_match(element, './/default:forename/text()', XML_NAMESPACES)
-            surname = self.__get_first_xpath_match(element, './/default:surname/text()', XML_NAMESPACES)
-            xml_id = self.__get_first_xpath_match(element, '@xml:id', XML_NAMESPACES)
-
-            user = self.__get_user(forename, surname, email)
-
-            annotators_map.update({xml_id: user})
+        annotators_map = self.__get_or_create_annotators_in_db(annotators)
 
         xpath = '//default:teiHeader//default:profileDesc//default:particDesc' \
                 '//default:listPerson[@type="PROVIDEDH Annotators"]'
@@ -132,34 +136,43 @@ class ElementsExtractor:
 
         return annotators_map
 
+    def __move_certainties(self, annotators_map):
+        xpath = '//default:teiHeader//default:profileDesc//default:textClass' \
+                '//default:classCode[@scheme="http://providedh.eu/uncertainty/ns/1.0"]//default:certainty'
+
+        certainties = self.__tree.xpath(xpath, namespaces=XML_NAMESPACES)
+
+        categories_map = self.__create_categories_map(certainties)
+
+        self.__create_certainties_in_db(certainties, categories_map, annotators_map)
+
     def __create_entities_in_db(self, elements, entity_name, custom=False):
         for element in elements:
             entity_object = self.__create_entity_object(element, entity_name)
-            entity_version_object = self.__create_entity_version_object()
-            self.__create_entity_properties_objects(element, entity_name, entity_object, entity_version_object, custom)
+            entity_version_object = self.__create_entity_version_object(entity_object)
+            self.__create_entity_properties_objects(element, entity_name, entity_version_object, custom)
 
     def __create_entity_object(self, element, entity_name):
-        entity_object = Entity(
+        entity_object = Entity.objects.create(
             project=self.__file.project,
             file=self.__file,
             xml_id=element.attrib[XML_ID_KEY],
-            created_by=User.objects.get(id=1),
+            created_by=User.objects.get(id=ANONYMOUS_USER_ID),
             created_in_version=self.__file.version_number,
             type=entity_name,
         )
 
         return entity_object
 
-    def __create_entity_version_object(self):
-        entity_version_object = EntityVersion(
-            fileversion=self.__file_version
+    def __create_entity_version_object(self, entity_object):
+        entity_version_object = EntityVersion.objects.create(
+            fileversion=self.__file_version,
+            entity=entity_object,
         )
 
         return entity_version_object
 
-    def __create_entity_properties_objects(self, element, entity_name, entity_object, entity_version_object,
-                                           custom=False):
-        objects_saved = False
+    def __create_entity_properties_objects(self, element, entity_name, entity_version_object, custom=False):
         property_objects = []
 
         if not custom:
@@ -169,30 +182,121 @@ class ElementsExtractor:
 
         for property in properties:
             xpath = f"{properties[property]['xpath']}"
-            property_values = element.xpath(xpath, namespaces=XML_NAMESPACES)
+            property_value = get_first_xpath_match(element, xpath, XML_NAMESPACES)
             property_type = properties[property]['type']
+            clean_xpath = self.clean_xpath(xpath)
 
-            if property_values:
-                if not objects_saved:
-                    self.__save_entity_objects(entity_object, entity_version_object)
-                    objects_saved = True
+            if not property_value:
+                continue
 
-                entity_property_object = self.__create_entity_property_object(property, property_type,
-                                                                              property_values[0], entity_version_object)
+            entity_property_object = self.__create_entity_property_object(property, property_type, property_value,
+                                                                          clean_xpath, entity_version_object)
 
-                property_objects.append(entity_property_object)
+            property_objects.append(entity_property_object)
 
-        if property_objects:
-            EntityProperty.objects.bulk_create(property_objects)
+        EntityProperty.objects.bulk_create(property_objects)
 
-    def __save_entity_objects(self, entity_object, entity_version_object):
-        entity_object.save()
-        entity_version_object.entity = entity_object
-        entity_version_object.save()
+    def __get_or_create_annotators_in_db(self, annotators):
+        annotators_map = {}
 
-    def __create_entity_property_object(self, property, property_type, property_value, entity_version_object):
+        for annotator in annotators:
+            email = get_first_xpath_match(annotator, './/default:email/text()', XML_NAMESPACES)
+            forename = get_first_xpath_match(annotator, './/default:forename/text()', XML_NAMESPACES)
+            surname = get_first_xpath_match(annotator, './/default:surname/text()', XML_NAMESPACES)
+            xml_id = get_first_xpath_match(annotator, '@xml:id', XML_NAMESPACES)
+
+            user = self.__get_or_create_user(forename, surname, email)
+
+            annotators_map.update({xml_id: user})
+
+        return annotators_map
+
+    def __create_categories_map(self, certainties):
+        categories_map = {}
+
+        unique_categories = set()
+
+        for certainty in certainties:
+            categories = get_first_xpath_match(certainty, '@ana', XML_NAMESPACES)
+            categories = categories.split(' ')
+
+            unique_categories.update(categories)
+
+        for category in unique_categories:
+            regex = r'#\w+$'
+            match = re.search(regex, category)
+            xml_id = match.group()
+            xml_id = xml_id.replace('#', '')
+
+            try:
+                uncertainty_category = UncertaintyCategory.objects.get(
+                    taxonomy__project_id=self.__file.project.id,
+                    xml_id=xml_id,
+                )
+
+                categories_map.update({category: uncertainty_category})
+
+            except UncertaintyCategory.DoesNotExist:
+                continue
+
+        return categories_map
+
+    def __create_certainties_in_db(self, certainties, categories_map, annotators_map):
+        certainties_objects = []
+
+        for certainty in certainties:
+            categories = get_first_xpath_match(certainty, '@ana', XML_NAMESPACES)
+            categories = categories.split(' ')
+            categories = [categories_map[category] for category in categories if category in categories_map]
+
+            author_xml_id = get_first_xpath_match(certainty, '@resp', XML_NAMESPACES)
+            author_xml_id = author_xml_id.replace('#', '')
+            target_xml_id = get_first_xpath_match(certainty, '@target', XML_NAMESPACES)
+            target_xml_id = target_xml_id.replace('#', '')
+            target_xpath = get_first_xpath_match(certainty, '@match', XML_NAMESPACES)
+
+            try:
+                author = annotators_map[author_xml_id]
+            except KeyError:
+                author = User.objects.get(id=ANONYMOUS_USER_ID)
+
+            certainty = Certainty(
+                file=self.__file,
+                xml_id=get_first_xpath_match(certainty, '@xml:id', XML_NAMESPACES),
+                locus=get_first_xpath_match(certainty, '@locus', XML_NAMESPACES),
+                cert=get_first_xpath_match(certainty, '@cert', XML_NAMESPACES),
+                degree=get_first_xpath_match(certainty, '@degree', XML_NAMESPACES),
+                target_xml_id=target_xml_id,
+                target_match=target_xpath,
+                asserted_value=get_first_xpath_match(certainty, '@assertedValue', XML_NAMESPACES),
+                description=get_first_xpath_match(certainty, './default:desc/text()', XML_NAMESPACES),
+                created_in_file_version=self.__file_version,
+            )
+
+            certainty.set_created_by(author)
+            certainty.categories.add(*categories)
+
+            certainties_objects.append(certainty)
+
+        # TODO: bulk_create cause "IntegrityError: duplicate key value violates unique constraint". Figure out why
+        # Certainty.objects.bulk_create(certainties_objects)
+
+        for certainty in certainties_objects:
+            certainty.save()
+
+    @staticmethod
+    def clean_xpath(xpath):
+        clean_xpath = xpath.replace('./text()', '')
+        clean_xpath = clean_xpath.replace('/text()', '')
+        clean_xpath = clean_xpath.replace('default:', '')
+
+        return clean_xpath
+
+    def __create_entity_property_object(self, property, property_type, property_value, clean_xpath,
+                                        entity_version_object):
         entity_property_object = EntityProperty(
             entity_version=entity_version_object,
+            xpath=clean_xpath,
             name=property,
             type=property_type,
             created_by=User.objects.get(id=1),
@@ -204,18 +308,7 @@ class ElementsExtractor:
         return entity_property_object
 
     @staticmethod
-    def __get_first_xpath_match(root, xpath, namespaces):
-        matches = root.xpath(xpath, namespaces=namespaces)
-
-        if matches:
-            match = matches[0]
-
-            return match
-        else:
-            return None
-
-    @staticmethod
-    def __get_user(forename, surname, email):
+    def __get_or_create_user(forename, surname, email):
         try:
             user = User.objects.get(email=email)
         except User.DoesNotExist:
@@ -225,7 +318,7 @@ class ElementsExtractor:
                 else:
                     user = VirtualUser.objects.get(first_name=forename, last_name=surname)
             except VirtualUser.DoesNotExist:
-                user = VirtualUser(
+                user = VirtualUser.objects.create(
                     first_name=forename,
                     last_name=surname,
                     email=email,

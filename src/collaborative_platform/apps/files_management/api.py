@@ -94,11 +94,18 @@ def __update_file_content(file_object):
     tei_handler = TeiHandler()
     xml_content, migration, migration_message = tei_handler.migrate_to_tei_p5(content_binary)
 
+    # TODO: Extract formatting xml from TeiHandler and put it here
+
+    # TODO: Create class to remove not connected xml elements (eg. annotator without certainties, certainties without
+    # TODO: existing target, certainties without any category used in project)
+
     ids_corrector = IDsCorrector()
     xml_content, correction, correction_message = ids_corrector.correct_ids(xml_content, file_object.id)
 
     elements_extractor = ElementsExtractor()
     xml_content, extraction, extraction_message = elements_extractor.move_elements_to_db(xml_content, file_object.id)
+
+    # TODO: Add indexing entities in Elasticsearch
 
     if migration or correction or extraction:
         content_updated = True

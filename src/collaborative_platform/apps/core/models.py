@@ -20,9 +20,9 @@ class Profile(models.Model):
 
 
 class VirtualUser(models.Model):
-    first_name = models.CharField(max_length=255, blank=True)
-    last_name = models.CharField(max_length=255, blank=True)
-    email = models.EmailField(max_length=255, blank=True, unique=True)
+    first_name = models.CharField(max_length=255, blank=True, null=True)
+    last_name = models.CharField(max_length=255, blank=True, null=True)
+    email = models.EmailField(max_length=255, blank=True, null=True)
 
 
 @receiver(post_save, sender=User)

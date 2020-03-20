@@ -40,6 +40,7 @@ class IDsCorrector:
         self.__correct_tags_ids_in_body_text_related_to_entities()
         self.__correct_annotators_ids()
         self.__correct_certainties_xml_ids()
+        self.__correct_additional_usable_tags_ids_in_body()
         self.__create_xml_content()
 
         self._dump_max_xml_ids_to_db(file_id)
@@ -141,7 +142,7 @@ class IDsCorrector:
 
             elements_on_lists.extend(elements)
 
-        xpath_body = f'//default:text//default:body//default:name'
+        xpath_body = '//default:text//default:body//default:name'
         elements_in_body = self.__tree.xpath(xpath_body, namespaces=XML_NAMESPACES)
 
         elements = self.__get_difference_of_elements(elements_in_body, elements_on_lists)
@@ -149,17 +150,26 @@ class IDsCorrector:
         self.__correct_elements_ids(elements, 'name')
 
     def __correct_annotators_ids(self):
-        xpath = f'//default:teiHeader//default:profileDesc//default:particDesc//' \
-                f'default:listPerson[@type="PROVIDEDH Annotators"]/default:person'
+        xpath = '//default:teiHeader//default:profileDesc//default:particDesc//' \
+                'default:listPerson[@type="PROVIDEDH Annotators"]/default:person'
 
         elements = self.__tree.xpath(xpath, namespaces=XML_NAMESPACES)
 
         self.__correct_elements_ids(elements, 'annotator')
 
+    def __correct_additional_usable_tags_ids_in_body(self):
+        additional_usable_tags = set(ADDITIONAL_USABLE_TAGS) - {'certainty', 'name'}
+
+        for tag in additional_usable_tags:
+            xpath = f'//default:text//default:body//default:{tag}'
+
+            elements = self.__tree.xpath(xpath, namespaces=XML_NAMESPACES)
+
+            self.__correct_elements_ids(elements, tag)
 
     def __correct_certainties_xml_ids(self):
-        xpath = f'//default:teiHeader//default:classCode[@scheme="http://providedh.eu/uncertainty/ns/1.0"]' \
-                f'//default:certainty'
+        xpath = '//default:teiHeader//default:classCode[@scheme="http://providedh.eu/uncertainty/ns/1.0"]' \
+                '//default:certainty'
         elements = self.__tree.xpath(xpath, namespaces=XML_NAMESPACES)
 
         self.__correct_elements_ids(elements, 'certainty')

@@ -58,24 +58,37 @@
               <email/>
             </persName>
           </person>
+          <person xml:id="second_annotator">
+            <persName>
+              <forename>Tony</forename>
+              <surname>Stark</surname>
+              <email>tony_stark@zmyslonymail.com</email>
+            </persName>
+          </person>
         </listPerson>
       </particDesc>
       <textClass>
         <classCode scheme="http://providedh.eu/uncertainty/ns/1.0">
-          <certainty ana="https://providedh-test.ehum.psnc.pl/api/projects/17/taxonomy/#incompleteness" locus="value" degree="0.8571428571428571" cert="high" resp="#recipe_levenshtein_matching" match="@ref" target="#objectName-4" xml:id="certainty-0" assertedValue="#met"/>
-          <certainty ana="https://providedh-test.ehum.psnc.pl/api/projects/17/taxonomy/#incompleteness" locus="value" degree="0.8571428571428571" cert="high" resp="#recipe_levenshtein_matching" match="@ref" target="#objectName-5" xml:id="certainty-1" assertedValue="#rag"/>
-          <certainty ana="https://providedh-test.ehum.psnc.pl/api/projects/17/taxonomy/#incompleteness" locus="value" degree="0.8571428571428571" cert="high" resp="#recipe_levenshtein_matching" match="@ref" target="#objectName-7" xml:id="certainty-2" assertedValue="#sand"/>
-          <certainty ana="https://providedh-test.ehum.psnc.pl/api/projects/17/taxonomy/#incompleteness" locus="value" degree="0.8571428571428571" cert="high" resp="#recipe_levenshtein_matching" match="@ref" target="#objectName-2" xml:id="certainty-3" assertedValue="#met"/>
-          <certainty ana="https://providedh-test.ehum.psnc.pl/api/projects/17/taxonomy/#incompleteness" locus="value" degree="0.8571428571428571" cert="high" resp="#recipe_levenshtein_matching" match="@ref" target="#objectName-8" xml:id="certainty-4" assertedValue="#sand"/>
-          <certainty ana="https://providedh-test.ehum.psnc.pl/api/projects/17/taxonomy/#incompleteness" locus="value" degree="0.8571428571428571" cert="high" resp="#recipe_levenshtein_matching" match="@ref" target="#objectName-11" xml:id="certainty-5" assertedValue="#sand"/>
-          <certainty ana="https://providedh-test.ehum.psnc.pl/api/projects/17/taxonomy/#incompleteness" locus="value" degree="0.8571428571428571" cert="high" resp="#recipe_levenshtein_matching" match="@ref" target="#objectName-12" xml:id="certainty-6" assertedValue="#form"/>
-          <certainty ana="https://providedh-test.ehum.psnc.pl/api/projects/17/taxonomy/#incompleteness" locus="value" degree="0.8333333333333334" cert="high" resp="#recipe_levenshtein_matching" match="@ref" target="#objectName-1" xml:id="certainty-7" assertedValue="#ingwer"/>
-          <certainty ana="https://providedh-test.ehum.psnc.pl/api/projects/17/taxonomy/#incompleteness" locus="value" degree="0.8571428571428571" cert="high" resp="#recipe_levenshtein_matching" match="@ref" target="#objectName-9" xml:id="certainty-8" assertedValue="#sand"/>
-          <certainty ana="https://providedh-test.ehum.psnc.pl/api/projects/17/taxonomy/#incompleteness" locus="value" degree="1.0" cert="very high" resp="#recipe_levenshtein_matching" match="@ref" target="#objectName-0" xml:id="certainty-9" assertedValue="#butter"/>
-          <certainty ana="https://providedh-test.ehum.psnc.pl/api/projects/17/taxonomy/#incompleteness" locus="value" degree="0.8571428571428571" cert="high" resp="#recipe_levenshtein_matching" match="@ref" target="#objectName-10" xml:id="certainty-10" assertedValue="#sand"/>
-          <certainty ana="https://providedh-test.ehum.psnc.pl/api/projects/17/taxonomy/#incompleteness" locus="value" degree="0.8571428571428571" cert="high" resp="#recipe_levenshtein_matching" match="@ref" target="#objectName-3" xml:id="certainty-11" assertedValue="#met"/>
-          <certainty ana="https://providedh-test.ehum.psnc.pl/api/projects/17/taxonomy/#incompleteness" locus="value" degree="0.8571428571428571" cert="high" resp="#recipe_levenshtein_matching" match="@ref" target="#objectName-6" xml:id="certainty-12" assertedValue="#sand"/>
-          <certainty ana="https://providedh-test.ehum.psnc.pl/api/projects/17/taxonomy/#incompleteness" locus="value" degree="0.8333333333333334" cert="high" resp="#recipe_levenshtein_matching" match="@ref" target="#objectName-13" xml:id="certainty-13" assertedValue="#grieben"/>
+          <certainty ana="https://providedh-test.ehum.psnc.pl/api/projects/17/taxonomy/#incompleteness https://providedh-test.ehum.psnc.pl/api/projects/17/taxonomy/#credibility" locus="value" degree="0.8571428571428571" cert="high" resp="#recipe_levenshtein_matching" match="@ref" target="#name-4" xml:id="certainty-0" assertedValue="#met"/>
+          <certainty ana="https://providedh-test.ehum.psnc.pl/api/projects/17/taxonomy/#incompleteness https://providedh-test.ehum.psnc.pl/api/projects/17/taxonomy/#invalid_category" locus="value" degree="0.8571428571428571" cert="high" resp="#recipe_levenshtein_matching" match="@ref" target="#name-5" xml:id="certainty-1" assertedValue="#rag"/>
+          <certainty ana="https://providedh-test.ehum.psnc.pl/api/projects/17/taxonomy/#incompleteness" locus="value" degree="0.8571428571428571" cert="high" resp="#recipe_levenshtein_matching" match="@ref" target="#name-7" xml:id="certainty-2" assertedValue="#sand"/>
+          <certainty ana="https://providedh-test.ehum.psnc.pl/api/projects/17/taxonomy/#invalid_category" locus="value" degree="0.8571428571428571" cert="high" resp="#recipe_levenshtein_matching" match="@ref" target="#name-2" xml:id="certainty-3" assertedValue="#met"/>
+          <certainty ana="https://providedh-test.ehum.psnc.pl/api/projects/17/taxonomy/#credibility" locus="value" degree="0.8571428571428571" cert="high" resp="#recipe_levenshtein_matching" match="@ref" target="#name-8" xml:id="certainty-4" assertedValue="#sand"/>
+          <certainty ana="https://providedh-test.ehum.psnc.pl/api/projects/17/taxonomy/#incompleteness" locus="value" degree="0.8571428571428571" cert="high" resp="#recipe_levenshtein_matching" match="@ref" target="#name-11" xml:id="certainty-5" assertedValue="#sand"/>
+          <certainty ana="https://providedh-test.ehum.psnc.pl/api/projects/17/taxonomy/#incompleteness" locus="value" degree="0.8571428571428571" cert="high" resp="#recipe_levenshtein_matching" match="@ref" target="#name-12" xml:id="certainty-6" assertedValue="#form"/>
+          <certainty ana="https://providedh-test.ehum.psnc.pl/api/projects/17/taxonomy/#incompleteness" locus="value" degree="0.8333333333333334" cert="high" resp="#recipe_levenshtein_matching" match="@ref" target="#name-1" xml:id="certainty-7" assertedValue="#ingwer"/>
+          <certainty ana="https://providedh-test.ehum.psnc.pl/api/projects/17/taxonomy/#incompleteness" locus="value" degree="0.8571428571428571" cert="high" resp="#recipe_levenshtein_matching" match="@ref" target="#name-9" xml:id="certainty-8" assertedValue="#sand"/>
+          <certainty ana="https://providedh-test.ehum.psnc.pl/api/projects/17/taxonomy/#incompleteness" locus="value" degree="1.0" cert="very high" resp="#recipe_levenshtein_matching" match="@ref" target="#name-0" xml:id="certainty-9" assertedValue="#butter"/>
+          <certainty ana="https://providedh-test.ehum.psnc.pl/api/projects/17/taxonomy/#incompleteness" locus="value" degree="0.8571428571428571" cert="high" resp="#recipe_levenshtein_matching" match="@ref" target="#name-10" xml:id="certainty-10" assertedValue="#sand"/>
+          <certainty ana="https://providedh-test.ehum.psnc.pl/api/projects/17/taxonomy/#incompleteness" locus="value" degree="0.8571428571428571" cert="high" resp="#recipe_levenshtein_matching" match="@ref" target="#name-3" xml:id="certainty-11" assertedValue="#met"/>
+          <certainty ana="https://providedh-test.ehum.psnc.pl/api/projects/17/taxonomy/#incompleteness" locus="value" degree="0.8571428571428571" cert="high" resp="#recipe_levenshtein_matching" match="@ref" target="#name-6" xml:id="certainty-12" assertedValue="#sand"/>
+          <certainty ana="https://providedh-test.ehum.psnc.pl/api/projects/17/taxonomy/#incompleteness" locus="value" degree="0.8333333333333334" cert="high" resp="#recipe_levenshtein_matching" match="@ref" target="#name-13" xml:id="certainty-13" assertedValue="#grieben"/>
+          <certainty ana="https://providedh-test.ehum.psnc.pl/api/projects/17/taxonomy/#incompleteness" locus="value" cert="high" assertedValue="Balloons" target="#test" resp="#second_annotator" xml:id="certainty22">
+            <desc>Some important decription</desc>
+          </certainty>
+          <certainty ana="https://providedh-test.ehum.psnc.pl/api/projects/17/taxonomy/#incompleteness" locus="value" cert="high" assertedValue="#ingredient-0" target="#name-8" match="@ref" resp="#second_annotator" xml:id="certainty23"/>
+          <certainty ana="https://providedh-test.ehum.psnc.pl/api/projects/17/taxonomy/#incompleteness" locus="value" cert="high" assertedValue="McDuck" target="#person-0" match="name/forename" resp="#second_annotator" xml:id="certainty24"/>
+          <certainty ana="https://providedh-test.ehum.psnc.pl/api/projects/17/taxonomy/#incompleteness" locus="value" cert="high" assertedValue="low" target="#certainty-10" match="@cert" resp="#xml_id_autora" xml:id="certainty25"/>
         </classCode>
       </textClass>
     </profileDesc>
@@ -84,16 +97,16 @@
     <body>
       <div type="person">
         <listPerson type="personList">
-          <person sex="M" age="child" xml:id="person-0">
+          <person sex="M" age="child" resp="#second_annotator" xml:id="person-0">
             <persName>
-              <forename>Jerry</forename>
-              <surname>Maguire</surname>
+              <forename resp="#second_annotator">Jerry</forename>
+              <surname resp="#second_annotator">Maguire</surname>
             </persName>
             <name>Jerry Maguire</name>
             <birth when="2001-02-03"/>
           </person>
-          <person xml:id="person-1">Ingwer</person>
-          <person xml:id="person-2">Grieben</person>
+          <person resp="recipe_levenshtein_matching" xml:id="person-1">Ingwer</person>
+          <person resp="recipe_levenshtein_matching" xml:id="person-2">Grieben</person>
           <person xml:id="person-3">Met</person>
           <person xml:id="person-4">Butter</person>
           <person xml:id="person-5">Sand</person>
@@ -137,7 +150,7 @@
         <listObject/>
       </div>
       <div type="recipe">
-        <p>Put three or four Pounds of <persName ref="#person-0" xml:id="persName-1">Jerry Maguire's</persName> coarse Beef , with <event ref="#event-0" xml:id="event-1">three Pints of Pease</event> , into two Gallons of <persName ref="#person-0 #onion" xml:id="persName-0">Hank Moody's</persName> Water ; let it boil till the <objectName xml:id="objectName-4" ref="#ingredient-3">Meat</objectName> is all to <objectName xml:id="objectName-5" ref="#ingredient-0">Rags</objectName> ; <objectName xml:id="objectName-7" ref="#ingredient-5">and</objectName> Half an Hour before you strain it out , put in two or three <placeName ref="#place-0" xml:id="placeName-0">Anchovies</placeName> ; then strain it from the <objectName xml:id="objectName-2" ref="#ingredient-3">Meat</objectName> <objectName xml:id="objectName-8" ref="#ingredient-5">and</objectName> Husks , <objectName xml:id="objectName-11" ref="#ingredient-5">and</objectName> put in as much as you want <objectName xml:id="objectName-12" ref="#form">for</objectName> the Meal into a Sauce-pan , with an Onion stuck with Cloves , a Race of <objectName xml:id="objectName-1" ref="#ingredient-1">Ginger</objectName> bruis 'd , a little Fagot of Thyme , Savory , Parsley , <objectName xml:id="objectName-9" ref="#ingredient-5">and</objectName> a little Pepper . Let it boil near Half an Hour ; stir in a Piece of <objectName xml:id="objectName-0" ref="#ingredient-4">Butter</objectName> , <objectName xml:id="objectName-10" ref="#ingredient-5">and</objectName> fry some forc 'd <objectName xml:id="objectName-3" ref="#ingredient-3">Meat</objectName> Balls , Bacon <objectName xml:id="objectName-6" ref="#ingredient-5">and</objectName> French Bread cut in Dice , with Spinage boil 'd <objectName xml:id="objectName-13" ref="#ingredient-2">green</objectName> , to put to it in the Dish .</p>
+        <p>Put three or four Pounds of <name ref="#person-0" xml:id="name-99">Jerry Maguire's</name> coarse Beef , with <name ref="#event-0" xml:id="name-97">three Pints of Pease</name> , into two <ab xml:id="test">Gallons</ab> of <name ref="#person-0 #onion" xml:id="name-98">Hank Moody's</name> Water ; let it boil till the <name xml:id="name-4" ref="#ingredient-3">Meat</name> is all to <name xml:id="name-5" ref="#ingredient-0">Rags</name> ; <name xml:id="name-7" ref="#ingredient-5">and</name> Half an Hour before you strain it out , put in two or three <placeName ref="#place-0" xml:id="placeName-0">Anchovies</placeName> ; then strain it from the <name xml:id="name-2" ref="#ingredient-3">Meat</name> <name xml:id="name-8" ref="#ingredient-5">and</name> Husks , <name xml:id="name-11" ref="#ingredient-5">and</name> put in as much as you want <name xml:id="name-12" ref="#form">for</name> the Meal into a Sauce-pan , with an Onion stuck with Cloves , a Race of <name xml:id="name-1" ref="#ingredient-1">Ginger</name> bruis 'd , a little Fagot of Thyme , Savory , Parsley , <name xml:id="name-9" ref="#ingredient-5">and</name> a little Pepper . Let it boil near Half an Hour ; stir in a Piece of <name xml:id="name-0" ref="#ingredient-4">Butter</name> , <name xml:id="name-10" ref="#ingredient-5">and</name> fry some forc 'd <name xml:id="name-3" ref="#ingredient-3">Meat</name> Balls , Bacon <name xml:id="name-6" ref="#ingredient-5">and</name> French Bread cut in Dice , with Spinage boil 'd <name xml:id="name-13" ref="#ingredient-2">green</name> , to put to it in the Dish .</p>
         <p>Some random date <date when="2020-07-04" xml:id="date-0">4th of july 2010</date> for test unlistable entities, and reference to this date <date ref="#date-0" xml:id="date-1">the exact same day</date></p>
       </div>
     </body>
