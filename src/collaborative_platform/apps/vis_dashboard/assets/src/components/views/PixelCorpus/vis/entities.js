@@ -43,10 +43,6 @@ export default function renderEntities(args){
 	setupInteractions();
 }
 
-function renderTitle(){
-
-}
-
 function shorttenedLabel(label, maxLabelLength = 20){
 	if(label.length <= maxLabelLength)
 		return label;
