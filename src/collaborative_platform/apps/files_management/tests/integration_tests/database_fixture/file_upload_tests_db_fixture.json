@@ -24,8 +24,8 @@
   "fields": {
     "title": "Project_1",
     "description": "",
-    "creation_date": "2020-02-28T10:06:43.730Z",
-    "modification_date": "2020-02-28T10:06:43.730Z",
+    "creation_date": "2020-03-23T13:39:13.896Z",
+    "modification_date": "2020-03-23T13:39:13.896Z",
     "license": "GPL",
     "public": false
   }
@@ -38,7 +38,7 @@
     "file_version_counter": 0,
     "commit": null,
     "commit_counter": 0,
-    "date": "2020-02-28T10:06:43.745Z",
+    "date": "2020-03-23T13:39:13.906Z",
     "file_versions": []
   }
 },
@@ -46,7 +46,128 @@
   "model": "projects.taxonomy",
   "pk": 1,
   "fields": {
-    "contents": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<TEI xmlns=\"http://www.tei-c.org/ns/1.0\">\n  <teiHeader>\n    <fileDesc>\n      <titleStmt>\n        <title>Uncertainty Taxonomy for project Project_1</title>\n      </titleStmt>\n    </fileDesc>\n    <encodingDesc>\n      <classDecl>\n        <taxonomy>\n          <category>\n            <catDesc>User recognized uncertainty</catDesc>\n            <category xml:id=\"ignorance\">\n              <catDesc>ignorance</catDesc>\n              <desc></desc>\n            </category>\n            <category xml:id=\"credibility\">\n              <catDesc>credibility</catDesc>\n              <desc></desc>\n            </category>\n            <category xml:id=\"imprecision\">\n              <catDesc>imprecision</catDesc>\n              <desc></desc>\n            </category>\n            <category xml:id=\"incompleteness\">\n              <catDesc>incompleteness</catDesc>\n              <desc></desc>\n            </category>\n          </category>\n          <category>\n            <catDesc>Machine generated uncertainty</catDesc>\n            <category xml:id=\"algorithmic\">\n              <catDesc>Algorithmic</catDesc>\n            </category>\n          </category>\n        </taxonomy>\n      </classDecl>\n    </encodingDesc>\n  </teiHeader>\n</TEI>"
+    "contents": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<TEI xmlns=\"http://www.tei-c.org/ns/1.0\">\n  <teiHeader>\n    <fileDesc>\n      <titleStmt>\n        <title>Uncertainty Taxonomy for project Project_1</title>\n      </titleStmt>\n    </fileDesc>\n    <encodingDesc>\n      <classDecl>\n        <taxonomy>\n          <category>\n            <catDesc>User recognized uncertainty</catDesc>\n            \n            <category xml:id=\"new_awesome_category\">\n              <catDesc>new_awesome_category</catDesc>\n              <desc></desc>\n            </category>\n\n            <category xml:id=\"incompleteness\">\n              <catDesc>incompleteness</catDesc>\n              <desc></desc>\n            </category>\n\n            <category xml:id=\"imprecision\">\n              <catDesc>imprecision</catDesc>\n              <desc></desc>\n            </category>\n\n            <category xml:id=\"credibility\">\n              <catDesc>credibility</catDesc>\n              <desc></desc>\n            </category>\n\n            <category xml:id=\"ignorance\">\n              <catDesc>ignorance</catDesc>\n              <desc></desc>\n            </category>\n\n          </category>\n          <category>\n            <catDesc>Machine generated uncertainty</catDesc>\n            <category xml:id=\"algorithmic\">\n              <catDesc>Algorithmic</catDesc>\n            </category>\n          </category>\n        </taxonomy>\n      </classDecl>\n    </encodingDesc>\n  </teiHeader>\n</TEI>"
+  }
+},
+{
+  "model": "projects.uncertaintycategory",
+  "pk": 1,
+  "fields": {
+    "taxonomy": 1,
+    "name": "ignorance",
+    "xml_id": "ignorance",
+    "color": "#9270a8",
+    "description": ""
+  }
+},
+{
+  "model": "projects.uncertaintycategory",
+  "pk": 2,
+  "fields": {
+    "taxonomy": 1,
+    "name": "credibility",
+    "xml_id": "credibility",
+    "color": "#cc4c3b",
+    "description": ""
+  }
+},
+{
+  "model": "projects.uncertaintycategory",
+  "pk": 3,
+  "fields": {
+    "taxonomy": 1,
+    "name": "imprecision",
+    "xml_id": "imprecision",
+    "color": "#f1d155",
+    "description": ""
+  }
+},
+{
+  "model": "projects.uncertaintycategory",
+  "pk": 4,
+  "fields": {
+    "taxonomy": 1,
+    "name": "incompleteness",
+    "xml_id": "incompleteness",
+    "color": "#67b2ac",
+    "description": ""
+  }
+},
+{
+  "model": "projects.uncertaintycategory",
+  "pk": 5,
+  "fields": {
+    "taxonomy": 1,
+    "name": "new_awesome_category",
+    "xml_id": "new_awesome_category",
+    "color": "#0098ff",
+    "description": ""
+  }
+},
+{
+  "model": "projects.entityschema",
+  "pk": 1,
+  "fields": {
+    "taxonomy": 1,
+    "name": "person",
+    "color": "#ff7f00",
+    "icon": "\uf007",
+    "body_list": false
+  }
+},
+{
+  "model": "projects.entityschema",
+  "pk": 2,
+  "fields": {
+    "taxonomy": 1,
+    "name": "event",
+    "color": "#cecece",
+    "icon": "\uf274",
+    "body_list": true
+  }
+},
+{
+  "model": "projects.entityschema",
+  "pk": 3,
+  "fields": {
+    "taxonomy": 1,
+    "name": "place",
+    "color": "#204191",
+    "icon": "\uf279",
+    "body_list": false
+  }
+},
+{
+  "model": "projects.entityschema",
+  "pk": 4,
+  "fields": {
+    "taxonomy": 1,
+    "name": "date",
+    "color": "#868788",
+    "icon": "\uf073",
+    "body_list": false
+  }
+},
+{
+  "model": "projects.entityschema",
+  "pk": 5,
+  "fields": {
+    "taxonomy": 1,
+    "name": "time",
+    "color": "#eab9e4",
+    "icon": "\uf017",
+    "body_list": false
+  }
+},
+{
+  "model": "projects.entityschema",
+  "pk": 6,
+  "fields": {
+    "taxonomy": 1,
+    "name": "ingredient",
+    "color": "#02ff00",
+    "icon": "\uf0c3",
+    "body_list": true
   }
 },
 {
@@ -71,8 +192,8 @@
   "model": "auth.user",
   "pk": 2,
   "fields": {
-    "password": "pbkdf2_sha256$150000$WLnWh84ElCQc$25ZbsN1j+omyb06+JZFn9E2voKNcXKYX69WAW8qlCfE=",
-    "last_login": "2020-02-28T10:08:18.490Z",
+    "password": "pbkdf2_sha256$150000$OuSfFRLUpS72$sIzCGw7hcr39pW9qkcznKbxnnJMxRSYpLhIUPFVQyKo=",
+    "last_login": "2020-03-23T13:40:23.457Z",
     "is_superuser": false,
     "username": "tony_stark",
     "first_name": "Tony",
@@ -80,7 +201,7 @@
     "email": "tony_stark@zmyslonymail.com",
     "is_staff": false,
     "is_active": true,
-    "date_joined": "2020-02-28T10:06:28.379Z",
+    "date_joined": "2020-03-23T13:37:29.827Z",
     "groups": [],
     "user_permissions": []
   }
@@ -89,8 +210,8 @@
   "model": "auth.user",
   "pk": 3,
   "fields": {
-    "password": "pbkdf2_sha256$150000$NaYGi3VPXk1Q$Y+M4fvyU/SFi0ZuEK+s/8DeehnIePzA31BPFG5ia2DA=",
-    "last_login": "2020-02-28T10:07:56.023Z",
+    "password": "pbkdf2_sha256$150000$c4o6IOdvDWJA$VqdvOkIwQyUxNyYFwy41xfqdBKi/YE8VsoiSLc2FDwU=",
+    "last_login": "2020-03-23T13:40:12.016Z",
     "is_superuser": false,
     "username": "pepper_potts",
     "first_name": "Pepper",
@@ -98,7 +219,7 @@
     "email": "pepper_potts@zmyslonymail.com",
     "is_staff": false,
     "is_active": true,
-    "date_joined": "2020-02-28T10:07:55.740Z",
+    "date_joined": "2020-03-23T13:40:11.724Z",
     "groups": [],
     "user_permissions": []
   }
@@ -170,7 +291,7 @@
   "pk": 1,
   "fields": {
     "project": 1,
-    "date": "2020-02-28T10:06:43.774Z",
+    "date": "2020-03-23T13:39:13.944Z",
     "related_file": null,
     "related_file_name": null,
     "related_dir": null,

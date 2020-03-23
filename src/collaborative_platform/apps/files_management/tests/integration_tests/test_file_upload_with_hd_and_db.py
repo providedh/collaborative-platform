@@ -12,6 +12,7 @@ from apps.projects.models import Project
 SCRIPT_DIR = os.path.dirname(__file__)
 
 
+@pytest.mark.usefixtures('test_file_upload_with_hd_and_db__db_setup')
 @pytest.mark.django_db(transaction=True)
 @pytest.mark.integration_tests
 class TestFileUploadWithHdAndDb:
@@ -33,7 +34,7 @@ class TestFileUploadWithHdAndDb:
         directory = Directory.objects.get(project=project, name=project.title)
         file_name = 'group_0_long_original_0.xml'
 
-        with open(os.path.join(SCRIPT_DIR, 'test_files', file_name)) as uploaded_file:
+        with open(os.path.join(SCRIPT_DIR, 'test_files', 'source_files', file_name)) as uploaded_file:
             client.post(f'/api/files/upload/{directory.id}/', {'name': file_name, 'file': uploaded_file})
 
         files_in_db = File.objects.all()
