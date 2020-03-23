@@ -7,7 +7,6 @@ from django.db import models
 
 from collaborative_platform.settings import ANONYMOUS_USER_ID
 
-from apps.core.models import VirtualUser
 from apps.files_management.models import File, FileVersion
 from apps.projects.models import Project, ProjectVersion, UncertaintyCategory
 from apps.api_vis.enums import TypeChoice
@@ -19,20 +18,17 @@ def get_anonymous_user():
     return anonymous_user
 
 
-class CommonFields(models.Model):
-    created_by = models.ForeignKey(User, on_delete=models.SET(get_anonymous_user))
-    created_in_file_version = models.ForeignKey(FileVersion, on_delete=models.CASCADE)
-    deleted_by = models.ForeignKey(User, default=None, null=True, on_delete=models.SET(get_anonymous_user))
-    deleted_in_file_version = models.ForeignKey(FileVersion, default=None, null=True, on_delete=models.CASCADE)
-
-    class Meta:
-        abstract = True
-
-
-class Entity(CommonFields):
+class Entity(models.Model):
     file = models.ForeignKey(File, on_delete=models.CASCADE)
     type = models.CharField(max_length=255)
     xml_id = models.CharField(max_length=255)
+
+    created_by = models.ForeignKey(User, on_delete=models.SET(get_anonymous_user), related_name='created_entities')
+    created_in_file_version = models.ForeignKey(FileVersion, on_delete=models.CASCADE, related_name='created_entities')
+    deleted_by = models.ForeignKey(User, default=None, null=True, on_delete=models.SET(get_anonymous_user),
+                                   related_name='deleted_entities')
+    deleted_in_file_version = models.ForeignKey(FileVersion, default=None, null=True, on_delete=models.CASCADE,
+                                                related_name='deleted_entities')
 
     deleted_on = models.DateTimeField(null=True)
 
@@ -48,14 +44,23 @@ class EntityVersion(models.Model):
     context = models.TextField(blank=True, null=True)
 
     class Meta:
-        unique_together = ("fileversion", "entity")
+        unique_together = ("file_version", "entity")
 
 
-class EntityProperty(CommonFields):
+class EntityProperty(models.Model):
     entity_version = models.ForeignKey(EntityVersion, on_delete=models.CASCADE)
     xpath = models.CharField(max_length=255)
     name = models.CharField(max_length=255)
     type = models.CharField(max_length=255, choices=[(tag, tag.value) for tag in TypeChoice])
+
+    created_by = models.ForeignKey(User, on_delete=models.SET(get_anonymous_user),
+                                   related_name='created_entities_properties')
+    created_in_file_version = models.ForeignKey(FileVersion, on_delete=models.CASCADE,
+                                                related_name='created_entities_properties')
+    deleted_by = models.ForeignKey(User, default=None, null=True, on_delete=models.SET(get_anonymous_user),
+                                   related_name='deleted_entities_properties')
+    deleted_in_file_version = models.ForeignKey(FileVersion, default=None, null=True, on_delete=models.CASCADE,
+                                                related_name='deleted_entities_properties')
 
     value_str = models.CharField(max_length=255, null=True, blank=True)
     value_int = models.IntegerField(null=True)
@@ -116,23 +121,36 @@ class Clique(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     asserted_name = models.CharField(max_length=255)
 
-    created_by = models.ForeignKey(User, on_delete=models.SET(get_anonymous_user))
+    created_by = models.ForeignKey(User, on_delete=models.SET(get_anonymous_user), related_name='created_cliques')
     created_on = models.DateTimeField(auto_now_add=True)
-    created_in_commit = models.ForeignKey(Commit, default=None, null=True, on_delete=models.CASCADE)
-    deleted_by = models.ForeignKey(User, default=None, null=True, on_delete=models.SET(get_anonymous_user))
+    created_in_commit = models.ForeignKey(Commit, default=None, null=True, on_delete=models.CASCADE,
+                                          related_name='created_cliques')
+    deleted_by = models.ForeignKey(User, default=None, null=True, on_delete=models.SET(get_anonymous_user),
+                                   related_name='deleted_cliques')
     deleted_on = models.DateTimeField(null=True)
-    deleted_in_commit = models.ForeignKey(Commit, default=None, null=True, on_delete=models.CASCADE)
+    deleted_in_commit = models.ForeignKey(Commit, default=None, null=True, on_delete=models.CASCADE,
+                                          related_name='deleted_cliques')
 
 
-class Unification(CommonFields):
+class Unification(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     entity = models.ForeignKey(Entity, on_delete=models.CASCADE)
     clique = models.ForeignKey(Clique, on_delete=models.CASCADE)
 
+    created_by = models.ForeignKey(User, on_delete=models.SET(get_anonymous_user), related_name='created_unifications')
+    created_in_file_version = models.ForeignKey(FileVersion, on_delete=models.CASCADE,
+                                                related_name='created_unifications')
+    deleted_by = models.ForeignKey(User, default=None, null=True, on_delete=models.SET(get_anonymous_user),
+                                   related_name='deleted_unifications')
+    deleted_in_file_version = models.ForeignKey(FileVersion, default=None, null=True, on_delete=models.CASCADE,
+                                                related_name='deleted_unifications')
+
     created_on = models.DateTimeField(auto_now_add=True)
-    created_in_commit = models.ForeignKey(Commit, default=None, null=True, blank=True, on_delete=models.CASCADE)
+    created_in_commit = models.ForeignKey(Commit, default=None, null=True, blank=True, on_delete=models.CASCADE,
+                                          related_name='created_unifications')
     deleted_on = models.DateTimeField(null=True)
-    deleted_in_commit = models.ForeignKey(Commit, default=None, null=True, blank=True, on_delete=models.CASCADE)
+    deleted_in_commit = models.ForeignKey(Commit, default=None, null=True, blank=True, on_delete=models.CASCADE,
+                                          related_name='deleted_unifications')
 
     ana = models.TextField(default='')
     certainty = models.CharField(max_length=255)
@@ -154,7 +172,7 @@ class UnificationToDelete(models.Model):
     project_version = models.ForeignKey(ProjectVersion, on_delete=models.CASCADE)
 
 
-class Certainty(CommonFields):
+class Certainty(models.Model):
     file = models.ForeignKey(File, on_delete=models.CASCADE)
     xml_id = models.CharField(max_length=255)
     categories = models.ManyToManyField(UncertaintyCategory)
@@ -165,3 +183,11 @@ class Certainty(CommonFields):
     target_match = models.CharField(max_length=255, null=True)
     asserted_value = models.CharField(max_length=255, null=True)
     description = models.CharField(max_length=255, null=True)
+
+    created_by = models.ForeignKey(User, on_delete=models.SET(get_anonymous_user), related_name='created_certainties')
+    created_in_file_version = models.ForeignKey(FileVersion, on_delete=models.CASCADE,
+                                                related_name='created_certainties')
+    deleted_by = models.ForeignKey(User, default=None, null=True, on_delete=models.SET(get_anonymous_user),
+                                   related_name='deleted_certainties')
+    deleted_in_file_version = models.ForeignKey(FileVersion, default=None, null=True, on_delete=models.CASCADE,
+                                                related_name='deleted_certainties')
