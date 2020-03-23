@@ -19,7 +19,8 @@ def django_db_setup(django_db_setup, django_db_blocker):
             raise ValueError(f"You try to run tests with '{media_for_tests_dir}' catalogue instead 'media_for_tests' "
                              f"catalogue. Check if you use 'settings_for_tests' module in your 'pytest.ini' file.")
 
-        call_command('loaddata', 'apps/close_reading/tests/database_fixture/annotator_tests_db_fixture.json')
+        path_to_fixture = os.path.join(SCRIPT_DIR, 'database_fixture', 'annotator_tests_db_fixture.json')
+        call_command('loaddata', path_to_fixture)
 
         source_files = os.path.join(SCRIPT_DIR, 'database_fixture', 'media')
         copytree(source_files, settings.MEDIA_ROOT, ignore=ignore_patterns('.keep'))
