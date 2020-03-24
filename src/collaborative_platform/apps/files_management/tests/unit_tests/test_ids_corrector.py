@@ -5,7 +5,7 @@ from apps.files_management.file_conversions.ids_corrector import IDsCorrector
 from apps.projects.models import EntitySchema
 
 
-DIRNAME = os.path.dirname(__file__)
+SCRIPT_DIR = os.path.dirname(__file__)
 
 
 class TestIDsCorrector:
@@ -13,9 +13,9 @@ class TestIDsCorrector:
         monkeypatch.setattr(IDsCorrector, '_get_entities_schemes_from_db', fake_get_entities_schemes_from_db)
         monkeypatch.setattr(IDsCorrector, '_dump_max_xml_ids_to_db', do_nothing)
 
-        source_file_path = os.path.join(DIRNAME, 'test_files', 'source_files',
+        source_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files',
                                         'correct_ids__correct_listable_entities_ids__source.xml')
-        expected_file_path = os.path.join(DIRNAME, 'test_files', 'expected_files',
+        expected_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'expected_files',
                                           'correct_ids__correct_listable_entities_ids__expected.xml')
 
         source_xml = read_file(source_file_path)
@@ -32,9 +32,9 @@ class TestIDsCorrector:
         monkeypatch.setattr(IDsCorrector, '_get_entities_schemes_from_db', fake_get_entities_schemes_from_db)
         monkeypatch.setattr(IDsCorrector, '_dump_max_xml_ids_to_db', do_nothing)
 
-        source_file_path = os.path.join(DIRNAME, 'test_files', 'source_files',
+        source_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files',
                                         'correct_ids__correct_unlistable_entities_ids__source.xml')
-        expected_file_path = os.path.join(DIRNAME, 'test_files', 'expected_files',
+        expected_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'expected_files',
                                           'correct_ids__correct_unlistable_entities_ids__expected.xml')
 
         source_xml = read_file(source_file_path)
@@ -51,9 +51,9 @@ class TestIDsCorrector:
         monkeypatch.setattr(IDsCorrector, '_get_entities_schemes_from_db', fake_get_entities_schemes_from_db)
         monkeypatch.setattr(IDsCorrector, '_dump_max_xml_ids_to_db', do_nothing)
 
-        source_file_path = os.path.join(DIRNAME, 'test_files', 'source_files',
+        source_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files',
                                         'correct_ids__correct_custom_entities_ids__source.xml')
-        expected_file_path = os.path.join(DIRNAME, 'test_files', 'expected_files',
+        expected_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'expected_files',
                                           'correct_ids__correct_custom_entities_ids__expected.xml')
 
         source_xml = read_file(source_file_path)
@@ -70,9 +70,9 @@ class TestIDsCorrector:
         monkeypatch.setattr(IDsCorrector, '_get_entities_schemes_from_db', fake_get_entities_schemes_from_db)
         monkeypatch.setattr(IDsCorrector, '_dump_max_xml_ids_to_db', do_nothing)
 
-        source_file_path = os.path.join(DIRNAME, 'test_files', 'source_files',
+        source_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files',
                                         'correct_ids__correct_collision_xml_ids__source.xml')
-        expected_file_path = os.path.join(DIRNAME, 'test_files', 'expected_files',
+        expected_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'expected_files',
                                           'correct_ids__correct_collision_xml_ids__expected.xml')
 
         source_xml = read_file(source_file_path)
@@ -89,9 +89,9 @@ class TestIDsCorrector:
         monkeypatch.setattr(IDsCorrector, '_get_entities_schemes_from_db', fake_get_entities_schemes_from_db)
         monkeypatch.setattr(IDsCorrector, '_dump_max_xml_ids_to_db', do_nothing)
 
-        source_file_path = os.path.join(DIRNAME, 'test_files', 'source_files',
+        source_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files',
                                         'correct_ids__correct_tags_ids_in_body_related_to_entities__source.xml')
-        expected_file_path = os.path.join(DIRNAME, 'test_files', 'expected_files',
+        expected_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'expected_files',
                                           'correct_ids__correct_tags_ids_in_body_related_to_entities__expected.xml')
 
         source_xml = read_file(source_file_path)
@@ -108,9 +108,9 @@ class TestIDsCorrector:
         monkeypatch.setattr(IDsCorrector, '_get_entities_schemes_from_db', fake_get_entities_schemes_from_db)
         monkeypatch.setattr(IDsCorrector, '_dump_max_xml_ids_to_db', do_nothing)
 
-        source_file_path = os.path.join(DIRNAME, 'test_files', 'source_files',
+        source_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files',
                                         'correct_ids__correct_annotators_ids__source.xml')
-        expected_file_path = os.path.join(DIRNAME, 'test_files', 'expected_files',
+        expected_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'expected_files',
                                           'correct_ids__correct_annotators_ids__expected.xml')
 
         source_xml = read_file(source_file_path)
@@ -127,9 +127,9 @@ class TestIDsCorrector:
         monkeypatch.setattr(IDsCorrector, '_get_entities_schemes_from_db', fake_get_entities_schemes_from_db)
         monkeypatch.setattr(IDsCorrector, '_dump_max_xml_ids_to_db', do_nothing)
 
-        source_file_path = os.path.join(DIRNAME, 'test_files', 'source_files',
+        source_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files',
                                         'correct_ids__correct_certainties_ids__source.xml')
-        expected_file_path = os.path.join(DIRNAME, 'test_files', 'expected_files',
+        expected_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'expected_files',
                                           'correct_ids__correct_certainties_ids__expected.xml')
 
         source_xml = read_file(source_file_path)
@@ -146,9 +146,9 @@ class TestIDsCorrector:
         monkeypatch.setattr(IDsCorrector, '_get_entities_schemes_from_db', fake_get_entities_schemes_from_db)
         monkeypatch.setattr(IDsCorrector, '_dump_max_xml_ids_to_db', do_nothing)
 
-        source_file_path = os.path.join(DIRNAME, 'test_files', 'source_files',
+        source_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files',
                                         'correct_ids__correct_additional_usable_tags_ids_in_body__source.xml')
-        expected_file_path = os.path.join(DIRNAME, 'test_files', 'expected_files',
+        expected_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'expected_files',
                                           'correct_ids__correct_additional_usable_tags_ids_in_body__expected.xml')
 
         source_xml = read_file(source_file_path)
@@ -165,9 +165,9 @@ class TestIDsCorrector:
         monkeypatch.setattr(IDsCorrector, '_get_entities_schemes_from_db', fake_get_entities_schemes_from_db)
         monkeypatch.setattr(IDsCorrector, '_dump_max_xml_ids_to_db', do_nothing)
 
-        source_file_path = os.path.join(DIRNAME, 'test_files', 'source_files',
+        source_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files',
                                         'correct_ids__correct_all__source.xml')
-        expected_file_path = os.path.join(DIRNAME, 'test_files', 'expected_files',
+        expected_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'expected_files',
                                           'correct_ids__correct_all__expected.xml')
 
         source_xml = read_file(source_file_path)
@@ -191,8 +191,8 @@ class TestIDsCorrector:
         monkeypatch.setattr(IDsCorrector, '_get_entities_schemes_from_db', fake_get_entities_schemes_from_db)
         monkeypatch.setattr(IDsCorrector, '_dump_max_xml_ids_to_db', do_nothing)
 
-        source_file_path = os.path.join(DIRNAME, 'test_files', 'source_files', source_file_name)
-        expected_file_path = os.path.join(DIRNAME, 'test_files', 'source_files', source_file_name)
+        source_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files', source_file_name)
+        expected_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files', source_file_name)
 
         source_xml = read_file(source_file_path)
         expected_xml = read_file(expected_file_path)

@@ -10,7 +10,7 @@ from apps.files_management.helpers import create_certainty_elements_for_file_ver
 from apps.files_management.models import FileVersion
 
 
-DIRNAME = os.path.dirname(__file__)
+SCRIPT_DIR = os.path.dirname(__file__)
 
 
 def read_file(path):
@@ -30,8 +30,8 @@ class TestAnnotator:
             'tag': 'date',
         }
 
-        input_file_path = os.path.join(DIRNAME, 'test_files', 'source_files', 'source_file.xml')
-        expected_file_path = os.path.join(DIRNAME, 'test_files', 'result_files',
+        input_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files', 'source_file.xml')
+        expected_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'result_files',
                                           'add_tag_to_text__fragment_without_tag__result.xml')
 
         input_text = read_file(input_file_path)
@@ -55,8 +55,8 @@ class TestAnnotator:
             'tag': 'date',
         }
 
-        input_file_path = os.path.join(DIRNAME, 'test_files', 'source_files', 'source_file.xml')
-        expected_file_path = os.path.join(DIRNAME, 'test_files', 'result_files',
+        input_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files', 'source_file.xml')
+        expected_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'result_files',
                                           'add_tag_to_text__fragment_with_other_tag__result.xml')
 
         input_text = read_file(input_file_path)
@@ -80,7 +80,7 @@ class TestAnnotator:
             'tag': 'place',
         }
 
-        input_file_path = os.path.join(DIRNAME, 'test_files', 'source_files', 'source_file.xml')
+        input_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files', 'source_file.xml')
 
         input_text = read_file(input_file_path)
 
@@ -103,7 +103,7 @@ class TestAnnotator:
             'tag': 'date',
         }
 
-        input_file_path = os.path.join(DIRNAME, 'test_files', 'source_files', 'source_file.xml')
+        input_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files', 'source_file.xml')
 
         input_text = read_file(input_file_path)
 
@@ -131,8 +131,8 @@ class TestAnnotator:
             'tag': '',
         }
 
-        input_file_path = os.path.join(DIRNAME, 'test_files', 'source_files', 'source_file.xml')
-        expected_file_path = os.path.join(DIRNAME, 'test_files', 'result_files',
+        input_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files', 'source_file.xml')
+        expected_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'result_files',
                                           'add_certainty_without_tag_to_text__fragment_without_tag__result.xml')
 
         input_text = read_file(input_file_path)
@@ -161,8 +161,8 @@ class TestAnnotator:
             'tag': '',
         }
 
-        input_file_path = os.path.join(DIRNAME, 'test_files', 'source_files', 'source_file.xml')
-        expected_file_path = os.path.join(DIRNAME, 'test_files', 'result_files',
+        input_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files', 'source_file.xml')
+        expected_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'result_files',
                                           'add_certainty_without_tag_to_text__fragment_with_other_tag__result.xml')
 
         input_text = read_file(input_file_path)
@@ -191,8 +191,8 @@ class TestAnnotator:
             'tag': '',
         }
 
-        input_file_path = os.path.join(DIRNAME, 'test_files', 'source_files', 'source_file.xml')
-        expected_file_path = os.path.join(DIRNAME, 'test_files', 'result_files',
+        input_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files', 'source_file.xml')
+        expected_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'result_files',
                                           'add_certainty_without_tag_to_text__fragment_with_same tag_and_other_certainty__result.xml')
 
         input_text = read_file(input_file_path)
@@ -221,7 +221,7 @@ class TestAnnotator:
             'tag': '',
         }
 
-        input_file_path = os.path.join(DIRNAME, 'test_files', 'source_files', 'source_file.xml')
+        input_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files', 'source_file.xml')
 
         input_text = read_file(input_file_path)
 
@@ -249,8 +249,8 @@ class TestAnnotator:
             'tag': 'date',
         }
 
-        input_file_path = os.path.join(DIRNAME, 'test_files', 'source_files', 'source_file.xml')
-        expected_file_path = os.path.join(DIRNAME, 'test_files', 'result_files',
+        input_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files', 'source_file.xml')
+        expected_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'result_files',
                                           'add_certainty_with_tag_to_text__fragment_without_tag__result.xml')
 
         input_text = read_file(input_file_path)
@@ -279,8 +279,8 @@ class TestAnnotator:
             'tag': 'date',
         }
 
-        input_file_path = os.path.join(DIRNAME, 'test_files', 'source_files', 'source_file.xml')
-        expected_file_path = os.path.join(DIRNAME, 'test_files', 'result_files',
+        input_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files', 'source_file.xml')
+        expected_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'result_files',
                                           'add_certainty_with_tag_to_text__fragment_with_other_tag__result.xml')
 
         input_text = read_file(input_file_path)
@@ -309,8 +309,8 @@ class TestAnnotator:
             'tag': 'place',
         }
 
-        input_file_path = os.path.join(DIRNAME, 'test_files', 'source_files', 'source_file.xml')
-        expected_file_path = os.path.join(DIRNAME, 'test_files', 'result_files',
+        input_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files', 'source_file.xml')
+        expected_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'result_files',
                                           'add_certainty_with_tag_to_text__fragment_with_same_tag__result.xml')
 
         input_text = read_file(input_file_path)
@@ -339,8 +339,8 @@ class TestAnnotator:
             'tag': 'date',
         }
 
-        input_file_path = os.path.join(DIRNAME, 'test_files', 'source_files', 'source_file.xml')
-        expected_file_path = os.path.join(DIRNAME, 'test_files', 'result_files',
+        input_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files', 'source_file.xml')
+        expected_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'result_files',
                                           'add_certainty_with_tag_to_text__fragment_with_same_tag_and_other_certainty__result.xml')
 
         input_text = read_file(input_file_path)
@@ -369,7 +369,7 @@ class TestAnnotator:
             'tag': 'country',
         }
 
-        input_file_path = os.path.join(DIRNAME, 'test_files', 'source_files', 'source_file.xml')
+        input_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files', 'source_file.xml')
 
         input_text = read_file(input_file_path)
 
@@ -397,8 +397,8 @@ class TestAnnotator:
             'tag': 'org',
         }
 
-        input_file_path = os.path.join(DIRNAME, 'test_files', 'source_files', 'source_file.xml')
-        expected_file_path = os.path.join(DIRNAME, 'test_files', 'result_files',
+        input_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files', 'source_file.xml')
+        expected_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'result_files',
                                           'add_certainty_to_tag__fragment_without_tag__result.xml')
 
         input_text = read_file(input_file_path)
@@ -427,8 +427,8 @@ class TestAnnotator:
             'tag': 'org',
         }
 
-        input_file_path = os.path.join(DIRNAME, 'test_files', 'source_files', 'source_file.xml')
-        expected_file_path = os.path.join(DIRNAME, 'test_files', 'result_files',
+        input_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files', 'source_file.xml')
+        expected_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'result_files',
                                           'add_certainty_to_tag__fragment_with_other_tag__result.xml')
 
         input_text = read_file(input_file_path)
@@ -457,8 +457,8 @@ class TestAnnotator:
             'tag': 'place',
         }
 
-        input_file_path = os.path.join(DIRNAME, 'test_files', 'source_files', 'source_file.xml')
-        expected_file_path = os.path.join(DIRNAME, 'test_files', 'result_files',
+        input_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files', 'source_file.xml')
+        expected_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'result_files',
                                           'add_certainty_to_tag__fragment_with_same_tag__result.xml')
 
         input_text = read_file(input_file_path)
@@ -487,8 +487,8 @@ class TestAnnotator:
             'tag': 'date',
         }
 
-        input_file_path = os.path.join(DIRNAME, 'test_files', 'source_files', 'source_file.xml')
-        expected_file_path = os.path.join(DIRNAME, 'test_files', 'result_files',
+        input_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files', 'source_file.xml')
+        expected_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'result_files',
                                           'add_certainty_to_tag__fragment_with_same_tag_and_other_certainty__result.xml')
 
         input_text = read_file(input_file_path)
@@ -517,7 +517,7 @@ class TestAnnotator:
             'tag': 'date',
         }
 
-        input_file_path = os.path.join(DIRNAME, 'test_files', 'source_files', 'source_file.xml')
+        input_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files', 'source_file.xml')
 
         input_text = read_file(input_file_path)
 
@@ -545,7 +545,7 @@ class TestAnnotator:
             'tag': 'place',
         }
 
-        input_file_path = os.path.join(DIRNAME, 'test_files', 'source_files', 'source_file.xml')
+        input_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files', 'source_file.xml')
 
         input_text = read_file(input_file_path)
 
@@ -574,7 +574,7 @@ class TestAnnotator:
             'tag': 'person',
         }
 
-        input_file_path = os.path.join(DIRNAME, 'test_files', 'source_files', 'source_file.xml')
+        input_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files', 'source_file.xml')
 
         input_text = read_file(input_file_path)
 
@@ -604,7 +604,7 @@ class TestAnnotator:
             'tag': 'person',
         }
 
-        input_file_path = os.path.join(DIRNAME, 'test_files', 'source_files', 'source_file.xml')
+        input_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files', 'source_file.xml')
 
         input_text = read_file(input_file_path)
 
@@ -634,7 +634,7 @@ class TestAnnotator:
             'tag': 'person',
         }
 
-        input_file_path = os.path.join(DIRNAME, 'test_files', 'source_files', 'source_file.xml')
+        input_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files', 'source_file.xml')
 
         input_text = read_file(input_file_path)
 
@@ -728,7 +728,7 @@ class TestAnnotator:
             'tag': 'person',
         }
 
-        input_file_path = os.path.join(DIRNAME, 'test_files', 'source_files', 'source_file.xml')
+        input_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files', 'source_file.xml')
 
         input_text = read_file(input_file_path)
 
@@ -854,8 +854,8 @@ class TestAnnotator:
             'tag': 'person',
         }
 
-        input_file_path = os.path.join(DIRNAME, 'test_files', 'source_files', 'source_file.xml')
-        expected_file_path = os.path.join(DIRNAME, 'test_files', 'result_files',
+        input_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files', 'source_file.xml')
+        expected_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'result_files',
                                           'add_attribute_to_tag__fragment_without_tag__result.xml')
 
         input_text = read_file(input_file_path)
@@ -885,8 +885,8 @@ class TestAnnotator:
             'tag': 'person',
         }
 
-        input_file_path = os.path.join(DIRNAME, 'test_files', 'source_files', 'source_file.xml')
-        expected_file_path = os.path.join(DIRNAME, 'test_files', 'result_files',
+        input_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files', 'source_file.xml')
+        expected_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'result_files',
                                           'add_attribute_to_tag__fragment_with_other_tag__result.xml')
 
         input_text = read_file(input_file_path)
@@ -916,8 +916,8 @@ class TestAnnotator:
             'tag': 'person',
         }
 
-        input_file_path = os.path.join(DIRNAME, 'test_files', 'source_files', 'source_file.xml')
-        expected_file_path = os.path.join(DIRNAME, 'test_files', 'result_files',
+        input_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files', 'source_file.xml')
+        expected_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'result_files',
                                           'add_attribute_to_tag__fragment_with_same_tag__result.xml')
 
         input_text = read_file(input_file_path)
@@ -947,8 +947,8 @@ class TestAnnotator:
             'tag': 'person',
         }
 
-        input_file_path = os.path.join(DIRNAME, 'test_files', 'source_files', 'source_file.xml')
-        expected_file_path = os.path.join(DIRNAME, 'test_files', 'result_files',
+        input_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files', 'source_file.xml')
+        expected_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'result_files',
                                           'add_attribute_to_tag__fragment_with_same_tag_and_other_certainty__result.xml')
 
         input_text = read_file(input_file_path)
@@ -978,7 +978,7 @@ class TestAnnotator:
             'tag': 'person',
         }
 
-        input_file_path = os.path.join(DIRNAME, 'test_files', 'source_files', 'source_file.xml')
+        input_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files', 'source_file.xml')
 
         input_text = read_file(input_file_path)
 
@@ -1006,8 +1006,8 @@ class TestAnnotator:
             'tag': 'person',
         }
 
-        input_file_path = os.path.join(DIRNAME, 'test_files', 'source_files', 'source_file.xml')
-        expected_file_path = os.path.join(DIRNAME, 'test_files', 'result_files',
+        input_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files', 'source_file.xml')
+        expected_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'result_files',
                                           'add_certainty_with_tag_to_text__fragment_with_same_tag_separated__result.xml')
 
         input_text = read_file(input_file_path)
@@ -1036,8 +1036,8 @@ class TestAnnotator:
             'tag': '',
         }
 
-        input_file_path = os.path.join(DIRNAME, 'test_files', 'source_files', 'source_file_without_annotators_and_certainties.xml')
-        expected_file_path = os.path.join(DIRNAME, 'test_files', 'result_files',
+        input_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files', 'source_file_without_annotators_and_certainties.xml')
+        expected_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'result_files',
                                           'add_first_annotator_and_certainty__result.xml')
 
         input_text = read_file(input_file_path)
@@ -1061,8 +1061,8 @@ class TestAnnotator:
             'tag': 'date',
         }
 
-        input_file_path = os.path.join(DIRNAME, 'test_files', 'source_files', 'source_file.xml')
-        expected_file_path = os.path.join(DIRNAME, 'test_files', 'result_files',
+        input_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files', 'source_file.xml')
+        expected_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'result_files',
                                           'position_in_request_with_adhering_tags__result.xml')
 
         input_text = read_file(input_file_path)
@@ -1144,7 +1144,7 @@ class TestAnnotator:
     @pytest.mark.django_db
     @pytest.mark.parametrize(test_parameters_names, test_parameters_list)
     def test_add_annotation__wrong_request_parameters__exception(self, json, error_type, error_message):
-        input_file_path = os.path.join(DIRNAME, 'test_files', 'source_files',
+        input_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files',
                                        'source_file_without_annotators_and_certainties.xml')
 
         input_text = read_file(input_file_path)

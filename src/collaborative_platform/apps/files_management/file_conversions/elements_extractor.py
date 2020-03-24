@@ -132,7 +132,7 @@ class ElementsExtractor:
         parent.remove(element)
 
         if len(parent) == 0 and clean_up_parent:
-            self.remove_element(parent)
+            self.remove_element(parent, clean_up_parent=True)
 
     def __move_listable_entities(self):
         for entity in self.__listable_entities:
