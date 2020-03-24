@@ -3,6 +3,7 @@ import {useState, useRef, useEffect} from 'react';
 
 import {DataClient} from '../../../data';
 
+import css from './style.css';
 import styles from './style.module.css';
 import getConfig from './config';
 import taxonomy from './taxonomy';
@@ -20,7 +21,7 @@ function useData(dataClient){
     return data;
 }
 
-function useVis(sortDocumentsBy, colorCertaintyBy){
+function useVis(sortDocumentsBy, colorCertaintyBy, callback){
     const [vis, _] = useState(Vis());
 
     useEffect(()=>{ // Initialize vis component
@@ -28,7 +29,7 @@ function useVis(sortDocumentsBy, colorCertaintyBy){
         vis.setDocSortingCriteria(sortDocumentsBy);
         vis.setEntitySortingCriteria(sortDocumentsBy);
         vis.setColorCertaintyBy(colorCertaintyBy);
-        vis.setEventCallback(x=>console.log('event', x));
+        vis.setEventCallback(callback);
     }, []);
 
     vis.setDocSortingCriteria(sortDocumentsBy);
@@ -41,9 +42,20 @@ function PixelCorpus({sortDocumentsBy, colorCertaintyBy, layout}) {
     const [svgRef, containerRef] = [useRef(), useRef()];
     const [width, height] = layout!=undefined?[layout.w, layout.h]:[4,4];
 
-    const [dataClient, _] = useState(DataClient()),
-        data = useData(dataClient),
-        vis = useVis(sortDocumentsBy, colorCertaintyBy);
+    const [dataClient, _] = useState(DataClient());
+    function handleEvent(type, d){
+        if(type == 'labelHover'){
+            for(let doc of Object.values(window.documents)){
+                if(doc.name == d){
+                    dataClient.focusDocument(doc.id);
+                    break;
+                }
+            }
+        }
+    }
+
+    const data = useData(dataClient),
+        vis = useVis(sortDocumentsBy, colorCertaintyBy, handleEvent);
 
     useEffect(()=>vis.render(
             containerRef.current,

@@ -31,9 +31,9 @@ export default function renderEntities(args){
 		.attr('y', 22)// font size
 		.text('Entities in the corpus');
 
-	renderDocumentLabels(docOrder, rowsByDoc, rootG, cellSide, cellPadding, _titleHeight);
+	renderDocumentLabels(docOrder, rowsByDoc, rootG, cellSide, cellPadding, _titleHeight, _eventCallback);
 
-	renderEntityCells(docOrder, entitiesByDoc, rowsByDoc, rootG, cellSide, cellPadding, _titleHeight, _docNameWidth, _maxRowItems, _entityColorScale);
+	renderEntityCells(docOrder, entitiesByDoc, rowsByDoc, rootG, cellSide, cellPadding, _titleHeight, _docNameWidth, _maxRowItems, _entityColorScale, _eventCallback);
 
 	setupInteractions();
 }
@@ -56,7 +56,7 @@ function shorttenedLabel(label, maxLabelLength = 20){
 	return startFragment + '...' + endFragment;
 }
 
-function renderDocumentLabels(docOrder, rowsByDoc, rootG, cellSide, cellPadding, titleHeight){
+function renderDocumentLabels(docOrder, rowsByDoc, rootG, cellSide, cellPadding, titleHeight, eventCallback){
 	let labels = rootG.select('.docLabels')
 		.attr('transform', `translate(0, ${titleHeight})`)
 		.selectAll('text.label')
@@ -66,6 +66,7 @@ function renderDocumentLabels(docOrder, rowsByDoc, rootG, cellSide, cellPadding,
 
 	rootG.select('.docLabels').selectAll('text.label')
 		.text(d=>shorttenedLabel(d))
+		.on('mouseenter', d=>eventCallback('labelHover', d))
 		.attr('x', 0)
 		.transition()
 			.duration(750)
@@ -73,7 +74,7 @@ function renderDocumentLabels(docOrder, rowsByDoc, rootG, cellSide, cellPadding,
 			.attr('y', d=>priorRows(d, rowsByDoc, docOrder)*(cellSide + cellPadding));
 }
 
-function renderEntityCells(docOrder, data, rowsByDoc, rootG, cellSide, cellPadding, titleHeight, docNameWidth, maxRowItems, colorScale){
+function renderEntityCells(docOrder, data, rowsByDoc, rootG, cellSide, cellPadding, titleHeight, docNameWidth, maxRowItems, colorScale, eventCallback){
 	let labels = rootG.select('.entityCells')
 		.attr('transform', `translate(${docNameWidth}, ${titleHeight - 22})`)
 		.selectAll('g.doc')

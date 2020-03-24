@@ -31,12 +31,11 @@ export default function DocumentDataSource(pubSubService, project){
 	}
 
 	function _publishData(){
-		const data = {contents: self._document};
-		self.publish(`data/${self._sourceName}`, data);
+		self.publish(`data/${self._sourceName}`, _getData());
 	}
 
 	function _getData(){
-		return({contents: self._document});
+		return({id: self._focused, html: self._document});
 	}
 
 	function _focusDocument(documentId){

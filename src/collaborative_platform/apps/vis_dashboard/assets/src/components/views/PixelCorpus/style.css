@@ -1,3 +1,5 @@
 .focused {
     border-width: 3px !important;
 }
+.label{cursor: default;}
+.label:hover{font-weight: bold;}
