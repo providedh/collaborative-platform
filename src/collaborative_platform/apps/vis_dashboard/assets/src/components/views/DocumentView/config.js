@@ -1,9 +1,8 @@
 export default function getOptions(form){
-	const documentIds = window.documents.map(x=>x.id),
-		documentNames = window.documents.map(x=>x.name),
+	const documentNames = Object.values(window.documents).map(x=>x.name),
 		defaultConfig = [
 	    {name: 'syncWithViews', type: 'toogle', value: false},
-	    {name: 'documentId', type: 'selection', value: '44', params: {options: documentIds, labels: documentNames}}
+	    {name: 'documentId', type: 'selection', value: Object.keys(window.documents)[0], params: {options: Object.keys(window.documents), labels: documentNames}}
 	];
 
 	if(form == null)
@@ -19,8 +18,8 @@ export default function getOptions(form){
 	];
 
 	if(syncWithViews === false){
-		const documentId = currentValues.hasOwnProperty('documentId')?currentValues.documentId:documentIds[0];
-	    configOptions.push({name: 'documentId', type: 'selection', value: documentId, params: {options: documentIds, labels: documentNames}});
+		const documentId = currentValues.hasOwnProperty('documentId')?currentValues.document:Object.keys(window.documents)[0];
+	    configOptions.push({name: 'documentId', type: 'selection', value: documentId, params: {options: Object.keys(window.documents), labels: documentNames}});
 	}
 
 	return configOptions;

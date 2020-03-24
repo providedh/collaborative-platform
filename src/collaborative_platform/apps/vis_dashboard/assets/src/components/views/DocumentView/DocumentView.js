@@ -37,11 +37,20 @@ function DocumentView({layout, syncWithViews, documentId}) {
 
 	const [dataClient, _] = useState(DataClient());
 	const contents = useData(dataClient, syncWithViews, documentId);
-
 	useEffect(()=>{viewRef.current.innerHTML = contents.getElementsByTagName('body')[0].innerHTML}, [contents]);
 
     return(
-        <div className={styles.documentView} ref={viewRef}>
+        <div className={styles.documentView}>
+        	<div className="bg-white d-flex justify-content-between justify-space-between p-2">
+	        	<span>{window.documents[documentId].name}</span>
+	        	<a className="btn btn-sm btn-outline-primary" 
+	        	   target="blank" 
+	        	   href={`/close_reading/project/${window.project}/file/${window.documents[documentId].id}/`}>
+	        	   Open in annotator
+	        	</a>	
+        	</div>
+        	<div ref={viewRef} className={styles.documentContainer}>
+        	</div>
         </div>
     )
 }
