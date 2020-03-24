@@ -1,4 +1,4 @@
-import {EntityDataSource, CertaintyDataSource, DocumentDataSource} from './datasources';
+import {EntityDataSource, CertaintyDataSource, DocumentDataSource, StatsDataSource} from './datasources';
 import {PubSubService} from '../helpers';
 import Filter from './filter';
 import Subscription from './subscription';
@@ -25,6 +25,7 @@ export default (function DataService(){
 		self._pubSubService.register(self._pubSubClient);
 
 		self._sources = {
+			stats: StatsDataSource(self._pubSubService, window.project),
 			certainty: CertaintyDataSource(self._pubSubService, window.project),
 			entity: EntityDataSource(self._pubSubService, window.project),
 			document: DocumentDataSource(self._pubSubService, window.project),
