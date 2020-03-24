@@ -22,13 +22,18 @@ export default class Dashboard extends React.Component {
             currentVersion: props.projectVersions[0],
         };
 
-
         this.state = Object.assign({},{
             focusedView: -1,
             lastChangesSaved: true,
         }, this.dashboardConfig);
 
         this.ajax = AjaxCalls();
+
+        if(props.savedConf==null){ // Ensure the initial configuration is saved for fresh new dashboards
+            const data = JSON.stringify(Object.assign(this.dashboardConfig, {lastChangesSaved: true}));
+            this.ajax.updateDashboard({project:window.project, dashboard:window.dashboard}, {}, data)
+                .then(()=>console.info('Initial state saved.'));
+        }
 
         this.updateDashboardConfig = this.updateDashboardConfig.bind(this);
         this.openDetails = this.openDetails.bind(this);
