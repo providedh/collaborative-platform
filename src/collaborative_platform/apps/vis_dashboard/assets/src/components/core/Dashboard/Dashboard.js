@@ -98,7 +98,15 @@ export default class Dashboard extends React.Component {
     }
 
     setVersion(version){
-        this.setState({currentVersion: version});
+        this.setState(prevState => {
+            const newState = Object.assign({},
+                prevState,
+                {currentVersion: version, lastChangesSaved: false}
+            );
+            this.dashboardConfig.currentVersion = version;
+            
+            return newState;
+        })
     }
 
     openDetails(viewIndex){
