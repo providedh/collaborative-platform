@@ -13,11 +13,7 @@ export default function CertaintyDataSource(pubSubService, project){
 		self._sourceName = 'entity';
 
 	 	self._data = crossfilter([]);
-	 	self._idDimension = self._data.dimension(x=>x.id);
-	 	self._nameDimension = self._data.dimension(x=>x.name);
-	 	self._typeDimension = self._data.dimension(x=>x.type);
-	 	self._docNameDimension = self._data.dimension(x=>x.file_name);
-	 	self._docIdDimension = self._data.dimension(x=>x.file_id);
+	 	self._textDimension = self._data.dimension(x=>x.textContext);
 
 	 	self._project = project
 		
@@ -39,11 +35,11 @@ export default function CertaintyDataSource(pubSubService, project){
 
 		pubSubService.register(self);
 
-		self.subscribe(`filter/entityId`, args=>_filterDimension(self._idDimension, args.filter));
-		self.subscribe(`filter/entityName`, args=>_filterDimension(self._nameDimension, args.filter));
-		self.subscribe(`filter/entityType`, args=>_filterDimension(self._typeDimension, args.filter));
-		self.subscribe(`filter/fileName`, args=>_filterDimension(self._docNameDimension, args.filter));
-		self.subscribe(`filter/fileId`, args=>_filterDimension(self._docIdDimension, args.filter));
+		//self.subscribe(`filter/entityId`, args=>_filterDimension(self._idDimension, args.filter));
+		//self.subscribe(`filter/entityName`, args=>_filterDimension(self._nameDimension, args.filter));
+		//self.subscribe(`filter/entityType`, args=>_filterDimension(self._typeDimension, args.filter));
+		//self.subscribe(`filter/fileName`, args=>_filterDimension(self._docNameDimension, args.filter));
+		//self.subscribe(`filter/fileId`, args=>_filterDimension(self._docIdDimension, args.filter));
 
 		return self;
 	}
@@ -84,6 +80,27 @@ export default function CertaintyDataSource(pubSubService, project){
 		_publishData();
 	}
 
+	function _processData(data){
+		const annotations = [];
+		
+		for(let entity of data){
+			const attributes = entity.attributes != null
+				?entity.attributes.map(x=>[x.name, x.value])
+				:[];
+
+			if(entity.uncertainties == null)
+				entity.uncertainties = [null];
+
+			annotations.push(...entity.uncertainties.map(u=>Object.fromEntries([
+				...attributes,
+				['tag', entity.tag],
+				['textContext', entity.textContext]
+				])));
+		}
+
+		return annotations;
+	}
+
 	/**
 	 * Retrieves data from the external source.
 	 */
@@ -97,12 +114,14 @@ export default function CertaintyDataSource(pubSubService, project){
 			response.content.forEach(file=>{
 				self._data.remove(()=>true); // clear previous data
 
-				self._source.getFileEntities({project:self._project, file:file.id},{},null).then(response=>{
+				self._source.getAnnotations({project:self._project, file:file.id},{},null).then(response=>{
 					if(response.success === false)
 						console.info('Failed to retrieve entities for file: '+file.id);
-					else
-						self._data.add(response.content.map(x=>({file_id:file.id, file_name:file.name, ...x})));
+					else{
+						console.log(_processData(response.content))
+						self._data.add(_processData(response.content));
 						_publishData();
+					}
 					if(++retrieved == retrieving){
 						self.publish('status',{action:'fetched'});
 					}
