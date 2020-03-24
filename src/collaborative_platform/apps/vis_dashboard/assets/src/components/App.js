@@ -47,6 +47,7 @@ export default class App extends React.Component {
                         documents: response.content, 
                         fetching: 'collaborators in the project.'
                     });
+                    window.documents = response.content;
                     resolve();
                 }
             });
