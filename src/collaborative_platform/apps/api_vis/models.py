@@ -53,12 +53,8 @@ class EntityProperty(models.Model):
     name = models.CharField(max_length=255)
     type = models.CharField(max_length=255, choices=[(tag, tag.value) for tag in TypeChoice])
 
-    created_by = models.ForeignKey(User, on_delete=models.SET(get_anonymous_user),
-                                   related_name='created_entities_properties')
     created_in_file_version = models.ForeignKey(FileVersion, on_delete=models.CASCADE,
                                                 related_name='created_entities_properties')
-    deleted_by = models.ForeignKey(User, default=None, null=True, on_delete=models.SET(get_anonymous_user),
-                                   related_name='deleted_entities_properties')
     deleted_in_file_version = models.ForeignKey(FileVersion, default=None, null=True, on_delete=models.CASCADE,
                                                 related_name='deleted_entities_properties')
 

@@ -99,8 +99,8 @@
         <listPerson type="personList">
           <person sex="M" age="child" resp="#second_annotator" xml:id="person-0">
             <persName>
-              <forename resp="#second_annotator">Jerry</forename>
-              <surname resp="#second_annotator">Maguire</surname>
+              <forename>Jerry</forename>
+              <surname>Maguire</surname>
             </persName>
             <name>Jerry Maguire</name>
             <birth when="2001-02-03"/>

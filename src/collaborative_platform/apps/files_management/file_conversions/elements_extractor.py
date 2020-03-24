@@ -36,6 +36,8 @@ class ElementsExtractor:
         self.__unlistable_entities = []
         self.__custom_entities = []
 
+        self.__annotators_map = {}
+
         self.__is_changed = False
 
         self.__file = None
@@ -49,11 +51,11 @@ class ElementsExtractor:
         self.__load_entities_schemes()
 
         self.__create_tree()
+        self.__extract_annotators()
         self.__move_listable_entities()
         self.__copy_unlistable_entities()
         self.__move_custom_entities()
-        annotators_map = self.__extract_annotators()
-        self.__move_certainties(annotators_map)
+        self.__move_certainties()
         self.__create_xml_content()
 
         self.__check_if_changed()
@@ -87,6 +89,50 @@ class ElementsExtractor:
         parser = etree.XMLParser(remove_blank_text=True)
 
         self.__tree = etree.fromstring(self.__old_xml_content, parser=parser)
+
+    def __extract_annotators(self):
+        xpath = '//default:teiHeader//default:profileDesc//default:particDesc' \
+                '//default:listPerson[@type="PROVIDEDH Annotators"]/default:person'
+        annotators = self.__tree.xpath(xpath, namespaces=XML_NAMESPACES)
+
+        self.__create_annotators_map(annotators)
+
+        xpath = '//default:teiHeader//default:profileDesc//default:particDesc' \
+                '//default:listPerson[@type="PROVIDEDH Annotators"]'
+        lists = self.__tree.xpath(xpath, namespaces=XML_NAMESPACES)
+
+        self.__remove_elements_from_tree(lists)
+
+    def __create_annotators_map(self, annotators):
+        for annotator in annotators:
+            email = get_first_xpath_match(annotator, './/default:email/text()', XML_NAMESPACES)
+            xml_id = get_first_xpath_match(annotator, '@xml:id', XML_NAMESPACES)
+
+            user = self.get_user_from_db(email)
+
+            self.__annotators_map.update({xml_id: user})
+
+    def get_user_from_db(self, email):
+        if email:
+            try:
+                user = User.objects.get(email=email)
+            except User.DoesNotExist:
+                user = User.objects.get(id=ANONYMOUS_USER_ID)
+        else:
+            user = User.objects.get(id=ANONYMOUS_USER_ID)
+
+        return user
+
+    def __remove_elements_from_tree(self, elements):
+        for element in elements:
+            self.remove_element(element, clean_up_parent=True)
+
+    def remove_element(self, element, clean_up_parent=False):
+        parent = element.getparent()
+        parent.remove(element)
+
+        if len(parent) == 0 and clean_up_parent:
+            self.remove_element(parent)
 
     def __move_listable_entities(self):
         for entity in self.__listable_entities:
@@ -127,15 +173,27 @@ class ElementsExtractor:
             self.__create_entity_properties_objects(element, entity_name, entity_version_object, custom)
 
     def __create_entity_object(self, element, entity_name):
+        author_xml_id = get_first_xpath_match(element, '@resp', XML_NAMESPACES)
+        author_xml_id = author_xml_id.replace('#', '') if author_xml_id else None
+        author = self.__get_author(author_xml_id)
+
         entity_object = Entity.objects.create(
             file=self.__file,
             xml_id=element.attrib[XML_ID_KEY],
-            created_by=User.objects.get(id=ANONYMOUS_USER_ID),
+            created_by=author,
             created_in_file_version=self.__file_version,
             type=entity_name,
         )
 
         return entity_object
+
+    def __get_author(self, xml_id):
+        try:
+            author = self.__annotators_map[xml_id]
+        except KeyError:
+            author = User.objects.get(id=ANONYMOUS_USER_ID)
+
+        return author
 
     def __create_entity_version_object(self, entity_object):
         entity_version_object = EntityVersion.objects.create(
@@ -154,7 +212,7 @@ class ElementsExtractor:
             properties = CUSTOM_ENTITY['properties']
 
         for property in properties:
-            xpath = f"{properties[property]['xpath']}"
+            xpath = properties[property]['xpath']
             property_value = get_first_xpath_match(element, xpath, XML_NAMESPACES)
             property_type = properties[property]['type']
             clean_xpath = self.clean_xpath(xpath)
@@ -184,7 +242,6 @@ class ElementsExtractor:
             xpath=clean_xpath,
             name=property,
             type=property_type,
-            created_by=User.objects.get(id=1),
             created_in_file_version=self.__file_version,
         )
 
@@ -192,62 +249,14 @@ class ElementsExtractor:
 
         return entity_property_object
 
-    def __remove_elements_from_tree(self, elements):
-        for element in elements:
-            self.remove_element(element, clean_up_parent=True)
-
-    def remove_element(self, element, clean_up_parent=False):
-        parent = element.getparent()
-        parent.remove(element)
-
-        if len(parent) == 0 and clean_up_parent:
-            self.remove_element(parent)
-
-    def __extract_annotators(self):
-        xpath = '//default:teiHeader//default:profileDesc//default:particDesc' \
-                '//default:listPerson[@type="PROVIDEDH Annotators"]/default:person'
-        annotators = self.__tree.xpath(xpath, namespaces=XML_NAMESPACES)
-
-        annotators_map = self.__create_annotators_map(annotators)
-
-        xpath = '//default:teiHeader//default:profileDesc//default:particDesc' \
-                '//default:listPerson[@type="PROVIDEDH Annotators"]'
-        lists = self.__tree.xpath(xpath, namespaces=XML_NAMESPACES)
-
-        self.__remove_elements_from_tree(lists)
-
-        return annotators_map
-
-    def __create_annotators_map(self, annotators):
-        annotators_map = {}
-
-        for annotator in annotators:
-            email = get_first_xpath_match(annotator, './/default:email/text()', XML_NAMESPACES)
-            xml_id = get_first_xpath_match(annotator, '@xml:id', XML_NAMESPACES)
-
-            user = self.__get_user(email)
-
-            annotators_map.update({xml_id: user})
-
-        return annotators_map
-
-    @staticmethod
-    def __get_user(email):
-        try:
-            user = User.objects.get(email=email)
-        except User.DoesNotExist:
-            user = User.objects.get(id=ANONYMOUS_USER_ID)
-
-        return user
-
-    def __move_certainties(self, annotators_map):
+    def __move_certainties(self):
         xpath = '//default:teiHeader//default:profileDesc//default:textClass' \
                 '//default:classCode[@scheme="http://providedh.eu/uncertainty/ns/1.0"]//default:certainty'
         certainties = self.__tree.xpath(xpath, namespaces=XML_NAMESPACES)
 
         categories_map = self.__create_categories_map(certainties)
 
-        self.__create_certainties_in_db(certainties, categories_map, annotators_map)
+        self.__create_certainties_in_db(certainties, categories_map)
 
         xpath = '//default:teiHeader//default:profileDesc//default:textClass' \
                 '//default:classCode[@scheme="http://providedh.eu/uncertainty/ns/1.0"]'
@@ -285,11 +294,11 @@ class ElementsExtractor:
 
         return categories_map
 
-    def __create_certainties_in_db(self, certainties, categories_map, annotators_map):
+    def __create_certainties_in_db(self, certainties, categories_map):
         for certainty in certainties:
-            self.__create_certainty_object(certainty, categories_map, annotators_map)
+            self.__create_certainty_object(certainty, categories_map)
 
-    def __create_certainty_object(self, certainty, categories_map, annotators_map):
+    def __create_certainty_object(self, certainty, categories_map):
         categories = get_first_xpath_match(certainty, '@ana', XML_NAMESPACES)
         categories = categories.split(' ')
         categories = [categories_map[category] for category in categories if category in categories_map]
@@ -300,10 +309,7 @@ class ElementsExtractor:
         target_xml_id = target_xml_id.replace('#', '')
         target_xpath = get_first_xpath_match(certainty, '@match', XML_NAMESPACES)
 
-        try:
-            author = annotators_map[author_xml_id]
-        except KeyError:
-            author = User.objects.get(id=ANONYMOUS_USER_ID)
+        author = self.__get_author(author_xml_id)
 
         certainty_object = Certainty.objects.create(
             file=self.__file,
