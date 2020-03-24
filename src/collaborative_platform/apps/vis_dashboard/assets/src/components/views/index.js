@@ -8,8 +8,7 @@ import DocumentView from './DocumentView';
 
 export default {
     'PixelCorpus': PixelCorpus, 
-	'Histogram': Histogram,
+	'BarChart': Histogram,
 	'Heatmap': Heatmap,
-    'DotMatrix': DotMatrix,
     'DocumentView':DocumentView,
 }
