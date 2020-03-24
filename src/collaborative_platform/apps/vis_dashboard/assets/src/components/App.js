@@ -88,6 +88,13 @@ export default class App extends React.Component {
     }
 
     fetchProjectVersions(){
+        function processVersions(response){
+            const versions = response.content.project_versions;
+            versions.forEach(x=>x.date = new Date(x.date));
+            const sorted = versions.sort((x,y)=>x<y?1:-1);
+            return sorted;
+        }
+
         return new Promise((resolve, error)=>{
             ajax.getProjectVersions({project},{},null).then(response=>{
                 if(response.success === false){
@@ -95,7 +102,7 @@ export default class App extends React.Component {
                 }else{
                     this.setState({
                         fetched: 4, 
-                        projectVersions: response.content, 
+                        projectVersions: processVersions(response), 
                     });
                     resolve();
                 }
@@ -113,7 +120,7 @@ export default class App extends React.Component {
 
     render(){
         if(this.state.fetched == 4)
-            return <Dashboard savedConf={this.props.savedConf}/>
+            return <Dashboard savedConf={this.props.savedConf} projectVersions={this.state.projectVersions}/>
         else
             return <LoadingApp {...this.state}/>
     }
