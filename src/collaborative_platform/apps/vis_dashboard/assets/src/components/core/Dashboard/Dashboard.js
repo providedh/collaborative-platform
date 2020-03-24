@@ -14,19 +14,19 @@ export default class Dashboard extends React.Component {
     constructor(props){
         super(props);
 
-        this.dashboardConfig = this.props.hasOwnProperty('savedConf')?
+        this.dashboardConfig = props.savedConf!=null?
             this.props.savedConf:{
             views:[],
             layout:[],
             authors:[],
-            version: '',
+            currentVersion: props.projectVersions[0],
         };
 
-        this.state = {
-            views: this.dashboardConfig.views,
+
+        this.state = Object.assign({},{
             focusedView: -1,
             lastChangesSaved: true,
-        };
+        }, this.dashboardConfig);
 
         this.ajax = AjaxCalls();
 
@@ -92,8 +92,8 @@ export default class Dashboard extends React.Component {
         this.setState({authors});
     }
 
-    setVersion(versions){
-        this.setState({versions});
+    setVersion(version){
+        this.setState({currentVersion: version});
     }
 
     openDetails(viewIndex){
@@ -138,7 +138,8 @@ export default class Dashboard extends React.Component {
                                 <DashboardControlPanel 
                                     addView={this.addView} 
                                     authors={this.state.authors} 
-                                    version={this.state.version} 
+                                    versions={this.props.projectVersions}
+                                    currentVersion={this.state.currentVersion} 
                                     setAuthors={this.setAuthors} 
                                     setVersion={this.setVersion}
                                     display={this.state.focusedView == -1}/>
