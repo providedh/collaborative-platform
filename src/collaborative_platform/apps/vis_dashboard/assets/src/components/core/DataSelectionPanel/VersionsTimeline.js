@@ -7,7 +7,7 @@ export default function ProjectVersionTimeline({selected, versions=[], onChange}
 
     const timestamp = (v,i)=>(
         <div key={i} 
-                className={`d-flex ${styles.timestamp} ${v.version <= selected.version?styles.selected:""}`}
+                className={`d-flex ${styles.timestamp} ${+v.version <= +selected.version?styles.selected:""}`}
                 onClick={()=>onChange(v)}>
             <span className={`border ${styles.icon}`}/>
             <div className="pl-3">
