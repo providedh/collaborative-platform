@@ -14,15 +14,13 @@ var AjaxCalls = function(args){
 	// PROJECT SETTINGS
 	const collaborators_url = ({project, dashboard}) => ['/dashboard', 'project', project, 'vis', dashboard, 'update'].join('/');
 	const taxonomy_url = ({project, dashboard}) => ['/dashboard', 'project', project, 'vis', dashboard, 'update'].join('/');
-	const project_versions_url = ({project, dashboard}) => ['/dashboard', 'project', project, 'vis', dashboard, 'update'].join('/');
+	const project_versions_url = ({project}) => ['/stats', 'project', project, 'versions'].join('/');
 
 	// VIS DASHBOARD
 	const update_url = ({project, dashboard}) => ['/dashboard', 'project', project, 'vis', dashboard, 'update'].join('/');
 
 	// STATS
-	const stats_entities = ({project}) => ['/api', 'stats', 'projects', project, 'entities'].join('/');
-	const stats_attributes = ({project}) => ['/api', 'stats', 'projects', project, 'entities', 'attributes'].join('/');
-	const stats_documents = ({project}) => ['/api', 'stats', 'projects', project, 'documents'].join('/');
+	const stats_url = ({project, version}) => ['/stats', 'project', project, 'version', version, 'stats'].join('/');
 
 	// CLOSE READING
 	const close_history = ({project, file, version}) => ['/api', 'close_reading', 'project', project, 'file', file, 'version', version, 'history'].join('/');
@@ -49,15 +47,13 @@ var AjaxCalls = function(args){
 			// PROJECT SETTINGS
 			getCollaborators: (options,params,data) => _createDummyResponse({}),//_createCall('GET', _createUrl(collaborators_url, options, params), data),
 			getTaxonomy: (options,params,data) => _createDummyResponse({}),//_createCall('GET', _createUrl(taxonomy_url, options, params), data),
-			getProjectVersions: (options,params,data) => _createDummyResponse({}),//_createCall('GET', _createUrl(project_versions_url, options, params), data),
+			getProjectVersions: (options,params,data) => _createCall('GET', _createUrl(project_versions_url, options, params), data),
 
 			// VIS DASHBOARD
 			updateDashboard: (options,params,data) => _createCall('POST', _createUrl(update_url, options, params), data),
 
 			// STATS
-			getStatEntities: (options, params, data) => _createCall('GET', _createUrl(stats_entities, options, params), data),
-			getStatsAttributes: (options, params, data) => _createCall('GET', _createUrl(stats_attributes, options, params), data),
-			getStatsDocuments: (options, params, data) => _createCall('GET', _createUrl(stats_documents, options, params), data),
+			getStats: (options, params, data) => _createCall('GET', _createUrl(stats_url, options, params), data),
 
 			// CLOSE READING
 			getFileHistory: (options, params, data) => _createCall('GET', _createUrl(close_history, options, params), data),
