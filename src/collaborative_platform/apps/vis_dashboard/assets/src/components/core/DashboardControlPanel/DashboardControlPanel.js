@@ -5,7 +5,7 @@ import SidePanel from '../../ui/SidePanel';
 import AddViewPanel from '../AddViewPanel';
 import DataSelectionPanel from '../DataSelectionPanel';
 
-export default function DashboardControlPanel({authors, version, addView, setAuthors, setVersion, display}) {
+export default function DashboardControlPanel({authors, versions, currentVersion, addView, setAuthors, setVersion, display}) {
     return(
         <SidePanel title="Dashboard Controls" labels={["Add View", "Theme", "Data"]} display={display}>
             <div className={styles.panelArea}>
@@ -17,7 +17,8 @@ export default function DashboardControlPanel({authors, version, addView, setAut
             <div className={styles.panelArea}>
                 <DataSelectionPanel 
                     authors={authors} 
-                    version={version} 
+                    versions={versions}
+                    currentVersion={currentVersion} 
                     setAuthors={setAuthors} 
                     setVersion={setVersion}
                 />
