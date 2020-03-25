@@ -35,7 +35,7 @@ def close_reading(request, project_id, file_id):  # type: (HttpRequest, int, int
         'color': category.color,
         'desc': category.description
     } for category in
-        file.project.taxonomy.categories}}
+        file.project.taxonomy.categories.all()}}
 
     context = {
         'origin': origin,
