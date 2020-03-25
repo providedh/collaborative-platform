@@ -13,7 +13,8 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 
-from datetime import timedelta
+from datetime import timedelta, date, time
+from django.contrib.gis.geos import Point
 from .log_filters import skip_logs_from_certain_modules
 
 
@@ -293,3 +294,116 @@ SOCIAL_AUTH_RAISE_EXCEPTIONS = False
 # SECURE_SSL_REDIRECT = True
 # SESSION_COOKIE_SECURE = True
 # CSRF_COOKIE_SECURE = True
+
+# Entities structure
+ENTITIES = {
+    'person': {
+        'properties': {
+            'sex': {
+                'type': [str],
+                'xpath': '@sex',
+            },
+            'age': {
+                'type': [int],
+                'xpath': '@age',
+            },
+            'forename': {
+                'type': [str],
+                'xpath': '/persName/forename'
+            },
+            'surname': {
+                'type': [str],
+                'xpath': '/persName/surname',
+            },
+            'occupation': {
+                'type': [str],
+                'xpath': '/occupation',
+            },
+            'birth': {
+                'type': [date],
+                'xpath': '/birth@when',
+            },
+            'death': {
+                'type': [date],
+                'xpath': '/death@when',
+            }
+        },
+        'listable': True,
+        'text_tag': 'persName',
+        'list_tag': 'listPerson',
+    },
+    'event': {
+        'properties': {
+            'text': {
+                'type': [str],
+                'xpath': '/',
+            }
+        },
+        'listable': True,
+        'text_tag': 'event',
+        'list_tag': 'listEvent',
+    },
+    'org': {
+        'properties': {
+            'text': {
+                'type': [str],
+                'xpath': '/',
+            }
+        },
+        'listable': True,
+        'text_tag': 'orgName',
+        'list_tag': 'listOrg',
+    },
+    'object': {
+        'properties': {
+            'text': {
+                'type': [str],
+                'xpath': '/',
+            }
+        },
+        'listable': True,
+        'text_tag': 'objectName',
+        'list_tag': 'listOrg',
+    },
+    'place': {
+        'properties': {
+            'country': {
+                'type': [str],
+                'xpath': '/country',
+            },
+            'settlement': {
+                'type': [str],
+                'xpath': '/settlement',
+            },
+            'geo': {
+                'type': [Point],
+                'xpath': '/location/geo',
+            }
+        },
+        'listable': True,
+        'text_tag': 'placeName',
+        'list_tag': 'listPlace',
+    },
+    'date': {
+        'properties': {
+            'when': {
+                'type': [date],
+                'xpath': '@when',
+            }
+        },
+        'listable': False,
+        'text_tag': 'date',
+        'list_tag': None,
+    },
+    'time': {
+        'properties': {
+            'when': {
+                'type': [time],
+                'xpath': '@when',
+            }
+        },
+        'listable': False,
+        'text_tag': 'time',
+        'list_tag': None,
+    },
+}

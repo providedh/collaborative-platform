@@ -1,78 +1,103 @@
 export default {
 	"taxonomy" : {
 		"ignorance": {
-			"icon": "\uf04b",
 			"color": "#9270a8",
 			"description": ""
 		},
 		"credibility": {
-			"icon": "\uf0c8",
 			"color": "#cc4c3b",
 			"description": ""
 		},
 		"imprecision": {
-			"icon": "\uf005",
 			"color": "#f1d155",
 			"description": ""
 		},
 		"incompleteness": {
-			"icon": "\uf0c2",
 			"color": "#67b2ac",
 			"description": ""
 		},
 	},
 	"entities" : {
-		"date": {
-			"icon": "\uf073", 
-			"color": "#868788"
+		"person": {
+			"body_list": "false",
+			"icon": "\uf007", 
+			"color": "#ff7f00",
 		},
 		"event": {
+			"body_list": "false",
 			"icon": "\uf274", 
 			"color": "#cecece"
 		},
+		"org": {
+			"body_list": "false",
+			"icon": "\uf1ad", 
+			"color": "#b4edfc"
+		},
+		"object": {
+			"body_list": "false",
+			"icon": "\uf466", 
+			"color": "#b4d38d"
+		},
+		"place": {
+			"body_list": "false",
+			"icon": "\uf279", 
+			"color": "#204191",
+		},
+		"date": {
+			"body_list": "false",
+			"icon": "\uf073", 
+			"color": "#868788"
+		},
+		"time": {
+			"body_list": "false",
+			"icon": "\uf017", 
+			"color": "#eab9e4"
+		}/*
 		"location": {
+			"body_list": "false",
 			"icon": "\uf5a0", 
 			"color": "#ff6464"
 		},
 		"geolocation": {
+			"body_list": "false",
 			"icon": "\uf5a0", 
 			"color": "#ff6464"
 		},
 		"name": {
+			"body_list": "false",
 			"icon": "\uf007", 
 			"color": "#ff7f00"
 		},
 		"occupation": {
+			"body_list": "false",
 			"icon": "\uf0b1", 
 			"color": "#3c8745"
 		},
-		"object": {
-			"icon": "\uf466", 
-			"color": "#b4d38d"
-		},
-		"org": {
-			"icon": "\uf1ad", 
-			"color": "#b4edfc"
-		},
-		"person": {
-			"icon": "\uf007", 
-			"color": "#ff7f00"
-		},
-		"place": {
-			"icon": "\uf279", 
-			"color": "#204191"
-		},
 		"placeName": {
+			"body_list": "false",
 			"icon": "\uf279", 
 			"color": "#204191"
 		},
 		"country": {
+			"body_list": "false",
 			"icon": "\uf279", 
 			"color": "#204191"
-		},
-		"time": {
-			"icon": "\uf017", 
-			"color": "#eab9e4"
-		}
+		},*/
+	},
+	"properties": {
+		"person": [
+			"forename",
+			"surname",
+			"occupation",
+			"sex",
+			"birth",
+			"death",
+			"age"
+		],
+		"place": [
+			"country",
+			"settlement",
+			"[geo]location"
+		]
 	}
 };

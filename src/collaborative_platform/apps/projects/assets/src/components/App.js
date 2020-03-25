@@ -3,6 +3,7 @@ import React from 'react';
 import taxonomy from './def_taxonomy.js';
 import ProjectDescriptionSection from './ProjectDescriptionSection.js';
 import TaxonomySection from './TaxonomySection.js';
+import TEIentitiesSection from './TEIentitiesSection.js';
 
 class App extends React.Component {
   constructor(props){
@@ -12,10 +13,12 @@ class App extends React.Component {
       title: '',
       description: '',
       certScheme: Object.entries(taxonomy.taxonomy),
+      teiScheme: Object.entries(taxonomy.entities),
     };
 
     this.createProject = this.createProject.bind(this);
     this.updateCertScheme = this.updateCertScheme.bind(this);
+    this.updateTEIScheme = this.updateTEIScheme.bind(this);
   }
 
   componentDidMount(){
@@ -28,28 +31,39 @@ class App extends React.Component {
     this.setState({certScheme: scheme});
   }
 
+  updateTEIScheme(scheme){
+    this.setState({teiScheme: scheme});
+  }
+
+  validateScheme(){
+    function hasEmptyNames(names){return names.some(x=>x.length == 0);}
+    function hasRepeatedNames(names){return (new Set(names)).size != names.length;}
+    
+    const isValid = (true &&
+      !hasEmptyNames(this.state.teiScheme.map(x=>x[0])) &&
+      !hasRepeatedNames(this.state.teiScheme.map(x=>x[0])) &&
+      !hasEmptyNames(this.state.certScheme.map(x=>x[0])) &&
+      !hasRepeatedNames(this.state.certScheme.map(x=>x[0])));
+
+    return isValid;
+  }
+
   createProject(e){
+    e.preventDefault()
+    const key2name = array=>({...array[1], name:array[0]});
+    const body_list2boolean = ({name, color, icon, body_list})=>
+      ({name, color, icon, body_list:body_list=='true'})
+
+    if(this.validateScheme() === false)
+      return;
+
     const data = {
       title: this.state.title,
       description: this.state.description,
-      categories: this.state.certScheme,
-      taxonomy: {
-              name_1: this.state.certScheme[0][0],
-              color_1: this.state.certScheme[0][1].color,
-              desc_1: this.state.certScheme[0][1].description,
-              name_2: this.state.certScheme[1][0],
-              color_2: this.state.certScheme[1][1].color,
-              desc_2: this.state.certScheme[1][1].description,
-              name_3: this.state.certScheme[2][0],
-              color_3: this.state.certScheme[2][1].color,
-              desc_3: this.state.certScheme[2][1].description,
-              name_4: this.state.certScheme[3][0],
-              color_4: this.state.certScheme[3][1].color,
-              desc_4: this.state.certScheme[3][1].description
-          }
+      taxonomy: this.state.certScheme.map(key2name),
+      entities: this.state.teiScheme.map(key2name).map(body_list2boolean)
     };
 
-    e.preventDefault()
     var form = $(this).serializeObject()
     var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
     $.ajaxSetup({
@@ -83,6 +97,10 @@ class App extends React.Component {
           description={this.state.description}
           setTitle={title=>this.setState({title:title})}
           setDescription={description=>this.setState({description:description})}
+          />
+        <TEIentitiesSection
+          scheme={this.state.teiScheme}
+          updateScheme={this.updateTEIScheme}
           />
         <TaxonomySection
           scheme={this.state.certScheme}
