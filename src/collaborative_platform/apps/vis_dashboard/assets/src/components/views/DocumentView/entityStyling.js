@@ -20,7 +20,7 @@ export default function(container, doc, settings){
 				?e.attributes['type'].value
 				:e.tagName.toLowerCase();
 
-		e.style.setProperty('border-bottom', 'solid 4px '+name2style[entityName].color);
+		applyStyle(e, name2style[entityName]);
 	})
 
 	containerObjectNames.forEach(e=>{
@@ -37,6 +37,16 @@ export default function(container, doc, settings){
 					?target.attributes['type'].value
 					:target.tagName.toLowerCase();
 
-		e.style.setProperty('border-bottom', 'solid 4px '+name2style[entityName].color);
+		applyStyle(e, name2style[entityName]);
 	})
+}
+
+function applyStyle(node, style){
+
+	const icon = `"${style.icon}"`;
+	node.style.setProperty('border-bottom', 'solid 3px '+style.color);
+	node.style.setProperty('position', 'relative');
+	node.style.setProperty('display', 'inline-block');
+    node.style.setProperty('height', '2em');
+	node.append($.parseHTML(`<i class="fa entityIcon" style="color:${style.color};" data-icon=${icon}></i>`)[0]);
 }
