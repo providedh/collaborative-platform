@@ -17,7 +17,8 @@ export default function ToogleControl({name, value=true, onValueChange, params})
                     id={'input-'+name}
                     type="checkbox" 
                     className="form-check-input" 
-                    value={value} 
+                    value={value}
+                    checked={value}
                     onChange={handleChange}/>
                 <label className="form-check-label" htmlFor={'input-'+name}>{createLabel(name)}</label>
             </div>
