@@ -44,7 +44,7 @@ export default function(container, doc, settings){
 function applyStyle(node, style){
 
 	const icon = `"${style.icon}"`;
-	node.style.setProperty('border-bottom', 'solid 3px '+style.color);
+	node.style.setProperty('border-bottom', 'solid 2px '+style.color);
 	node.style.setProperty('position', 'relative');
 	node.style.setProperty('display', 'inline-block');
     node.style.setProperty('height', '2em');
