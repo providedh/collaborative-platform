@@ -65,9 +65,13 @@ def get_project_contributors(project_id):  # type: (int) -> QuerySet
 def include_contributors(response):  # type: (JsonResponse) -> JsonResponse
     json = loads(response.content)
     for project in json['data']:
-        project['contributors'] = list(get_project_contributors(project['id']).values('id', 'first_name', 'last_name'))
+        project['contributors'] = get_contributors_list(project['id'])
 
     return JsonResponse(json)
+
+
+def get_contributors_list(project_id):
+    return list(get_project_contributors(project_id).values('id', 'first_name', 'last_name'))
 
 
 def log_activity(project, user, action_text="", file=None, related_dir=None):
@@ -114,17 +118,11 @@ def create_new_project_version(project, files_modification=False, commit=None):
 
 
 def user_is_project_admin(project_id, user):  # type: (int, User) -> bool
-    try:
-        Contributor.objects.get(
-            project_id=project_id,
-            user=user,
-            permissions='AD',
-        )
-
-        return True
-
-    except Contributor.DoesNotExist:
-        return False
+    return Contributor.objects.filter(
+        project_id=project_id,
+        user=user,
+        permissions='AD',
+    ).exists()
 
 
 def get_ana_link(project_id, uncertainty_type):  # type: (int, str) -> str
@@ -135,4 +133,4 @@ def get_ana_link(project_id, uncertainty_type):  # type: (int, str) -> str
 
 
 def ana_link_to_type(link):  # type: (str) -> str
-    return link.split('#')[1]
+    return link.split('#')[-1]

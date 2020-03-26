@@ -1,4 +1,4 @@
-template_string = """<?xml version="1.0" encoding="UTF-8"?>
+taxonomy_template_string = """<?xml version="1.0" encoding="UTF-8"?>
 <TEI xmlns="http://www.tei-c.org/ns/1.0">
   <teiHeader>
     <fileDesc>
@@ -11,22 +11,7 @@ template_string = """<?xml version="1.0" encoding="UTF-8"?>
         <taxonomy>
           <category>
             <catDesc>User recognized uncertainty</catDesc>
-            <category xml:id="{}">
-              <catDesc>{}</catDesc>
-              <desc>{}</desc>
-            </category>
-            <category xml:id="{}">
-              <catDesc>{}</catDesc>
-              <desc>{}</desc>
-            </category>
-            <category xml:id="{}">
-              <catDesc>{}</catDesc>
-              <desc>{}</desc>
-            </category>
-            <category xml:id="{}">
-              <catDesc>{}</catDesc>
-              <desc>{}</desc>
-            </category>
+            {}
           </category>
           <category>
             <catDesc>Machine generated uncertainty</catDesc>
@@ -39,3 +24,10 @@ template_string = """<?xml version="1.0" encoding="UTF-8"?>
     </encodingDesc>
   </teiHeader>
 </TEI>"""
+
+category_template_string = """
+            <category xml:id="{}">
+              <catDesc>{}</catDesc>
+              <desc>{}</desc>
+            </category>
+"""

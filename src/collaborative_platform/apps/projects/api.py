@@ -6,16 +6,17 @@ from django.contrib.auth.models import AnonymousUser, User
 from django.core.exceptions import ValidationError, FieldError
 from django.core.paginator import InvalidPage, EmptyPage
 from django.db.models import QuerySet, Q
-from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, HttpResponseNotFound
+from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, HttpResponseNotFound, JsonResponse
 
 from apps.core.models import Profile
 from apps.files_management.helpers import clean_name
 from apps.files_management.models import Directory
-from apps.projects.helpers import page_to_json_response, include_contributors, log_activity, paginate_start_length
+from apps.projects.helpers import page_to_json_response, include_contributors, log_activity, paginate_start_length, \
+    get_contributors_list
 from apps.views_decorators import objects_exists, user_has_access
 
 from .helpers import paginate_page_perpage, order_queryset
-from .models import Project, Contributor, Taxonomy
+from .models import Project, Contributor, Taxonomy, UncertaintyCategory, EntitySchema
 
 
 @login_required
@@ -35,12 +36,7 @@ def create(request):  # type: (HttpRequest) -> HttpResponse
             project = Project(title=project_name, description=data["description"])
             project.save()
 
-            taxonomy_data = data['taxonomy']
-            for key, val in copy(taxonomy_data).items():
-                if key.startswith("name"):
-                    taxonomy_data[key.replace("name", "xml_id")] = '-'.join(val.lower().strip().split())
-            taxonomy = Taxonomy(project=project, **taxonomy_data)
-            taxonomy.save()
+            create_taxonomy(data, project)
 
             profile = Profile.objects.get(user=request.user)
 
@@ -56,6 +52,24 @@ def create(request):  # type: (HttpRequest) -> HttpResponse
             return HttpResponseBadRequest(dumps({"message": "Invalid value"}))
 
     return HttpResponseBadRequest(dumps({"message": "Invalid request type or empty request"}))
+
+
+def create_taxonomy(data, project):
+    taxonomy_data = data['taxonomy']
+    for cat in taxonomy_data:
+        cat["xml_id"] = '-'.join(cat['name'].lower().strip().split())
+    taxonomy = Taxonomy(project=project)
+    taxonomy.save()
+
+    UncertaintyCategory.objects.bulk_create(
+        UncertaintyCategory(taxonomy=taxonomy, **cat) for cat in taxonomy_data
+    )
+
+    taxonomy.update_contents()
+
+    EntitySchema.objects.bulk_create(
+        EntitySchema(taxonomy=taxonomy, **entity) for entity in data['entities']
+    )
 
 
 @login_required
@@ -138,9 +152,46 @@ def get_users(request, user_id):  # type: (HttpRequest, int) -> HttpResponse
 @login_required
 @objects_exists
 @user_has_access()
+def get_contributors(request, project_id):
+    if request.method != "GET":
+        return HttpResponseBadRequest("Invalid request method")
+    return JsonResponse(get_contributors_list(project_id), safe=False)
+
+
+@login_required
+@objects_exists
+@user_has_access()
 def get_taxonomy(request, project_id):
     if request.method != "GET":
         return HttpResponseBadRequest("Invalid request method")
 
     project = Project.objects.get(id=project_id)
     return HttpResponse(project.taxonomy.contents, content_type="application/xml")
+
+
+@login_required
+@objects_exists
+@user_has_access()
+def get_settings(request, project_id):
+    entities = EntitySchema.objects.filter(taxonomy__project_id=project_id).values("name", "color", "icon")
+    uncertainty_cats = UncertaintyCategory.objects.filter(taxonomy__project_id=project_id).values("name", "xml_id",
+                                                                                                  "color",
+                                                                                                  "description")
+
+    resp = {"entities": list(entities),
+            "taxonomy": list(uncertainty_cats)}
+
+    return JsonResponse(resp)
+
+
+@login_required
+def get_default_properties(request):
+    from collaborative_platform.settings import ENTITIES
+    entites = ENTITIES
+
+    for key, entity in entites.items():
+        entity['properties'] = list(set(entity['properties'].keys()).difference('text'))
+        entity.pop('list_tag')
+        entity.pop('text_tag')
+
+    return JsonResponse(entites)

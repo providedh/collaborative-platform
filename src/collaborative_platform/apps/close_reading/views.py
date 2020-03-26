@@ -21,33 +21,21 @@ def close_reading(request, project_id, file_id):  # type: (HttpRequest, int, int
 
     origin_url = request.META.get('HTTP_REFERER', project_url)
     if not origin_url.endswith('/'):
-        origin_url += '/'    
+        origin_url += '/'
 
     try:
         resolve_match = resolve(urlparse(origin_url).path)
     except Exception as e:
         origin_url = project_url
         resolve_match = resolve(urlparse(origin_url).path)
-    
+
     origin = resolve_match.url_name
 
-    preferences = { 'taxonomy':{ }}
-    preferences['taxonomy'][file.project.taxonomy.name_1] = {
-        'color': file.project.taxonomy.color_1,
-        'desc': file.project.taxonomy.desc_1
-    }
-    preferences['taxonomy'][file.project.taxonomy.name_2] = {
-        'color': file.project.taxonomy.color_2,
-        'desc': file.project.taxonomy.desc_2
-    }
-    preferences['taxonomy'][file.project.taxonomy.name_3] = {
-        'color': file.project.taxonomy.color_3,
-        'desc': file.project.taxonomy.desc_3
-    }
-    preferences['taxonomy'][file.project.taxonomy.name_4] = {
-        'color': file.project.taxonomy.color_4,
-        'desc': file.project.taxonomy.desc_4
-    }
+    preferences = {'taxonomy': {category.name: {
+        'color': category.color,
+        'desc': category.description
+    } for category in
+        file.project.taxonomy.categories.all()}}
 
     context = {
         'origin': origin,
