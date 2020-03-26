@@ -52,7 +52,7 @@ function useDocumentRendering(data, container){
     }, [data.id]);
 }
 
-function DocumentView({layout, syncWithViews, documentId}) {
+function DocumentView({layout, syncWithViews, documentId, showEntities, showCertainty}) {
 	const [width, height] = layout!=undefined?[layout.w, layout.h]:[4,4];
 	const viewRef = useRef();
 
@@ -71,7 +71,7 @@ function DocumentView({layout, syncWithViews, documentId}) {
 		        	   Open in annotator
 		        	</a>):''}
         	</div>
-        	<div ref={viewRef} className={styles.documentContainer}>
+        	<div ref={viewRef} className={styles.documentContainer + (showEntities?' ':' hideEntities ') + (showCertainty?'':'hideCertainty')}>
         	</div>
         </div>
     )
