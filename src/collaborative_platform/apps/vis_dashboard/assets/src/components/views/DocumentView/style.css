@@ -1,0 +1,11 @@
+.hideCertainty *{
+	background: var(--light) !important;
+}
+
+.hideEntities *{
+	border: solid 0 var(--light) !important;
+}
+
+.hideEntities *:before{
+	content: '';
+}
