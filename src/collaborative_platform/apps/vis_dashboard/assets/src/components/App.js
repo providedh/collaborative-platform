@@ -32,7 +32,7 @@ export default class App extends React.Component {
     fetchData(){
         this.fetchDocuments().then(()=>
             this.fetchCollaborators().then(()=>
-                this.fetchTaxonomy().then(()=>
+                this.fetchSettings().then(()=>
                     this.fetchProjectVersions())));
     }
 
@@ -63,7 +63,7 @@ export default class App extends React.Component {
                     this.setState({
                         fetched: 2, 
                         collaborators: response.content, 
-                        fetching: 'the taxonomy configuration.'
+                        fetching: 'the project settings.'
                     });
                     resolve();
                 }
@@ -71,17 +71,18 @@ export default class App extends React.Component {
         });
     }
 
-    fetchTaxonomy(){
+    fetchSettings(){
         return new Promise((resolve, error)=>{
-            ajax.getTaxonomy({project},{},null).then(response=>{
+            ajax.getSettings({project},{},null).then(response=>{
                 if(response.success === false){
-                    this.setState({error: 'Failed to retrieve the taxonomy configuration.'});
+                    this.setState({error: 'Failed to retrieve the project settings.'});
                 }else{
                     this.setState({
                         fetched: 3, 
-                        taxonomy: response.content, 
+                        settings: response.content, 
                         fetching: 'project versions.'
                     });
+                    window.settings = response.content;
                     resolve();
                 }
             });
