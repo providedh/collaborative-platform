@@ -20,7 +20,7 @@ export default class App extends React.Component {
             fetched: 0,
             documents: [],
             taxonomy: [],
-            collaborators: [],
+            contributors: [],
             projectVersions: []
         }
     }
@@ -31,7 +31,7 @@ export default class App extends React.Component {
 
     fetchData(){
         this.fetchDocuments().then(()=>
-            this.fetchCollaborators().then(()=>
+            this.fetchContributors().then(()=>
                 this.fetchSettings().then(()=>
                     this.fetchProjectVersions())));
     }
@@ -45,7 +45,7 @@ export default class App extends React.Component {
                     this.setState({
                         fetched: 1, 
                         documents: response.content, 
-                        fetching: 'collaborators in the project.'
+                        fetching: 'contributors in the project.'
                     });
                     window.documents = Object.fromEntries(response.content.map(d=>[d.id, d]));
                     resolve();
@@ -54,17 +54,18 @@ export default class App extends React.Component {
         });
     }
 
-    fetchCollaborators(){
+    fetchContributors(){
         return new Promise((resolve, error)=>{
-            ajax.getCollaborators({project},{},null).then(response=>{
+            ajax.getContributors({project},{},null).then(response=>{
                 if(response.success === false){
-                    this.setState({error: 'Failed to retrieve the project collaborators.'});
+                    this.setState({error: 'Failed to retrieve the project contributors.'});
                 }else{
                     this.setState({
                         fetched: 2, 
-                        collaborators: response.content, 
+                        contributors: response.content, 
                         fetching: 'the project settings.'
                     });
+                    window.contributors = response.content;
                     resolve();
                 }
             });

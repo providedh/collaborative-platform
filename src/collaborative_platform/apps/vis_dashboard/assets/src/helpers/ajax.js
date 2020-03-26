@@ -12,8 +12,8 @@ var AjaxCalls = function(args){
 	const base_url = [window.location.protocol + '/', window.location.hostname+':'+window.location.port].join('/');
 
 	// PROJECT SETTINGS
-	const collaborators_url = ({project, dashboard}) => ['/dashboard', 'project', project, 'vis', dashboard, 'update'].join('/');
-	const settings_url = ({project, dashboard}) => ['/api', 'projects', project, 'settings'].join('/');
+	const contributors_url = ({project}) => ['/api', 'projects', project, 'contributors'].join('/');
+	const settings_url = ({project}) => ['/api', 'projects', project, 'settings'].join('/');
 	const project_versions_url = ({project}) => ['/stats', 'project', project, 'versions'].join('/');
 
 	// VIS DASHBOARD
@@ -45,7 +45,7 @@ var AjaxCalls = function(args){
 	function _init(args){
 		const obj = {
 			// PROJECT SETTINGS
-			getCollaborators: (options,params,data) => _createDummyResponse({}),//_createCall('GET', _createUrl(collaborators_url, options, params), data),
+			getContributors: (options,params,data) => _createCall('GET', _createUrl(contributors_url, options, params), data),
 			getSettings: (options,params,data) => _createCall('GET', _createUrl(settings_url, options, params), data),
 			getProjectVersions: (options,params,data) => _createCall('GET', _createUrl(project_versions_url, options, params), data),
 
