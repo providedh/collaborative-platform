@@ -46,7 +46,7 @@ function applyStyle(node, style){
 	const icon = `"${style.icon}"`;
 	node.style.setProperty('border-bottom', 'solid 2px '+style.color);
 	node.style.setProperty('position', 'relative');
-	node.style.setProperty('display', 'inline-block');
+	//node.style.setProperty('display', 'inline-block');
     node.style.setProperty('height', '2em');
 	node.append($.parseHTML(`<i class="fa entityIcon" style="color:${style.color};" data-icon=${icon}></i>`)[0]);
 }

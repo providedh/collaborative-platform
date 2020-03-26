@@ -7,6 +7,7 @@ import styles from './style.module.css';
 import css from './style.css';
 import getConfig from './config';
 import styleEntities from './entityStyling';
+import styleCertainty from './certaintyStyling';
 
 const ajax = AjaxCalls();
 
@@ -46,8 +47,8 @@ function useDocumentRendering(data, container){
             return
 
         container.innerHTML = data.html;
-        console.log(data)
-        styleEntities(container, data.doc, window.settings)
+        styleEntities(container, data.doc, window.settings);
+        styleCertainty(container, data.doc, window.settings);
     }, [data.id]);
 }
 
