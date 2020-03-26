@@ -1,6 +1,6 @@
 import json
 from datetime import datetime
-from django.http import HttpResponse, HttpRequest
+from django.http import HttpResponse, HttpRequest, JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
@@ -33,7 +33,7 @@ def dashboard_create(request, project_id):
 def get_dashboard(request, project_id, dashboard_id):
     if request.method == 'GET':
         dashboard = Dashboard.objects.get(project_id=project_id, id=dashboard_id)
-    
+
         context = {
             'DEVELOPMENT': True,
             'project_id': project_id,
@@ -64,11 +64,13 @@ def dashboard_edit(request, project_id, dashboard_id):
 def dashboard_update(request, project_id, dashboard_id):
     if request.method == 'POST':
         newConfig = json.loads(request.body.decode('UTF-8'))
-        
+
         dashboard = Dashboard.objects.get(project_id=project_id, id=dashboard_id)
         dashboard.config = newConfig
         dashboard.last_edit = datetime.now()
         dashboard.save()
+
+    return JsonResponse({'success': True})
 
 @login_required
 @objects_exists
