@@ -1,7 +1,5 @@
 import {AjaxCalls} from '../../helpers';
 
-const dummyDocument = {getElementsByTagName: ()=>[{innerHTML: ''}]}
-
 /* Class: DocumentDatasource
  *
  * 
@@ -18,7 +16,7 @@ export default function DocumentDataSource(pubSubService, project){
 		 */
 		self._source = AjaxCalls();
 		self._focused = '';
-		self._document = dummyDocument;
+		self._document = null;
 		self._projectVersion = 'latest';
 
 		self.get = _getData;

@@ -1,10 +1,12 @@
 import React, { useEffect, useState, useRef } from "react";
-import styles from './style.module.css';
-import css from './style.css';
-import getConfig from './config';
 
 import {AjaxCalls} from '../../../helpers';
 import {DataClient} from '../../../data';
+
+import styles from './style.module.css';
+import css from './style.css';
+import getConfig from './config';
+import styleEntities from './entityStyling';
 
 const ajax = AjaxCalls();
 
@@ -16,9 +18,9 @@ function useData(dataClient, syncWithViews, documentId){
 			dataClient.unsubscribe('document');
             dataClient.subscribe('document', ({id, html})=>{
             	if(id!='')
-                	setData({id, html: html.getElementsByTagName('body')[0].innerHTML, name: window.documents[id].name});
+                	setData({id, html: html.getElementsByTagName('body')[0].innerHTML, doc:html, name: window.documents[id].name});
                 else
-                	setData({id:'', html:'<i>Hover over documents in other views to see its contents here.</i>', name:''});
+                	setData({id:'', html:'<i>Hover over documents in other views to see its contents here.</i>', doc: null, name:''});
             });
 		}else{
 			dataClient.unsubscribe('document');
@@ -27,6 +29,7 @@ function useData(dataClient, syncWithViews, documentId){
             		setData({
             			id: documentId, 
             			name: window.documents[documentId].name, 
+                        doc: response.content,
             			html:response.content.getElementsByTagName('body')[0].innerHTML
             		});
             });
@@ -37,13 +40,24 @@ function useData(dataClient, syncWithViews, documentId){
 	return data;
 }
 
+function useDocumentRendering(data, container){
+	useEffect(()=>{
+        if(container == undefined)
+            return
+
+        container.innerHTML = data.html;
+        console.log(data)
+        styleEntities(container, data.doc, window.settings)
+    }, [data.id]);
+}
+
 function DocumentView({layout, syncWithViews, documentId}) {
 	const [width, height] = layout!=undefined?[layout.w, layout.h]:[4,4];
 	const viewRef = useRef();
 
 	const [dataClient, _] = useState(DataClient());
 	const data = useData(dataClient, syncWithViews, documentId);
-	useEffect(()=>{viewRef.current.innerHTML = data.html}, [data.id]);
+    useDocumentRendering(data, viewRef.current)
 
     return(
         <div className={styles.documentView}>
