@@ -1,5 +1,6 @@
 export default function(container, doc, settings){
-	const annotations = [...doc.getElementsByTagName('certainty')],
+	const annotations = [...doc.getElementsByTagName('certainty')].filter(
+			x=>x.attributes.hasOwnProperty('ana') && x.attributes['ana'].value != ''),
 		targets = getTargets(annotations),
 		id2annotations = Object.fromEntries(targets.map(e=>[e,[]])),
 		containerEntities = [...settings.entities, {name: 'objectname'}].map(e=>container.getElementsByTagName(e.name)),
@@ -14,6 +15,7 @@ export default function(container, doc, settings){
 		annotation.attributes['target'].value
 			.split(' ')
 			.map(x=>x.slice(1))
+			.filter(x=>x!='')
 			.forEach(t=>id2annotations[t].push(annotation));
 	});
 
@@ -83,5 +85,5 @@ function getTargets(annotations){
 		splitted = targets.reduce((ac,dc)=>[...ac, ...dc.split(' ')], []),
 		trimmed = splitted.map(x=>x.slice(1)),
 		unique = [...(new Set(trimmed)).values()];
-	return unique;
+	return unique.filter(x=>x!='');
 }
