@@ -20,11 +20,27 @@ const defaultConfig = [
             'Power'
         ]}
     },
-    {name: 'dimension', type: 'selection', value: 'Entities related by documents', params: {
-    	options: [
-	    	'Entities related by documents',
-	    	'Documents related by entities',
-    	]}
+    {name: 'source', type: 'selection', value: 'entity', params: {
+        options: [
+            'entity',
+            'certainty'
+        ]}
+    },
+    {name: 'axis1', type: 'selection', value: 'documentName', params: {
+        options: [
+            'id',
+            'text',
+            'type',
+            'documentName',
+        ]}
+    },
+    {name: 'axis2', type: 'selection', value: 'documentName', params: {
+        options: [
+            'id',
+            'text',
+            'type',
+            'documentName',
+        ]}
     },
 ];
 
@@ -35,7 +51,7 @@ export default function getOptions(form){
 	const currentValues = {};
 	form.forEach(x=>currentValues[x.name] = x.value);
 
-	const {tileLayout, colorScale, rangeScale, dimension} = currentValues;
+	const {tileLayout, colorScale, rangeScale, source, axis1, axis2} = currentValues;
 
 	const configOptions = [
 	    {name: 'tileLayout', type: 'selection', value: tileLayout, params: {
@@ -59,11 +75,27 @@ export default function getOptions(form){
 	            'Power'
 	        ]}
 	    },
-	    {name: 'dimension', type: 'selection', value: dimension, params: {
-	    	options: [
-		    	'Entities related by documents',
-		    	'Documents related by entities',
-	    	]}
+	    {name: 'source', type: 'selection', value: source, params: {
+	        options: [
+	            'entity',
+	            'certainty'
+	        ]}
+	    },
+	    {name: 'axis1', type: 'selection', value: axis1, params: {
+	        options: [
+	            'id',
+	            'text',
+	            'type',
+	            'documentName',
+	        ]}
+	    },
+	    {name: 'axis2', type: 'selection', value: axis2, params: {
+	        options: [
+	            'id',
+	            'text',
+	            'type',
+	            'documentName',
+	        ]}
 	    },
 	];
 

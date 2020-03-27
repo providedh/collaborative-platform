@@ -88,8 +88,10 @@ export default function Heatmap(){
 		if(container == null || canvas == null || overlayCanvas == null || data == null || data.length == 0)
 			return;
 
-		const [_, maxRelated] = data;
-		self._rangeScale.domain([0, maxRelated]);
+		//const [_, maxRelated] = data;
+		//self._rangeScale.domain([0, maxRelated]);
+		const {concurrenceMatrix, axis1, axis2} = data;
+		console.log(concurrenceMatrix, axis1, axis2)
 
 		canvas.width = container.clientWidth;
 		canvas.height = container.clientHeight;
@@ -101,22 +103,22 @@ export default function Heatmap(){
 
 	    _renderColorLegend(canvas, legendbrush);
 
-	    self._gridRenderer(
-    		canvas, 
-    		overlayCanvas, 
-    		self._padding, 
-    		self._axisWidth, 
-    		self._legendWidth,
-    		data, 
-    		self._colorScale, 
-    		self._rangeScale);
+	    // self._gridRenderer(
+    	// 	canvas, 
+    	// 	overlayCanvas, 
+    	// 	self._padding, 
+    	// 	self._axisWidth, 
+    	// 	self._legendWidth,
+    	// 	data, 
+    	// 	self._colorScale, 
+    	// 	self._rangeScale);
 
-	    self._axisRenderer(
-    		canvas, 
-    		self._padding, 
-    		self._axisWidth, 
-    		self._legendWidth,
-    		data);
+	    // self._axisRenderer(
+    	// 	canvas, 
+    	// 	self._padding, 
+    	// 	self._axisWidth, 
+    	// 	self._legendWidth,
+    	// 	data);
 	}
 
 	return _init();

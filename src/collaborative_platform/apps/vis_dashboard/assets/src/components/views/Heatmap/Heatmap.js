@@ -1,85 +1,11 @@
 import React, { useEffect, useState, useRef } from "react";
+
 import styles from './style.module.css';
 import css from './style.css';
 import getConfig from './config';
 import {RegularHeatmapBuilder, StairHeatmapBuilder, HeartHeatmapBuilder, Director} from './vis';
 import {DataClient} from '../../../data';
-
-function useData(dataClient, dimension){
-	const [data, setData] = useState(null);
-
-	useEffect(()=>{
-        if(dimension == 'Entities related by documents'){
-            dataClient.unsubscribe('entity');
-            dataClient.subscribe('entity', data=>{
-                if(data == null || data.all.length == 0 || data.filtered.length == 0)
-                    return 0;
-                const entities = Array.from(new Set(data.filtered.map(x=>x.name)).values());
-                let maxRelated = 0;
-
-                const entitiesInDoc = {};
-                data.filtered.forEach(x=>{
-                    if(entitiesInDoc.hasOwnProperty(x.file_name)){
-                        entitiesInDoc[x.file_name].add(x.name)
-                    }else{
-                        entitiesInDoc[x.file_name]=new Set([x.name])
-                    }
-                });
-
-                const arrayOfEntities = ()=>entities.map(()=>[]);
-                const concurrenceMatrix = {};
-                entities.forEach(e=>concurrenceMatrix[e] = arrayOfEntities());
-
-                for(let [doc, relatedEntities] of Object.entries(entitiesInDoc)){
-                    const relatedEntitiesArray = Array.from(relatedEntities.values());
-                    for(let entity of relatedEntitiesArray){
-                        relatedEntitiesArray.forEach(e=>{
-                            concurrenceMatrix[entity][entities.indexOf(e)].push(doc);
-                            maxRelated = Math.max(concurrenceMatrix[entity][entities.indexOf(e)].length, maxRelated);
-                        });
-                    }
-                }
-
-                setData([concurrenceMatrix, maxRelated]);
-            });
-        }else if(dimension == 'Documents related by entities'){
-            dataClient.unsubscribe('entity');
-            dataClient.subscribe('entity', data=>{
-                if(data == null || data.all.length == 0 || data.filtered.length == 0)
-                    return 0;
-                const documents = Array.from(new Set(data.filtered.map(x=>x.file_name)).values());
-                let maxRelated = 0;
-
-                const entitiesInDoc = {};
-                data.filtered.forEach(x=>{
-                    if(entitiesInDoc.hasOwnProperty(x.name)){
-                        entitiesInDoc[x.name].add(x.file_name)
-                    }else{
-                        entitiesInDoc[x.name]=new Set([x.file_name])
-                    }
-                });
-
-                const arrayOfDocuments = ()=>documents.map(()=>[]);
-                const concurrenceMatrix = {};
-                documents.forEach(e=>concurrenceMatrix[e] = arrayOfDocuments());
-
-                for(let [entity, relatedDocuments] of Object.entries(entitiesInDoc)){
-                    const relatedDocumentsArray = Array.from(relatedDocuments.values());
-                    for(let doc of relatedDocumentsArray){
-                        relatedDocumentsArray.forEach(e=>{
-                            concurrenceMatrix[doc][documents.indexOf(e)].push(entity);
-                            maxRelated = Math.max(concurrenceMatrix[doc][documents.indexOf(e)].length, maxRelated);
-                        });
-                    }
-                }
-
-                setData([concurrenceMatrix, maxRelated]);
-            });
-        }
-	}, [dimension])
-
-	return data;
-}
+import useData from './data';
 
 function useHeatmap(layout, colorScale, rangeScale, eventCallback){
     const [heatmap, setHeatmap] = useState(null)
@@ -112,12 +38,12 @@ function handleFilter([min, max], data, dataClient){
     }
 }
 
-function Heatmap({ layout, tileLayout, colorScale, rangeScale, dimension}) {
+function Heatmap({ layout, tileLayout, colorScale, rangeScale, source, axis1, axis2}) {
 	const [containerRef, canvasRef, overlayCanvasRef, legendRef] = [useRef(), useRef(), useRef(), useRef()];
 	const [width, height] = layout!=undefined?[layout.w, layout.h]:[4,4];
 
     const [dataClient, _] = useState(DataClient());
-	const data = useData(dataClient, dimension);
+	const data = useData(dataClient, source, axis1, axis2);
     const heatmap = useHeatmap(tileLayout, colorScale, rangeScale, event=>event);
     
     useRender(width, height, heatmap, data, containerRef, canvasRef, overlayCanvasRef, legendRef);
