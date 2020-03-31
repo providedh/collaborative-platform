@@ -29,7 +29,7 @@ function useRender(width, height, heatmap, data, containerRef, canvasRef, overla
         if(heatmap != null)
             heatmap.render(data, containerRef.current, canvasRef.current, overlayCanvasRef.current, legendRef.current)
         }, // Render 
-        [width, height, heatmap, data]); // Conditions*/
+        [width, height, heatmap, data, containerRef, canvasRef, overlayCanvasRef, legendRef]); // Conditions*/
 }
 
 function handleFilter([min, max], data, dataClient){

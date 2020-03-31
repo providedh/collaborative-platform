@@ -17,6 +17,7 @@ export default function useData(dataClient, source, axis1name, axis2name){
             	[entries, axis1, axis2] = getEntriesAndAxis(preprocessed, axis1name, axis2name),
             	[concurrenceMatrix, maxOccurrences] = getConcurrenceMatrix(entries, axis1, axis2),
             	processed = {concurrenceMatrix, maxOccurrences, axis1, axis2};
+
         	
         	setData(processed);
         });
@@ -26,18 +27,18 @@ export default function useData(dataClient, source, axis1name, axis2name){
 	return data;
 }
 
-function getAttribute(x, attr){
-	let attrName = attr;
-
-	if(attr == 'documentName')
-		attrName = 'file_name';
-	else if(attr == 'text')
-		attrName = 'name';
-
-	return ''+x[attrName];
-}
-
 function entityProcessing(){
+	function getAttribute(x, attr){
+		let attrName = attr;
+
+		if(attr == 'documentName')
+			attrName = 'file_name';
+		else if(attr == 'text')
+			attrName = 'name';
+
+		return ''+x[attrName];
+	}
+
 	function preprocessing(data){
 		return data.filtered;
 	}
@@ -67,17 +68,40 @@ function entityProcessing(){
 }
 
 function certaintyProcessing(){
+	function getAttribute(x, attr){
+		let attrName = attr;
+
+		if(attr == 'id')
+			attrName = 'xml:id';
+		else if(attr == 'text')
+			attrName = 'textContext';
+
+		return ''+x[attrName];
+	}
+
 	function preprocessing(data){
-		return data.all;
+		return data.filtered;
 	}
 
 	function getEntriesAndAxis(data, axis1name, axis2name){
 		const axis1 = {name: axis1name, values: new Set()},
 			axis2 = {name: axis2name, values: new Set()},
-			entries = data.map(x=>({name:'', id:'', axis1:'', axis2:''}));
+			entries = data.map(x=>{
+				axis1.values.add(getAttribute(x, axis1name));
+				axis2.values.add(getAttribute(x, axis2name));
+				
+				return{ 
+					name:x.textContext, 
+					id:x['xml:id'], 
+					axis1:getAttribute(x, axis1name), 
+					axis2:getAttribute(x, axis2name)
+				};
+			});
 
+		axis1.values = [...axis1.values.values()];
+		axis2.values = [...axis2.values.values()];
 
-		return [entries, [...axis1.values()], [...axis2.values()]];
+		return [entries, axis1, axis2];
 	}
 
 	return {preprocessing, getEntriesAndAxis}

@@ -10,7 +10,7 @@ export default function CertaintyDataSource(pubSubService, project){
 	const self = {};
 
 	function _init(pubSubService, project){
-		self._sourceName = 'entity';
+		self._sourceName = 'certainty';
 
 	 	self._data = crossfilter([]);
 	 	self._textDimension = self._data.dimension(x=>x.textContext);
@@ -21,7 +21,7 @@ export default function CertaintyDataSource(pubSubService, project){
 		 * Method for retrieving data.
 		 */
 		self._source = AjaxCalls();
-		console.log(self._source)
+
 		/**
 		* This options allow recreating the state.
 		* They are used to query for the data and take into
@@ -118,7 +118,7 @@ export default function CertaintyDataSource(pubSubService, project){
 					if(response.success === false)
 						console.info('Failed to retrieve entities for file: '+file.id);
 					else{
-						console.log(_processData(response.content))
+						//console.log(response.content)
 						self._data.add(_processData(response.content));
 						_publishData();
 					}
