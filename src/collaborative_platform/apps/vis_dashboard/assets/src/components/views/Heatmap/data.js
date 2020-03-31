@@ -39,7 +39,7 @@ function getAttribute(x, attr){
 
 function entityProcessing(){
 	function preprocessing(data){
-		return data.all;
+		return data.filtered;
 	}
 
 	function getEntriesAndAxis(data, axis1name, axis2name){
