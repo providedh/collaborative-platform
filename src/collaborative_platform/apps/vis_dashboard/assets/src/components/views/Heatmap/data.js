@@ -31,8 +31,10 @@ function getAttribute(x, attr){
 
 	if(attr == 'documentName')
 		attrName = 'file_name';
+	else if(attr == 'text')
+		attrName = 'name';
 
-	return x[attrName];
+	return ''+x[attrName];
 }
 
 function entityProcessing(){
