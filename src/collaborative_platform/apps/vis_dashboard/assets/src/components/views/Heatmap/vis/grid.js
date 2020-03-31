@@ -48,10 +48,10 @@ function setupInteractions(data, canvas, overlayCanvas, leftOffset, padding, gri
         	}        	
         }
 
+        context.clearRect(0,0,overlayCanvas.width, overlayCanvas.height);
+        
         if(shared == null)
         	return;
-
-        context.clearRect(0,0,overlayCanvas.width, overlayCanvas.height);
         
         context.save()
         context.fillStyle = '#f8f9fa';
