@@ -11,23 +11,21 @@ function shorttenedLabel(label, maxLabelLength = 30){
 	return startFragment + '...' + endFragment;
 } 
 
-function regularAxis(canvas, padding, axisWidth, legendWidth, data){
+function regularAxis(canvas, sizes, axisWidth, legendWidth, data){
 	const {concurrenceMatrix, axis1, axis2} = data;
+	const {
+            cellPadding,
+            minSpacingX,
+            minSpacingY,
+            cellSide,
+            leftOffset,
+            maxLabels,
+            padding
+        } = sizes;
 
-	const minSpacingX = 2*padding + axisWidth + legendWidth,
-		minSpacingY = 2*padding + (axisWidth * Math.cos(Math.PI / 4)),
-		sideLength = Math.min(canvas.width - minSpacingX, canvas.height - minSpacingY),
-		leftOffset = canvas.width - (sideLength + legendWidth + padding),
-		bottomOffset = canvas.height - (sideLength + padding),
-		maxLabels = Math.max(axis1.values.length, axis2.values.length),
+	const bottomOffset = canvas.height - (cellSide*axis1.values.length + padding),
 		leftLabelLength = (leftOffset - 2*padding) / 7,
 		bottomLabelLength = ((bottomOffset - 2*padding) / Math.cos(Math.PI / 4)) / 7;
-
-	const gridScale = d3.scaleBand()
-		.domain(d3.range(maxLabels))
-		.range([0, sideLength])
-		.round(true)
-		.padding(.1);
 
 	const ctx = canvas.getContext("2d");
 	ctx.save();
@@ -36,7 +34,7 @@ function regularAxis(canvas, padding, axisWidth, legendWidth, data){
 	ctx.textBaseline = 'middle';
 	ctx.font = '13px Open Sans';
 	axis1.values.forEach((label, i)=>{
-		ctx.fillText(shorttenedLabel(label, leftLabelLength), leftOffset, padding + gridScale(i) + gridScale.bandwidth()/2);
+		ctx.fillText(shorttenedLabel(label, leftLabelLength), leftOffset - cellSide/4, padding + cellSide*i + cellSide/2);
 	});
 	ctx.restore()
 
@@ -46,9 +44,9 @@ function regularAxis(canvas, padding, axisWidth, legendWidth, data){
 	ctx.font = '13px Open Sans';
 
 	axis2.values.forEach((label, i)=>{
-		const bandMiddle = gridScale(i) + gridScale.bandwidth()/2,
+		const bandMiddle = cellSide*i + cellSide/2,
 			x = leftOffset +  bandMiddle,
-			y = padding*2 + gridScale(axis1.values.length),
+			y = padding*2 + (cellSide * axis1.values.length),
 			translatedX = x,
 			translatedY = y;
 

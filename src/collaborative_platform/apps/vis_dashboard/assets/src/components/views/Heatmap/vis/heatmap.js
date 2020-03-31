@@ -84,12 +84,31 @@ export default function Heatmap(){
 		ctx.restore();
 	}
 
+	function _getSizes(data, width, height){
+		const {axis1, axis2} = data,
+			cellPadding = .1,
+	        minSpacingX = 2*self._padding + self._axisWidth + self._legendWidth,
+			minSpacingY = 2*self._padding + (self._axisWidth * Math.cos(Math.PI / 4)),
+			cellSide = Math.min((width - minSpacingX)/axis2.values.length, (height - minSpacingY)/axis1.values.length),
+			leftOffset = width - ((cellSide*axis2.values.length) + self._legendWidth + self._padding),
+			maxLabels = Math.max(axis1.values.length, axis2.values.length);
+
+		return {
+			cellPadding,
+			minSpacingX,
+			minSpacingY,
+			cellSide,
+			leftOffset,
+			maxLabels,
+			padding: self._padding
+		}
+	}
+
 	function _render(data, container, canvas, overlayCanvas, legendbrush){
 		if(container == null || canvas == null || overlayCanvas == null || data == null || data.length == 0)
 			return;
 
-		//const [_, maxRelated] = data;
-		//self._rangeScale.domain([0, maxRelated]);
+		self._rangeScale.domain([0, data.maxOccurrences]);
 
 		canvas.width = container.clientWidth;
 		canvas.height = container.clientHeight;
@@ -101,19 +120,19 @@ export default function Heatmap(){
 
 	    _renderColorLegend(canvas, legendbrush);
 
+	    const sizes = _getSizes(data, canvas.width, canvas.height);
+
 	    self._gridRenderer(
     		canvas, 
     		overlayCanvas, 
-    		self._padding, 
-    		self._axisWidth, 
-    	 	self._legendWidth,
+    		sizes,
     	 	data, 
     	 	self._colorScale, 
     	 	self._rangeScale);
 
 	    self._axisRenderer(
-    		canvas, 
-    		self._padding, 
+    		canvas,
+    		sizes,
     		self._axisWidth, 
     		self._legendWidth,
     		data);

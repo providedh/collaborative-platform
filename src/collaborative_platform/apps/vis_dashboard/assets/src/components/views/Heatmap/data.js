@@ -15,8 +15,8 @@ export default function useData(dataClient, source, axis1name, axis2name){
 
             const preprocessed = preprocessing(data),
             	[entries, axis1, axis2] = getEntriesAndAxis(preprocessed, axis1name, axis2name),
-            	concurrenceMatrix = getConcurrenceMatrix(entries, axis1, axis2),
-            	processed = {concurrenceMatrix, axis1, axis2};
+            	[concurrenceMatrix, maxOccurrences] = getConcurrenceMatrix(entries, axis1, axis2),
+            	processed = {concurrenceMatrix, maxOccurrences, axis1, axis2};
         	
         	setData(processed);
         });
@@ -85,9 +85,14 @@ function certaintyProcessing(){
 
 
 function getConcurrenceMatrix(entries, axis1, axis2){
+	let maxOccurrences = 0;
 	const concurrenceMatrix = Object.fromEntries(axis1.values.map(x=>[x,null]));
 		axis1.values.forEach(x=>concurrenceMatrix[x] = Object.fromEntries(axis2.values.map(y=>[y, []])));
-	entries.forEach(x=>concurrenceMatrix[x.axis1][x.axis2].push(x));
+	entries.forEach(x=>{
+		concurrenceMatrix[x.axis1][x.axis2].push(x);
+		if(concurrenceMatrix[x.axis1][x.axis2].length > maxOccurrences)
+			maxOccurrences = concurrenceMatrix[x.axis1][x.axis2].length;
+	});
 
-	return concurrenceMatrix;
+	return [concurrenceMatrix, maxOccurrences];
 }

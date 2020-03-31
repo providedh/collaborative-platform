@@ -1,19 +1,16 @@
 import * as d3 from 'd3';
 
-function regularGrid(canvas, overlayCanvas, padding, axisWidth, legendWidth, data, colorScale, rangeScale){
+function regularGrid(canvas, overlayCanvas, sizes, data, colorScale, rangeScale){
 	const {concurrenceMatrix, axis1, axis2} = data;
-
-	const minSpacingX = 2*padding + axisWidth + legendWidth,
-		minSpacingY = 2*padding + (axisWidth * Math.cos(Math.PI / 4)),
-		sideLength = Math.min(canvas.width - minSpacingX, canvas.height - minSpacingY),
-		leftOffset = canvas.width - (sideLength + legendWidth + padding),
-		maxLabels = Math.max(axis1.values.length, axis2.values.length);
-
-	const gridScale = d3.scaleBand()
-		.domain(d3.range(maxLabels))
-		.range([0, sideLength])
-		.round(true)
-		.padding(.1);
+    const {
+            cellPadding,
+            minSpacingX,
+            minSpacingY,
+            cellSide,
+            leftOffset,
+            maxLabels,
+            padding
+        } = sizes;
 
 	const context = canvas.getContext("2d");
 	context.save();
@@ -21,23 +18,23 @@ function regularGrid(canvas, overlayCanvas, padding, axisWidth, legendWidth, dat
     axis2.values.forEach((axis2label, i)=>{
         axis1.values.forEach((axis1label, j)=>{    
     		context.fillStyle = colorScale(rangeScale(concurrenceMatrix[axis1label][axis2label].length));
-    		context.fillRect(leftOffset + gridScale(i), padding + gridScale(j), gridScale.bandwidth(), gridScale.bandwidth());
+    		context.fillRect(leftOffset + cellSide*i, padding + cellSide*j, cellSide - cellPadding, cellSide - cellPadding);
 		});
     })
 
 	context.restore();
 
-	setupInteractions(data, canvas, overlayCanvas, leftOffset, padding, gridScale);
+	setupInteractions(data, canvas, overlayCanvas, leftOffset, padding, cellSide);
 }
 
-function setupInteractions(data, canvas, overlayCanvas, leftOffset, padding, gridScale){
+function setupInteractions(data, canvas, overlayCanvas, leftOffset, padding, cellSide){
     const {concurrenceMatrix, axis1, axis2} = data;
     const context = overlayCanvas.getContext("2d");
 
     function handleOverlayHover(e){
         const [x, y] = d3.mouse(this),
-        	yAxisIndex = Math.floor((y - padding) / gridScale.step()),
-        	xAxisIndex = Math.floor((x - leftOffset) / gridScale.step());
+        	yAxisIndex = Math.floor((y - padding) / cellSide),
+        	xAxisIndex = Math.floor((x - leftOffset) / cellSide);
 
         let shared = null;
         if(yAxisIndex >= 0 && yAxisIndex < axis1.values.length){
