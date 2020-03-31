@@ -1,3 +1,8 @@
+const attributes = {
+	entity: ['id', 'text', 'type', 'documentName'],
+	certainty: ['id', 'type', 'tag', 'text']
+};
+
 const defaultConfig = [
     {name: 'tileLayout', type: 'selection', value: 'Regular', params: {
     	options: [
@@ -26,21 +31,11 @@ const defaultConfig = [
             'certainty'
         ]}
     },
-    {name: 'axis1', type: 'selection', value: 'documentName', params: {
-        options: [
-            'id',
-            'text',
-            'type',
-            'documentName',
-        ]}
+    {name: 'axis1', type: 'selection', value: attributes.entity[3], params: {
+        options: attributes.entity}
     },
-    {name: 'axis2', type: 'selection', value: 'documentName', params: {
-        options: [
-            'id',
-            'text',
-            'type',
-            'documentName',
-        ]}
+    {name: 'axis2', type: 'selection', value: attributes.entity[3], params: {
+        options: attributes.entity}
     },
 ];
 
@@ -51,7 +46,13 @@ export default function getOptions(form){
 	const currentValues = {};
 	form.forEach(x=>currentValues[x.name] = x.value);
 
-	const {tileLayout, colorScale, rangeScale, source, axis1, axis2} = currentValues;
+	let {tileLayout, colorScale, rangeScale, source, axis1, axis2} = currentValues;
+
+	if(! attributes[source].includes(axis1))
+		axis1 = attributes[source][0];
+
+	if(! attributes[source].includes(axis2))
+		axis2 = attributes[source][0];
 
 	const configOptions = [
 	    {name: 'tileLayout', type: 'selection', value: tileLayout, params: {
@@ -82,20 +83,10 @@ export default function getOptions(form){
 	        ]}
 	    },
 	    {name: 'axis1', type: 'selection', value: axis1, params: {
-	        options: [
-	            'id',
-	            'text',
-	            'type',
-	            'documentName',
-	        ]}
+	        options: attributes[source]}
 	    },
 	    {name: 'axis2', type: 'selection', value: axis2, params: {
-	        options: [
-	            'id',
-	            'text',
-	            'type',
-	            'documentName',
-	        ]}
+	        options: attributes[source]}
 	    },
 	];
 
