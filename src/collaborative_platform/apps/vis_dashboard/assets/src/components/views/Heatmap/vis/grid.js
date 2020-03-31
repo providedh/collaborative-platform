@@ -18,9 +18,9 @@ function regularGrid(canvas, overlayCanvas, padding, axisWidth, legendWidth, dat
 	const context = canvas.getContext("2d");
 	context.save();
 
-    axis1.values.forEach((entity, i)=>{
-        axis2.values.forEach((intersection, j)=>{    
-    		context.fillStyle = colorScale(rangeScale(concurrenceMatrix[entity][intersection].length));
+    axis2.values.forEach((axis2label, i)=>{
+        axis1.values.forEach((axis1label, j)=>{    
+    		context.fillStyle = colorScale(rangeScale(concurrenceMatrix[axis1label][axis2label].length));
     		context.fillRect(leftOffset + gridScale(i), padding + gridScale(j), gridScale.bandwidth(), gridScale.bandwidth());
 		});
     })

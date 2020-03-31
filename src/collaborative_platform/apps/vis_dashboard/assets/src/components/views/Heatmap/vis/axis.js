@@ -12,14 +12,14 @@ function shorttenedLabel(label, maxLabelLength = 30){
 } 
 
 function regularAxis(canvas, padding, axisWidth, legendWidth, data){
-	const [concurrenceMatrix, maxRelated] = data;
+	const {concurrenceMatrix, axis1, axis2} = data;
 
 	const minSpacingX = 2*padding + axisWidth + legendWidth,
 		minSpacingY = 2*padding + (axisWidth * Math.cos(Math.PI / 4)),
 		sideLength = Math.min(canvas.width - minSpacingX, canvas.height - minSpacingY),
 		leftOffset = canvas.width - (sideLength + legendWidth + padding),
 		bottomOffset = canvas.height - (sideLength + padding),
-		maxLabels = Math.max(Object.keys(concurrenceMatrix).length, Object.values(concurrenceMatrix)[0].length),
+		maxLabels = Math.max(axis1.values.length, axis2.values.length),
 		leftLabelLength = (leftOffset - 2*padding) / 7,
 		bottomLabelLength = ((bottomOffset - 2*padding) / Math.cos(Math.PI / 4)) / 7;
 
@@ -35,27 +35,30 @@ function regularAxis(canvas, padding, axisWidth, legendWidth, data){
 	ctx.textAlign = 'end';
 	ctx.textBaseline = 'middle';
 	ctx.font = '13px Open Sans';
-	Object.entries(concurrenceMatrix).forEach(([entity, intersections], i)=>{
-		ctx.fillText(shorttenedLabel(entity, leftLabelLength), leftOffset, padding + gridScale(i) + gridScale.bandwidth()/2);
+	axis1.values.forEach((label, i)=>{
+		ctx.fillText(shorttenedLabel(label, leftLabelLength), leftOffset, padding + gridScale(i) + gridScale.bandwidth()/2);
 	});
 	ctx.restore()
 
 	ctx.save()
-	ctx.textAlign = 'start';
+	ctx.textAlign = 'end';
 	ctx.textBaseline = 'middle';
 	ctx.font = '13px Open Sans';
-	ctx.translate(leftOffset, sideLength+padding);
-	ctx.rotate(Math.PI / 4);
-	ctx.translate(-leftOffset, -(sideLength+padding));
 
-	Object.entries(concurrenceMatrix).forEach(([entity, intersections], i)=>{
+	axis2.values.forEach((label, i)=>{
 		const bandMiddle = gridScale(i) + gridScale.bandwidth()/2,
-			x = leftOffset +  bandMiddle*Math.cos(Math.PI/4),
-			y = sideLength + padding,
+			x = leftOffset +  bandMiddle,
+			y = padding*2 + gridScale(axis1.values.length),
 			translatedX = x,
-			translatedY = y - bandMiddle*Math.sin(Math.PI/4) +  padding;
+			translatedY = y;
 
-		ctx.fillText(shorttenedLabel(entity, bottomLabelLength), translatedX, translatedY);
+			ctx.save()
+			ctx.translate(translatedX, translatedY);
+			ctx.rotate(-Math.PI / 4);
+			ctx.translate(-translatedX, -translatedY);
+
+			ctx.fillText(shorttenedLabel(label, bottomLabelLength), translatedX, translatedY);
+			ctx.restore()
 	});
 
 	ctx.restore();

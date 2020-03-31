@@ -111,12 +111,12 @@ export default function Heatmap(){
     	 	self._colorScale, 
     	 	self._rangeScale);
 
-	    // self._axisRenderer(
-    	// 	canvas, 
-    	// 	self._padding, 
-    	// 	self._axisWidth, 
-    	// 	self._legendWidth,
-    	// 	data);
+	    self._axisRenderer(
+    		canvas, 
+    		self._padding, 
+    		self._axisWidth, 
+    		self._legendWidth,
+    		data);
 	}
 
 	return _init();
