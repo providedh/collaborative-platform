@@ -36,8 +36,8 @@ function setupInteractions(data, canvas, overlayCanvas, leftOffset, padding, gri
 
     function handleOverlayHover(e){
         const [x, y] = d3.mouse(this),
-        	xAxisIndex = Math.floor((y - padding) / gridScale.step()),
-        	yAxisIndex = Math.floor((x - leftOffset) / gridScale.step());
+        	yAxisIndex = Math.floor((y - padding) / gridScale.step()),
+        	xAxisIndex = Math.floor((x - leftOffset) / gridScale.step());
 
         let shared = null;
         if(yAxisIndex >= 0 && yAxisIndex < axis1.values.length){
