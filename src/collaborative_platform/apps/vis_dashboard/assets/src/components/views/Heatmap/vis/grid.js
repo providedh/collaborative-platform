@@ -1,13 +1,13 @@
 import * as d3 from 'd3';
 
 function regularGrid(canvas, overlayCanvas, padding, axisWidth, legendWidth, data, colorScale, rangeScale){
-	const [concurrenceMatrix, maxRelated] = data;
+	const {concurrenceMatrix, axis1, axis2} = data;
 
 	const minSpacingX = 2*padding + axisWidth + legendWidth,
 		minSpacingY = 2*padding + (axisWidth * Math.cos(Math.PI / 4)),
 		sideLength = Math.min(canvas.width - minSpacingX, canvas.height - minSpacingY),
 		leftOffset = canvas.width - (sideLength + legendWidth + padding),
-		maxLabels = Math.max(Object.keys(concurrenceMatrix).length, Object.values(concurrenceMatrix)[0].length);
+		maxLabels = Math.max(axis1.values.length, axis2.values.length);
 
 	const gridScale = d3.scaleBand()
 		.domain(d3.range(maxLabels))
@@ -18,19 +18,20 @@ function regularGrid(canvas, overlayCanvas, padding, axisWidth, legendWidth, dat
 	const context = canvas.getContext("2d");
 	context.save();
 
-	Object.entries(concurrenceMatrix).forEach(([entity, intersections], i)=>{
-		intersections.forEach((intersection, j)=>{
-			context.fillStyle = colorScale(rangeScale(intersection.length));
-			context.fillRect(leftOffset + gridScale(i), padding + gridScale(j), gridScale.bandwidth(), gridScale.bandwidth());
+    axis1.values.forEach((entity, i)=>{
+        axis2.values.forEach((intersection, j)=>{    
+    		context.fillStyle = colorScale(rangeScale(concurrenceMatrix[entity][intersection].length));
+    		context.fillRect(leftOffset + gridScale(i), padding + gridScale(j), gridScale.bandwidth(), gridScale.bandwidth());
 		});
-	});
+    })
 
 	context.restore();
 
-	setupInteractions(concurrenceMatrix, canvas, overlayCanvas, leftOffset, padding, gridScale);
+	setupInteractions(data, canvas, overlayCanvas, leftOffset, padding, gridScale);
 }
 
-function setupInteractions(matrix, canvas, overlayCanvas, leftOffset, padding, gridScale){
+function setupInteractions(data, canvas, overlayCanvas, leftOffset, padding, gridScale){
+    const {concurrenceMatrix, axis1, axis2} = data;
     const context = overlayCanvas.getContext("2d");
 
     function handleOverlayHover(e){
@@ -39,9 +40,11 @@ function setupInteractions(matrix, canvas, overlayCanvas, leftOffset, padding, g
         	yAxisIndex = Math.floor((x - leftOffset) / gridScale.step());
 
         let shared = null;
-        if(yAxisIndex >= 0 && yAxisIndex < Object.keys(matrix).length){
-			if(xAxisIndex >= 0 && xAxisIndex < Object.values(matrix)[yAxisIndex].length){
-        		shared = Object.values(matrix)[yAxisIndex][xAxisIndex];
+        if(yAxisIndex >= 0 && yAxisIndex < axis1.values.length){
+			if(xAxisIndex >= 0 && xAxisIndex < axis2.values.length){
+                const axis1label = axis1.values[yAxisIndex],
+                    axis2label = axis2.values[xAxisIndex];
+        		shared = concurrenceMatrix[axis1label][axis2label];
         	}        	
         }
 
@@ -54,14 +57,14 @@ function setupInteractions(matrix, canvas, overlayCanvas, leftOffset, padding, g
         context.fillStyle = '#f8f9fa';
         context.strokeStyle = '#00b3b0';
         context.beginPath();
-        context.rect(x+5, y-10, Math.max(...shared.map(x=>x.length))*6+5,shared.length*20)
+        context.rect(x+5, y-10, Math.max(...shared.map(x=>x.name.length))*6+5,shared.length*20)
         context.stroke();
         context.fill();
         context.closePath();
         context.textBaseline = 'bottom';
         context.fillStyle = '#00b3b0';
         shared.forEach((t,i)=>
-        	context.fillText(t,x+10, y+5+(i*20)));
+        	context.fillText(t.name,x+10, y+5+(i*20)));
         context.restore()
     }
 
