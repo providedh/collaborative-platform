@@ -1,4 +1,4 @@
-from datetime import date, time
+from datetime import date, datetime, time
 
 from django.contrib.auth.models import User
 from django.contrib.gis.db.models import PointField
@@ -34,6 +34,30 @@ class Entity(models.Model):
 
     class Meta:
         unique_together = ("file", "xml_id")
+
+    def delete_fake(self, user):
+        file_version = self.file.file_versions.last()
+
+        self.deleted_by = user
+        self.deleted_in_file_version = file_version
+        self.deleted_on = datetime.now()
+
+        self.save()
+
+        self.__fake_delete_entity_properties()
+
+    def __fake_delete_entity_properties(self):
+        entity_properties = EntityProperty.objects.filter(
+            entity_version__entity=self,
+            deleted_in_file_version__isnull=True,
+        )
+
+        file_version = self.file.file_versions.last()
+
+        for entity_property in entity_properties:
+            entity_property.deleted_in_file_version = file_version
+
+        EntityProperty.objects.bulk_update(entity_properties, ['deleted_in_file_version'])
 
 
 class EntityVersion(models.Model):
@@ -152,6 +176,16 @@ class Unification(models.Model):
     certainty = models.CharField(max_length=255)
     description = models.TextField(default='')
     xml_id = models.CharField(max_length=255)
+
+    def delete_fake(self, user, commit):
+        file_version = self.entity.file.file_versions.last()
+
+        self.deleted_on = datetime.now()
+        self.deleted_by = user
+        self.deleted_in_commit = commit
+        self.deleted_in_file_version = file_version
+
+        self.save()
 
 
 class CliqueToDelete(models.Model):

@@ -1,5 +1,6 @@
 import hashlib
-import datetime
+
+from datetime import datetime
 
 from django.contrib.auth.models import User
 from django.db import models
@@ -37,7 +38,7 @@ class FileNode(models.Model):
 
     def delete_fake(self, user=None):
         self.deleted = True
-        self.deleted_on = datetime.datetime.now()
+        self.deleted_on = datetime.now()
         self.save()
 
 
@@ -105,7 +106,7 @@ class File(FileNode):
         if old_name == new_name:
             return
 
-        current_version = self.versions.filter(number=self.version_number).get()
+        current_version = self.file_versions.filter(number=self.version_number).get()
         contents = current_version.get_content()
 
         hashed = bytes(new_name, encoding='utf8') + \
@@ -125,7 +126,7 @@ class File(FileNode):
                      action_text="renamed {} to".format(old_name))
 
     def download(self):
-        fv = self.versions.filter(number=self.version_number).get()
+        fv = self.file_versions.filter(number=self.version_number).get()
         return fv.download()
 
     def delete(self, using=None, keep_parents=False):
@@ -148,26 +149,60 @@ class File(FileNode):
             raise ValueError("Attribute 'user' is required to delete a file.")
 
         from apps.projects.helpers import create_new_project_version
-        from apps.api_vis.helpers import fake_delete_entities, fake_delete_unifications
-        from apps.api_vis.models import Entity
         from apps.files_management.helpers import delete_es_docs
 
         delete_es_docs(self.id)
 
         super().delete_fake()
 
-        deleted_entity_ids = fake_delete_entities(self, user)
-        commit = fake_delete_unifications(self, user, deleted_entity_ids)
+        deleted_entities_ids = self.__fake_delete_entities(user)
+        commit = self.__fake_delete_unifications(user, deleted_entities_ids)
+
         create_new_project_version(project=self.project, files_modification=True, commit=commit)
+
+    def __fake_delete_entities(self, user):
+        from apps.api_vis.models import Entity
+
+        entities = Entity.objects.filter(
+            file=self,
+            deleted_in_file_version__isnull=True,
+        )
+
+        deleted_entities_ids = []
+
+        for entity in entities:
+            entity.delete_fake(user)
+            deleted_entities_ids.append(entity.id)
+
+        return deleted_entities_ids
+
+    def __fake_delete_unifications(self, user, deleted_entities_ids):
+        from apps.api_vis.models import Commit, Unification
+
+        unifications = Unification.objects.filter(
+            entity_id__in=deleted_entities_ids,
+            deleted_on__isnull=True,
+        )
+
+        if unifications:
+            commit = Commit.objects.create(
+                project=self.project,
+                message=f"Removing unifications associated with deleted file '{self.name}'.",
+            )
+
+            for unification in unifications:
+                unification.delete_fake(user, commit)
+
+            return commit
 
 
 class FileVersion(models.Model):
     upload = models.FileField(upload_to=UPLOADED_FILES_PATH)
     hash = models.CharField(max_length=255)
-    file = models.ForeignKey(File, related_name='versions', on_delete=models.CASCADE)
+    file = models.ForeignKey(File, related_name='file_versions', on_delete=models.CASCADE)
     number = models.PositiveIntegerField()
     creation_date = models.DateTimeField(auto_now_add=True)
-    created_by = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='created_fileversions', null=True,
+    created_by = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='file_versions', null=True,
                                    blank=True)
     message = models.CharField(max_length=255, null=True)
 

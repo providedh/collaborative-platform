@@ -79,7 +79,7 @@ def upload_file(uploaded_file, project, user, parent_dir=None):  # type: (Upload
 
 def overwrite_file(dbfile, uploaded_file, user):  # type: (File, UploadedFile, User) -> File
     hash = hash_file(dbfile, uploaded_file)
-    latest_file_version = dbfile.versions.filter(number=dbfile.version_number).get()  # type: FileVersion
+    latest_file_version = dbfile.file_versions.filter(number=dbfile.version_number).get()  # type: FileVersion
     if latest_file_version.hash == hash:
         return dbfile  # current file is the same as uploaded one
 

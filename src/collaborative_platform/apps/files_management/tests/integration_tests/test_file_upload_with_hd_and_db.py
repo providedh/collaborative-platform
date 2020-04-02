@@ -75,7 +75,7 @@ class TestFileUploadWithHdAndDb:
         expected_xml = read_file(expected_file_path)
 
         file = File.objects.last()
-        file_version = file.versions.last()
+        file_version = file.file_versions.last()
         result_xml = file_version.get_content()
 
         assert result_xml == expected_xml

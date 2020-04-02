@@ -146,7 +146,7 @@ def get_file_versions(request, file_id):  # type: (HttpRequest, int) -> HttpResp
     if request.method == 'GET':
         file = File.objects.get(id=file_id, deleted=False)
 
-        page = paginate_start_length(request, file.versions.all())
+        page = paginate_start_length(request, file.file_versions.all())
         return include_user(page_to_json_response(page))
 
     else:
@@ -172,7 +172,7 @@ def get_file_version(request, file_id, version=None):  # type: (HttpRequest, int
     if version is None:
         version = file.version_number
 
-    file_version = file.versions.filter(number=version).get()  # type: FileVersion
+    file_version = file.file_versions.filter(number=version).get()  # type: FileVersion
 
     try:
         creator = model_to_dict(file_version.created_by, fields=('id', 'first_name', 'last_name'))
@@ -317,7 +317,7 @@ def download_directory(request, directory_id):  # type: (HttpRequest, int) -> Ht
     def pack_dir(dir):
         zf.write("/tmp/dummy", dir.get_path())
         for file in dir.files.all():
-            last_version = file.versions.get(number=file.version_number)
+            last_version = file.file_versions.get(number=file.version_number)
             path = last_version.upload.path
             zf.write(path, file.get_path())
         for subdir in dir.subdirs.all():
