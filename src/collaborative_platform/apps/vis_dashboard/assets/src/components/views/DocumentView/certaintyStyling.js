@@ -20,7 +20,11 @@ export default function(container, doc, settings){
 	});
 
 	targets.forEach(target=>{
-		applyStyle(id2entity[target], id2annotations[target], settings);
+		if(!id2entity.hasOwnProperty(target)){
+			return;
+		}else{
+			applyStyle(id2entity[target], id2annotations[target], settings);
+		}
 	});
 }
 
