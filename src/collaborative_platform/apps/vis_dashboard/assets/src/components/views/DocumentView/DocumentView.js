@@ -18,6 +18,9 @@ function useData(dataClient, syncWithViews, documentId){
 		if(syncWithViews === true){
 			dataClient.unsubscribe('document');
             dataClient.subscribe('document', ({id, html})=>{
+                if(id == null || html == null)
+                    return
+                
             	if(id!='')
                 	setData({id, html: html.getElementsByTagName('body')[0].innerHTML, doc:html, name: window.documents[id].name});
                 else
