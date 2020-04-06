@@ -5,10 +5,12 @@ import Histogram from './Histogram';
 import Heatmap from './Heatmap';
 import DotMatrix from './DotMatrix';
 import DocumentView from './DocumentView';
+import Sunburst from './Sunburst';
 
 export default {
-    'PixelCorpus': PixelCorpus, 
-	'BarChart': Histogram,
-	'Heatmap': Heatmap,
-    'DocumentView':DocumentView,
+    Sunburst,
+    PixelCorpus,
+	Heatmap,
+    DocumentView,
+	BarChart: Histogram,
 }
