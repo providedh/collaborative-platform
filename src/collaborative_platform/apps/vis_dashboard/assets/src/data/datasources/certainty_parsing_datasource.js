@@ -14,6 +14,16 @@ export default function CertaintyDataSource(pubSubService, project){
 
 	 	self._data = crossfilter([]);
 	 	self._textDimension = self._data.dimension(x=>x.textContext);
+	 	self._categoryDimension = self._data.dimension(x=>x.category);
+	 	self._locusDimension = self._data.dimension(x=>x.locus);
+	 	self._degreeDimension = self._data.dimension(x=>x.degree);
+	 	self._certDimension = self._data.dimension(x=>x.cert);
+	 	self._respDimension = self._data.dimension(x=>x.resp);
+	 	self._matchDimension = self._data.dimension(x=>x.match);
+	 	self._idDimension = self._data.dimension(x=>x['xml:id']);
+	 	self._targetDimension = self._data.dimension(x=>x.target);
+	 	self._assertedValueDimension = self._data.dimension(x=>x.assertedValue);
+	 	self._fileDimension = self._data.dimension(x=>x.file);
 
 	 	self._project = project
 		
@@ -34,13 +44,17 @@ export default function CertaintyDataSource(pubSubService, project){
 		self.get = _getData;
 
 		pubSubService.register(self);
-
-		//self.subscribe(`filter/entityId`, args=>_filterDimension(self._idDimension, args.filter));
-		//self.subscribe(`filter/entityName`, args=>_filterDimension(self._nameDimension, args.filter));
-		//self.subscribe(`filter/entityType`, args=>_filterDimension(self._typeDimension, args.filter));
-		//self.subscribe(`filter/fileName`, args=>_filterDimension(self._docNameDimension, args.filter));
-		//self.subscribe(`filter/fileId`, args=>_filterDimension(self._docIdDimension, args.filter));
-
+		self.subscribe('filter/certaintyCategory', args=>_filterDimension(self._categoryDimension, args.filter));
+		self.subscribe('filter/certaintyLocus', args=>_filterDimension(self._locusDimension, args.filter));
+		self.subscribe('filter/certaintyDegree', args=>_filterDimension(self._degreeDimension, args.filter));
+		self.subscribe('filter/certaintyCert', args=>_filterDimension(self._certDimension, args.filter));
+		self.subscribe('filter/certaintyMatch', args=>_filterDimension(self._matchDimension, args.filter));
+		self.subscribe('filter/certaintyId', args=>_filterDimension(self._idDimension, args.filter));
+		self.subscribe('filter/certaintyAssertedValue', args=>_filterDimension(self._assertedValueDimension, args.filter));
+		self.subscribe('filter/author', args=>_filterDimension(self._respDimension, args.filter));
+		self.subscribe('filter/entityId', args=>_filterDimension(self._targetDimension, args.filter));
+		self.subscribe('filter/fileId', args=>_filterDimension(self._fileDimension, args.filter));
+		
 		return self;
 	}
 
