@@ -1,1 +1,1 @@
-export {default as useRender} from './sunburst';
+export {default as useRender} from './vis';

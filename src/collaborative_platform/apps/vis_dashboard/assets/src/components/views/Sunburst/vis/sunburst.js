@@ -1,13 +1,32 @@
-import {useEffect} from 'react';
 import * as d3 from 'd3';
 
-export default function useRender(width, height, data, numLevels, levels, containerRef){
-    useEffect(()=>{
-        render(width, height, data, numLevels, levels, containerRef);
-        }, // Render 
-        [width, height, data, numLevels, levels, containerRef]); // Conditions*/
-}
+/* Class: Heatmap
+ *
+ * 
+ * */
+export default function Sunburst(){
+	const self = {
+		_eventCallback: null,
+		_padding: 10,
+		_legendWidth: 120,
+		_hoverTooltipHeight: 70,
+		_getLegendHeight: numLevels=>numLevels*70,
+	};
 
-function render(width, height, data, numLevels, levels, containerRef){
-	console.log(width, height, data, numLevels, levels, containerRef)
-}
+	function _init(){
+		self.setEventCallback = _getParameterSetter('_eventCallback');
+		self.render = _render;
+
+		return self;
+	}
+
+	function _getParameterSetter(key){
+		return (value)=>self[key]=value;
+	}
+
+	function _render(width, height, data, numLevels, levels, containerRef){
+		console.log(width, height, data, numLevels, levels, containerRef)
+	}
+
+	return _init();
+};

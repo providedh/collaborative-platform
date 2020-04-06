@@ -6,7 +6,7 @@ import getConfig from './config';
 import {useRender} from './vis';
 import {DataClient} from '../../../data';
 
-function useData(dataClient, dimension){
+function useData(dataClient, source){
     const [data, setData] = useState(null);
 
     useEffect(()=>{
@@ -28,14 +28,14 @@ function handleFilter([min, max], data, dataClient){
     }
 }
 
-function Sunburst ({ layout, source, numLevels, ...levels}) {
+function Sunburst ({ layout, source, numberOfLevels, ...levels}) {
 	const containerRef = useRef();
 	const [width, height] = layout!=undefined?[layout.w, layout.h]:[4,4];
 
     const [dataClient, _] = useState(DataClient());
 	const data = useData(dataClient, source);
     
-    useRender(width, height, data, numLevels, levels, containerRef)
+    useRender(width, height, data, numberOfLevels, levels, containerRef)
 
     return(
         <div className={styles.sunburst} ref={containerRef}>
