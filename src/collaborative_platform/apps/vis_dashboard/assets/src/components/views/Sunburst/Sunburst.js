@@ -22,10 +22,7 @@ function useData(dataClient, source){
     return data;
 }
 
-function handleFilter([min, max], data, dataClient){
-    function inRange(entry){
-        
-    }
+function onEvent(event){
 }
 
 function Sunburst ({ layout, source, numberOfLevels, ...levels}) {
@@ -33,7 +30,7 @@ function Sunburst ({ layout, source, numberOfLevels, ...levels}) {
 	const [width, height] = layout!=undefined?[layout.w, layout.h]:[4,4];
 
     const [dataClient, _] = useState(DataClient());
-	const data = useData(dataClient, source);
+	const data = useData(dataClient, source, onEvent);
     
     useRender(width, height, data, numberOfLevels, levels, containerRef)
 
