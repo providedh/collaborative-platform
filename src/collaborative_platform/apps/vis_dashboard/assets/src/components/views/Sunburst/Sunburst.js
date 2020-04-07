@@ -7,7 +7,7 @@ import {useRender} from './vis';
 import {DataClient} from '../../../data';
 
 function useData(dataClient, source){
-    const [data, setData] = useState(null);
+    const [data, setData] = useState({all:[], filtered:[]});
 
     useEffect(()=>{
         dataClient.unsubscribe('entity');
@@ -36,7 +36,7 @@ function Sunburst ({ layout, source, numberOfLevels, ...levels}) {
 
     return(
         <div className={styles.sunburst} ref={containerRef}>
-            <svg/>
+            <svg></svg>
         </div>
     )
 }

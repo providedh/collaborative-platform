@@ -1,0 +1,9 @@
+.innerCircle text{
+	text-anchor: middle;
+	fill: var(--primary);
+}
+
+.innerCircle circle{
+	fill: white;
+	stroke: var(--primary);
+}

@@ -7,7 +7,7 @@ export default function useRender(width, height, data, numLevels, levels, contai
     useEffect(()=>{
 			const sunburst = Sunburst();
 			sunburst.setEventCallback(callback);
-			sunburst.render(width, height, data, numLevels, levels, containerRef);
+			sunburst.render(data, numLevels, levels, containerRef.current);
         }, // Render 
         [width, height, data, numLevels, levels, containerRef]); // Conditions*/
 }
