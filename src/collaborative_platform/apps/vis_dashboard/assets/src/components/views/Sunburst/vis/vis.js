@@ -3,11 +3,15 @@ import * as d3 from 'd3';
 
 import Sunburst from './sunburst';
 
-export default function useRender(width, height, data, numLevels, levels, containerRef, callback){
+export default function useRender(width, height, data, count, levels, containerRef, callback){
+	const levelKeys = Object.entries(levels).sort((x, y)=>x[0] - y[0]).map(x=>x[1]);
+	
     useEffect(()=>{
+		if(data != null){
 			const sunburst = Sunburst();
 			sunburst.setEventCallback(callback);
-			sunburst.render(data, numLevels, levels, containerRef.current);
-        }, // Render 
-        [width, height, data, numLevels, levels, containerRef]); // Conditions*/
+			sunburst.render(data, count, levels, containerRef.current);
+		}
+    }, // Render 
+    [width, height, data, levelKeys.join('_'), containerRef]); // Conditions*/
 }

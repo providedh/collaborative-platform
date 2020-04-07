@@ -24,7 +24,7 @@ export default function Sunburst(){
 		return (value)=>self[key]=value;
 	}
 
-	function setupColorSchemes(){
+	function _setupColorSchemes(){
 		self._colorSchemes = {
 			author: d3.scaleOrdinal().range(d3.schemePaired),
 			document: d3.scaleOrdinal().range(d3.schemePaired),
@@ -39,11 +39,11 @@ export default function Sunburst(){
 		}
 	}
 
-	function renderLegend(width, height, levels, container){
+	function _renderLegend(width, height, levels, container){
 
 	}
 
-	function renderInnerCircle(annotationsCount, centerX, centerY, innerCircleRadius, container){
+	function _renderInnerCircle(annotationsCount, centerX, centerY, innerCircleRadius, container){
 		d3.select(container).select('svg').selectAll('g.innerCircle')
 			.data([annotationsCount])
 			.enter().append('svg:g')
@@ -73,12 +73,39 @@ export default function Sunburst(){
 			})
 	}
 
-	function setupHoverTooltip(){
-
+	function _partition(data, radius){
+		window.d3 = d3;
+		console.log(data)
+		return d3.partition().size([2 * Math.PI, radius])
+			(d3.hierarchy(data, d=>d.value).sum(d => 1))
+		//	    .sort((a, b) => b.value - a.value))
 	}
 
-	function renderSunburst(data, numLevels, levels, container){
-		const height = container.clientHeight,
+	function _renderSections(data, count, levels, container, maxDiameter, centerX, centerY){
+		const root = _partition(data, maxDiameter/2);
+		root.each(d => d.current = d);
+
+		const arc = d3.arc()
+		    .startAngle(d => d.x0)
+		    .endAngle(d => d.x1)
+		    .padAngle(d => Math.min((d.x1 - d.x0) / 2, 0.005))
+		    .padRadius(maxDiameter / 4)
+		    .innerRadius(d => d.y0)
+		    .outerRadius(d => d.y1 - 1)
+
+		const g = d3.select(container).select('g.sections')
+			.attr('transform', `translate(${centerX}, ${centerY})`);
+
+		//console.log(data)
+		//console.log(root, arc)
+	}
+
+	function _setupHoverTooltip(){
+	}
+
+	function _renderSunburst(data, count, levels, container){
+		const numLevels = Object.keys(levels).length,
+			height = container.clientHeight,
 			width = container.clientWidth,
 			freeVspace = height - (self._padding*2 + self._hoverTooltipHeight + self._getLegendHeight(numLevels)),
 			freeHspace = width - (self._padding * 2),
@@ -92,13 +119,15 @@ export default function Sunburst(){
 			.attr('width', width)
 			.attr('height', height);
 
-		renderInnerCircle(data.all.length, centerX, centerY, innerCircleRadius, container)
+
+		_renderInnerCircle(count, centerX, centerY, innerCircleRadius, container);
+		_renderSections(data, count, levels, container, maxDiameter, centerX, centerY);
 	}
 
-	function _render(width, height, data, numLevels, levels, container){
-		//console.log(width, height, data, numLevels, levels, container)
-		setupColorSchemes();
-		renderSunburst(width, height, data, numLevels, levels, container);
+	function _render(data, count, levels, container){
+		//console.log(data)
+		_setupColorSchemes();
+		_renderSunburst(data.all, count, levels, container);
 	}
 
 	return _init();

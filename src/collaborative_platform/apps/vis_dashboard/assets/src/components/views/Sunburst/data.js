@@ -1,122 +1,74 @@
 import {useEffect, useState} from "react";
 
-export default function useData(dataClient, source, axis1name, axis2name){
-	const [data, setData] = useState(null);
+export default function useData(dataClient, source, levels){
+    const levelKeys = Object.entries(levels).sort((x, y)=>x[0] - y[0]).map(x=>x[1]);
+    const [fetched, setFetched] = useState(null);
+    const [data, setData] = useState({data:null, count:0});
 
-	useEffect(()=>{
-        const {preprocessing, getEntriesAndAxis} = 
-        	source=='entity'?entityProcessing():certaintyProcessing();
-
+    useEffect(()=>{
         dataClient.unsubscribe('entity');
         dataClient.unsubscribe('certainty');
-        dataClient.subscribe(source, data=>{
-        	if(data == null || data.all.length == 0 || data.filtered.length == 0)
-                return 0;
+        dataClient.unsubscribe('meta');
 
-            const preprocessed = preprocessing(data),
-            	[entries, axis1, axis2] = getEntriesAndAxis(preprocessed, axis1name, axis2name),
-            	[concurrenceMatrix, maxOccurrences] = getConcurrenceMatrix(entries, axis1, axis2),
-            	processed = {concurrenceMatrix, maxOccurrences, axis1, axis2};
-
-        	
-        	setData(processed);
+        dataClient.subscribe(source, d=>{
+        	if(d != null){
+            	const trees = {
+					all: createTree(d.all, levelKeys),
+					filtered: createTree(d.filtered, levelKeys)
+				};
+				setFetched(d);
+	            setData({data:trees, count:d.all.length});
+        	}
         });
+    }, [source])
 
-	}, [source, axis1name, axis2name])
+    useEffect(()=>{
+        if(fetched != null){
+        	const trees = {
+				all: createTree(fetched.all, levelKeys),
+				filtered: createTree(fetched.filtered, levelKeys)
+			};
+            setData({data:trees, count:fetched.all.length});
+        }
+    }, [levelKeys.join('_')])
 
-	return data;
+    return data;
 }
 
-function entityProcessing(){
-	function getAttribute(x, attr){
-		let attrName = attr;
-
-		if(attr == 'documentName')
-			attrName = 'file_name';
-		else if(attr == 'text')
-			attrName = 'name';
-
-		return ''+x[attrName];
-	}
-
-	function preprocessing(data){
-		return data.filtered;
-	}
-
-	function getEntriesAndAxis(data, axis1name, axis2name){
-		const axis1 = {name: axis1name, values: new Set()},
-			axis2 = {name: axis2name, values: new Set()},
-			entries = data.map(x=>{
-				axis1.values.add(getAttribute(x, axis1name));
-				axis2.values.add(getAttribute(x, axis2name));
-				
-				return{ 
-					name:x.name, 
-					id:x.id, 
-					axis1:getAttribute(x, axis1name), 
-					axis2:getAttribute(x, axis2name)
-				};
-			});
-
-		axis1.values = [...axis1.values.values()];
-		axis2.values = [...axis2.values.values()];
-
-		return [entries, axis1, axis2];
-	}
-
-	return {preprocessing, getEntriesAndAxis}
+function getAttrAccessor(key){
+	if(key !== 'category') return entry=>entry[key];
+	else return entry=>entry[key].join(', ')
 }
 
-function certaintyProcessing(){
-	function getAttribute(x, attr){
-		let attrName = attr;
-
-		if(attr == 'id')
-			attrName = 'xml:id';
-		else if(attr == 'text')
-			attrName = 'textContext';
-
-		return ''+x[attrName];
-	}
-
-	function preprocessing(data){
-		return data.filtered;
-	}
-
-	function getEntriesAndAxis(data, axis1name, axis2name){
-		const axis1 = {name: axis1name, values: new Set()},
-			axis2 = {name: axis2name, values: new Set()},
-			entries = data.map(x=>{
-				axis1.values.add(getAttribute(x, axis1name));
-				axis2.values.add(getAttribute(x, axis2name));
-				
-				return{ 
-					name:x.textContext, 
-					id:x['xml:id'], 
-					axis1:getAttribute(x, axis1name), 
-					axis2:getAttribute(x, axis2name)
-				};
-			});
-
-		axis1.values = [...axis1.values.values()];
-		axis2.values = [...axis2.values.values()];
-
-		return [entries, axis1, axis2];
-	}
-
-	return {preprocessing, getEntriesAndAxis}
+function createTree(data, levelKeys){
+	const accessors = levelKeys.map(key=>getAttrAccessor(key));
+	const tree = group(data, accessors); // hierarchy
+	
+	return tree;
 }
 
+function group(data, keys){
+	function regroup(values, i){
+		if (i >= keys.length) return values;
+	    const groupsMap = new Map();
+	    const keyof = keys[i++];
+	    let index = -1;
 
-function getConcurrenceMatrix(entries, axis1, axis2){
-	let maxOccurrences = 0;
-	const concurrenceMatrix = Object.fromEntries(axis1.values.map(x=>[x,null]));
-		axis1.values.forEach(x=>concurrenceMatrix[x] = Object.fromEntries(axis2.values.map(y=>[y, []])));
-	entries.forEach(x=>{
-		concurrenceMatrix[x.axis1][x.axis2].push(x);
-		if(concurrenceMatrix[x.axis1][x.axis2].length > maxOccurrences)
-			maxOccurrences = concurrenceMatrix[x.axis1][x.axis2].length;
-	});
+	    for (const value of values) {
+	      const key = keyof(value)+''; // the attribute's value
+	      const group = groupsMap.get(key);
 
-	return [concurrenceMatrix, maxOccurrences];
+	      if (group) group.children.push(value);
+	      else groupsMap.set(key, {name: group, children:[value]});
+	    }
+
+	    for (const [name, group] of groupsMap) {
+	    	groupsMap.set(name, {name, children:regroup(group.children, i)});
+	    }
+
+	    const groups = [...groupsMap.values()]; //[{name, children}]
+	    return groups;
+	}
+
+	return regroup(data, 0);
 }

@@ -5,22 +5,7 @@ import css from './style.css';
 import getConfig from './config';
 import {useRender} from './vis';
 import {DataClient} from '../../../data';
-
-function useData(dataClient, source){
-    const [data, setData] = useState({all:[], filtered:[]});
-
-    useEffect(()=>{
-        dataClient.unsubscribe('entity');
-        dataClient.unsubscribe('certainty');
-        dataClient.unsubscribe('meta');
-
-        dataClient.subscribe(source, data=>{
-            setData(data);
-        });
-    }, [source])
-
-    return data;
-}
+import useData from './data';
 
 function onEvent(event){
 }
@@ -30,13 +15,15 @@ function Sunburst ({ layout, source, numberOfLevels, ...levels}) {
 	const [width, height] = layout!=undefined?[layout.w, layout.h]:[4,4];
 
     const [dataClient, _] = useState(DataClient());
-	const data = useData(dataClient, source, onEvent);
-    
-    useRender(width, height, data, numberOfLevels, levels, containerRef)
+	const {data, count} = useData(dataClient, source, levels);
+
+    useRender(width, height, data, count, levels, containerRef, onEvent);
 
     return(
         <div className={styles.sunburst} ref={containerRef}>
-            <svg></svg>
+            <svg>
+            <g className='sections'></g>
+            </svg>
         </div>
     )
 }
