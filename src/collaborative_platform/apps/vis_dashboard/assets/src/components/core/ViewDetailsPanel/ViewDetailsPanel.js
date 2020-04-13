@@ -15,9 +15,17 @@ export default function ViewDetailsPanel({view, display, updateView, close}) {
     const options = Views[view.type].prototype.getConfigOptions(form);
     
     function handleUpdateView(formValues){
-        const newConfig = {};
-        formValues.forEach(x=>newConfig[x.name]=x.value);
-        //console.log(view.config, view.type, newConfig, formValues)
+        // This creates a new configuration from the old one with the replaced new
+        // value; which does not ensure that is a valid configuration for the view.
+        // const newConfig = Object.fromEntries(formValues.map(x=>[x.name, x.value]));
+
+        // The getConfigOptions method already returns a correct set of options and 
+        // defaults. The updated view configuration is ensured to be valid. 
+        const formValuesValidated = Views[view.type].prototype.getConfigOptions(formValues);
+        const newConfig = Object.fromEntries(
+            formValuesValidated.map(x=>[x.name, x.value])
+        );
+        
         updateView(newConfig);
     }
 
