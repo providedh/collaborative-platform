@@ -1,9 +1,16 @@
 .innerCircle text{
 	text-anchor: middle;
 	fill: var(--primary);
+	font-weight: bold;
 }
 
 .innerCircle circle{
 	fill: white;
 	stroke: var(--primary);
+}
+
+g.hovertooltip text{
+	text-anchor: middle;
+	fill: var(--primary);
+	font-weight: bold;
 }
