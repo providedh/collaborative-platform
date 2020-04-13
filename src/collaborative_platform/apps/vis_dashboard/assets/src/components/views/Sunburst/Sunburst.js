@@ -20,13 +20,13 @@ function Sunburst ({ layout, source, numberOfLevels, ...levels}) {
     useRender(width, height, data, count, levels, containerRef, onEvent);
 
     return(
-        <div className={styles.sunburst} ref={containerRef}>
+        <div className={styles.sunburst + ' sunburst'} ref={containerRef}>
             <svg>
             <g className='sections'>
                 <g className='paths'></g>
-                <g className='labels'></g>
+                <g className={styles.labels + ' labels'}></g>
             </g>
-            <g className='hovertooltip'>
+            <g className={styles.hovertooltip + ' hovertooltip'}>
                 <text></text>
             </g>
             <g className='legend'></g>

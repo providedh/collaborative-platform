@@ -1,23 +1,10 @@
-.innerCircle text{
+.sunburst  .innerCircle text{
 	text-anchor: middle;
 	fill: var(--primary);
 	font-weight: bold;
 }
 
-.innerCircle circle{
+.sunburst .innerCircle circle{
 	fill: white;
 	stroke: var(--primary);
-}
-
-g.hovertooltip text{
-	text-anchor: middle;
-	fill: var(--primary);
-	font-weight: bold;
-}
-
-g.labels{
-	pointer-events: none;
-    text-anchor: middle;
-    font-size: 9px;
-    font-family: sans-serif;
 }
