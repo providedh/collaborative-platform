@@ -2,7 +2,7 @@ import * as d3 from 'd3';
 
 const attributes = {
 	entity: {
-		options:['id', 'text', 'type', 'documentName'], 
+		options:['id', 'name', 'type', 'file_name'], 
 		labels: ['id', 'text', 'type', 'documentName']
 	},
 	certainty: {
