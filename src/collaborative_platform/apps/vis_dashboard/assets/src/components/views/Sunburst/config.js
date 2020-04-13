@@ -2,8 +2,8 @@ import * as d3 from 'd3';
 
 const attributes = {
 	entity: {
-		options:['id', 'name', 'type', 'file_name'], 
-		labels: ['id', 'text', 'type', 'documentName']
+		options:['name', 'type', 'file_name', 'id'], 
+		labels: ['text', 'type', 'documentName', 'id']
 	},
 	certainty: {
 		options: ['resp', 'file', 'category', 'match', 'cert', 'degree'],
@@ -35,10 +35,10 @@ function createLevelsControls(numberOfLevels, prevLevels, source){
 					availableOptions.splice(availableOptions.indexOf(prevLevels['level'+i]), 1);
 					return prevLevels['level'+i];
 				}else{
-					return availableOptions.pop();
+					return availableOptions.shift();
 				}
 			}else{
-				return availableOptions.pop();
+				return availableOptions.shift();
 			}
 		});
 	const levels = levelValues.map((x,i)=>(

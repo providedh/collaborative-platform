@@ -47,12 +47,13 @@ export default function Sunburst(){
 		const legend = d3.select(container).select('g.legend'),
 			legendNode = legend.node(),
 			labels = self._colorSchemes.default.domain().map(x => _shorttenedLabel(x+'')),
-			maxLabelLength = labels.reduce((max, x)=>max>x.length?max:x.length, 0);
+			maxLabelLength = labels.reduce((max, x)=>max>x.length?max:x.length, 0),
+			shapeWidth = Math.max(10, maxLabelLength*6);
 
 		const legendOrdinal = d3.legendColor()
 		  .orient('horizontal')
 		  .shape('path', d3.symbol().type('rect'))
-		  .shapeWidth(maxLabelLength*6)
+		  .shapeWidth(shapeWidth)
 		  .shapePadding(10)
 		  .labelAlign('middle')
 		  .cellFilter(function(d){ return d.label !== 'e' })
@@ -60,13 +61,18 @@ export default function Sunburst(){
 		  .scale(self._colorSchemes.default);
 
 		legend.call(legendOrdinal);
-		const {width, height} = legendNode.getBBox()
-		d3.select(container).select('g.legend')
-			.attr('transform', `translate(${x - width/2}, ${y - height - self._padding})`);
+
+		// It takes at least 150 ms for the DOM to update and have the elements rendered
+		setTimeout(()=>{
+			const {width, height} = legendNode.getBBox();
+			d3.select(container).select('g.legend')
+				.attr('transform', `translate(${x - width/2}, ${y - height - self._padding})`);
+		}, 300);
 	}
 
 	function _renderInnerCircle(source, annotationsCount, centerX, centerY, innerCircleRadius, container){
 		const innerText = source === 'certainty'?'annotations':'entities';
+		
 		d3.select(container).select('svg').selectAll('g.innerCircle')
 			.data([annotationsCount])
 			.enter().append('svg:g')
@@ -79,9 +85,9 @@ export default function Sunburst(){
 					.attr('y', innerCircleRadius - 4)
 				d3.select(this)
 					.append('svg:text')
+					.attr('class', 'desc')
 					.attr('x', innerCircleRadius)
 					.attr('y', innerCircleRadius + 12)
-					.text(innerText)
 				//d3.select(this)
 				//	.append('svg:circle')
 				//	.attr('r', innerCircleRadius)
@@ -93,6 +99,7 @@ export default function Sunburst(){
 			.attr('transform', `translate(${centerX - innerCircleRadius}, ${centerY - innerCircleRadius})`)
 			.each(function(d){
 				d3.select(this).select('text.annotations').text(d);
+				d3.select(this).select('text.desc').text(innerText);
 			})
 	}
 
