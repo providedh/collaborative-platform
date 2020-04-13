@@ -15,3 +15,8 @@ g.labels{
     font-size: 9px;
     font-family: sans-serif;
 }
+
+g.legend text{
+	pointer-events: none;
+    font-size: 12px;
+}

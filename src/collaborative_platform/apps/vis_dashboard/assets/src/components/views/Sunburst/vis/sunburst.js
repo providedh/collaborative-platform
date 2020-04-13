@@ -1,4 +1,6 @@
-import * as d3 from 'd3';
+import * as d3_ from 'd3';
+import * as d3Legend from 'd3-svg-legend';
+const d3 = Object.assign({}, d3_, d3Legend)
 
 /* Class: Heatmap
  *
@@ -27,6 +29,7 @@ export default function Sunburst(){
 
 	function _setupColorSchemes(){
 		self._colorSchemes = {
+			default: null,
 			author: d3.scaleOrdinal().range(d3.schemePaired),
 			document: d3.scaleOrdinal().range(d3.schemePaired),
 			category: d3.scaleOrdinal()
@@ -40,8 +43,26 @@ export default function Sunburst(){
 		}
 	}
 
-	function _renderLegend(width, height, levels, container){
+	function _renderLegend(container, x, y){
+		const legend = d3.select(container).select('g.legend'),
+			legendNode = legend.node(),
+			labels = self._colorSchemes.default.domain().map(x => _shorttenedLabel(x+'')),
+			maxLabelLength = labels.reduce((max, x)=>max>x.length?max:x.length, 0);
 
+		const legendOrdinal = d3.legendColor()
+		  .orient('horizontal')
+		  .shape('path', d3.symbol().type('rect'))
+		  .shapeWidth(maxLabelLength*6)
+		  .shapePadding(10)
+		  .labelAlign('middle')
+		  .cellFilter(function(d){ return d.label !== 'e' })
+		  .labels(labels)
+		  .scale(self._colorSchemes.default);
+
+		legend.call(legendOrdinal);
+		const {width, height} = legendNode.getBBox()
+		d3.select(container).select('g.legend')
+			.attr('transform', `translate(${x - width/2}, ${y - height - self._padding})`);
 	}
 
 	function _renderInnerCircle(annotationsCount, centerX, centerY, innerCircleRadius, container){
@@ -92,8 +113,7 @@ export default function Sunburst(){
 	}
 
 	function _renderSections(data, count, levels, container, maxDiameter, centerX, centerY){
-		const root = _partition(data, maxDiameter/2),
-			color = d3.scaleOrdinal(d3.quantize(d3.interpolateRainbow, data.children.length + 1));
+		const root = _partition(data, maxDiameter/2);
 		root.each(d => d.current = d);
 
 		const arc = d3.arc()
@@ -112,7 +132,7 @@ export default function Sunburst(){
     		.selectAll('path')
     		.data(root.descendants().filter(d=>(d.depth && d.depth <= Object.keys(levels).length)))
     		.join('path')
-      			.attr('fill', d => { while (d.depth > 1) d = d.parent; return color(d.data.name); })
+      			.attr('fill', d => { while (d.depth > 1) d = d.parent; return self._colorSchemes.default(d.data.name); })
       			.attr('d', arc)
     			//.append('title')
       			//	.text(d => `${d.ancestors().map(d => d.data.name).reverse().join('/')}\n${format(d.value)}`);
@@ -139,7 +159,7 @@ export default function Sunburst(){
 				let hierarchy = [d.data.name], t = d;
 				while(t = t?.parent) hierarchy = [t.data.name, ...hierarchy];
 
-				// remove the "root" label
+				// remove the 'root' label
 				hierarchy.shift();
 
 				d3.select(container).select('g.hovertooltip text')
@@ -161,6 +181,8 @@ export default function Sunburst(){
 			centerY = freeVspace/2 + self._padding - self._extraVspacing,
 			innerCircleRadius = 50;
 
+		self._colorSchemes.default = d3.scaleOrdinal(d3.quantize(d3.interpolateRainbow, data.children.length + 1));
+
 		d3.select(container).select('svg')
 			.attr('width', width)
 			.attr('height', height);
@@ -168,6 +190,7 @@ export default function Sunburst(){
 		_renderInnerCircle(count, centerX, centerY, innerCircleRadius, container);
 		_renderSections(data, count, levels, container, maxDiameter, centerX, centerY);
 		_setupHoverTooltip(container, centerX, centerY+maxDiameter/2);
+		_renderLegend(container, centerX, height);
 	}
 
 	function _render(data, count, levels, container){

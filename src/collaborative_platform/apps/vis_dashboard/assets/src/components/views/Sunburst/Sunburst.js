@@ -29,7 +29,7 @@ function Sunburst ({ layout, source, numberOfLevels, ...levels}) {
             <g className={styles.hovertooltip + ' hovertooltip'}>
                 <text></text>
             </g>
-            <g className='legend'></g>
+            <g className={styles.legend + ' legend'}></g>
             </svg>
         </div>
     )
