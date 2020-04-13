@@ -28,10 +28,10 @@ const defaultConfig = [
 
 function createLevelsControls(numberOfLevels, prevLevels, source){
 	const availableOptions = [...attributes[source].options],
-		levelValues = d3.range(1, numberOfLevels+1)
+		levelValues = d3.range(1, (+numberOfLevels)+1)
 		.map(i=>{
-			if(Object.hasOwnProperty(prevLevels, 'level'+i)){
-				if(Object.hasOwnProperty(attributes[source].options, prevLevels['level'+i])){
+			if(prevLevels.hasOwnProperty('level'+i)){
+				if(attributes[source].options.includes(prevLevels['level'+i])){
 					availableOptions.splice(availableOptions.indexOf(prevLevels['level'+i]), 1);
 					return prevLevels['level'+i];
 				}else{
@@ -62,7 +62,7 @@ export default function getOptions(form){
 
 	let {source, numberOfLevels, ...prevLevels} = currentValues;
 
-	numberOfLevels = Math.min(numberOfLevels, attributes[source].length-1);
+	numberOfLevels = Math.min(numberOfLevels, attributes[source].options.length-1);
 	const levels = createLevelsControls(numberOfLevels, prevLevels, source);
 
 	const configOptions = [
