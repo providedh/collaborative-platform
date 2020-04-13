@@ -14,3 +14,10 @@ g.hovertooltip text{
 	fill: var(--primary);
 	font-weight: bold;
 }
+
+g.labels{
+	pointer-events: none;
+    text-anchor: middle;
+    font-size: 9px;
+    font-family: sans-serif;
+}

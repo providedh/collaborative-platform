@@ -107,10 +107,6 @@ export default function Sunburst(){
       			//	.text(d => `${d.ancestors().map(d => d.data.name).reverse().join('/')}\n${format(d.value)}`);
 
   		g.select('g.labels')
-      		.attr('pointer-events', 'none')
-      		.attr('text-anchor', 'middle')
-      		.attr('font-size', 10)
-      		.attr('font-family', 'sans-serif')
     		.selectAll('text')
     			.data(root.descendants().filter(d => d.depth && (d.y0 + d.y1) / 2 * (d.x1 - d.x0) > 10))
     			.join('text')
