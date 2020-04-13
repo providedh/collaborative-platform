@@ -5,10 +5,10 @@ import Sunburst from './sunburst';
 
 export default function useRender(width, height, data, count, levels, containerRef, callback){
 	const levelKeys = Object.entries(levels).sort((x, y)=>x[0] - y[0]).map(x=>x[1]);
+	const sunburst = Sunburst();
 	
     useEffect(()=>{
-		if(data != null){
-			const sunburst = Sunburst();
+		if(data != null && data != undefined && count > 0){
 			sunburst.setEventCallback(callback);
 			sunburst.render(data, count, levels, containerRef.current);
 		}
