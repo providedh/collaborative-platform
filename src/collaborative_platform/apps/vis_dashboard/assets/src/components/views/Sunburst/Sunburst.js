@@ -17,7 +17,7 @@ function Sunburst ({ layout, source, numberOfLevels, ...levels}) {
     const [dataClient, _] = useState(DataClient());
 	const {data, count} = useData(dataClient, source, levels);
 
-    useRender(width, height, data, count, levels, containerRef, onEvent);
+    useRender(width, height, data, count, source, levels, containerRef, onEvent);
 
     return(
         <div className={styles.sunburst + ' sunburst'} ref={containerRef}>

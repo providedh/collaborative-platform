@@ -65,7 +65,8 @@ export default function Sunburst(){
 			.attr('transform', `translate(${x - width/2}, ${y - height - self._padding})`);
 	}
 
-	function _renderInnerCircle(annotationsCount, centerX, centerY, innerCircleRadius, container){
+	function _renderInnerCircle(source, annotationsCount, centerX, centerY, innerCircleRadius, container){
+		const innerText = source === 'certainty'?'annotations':'entities';
 		d3.select(container).select('svg').selectAll('g.innerCircle')
 			.data([annotationsCount])
 			.enter().append('svg:g')
@@ -80,7 +81,7 @@ export default function Sunburst(){
 					.append('svg:text')
 					.attr('x', innerCircleRadius)
 					.attr('y', innerCircleRadius + 12)
-					.text('annotations')
+					.text(innerText)
 				//d3.select(this)
 				//	.append('svg:circle')
 				//	.attr('r', innerCircleRadius)
@@ -170,7 +171,7 @@ export default function Sunburst(){
 			})
 	}
 
-	function _renderSunburst(data, count, levels, container){
+	function _renderSunburst(data, count, source, levels, container){
 		const numLevels = Object.keys(levels).length,
 			height = container.clientHeight,
 			width = container.clientWidth,
@@ -187,16 +188,16 @@ export default function Sunburst(){
 			.attr('width', width)
 			.attr('height', height);
 
-		_renderInnerCircle(count, centerX, centerY, innerCircleRadius, container);
+		_renderInnerCircle(source, count, centerX, centerY, innerCircleRadius, container);
 		_renderSections(data, count, levels, container, maxDiameter, centerX, centerY);
 		_setupHoverTooltip(container, centerX, centerY+maxDiameter/2);
 		_renderLegend(container, centerX, height);
 	}
 
-	function _render(data, count, levels, container){
+	function _render(data, count, source, levels, container){
 		//console.log(data)
 		_setupColorSchemes();
-		_renderSunburst(data.all, count, levels, container);
+		_renderSunburst(data.all, count, source, levels, container);
 	}
 
 	return _init();
