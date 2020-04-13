@@ -80,6 +80,17 @@ export default function Sunburst(){
 		//	    .sort((a, b) => b.value - a.value))
 	}
 
+	function _shorttenedLabel(label, maxLabelLength = 16){
+		if(label.length <= maxLabelLength)
+			return label;
+
+		const overflow = label.length - maxLabelLength,
+			fragmentLength = Math.trunc(maxLabelLength/2 - 2),
+			startFragment = label.slice(0, fragmentLength),
+			endFragment = label.slice(label.length - fragmentLength, label.length);
+		return startFragment + '...' + endFragment;
+	}
+
 	function _renderSections(data, count, levels, container, maxDiameter, centerX, centerY){
 		const root = _partition(data, maxDiameter/2),
 			color = d3.scaleOrdinal(d3.quantize(d3.interpolateRainbow, data.children.length + 1));
@@ -116,7 +127,7 @@ export default function Sunburst(){
         			return `rotate(${x - 90}) translate(${y},0) rotate(${x < 180 ? 0 : 180})`;
       			})
       			.attr('dy', '0.35em')
-      			.text(d => d.data.name);
+      			.text(d => _shorttenedLabel(d.data.name+''));
 	}
 
 	function _setupHoverTooltip(container, x, y){
@@ -134,7 +145,7 @@ export default function Sunburst(){
 				d3.select(container).select('g.hovertooltip text')
 					.text(`${hierarchy.join(' > ')} (${d.value} annotations)`);
 			})
-			.on('mouseexit', d=>{
+			.on('mouseleave', d=>{
 				d3.select(container).select('g.hovertooltip text').text('');
 			})
 	}
