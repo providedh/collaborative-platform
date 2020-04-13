@@ -42,7 +42,7 @@ function getAttrAccessor(key){
 
 function createTree(data, levelKeys){
 	const accessors = levelKeys.map(key=>getAttrAccessor(key));
-	const tree = group(data, accessors); // hierarchy
+	const tree = {name: 'root', children: group(data, accessors)}; // hierarchy
 	
 	return tree;
 }
