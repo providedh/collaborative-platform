@@ -22,7 +22,14 @@ function Sunburst ({ layout, source, numberOfLevels, ...levels}) {
     return(
         <div className={styles.sunburst} ref={containerRef}>
             <svg>
-            <g className='sections'></g>
+            <g className='sections'>
+                <g className='paths'></g>
+                <g className='labels'></g>
+            </g>
+            <g className='hovertooltip'>
+                <text></text>
+            </g>
+            <g className='legend'></g>
             </svg>
         </div>
     )
