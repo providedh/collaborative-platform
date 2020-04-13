@@ -7,7 +7,8 @@ import {useRender} from './vis';
 import {DataClient} from '../../../data';
 import useData from './data';
 
-function onEvent(event){
+function onEvent(source, levels, event){
+    console.log(source, levels['level'+event.depth], event.data)
 }
 
 function Sunburst ({ layout, source, numberOfLevels, ...levels}) {
@@ -17,7 +18,7 @@ function Sunburst ({ layout, source, numberOfLevels, ...levels}) {
     const [dataClient, _] = useState(DataClient());
 	const {data, count} = useData(dataClient, source, levels);
 
-    useRender(width, height, data, count, source, levels, containerRef, onEvent);
+    useRender(width, height, data, count, source, levels, containerRef, (e)=>onEvent(source,levels, e));
 
     return(
         <div className={styles.sunburst + ' sunburst'} ref={containerRef}>

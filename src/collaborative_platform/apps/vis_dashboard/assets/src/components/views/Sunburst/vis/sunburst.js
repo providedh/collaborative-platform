@@ -142,6 +142,7 @@ export default function Sunburst(){
     		.join('path')
       			.attr('fill', d => { while (d.depth > 1) d = d.parent; return self._colorSchemes.default(d.data.name); })
       			.attr('d', arc)
+      			.on('click', d=>self._eventCallback(d));
     			//.append('title')
       			//	.text(d => `${d.ancestors().map(d => d.data.name).reverse().join('/')}\n${format(d.value)}`);
 
