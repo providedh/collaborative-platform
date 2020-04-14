@@ -142,7 +142,21 @@ export default function Sunburst(){
     		.join('path')
       			.attr('fill', d => { while (d.depth > 1) d = d.parent; return self._colorSchemes.default(d.data.name); })
       			.attr('d', arc)
-      			.on('click', d=>self._eventCallback(d));
+      			.on('click', d=>self._eventCallback({action:'click', ...d}))
+				.on('mouseenter', d=>{
+					let hierarchy = [d.data.name], t = d;
+					while(t = t?.parent) hierarchy = [t.data.name, ...hierarchy];
+
+					// remove the 'root' label
+					hierarchy.shift();
+
+					d3.select(container).select('g.hovertooltip text')
+						.text(`${hierarchy.join(' > ')} (${d.value} annotations)`);
+					self._eventCallback({action:'hover', ...d})
+				})
+				.on('mouseleave', d=>{
+					d3.select(container).select('g.hovertooltip text').text('');
+				})
     			//.append('title')
       			//	.text(d => `${d.ancestors().map(d => d.data.name).reverse().join('/')}\n${format(d.value)}`);
 
@@ -162,21 +176,6 @@ export default function Sunburst(){
 	function _setupHoverTooltip(container, x, y){
 		d3.select(container).select('g.hovertooltip')
 			.attr('transform', `translate(${x}, ${y + self._hoverTooltipHeight - self._extraVspacing})`);
-
-		d3.select(container).select('g.paths').selectAll('path')
-			.on('mouseenter', d=>{
-				let hierarchy = [d.data.name], t = d;
-				while(t = t?.parent) hierarchy = [t.data.name, ...hierarchy];
-
-				// remove the 'root' label
-				hierarchy.shift();
-
-				d3.select(container).select('g.hovertooltip text')
-					.text(`${hierarchy.join(' > ')} (${d.value} annotations)`);
-			})
-			.on('mouseleave', d=>{
-				d3.select(container).select('g.hovertooltip text').text('');
-			})
 	}
 
 	function _renderSunburst(data, count, source, levels, container){
@@ -196,9 +195,9 @@ export default function Sunburst(){
 			.attr('width', width)
 			.attr('height', height);
 
+		_setupHoverTooltip(container, centerX, centerY+maxDiameter/2);
 		_renderInnerCircle(source, count, centerX, centerY, innerCircleRadius, container);
 		_renderSections(data, count, levels, container, maxDiameter, centerX, centerY);
-		_setupHoverTooltip(container, centerX, centerY+maxDiameter/2);
 		_renderLegend(container, centerX, height);
 	}
 

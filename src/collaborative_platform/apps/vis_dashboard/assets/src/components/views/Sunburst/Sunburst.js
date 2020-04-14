@@ -7,8 +7,19 @@ import {useRender} from './vis';
 import {DataClient} from '../../../data';
 import useData from './data';
 
-function onEvent(source, levels, event){
-    console.log(source, levels['level'+event.depth], event.data)
+function onEvent(source, levels, event, dataClient){
+        //console.log(source, levels['level'+event.depth], event.data)
+    if(event.action === 'click'){
+        if(levels['level'+event.depth] === 'file'){
+            dataClient.filter('fileId', x=>x===event.data.name);
+        }else if(levels['level'+event.depth] === 'file_name'){
+        }
+    }else{
+        if(levels['level'+event.depth] === 'file'){
+            dataClient.focusDocument(event.data.name);
+        }else if(levels['level'+event.depth] === 'file_name'){
+        }
+    }
 }
 
 function Sunburst ({ layout, source, numberOfLevels, ...levels}) {
@@ -18,7 +29,7 @@ function Sunburst ({ layout, source, numberOfLevels, ...levels}) {
     const [dataClient, _] = useState(DataClient());
 	const {data, count} = useData(dataClient, source, levels);
 
-    useRender(width, height, data, count, source, levels, containerRef, (e)=>onEvent(source,levels, e));
+    useRender(width, height, data, count, source, levels, containerRef, (e)=>onEvent(source,levels, e, dataClient));
 
     return(
         <div className={styles.sunburst + ' sunburst'} ref={containerRef}>
