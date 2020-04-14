@@ -162,7 +162,7 @@ export default function Sunburst(){
 
   		g.select('g.labels')
     		.selectAll('text')
-    			.data(root.descendants().filter(d => d.depth && (d.y0 + d.y1) / 2 * (d.x1 - d.x0) > 10))
+    			.data(root.descendants().filter(d => d.depth && d.depth <= Object.keys(levels).length && (d.y0 + d.y1) / 2 * (d.x1 - d.x0) > 10))
     			.join('text')
       			.attr('transform', function(d) {
         			const x = (d.x0 + d.x1) / 2 * 180 / Math.PI;
