@@ -13,6 +13,7 @@ from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, JsonR
 from apps.exceptions import BadRequest
 from apps.files_management.file_conversions.ids_corrector import IDsCorrector
 from apps.files_management.file_conversions.elements_extractor import ElementsExtractor
+from apps.files_management.file_conversions.file_renderer import FileRenderer
 from apps.projects.helpers import log_activity, paginate_start_length, page_to_json_response
 from apps.files_management.models import File, FileVersion, Directory
 from apps.views_decorators import objects_exists, user_has_access
@@ -172,18 +173,15 @@ def get_file_version(request, file_id, version=None):  # type: (HttpRequest, int
     if version is None:
         version = file.version_number
 
-    file_version = file.file_versions.filter(number=version).get()  # type: FileVersion
+    file_version = file.file_versions.get(number=version)
 
     try:
         creator = model_to_dict(file_version.created_by, fields=('id', 'first_name', 'last_name'))
     except (AttributeError, User.DoesNotExist):
         creator = file_version.created_by_id
 
-    file_version.upload.open('r')
-    xml_content = file_version.upload.read()
-    file_version.upload.close()
-
-    xml_content = append_unifications(xml_content, file_version)
+    file_renderer = FileRenderer()
+    xml_content = file_renderer.render_file_version(file_version)
 
     response = {
         "filename": file.name,
@@ -295,15 +293,25 @@ def get_project_tree(request, project_id):
 @user_has_access()
 def download_file(request, file_id):  # type: (HttpRequest, int) -> HttpResponse
     file = File.objects.get(id=file_id, deleted=False)
-    return file.download()
+    content = file.get_rendered_content()
+
+    response = HttpResponse(content, content_type='application/xml')
+    response['Content-Disposition'] = bytes(f'attachment; filename="{file.name}"', 'utf-8')
+
+    return response
 
 
 @login_required
 @objects_exists
 @user_has_access()
-def download_fileversion(request, file_id, version):  # type: (HttpRequest, int, int) -> HttpResponse
-    fileversion = FileVersion.objects.get(file_id=file_id, number=version)
-    return fileversion.download()
+def download_file_version(request, file_id, version):  # type: (HttpRequest, int, int) -> HttpResponse
+    file_version = FileVersion.objects.get(file_id=file_id, number=version)
+    content = file_version.get_rendered_content()
+
+    response = HttpResponse(content, content_type='application/xml')
+    response['Content-Disposition'] = bytes(f'attachment; filename="{file_version.file.name}"', 'utf-8')
+
+    return response
 
 
 @login_required

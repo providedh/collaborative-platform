@@ -10,6 +10,7 @@ from django.http import JsonResponse, HttpRequest, HttpResponse, HttpResponseBad
 
 from collaborative_platform.settings import XML_NAMESPACES
 
+from apps.files_management.api import download_file as files_management__download_file
 from apps.exceptions import BadRequest, NotModified
 from apps.files_management.models import File, FileVersion, FileMaxXmlIds
 from apps.projects.helpers import user_is_project_admin
@@ -113,8 +114,7 @@ def project_files(request, project_id):  # type: (HttpRequest, int) -> JsonRespo
 @user_has_access()
 def file(request, project_id, file_id):  # type: (HttpRequest, int, int) -> HttpResponse
     if request.method == 'GET':
-        file = File.objects.get(id=file_id, deleted=False)
-        response = file.download()
+        response = files_management__download_file(request, file_id)
 
         return response
 

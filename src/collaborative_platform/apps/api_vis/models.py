@@ -155,7 +155,7 @@ class Clique(models.Model):
 class Unification(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     entity = models.ForeignKey(Entity, on_delete=models.CASCADE)
-    clique = models.ForeignKey(Clique, on_delete=models.CASCADE)
+    clique = models.ForeignKey(Clique, on_delete=models.CASCADE, related_name='unifications')
 
     created_by = models.ForeignKey(User, on_delete=models.SET(get_anonymous_user), related_name='created_unifications')
     created_in_file_version = models.ForeignKey(FileVersion, on_delete=models.CASCADE,

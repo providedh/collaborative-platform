@@ -46,6 +46,15 @@
             <idno/>
           </msIdentifier>
         </msDesc>
+        <listPerson type="personList">
+          <person xml:id="person-4">Butter</person>
+          <person xml:id="person-5">Sand</person>
+        </listPerson>
+        <listObject type="ingredientList">
+          <object type="ingredient" xml:id="ingredient-0">Rag</object>
+          <object type="ingredient" xml:id="ingredient-1">Ingwer</object>
+          <object type="ingredient" xml:id="ingredient-2">Grieben</object>
+        </listObject>
       </sourceDesc>
     </fileDesc>
     <profileDesc>
@@ -108,8 +117,6 @@
           <person resp="recipe_levenshtein_matching" xml:id="person-1">Ingwer</person>
           <person resp="recipe_levenshtein_matching" xml:id="person-2">Grieben</person>
           <person xml:id="person-3">Met</person>
-          <person xml:id="person-4">Butter</person>
-          <person xml:id="person-5">Sand</person>
         </listPerson>
       </div>
       <div type="event">
@@ -133,9 +140,6 @@
       </div>
       <div type="ingredient">
         <listObject type="ingredientList">
-          <object type="ingredient" xml:id="ingredient-0">Rag</object>
-          <object type="ingredient" xml:id="ingredient-1">Ingwer</object>
-          <object type="ingredient" xml:id="ingredient-2">Grieben</object>
           <object type="ingredient" xml:id="ingredient-3">Met</object>
           <object type="ingredient" xml:id="ingredient-4">Butter</object>
           <object type="ingredient" xml:id="ingredient-5">Sand</object>

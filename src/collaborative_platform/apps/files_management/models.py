@@ -125,9 +125,11 @@ class File(FileNode):
         log_activity(project=self.project, user=user, file=self,
                      action_text="renamed {} to".format(old_name))
 
-    def download(self):
-        fv = self.file_versions.filter(number=self.version_number).get()
-        return fv.download()
+    def get_rendered_content(self):
+        file_version = self.file_versions.get(number=self.version_number)
+        content = file_version.get_rendered_content()
+
+        return content
 
     def delete(self, using=None, keep_parents=False):
         from apps.files_management.helpers import delete_es_docs
@@ -221,16 +223,13 @@ class FileVersion(models.Model):
         self.upload.close()
         return content_binary
 
+    def get_rendered_content(self):
+        from apps.files_management.file_conversions.file_renderer import FileRenderer
 
-    def download(self):
-        from apps.files_management.helpers import append_unifications
+        file_renderer = FileRenderer()
+        content = file_renderer.render_file_version(self)
 
-        content = self.get_content()
-        content = append_unifications(content, self)
-
-        response = HttpResponse(content, content_type='application/xml')
-        response['Content-Disposition'] = bytes('attachment; filename="{}"'.format(self.file.name), 'utf-8')
-        return response
+        return content
 
     def save(self, *args, **kwargs):
         from apps.projects.helpers import create_new_project_version

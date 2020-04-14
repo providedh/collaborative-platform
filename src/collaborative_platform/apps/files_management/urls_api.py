@@ -13,7 +13,6 @@ urlpatterns = [
     path('directory/<int:directory_id>/rename/<str:new_name>', api.rename, name='rename_directory'),
     path('get_tree/<int:project_id>', api.get_project_tree, name='get_project_tree'),
     path('<int:file_id>/download', api.download_file, name='file_download'),
-    path('<int:file_id>/version/<int:version>/download/', api.download_fileversion, name='fileversion_download'),
+    path('<int:file_id>/version/<int:version>/download/', api.download_file_version, name='file_version_download'),
     path('directory/<int:directory_id>/download', api.download_directory, name='directory_download'),
-
 ]
