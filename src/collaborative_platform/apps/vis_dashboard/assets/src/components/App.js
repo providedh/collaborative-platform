@@ -48,6 +48,7 @@ export default class App extends React.Component {
                         fetching: 'contributors in the project.'
                     });
                     window.documents = Object.fromEntries(response.content.map(d=>[d.id, d]));
+                    window.name2document = Object.fromEntries(response.content.map(d=>[d.name, d.id]));
                     resolve();
                 }
             });

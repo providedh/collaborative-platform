@@ -13,11 +13,31 @@ function onEvent(source, levels, event, dataClient){
         if(levels['level'+event.depth] === 'file'){
             dataClient.filter('fileId', x=>x===(+event.data.name));
         }else if(levels['level'+event.depth] === 'file_name'){
+            if(name2document.hasOwnProperty(event.data.name))
+                dataClient.filter('fileId', x=>x===name2document[event.data.name]);
+        }else{
+            if(source === 'certainty'){
+                const option2dimension = {
+                    category: 'certaintyCategory',
+                    degree: 'certaintyDegree',
+                    cert: 'certaintyCert',
+                    match: 'certaintyMatch',
+                    resp: 'certaintyAuthor',
+                };
+                const dimension = option2dimension[levels['level'+event.depth]];
+
+                if(dimension === 'certaintyCategory'){
+                    dataClient.filter(dimension, x=>x.includes(event.data.name));
+                }else{
+                    dataClient.filter(dimension, x=>x===event.data.name);
+                }
+            }
         }
     }else{
         if(levels['level'+event.depth] === 'file'){
             dataClient.focusDocument(event.data.name);
         }else if(levels['level'+event.depth] === 'file_name'){
+            dataClient.focusDocument(name2document[event.data.name]);
         }
     }
 }
@@ -27,9 +47,9 @@ function Sunburst ({ layout, source, numberOfLevels, ...levels}) {
 	const [width, height] = layout!=undefined?[layout.w, layout.h]:[4,4];
 
     const [dataClient, _] = useState(DataClient());
-	const {data, count} = useData(dataClient, source, levels);
+	const data = useData(dataClient, source, levels);
 
-    useRender(width, height, data, count, source, levels, containerRef, (e)=>onEvent(source,levels, e, dataClient));
+    useRender(width, height, data, source, levels, containerRef, (e)=>onEvent(source,levels, e, dataClient));
 
     return(
         <div className={styles.sunburst + ' sunburst'} ref={containerRef}>

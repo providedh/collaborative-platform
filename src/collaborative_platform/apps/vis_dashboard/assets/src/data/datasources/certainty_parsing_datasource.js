@@ -51,6 +51,7 @@ export default function CertaintyDataSource(pubSubService, project){
 		self.subscribe('filter/certaintyMatch', args=>_filterDimension(self._matchDimension, args.filter));
 		self.subscribe('filter/certaintyId', args=>_filterDimension(self._idDimension, args.filter));
 		self.subscribe('filter/certaintyAssertedValue', args=>_filterDimension(self._assertedValueDimension, args.filter));
+		self.subscribe('filter/certaintyAuthor', args=>_filterDimension(self._respDimension, args.filter));
 		self.subscribe('filter/author', args=>_filterDimension(self._respDimension, args.filter));
 		self.subscribe('filter/entityId', args=>_filterDimension(self._targetDimension, args.filter));
 		self.subscribe('filter/fileId', args=>_filterDimension(self._fileDimension, args.filter));

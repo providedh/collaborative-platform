@@ -12,23 +12,36 @@ export default function useData(dataClient, source, levels){
 
         dataClient.subscribe(source, d=>{
         	if(d != null){
-            	const trees = {
-					all: createTree(d.all, levelKeys),
-					filtered: createTree(d.filtered, levelKeys)
+            	const newData = {
+					all: {
+						tree: createTree(d.all, levelKeys),
+						count: d.all.length
+					},
+					filtered: {
+						tree: createTree(d.filtered, levelKeys),
+						count: d.filtered.length
+					}
 				};
 				setFetched(d);
-	            setData({data:trees, count:d.all.length});
+	            setData(newData);
         	}
         });
     }, [source])
 
     useEffect(()=>{
         if(fetched != null){
-        	const trees = {
-				all: createTree(fetched.all, levelKeys),
-				filtered: createTree(fetched.filtered, levelKeys)
+        	const newData = {
+				all: {
+					tree: createTree(fetched.all, levelKeys),
+					count: fetched.all.length
+				},
+				filtered: {
+					tree: createTree(fetched.filtered, levelKeys),
+					count: fetched.filtered.length
+				}
 			};
-            setData({data:trees, count:fetched.all.length});
+        	
+            setData(newData);
         }
     }, [levelKeys.join('_')])
 

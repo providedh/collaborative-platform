@@ -201,10 +201,11 @@ export default function Sunburst(){
 		_renderLegend(container, centerX, height);
 	}
 
-	function _render(data, count, source, levels, container){
-		//console.log(data)
+	function _render(data, source, levels, container){
+		const {tree, count} = data.filtered;
+		
 		_setupColorSchemes();
-		_renderSunburst(data.filtered, count, source, levels, container);
+		_renderSunburst(tree, count, source, levels, container);
 	}
 
 	return _init();
