@@ -11,7 +11,7 @@ function onEvent(source, levels, event, dataClient){
         //console.log(source, levels['level'+event.depth], event.data)
     if(event.action === 'click'){
         if(levels['level'+event.depth] === 'file'){
-            dataClient.filter('fileId', x=>x===event.data.name);
+            dataClient.filter('fileId', x=>x===(+event.data.name));
         }else if(levels['level'+event.depth] === 'file_name'){
         }
     }else{

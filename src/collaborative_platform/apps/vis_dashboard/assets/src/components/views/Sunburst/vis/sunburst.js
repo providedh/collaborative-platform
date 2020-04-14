@@ -204,7 +204,7 @@ export default function Sunburst(){
 	function _render(data, count, source, levels, container){
 		//console.log(data)
 		_setupColorSchemes();
-		_renderSunburst(data.all, count, source, levels, container);
+		_renderSunburst(data.filtered, count, source, levels, container);
 	}
 
 	return _init();
