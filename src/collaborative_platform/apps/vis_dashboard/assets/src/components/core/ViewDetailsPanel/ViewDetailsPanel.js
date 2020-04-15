@@ -30,18 +30,15 @@ export default function ViewDetailsPanel({view, display, updateView, close}) {
     }
 
     return(
-        <SidePanel title="View Details" labels={["View Params", "Style"]} display={display} onClose={close}>
-            <div className={styles.panelArea}>
+        <SidePanel title="View Details" labels={["Parameters"]} display={display} onClose={close}>
+            {[<div key="details" className={styles.panelArea}>
                 {view!=null && (
                     <div>
                     <Form options={options} onUpdate={handleUpdateView} />
                     </div>
                 )
                 }
-            </div>
-            <div className={styles.panelArea}>
-                <span>styling</span>
-            </div>
+            </div>]}
         </SidePanel>
     )
 }
