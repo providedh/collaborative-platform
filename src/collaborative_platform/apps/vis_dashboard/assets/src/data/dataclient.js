@@ -23,8 +23,18 @@ export default function DataClient(){
 		self.filter = _filter;
 		self.unfilter = _unfilter;
 		self.focusDocument = _focus;
+		self.getFilters = _getFilters;
+		self.getSubscriptions = _getSubscriptions;
 
 		return self;
+	}
+
+	function _getFilters(){
+		return Object.keys(self._filters);
+	}
+
+	function _getSubscriptions(){
+		return Object.keys(self._subscriptions);
 	}
 
 	/**
