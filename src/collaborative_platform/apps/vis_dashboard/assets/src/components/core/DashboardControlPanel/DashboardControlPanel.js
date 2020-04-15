@@ -7,12 +7,9 @@ import DataSelectionPanel from '../DataSelectionPanel';
 
 export default function DashboardControlPanel({authors, versions, currentVersion, addView, setAuthors, setVersion, display}) {
     return(
-        <SidePanel title="Dashboard Controls" labels={["Add View", "Theme", "Data"]} display={display}>
+        <SidePanel title="Dashboard Controls" labels={["Add View", "Data"]} display={display}>
             <div className={styles.panelArea}>
                 <AddViewPanel addView={addView} />
-            </div>
-            <div className={styles.panelArea}>
-                <span>theme</span>
             </div>
             <div className={styles.panelArea}>
                 <DataSelectionPanel 
