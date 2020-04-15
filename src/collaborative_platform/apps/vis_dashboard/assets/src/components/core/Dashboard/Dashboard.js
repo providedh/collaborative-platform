@@ -20,6 +20,7 @@ export default class Dashboard extends React.Component {
             layout:[],
             authors:[],
             currentVersion: props.projectVersions[0],
+            fullscreen: false
         };
 
         this.state = Object.assign({},{
@@ -44,6 +45,9 @@ export default class Dashboard extends React.Component {
         this.save = this.save.bind(this);
         this.setAuthors = this.setAuthors.bind(this);
         this.setVersion = this.setVersion.bind(this);
+        this.toggleFullscreen = this.toggleFullscreen.bind(this);
+        this.enterFullscreen = this.enterFullscreen.bind(this);
+        this.exitFullscreen = this.exitFullscreen.bind(this);
     }
 
     updateDashboardConfig(config) {
@@ -109,8 +113,47 @@ export default class Dashboard extends React.Component {
         })
     }
 
+    enterFullscreen(){
+        this.setState(prev=>{
+            if(prev.fullscreen === true)
+                return prev;
+
+            this.dashboardConfig.fullscreen = true;
+            return Object.assign({},prev,{fullscreen:true, lastChangesSaved:false});
+        });
+    }
+
+    exitFullscreen(){
+        this.setState(prev=>{
+            if(prev.fullscreen === exit)
+                return prev;
+
+            this.dashboardConfig.fullscreen = false;
+            return Object.assign({},prev,{fullscreen:false, lastChangesSaved:false});
+        });
+    }
+
+    toggleFullscreen(){
+        this.setState(prev=>{
+            const fullscreen = !prev.fullscreen;
+            this.dashboardConfig.fullscreen = fullscreen;
+            return Object.assign({},prev,{fullscreen, lastChangesSaved:false});
+        });
+    }
+
     openDetails(viewIndex){
-        this.setState({focusedView: viewIndex});
+        this.setState(prev=>{
+            if(prev.fullscreen === true){
+                this.dashboardConfig.fullscreen = false;
+                return Object.assign({},prev,{
+                    focusedView: viewIndex,
+                    fullscreen:false,
+                    lastChangesSaved:false
+                });
+            }else{
+                return Object.assign({},prev,{focusedView: viewIndex});
+            }
+        });
     }
 
     closeDetails(){
@@ -124,7 +167,7 @@ export default class Dashboard extends React.Component {
                     <div className={"container-fluid " + styles.dashboard } style={{height: parent.height, width: parent.width}}>
                         <div className={"row " + styles.heightInherit}>
                             <div className={`col ${styles.heightInherit} ${styles.leftContainer}`}>
-                                <div className="row justify-content-end align-items-baseline pr-3">
+                                <div className="row justify-content-end align-items-baseline">
                                     <Status />
                                     <button onClick={()=>document.getElementById('help').classList.toggle('hidden')}
                                         type="button" 
@@ -137,6 +180,12 @@ export default class Dashboard extends React.Component {
                                         disabled={this.state.lastChangesSaved===true}>
                                         {this.state.lastChangesSaved===true?'All changes saved':'Save last changes'}
                                     </button>
+                                    <button className={styles.toggleFullScreen + ' ml-3'}
+                                        onClick={this.toggleFullscreen}>
+                                        {this.state.fullscreen?'<<':''}
+                                        <span>{this.state.fullscreen?'Show':'Hide'} side panel</span>
+                                        {this.state.fullscreen?'':'>>'}
+                                    </button>
                                 </div>
                                 <Help />
                                 <Workspace 
@@ -147,7 +196,7 @@ export default class Dashboard extends React.Component {
                                     onClose={this.removeView}
                                     onFocus={this.openDetails}/>
                             </div>
-                            <div className={"col-3 px-0 " + styles.heightInherit}>
+                            <div className={"col-3 px-0 " + styles.heightInherit + (this.state.fullscreen?' d-none':'')}>
                                 <DashboardControlPanel 
                                     addView={this.addView} 
                                     authors={this.state.authors} 
