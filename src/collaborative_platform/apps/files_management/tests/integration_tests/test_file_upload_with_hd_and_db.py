@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.test import Client
 
 from apps.api_vis.models import Entity, EntityProperty
-from apps.files_management.models import Directory, File
+from apps.files_management.models import Directory, File, FileVersion
 from apps.projects.models import Project
 
 
@@ -64,19 +64,29 @@ class TestFileUploadWithHdAndDb:
 
         upload_file(client, source_file_path, directory.id)
 
+        file = File.objects.last()
+        file_versions = FileVersion.objects.filter(file=file).order_by('number')
+        first_file_version = file_versions[0]
+        second_file_version = file_versions[1]
+
         entities_in_db = Entity.objects.all()
         assert len(entities_in_db) == 16
 
-        entities_properties_in_db = EntityProperty.objects.all()
+        entities_properties_in_db = EntityProperty.objects.filter(
+            entity_version__file_version=first_file_version
+        )
+        assert len(entities_properties_in_db) == 20
+
+        entities_properties_in_db = EntityProperty.objects.filter(
+            entity_version__file_version=second_file_version
+        )
         assert len(entities_properties_in_db) == 20
 
         expected_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'expected_files',
                                           'move_elements_to_db__move_all__expected.xml')
         expected_xml = read_file(expected_file_path)
 
-        file = File.objects.last()
-        file_version = file.file_versions.last()
-        result_xml = file_version.get_content()
+        result_xml = second_file_version.get_raw_content()
 
         assert result_xml == expected_xml
 

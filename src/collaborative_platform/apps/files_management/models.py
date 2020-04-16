@@ -107,7 +107,7 @@ class File(FileNode):
             return
 
         current_version = self.file_versions.filter(number=self.version_number).get()
-        contents = current_version.get_content()
+        contents = current_version.get_raw_content()
 
         hashed = bytes(new_name, encoding='utf8') + \
                  bytes(str(self.project_id), encoding='utf8') + \
@@ -211,13 +211,13 @@ class FileVersion(models.Model):
     class Meta:
         unique_together = ("file", "number")
 
-    def get_content(self):
+    def get_raw_content(self):
         self.upload.open(mode='r')
         content = self.upload.read()
         self.upload.close()
         return content
 
-    def get_content_binary(self):
+    def get_raw_content_binary(self):
         self.upload.open(mode='rb')
         content_binary = self.upload.read()
         self.upload.close()

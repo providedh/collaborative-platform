@@ -44,21 +44,6 @@ class Entity(models.Model):
 
         self.save()
 
-        self.__fake_delete_entity_properties()
-
-    def __fake_delete_entity_properties(self):
-        entity_properties = EntityProperty.objects.filter(
-            entity_version__entity=self,
-            deleted_in_file_version__isnull=True,
-        )
-
-        file_version = self.file.file_versions.last()
-
-        for entity_property in entity_properties:
-            entity_property.deleted_in_file_version = file_version
-
-        EntityProperty.objects.bulk_update(entity_properties, ['deleted_in_file_version'])
-
 
 class EntityVersion(models.Model):
     entity = models.ForeignKey(Entity, on_delete=models.CASCADE)
@@ -77,11 +62,6 @@ class EntityProperty(models.Model):
     name = models.CharField(max_length=255)
     type = models.CharField(max_length=255, choices=[(tag, tag.value) for tag in TypeChoice])
 
-    created_in_file_version = models.ForeignKey(FileVersion, on_delete=models.CASCADE,
-                                                related_name='created_entities_properties')
-    deleted_in_file_version = models.ForeignKey(FileVersion, default=None, null=True, on_delete=models.CASCADE,
-                                                related_name='deleted_entities_properties')
-
     value_str = models.CharField(max_length=255, null=True, blank=True)
     value_int = models.IntegerField(null=True)
     value_float = models.FloatField(null=True)
@@ -90,6 +70,9 @@ class EntityProperty(models.Model):
     value_point = PointField(geography=True, null=True)
 
     def set_value(self, value):
+        if type(self.type) == str:
+            self.type = eval(self.type)
+
         if self.type == TypeChoice.str:
             self.value_str = str(value)
         elif self.type == TypeChoice.int:
@@ -106,19 +89,22 @@ class EntityProperty(models.Model):
 
             self.value_point = Point(float(values[0]), float(values[1]))
 
-    def get_value(self):
+    def get_value(self, as_str=False):
+        if type(self.type) == str:
+            self.type = eval(self.type)
+
         if self.type == TypeChoice.str:
             return self.value_str
         elif self.type == TypeChoice.int:
-            return self.value_int
+            return str(self.value_int) if as_str else self.value_int
         elif self.type == TypeChoice.float:
-            return self.value_float
+            return str(self.value_float) if as_str else self.value_float
         elif self.type == TypeChoice.date:
-            return self.value_date
+            return self.value_date.strftime('%Y-%m-%d') if as_str else self.value_date
         elif self.type == TypeChoice.time:
-            return self.value_time
+            return self.value_time.strftime('%H:%M:%S') if as_str else self.value_time
         elif self.type == TypeChoice.Point:
-            return self.value_point
+            return f'{self.value_point.coords[0]} {self.value_point.coords[1]}' if as_str else self.value_point
 
 
 class Commit(models.Model):
@@ -214,10 +200,8 @@ class Certainty(models.Model):
     asserted_value = models.CharField(max_length=255, null=True)
     description = models.CharField(max_length=255, null=True)
 
+    file_version = models.ForeignKey(FileVersion, on_delete=models.CASCADE)
+
     created_by = models.ForeignKey(User, on_delete=models.SET(get_anonymous_user), related_name='created_certainties')
-    created_in_file_version = models.ForeignKey(FileVersion, on_delete=models.CASCADE,
-                                                related_name='created_certainties')
     deleted_by = models.ForeignKey(User, default=None, null=True, on_delete=models.SET(get_anonymous_user),
                                    related_name='deleted_certainties')
-    deleted_in_file_version = models.ForeignKey(FileVersion, default=None, null=True, on_delete=models.CASCADE,
-                                                related_name='deleted_certainties')

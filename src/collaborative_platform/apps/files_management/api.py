@@ -10,6 +10,7 @@ from django.db import IntegrityError
 from django.forms import model_to_dict
 from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, JsonResponse, HttpResponseServerError
 
+from apps.api_vis.models import EntityVersion, EntityProperty, Certainty
 from apps.exceptions import BadRequest
 from apps.files_management.file_conversions.ids_corrector import IDsCorrector
 from apps.files_management.file_conversions.elements_extractor import ElementsExtractor
@@ -75,6 +76,9 @@ def __process_file(file, directory, user):
 
         if content_updated:
             file_object = __update_file_object(xml_content, file_object, user)
+
+            __clone_db_objects(file_object)
+
             upload_status.update({'migrated': True, 'message': message})
 
             log_activity(directory.project, user, f"File migrated: {message} ", file_object)
@@ -90,7 +94,7 @@ def __process_file(file, directory, user):
 
 
 def __update_file_content(file_object):
-    content_binary = __get_content_binary(file_object)
+    content_binary = __get_raw_content_binary(file_object)
 
     tei_handler = TeiHandler()
     xml_content, migration, migration_message = tei_handler.migrate_to_tei_p5(content_binary)
@@ -119,9 +123,9 @@ def __update_file_content(file_object):
     return xml_content, content_updated, message
 
 
-def __get_content_binary(file_object):
+def __get_raw_content_binary(file_object):
     file_version = FileVersion.objects.get(file_id=file_object.id, number=file_object.version_number)
-    content_binary = file_version.get_content_binary()
+    content_binary = file_version.get_raw_content_binary()
 
     return content_binary
 
@@ -138,6 +142,47 @@ def __update_file_object(xml_content, old_file, user):
     updated_file = overwrite_file(file, new_file, user)
 
     return updated_file
+
+
+def __clone_db_objects(file):
+    last_file_version = file.file_versions.last()
+    previous_file_version = FileVersion.objects.filter(file=file).order_by('-number')[1]
+
+    __clone_entities_versions(last_file_version, previous_file_version)
+    __clone_certainties(last_file_version, previous_file_version)
+
+
+def __clone_entities_versions(last_file_version, previous_file_version):
+    entities_versions = EntityVersion.objects.filter(
+        file_version=previous_file_version,
+    )
+
+    for entity_version in entities_versions:
+        entity_properties = EntityProperty.objects.filter(
+            entity_version=entity_version,
+        )
+
+        entity_version.id = None
+        entity_version.file_version = last_file_version
+        entity_version.save()
+
+        for entity_property in entity_properties:
+            entity_property.entity_version = entity_version
+            entity_property.id = None
+
+        EntityProperty.objects.bulk_create(entity_properties)
+
+
+def __clone_certainties(last_file_version, previous_file_version):
+    certainties = Certainty.objects.filter(
+        file_version=previous_file_version,
+    )
+
+    for certainty in certainties:
+        certainty.file_version = last_file_version
+        certainty.id = None
+
+    Certainty.objects.bulk_create(certainties)
 
 
 @login_required
