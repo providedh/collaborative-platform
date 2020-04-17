@@ -6,9 +6,7 @@ export default function useData(dataClient, source, levels){
     const [data, setData] = useState({data:null, count:0});
 
     useEffect(()=>{
-        dataClient.unsubscribe('entity');
-        dataClient.unsubscribe('certainty');
-        dataClient.unsubscribe('meta');
+        dataClient.clearSubscriptions();
 
         dataClient.subscribe(source, d=>{
         	if(d != null){

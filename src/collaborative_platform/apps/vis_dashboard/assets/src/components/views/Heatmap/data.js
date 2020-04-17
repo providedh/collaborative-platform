@@ -7,8 +7,7 @@ export default function useData(dataClient, source, axis1name, axis2name){
         const {preprocessing, getEntriesAndAxis} = 
         	source=='entity'?entityProcessing():certaintyProcessing();
 
-        dataClient.unsubscribe('entity');
-        dataClient.unsubscribe('certainty');
+        dataClient.clearSubscriptions();
         dataClient.subscribe(source, data=>{
         	if(data == null || data.all.length == 0 || data.filtered.length == 0)
                 return 0;

@@ -12,8 +12,8 @@ function useData(dataClient, dimension){
 	const [data, setData] = useState(null);
 
 	useEffect(()=>{
+        dataClient.clearSubscriptions();
         if(dimension == 'Number of entities per type'){
-            dataClient.unsubscribe('entity');
             dataClient.subscribe('entity', data=>{
                 const count = {};
                 data.filtered.forEach(x=>count.hasOwnProperty(x.type)?count[x.type]++:count[x.type]=1);
@@ -21,7 +21,6 @@ function useData(dataClient, dimension){
                 setData(entries);
             });
         }else if(dimension == 'Most common entities'){
-            dataClient.unsubscribe('entity');
             dataClient.subscribe('entity', data=>{
                 const count = {};
                 data.filtered.forEach(x=>count.hasOwnProperty(x.name)?count[x.name]++:count[x.name]=1);
@@ -39,7 +38,6 @@ function useData(dataClient, dimension){
                 setData(mostCommon);
             });
         }else if(dimension == 'Number of entities per document'){
-            dataClient.unsubscribe('entity');
             dataClient.subscribe('entity', data=>{
                 const count = {};
                 data.filtered.forEach(x=>count.hasOwnProperty(x.file_name)?count[x.file_name]++:count[x.file_name]=1);
@@ -47,7 +45,6 @@ function useData(dataClient, dimension){
                 setData(entries);
             });
         }else{
-            dataClient.unsubscribe('entity');
 		    setData(dummy_data[dimension])
         }
 	}, [dimension])
