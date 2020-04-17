@@ -1,4 +1,3 @@
-import DataService from './dataservice';
-import DataClient from './dataclient';
-
-export {DataService, DataClient};
+export {default as DataService} from './dataservice';
+export {default as DataClient} from './dataclient';
+export {default as useCleanup} from './useCleanupHook';
