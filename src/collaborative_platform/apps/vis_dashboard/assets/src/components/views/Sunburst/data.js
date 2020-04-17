@@ -11,6 +11,7 @@ export default function useData(dataClient, source, levels){
         dataClient.subscribe(source, d=>{
         	if(d != null){
             	const newData = {
+            		filters: dataClient.getFilters(),
 					all: {
 						tree: createTree(d.all, levelKeys),
 						count: d.all.length
@@ -29,6 +30,7 @@ export default function useData(dataClient, source, levels){
     useEffect(()=>{
         if(fetched != null){
         	const newData = {
+        		filters: dataClient.getFilters(),
 				all: {
 					tree: createTree(fetched.all, levelKeys),
 					count: fetched.all.length

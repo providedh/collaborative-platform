@@ -71,36 +71,54 @@ export default function Sunburst(){
 		}, 300);
 	}
 
-	function _renderInnerCircle(source, annotationsCount, centerX, centerY, innerCircleRadius, container){
+	function _renderInnerCircle(source, filters, annotationsCount, centerX, centerY, innerCircleRadius, container){
 		const innerText = source === 'certainty'?'annotations':'entities';
 		
 		d3.select(container).select('svg').selectAll('g.innerCircle')
 			.data([annotationsCount])
 			.enter().append('svg:g')
 			.attr('class', 'innerCircle')
+			.on('click', ()=>self._eventCallback({action:'click', target:'unfilter'}))
 			.each(function(d){
+				d3.select(this)
+					.append('svg:circle')
+					.attr('r', innerCircleRadius)
+					.attr('cx', innerCircleRadius)
+					.attr('cy', innerCircleRadius);
 				d3.select(this)
 					.append('svg:text')
 					.attr('class', 'annotations')
 					.attr('x', innerCircleRadius)
-					.attr('y', innerCircleRadius - 4)
+					.attr('y', innerCircleRadius - 10)
 				d3.select(this)
 					.append('svg:text')
 					.attr('class', 'desc')
 					.attr('x', innerCircleRadius)
-					.attr('y', innerCircleRadius + 12)
-				//d3.select(this)
-				//	.append('svg:circle')
-				//	.attr('r', innerCircleRadius)
-				//	.attr('cx', innerCircleRadius)
-				//	.attr('cy', innerCircleRadius);
+					.attr('y', innerCircleRadius + 2)
+				d3.select(this)
+					.append('svg:text')
+					.attr('class', 'filters')
+					.attr('x', innerCircleRadius)
+					.attr('y', innerCircleRadius + 16)
+				d3.select(this)
+					.append('svg:text')
+					.attr('class', 'click')
+					.attr('x', innerCircleRadius)
+					.attr('y', innerCircleRadius + 28)
+					.text('(click to remove)')
 			})
 
 		d3.select(container).select('svg').selectAll('g.innerCircle')
 			.attr('transform', `translate(${centerX - innerCircleRadius}, ${centerY - innerCircleRadius})`)
+			.style('cursor', ()=>filters.length>0?'pointer':'default')
 			.each(function(d){
 				d3.select(this).select('text.annotations').text(d);
 				d3.select(this).select('text.desc').text(innerText);
+				d3.select(this).select('text.filters')
+					.classed('d-none', filters.length===0)
+					.text('Filtering '+ filters.length + ' dimensions');
+				d3.select(this).select('text.click')
+					.classed('d-none', filters.length===0);
 			})
 	}
 
@@ -179,7 +197,7 @@ export default function Sunburst(){
 			.attr('transform', `translate(${x}, ${y + self._hoverTooltipHeight - self._extraVspacing})`);
 	}
 
-	function _renderSunburst(data, count, source, levels, container){
+	function _renderSunburst(data, count, source, filters, levels, container){
 		const numLevels = Object.keys(levels).length,
 			height = container.clientHeight,
 			width = container.clientWidth,
@@ -197,7 +215,7 @@ export default function Sunburst(){
 			.attr('height', height);
 
 		_setupHoverTooltip(container, centerX, centerY+maxDiameter/2);
-		_renderInnerCircle(source, count, centerX, centerY, innerCircleRadius, container);
+		_renderInnerCircle(source, filters, count, centerX, centerY, innerCircleRadius, container);
 		_renderSections(data, count, levels, container, maxDiameter, centerX, centerY);
 		_renderLegend(container, centerX, height);
 	}
@@ -206,7 +224,7 @@ export default function Sunburst(){
 		const {tree, count} = data.filtered;
 		
 		_setupColorSchemes();
-		_renderSunburst(tree, count, source, levels, container);
+		_renderSunburst(tree, count, source, data.filters, levels, container);
 	}
 
 	return _init();
