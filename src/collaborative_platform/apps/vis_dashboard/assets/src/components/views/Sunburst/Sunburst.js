@@ -37,7 +37,7 @@ function onEvent(source, levels, event, dataClient, context){
         if(levels['level'+event.depth] === 'file'){
             dataClient.focusDocument(event.data.name);
         }else if(levels['level'+event.depth] === 'file_name'){
-            dataClient.focusDocument(context.name2document[event.data.name]);
+            dataClient.focusDocument(context.name2document[event.data.name].id);
         }
     }
 }
@@ -55,7 +55,7 @@ function Sunburst ({ layout, source, numberOfLevels, ...rest}) {
     useCleanup(dataClient);
 	const data = useData(dataClient, source, levels);
 
-    useRender(width, height, data, source, levels, context.taxonomy, containerRef, (e)=>onEvent(source,levels, e, dataClient));
+    useRender(width, height, data, source, levels, context.taxonomy, containerRef, (e)=>onEvent(source,levels, e, dataClient, context));
 
     return(
         <div className={styles.sunburst + ' sunburst'} ref={containerRef}>
