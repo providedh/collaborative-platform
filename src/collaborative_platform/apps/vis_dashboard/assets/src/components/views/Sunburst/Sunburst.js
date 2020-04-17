@@ -8,13 +8,14 @@ import {DataClient, useCleanup} from '../../../data';
 import useData from './data';
 
 function onEvent(source, levels, event, dataClient, context){
-        //console.log(source, levels['level'+event.depth], event.data)
     if(event.action === 'click'){
-        if(levels['level'+event.depth] === 'file'){
+        if(event?.target === 'unfilter'){
+            dataClient.clearFilters();
+        }else if(levels['level'+event.depth] === 'file'){
             dataClient.filter('fileId', x=>x===(+event.data.name));
         }else if(levels['level'+event.depth] === 'file_name'){
             if(context.name2document.hasOwnProperty(event.data.name))
-                dataClient.filter('fileId', x=>x===context.name2document[event.data.name]);
+                dataClient.filter('fileId', x=>x===context.name2document[event.data.name].id);
         }else{
             if(source === 'certainty'){
                 const option2dimension = {
