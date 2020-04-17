@@ -48,6 +48,7 @@ export default class Dashboard extends React.Component {
         this.toggleFullscreen = this.toggleFullscreen.bind(this);
         this.enterFullscreen = this.enterFullscreen.bind(this);
         this.exitFullscreen = this.exitFullscreen.bind(this);
+        this.handleViewDetailsChange = this.handleViewDetailsChange.bind(this);
     }
 
     updateDashboardConfig(config) {
@@ -168,6 +169,14 @@ export default class Dashboard extends React.Component {
         this.setState({focusedView: -1});
     }
 
+    toggleHelp(){
+        document.getElementById('help').classList.toggle('hidden');
+    }
+
+    handleViewDetailsChange(newConfig){
+        this.updateView(this.state.focusedView, newConfig);
+    }
+
     render(){
         return (
             <ParentSize>
@@ -177,7 +186,7 @@ export default class Dashboard extends React.Component {
                             <div className={`col ${styles.heightInherit} ${styles.leftContainer}`}>
                                 <div className="row justify-content-end align-items-baseline">
                                     <Status />
-                                    <button onClick={()=>document.getElementById('help').classList.toggle('hidden')}
+                                    <button onClick={this.toggleHelp}
                                         type="button" 
                                         className="btn btn-primary h-75 mr-3">
                                         Help
