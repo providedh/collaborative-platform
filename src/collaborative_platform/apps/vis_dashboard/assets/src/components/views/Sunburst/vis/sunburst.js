@@ -18,6 +18,7 @@ export default function Sunburst(){
 
 	function _init(){
 		self.setEventCallback = _getParameterSetter('_eventCallback');
+		self.setTaxonomy = _getParameterSetter('_settings')
 		self.render = _render;
 
 		return self;
@@ -33,8 +34,8 @@ export default function Sunburst(){
 			author: d3.scaleOrdinal().range(d3.schemePaired),
 			document: d3.scaleOrdinal().range(d3.schemePaired),
 			category: d3.scaleOrdinal()
-				.range(Object.values(settings.taxonomy).map(x=>x.color))
-				.domain(Object.values(settings.taxonomy).map(x=>x.name)),
+				.range(Object.values(self._settings.taxonomy).map(x=>x.color))
+				.domain(Object.values(self._settings.taxonomy).map(x=>x.name)),
 			attribute: d3.scaleOrdinal().range(d3.schemePaired),
 			degree: d3.interpolateYlOrRd,
 			certainty: d3.scaleOrdinal()

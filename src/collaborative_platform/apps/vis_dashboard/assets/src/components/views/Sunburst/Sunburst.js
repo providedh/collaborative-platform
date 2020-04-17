@@ -7,14 +7,14 @@ import {useRender} from './vis';
 import {DataClient} from '../../../data';
 import useData from './data';
 
-function onEvent(source, levels, event, dataClient){
+function onEvent(source, levels, event, dataClient, context){
         //console.log(source, levels['level'+event.depth], event.data)
     if(event.action === 'click'){
         if(levels['level'+event.depth] === 'file'){
             dataClient.filter('fileId', x=>x===(+event.data.name));
         }else if(levels['level'+event.depth] === 'file_name'){
-            if(name2document.hasOwnProperty(event.data.name))
-                dataClient.filter('fileId', x=>x===name2document[event.data.name]);
+            if(context.name2document.hasOwnProperty(event.data.name))
+                dataClient.filter('fileId', x=>x===context.name2document[event.data.name]);
         }else{
             if(source === 'certainty'){
                 const option2dimension = {
@@ -37,19 +37,24 @@ function onEvent(source, levels, event, dataClient){
         if(levels['level'+event.depth] === 'file'){
             dataClient.focusDocument(event.data.name);
         }else if(levels['level'+event.depth] === 'file_name'){
-            dataClient.focusDocument(name2document[event.data.name]);
+            dataClient.focusDocument(context.name2document[event.data.name]);
         }
     }
 }
 
-function Sunburst ({ layout, source, numberOfLevels, ...levels}) {
+// ...rest has both the levels and the injected context prop
+function Sunburst ({ layout, source, numberOfLevels, ...rest}) {
 	const containerRef = useRef();
 	const [width, height] = layout!=undefined?[layout.w, layout.h]:[4,4];
+    const {context} = rest;
+    const levels = Object.fromEntries(
+        Object.entries(rest).filter(([key, value])=>key.startsWith('level'))
+    );
 
     const [dataClient, _] = useState(DataClient());
 	const data = useData(dataClient, source, levels);
 
-    useRender(width, height, data, source, levels, containerRef, (e)=>onEvent(source,levels, e, dataClient));
+    useRender(width, height, data, source, levels, context.taxonomy, containerRef, (e)=>onEvent(source,levels, e, dataClient));
 
     return(
         <div className={styles.sunburst + ' sunburst'} ref={containerRef}>
