@@ -129,28 +129,25 @@ export default function MetaDataSource(pubSubService, appContext){
 	 * Retrieves data from the external source.
 	 */
 	function _retrieve(){
-		self.publish('status',{action:'fetching'});
-		self._source.getFiles({project:self._appContext.project},{},null).then(response=>{
-			if(response.success === false)
-				throw('Failed to retrieve files for the current project.')
-			
-			let retrieved = 0, retrieving = response.content.length;
-			response.content.forEach(file=>{
-				self._data.remove(()=>true); // clear previous data
+		const files = Object.keys(self._appContext.id2document);
+		let retrieved = 0, retrieving = files.length;
 
-				self._source.getFileMeta({project:self._appContext.project, file:file.id},{},null).then(response=>{
-					if(response.success === false)
-						console.info('Failed to retrieve meta information for file: '+file.id);
-					else{
-						self._data.add(_processData(response.content, file.id));
-						_publishData();
-					}
-					if(++retrieved == retrieving){
-						self.publish('status',{action:'fetched'});
-					}
-				});
-			})
-		})
+		self.publish('status',{action:'fetching'});
+		files.forEach(file=>{
+			self._data.remove(()=>true); // clear previous data
+
+			self._source.getFileMeta({project:self._appContext.project, file},{},null).then(response=>{
+				if(response.success === false)
+					console.info('Failed to retrieve meta information for file: '+file);
+				else{
+					self._data.add(_processData(response.content, file));
+					_publishData();
+				}
+				if(++retrieved == retrieving){
+					self.publish('status',{action:'fetched'});
+				}
+			});
+		});
 	}
 
 	return _init(pubSubService, appContext);
