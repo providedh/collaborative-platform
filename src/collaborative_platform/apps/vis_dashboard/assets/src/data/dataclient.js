@@ -22,6 +22,9 @@ export default function DataClient(){
 		self.focusDocument = _focus;
 		self.getFilters = _getFilters;
 		self.getSubscriptions = _getSubscriptions;
+		self.cleanFilters = _cleanFilters;
+		self.clearSubscriptions = _clearSubscriptions;
+		self.clearFiltersAndSubscriptions = _clearFiltersAndSubscriptions;
 
 		return self;
 	}
@@ -33,6 +36,24 @@ export default function DataClient(){
 	function _getSubscriptions(){
 		return Object.keys(self._subscriptions);
 	}
+
+	function cleanFilters(){
+		Object.keys(self._filters).forEach(dimension=>{
+			_unfilter(dimension);
+		});
+	}
+
+	function clearSubscriptions(){
+		Object.keys(self._subscriptions).forEach(source=>{
+			_unsubscribe(source);
+		});
+	}
+
+	function clearFiltersAndSubscriptions(){
+		_clearSubscriptions();
+		_cleanFilters();
+	}
+
 
 	/**
 	 * _subscribe
