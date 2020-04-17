@@ -88,7 +88,8 @@ export default function EntityDataSource(pubSubService, appContext){
 	 * Retrieves data from the external source.
 	 */
 	function _retrieve(){
-		const files = Object.keys(self._appContext.id2document);
+		const files = Object.keys(self._appContext.id2document),
+			getName = fileId=>self._appContext.id2document[fileId].name;
 		let retrieved = 0, retrieving = files.length;
 
 		self.publish('status',{action:'fetching'});
@@ -99,7 +100,7 @@ export default function EntityDataSource(pubSubService, appContext){
 				if(response.success === false)
 					console.info('Failed to retrieve entities for file: '+file);
 				else
-					self._data.add(response.content.map(x=>({file_id:file, file_name:file.name, ...x})));
+					self._data.add(response.content.map(x=>({file_id:file, file_name:getName(file), ...x})));
 					_publishData();
 				if(++retrieved == retrieving){
 					self.publish('status',{action:'fetched'});
