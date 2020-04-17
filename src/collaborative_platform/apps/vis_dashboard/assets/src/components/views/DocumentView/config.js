@@ -1,18 +1,20 @@
-export default function getOptions(form){
-	const documentNames = Object.values(window.documents).map(x=>x.name),
+export default function getOptions(form, context){
+	console.log(context)
+	const documentNames = Object.keys(context.name2document),
+		documentIds = Object.keys(context.id2document),
 		defaultConfig = [
 		{name: 'showEntities', type: 'toogle', value: true},
 		{name: 'showCertainty', type: 'toogle', value: true},
 	    {name: 'syncWithViews', type: 'toogle', value: false},
-	    {name: 'documentId', type: 'selection', value: Object.keys(window.documents)[0], params: {options: Object.keys(window.documents), labels: documentNames}}
+	    {name: 'documentId', type: 'selection', value: documentIds[0], params: {options: documentIds, labels: documentNames}}
 	];
 
 	if(form == null)
 		return defaultConfig;
 
-	const currentValues = {};
-	form.forEach(x=>currentValues[x.name] = x.value);
-
+	const currentValues = Object.fromEntries(
+		form.map(x=>[x.name, x.value])
+	);
 	const {syncWithViews, showEntities, showCertainty} = currentValues;
 
 	const configOptions = [
@@ -22,8 +24,8 @@ export default function getOptions(form){
 	];
 
 	if(syncWithViews === false){
-		const documentId = currentValues.hasOwnProperty('documentId')?currentValues.documentId:Object.keys(window.documents)[0];
-	    configOptions.push({name: 'documentId', type: 'selection', value: documentId, params: {options: Object.keys(window.documents), labels: documentNames}});
+		const documentId = currentValues.hasOwnProperty('documentId')?currentValues.documentId:documentIds[0];
+	    configOptions.push({name: 'documentId', type: 'selection', value: documentId, params: {options: documentIds, labels: documentNames}});
 	}
 
 	return configOptions;
