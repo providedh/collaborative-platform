@@ -2,6 +2,7 @@ import React from 'react';
 
 import css from '../themes/theme.css';
 
+import {AppContext} from 'app_context';
 import Dashboard from './core/Dashboard/Dashboard';
 import LoadingApp from './LoadingApp';
 import {DataClient} from '../data';
@@ -18,11 +19,14 @@ export default class App extends React.Component {
             fetching: 'project documents.',
             error: '',
             fetched: 0,
-            documents: [],
+            id2document: null,
+            name2document: null,
             taxonomy: [],
             contributors: [],
-            projectVersions: []
+            projectVersions: [],
+            appContext: null
         }
+
     }
 
     componentDidMount(){
@@ -44,11 +48,11 @@ export default class App extends React.Component {
                 }else{
                     this.setState({
                         fetched: 1, 
-                        documents: response.content, 
+                        id2document: Object.fromEntries(response.content.map(d=>[d.id, d])), 
+                        name2document: Object.fromEntries(response.content.map(d=>[d.name, d])),
                         fetching: 'contributors in the project.'
                     });
-                    window.documents = Object.fromEntries(response.content.map(d=>[d.id, d]));
-                    window.name2document = Object.fromEntries(response.content.map(d=>[d.name, d.id]));
+
                     resolve();
                 }
             });
@@ -66,7 +70,7 @@ export default class App extends React.Component {
                         contributors: response.content, 
                         fetching: 'the project settings.'
                     });
-                    window.contributors = response.content;
+                    
                     resolve();
                 }
             });
@@ -81,10 +85,10 @@ export default class App extends React.Component {
                 }else{
                     this.setState({
                         fetched: 3, 
-                        settings: response.content, 
+                        taxonomy: response.content, 
                         fetching: 'project versions.'
                     });
-                    window.settings = response.content;
+                    
                     resolve();
                 }
             });
@@ -104,10 +108,17 @@ export default class App extends React.Component {
                 if(response.success === false){
                     this.setState({error: 'Failed to retrieve project versions.'});
                 }else{
+                    const projectVersions = processVersions(response);
                     this.setState({
-                        fetched: 4, 
-                        projectVersions: processVersions(response), 
-                    });
+                        projectVersions,
+                        appContext: {
+                            projectVersions: projectVersions,
+                            id2document: this.state.id2document, 
+                            name2document: this.state.name2document, 
+                            taxonomy: this.state.taxonomy, 
+                            contributors: this.state.contributors
+                        },
+                        fetched: 4});
                     resolve();
                 }
             });
@@ -123,9 +134,14 @@ export default class App extends React.Component {
     }
 
     render(){
-        if(this.state.fetched == 4)
-            return <Dashboard savedConf={this.props.savedConf} projectVersions={this.state.projectVersions}/>
-        else
-            return <LoadingApp {...this.state}/>
+        if(this.state.fetched == 4){
+            return(
+                <AppContext.Provider value={this.state.appContext}>
+                    <Dashboard savedConf={this.props.savedConf}/>
+                </AppContext.Provider>
+            );
+        }else{
+            return(<LoadingApp {...this.state}/>);
+        }
     }
 }
