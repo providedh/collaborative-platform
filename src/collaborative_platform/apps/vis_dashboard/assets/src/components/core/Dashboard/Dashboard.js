@@ -9,8 +9,15 @@ import ViewDetailsPanel from '../ViewDetailsPanel';
 import Workspace from '../Workspace';
 import Help from '../Help';
 import AjaxCalls from '../../../helpers/ajax.js';
+import {WithAppContext} from 'app_context';
 
-export default class Dashboard extends React.Component {
+export default (props)=>(
+    <WithAppContext>
+        <Dashboard {...props}/>
+    </WithAppContext>
+);
+
+class Dashboard extends React.Component {
     constructor(props){
         super(props);
 
@@ -19,7 +26,7 @@ export default class Dashboard extends React.Component {
             views:[],
             layout:[],
             authors:[],
-            currentVersion: props.projectVersions[0],
+            currentVersion: props.context.projectVersions[0],
             fullscreen: false
         };
 
@@ -225,7 +232,7 @@ export default class Dashboard extends React.Component {
                                     <ViewDetailsPanel 
                                         view={this.state.views[this.state.focusedView]} 
                                         display={true} 
-                                        updateView={newConfig => this.updateView(this.state.focusedView, newConfig)}
+                                        updateView={this.handleViewDetailsChange}
                                         close={this.closeDetails}/>
                                 }
                             </div>
