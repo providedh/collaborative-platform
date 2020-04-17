@@ -1,5 +1,4 @@
 export default function getOptions(form, context){
-	console.log(context)
 	const documentNames = Object.keys(context.name2document),
 		documentIds = Object.keys(context.id2document),
 		defaultConfig = [
