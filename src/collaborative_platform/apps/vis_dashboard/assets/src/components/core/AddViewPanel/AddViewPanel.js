@@ -1,9 +1,16 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import styles from './style.module.css';
 
+import {WithAppContext} from 'app_context';
+import styles from './style.module.css';
 import Views from '../../views';
 import Form from '../../ui/Form';
+
+export default (props)=>(
+    <WithAppContext>
+        <AddViewPanel {...props}/>
+    </WithAppContext>
+);
 
 function useViewType() {
     const [value, setValue] = useState(Object.keys(Views)[0])
@@ -13,16 +20,16 @@ function useViewType() {
     return [value, onChange]
 }
 
-export default function AddViewPanel({addView}) {
+function AddViewPanel({addView, context}) {
     const [viewType, setViewType] = useViewType();
-    const [viewConfig, setViewConfig] = useState(Views[viewType].prototype.getConfigOptions(null))
+    const [viewConfig, setViewConfig] = useState(Views[viewType].prototype.getConfigOptions(null, context))
 
     useEffect(()=>{
-        setViewConfig(Views[viewType].prototype.getConfigOptions(null))}
+        setViewConfig(Views[viewType].prototype.getConfigOptions(null, context))}
         , [viewType])
 
     function handleValueChange(config){
-        const newConfig = Views[viewType].prototype.getConfigOptions(config);
+        const newConfig = Views[viewType].prototype.getConfigOptions(config, context);
         setViewConfig(newConfig);
     }
 
