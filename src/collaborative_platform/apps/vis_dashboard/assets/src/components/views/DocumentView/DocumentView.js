@@ -11,7 +11,7 @@ import styleCertainty from './certaintyStyling';
 
 const ajax = AjaxCalls();
 
-function useData(dataClient, syncWithViews, documentId){
+function useData(dataClient, syncWithViews, documentId, id2Document){
 	const [data, setData] = useState({id: '', name: '', html: ''});
 
 	useEffect(()=>{
@@ -22,7 +22,7 @@ function useData(dataClient, syncWithViews, documentId){
                     return
                 
             	if(id!='')
-                	setData({id, html: html.getElementsByTagName('body')[0].innerHTML, doc:html, name: window.documents[id].name});
+                	setData({id, html: html.getElementsByTagName('body')[0].innerHTML, doc:html, name: id2Document[id].name});
                 else
                 	setData({id:'', html:'<i>Hover over documents in other views to see its contents here.</i>', doc: null, name:''});
             });
@@ -32,7 +32,7 @@ function useData(dataClient, syncWithViews, documentId){
             	if(response.success === true)
             		setData({
             			id: documentId, 
-            			name: window.documents[documentId].name, 
+            			name: id2Document[documentId].name, 
                         doc: response.content,
             			html:response.content.getElementsByTagName('body')[0].innerHTML
             		});
@@ -44,24 +44,24 @@ function useData(dataClient, syncWithViews, documentId){
 	return data;
 }
 
-function useDocumentRendering(data, container){
+function useDocumentRendering(data, container, taxonomy){
 	useEffect(()=>{
         if(container == undefined)
             return
 
         container.innerHTML = data.html;
-        styleEntities(container, data.doc, window.settings);
-        styleCertainty(container, data.doc, window.settings);
+        styleEntities(container, data.doc, taxonomy);
+        styleCertainty(container, data.doc, taxonomy);
     }, [data.id]);
 }
 
-function DocumentView({layout, syncWithViews, documentId, showEntities, showCertainty}) {
+export default function DocumentView({layout, syncWithViews, documentId, showEntities, showCertainty, context}) {
 	const [width, height] = layout!=undefined?[layout.w, layout.h]:[4,4];
 	const viewRef = useRef();
 
 	const [dataClient, _] = useState(DataClient());
-	const data = useData(dataClient, syncWithViews, documentId);
-    useDocumentRendering(data, viewRef.current)
+	const data = useData(dataClient, syncWithViews, documentId, context.id2document);
+    useDocumentRendering(data, viewRef.current, context.taxonomy)
 
     return(
         <div className={styles.documentView}>
@@ -83,5 +83,3 @@ function DocumentView({layout, syncWithViews, documentId, showEntities, showCert
 DocumentView.prototype.description = "Encode frequencies using horizontal or vertical bars."
 
 DocumentView.prototype.getConfigOptions = getConfig;
-
-export default DocumentView;
