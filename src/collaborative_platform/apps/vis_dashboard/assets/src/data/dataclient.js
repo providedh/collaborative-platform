@@ -50,6 +50,9 @@ export default function DataClient(){
 	}
 
 	function _clearFiltersAndSubscriptions(){
+		const subscriptions = Object.keys(self._subscriptions).join(', '),
+			filters = Object.keys(self._filters).join(', ');
+		console.info(`Cleaning up [Subscriptions: ${subscriptions}] [Filters: ${filters}]`);
 		_clearSubscriptions();
 		_clearFilters();
 	}
