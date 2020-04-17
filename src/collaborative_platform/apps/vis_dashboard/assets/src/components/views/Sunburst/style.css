@@ -4,7 +4,12 @@
 	font-weight: bold;
 }
 
+.sunburst .innerCircle text.click,
+.sunburst .innerCircle text.filters{
+	font-weight: normal;
+	font-size: 11px;
+}
+
 .sunburst .innerCircle circle{
-	fill: white;
-	stroke: var(--primary);
+	fill: transparent;
 }
