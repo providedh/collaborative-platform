@@ -4,12 +4,12 @@ import {AjaxCalls} from '../../helpers';
  *
  * 
  * */
-export default function DocumentDataSource(pubSubService, project){
+export default function DocumentDataSource(pubSubService, appContext){
 	const self = {};
 
-	function _init(pubSubService, project){
+	function _init(pubSubService, appContext){
 		self._sourceName = 'document';
-	 	self._project = project
+	 	self._appContext = appContext
 		
 		/**
 		 * Method for retrieving data.
@@ -46,7 +46,7 @@ export default function DocumentDataSource(pubSubService, project){
 	 */
 	function _retrieve(){
 		self.publish('status',{action:'fetching'});
-		self._source.getFile({project:self._project, file:self._focused},{},null).then(response=>{
+		self._source.getFile({project:self._appContext.project, file:self._focused},{},null).then(response=>{
 			if(response.success === false)
 				throw('Failed to retrieve files for the current project.')
 			
@@ -56,5 +56,5 @@ export default function DocumentDataSource(pubSubService, project){
 		})
 	}
 
-	return _init(pubSubService, project);
+	return _init(pubSubService, appContext);
 }

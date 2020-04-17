@@ -6,22 +6,21 @@ import {AjaxCalls} from '../../helpers';
  *
  * 
  * */
-export default function CertaintyDataSource(pubSubService, project){
+export default function CertaintyDataSource(pubSubService, appContext){
 	const self = {};
 
-	function _init(pubSubService, project){
+	function _init(pubSubService, appContext){
 		self._sourceName = 'entity';
 
 	 	self._data = crossfilter([]);
 	 	self._textDimension = self._data.dimension(x=>x.textContext);
 
-	 	self._project = project
+	 	self._appContext = appContext
 		
 		/**
 		 * Method for retrieving data.
 		 */
 		self._source = AjaxCalls();
-		console.log(self._source)
 		/**
 		* This options allow recreating the state.
 		* They are used to query for the data and take into
@@ -106,7 +105,7 @@ export default function CertaintyDataSource(pubSubService, project){
 	 */
 	function _retrieve(){
 		self.publish('status',{action:'fetching'});
-		self._source.getFiles({project:self._project},{},null).then(response=>{
+		self._source.getFiles({project:self._appContext.project},{},null).then(response=>{
 			if(response.success === false)
 				throw('Failed to retrieve files for the current project.')
 			
@@ -114,7 +113,7 @@ export default function CertaintyDataSource(pubSubService, project){
 			response.content.forEach(file=>{
 				self._data.remove(()=>true); // clear previous data
 
-				self._source.getStats({project:self._project, file:file.id},{},null).then(response=>{
+				self._source.getStats({project:self._appContext.project, file:file.id},{},null).then(response=>{
 					if(response.success === false)
 						console.info('Failed to retrieve entities for file: '+file.id);
 					else{
@@ -130,5 +129,5 @@ export default function CertaintyDataSource(pubSubService, project){
 		})
 	}
 
-	return _init(pubSubService, project);
+	return _init(pubSubService, appContext);
 }
