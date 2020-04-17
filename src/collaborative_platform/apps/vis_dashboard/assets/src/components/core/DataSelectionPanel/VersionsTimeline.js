@@ -1,9 +1,16 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import styles from './style.module.css';
 
-export default function ProjectVersionTimeline({selected, versions=[], onChange}) {
-    //versions.map(v=>console.log(v.date, selected.date, v.date <= selected.date))
+import styles from './style.module.css';
+import {WithAppContext} from 'app_context';
+
+export default (props)=>(
+    <WithAppContext>
+        <ProjectVersionTimeline {...props}/>
+    </WithAppContext>
+);
+
+function ProjectVersionTimeline({selected, context, onChange}) {
 
     const timestamp = (v,i)=>(
         <div key={i} 
@@ -22,11 +29,11 @@ export default function ProjectVersionTimeline({selected, versions=[], onChange}
             <span className={styles.timeBar}>
             <span>Present day</span>
             <span/>
-            <span style={{height: (100*versions.length)+'px'}}/>
+            <span style={{height: (100*context.projectVersions.length)+'px'}}/>
             <span/>
             <span>Project creation</span>
             </span>
-            {versions.map((v,i)=>timestamp(v,i))}
+            {context.projectVersions.map((v,i)=>timestamp(v,i))}
         </div>
     )
 }
