@@ -109,14 +109,12 @@ export default function CertaintyDataSource(pubSubService, appContext){
 		let retrieved = 0, retrieving = files.length;
 
 		self.publish('status',{action:'fetching'});
+		self._data.remove(()=>true); // clear previous data
 		files.forEach(file=>{
-			self._data.remove(()=>true); // clear previous data
-
 			self._source.getAnnotations({project:self._appContext.project, file},{},null).then(response=>{
 				if(response.success === false)
 					console.info('Failed to retrieve entities for file: '+file);
 				else{
-					//console.log(response.content)
 					self._data.add(_processData(response.content));
 					_publishData();
 				}

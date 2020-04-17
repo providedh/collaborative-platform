@@ -93,14 +93,13 @@ export default function EntityDataSource(pubSubService, appContext){
 		let retrieved = 0, retrieving = files.length;
 
 		self.publish('status',{action:'fetching'});
+		self._data.remove(()=>true); // clear previous data
 		files.forEach(file=>{
-			self._data.remove(()=>true); // clear previous data
-
 			self._source.getFileEntities({project:self._appContext.project, file},{},null).then(response=>{
 				if(response.success === false)
 					console.info('Failed to retrieve entities for file: '+file);
 				else
-					self._data.add(response.content.map(x=>({file_id:file, file_name:getName(file), ...x})));
+					self._data.add(response.content.map(x=>({file_id:+file, file_name:getName(file), ...x})));
 					_publishData();
 				if(++retrieved == retrieving){
 					self.publish('status',{action:'fetched'});
