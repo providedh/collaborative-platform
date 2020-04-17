@@ -12,87 +12,22 @@ from collaborative_platform.settings import XML_NAMESPACES, DEFAULT_ENTITIES, NS
 
 class FileRenderer:
     def __init__(self):
+        self.__file_version = None
+
         self.__tree = None
 
+        self.__listable_entities = []
+        self.__custom_entities = []
+
     def render_file_version(self, file_version):
+        self.__file_version = file_version
+
+        self.__load_entities_schemes()
+
+        self.__create_tree()
+        self.__append_listable_entities()
 
 
-        # create tree
-        file_version.upload.open('r')
-        xml_content = file_version.upload.read()
-        file_version.upload.close()
-
-        parser = etree.XMLParser(remove_blank_text=True)
-        tree = etree.fromstring(xml_content, parser=parser)
-
-        # load entities schemes
-        listable_entities = []
-        custom_entities = []
-
-        entities_schemes = EntitySchema.objects.filter(
-            taxonomy__project=file_version.file.project,
-        )
-
-        default_entities_names = DEFAULT_ENTITIES.keys()
-
-        for entity in entities_schemes:
-            if entity.name not in default_entities_names:
-                custom_entities.append(entity)
-            elif DEFAULT_ENTITIES[entity.name]['listable']:
-                listable_entities.append(entity)
-
-
-        # TODO: Append listable entities
-
-        for entity in listable_entities:
-            list_tag = DEFAULT_ENTITIES[entity.name]['list_tag']
-
-            # get entities from db
-            entities_versions = EntityVersion.objects.filter(
-                file_version=file_version,
-                entity__type=entity.name,
-            )
-
-            # create entities elements
-            elements = []
-
-            default_prefix = '{%s}' % XML_NAMESPACES['default']
-            xml_prefix = '{%s}' % XML_NAMESPACES['xml']
-
-            for entity_version in entities_versions:
-                entity_element = etree.Element(default_prefix + entity_version.entity.type, nsmap=NS_MAP)
-                entity_element.set(xml_prefix + 'id', entity_version.entity.xml_id)
-                entity_element.set('resp', str(entity_version.entity.created_by_id))
-
-                entities_properties = EntityProperty.objects.filter(
-                    entity_version=entity_version
-                )
-
-                for entity_property in entities_properties:
-                    xpath = DEFAULT_ENTITIES[entity_version.entity.type]['properties'][entity_property.name]['xpath']
-                    value = entity_property.get_value(as_str=True)
-
-                    add_property(entity_element, xpath, value)
-
-                elements.append(entity_element)
-
-            if entity.body_list:
-                list_xpath = f'/default:TEI/default:text/default:body/default:div[@type="{entity.name}"]/' \
-                             f'default:{DEFAULT_ENTITIES[entity.name]["list_tag"]}[@type="{entity.name}List"]'
-            else:
-                list_xpath = f'/default:TEI/default:teiHeader/default:sourceDesc/' \
-                             f'default:{DEFAULT_ENTITIES[entity.name]["list_tag"]}[@type="{entity.name}List"]'
-
-            list = get_first_xpath_match(tree, list_xpath, XML_NAMESPACES)
-
-            if not list:
-                tree = create_elements_from_xpath(tree, list_xpath)
-                list = get_first_xpath_match(tree, list_xpath, XML_NAMESPACES)
-
-            for element in elements:
-                list.append(element)
-
-        xml_content = etree.tounicode(tree, pretty_print=True)
 
 
 
@@ -124,7 +59,112 @@ class FileRenderer:
 
         # xml_content = append_unifications(xml_content, file_version)
 
+        xml_content = self.__create_xml_content()
+
         return xml_content
+
+    def __create_tree(self):
+        raw_content = self.__file_version.get_raw_content()
+
+        parser = etree.XMLParser(remove_blank_text=True)
+        self.__tree = etree.fromstring(raw_content, parser=parser)
+
+    def __load_entities_schemes(self):
+        entities_schemes = self.__get_entities_schemes_from_db()
+
+        default_entities_names = DEFAULT_ENTITIES.keys()
+
+        for entity in entities_schemes:
+            if entity.name not in default_entities_names:
+                self.__custom_entities.append(entity)
+            elif DEFAULT_ENTITIES[entity.name]['listable']:
+                self.__listable_entities.append(entity)
+
+    def __get_entities_schemes_from_db(self):
+        entities_schemes = EntitySchema.objects.filter(taxonomy__project=self.__file_version.file.project)
+
+        return entities_schemes
+
+    def __append_listable_entities(self):
+        for entity in self.__listable_entities:
+            entities_versions = self.__get_entities_versions_from_db(entity.name)
+            elements = self.__create_entities_elements(entities_versions)
+
+            list_tag = DEFAULT_ENTITIES[entity.name]['list_tag']
+
+            if entity.body_list:
+                list_xpath = f'/default:TEI/default:text/default:body/default:div[@type="{entity.name}"]/' \
+                             f'default:{list_tag}[@type="{entity.name}List"]'
+            else:
+                list_xpath = f'/default:TEI/default:teiHeader/default:sourceDesc/' \
+                             f'default:{list_tag}[@type="{entity.name}List"]'
+
+            self.__append_elements_to_the_list(elements, list_xpath)
+
+    def __get_entities_versions_from_db(self, entity_type):
+        entities_versions = EntityVersion.objects.filter(
+            file_version=self.__file_version,
+            entity__type=entity_type,
+        )
+
+        return entities_versions
+
+    def __create_entities_elements(self, entities_versions):
+        elements = []
+
+        for entity_version in entities_versions:
+            entity_element = self.__create_entity_element(entity_version)
+
+            self.__append_entity_properties(entity_element, entity_version)
+
+            elements.append(entity_element)
+
+        return elements
+
+    def __create_entity_element(self, entity_version):
+        default_prefix = '{%s}' % XML_NAMESPACES['default']
+        xml_prefix = '{%s}' % XML_NAMESPACES['xml']
+
+        entity_element = etree.Element(default_prefix + entity_version.entity.type, nsmap=NS_MAP)
+        entity_element.set(xml_prefix + 'id', entity_version.entity.xml_id)
+        entity_element.set('resp', str(entity_version.entity.created_by_id))
+
+        return entity_element
+
+    def __append_entity_properties(self, entity_element, entity_version):
+        entities_properties = EntityProperty.objects.filter(
+            entity_version=entity_version
+        )
+
+        for entity_property in entities_properties:
+            xpath = DEFAULT_ENTITIES[entity_version.entity.type]['properties'][entity_property.name]['xpath']
+            value = entity_property.get_value(as_str=True)
+
+            add_property(entity_element, xpath, value)
+
+    def __append_elements_to_the_list(self, elements, list_xpath):
+        list = get_first_xpath_match(self.__tree, list_xpath, XML_NAMESPACES)
+
+        if not list:
+            tree = create_elements_from_xpath(self.__tree, list_xpath)
+            list = get_first_xpath_match(tree, list_xpath, XML_NAMESPACES)
+
+        for element in elements:
+            list.append(element)
+
+    def __create_xml_content(self):
+        xml_content = etree.tounicode(self.__tree, pretty_print=True)
+
+        return xml_content
+
+
+
+
+
+
+
+
+
 
 
 def add_property(parent, xpath, value):

@@ -71,7 +71,7 @@ class ElementsExtractor:
                     self.__unlistable_entities.append(entity)
 
     def _get_entities_schemes_from_db(self):
-        entities_schemes = EntitySchema.objects.filter(taxonomy__project_id=self.__file.project.id)
+        entities_schemes = EntitySchema.objects.filter(taxonomy__project=self.__file.project)
 
         return entities_schemes
 
