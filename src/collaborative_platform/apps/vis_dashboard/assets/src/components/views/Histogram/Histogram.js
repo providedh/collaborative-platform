@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useRef } from "react";
+
 import styles from './style.module.css';
 import css from './style.css';
 import dummy_data from './dummy_data';
 import dummy_overlay from './overlay_data';
 import render from './render';
 import getConfig from './config';
-
-import {DataClient} from '../../../data';
+import {DataClient, useCleanup} from '../../../data';
 
 function useData(dataClient, dimension){
 	const [data, setData] = useState(null);
@@ -76,6 +76,7 @@ function Histogram({dimension, barDirection, renderOverlay, overlay, layout}) {
 	const [width, height] = layout!=undefined?[layout.w, layout.h]:[4,4];
 
     const [dataClient, _] = useState(DataClient());
+    useCleanup(dataClient);
 	const data = useData(dataClient, dimension);
     const onEvent = getOnEventCallback(dataClient, dimension, barDirection);
 	//const overlay_data = useOverlay(renderOverlay, dimension, overlay);

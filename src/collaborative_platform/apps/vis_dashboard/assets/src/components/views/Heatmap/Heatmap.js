@@ -4,7 +4,7 @@ import styles from './style.module.css';
 import css from './style.css';
 import getConfig from './config';
 import {RegularHeatmapBuilder, StairHeatmapBuilder, HeartHeatmapBuilder, Director} from './vis';
-import {DataClient} from '../../../data';
+import {DataClient, useCleanup} from '../../../data';
 import useData from './data';
 
 function useHeatmap(layout, colorScale, rangeScale, eventCallback){
@@ -43,6 +43,7 @@ function Heatmap({ layout, tileLayout, colorScale, rangeScale, source, axis1, ax
 	const [width, height] = layout!=undefined?[layout.w, layout.h]:[4,4];
 
     const [dataClient, _] = useState(DataClient());
+    useCleanup(dataClient);
 	const data = useData(dataClient, source, axis1, axis2);
     const heatmap = useHeatmap(tileLayout, colorScale, rangeScale, event=>event);
     

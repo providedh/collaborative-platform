@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 
 import {AjaxCalls} from '../../../helpers';
-import {DataClient} from '../../../data';
+import {DataClient, useCleanup} from '../../../data';
 
 import styles from './style.module.css';
 import css from './style.css';
@@ -16,7 +16,9 @@ function useData(dataClient, syncWithViews, documentId, id2Document){
 
 	useEffect(()=>{
 		if(syncWithViews === true){
-			dataClient.unsubscribe('document');
+			if(dataClient.getSubscriptions().includes('document'))
+                dataClient.unsubscribe('document');
+
             dataClient.subscribe('document', ({id, html})=>{
                 if(id == null || html == null)
                     return
@@ -27,7 +29,9 @@ function useData(dataClient, syncWithViews, documentId, id2Document){
                 	setData({id:'', html:'<i>Hover over documents in other views to see its contents here.</i>', doc: null, name:''});
             });
 		}else{
-			dataClient.unsubscribe('document');
+            if(dataClient.getSubscriptions().includes('document'))
+		        dataClient.unsubscribe('document');
+
             ajax.getFile({project:window.project, file:documentId},{},null).then(response=>{
             	if(response.success === true)
             		setData({
@@ -61,7 +65,8 @@ export default function DocumentView({layout, syncWithViews, documentId, showEnt
 
 	const [dataClient, _] = useState(DataClient());
 	const data = useData(dataClient, syncWithViews, documentId, context.id2document);
-    useDocumentRendering(data, viewRef.current, context.taxonomy)
+    useDocumentRendering(data, viewRef.current, context.taxonomy);
+    useCleanup(dataClient);
 
     return(
         <div className={styles.documentView}>

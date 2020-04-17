@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import styles from './style.module.css';
 import css from './style.css';
-import {DataClient} from '../../../data';
+import {DataClient, useCleanup} from '../../../data';
 import getConfig from './config';
 
 function useData(dataClient, dimension){
@@ -77,6 +77,7 @@ function DotMatrix({ layout, singleSource, dataSourceType, dataSource, dotType, 
 	const [width, height] = layout!=undefined?[layout.w, layout.h]:[4,4];
 
     const [dataClient, _] = useState(DataClient());
+    useCleanup(dataClient);
 	//const data = useData(dataClient, dimension);
 
     return(

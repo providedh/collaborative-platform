@@ -4,7 +4,7 @@ import styles from './style.module.css';
 import css from './style.css';
 import getConfig from './config';
 import {useRender} from './vis';
-import {DataClient} from '../../../data';
+import {DataClient, useCleanup} from '../../../data';
 import useData from './data';
 
 function onEvent(source, levels, event, dataClient, context){
@@ -52,6 +52,7 @@ function Sunburst ({ layout, source, numberOfLevels, ...rest}) {
     );
 
     const [dataClient, _] = useState(DataClient());
+    useCleanup(dataClient);
 	const data = useData(dataClient, source, levels);
 
     useRender(width, height, data, source, levels, context.taxonomy, containerRef, (e)=>onEvent(source,levels, e, dataClient));

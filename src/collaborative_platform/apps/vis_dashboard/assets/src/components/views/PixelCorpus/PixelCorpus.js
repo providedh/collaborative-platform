@@ -1,7 +1,7 @@
 import React from 'react';
 import {useState, useRef, useEffect} from 'react';
 
-import {DataClient} from '../../../data';
+import {DataClient, useCleanup} from '../../../data';
 
 import css from './style.css';
 import styles from './style.module.css';
@@ -43,6 +43,7 @@ function PixelCorpus({sortDocumentsBy, colorCertaintyBy, layout}) {
     const [width, height] = layout!=undefined?[layout.w, layout.h]:[4,4];
 
     const [dataClient, _] = useState(DataClient());
+    useCleanup(dataClient);
     function handleEvent(type, d){
         if(type == 'labelHover'){
             for(let doc of Object.values(window.documents)){
