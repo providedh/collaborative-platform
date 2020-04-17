@@ -37,7 +37,7 @@ export default class Dashboard extends React.Component {
         }
 
         this.updateDashboardConfig = this.updateDashboardConfig.bind(this);
-        this.openDetails = this.openDetails.bind(this);
+        this.handleViewFocus = this.handleViewFocus.bind(this);
         this.closeDetails = this.closeDetails.bind(this);
         this.addView = this.addView.bind(this);
         this.updateView = this.updateView.bind(this);
@@ -141,6 +141,14 @@ export default class Dashboard extends React.Component {
         });
     }
 
+    handleViewFocus(viewIndex){
+        if(this.state.focusedView == viewIndex){
+            this.closeDetails(viewIndex);
+        } else {
+            this.openDetails(viewIndex);
+        }       
+    }
+
     openDetails(viewIndex){
         this.setState(prev=>{
             if(prev.fullscreen === true){
@@ -194,14 +202,13 @@ export default class Dashboard extends React.Component {
                                     views={this.state.views} 
                                     focused={this.state.focusedView} 
                                     onClose={this.removeView}
-                                    onFocus={this.openDetails}/>
+                                    onFocus={this.handleViewFocus}/>
                             </div>
                             <div className={"col-3 px-0 " + styles.heightInherit + (this.state.fullscreen?' d-none':'')}>
                                 <DashboardControlPanel 
                                     addView={this.addView} 
-                                    authors={this.state.authors} 
-                                    versions={this.props.projectVersions}
                                     currentVersion={this.state.currentVersion} 
+                                    authors={this.state.authors}
                                     setAuthors={this.setAuthors} 
                                     setVersion={this.setVersion}
                                     display={this.state.focusedView == -1}/>
