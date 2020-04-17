@@ -5,7 +5,7 @@ import css from '../themes/theme.css';
 import {AppContext} from 'app_context';
 import Dashboard from './core/Dashboard/Dashboard';
 import LoadingApp from './LoadingApp';
-import {DataClient} from '../data';
+import {DataClient, DataService} from '../data';
 import {AjaxCalls} from '../helpers';
 const ajax = AjaxCalls();
 
@@ -24,7 +24,8 @@ export default class App extends React.Component {
             taxonomy: [],
             contributors: [],
             projectVersions: [],
-            appContext: null
+            appContext: null,
+            project: window.project,
         }
 
     }
@@ -42,7 +43,7 @@ export default class App extends React.Component {
 
     fetchDocuments(){
         return new Promise((resolve, error)=>{
-            ajax.getFiles({project},{},null).then(response=>{
+            ajax.getFiles({project: this.state.project},{},null).then(response=>{
                 if(response.success === false){
                     this.setState({error: 'Failed to retrieve project documents.'});
                 }else{
@@ -61,7 +62,7 @@ export default class App extends React.Component {
 
     fetchContributors(){
         return new Promise((resolve, error)=>{
-            ajax.getContributors({project},{},null).then(response=>{
+            ajax.getContributors({project: this.state.project},{},null).then(response=>{
                 if(response.success === false){
                     this.setState({error: 'Failed to retrieve the project contributors.'});
                 }else{
@@ -79,7 +80,7 @@ export default class App extends React.Component {
 
     fetchSettings(){
         return new Promise((resolve, error)=>{
-            ajax.getSettings({project},{},null).then(response=>{
+            ajax.getSettings({project: this.state.project},{},null).then(response=>{
                 if(response.success === false){
                     this.setState({error: 'Failed to retrieve the project settings.'});
                 }else{
@@ -104,24 +105,32 @@ export default class App extends React.Component {
         }
 
         return new Promise((resolve, error)=>{
-            ajax.getProjectVersions({project},{},null).then(response=>{
+            ajax.getProjectVersions({project: this.state.project},{},null).then(response=>{
                 if(response.success === false){
                     this.setState({error: 'Failed to retrieve project versions.'});
                 }else{
                     const projectVersions = processVersions(response);
-                    this.setState({
-                        projectVersions,
-                        appContext: {
-                            projectVersions: projectVersions,
-                            id2document: this.state.id2document, 
-                            name2document: this.state.name2document, 
-                            taxonomy: this.state.taxonomy, 
-                            contributors: this.state.contributors
-                        },
-                        fetched: 4});
+                    const appContext = {
+                        project: this.state.project,
+                        projectVersions: projectVersions,
+                        id2document: this.state.id2document, 
+                        name2document: this.state.name2document, 
+                        taxonomy: this.state.taxonomy, 
+                        contributors: this.state.contributors
+                    };
+                    this.setAppContext(appContext)
                     resolve();
                 }
             });
+        });
+    }
+
+    setAppContext(appContext){
+        DataService.setAppContext(appContext);
+        this.setState({
+            appContext,
+            projectVersions: appContext.projectVersions,
+            fetched: 4
         });
     }
 
