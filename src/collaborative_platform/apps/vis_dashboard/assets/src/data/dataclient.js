@@ -97,10 +97,15 @@ export default function DataClient(){
 		if(self._filters.hasOwnProperty(dim))
 			DataService.unfilter(self._filters[dim]);
 
+		const activeFilters = self._filters[dim];
+		self._filters[dim] = null;
 		const filter = DataService.filter(dim, filterFunc);
 
-		if(filter == null)
+		if(filter == null){
+			const {[dim]:added, ...activeFilters} = self._filters;
+			self._filters = activeFilters;
 			throw('Could not filter by dimension: '+dim);
+		}
 		self._filters[dim] = filter;
 	}
 
@@ -109,8 +114,9 @@ export default function DataClient(){
 	 */
 	function _unfilter(dim){
 	  	if(self._filters.hasOwnProperty(dim)){
-	  		DataService.unfilter((self._filters[dim]));
-			delete self._filters[dim];
+	  		const {[dim]:toremove, ...activeFilters} = self._filters;
+	  		self._filters = activeFilters;
+	  		DataService.unfilter(toremove);
 		}else{
 			console.info('Attempted to unfilter an already unfiltered dimension: '+dim);
 		}
