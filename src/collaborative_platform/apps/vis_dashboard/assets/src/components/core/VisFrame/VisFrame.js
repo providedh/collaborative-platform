@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './style.module.css';
 import css from './style.css';
+import {WithAppContext} from 'app_context';
 
 export default function VisFrame({index, focused, onViewFocus, onViewClose, children}) {
     const getTitlePadding = title=>({'paddingLeft': 'calc(50% - '+((children.props.dimension.length/2)*5.5)+'px)'});
@@ -21,7 +22,9 @@ export default function VisFrame({index, focused, onViewFocus, onViewClose, chil
                 </button>
             </div>
             <div className={styles.container}>
-                {children}
+                <WithAppContext>
+                    {children}
+                </WithAppContext>
             </div>
         </div>
     )
