@@ -23,15 +23,10 @@ export default (function DataService(){
 		self._pubSubService = PubSubService();
 		self._pubSubClient = {};
 		self._pubSubService.register(self._pubSubClient);
+		self._context = null;
+		self._sources = {};		
 
-		self._sources = {
-			meta: MetaDataSource(self._pubSubService, window.project),
-			stats: StatsDataSource(self._pubSubService, window.project),
-			certainty: CertaintyDataSource(self._pubSubService, window.project),
-			entity: EntityDataSource(self._pubSubService, window.project),
-			document: DocumentDataSource(self._pubSubService, window.project),
-		}
-
+		self.setAppContext = _setContext;
 		self.subscribe = _subscribe;
 		self.unsubscribe = _unsubscribe;
 		self.filter = _filter;
@@ -40,6 +35,18 @@ export default (function DataService(){
 		self.subscribeToStatus = _subscribeToStatus;
 
 		return self;
+	}
+
+	function _setContext(context){
+		self._context = context;
+
+		self._sources = {
+			meta: MetaDataSource(self._pubSubService, context),
+			stats: StatsDataSource(self._pubSubService, context),
+			certainty: CertaintyDataSource(self._pubSubService, context),
+			entity: EntityDataSource(self._pubSubService, context),
+			document: DocumentDataSource(self._pubSubService, context),
+		}	
 	}
 
 	function _subscribeToStatus(callable){
