@@ -2,9 +2,6 @@ import DataService from './dataservice';
 import Filter from './filter';
 import Subscription from './subscription';
 
-
-window.dataClient = DataClient();
-
 /**
   * class DataClient
   * Components interact with an instance of this class
