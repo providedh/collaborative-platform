@@ -36,7 +36,7 @@ function createScales(data, barDirection, height, width, onEvent, padding=10, fo
 }
 
 function renderHorizontalAxis(data, context, xScale, width, height, padding, barDirection, tickCount=10, tickSize=5){
-    const label = barDirection===BarChartDirection.horizontal?'count':'';
+    const label = barDirection===BarChartDirection.horizontal?'count':data.dimension;
 
     context.save();
     context.strokeStyle = 'slategrey';
@@ -76,7 +76,7 @@ function renderHorizontalAxis(data, context, xScale, width, height, padding, bar
 }
 
 function renderVerticalAxis(data, context, yScale, width, height, padding, barDirection, tickCount=10, tickSize=5){
-    const label = barDirection===BarChartDirection.vertical?'count':'';
+    const label = barDirection===BarChartDirection.vertical?'count':data.dimension;
 
     context.save();
     context.strokeStyle = 'slategrey';
@@ -116,63 +116,64 @@ function renderVerticalAxis(data, context, yScale, width, height, padding, barDi
 }
 
 function barFactory(barDirection){
-    if (barDirection == 'Vertical') {
-        return renderVerticalBars
-    } else {
-        return renderHorizontalBars
-    }
+    const createBarBox = barDirection === BarChartDirection.vertical
+        ? createVerticalBarBox
+        : createHorizontalBarBox;
+
+    return (data, context, xScale, yScale, padding)=>renderBars(data, context, xScale, yScale, padding, createBarBox);
 }
 
-function renderVerticalBars(data, context, xScale, yScale, width, height, padding){
-    const [xDim, yDim] = Object.keys(data[0]);
 
-    function renderBar(bar_data){
-        const y = yScale(bar_data[yDim]),
-            box = [
-                padding.left + xScale(bar_data[xDim]),
-                y + padding.top,
-                xScale.bandwidth(),
-                height - y - padding.bottom - padding.top
-            ];
-        
-        context.fillRect(...box)
-        return box;
-    }
-
+function renderBars(data, context, xScale, yScale, padding, createBarBox){
     context.save();
-    context.fillStyle = '#007bff';
-    const rendered = data.map(d=>({box:renderBar(d), data:Object.values(d)}));
-    context.restore();
 
-    return rendered;
-}
+    context.fillStyle = 'lightgrey';
 
-function renderHorizontalBars(data, context, xScale, yScale, width, height, padding){
-    const [yDim, xDim] = Object.keys(data[0]);
-
-    function renderBar(bar_data){
-        const x = xScale(bar_data[yDim]),
-            box = [
-                padding.left,
-                yScale(bar_data[yDim]) + padding.top,
-                xScale(bar_data[xDim]),
-                yScale.bandwidth()
-            ];
-
+    const rendered = [...data.all.entries()].map(([label, items])=>{
+        const box = createBarBox(label, items, xScale, yScale, padding);
         context.fillRect(...box);
-        return box;
-    }
 
-    context.save();
+        return {box, data: items};
+    });
+
     context.fillStyle = '#007bff';
-    const rendered = data.map(d=>({box:renderBar(d), data:Object.values(d)}));
+    [...data.filtered.entries()].forEach(([label, items])=>{
+        const box = createBarBox(label, items, xScale, yScale, padding);
+        context.fillRect(...box);
+        
+        return {box, data: items};
+    });
+
     context.restore();
 
     return rendered;
+}
+
+function createVerticalBarBox(label, items, xScale, yScale, padding){
+    const y = yScale(items.length),
+        box = [
+            padding.left + xScale(label),
+            y + padding.top,
+            xScale.bandwidth(),
+            yScale.range()[0] - y
+        ];
+    
+    return box;
+}
+
+function createHorizontalBarBox(label, items, xScale, yScale, padding){
+    const box = [
+        padding.left,
+        yScale(label) + padding.top,
+        xScale(items.length),
+        yScale.bandwidth()
+    ];
+
+    return box;
 }
 
 function overlayFactory(barDirection){
-    if (barDirection == 'Vertical') {
+    if (barDirection === BarChartDirection.vertical) {
         return renderVerticalOverlay
     } else {
         return renderHorizontalOverlay
@@ -301,10 +302,10 @@ export default function render(container, canvas, overlayCanvas, data, overlay_d
 
     const {xScale, yScale, ...padding} = createScales(data, barDirection, canvas.height, canvas.width);
     console.log({xScale, yScale, padding});
-//    const renderData = barFactory(barDirection);
+    const renderData = barFactory(barDirection);
 //    const renderOverlay = overlayFactory(barDirection);
 //
-//    let renderedData = renderData(data, context, xScale, yScale, canvas.width, canvas.height, padding);
+    let renderedData = renderData(data, context, xScale, yScale, padding);
 //    if(render_overlay === true)
 //        renderedData = renderOverlay(overlay_data, context, xScale, yScale, canvas.width, canvas.height, padding);
 //
