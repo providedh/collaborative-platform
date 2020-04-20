@@ -8,7 +8,7 @@ import useData from './data';
 import {DataClient, useCleanup} from '../../../data';
 import getOnEventCallback from './event';
 
-function Histogram({layout, dimension, barDirection}) {
+function BarChart({layout, dimension, barDirection}) {
 	const [refContainer, refCanvas, refOverlayCanvas] = [useRef(), useRef(), useRef()];
 	const [width, height] = layout!=undefined?[layout.w, layout.h]:[4,4];
 
@@ -34,8 +34,8 @@ function Histogram({layout, dimension, barDirection}) {
     );
 }
 
-Histogram.prototype.description = "Encode frequencies using horizontal or vertical bars."
+BarChart.prototype.description = "Encode frequencies using horizontal or vertical bars."
 
-Histogram.prototype.getConfigOptions = getConfig;
+BarChart.prototype.getConfigOptions = getConfig;
 
-export default Histogram;
+export default BarChart;
