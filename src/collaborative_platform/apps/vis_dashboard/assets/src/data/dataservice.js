@@ -133,7 +133,11 @@ export default (function DataService(){
 	function _createDimFilter(dim){
 		const filters = Object.values(self._filters[dim]),
 			filterFunc = data=>filters.reduce((ac, dc)=>ac && dc(data), data);
-		return filterFunc;
+		if(filters.length === 0){
+			return null;
+		}else{
+			return filterFunc;
+		}
 	}
 
 	/**
