@@ -5,17 +5,20 @@ import {BarChartDirection, BarChartDimension} from './config';
 
 function createScales(data, barDirection, height, width, onEvent, padding=10, fontSize=12){
     const dimensions = [...data.all.keys()],
-        maxLabelLength = Math.max(...dimensions.map(x=>String(x).length)),
+        maxTickLength = Math.max(...dimensions.map(x=>String(x).length)),
         maxCount = Math.max(...[...data.all.values()].map(x=>x.length)),
-        labelTickSize = maxLabelLength * (fontSize/2.2),
+        labelTickSize = maxTickLength * (fontSize/2.2),
         countTickSize = String(maxCount).length * (fontSize/2.2),
-        [xTickLength, yTickLength] = barDirection===BarChartDirection.horizontal 
+        [xTickLength, yTickLength] = barDirection===BarChartDirection.horizontal
             ? [countTickSize, labelTickSize]
-            : [labelTickSize, countTickSize];
+            : [labelTickSize, countTickSize],
+        [xLabel, yLabel] = barDirection===BarChartDirection.horizontal
+            ? ['count', data.dimension]
+            : [data.dimension, 'count'];
 
     const paddingLeft = padding*2 + yTickLength,
         paddingBottom = padding + fontSize + 2,
-        paddingRight = padding + xTickLength,
+        paddingRight = padding + xTickLength + xLabel.length*(fontSize/2.2),
         paddingTop = padding*2 + fontSize + 2;
         
     const scaleWidth = width - paddingRight - paddingLeft,
