@@ -11,6 +11,8 @@ export default function getOnEventCallback(dataClient, dimension, data){
             }else{
                 handleUnfilteredDimension(dataClient, dimension, label);
             }
+        }else if(isValidFocusEvent(target, source, dimension)){
+            focusDocument(dataClient, dimension, target.data);
         }
     });
 }
@@ -21,6 +23,18 @@ function isValidFilterEvent(target, source, dimension){
         && dimension != undefined);
 
     return isValid;
+}
+
+function isValidFocusEvent(target, source, dimension){
+    const isValid = (target.data[0] !== undefined
+        && source == 'hover' 
+        && dimension === 'fileId');
+
+    return isValid;   
+}
+
+function focusDocument(dataClient, dimension, [docId, count]){
+    dataClient.focusDocument(docId)
 }
 
 function isDimensionFiltered(dataClient, dimension){
