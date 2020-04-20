@@ -206,9 +206,9 @@ class Dashboard extends React.Component {
                                     </button>
                                     <button className={styles.toggleFullScreen + ' ml-3'}
                                         onClick={this.toggleFullscreen}>
-                                        {this.state.fullscreen?'<<':''}
+                                        {this.state.fullscreen?'<< ':''}
                                         <span>{this.state.fullscreen?'Show':'Hide'} side panel</span>
-                                        {this.state.fullscreen?'':'>>'}
+                                        {this.state.fullscreen?'':' >>'}
                                     </button>
                                 </div>
                                 <Help />
