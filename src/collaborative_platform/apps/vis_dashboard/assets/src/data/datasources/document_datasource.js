@@ -37,8 +37,10 @@ export default function DocumentDataSource(pubSubService, appContext){
 	}
 
 	function _focusDocument(documentId){
-		self._focused = documentId;
-		_retrieve();
+		if(self._focused !== documentId){
+			self._focused = documentId;
+			_retrieve();
+		}
 	}
 
 	/**
