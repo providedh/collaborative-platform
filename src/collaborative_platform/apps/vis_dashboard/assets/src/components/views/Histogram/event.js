@@ -32,19 +32,33 @@ function removeFromFilter(dataClient, dimension, filterItems, label){
         dataClient.unfilter(dimension);
     }else{
         filterItems.splice(filterItems.indexOf(label),1);
-        dataClient.filter(dimension, x=>filterItems.includes(x));
+
+        if(dimension === 'certaintyCategory'){
+            dataClient.filter(dimension, x=>x && filterItems.includes(x.sort().join()));
+        }else{
+            dataClient.filter(dimension, x=>filterItems.includes(x));
+        }
     }
 }
 
 function addToFilter(dataClient, dimension, filterItems, label){
     filterItems.push(label);
-    dataClient.filter(dimension, x=>filterItems.includes(x));
 
+    if(dimension === 'certaintyCategory'){
+        dataClient.filter(dimension, x=>x && filterItems.includes(x.sort().join()));
+    }else{
+        dataClient.filter(dimension, x=>filterItems.includes(x));
+    }
 }
 
 function handleFilteredDimension(dataClient, dimension, label, data){
-    const filter = dataClient.getFilter(dimension),
-        filterItems = [...data.keys()].filter(filter.filter);
+    const filter = dataClient.getFilter(dimension);
+    const items = dimension==='certaintyCategory'
+        ? [...data.keys()].map(x=>[x])
+        : [...data.keys()];
+    const filterItems = dimension==='certaintyCategory'
+        ? items.filter(filter.filter).map(x=>x.sort().join())
+        : items.filter(filter.filter);
 
     if(filterItems.includes(label)){
         removeFromFilter(dataClient, dimension, filterItems, label);
@@ -54,5 +68,14 @@ function handleFilteredDimension(dataClient, dimension, label, data){
 }
 
 function handleUnfilteredDimension(dataClient, dimension, label){
-    dataClient.filter(dimension, x=>x===label);
+    if(dimension === 'certaintyCategory'){
+        dataClient.filter(dimension, x=>x && x.sort().join()===label);
+    }else{
+        dataClient.filter(dimension, x=>x===label);
+    }
+}
+
+function arrayIsSubsetOf(arr1, arr2){
+    const isSubset = arr1.every(x=>arr2.includes(x));
+    return isSubset;
 }
