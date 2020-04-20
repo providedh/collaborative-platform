@@ -1,35 +1,33 @@
 import * as d3 from 'd3';
 
+import {BarChartDirection, BarChartDimension} from './config';
+
+
 function createScales(data, barDirection, height, width, onEvent, padding=10, fontSize=12){
-    let scales = {xScale:null, yScale: null};
+    const dimensions = [...data.all.keys()],
+        maxLabelLength = Math.max(...dimensions.map(x=>String(x).length)),
+        maxCount = Math.max(...[...data.all.values()].map(x=>x.length)),
+        labelTickSize = maxLabelLength * (fontSize/2.2),
+        countTickSize = String(maxCount).length * (fontSize/2.2),
+        [xTickLength, yTickLength] = barDirection===BarChartDirection.horizontal 
+            ? [countTickSize, labelTickSize]
+            : [labelTickSize, countTickSize];
 
-    const dimensions = Object.keys(data[0]),
-        [xDim, yDim] = barDirection=='Vertical'?dimensions:[dimensions[1], dimensions[0]];
-
-    const [xTickLength, yTickLength] = [
-        Math.max(...data.map(x=>String(x[xDim]).length)),
-        Math.max(...data.map(x=>String(x[yDim]).length))
-        ]
-
-    const paddingLeft = padding + yTickLength*(fontSize/2.2),
+    const paddingLeft = padding*2 + yTickLength,
         paddingBottom = padding + fontSize + 2,
-        paddingRight = padding + xDim.length*(fontSize/2.2),
-        paddingTop = padding + fontSize + 2;
+        paddingRight = padding + xTickLength,
+        paddingTop = padding*2 + fontSize + 2;
         
     const scaleWidth = width - paddingRight - paddingLeft,
         scaleHeight = height - paddingTop - paddingBottom;
 
-    const xData = data.map(d=>d[xDim]),
-        yData = data.map(d=>d[yDim]);
+    const [xDomain, yDomain] = barDirection==BarChartDirection.horizontal
+        ? [[0, maxCount], dimensions]
+        : [dimensions, [0, maxCount]];
 
-    const xMax = Math.max(...xData),
-        yMax = Math.max(...yData);
-
-    const xDomain = barDirection=='Vertical'?xData:[0, xMax + xMax*.02],
-        yDomain = barDirection=='Vertical'?[0, yMax + yMax*.02]:yData;
-
-    const xScale = barDirection=='Vertical'?d3.scaleBand().padding(0.1):d3.scaleLinear(),
-        yScale = barDirection=='Vertical'?d3.scaleLinear():d3.scaleBand().padding(0.1);
+    const [xScale, yScale] = barDirection==BarChartDirection.horizontal
+        ? [d3.scaleLinear(), d3.scaleBand().padding(0.1)]
+        : [d3.scaleBand().padding(0.1), d3.scaleLinear()];
 
     xScale.rangeRound([0, scaleWidth]).domain(xDomain);
     yScale.rangeRound([scaleHeight, 0]).domain(yDomain);
@@ -38,7 +36,7 @@ function createScales(data, barDirection, height, width, onEvent, padding=10, fo
 }
 
 function renderHorizontalAxis(data, context, xScale, width, height, padding, barDirection, tickCount=10, tickSize=5){
-    const label = barDirection=='Vertical'?Object.keys(data[0])[0]:Object.keys(data[0])[1];
+    const label = barDirection===BarChartDirection.horizontal?'count':'';
 
     context.save();
     context.strokeStyle = 'slategrey';
@@ -54,7 +52,7 @@ function renderHorizontalAxis(data, context, xScale, width, height, padding, bar
     context.lineTo(padding.left, height - padding.bottom + tickSize);
     context.stroke();
 
-    if(barDirection=='Vertical') {
+    if(barDirection === BarChartDirection.vertical) {
         xScale.domain().forEach(d=>{
             context.moveTo(padding.left + xScale(d) + xScale.bandwidth()/2, height - padding.bottom);
             context.lineTo(padding.left + xScale(d) + xScale.bandwidth()/2, height - padding.bottom + tickSize);
@@ -78,7 +76,7 @@ function renderHorizontalAxis(data, context, xScale, width, height, padding, bar
 }
 
 function renderVerticalAxis(data, context, yScale, width, height, padding, barDirection, tickCount=10, tickSize=5){
-    const label = barDirection=='Vertical'?Object.keys(data[0])[1]:Object.keys(data[0])[0];
+    const label = barDirection===BarChartDirection.vertical?'count':'';
 
     context.save();
     context.strokeStyle = 'slategrey';
@@ -287,10 +285,11 @@ function setupInteractions(renderedData, overlayCanvas, ){
 }
 
 export default function render(container, canvas, overlayCanvas, data, overlay_data, render_overlay, barDirection){
-	if(container == null || canvas == null || data == null || data.length == 0)
+    console.log(container, canvas, data, data?.filtered?.size)
+	if(container == null || canvas == null || data == null || data.filtered.size == 0)
 		return
 
-    const dimensions = Object.keys(data[0]);
+    const dimensions = [...data.all.keys()];
 
 	canvas.width = container.clientWidth;
 	canvas.height = container.clientHeight;
@@ -301,15 +300,16 @@ export default function render(container, canvas, overlayCanvas, data, overlay_d
     context.clearRect(0, 0, canvas.width, canvas.height);
 
     const {xScale, yScale, ...padding} = createScales(data, barDirection, canvas.height, canvas.width);
-    const renderData = barFactory(barDirection);
-    const renderOverlay = overlayFactory(barDirection);
-
-    let renderedData = renderData(data, context, xScale, yScale, canvas.width, canvas.height, padding);
-    if(render_overlay === true)
-        renderedData = renderOverlay(overlay_data, context, xScale, yScale, canvas.width, canvas.height, padding);
-
-    setupInteractions(renderedData, overlayCanvas);
-
+    console.log({xScale, yScale, padding});
+//    const renderData = barFactory(barDirection);
+//    const renderOverlay = overlayFactory(barDirection);
+//
+//    let renderedData = renderData(data, context, xScale, yScale, canvas.width, canvas.height, padding);
+//    if(render_overlay === true)
+//        renderedData = renderOverlay(overlay_data, context, xScale, yScale, canvas.width, canvas.height, padding);
+//
+//    setupInteractions(renderedData, overlayCanvas);
+//
     renderHorizontalAxis(data, context, xScale, canvas.width, canvas.height, padding, barDirection);
     renderVerticalAxis(data, context, yScale, canvas.width, canvas.height, padding, barDirection);
 
