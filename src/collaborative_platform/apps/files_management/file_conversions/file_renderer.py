@@ -74,10 +74,10 @@ class FileRenderer:
                 list_tag = DEFAULT_ENTITIES[entity.name]['list_tag']
 
                 if entity.body_list:
-                    list_xpath = f'/default:TEI/default:text/default:body/default:div[@type="{entity.name}"]/' \
+                    list_xpath = f'./default:text/default:body/default:div[@type="{entity.name}"]/' \
                                  f'default:{list_tag}[@type="{entity.name}List"]'
                 else:
-                    list_xpath = f'/default:TEI/default:teiHeader/default:sourceDesc/' \
+                    list_xpath = f'./default:teiHeader/default:fileDesc/default:sourceDesc/' \
                                  f'default:{list_tag}[@type="{entity.name}List"]'
 
                 self.__append_elements_to_the_list(elements, list_xpath)
@@ -90,10 +90,10 @@ class FileRenderer:
                 elements = self.__create_entities_elements(entities_versions, custom=True)
 
                 if entity.body_list:
-                    list_xpath = f'/default:TEI/default:text/default:body/default:div[@type="{entity.name}"]/' \
+                    list_xpath = f'./default:text/default:body/default:div[@type="{entity.name}"]/' \
                                  f'default:listObject[@type="{entity.name}List"]'
                 else:
-                    list_xpath = f'/default:TEI/default:teiHeader/default:sourceDesc/' \
+                    list_xpath = f'./default:teiHeader/default:fileDesc/default:sourceDesc/' \
                                  f'default:listObject[@type="{entity.name}List"]'
 
                 self.__append_elements_to_the_list(elements, list_xpath)
@@ -154,7 +154,7 @@ class FileRenderer:
 
         if not list:
             tree = create_elements_from_xpath(self.__tree, list_xpath)
-            list = get_first_xpath_match(tree, list_xpath, XML_NAMESPACES)
+            list = get_first_xpath_match(self.__tree, list_xpath, XML_NAMESPACES)
 
         for element in elements:
             list.append(element)
@@ -170,7 +170,7 @@ class FileRenderer:
         if certainties:
             elements = self.__create_certainties_elements(certainties)
 
-            list_xpath = '/default:TEI/default:teiHeader/default:profileDesc/default:textClass/' \
+            list_xpath = './default:teiHeader/default:profileDesc/default:textClass/' \
                          'default:classCode[@scheme="http://providedh.eu/uncertainty/ns/1.0"]'
 
             self.__append_elements_to_the_list(elements, list_xpath)
@@ -262,9 +262,9 @@ def add_property(parent, xpath, value):
         return add_property(child, splitted_xpath[1], value)
 
 
-def create_elements_from_xpath(root, xpath, initial=True):
-    element_with_attributes_regex = r'^\/[^\/]+\[.+?]'
-    element_without_attributes_regex = r'^\/[^\[\]\/]+'
+def create_elements_from_xpath(root, xpath):
+    element_with_attributes_regex = r'^\.\/[^\/]+\[.+?]'
+    element_without_attributes_regex = r'^\.\/[^\[\]\/]+'
 
     match_with_attributes = re.search(element_with_attributes_regex, xpath)
     match_without_attributes = re.search(element_without_attributes_regex, xpath)
@@ -276,23 +276,20 @@ def create_elements_from_xpath(root, xpath, initial=True):
     else:
         raise ValueError(f"Xpath to element is incorrect: {xpath}")
 
-    if initial:
-        child = get_first_xpath_match(root, f'.{child_xpath}', XML_NAMESPACES)
+    child = get_first_xpath_match(root, child_xpath, XML_NAMESPACES)
 
-        if not child:
-            child = get_first_xpath_match(root, child_xpath, XML_NAMESPACES)
+    if xpath != child_xpath:
+        xpath = xpath.replace(child_xpath, '.', 1)
     else:
-        child = get_first_xpath_match(root, f'.{child_xpath}', XML_NAMESPACES)
-
-    xpath = xpath.replace(child_xpath, '', 1)
+        xpath = None
 
     if not child:
-        attributes_regex = r'\[.*?\]'
-        match = re.search(attributes_regex, child_xpath)
-
         parsed_attributes = {}
 
-        if match:
+        if match_with_attributes:
+            attributes_regex = r'\[.*?\]'
+            match = re.search(attributes_regex, child_xpath)
+
             attributes_part = match.group()
             name_part = child_xpath.replace(attributes_part, '')
 
@@ -311,7 +308,7 @@ def create_elements_from_xpath(root, xpath, initial=True):
         else:
             name_part = child_xpath
 
-        name_part = name_part.replace('/', '')
+        name_part = name_part.replace('./', '')
 
         if ':' in name_part:
             prefix = name_part.split(':')[0]
@@ -332,6 +329,6 @@ def create_elements_from_xpath(root, xpath, initial=True):
         root.append(child)
 
     if xpath:
-        return create_elements_from_xpath(child, xpath, initial=False)
+        return create_elements_from_xpath(child, xpath)
     else:
         return root
