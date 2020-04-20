@@ -20,6 +20,7 @@ export default function DataClient(){
 		self.filter = _filter;
 		self.unfilter = _unfilter;
 		self.focusDocument = _focus;
+		self.getFilter = _getFilter;
 		self.getFilters = _getFilters;
 		self.getSubscriptions = _getSubscriptions;
 		self.clearFilters = _clearFilters;
@@ -31,6 +32,10 @@ export default function DataClient(){
 
 	function _getFilters(){
 		return Object.keys(self._filters);
+	}
+
+	function _getFilter(dim){
+		return self._filters?.[dim];
 	}
 
 	function _getSubscriptions(){
@@ -98,7 +103,7 @@ export default function DataClient(){
 			DataService.unfilter(self._filters[dim]);
 
 		const activeFilters = self._filters[dim];
-		self._filters[dim] = null;
+		self._filters[dim] = Filter(null, null, filterFunc);
 		const filter = DataService.filter(dim, filterFunc);
 
 		if(filter == null){

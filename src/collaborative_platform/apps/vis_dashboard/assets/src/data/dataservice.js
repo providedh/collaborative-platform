@@ -101,7 +101,7 @@ export default (function DataService(){
 	 */
 	function _filter(dim, filterFunc){
 		const filterId = _nextFilterId(dim),
-			filter = Filter(dim, filterId);
+			filter = Filter(dim, filterId, filterFunc);
 
 		if(!self._filters.hasOwnProperty(dim))
 			self._filters[dim] = {};
