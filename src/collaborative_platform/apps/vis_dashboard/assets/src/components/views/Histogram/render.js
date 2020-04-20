@@ -126,7 +126,6 @@ function barFactory(barDirection){
     return (data, context, xScale, yScale, padding)=>renderBars(data, context, xScale, yScale, padding, createBarBox);
 }
 
-
 function renderBars(data, context, xScale, yScale, padding, createBarBox){
     context.save();
 
@@ -136,15 +135,13 @@ function renderBars(data, context, xScale, yScale, padding, createBarBox){
         const box = createBarBox(label, items, xScale, yScale, padding);
         context.fillRect(...box);
 
-        return {box, data: items};
+        return {box, data: [label, items.length]};
     });
 
     context.fillStyle = '#007bff';
     [...data.filtered.entries()].forEach(([label, items])=>{
         const box = createBarBox(label, items, xScale, yScale, padding);
         context.fillRect(...box);
-        
-        return {box, data: items};
     });
 
     context.restore();
@@ -245,7 +242,7 @@ function renderHorizontalOverlay(data, context, xScale, yScale, width, height, p
     return rendered;
 }
 
-function setupInteractions(renderedData, overlayCanvas, ){
+function setupInteractions(renderedData, overlayCanvas){
     const context = overlayCanvas.getContext("2d");
     
     const renderedDataSorted = renderedData.sort(
@@ -289,7 +286,7 @@ function setupInteractions(renderedData, overlayCanvas, ){
 }
 
 export default function render(container, canvas, overlayCanvas, data, overlay_data, render_overlay, barDirection){
-    console.log(container, canvas, data, data?.filtered?.size)
+    //console.log(container, canvas, data, data?.filtered?.size)
 	if(container == null || canvas == null || data == null || data.filtered.size == 0)
 		return
 
@@ -304,7 +301,6 @@ export default function render(container, canvas, overlayCanvas, data, overlay_d
     context.clearRect(0, 0, canvas.width, canvas.height);
 
     const {xScale, yScale, ...padding} = createScales(data, barDirection, canvas.height, canvas.width);
-    console.log({xScale, yScale, padding});
     const renderData = barFactory(barDirection);
 //    const renderOverlay = overlayFactory(barDirection);
 //
@@ -312,7 +308,7 @@ export default function render(container, canvas, overlayCanvas, data, overlay_d
 //    if(render_overlay === true)
 //        renderedData = renderOverlay(overlay_data, context, xScale, yScale, canvas.width, canvas.height, padding);
 //
-//    setupInteractions(renderedData, overlayCanvas);
+    setupInteractions(renderedData, overlayCanvas);
 //
     renderHorizontalAxis(data, context, xScale, canvas.width, canvas.height, padding, barDirection);
     renderVerticalAxis(data, context, yScale, canvas.width, canvas.height, padding, barDirection);

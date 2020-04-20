@@ -6,12 +6,11 @@ export default function useData(dataClient, option){
 
 	if(!Object.hasOwnProperty.call(dataOptions, option))
 		return
-
+	
 	useEffect(()=>{
 		dataOptions[option](dataClient, setData);
-
 		return dataClient.clearFiltersAndSubscriptions;
-	}, ['option']);
+	}, [option]);
 
 	return data;
 }

@@ -23,8 +23,6 @@ function Histogram({layout, dimension, barDirection}) {
 	const data = useData(dataClient, dimension);
     const onEvent = getOnEventCallback(dataClient, dimension, barDirection);
 
-    console.log(dimension, barDirection, data)
-
     useEffect(()=>render(
     		refContainer.current, 
     		refCanvas.current, 
