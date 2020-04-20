@@ -4,7 +4,7 @@ from lxml import etree
 
 from apps.files_management.helpers import append_unifications
 from apps.files_management.file_conversions.xml_tools import get_first_xpath_match
-from apps.api_vis.models import Entity, EntityVersion, EntityProperty
+from apps.api_vis.models import Entity, EntityVersion, EntityProperty, Certainty
 from apps.projects.models import EntitySchema
 
 from collaborative_platform.settings import XML_NAMESPACES, DEFAULT_ENTITIES, NS_MAP, CUSTOM_ENTITY
@@ -27,30 +27,8 @@ class FileRenderer:
         self.__create_tree()
         self.__append_listable_entities()
         self.__append_custom_entities()
+        self.__append_certainties()
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        # TODO: Append custom entities
-
-
-
-        # TODO: Append certainties
 
 
 
@@ -89,32 +67,36 @@ class FileRenderer:
     def __append_listable_entities(self):
         for entity in self.__listable_entities:
             entities_versions = self.__get_entities_versions_from_db(entity.name)
-            elements = self.__create_entities_elements(entities_versions)
 
-            list_tag = DEFAULT_ENTITIES[entity.name]['list_tag']
+            if entities_versions:
+                elements = self.__create_entities_elements(entities_versions)
 
-            if entity.body_list:
-                list_xpath = f'/default:TEI/default:text/default:body/default:div[@type="{entity.name}"]/' \
-                             f'default:{list_tag}[@type="{entity.name}List"]'
-            else:
-                list_xpath = f'/default:TEI/default:teiHeader/default:sourceDesc/' \
-                             f'default:{list_tag}[@type="{entity.name}List"]'
+                list_tag = DEFAULT_ENTITIES[entity.name]['list_tag']
 
-            self.__append_elements_to_the_list(elements, list_xpath)
+                if entity.body_list:
+                    list_xpath = f'/default:TEI/default:text/default:body/default:div[@type="{entity.name}"]/' \
+                                 f'default:{list_tag}[@type="{entity.name}List"]'
+                else:
+                    list_xpath = f'/default:TEI/default:teiHeader/default:sourceDesc/' \
+                                 f'default:{list_tag}[@type="{entity.name}List"]'
+
+                self.__append_elements_to_the_list(elements, list_xpath)
 
     def __append_custom_entities(self):
         for entity in self.__custom_entities:
             entities_versions = self.__get_entities_versions_from_db(entity.name)
-            elements = self.__create_entities_elements(entities_versions, custom=True)
 
-            if entity.body_list:
-                list_xpath = f'/default:TEI/default:text/default:body/default:div[@type="{entity.name}"]/' \
-                             f'default:listObject[@type="{entity.name}List"]'
-            else:
-                list_xpath = f'/default:TEI/default:teiHeader/default:sourceDesc/' \
-                             f'default:listObject[@type="{entity.name}List"]'
+            if entities_versions:
+                elements = self.__create_entities_elements(entities_versions, custom=True)
 
-            self.__append_elements_to_the_list(elements, list_xpath)
+                if entity.body_list:
+                    list_xpath = f'/default:TEI/default:text/default:body/default:div[@type="{entity.name}"]/' \
+                                 f'default:listObject[@type="{entity.name}List"]'
+                else:
+                    list_xpath = f'/default:TEI/default:teiHeader/default:sourceDesc/' \
+                                 f'default:listObject[@type="{entity.name}List"]'
+
+                self.__append_elements_to_the_list(elements, list_xpath)
 
     def __get_entities_versions_from_db(self, entity_type):
         entities_versions = EntityVersion.objects.filter(
@@ -147,7 +129,7 @@ class FileRenderer:
             entity_element.set('type', entity_version.entity.type)
 
         entity_element.set(xml_prefix + 'id', entity_version.entity.xml_id)
-        entity_element.set('resp', str(entity_version.entity.created_by_id))
+        entity_element.set('resp', f'#annotator-{entity_version.entity.created_by_id}')
 
         return entity_element
 
@@ -182,7 +164,62 @@ class FileRenderer:
 
         return xml_content
 
+    def __append_certainties(self):
+        certainties = self.__get_certainties_from_db()
 
+        if certainties:
+            elements = self.__create_certainties_elements(certainties)
+
+            list_xpath = '/default:TEI/default:teiHeader/default:profileDesc/default:textClass/' \
+                         'default:classCode[@scheme="http://providedh.eu/uncertainty/ns/1.0"]'
+
+            self.__append_elements_to_the_list(elements, list_xpath)
+
+
+
+
+
+    def __get_certainties_from_db(self):
+        certainties = Certainty.objects.filter(
+            file_version=self.__file_version
+        )
+
+        return certainties
+
+    def __create_certainties_elements(self, certainties):
+        elements = []
+
+        for certainty in certainties:
+            certainty_element = self.__create_certainty_element(certainty)
+
+            elements.append(certainty_element)
+
+        return elements
+
+    def __create_certainty_element(self, certainty):
+        default_prefix = '{%s}' % XML_NAMESPACES['default']
+        xml_prefix = '{%s}' % XML_NAMESPACES['xml']
+
+        certainty_element = etree.Element(default_prefix + 'certainty', nsmap=NS_MAP)
+
+        certainty_element.set(xml_prefix + 'id', certainty.xml_id)
+        certainty_element.set('resp', f'#annotator-{certainty.created_by_id}')
+
+        certainty_element.set('ana', 'PUT CATEGORIES HERE')
+        certainty_element.set('locus', certainty.locus)
+        certainty_element.set('cert', certainty.cert)
+        certainty_element.set('target', f'#{certainty.target_xml_id}')
+
+        if certainty.asserted_value:
+            certainty_element.set('assertedValue', certainty.asserted_value)
+
+        if certainty.description:
+            description_element = etree.Element(default_prefix + 'desc', nsmap=NS_MAP)
+            description_element.text = certainty.description
+
+            certainty_element.append(description_element)
+
+        return certainty_element
 
 
 
@@ -225,65 +262,76 @@ def add_property(parent, xpath, value):
         return add_property(child, splitted_xpath[1], value)
 
 
+def create_elements_from_xpath(root, xpath, initial=True):
+    element_with_attributes_regex = r'^\/[^\/]+\[.+?]'
+    element_without_attributes_regex = r'^\/[^\[\]\/]+'
 
-def create_elements_from_xpath(tree, xpath):
-    default_namespace = XML_NAMESPACES['default']
+    match_with_attributes = re.search(element_with_attributes_regex, xpath)
+    match_without_attributes = re.search(element_without_attributes_regex, xpath)
 
-    ns_map = {
-        None: default_namespace
-    }
+    if match_with_attributes:
+        child_xpath = match_with_attributes.group()
+    elif match_without_attributes:
+        child_xpath = match_without_attributes.group()
+    else:
+        raise ValueError(f"Xpath to element is incorrect: {xpath}")
 
-    path_steps = xpath.split('/')
-    path_steps = [step for step in path_steps if step != '']
+    if initial:
+        child = get_first_xpath_match(root, f'.{child_xpath}', XML_NAMESPACES)
 
-    for i in range(len(path_steps)):
-        i += 1
+        if not child:
+            child = get_first_xpath_match(root, child_xpath, XML_NAMESPACES)
+    else:
+        child = get_first_xpath_match(root, f'.{child_xpath}', XML_NAMESPACES)
 
-        element_xpath = '/' + '/'.join(path_steps[:i])
-        element = tree.xpath(element_xpath, namespaces=XML_NAMESPACES)
+    xpath = xpath.replace(child_xpath, '', 1)
 
-        if not element:
-            parent_xpath = '/' + '/'.join(path_steps[:i - 1])
-            parent = tree.xpath(parent_xpath, namespaces=XML_NAMESPACES)
+    if not child:
+        attributes_regex = r'\[.*?\]'
+        match = re.search(attributes_regex, child_xpath)
 
-            step = path_steps[i - 1]
+        parsed_attributes = {}
 
-            attributes_regex = r'\[.*?\]'
-            attributes_dict = {}
-            match = re.search(attributes_regex, step)
+        if match:
+            attributes_part = match.group()
+            name_part = child_xpath.replace(attributes_part, '')
 
-            if match:
-                attributes_part = match.group()
-                step = step.replace(attributes_part, '')
+            attribute_regex = r'@\S*?=[\'"].*?[\'"]'
+            attributes = re.findall(attribute_regex, attributes_part)
 
-                attribute_regex = r'@\w*?=[\'"].*?[\'"]'
-                attributes = re.findall(attribute_regex, attributes_part)
+            for attribute in attributes:
+                key = attribute.split('=')[0]
+                key = key.replace('@', '')
 
-                for attribute in attributes:
-                    key = attribute.split('=')[0]
-                    key = key.replace('@', '')
+                value = attribute.split('=')[1]
+                value = re.sub(r'[\'"]', '', value)
 
-                    value = attribute.split('=')[1]
-                    value = re.sub(r'[\'"]', '', value)
+                parsed_attributes.update({key: value})
 
-                    attributes_dict.update({key: value})
+        else:
+            name_part = child_xpath
 
-            if ':' in step:
-                prefix = step.split(':')[0]
-                name = step.split(':')[1]
+        name_part = name_part.replace('/', '')
 
-            else:
-                prefix = ''
-                name = step
+        if ':' in name_part:
+            prefix = name_part.split(':')[0]
+            name = name_part.split(':')[1]
 
-            namespace = '{%s}' % XML_NAMESPACES[prefix]
+        else:
+            prefix = ''
+            name = name_part
 
-            element = etree.Element(namespace + name, nsmap=ns_map)
+        namespace = '{%s}' % XML_NAMESPACES[prefix]
 
-            if attributes_dict:
-                for key, value in attributes_dict.items():
-                    element.set(key, value)
+        child = etree.Element(namespace + name, nsmap=NS_MAP)
 
-            parent[0].append(element)
+        if parsed_attributes:
+            for key, value in parsed_attributes.items():
+                child.set(key, value)
 
-    return tree
+        root.append(child)
+
+    if xpath:
+        return create_elements_from_xpath(child, xpath, initial=False)
+    else:
+        return root
