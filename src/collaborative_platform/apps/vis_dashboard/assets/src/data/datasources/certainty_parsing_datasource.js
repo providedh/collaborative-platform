@@ -91,7 +91,9 @@ export default function CertaintyDataSource(pubSubService, appContext){
 	 *      
 	 */
 	function _filterDimension(dimension, filter){
-		dimension.filterFunction(filter);
+		if(filter === null) dimension.filterAll();	
+		else dimension.filterFunction(filter);
+
 		_publishData();
 	}
 
