@@ -30,6 +30,7 @@ function entitiesPerDoc(dataClient, setData){
 	dataClient.subscribe('entity', ({all, filtered})=>{
 		setData({
 			dimension: 'file_id',
+			filterDimension: 'fileId',
 			all: d3Array.group(all, x=>x.file_id),
 			filtered: d3Array.group(filtered, x=>x.file_id)
 		})
@@ -40,6 +41,7 @@ function entitiesPerType(dataClient, setData){
 	dataClient.subscribe('entity', ({all, filtered})=>{
 		setData({
 			dimension: 'type',
+			filterDimension: 'entityType',
 			all: d3Array.group(all, x=>x.type),
 			filtered: d3Array.group(filtered, x=>x.type)
 		})

@@ -8,10 +8,33 @@ import useData from './data';
 import {DataClient, useCleanup} from '../../../data';
 
 
-function getOnEventCallback(dataClient, dimension, barDirection){
-    return (event)=>{
-        console.log(event);
-    };
+function getOnEventCallback(dataClient, dimension, data){
+    if(!data)
+        return null;
+
+    return (({source, target})=>{
+        if(source == 'click' && dimension != undefined){
+            const [label, count] = target.data;
+            if(dataClient.getFilters().includes(dimension)){
+                const filter = dataClient.getFilter(dimension),
+                    filterItems = [...data.keys()].filter(filter.filter);
+
+                if(filterItems.includes(label)){ // remove item from filter
+                    if(filterItems.length == 1)
+                        dataClient.unfilter(dimension);
+                    else{
+                        filterItems.splice(filterItems.indexOf(label),1);
+                        dataClient.filter(dimension, x=>filterItems.includes(x));
+                    }
+                }else{ // add items to filters
+                    filterItems.push(label);
+                    dataClient.filter(dimension, x=>filterItems.includes(x));
+                }
+            }else{
+                dataClient.filter(dimension, x=>x===label);
+            }
+        }
+    });
 }
 
 function Histogram({layout, dimension, barDirection}) {
@@ -21,15 +44,13 @@ function Histogram({layout, dimension, barDirection}) {
     const [dataClient, _] = useState(DataClient());
     useCleanup(dataClient);
 	const data = useData(dataClient, dimension);
-    const onEvent = getOnEventCallback(dataClient, dimension, barDirection);
+    const onEvent = getOnEventCallback(dataClient, data?.filterDimension, data?.all);
 
     useEffect(()=>render(
     		refContainer.current, 
     		refCanvas.current, 
     		refOverlayCanvas.current, 
-    		data, 
-    		null, 
-    		false, 
+    		data,
     		barDirection,
             onEvent), // Render 
     	[width, height, barDirection, data]); // Conditions

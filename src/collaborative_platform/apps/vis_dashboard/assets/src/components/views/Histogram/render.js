@@ -242,7 +242,7 @@ function renderHorizontalOverlay(data, context, xScale, yScale, width, height, p
     return rendered;
 }
 
-function setupInteractions(renderedData, overlayCanvas){
+function setupInteractions(renderedData, overlayCanvas, onEvent){
     const context = overlayCanvas.getContext("2d");
     
     const renderedDataSorted = renderedData.sort(
@@ -250,20 +250,28 @@ function setupInteractions(renderedData, overlayCanvas){
             (d0.box[1] < d1.box[1]) || // higher
             (d0.box[1] == d1.box[1] && d0.box[0] < d1.box[0]))?-1:1); // to the right
 
-    function handleOverlayHover(e){
-        const [x, y] = d3.mouse(this);
+    function pointInside(x,y, box){
+        return (box[0] < x 
+            && x < (box[0] + box[2]) 
+            && box[1] < y 
+            && y < (box[1] + box[3])
+        );
+    }
 
+    function getEventTarget([x, y]){
         let temp = null, node = null;
         let index = 0;
         do{
             temp = renderedData[index++];
-            if(temp.box[0] < x && x < (temp.box[0] + temp.box[2]) &&
-                    temp.box[1] < y && y < (temp.box[1] + temp.box[3])){
+            if(pointInside(x,y,temp.box)){
                 node = temp;
             }
         }while(node == null && index < renderedData.length);
 
-        context.clearRect(0,0,overlayCanvas.width, overlayCanvas.height);
+        return {node, index};
+    }
+
+    function updateTooltip([x, y], node){
         if(node != null){
             const label = `${node.data[0]}  (${node.data[1]})`;
             context.save()
@@ -281,11 +289,32 @@ function setupInteractions(renderedData, overlayCanvas){
         }
     }
 
+    function handleHover(){
+        const eventPosition = d3.mouse(this),
+            {node, index} = getEventTarget(eventPosition);
+        context.clearRect(0,0,overlayCanvas.width, overlayCanvas.height);
+
+        if(node != null){
+            updateTooltip(eventPosition, node);
+            onEvent({source:'hover', target: node});
+        }
+    }
+
+    function handleClick(){
+        const eventPosition = d3.mouse(this),
+            {node, index} = getEventTarget(eventPosition);
+
+        if(node != null){
+            onEvent({source:'click', target: node});
+        }
+    }
+
     d3.select(overlayCanvas)
-        .on('mousemove', handleOverlayHover);
+        .on('mousemove', handleHover)
+        .on('click', handleClick);
 }
 
-export default function render(container, canvas, overlayCanvas, data, overlay_data, render_overlay, barDirection){
+export default function render(container, canvas, overlayCanvas, data, barDirection, onEvent){
     //console.log(container, canvas, data, data?.filtered?.size)
 	if(container == null || canvas == null || data == null || data.filtered.size == 0)
 		return
@@ -308,7 +337,7 @@ export default function render(container, canvas, overlayCanvas, data, overlay_d
 //    if(render_overlay === true)
 //        renderedData = renderOverlay(overlay_data, context, xScale, yScale, canvas.width, canvas.height, padding);
 //
-    setupInteractions(renderedData, overlayCanvas);
+    setupInteractions(renderedData, overlayCanvas, onEvent);
 //
     renderHorizontalAxis(data, context, xScale, canvas.width, canvas.height, padding, barDirection);
     renderVerticalAxis(data, context, yScale, canvas.width, canvas.height, padding, barDirection);
