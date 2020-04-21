@@ -102,7 +102,7 @@ def __update_file_content(file_object):
     # TODO: Extract formatting xml from TeiHandler and put it here
 
     # TODO: Create class to remove not connected xml elements (eg. annotator without certainties, certainties without
-    # TODO: existing target, certainties without any category used in project)
+    # TODO: existing target, certainties without any category used in project, entities without properties)
 
     ids_corrector = IDsCorrector()
     xml_content, correction, correction_message = ids_corrector.correct_ids(xml_content, file_object.id)
