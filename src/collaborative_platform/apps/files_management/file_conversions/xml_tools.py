@@ -16,37 +16,47 @@ def get_first_xpath_match(root, xpath, namespaces):
         return None
 
 
-def add_property_to_element(parent, property_xpath, value):
-    property_xpath = property_xpath.replace('./', '')
-    splitted_property_xpath = property_xpath.split('/')
+def add_property_to_element(root, property_xpath, value):
+    target_element_xpath = '/'.join(property_xpath.split('/')[:-1]) or '.'
+    target_property = property_xpath.split('/')[-1]
 
-    if len(splitted_property_xpath) > 1:
-        child_xpath = '/'.join(splitted_property_xpath[:-1])
-        child_xpath = f'./{child_xpath}'
+    target_element = get_first_xpath_match(root, target_element_xpath, XML_NAMESPACES)
 
-        child = get_first_xpath_match(parent, child_xpath, XML_NAMESPACES)
+    if not target_element:
+        create_elements_from_xpath(root, target_element_xpath)
+        target_element = get_first_xpath_match(root, target_element_xpath, XML_NAMESPACES)
 
-        if not child:
-            create_elements_from_xpath(parent, child_xpath)
-            child = get_first_xpath_match(parent, child_xpath, XML_NAMESPACES)
+    if '@' in target_property:
+        key = target_property.replace('@', '')
+        target_element.set(key, value)
 
-    else:
-        child = parent
-
-    property = splitted_property_xpath[-1]
-
-    if '@' in property:
-        key = property.replace('@', '')
-        child.set(key, value)
-
-    elif 'text()' in property:
-        child.text = value
+    elif 'text()' in target_property:
+        target_element.text = value
 
     else:
         raise ValueError("Xpath for this property not pointing to attribute(@) or text (text())")
 
 
 def create_elements_from_xpath(root, xpath):
+    if xpath == '.':
+        return
+
+    child_xpath = __get_child_xpath(xpath)
+    child = get_first_xpath_match(root, child_xpath, XML_NAMESPACES)
+
+    if not child:
+        child = __create_child_element(child_xpath)
+
+        root.append(child)
+
+    xpath = xpath.replace(child_xpath, '.', 1)
+
+    return create_elements_from_xpath(child, xpath)
+
+
+def __get_child_xpath(xpath):
+    """Function created to properly handle splitting xpath with URLs in elements attributes"""
+
     element_with_attributes_regex = r'^\.\/[^\/]+\[.+?]'
     element_without_attributes_regex = r'^\.\/[^\[\]\/]+'
 
@@ -55,64 +65,68 @@ def create_elements_from_xpath(root, xpath):
 
     if match_with_attributes:
         child_xpath = match_with_attributes.group()
+
     elif match_without_attributes:
         child_xpath = match_without_attributes.group()
+
     else:
         raise ValueError(f"Xpath to element is incorrect: {xpath}")
 
-    child = get_first_xpath_match(root, child_xpath, XML_NAMESPACES)
+    return child_xpath
 
-    if xpath != child_xpath:
-        xpath = xpath.replace(child_xpath, '.', 1)
-    else:
-        xpath = None
 
-    if not child:
-        parsed_attributes = {}
+def __create_child_element(child_xpath):
+    name = __get_element_name(child_xpath)
+    attributes = __get_element_attributes(child_xpath)
 
-        if match_with_attributes:
-            attributes_regex = r'\[.*?\]'
-            match = re.search(attributes_regex, child_xpath)
-
-            attributes_part = match.group()
-            name_part = child_xpath.replace(attributes_part, '')
-
-            attribute_regex = r'@\S*?=[\'"].*?[\'"]'
-            attributes = re.findall(attribute_regex, attributes_part)
-
-            for attribute in attributes:
-                key = attribute.split('=')[0]
-                key = key.replace('@', '')
-
-                value = attribute.split('=')[1]
-                value = re.sub(r'[\'"]', '', value)
-
-                parsed_attributes.update({key: value})
-
-        else:
-            name_part = child_xpath
-
-        name_part = name_part.replace('./', '')
-
-        if ':' in name_part:
-            prefix = name_part.split(':')[0]
-            name = name_part.split(':')[1]
-
-        else:
-            prefix = ''
-            name = name_part
-
+    if ':' in name:
+        prefix = name.split(':')[0]
+        name = name.split(':')[1]
         namespace = '{%s}' % XML_NAMESPACES[prefix]
+        name = namespace + name
 
-        child = etree.Element(namespace + name, nsmap=NS_MAP)
+    child = etree.Element(name, nsmap=NS_MAP)
 
-        if parsed_attributes:
-            for key, value in parsed_attributes.items():
-                child.set(key, value)
+    if attributes:
+        for key, value in attributes.items():
+            child.set(key, value)
 
-        root.append(child)
+    return child
 
-    if xpath:
-        return create_elements_from_xpath(child, xpath)
-    else:
-        return root
+
+def __get_element_name(child_xpath):
+    name = child_xpath.replace('./', '')
+    name = name.split('[')[0]
+
+    return name
+
+
+def __get_element_attributes(child_xpath):
+    attributes_regex = r'\[.*?\]'
+    match = re.search(attributes_regex, child_xpath)
+
+    attributes = {}
+
+    if match:
+        attributes_part = match.group()
+        attributes = __parse_attributes(attributes_part)
+
+    return attributes
+
+
+def __parse_attributes(attributes_part):
+    parsed_attributes = {}
+
+    attribute_regex = r'@\S*?=[\'"].*?[\'"]'
+    attributes = re.findall(attribute_regex, attributes_part)
+
+    for attribute in attributes:
+        key = attribute.split('=')[0]
+        key = key.replace('@', '')
+
+        value = attribute.split('=')[1]
+        value = re.sub(r'[\'"]', '', value)
+
+        parsed_attributes.update({key: value})
+
+    return parsed_attributes
