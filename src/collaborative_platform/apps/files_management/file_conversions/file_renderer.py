@@ -1,9 +1,8 @@
-import re
-
 from lxml import etree
 
 from apps.files_management.helpers import append_unifications
-from apps.files_management.file_conversions.xml_tools import get_first_xpath_match
+from apps.files_management.file_conversions.xml_tools import add_property_to_element, create_elements_from_xpath, \
+    get_first_xpath_match
 from apps.api_vis.models import Entity, EntityVersion, EntityProperty, Certainty
 from apps.projects.models import EntitySchema
 
@@ -33,6 +32,12 @@ class FileRenderer:
 
 
         # TODO: Append annotators
+
+        # TODO: Fix appending unifications
+
+        # TODO: Reorder lists in <body>
+
+        # TODO: Move appending line with xml-model here
 
 
 
@@ -147,7 +152,7 @@ class FileRenderer:
             xpath = properties[entity_property.name]['xpath']
             value = entity_property.get_value(as_str=True)
 
-            add_property(entity_element, xpath, value)
+            add_property_to_element(entity_element, xpath, value)
 
     def __append_elements_to_the_list(self, elements, list_xpath):
         list = get_first_xpath_match(self.__tree, list_xpath, XML_NAMESPACES)
@@ -174,10 +179,6 @@ class FileRenderer:
                          'default:classCode[@scheme="http://providedh.eu/uncertainty/ns/1.0"]'
 
             self.__append_elements_to_the_list(elements, list_xpath)
-
-
-
-
 
     def __get_certainties_from_db(self):
         certainties = Certainty.objects.filter(
@@ -220,115 +221,3 @@ class FileRenderer:
             certainty_element.append(description_element)
 
         return certainty_element
-
-
-
-
-
-
-
-
-
-def add_property(parent, xpath, value):
-    xpath = xpath.replace('./', '')
-    splitted_xpath = xpath.split('/', 1)
-
-    if len(splitted_xpath) == 1:
-        target = splitted_xpath[0]
-
-        if '@' in target:
-            key = target.replace('@', '')
-            parent.set(key, value)
-
-        elif 'text()' in target:
-            parent.text = value
-
-        else:
-            raise ValueError("Xpath for this property not pointing to attribute(@) or text (text())")
-
-    elif len(splitted_xpath) > 1:
-        child_name = splitted_xpath[0]
-        child_xpath = f'./{child_name}'
-        child = get_first_xpath_match(parent, child_xpath, XML_NAMESPACES)
-
-        if not child:
-            prefix = child_name.split(':')[0]
-            prefix = '{%s}' % XML_NAMESPACES[prefix]
-            name = child_name.split(':')[1]
-
-            child = etree.Element(prefix + name, nsmap=NS_MAP)
-            parent.append(child)
-
-        return add_property(child, splitted_xpath[1], value)
-
-
-def create_elements_from_xpath(root, xpath):
-    element_with_attributes_regex = r'^\.\/[^\/]+\[.+?]'
-    element_without_attributes_regex = r'^\.\/[^\[\]\/]+'
-
-    match_with_attributes = re.search(element_with_attributes_regex, xpath)
-    match_without_attributes = re.search(element_without_attributes_regex, xpath)
-
-    if match_with_attributes:
-        child_xpath = match_with_attributes.group()
-    elif match_without_attributes:
-        child_xpath = match_without_attributes.group()
-    else:
-        raise ValueError(f"Xpath to element is incorrect: {xpath}")
-
-    child = get_first_xpath_match(root, child_xpath, XML_NAMESPACES)
-
-    if xpath != child_xpath:
-        xpath = xpath.replace(child_xpath, '.', 1)
-    else:
-        xpath = None
-
-    if not child:
-        parsed_attributes = {}
-
-        if match_with_attributes:
-            attributes_regex = r'\[.*?\]'
-            match = re.search(attributes_regex, child_xpath)
-
-            attributes_part = match.group()
-            name_part = child_xpath.replace(attributes_part, '')
-
-            attribute_regex = r'@\S*?=[\'"].*?[\'"]'
-            attributes = re.findall(attribute_regex, attributes_part)
-
-            for attribute in attributes:
-                key = attribute.split('=')[0]
-                key = key.replace('@', '')
-
-                value = attribute.split('=')[1]
-                value = re.sub(r'[\'"]', '', value)
-
-                parsed_attributes.update({key: value})
-
-        else:
-            name_part = child_xpath
-
-        name_part = name_part.replace('./', '')
-
-        if ':' in name_part:
-            prefix = name_part.split(':')[0]
-            name = name_part.split(':')[1]
-
-        else:
-            prefix = ''
-            name = name_part
-
-        namespace = '{%s}' % XML_NAMESPACES[prefix]
-
-        child = etree.Element(namespace + name, nsmap=NS_MAP)
-
-        if parsed_attributes:
-            for key, value in parsed_attributes.items():
-                child.set(key, value)
-
-        root.append(child)
-
-    if xpath:
-        return create_elements_from_xpath(child, xpath)
-    else:
-        return root
