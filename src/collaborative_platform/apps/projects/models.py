@@ -1,11 +1,12 @@
 from django.contrib.auth.models import User
+from django.contrib.sites.models import Site
 from django.db import models
 from django.contrib.postgres import fields
 
 from apps.core.models import Profile
 from apps.projects.taxonomy_template import taxonomy_template_string, category_template_string
 
-TAXONOMY_FILES_PATH = 'taxonomy_files/'
+from collaborative_platform.settings import SITE_ID
 
 
 class Project(models.Model):
@@ -95,6 +96,14 @@ class UncertaintyCategory(models.Model):
     xml_id = models.CharField(max_length=255)
     color = models.CharField(max_length=7)
     description = models.TextField(null=True, blank=True)
+
+    def get_link(self):
+        domain = Site.objects.get(id=SITE_ID).domain
+        project_id = self.taxonomy.project.id
+
+        link = f'https://{domain}/api/projects/{project_id}/taxonomy/#{self.name}'
+
+        return link
 
 
 class EntitySchema(models.Model):

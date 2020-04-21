@@ -205,3 +205,17 @@ class Certainty(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.SET(get_anonymous_user), related_name='created_certainties')
     deleted_by = models.ForeignKey(User, default=None, null=True, on_delete=models.SET(get_anonymous_user),
                                    related_name='deleted_certainties')
+
+    def get_categories(self, as_str=False):
+        if as_str:
+            categories = self.categories.all()
+
+            categories_links = [category.get_link() for category in categories]
+            categories = ' '.join(categories_links)
+
+            return categories
+
+        else:
+            categories = self.categories.all()
+
+            return categories

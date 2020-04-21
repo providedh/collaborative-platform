@@ -167,8 +167,8 @@ def __clone_entities_versions(last_file_version, previous_file_version):
         entity_version.save()
 
         for entity_property in entity_properties:
-            entity_property.entity_version = entity_version
             entity_property.id = None
+            entity_property.entity_version = entity_version
 
         EntityProperty.objects.bulk_create(entity_properties)
 
@@ -179,10 +179,14 @@ def __clone_certainties(last_file_version, previous_file_version):
     )
 
     for certainty in certainties:
-        certainty.file_version = last_file_version
-        certainty.id = None
+        certainty_categories = certainty.categories.all()
 
-    Certainty.objects.bulk_create(certainties)
+        certainty.id = None
+        certainty.file_version = last_file_version
+        certainty.save()
+
+        for certainty_category in certainty_categories:
+            certainty.categories.add(certainty_category)
 
 
 @login_required
