@@ -23,7 +23,7 @@ def add_property_to_element(root, property_xpath, value):
     target_element = get_first_xpath_match(root, target_element_xpath, XML_NAMESPACES)
 
     if not target_element:
-        create_elements_from_xpath(root, target_element_xpath)
+        create_elements_from_xpath(root, target_element_xpath, XML_NAMESPACES)
         target_element = get_first_xpath_match(root, target_element_xpath, XML_NAMESPACES)
 
     if '@' in target_property:
@@ -37,12 +37,22 @@ def add_property_to_element(root, property_xpath, value):
         raise ValueError("Xpath for this property not pointing to attribute(@) or text (text())")
 
 
-def create_elements_from_xpath(root, xpath):
+def get_or_create_element_from_xpath(root, xpath, namespaces):
+    element = get_first_xpath_match(root, xpath, namespaces)
+
+    if not element:
+        create_elements_from_xpath(root, xpath, namespaces)
+        element = get_first_xpath_match(root, xpath, namespaces)
+
+    return element
+
+
+def create_elements_from_xpath(root, xpath, namespaces):
     if xpath == '.':
         return
 
     child_xpath = __get_child_xpath(xpath)
-    child = get_first_xpath_match(root, child_xpath, XML_NAMESPACES)
+    child = get_first_xpath_match(root, child_xpath, namespaces)
 
     if not child:
         child = __create_child_element(child_xpath)
@@ -51,7 +61,7 @@ def create_elements_from_xpath(root, xpath):
 
     xpath = xpath.replace(child_xpath, '.', 1)
 
-    return create_elements_from_xpath(child, xpath)
+    return create_elements_from_xpath(child, xpath, namespaces)
 
 
 def __get_child_xpath(xpath):

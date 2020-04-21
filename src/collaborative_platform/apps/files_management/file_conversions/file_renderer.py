@@ -1,8 +1,9 @@
 from lxml import etree
 
+from django.contrib.auth.models import User
+
 from apps.files_management.helpers import append_unifications
-from apps.files_management.file_conversions.xml_tools import add_property_to_element, create_elements_from_xpath, \
-    get_first_xpath_match
+from apps.files_management.file_conversions.xml_tools import add_property_to_element, get_or_create_element_from_xpath
 from apps.api_vis.models import Entity, EntityVersion, EntityProperty, Certainty
 from apps.projects.models import EntitySchema
 
@@ -27,18 +28,14 @@ class FileRenderer:
         self.__append_listable_entities()
         self.__append_custom_entities()
         self.__append_certainties()
+        self.__append_annotators()
 
-
-
-
-        # TODO: Append annotators
 
         # TODO: Fix appending unifications
 
         # TODO: Reorder lists in <body>
 
         # TODO: Move appending line with xml-model here
-
 
 
         # xml_content = append_unifications(xml_content, file_version)
@@ -157,11 +154,7 @@ class FileRenderer:
             add_property_to_element(entity_element, xpath, value)
 
     def __append_elements_to_the_list(self, elements, list_xpath):
-        list = get_first_xpath_match(self.__tree, list_xpath, XML_NAMESPACES)
-
-        if not list:
-            create_elements_from_xpath(self.__tree, list_xpath)
-            list = get_first_xpath_match(self.__tree, list_xpath, XML_NAMESPACES)
+        list = get_or_create_element_from_xpath(self.__tree, list_xpath, XML_NAMESPACES)
 
         for element in elements:
             list.append(element)
@@ -224,3 +217,62 @@ class FileRenderer:
             certainty_element.append(description_element)
 
         return certainty_element
+
+    def __append_annotators(self):
+        users_ids = self.__get_annotators_ids_of_xml_elements()
+        users = self.__get_users_from_db(users_ids)
+
+        if users:
+            elements = self.__create_annotators_elements(users)
+
+            list_xpath = './default:teiHeader/default:profileDesc/default:particDesc/' \
+                         'default:listPerson[@type="PROVIDEDH Annotators"]'
+
+            self.__append_elements_to_the_list(elements, list_xpath)
+
+    def __get_annotators_ids_of_xml_elements(self):
+        xpath = '//@resp'
+        annotators = self.__tree.xpath(xpath, namespaces=XML_NAMESPACES)
+        annotators = set(annotators)
+
+        annotators_ids = [int(annotator.replace('#annotator-', '')) for annotator in annotators]
+
+        return annotators_ids
+
+    @staticmethod
+    def __get_users_from_db(users_ids):
+        users = User.objects.filter(id__in=users_ids)
+
+        return users
+
+    def __create_annotators_elements(self, annotators):
+        elements = []
+
+        for annotator in annotators:
+            annotator_element = self.__create_annotator_element(annotator)
+
+            elements.append(annotator_element)
+
+        return elements
+
+    @staticmethod
+    def __create_annotator_element(annotator):
+        default_prefix = '{%s}' % XML_NAMESPACES['default']
+        xml_prefix = '{%s}' % XML_NAMESPACES['xml']
+
+        annotator_element = etree.Element(default_prefix + 'person', nsmap=NS_MAP)
+        annotator_element.set(xml_prefix + 'id', f'annotator-{annotator.id}')
+
+        forename_xpath = './default:persName/default:forename'
+        forename_element = get_or_create_element_from_xpath(annotator_element, forename_xpath, XML_NAMESPACES)
+        forename_element.text = annotator.first_name
+
+        surname_xpath = './default:persName/default:surname'
+        surname_element = get_or_create_element_from_xpath(annotator_element, surname_xpath, XML_NAMESPACES)
+        surname_element.text = annotator.last_name
+
+        email_xpath = './default:persName/default:email'
+        email_element = get_or_create_element_from_xpath(annotator_element, email_xpath, XML_NAMESPACES)
+        email_element.text = annotator.email
+
+        return annotator_element
