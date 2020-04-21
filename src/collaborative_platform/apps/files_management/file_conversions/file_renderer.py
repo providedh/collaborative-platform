@@ -123,7 +123,8 @@ class FileRenderer:
 
         return elements
 
-    def __create_entity_element(self, entity_version, custom=False):
+    @staticmethod
+    def __create_entity_element(entity_version, custom=False):
         default_prefix = '{%s}' % XML_NAMESPACES['default']
         xml_prefix = '{%s}' % XML_NAMESPACES['xml']
 
@@ -138,7 +139,8 @@ class FileRenderer:
 
         return entity_element
 
-    def __append_entity_properties(self, entity_element, entity_version, custom=False):
+    @staticmethod
+    def __append_entity_properties(entity_element, entity_version, custom=False):
         entities_properties = EntityProperty.objects.filter(
             entity_version=entity_version
         )
@@ -197,7 +199,8 @@ class FileRenderer:
 
         return elements
 
-    def __create_certainty_element(self, certainty):
+    @staticmethod
+    def __create_certainty_element(certainty):
         default_prefix = '{%s}' % XML_NAMESPACES['default']
         xml_prefix = '{%s}' % XML_NAMESPACES['xml']
 
@@ -206,7 +209,7 @@ class FileRenderer:
         certainty_element.set(xml_prefix + 'id', certainty.xml_id)
         certainty_element.set('resp', f'#annotator-{certainty.created_by_id}')
 
-        certainty_element.set('ana', 'PUT CATEGORIES HERE')
+        certainty_element.set('ana', certainty.get_categories(as_str=True))
         certainty_element.set('locus', certainty.locus)
         certainty_element.set('cert', certainty.cert)
         certainty_element.set('target', f'#{certainty.target_xml_id}')
