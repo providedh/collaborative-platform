@@ -158,7 +158,7 @@ class FileRenderer:
         list = get_first_xpath_match(self.__tree, list_xpath, XML_NAMESPACES)
 
         if not list:
-            tree = create_elements_from_xpath(self.__tree, list_xpath)
+            create_elements_from_xpath(self.__tree, list_xpath)
             list = get_first_xpath_match(self.__tree, list_xpath, XML_NAMESPACES)
 
         for element in elements:
