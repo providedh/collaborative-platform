@@ -51,7 +51,7 @@ class FileRenderer:
         self.__tree = etree.fromstring(raw_content, parser=parser)
 
     def __load_entities_schemes(self):
-        entities_schemes = self.__get_entities_schemes_from_db()
+        entities_schemes = self.__get_entities_schemes_from_db().order_by('id')
 
         default_entities_names = DEFAULT_ENTITIES.keys()
 
@@ -206,6 +206,12 @@ class FileRenderer:
         certainty_element.set('locus', certainty.locus)
         certainty_element.set('cert', certainty.cert)
         certainty_element.set('target', f'#{certainty.target_xml_id}')
+
+        if certainty.degree:
+            certainty_element.set('degree', str(certainty.degree))
+
+        if certainty.target_match:
+            certainty_element.set('match', certainty.target_match)
 
         if certainty.asserted_value:
             certainty_element.set('assertedValue', certainty.asserted_value)

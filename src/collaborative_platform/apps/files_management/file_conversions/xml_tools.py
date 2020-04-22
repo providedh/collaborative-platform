@@ -22,7 +22,7 @@ def add_property_to_element(root, property_xpath, value):
 
     target_element = get_first_xpath_match(root, target_element_xpath, XML_NAMESPACES)
 
-    if not target_element:
+    if target_element is None:
         create_elements_from_xpath(root, target_element_xpath, XML_NAMESPACES)
         target_element = get_first_xpath_match(root, target_element_xpath, XML_NAMESPACES)
 
@@ -54,7 +54,7 @@ def create_elements_from_xpath(root, xpath, namespaces):
     child_xpath = __get_child_xpath(xpath)
     child = get_first_xpath_match(root, child_xpath, namespaces)
 
-    if not child:
+    if child is None:
         child = __create_child_element(child_xpath)
 
         root.append(child)

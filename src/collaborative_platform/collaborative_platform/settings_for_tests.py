@@ -9,15 +9,15 @@ LOGGING = {
     'disable_existing_loggers': False,
     'loggers': {
         'annotator': {
-            'handlers': ['console'],
+            'handlers': [],
             'level': 'DEBUG',
         },
         'celery': {
-            'handlers': ['console'],
+            'handlers': [],
             'level': 'DEBUG',
         },
         'upload': {
-            'handlers': ['console'],
+            'handlers': [],
             'level': 'DEBUG',
         },
     },

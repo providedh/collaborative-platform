@@ -229,8 +229,7 @@ def get_file_version(request, file_id, version=None):  # type: (HttpRequest, int
     except (AttributeError, User.DoesNotExist):
         creator = file_version.created_by_id
 
-    file_renderer = FileRenderer()
-    xml_content = file_renderer.render_file_version(file_version)
+    xml_content = file_version.get_rendered_content()
 
     response = {
         "filename": file.name,
