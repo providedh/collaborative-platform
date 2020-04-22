@@ -45,14 +45,14 @@ class AnnotatorConsumer(WebsocketConsumer):
 
             self.accept()
 
-            certainties_from_db = self.__get_certainties_from_db()
+            # certainties_from_db = self.__get_certainties_from_db()
             xml_content = self.__annotating_xml_content.xml_content
 
             response = {
                 'status': 200,
                 'message': 'OK',
                 'xml_content': xml_content,
-                'certainties_from_db': certainties_from_db,
+                # 'certainties_from_db': certainties_from_db,
             }
 
             response = json.dumps(response)
