@@ -41,7 +41,7 @@ export default function LoadingApp ({ fetched, fetching, error }) {
 }
 
 LoadingApp.propTypes = {
-  fetched: PropTypes.string,
+  fetched: PropTypes.number,
   fetching: PropTypes.string,
   error: PropTypes.string
 }
