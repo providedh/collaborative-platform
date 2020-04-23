@@ -155,5 +155,5 @@ export default class App extends React.Component {
 }
 
 App.propTypes = {
-  savedConf: PropTypes.object.isRequired
+  savedConf: PropTypes.object
 }
