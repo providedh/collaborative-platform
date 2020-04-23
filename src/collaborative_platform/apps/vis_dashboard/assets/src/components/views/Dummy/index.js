@@ -1,2 +1,2 @@
-import Dummy from './Dummy';
-export default Dummy;
+import Dummy from './Dummy'
+export default Dummy

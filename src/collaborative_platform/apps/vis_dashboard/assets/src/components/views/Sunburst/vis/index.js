@@ -1,1 +1,1 @@
-export {default as useRender} from './vis';
+export { default as useRender } from './vis'

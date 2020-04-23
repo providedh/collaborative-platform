@@ -1,2 +1,2 @@
-import DocumentView from './DocumentView';
-export default DocumentView;
+import DocumentView from './DocumentView'
+export default DocumentView

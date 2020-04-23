@@ -1,2 +1,2 @@
-import GeoMap from './GeoMap';
-export default GeoMap;
+import GeoMap from './GeoMap'
+export default GeoMap

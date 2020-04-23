@@ -1,2 +1,2 @@
-import BarChart from './BarChart';
-export default BarChart;
+import BarChart from './BarChart'
+export default BarChart

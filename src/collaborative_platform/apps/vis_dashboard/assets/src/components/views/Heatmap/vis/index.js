@@ -1,4 +1,4 @@
-import {RegularHeatmapBuilder, StairHeatmapBuilder, HeartHeatmapBuilder} from './builder';
-import Director from './director';
+import { RegularHeatmapBuilder, StairHeatmapBuilder, HeartHeatmapBuilder } from './builder'
+import Director from './director'
 
-export {Director, RegularHeatmapBuilder, StairHeatmapBuilder, HeartHeatmapBuilder};
+export { Director, RegularHeatmapBuilder, StairHeatmapBuilder, HeartHeatmapBuilder }

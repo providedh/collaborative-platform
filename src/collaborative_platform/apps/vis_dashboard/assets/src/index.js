@@ -1,9 +1,9 @@
-import React from "react";
-import { render } from "react-dom";
-import App from "./components/App";
+import React from 'react'
+import { render } from 'react-dom'
+import App from './components/App'
 
-const dashboardConfig = (window.hasOwnProperty('config') && Object.keys(window.config).length > 0)?
-    Object.assign({views:[], layout:[], authors:[], currentVersion: null},window.config):
-    null;
+const dashboardConfig = (window.hasOwnProperty('config') && Object.keys(window.config).length > 0)
+  ? Object.assign({ views: [], layout: [], authors: [], currentVersion: null }, window.config)
+  : null
 
-render(<App savedConf={dashboardConfig} />, document.getElementById('react-root'));
+render(<App savedConf={dashboardConfig} />, document.getElementById('react-root'))

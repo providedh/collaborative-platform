@@ -1,2 +1,2 @@
-import DotMatrix from './DotMatrix';
-export default DotMatrix;
+import DotMatrix from './DotMatrix'
+export default DotMatrix

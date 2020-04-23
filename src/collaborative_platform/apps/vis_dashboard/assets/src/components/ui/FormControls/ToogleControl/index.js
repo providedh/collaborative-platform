@@ -1,2 +1,2 @@
-import ToogleControl from './ToogleControl';
-export default ToogleControl;
+import ToogleControl from './ToogleControl'
+export default ToogleControl

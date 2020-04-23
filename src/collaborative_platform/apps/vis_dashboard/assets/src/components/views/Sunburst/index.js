@@ -1,2 +1,2 @@
-import Sunburst from './Sunburst';
-export default Sunburst;
+import Sunburst from './Sunburst'
+export default Sunburst

@@ -1,2 +1,2 @@
-import PixelCorpus from './PixelCorpus';
-export default PixelCorpus;
+import PixelCorpus from './PixelCorpus'
+export default PixelCorpus
