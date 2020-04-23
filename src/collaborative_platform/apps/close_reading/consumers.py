@@ -5,10 +5,13 @@ from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 from channels.layers import get_channel_layer
 
-from apps.projects.models import Contributor, Project
+from django.contrib.auth.models import User
+
+from apps.api_vis.models import Certainty
 from apps.exceptions import BadRequest, Forbidden, NotModified
 from apps.files_management.helpers import create_certainty_elements_for_file_version, certainty_elements_to_json
 from apps.files_management.models import FileVersion, File
+from apps.projects.models import Contributor, Project
 
 from .annotator import Annotator
 from .helpers import verify_reference
@@ -37,7 +40,9 @@ class AnnotatorConsumer(WebsocketConsumer):
             self.__project_id, self.__file_id = self.__room_name.split('_')
 
             self.__check_if_project_exist()
+
             self.__check_if_user_is_contributor()
+            # self.scope['user'] = User.objects.get(id=2)      # For testing
 
             self.__load_xml_content()
             self.__add_user_to_room_group()
@@ -45,14 +50,16 @@ class AnnotatorConsumer(WebsocketConsumer):
 
             self.accept()
 
-            # certainties_from_db = self.__get_certainties_from_db()
+            certainties = self.__get_certainties()
             xml_content = self.__annotating_xml_content.xml_content
+
+            # TODO: Append entities with their properties on lists
 
             response = {
                 'status': 200,
                 'message': 'OK',
                 'xml_content': xml_content,
-                # 'certainties_from_db': certainties_from_db,
+                'certainties': certainties,
             }
 
             response = json.dumps(response)
@@ -91,17 +98,17 @@ class AnnotatorConsumer(WebsocketConsumer):
             except IndexError:
                 raise BadRequest(f"File with id: {self.__file_id} doesn't exist.")
 
-            file = File.objects.get(id=file_version.file_id, deleted=False)
+            xml_content = file_version.get_raw_content()
 
-            with open(file_version.upload.path) as file_version:
-                xml_content = file_version.read()
+            # TODO: send only content of <body> element instead whole file
 
-                self.__annotating_xml_content = AnnotatingXmlContent(file_symbol=self.__room_name, file_name=file.name,
-                                                                     xml_content=xml_content)
-                self.__annotating_xml_content.save()
+            self.__annotating_xml_content = AnnotatingXmlContent(file_symbol=self.__room_name,
+                                                                 file_name=file_version.file.name,
+                                                                 xml_content=xml_content)
+            self.__annotating_xml_content.save()
 
-                logger.info(f"Load content of file: '{file.name}' in version: {file.version_number} "
-                            f"to room: '{self.__room_name}'")
+            logger.info(f"Load content of file: '{file_version.file.name}' in version: {file_version.number} "
+                        f"to room: '{self.__room_name}'")
 
     def __add_user_to_room_group(self):
         async_to_sync(self.channel_layer.group_add)(
@@ -122,7 +129,7 @@ class AnnotatorConsumer(WebsocketConsumer):
 
         logger.info(f"User: '{self.scope['user'].username}' added to 'room_presence' table")
 
-    def __get_certainties_from_db(self):
+    def __get_certainties_from_db_old(self):
         file = File.objects.get(id=self.__file_id, deleted=False)
         file_version = FileVersion.objects.get(
             file=file,
@@ -134,6 +141,53 @@ class AnnotatorConsumer(WebsocketConsumer):
         certainties_from_db = certainty_elements_to_json(certainty_elements)
 
         return certainties_from_db
+
+    def __get_certainties(self):
+        certainties = self.__get_certainties_from_db()
+        certainties = self.__serialize_certainties(certainties)
+
+        # TODO: Append certainties created from unifications
+
+        return certainties
+
+    def __get_certainties_from_db(self):
+        file = File.objects.get(
+            id=self.__file_id,
+            deleted=False,
+        )
+
+        file_version = FileVersion.objects.get(
+            file=file,
+            number=file.version_number,
+        )
+
+        certainties = Certainty.objects.filter(
+            file_version=file_version,
+        )
+
+        return certainties
+
+    @staticmethod
+    def __serialize_certainties(certainties):
+        certainties_serialized = []
+
+        for certainty in certainties:
+            certainty_serialized = {
+                'ana': certainty.get_categories(as_str=True),
+                'locus': certainty.locus,
+                'degree': certainty.degree,
+                'cert': certainty.cert,
+                'resp': certainty.created_by.username,
+                'match': certainty.target_match,
+                'target': certainty.target_xml_id,
+                'xml:id': certainty.xml_id,
+                'assertedValue': certainty.asserted_value,
+                'desc': certainty.description,
+            }
+
+            certainties_serialized.append(certainty_serialized)
+
+        return certainties_serialized
 
     def disconnect(self, code):
         self.__remove_user_from_room_group()
@@ -189,6 +243,10 @@ class AnnotatorConsumer(WebsocketConsumer):
         elif text_data == 'ping':
             self.send('pong')
 
+        elif text_data == 'save':
+            # TODO: replace saving file after websocket message instead http request
+            pass
+
         else:
             try:
                 request = self.__parse_text_data(text_data)
@@ -242,24 +300,18 @@ class AnnotatorConsumer(WebsocketConsumer):
         )
 
         file = File.objects.get(id=self.__file_id, deleted=False)
-        file_version = FileVersion.objects.get(
-            file=file,
-            number=file.version_number,
-        )
 
         for presence in room_presences:
-            certainty_elements = create_certainty_elements_for_file_version(file_version,
-                                                                            include_uncommitted=True,
-                                                                            user=presence.user,
-                                                                            for_annotator=True)
-            certainties_from_db = certainty_elements_to_json(certainty_elements)
+            certainties = self.__get_certainties()
             xml_content = self.__annotating_xml_content.xml_content
+
+            # TODO: Append entities with their properties on lists
 
             response = {
                 'status': 200,
                 'message': 'OK',
                 'xml_content': xml_content,
-                'certainties_from_db': certainties_from_db,
+                'certainties': certainties,
             }
 
             response = json.dumps(response)

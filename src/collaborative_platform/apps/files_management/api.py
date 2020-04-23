@@ -8,20 +8,18 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db import IntegrityError
 from django.forms import model_to_dict
-from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, JsonResponse, HttpResponseServerError
+from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, HttpResponseServerError, JsonResponse
 
-from apps.api_vis.models import EntityVersion, EntityProperty, Certainty
+from apps.api_vis.models import Certainty, EntityVersion, EntityProperty
 from apps.exceptions import BadRequest
 from apps.files_management.file_conversions.ids_corrector import IDsCorrector
 from apps.files_management.file_conversions.elements_extractor import ElementsExtractor
-from apps.files_management.file_conversions.file_renderer import FileRenderer
+from apps.files_management.file_conversions.tei_handler import TeiHandler
+from apps.files_management.helpers import clean_name, create_uploaded_file_object_from_string, \
+    delete_directory_with_contents_fake, get_directory_content, include_user, overwrite_file, upload_file
+from apps.files_management.models import Directory, File, FileVersion
 from apps.projects.helpers import log_activity, paginate_start_length, page_to_json_response
-from apps.files_management.models import File, FileVersion, Directory
 from apps.views_decorators import objects_exists, user_has_access
-from .file_conversions.tei_handler import TeiHandler
-from .helpers import append_unifications, extract_text_and_entities, index_entities, upload_file, \
-    create_uploaded_file_object_from_string, get_directory_content, include_user, index_file, \
-    delete_directory_with_contents_fake, overwrite_file, clean_name
 
 
 logger = logging.getLogger('upload')
@@ -297,6 +295,8 @@ def delete(request, **kwargs):
     if request.method != 'DELETE':
         return HttpResponseBadRequest("Only delete method is allowed here")
     if 'directory_id' in kwargs:
+        # TODO: create `Directory` object method from `delete_directory_with_contents_fake()` function
+
         delete_directory_with_contents_fake(kwargs['directory_id'], request.user)
     elif 'file_id' in kwargs:
         file = File.objects.get(id=kwargs['file_id'], deleted=False)

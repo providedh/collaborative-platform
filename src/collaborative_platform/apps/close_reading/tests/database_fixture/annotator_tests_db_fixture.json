@@ -8,12 +8,1227 @@
   }
 },
 {
-  "model": "api_vis.commit",
+  "model": "api_vis.entityversion",
   "pk": 1,
   "fields": {
-    "project": 1,
-    "date": "2020-02-11T11:23:58.323Z",
-    "message": "first commit"
+    "entity": 1,
+    "file_version": 1,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 2,
+  "fields": {
+    "entity": 2,
+    "file_version": 1,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 3,
+  "fields": {
+    "entity": 3,
+    "file_version": 1,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 4,
+  "fields": {
+    "entity": 4,
+    "file_version": 1,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 5,
+  "fields": {
+    "entity": 5,
+    "file_version": 1,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 6,
+  "fields": {
+    "entity": 6,
+    "file_version": 1,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 7,
+  "fields": {
+    "entity": 7,
+    "file_version": 1,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 8,
+  "fields": {
+    "entity": 8,
+    "file_version": 1,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 9,
+  "fields": {
+    "entity": 9,
+    "file_version": 1,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 10,
+  "fields": {
+    "entity": 10,
+    "file_version": 1,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 11,
+  "fields": {
+    "entity": 11,
+    "file_version": 1,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 12,
+  "fields": {
+    "entity": 12,
+    "file_version": 1,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 13,
+  "fields": {
+    "entity": 13,
+    "file_version": 1,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 14,
+  "fields": {
+    "entity": 14,
+    "file_version": 1,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 15,
+  "fields": {
+    "entity": 15,
+    "file_version": 1,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 16,
+  "fields": {
+    "entity": 16,
+    "file_version": 1,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 17,
+  "fields": {
+    "entity": 1,
+    "file_version": 2,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 18,
+  "fields": {
+    "entity": 2,
+    "file_version": 2,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 19,
+  "fields": {
+    "entity": 3,
+    "file_version": 2,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 20,
+  "fields": {
+    "entity": 4,
+    "file_version": 2,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 21,
+  "fields": {
+    "entity": 5,
+    "file_version": 2,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 22,
+  "fields": {
+    "entity": 6,
+    "file_version": 2,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 23,
+  "fields": {
+    "entity": 7,
+    "file_version": 2,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 24,
+  "fields": {
+    "entity": 8,
+    "file_version": 2,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 25,
+  "fields": {
+    "entity": 9,
+    "file_version": 2,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 26,
+  "fields": {
+    "entity": 10,
+    "file_version": 2,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 27,
+  "fields": {
+    "entity": 11,
+    "file_version": 2,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 28,
+  "fields": {
+    "entity": 12,
+    "file_version": 2,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 29,
+  "fields": {
+    "entity": 13,
+    "file_version": 2,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 30,
+  "fields": {
+    "entity": 14,
+    "file_version": 2,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 31,
+  "fields": {
+    "entity": 15,
+    "file_version": 2,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 32,
+  "fields": {
+    "entity": 16,
+    "file_version": 2,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 33,
+  "fields": {
+    "entity": 17,
+    "file_version": 3,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 34,
+  "fields": {
+    "entity": 18,
+    "file_version": 3,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 35,
+  "fields": {
+    "entity": 17,
+    "file_version": 4,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 36,
+  "fields": {
+    "entity": 18,
+    "file_version": 4,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 1,
+  "fields": {
+    "entity_version": 1,
+    "xpath": "./country",
+    "name": "country",
+    "type": "TypeChoice.str",
+    "value_str": "Poland",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 2,
+  "fields": {
+    "entity_version": 1,
+    "xpath": "./settlement",
+    "name": "settlement",
+    "type": "TypeChoice.str",
+    "value_str": "Pozna\u0144",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 3,
+  "fields": {
+    "entity_version": 1,
+    "xpath": "./location/geo",
+    "name": "geo",
+    "type": "TypeChoice.Point",
+    "value_str": null,
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": "SRID=4326;POINT (52.408333 16.934167)"
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 4,
+  "fields": {
+    "entity_version": 1,
+    "xpath": "./placeName/name",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "PCSS",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 5,
+  "fields": {
+    "entity_version": 2,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Big Bang",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 6,
+  "fields": {
+    "entity_version": 3,
+    "xpath": "./name",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Butter",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 7,
+  "fields": {
+    "entity_version": 4,
+    "xpath": "./name",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Sand",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 8,
+  "fields": {
+    "entity_version": 5,
+    "xpath": "@sex",
+    "name": "sex",
+    "type": "TypeChoice.str",
+    "value_str": "M",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 9,
+  "fields": {
+    "entity_version": 5,
+    "xpath": "@age",
+    "name": "age",
+    "type": "TypeChoice.str",
+    "value_str": "child",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 10,
+  "fields": {
+    "entity_version": 5,
+    "xpath": "./persName/forename",
+    "name": "forename",
+    "type": "TypeChoice.str",
+    "value_str": "Jerry",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 11,
+  "fields": {
+    "entity_version": 5,
+    "xpath": "./persName/surname",
+    "name": "surname",
+    "type": "TypeChoice.str",
+    "value_str": "Maguire",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 12,
+  "fields": {
+    "entity_version": 5,
+    "xpath": "./birth/@when",
+    "name": "birth",
+    "type": "TypeChoice.date",
+    "value_str": null,
+    "value_int": null,
+    "value_float": null,
+    "value_date": "2001-02-03",
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 13,
+  "fields": {
+    "entity_version": 5,
+    "xpath": "./name",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Jerry Maguire",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 14,
+  "fields": {
+    "entity_version": 6,
+    "xpath": "./name",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Ingwer",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 15,
+  "fields": {
+    "entity_version": 7,
+    "xpath": "./name",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Grieben",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 16,
+  "fields": {
+    "entity_version": 8,
+    "xpath": "./name",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Met",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 17,
+  "fields": {
+    "entity_version": 9,
+    "xpath": "@when",
+    "name": "when",
+    "type": "TypeChoice.date",
+    "value_str": null,
+    "value_int": null,
+    "value_float": null,
+    "value_date": "2020-07-04",
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 18,
+  "fields": {
+    "entity_version": 9,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "4th of july 2010",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 19,
+  "fields": {
+    "entity_version": 10,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "the exact same day",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 20,
+  "fields": {
+    "entity_version": 11,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Rag",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 21,
+  "fields": {
+    "entity_version": 12,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Ingwer",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 22,
+  "fields": {
+    "entity_version": 13,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Grieben",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 23,
+  "fields": {
+    "entity_version": 14,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Met",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 24,
+  "fields": {
+    "entity_version": 15,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Butter",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 25,
+  "fields": {
+    "entity_version": 16,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Sand",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 26,
+  "fields": {
+    "entity_version": 17,
+    "xpath": "./placeName/name",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "PCSS",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 27,
+  "fields": {
+    "entity_version": 17,
+    "xpath": "./location/geo",
+    "name": "geo",
+    "type": "TypeChoice.Point",
+    "value_str": null,
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": "SRID=4326;POINT (52.408333 16.934167)"
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 28,
+  "fields": {
+    "entity_version": 17,
+    "xpath": "./settlement",
+    "name": "settlement",
+    "type": "TypeChoice.str",
+    "value_str": "Pozna\u0144",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 29,
+  "fields": {
+    "entity_version": 17,
+    "xpath": "./country",
+    "name": "country",
+    "type": "TypeChoice.str",
+    "value_str": "Poland",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 30,
+  "fields": {
+    "entity_version": 18,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Big Bang",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 31,
+  "fields": {
+    "entity_version": 19,
+    "xpath": "./name",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Butter",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 32,
+  "fields": {
+    "entity_version": 20,
+    "xpath": "./name",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Sand",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 33,
+  "fields": {
+    "entity_version": 21,
+    "xpath": "./name",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Jerry Maguire",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 34,
+  "fields": {
+    "entity_version": 21,
+    "xpath": "./birth/@when",
+    "name": "birth",
+    "type": "TypeChoice.date",
+    "value_str": null,
+    "value_int": null,
+    "value_float": null,
+    "value_date": "2001-02-03",
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 35,
+  "fields": {
+    "entity_version": 21,
+    "xpath": "./persName/surname",
+    "name": "surname",
+    "type": "TypeChoice.str",
+    "value_str": "Maguire",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 36,
+  "fields": {
+    "entity_version": 21,
+    "xpath": "./persName/forename",
+    "name": "forename",
+    "type": "TypeChoice.str",
+    "value_str": "Jerry",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 37,
+  "fields": {
+    "entity_version": 21,
+    "xpath": "@age",
+    "name": "age",
+    "type": "TypeChoice.str",
+    "value_str": "child",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 38,
+  "fields": {
+    "entity_version": 21,
+    "xpath": "@sex",
+    "name": "sex",
+    "type": "TypeChoice.str",
+    "value_str": "M",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 39,
+  "fields": {
+    "entity_version": 22,
+    "xpath": "./name",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Ingwer",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 40,
+  "fields": {
+    "entity_version": 23,
+    "xpath": "./name",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Grieben",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 41,
+  "fields": {
+    "entity_version": 24,
+    "xpath": "./name",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Met",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 42,
+  "fields": {
+    "entity_version": 25,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "4th of july 2010",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 43,
+  "fields": {
+    "entity_version": 25,
+    "xpath": "@when",
+    "name": "when",
+    "type": "TypeChoice.date",
+    "value_str": null,
+    "value_int": null,
+    "value_float": null,
+    "value_date": "2020-07-04",
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 44,
+  "fields": {
+    "entity_version": 26,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "the exact same day",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 45,
+  "fields": {
+    "entity_version": 27,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Rag",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 46,
+  "fields": {
+    "entity_version": 28,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Ingwer",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 47,
+  "fields": {
+    "entity_version": 29,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Grieben",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 48,
+  "fields": {
+    "entity_version": 30,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Met",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 49,
+  "fields": {
+    "entity_version": 31,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Butter",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 50,
+  "fields": {
+    "entity_version": 32,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Sand",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 51,
+  "fields": {
+    "entity_version": 33,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Jus",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 52,
+  "fields": {
+    "entity_version": 34,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Sand",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 53,
+  "fields": {
+    "entity_version": 35,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Jus",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 54,
+  "fields": {
+    "entity_version": 36,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Sand",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
   }
 },
 {
@@ -21,7 +1236,7 @@
   "pk": 1,
   "fields": {
     "project": 1,
-    "name": "tests_annotator",
+    "name": "Project_1",
     "deleted": false,
     "deleted_on": null,
     "parent_dir": null
@@ -32,7 +1247,7 @@
   "pk": 1,
   "fields": {
     "project": 1,
-    "name": "source_file_xml",
+    "name": "group_0_long_annotated_0_modified_xml",
     "deleted": false,
     "deleted_on": null,
     "version_number": 2,
@@ -44,7 +1259,19 @@
   "pk": 2,
   "fields": {
     "project": 1,
-    "name": "source_file_without_annotators_and_certainties_xml",
+    "name": "group_0_long_annotated_1_modified_xml",
+    "deleted": false,
+    "deleted_on": null,
+    "version_number": 2,
+    "parent_dir": 1
+  }
+},
+{
+  "model": "files_management.file",
+  "pk": 3,
+  "fields": {
+    "project": 1,
+    "name": "group_0_long_annotated_2_modified_xml",
     "deleted": false,
     "deleted_on": null,
     "version_number": 2,
@@ -55,34 +1282,307 @@
   "model": "files_management.filemaxxmlids",
   "pk": 1,
   "fields": {
-    "person": 18,
-    "event": 0,
-    "org": 1,
-    "place": 2,
-    "certainty": 16,
-    "object": 1
+    "file": 1,
+    "xml_id_base": "",
+    "xml_id_number": 0
   }
 },
 {
   "model": "files_management.filemaxxmlids",
   "pk": 2,
   "fields": {
-    "person": 6,
-    "event": 0,
-    "org": 1,
-    "place": 2,
-    "certainty": 0,
-    "object": 1
+    "file": 1,
+    "xml_id_base": "place",
+    "xml_id_number": 1
+  }
+},
+{
+  "model": "files_management.filemaxxmlids",
+  "pk": 3,
+  "fields": {
+    "file": 1,
+    "xml_id_base": "event",
+    "xml_id_number": 1
+  }
+},
+{
+  "model": "files_management.filemaxxmlids",
+  "pk": 4,
+  "fields": {
+    "file": 1,
+    "xml_id_base": "certainty",
+    "xml_id_number": 18
+  }
+},
+{
+  "model": "files_management.filemaxxmlids",
+  "pk": 5,
+  "fields": {
+    "file": 1,
+    "xml_id_base": "ab",
+    "xml_id_number": 1
+  }
+},
+{
+  "model": "files_management.filemaxxmlids",
+  "pk": 6,
+  "fields": {
+    "file": 1,
+    "xml_id_base": "time",
+    "xml_id_number": 0
+  }
+},
+{
+  "model": "files_management.filemaxxmlids",
+  "pk": 7,
+  "fields": {
+    "file": 1,
+    "xml_id_base": "date",
+    "xml_id_number": 2
+  }
+},
+{
+  "model": "files_management.filemaxxmlids",
+  "pk": 8,
+  "fields": {
+    "file": 1,
+    "xml_id_base": "ingredient",
+    "xml_id_number": 6
+  }
+},
+{
+  "model": "files_management.filemaxxmlids",
+  "pk": 9,
+  "fields": {
+    "file": 1,
+    "xml_id_base": "name",
+    "xml_id_number": 18
+  }
+},
+{
+  "model": "files_management.filemaxxmlids",
+  "pk": 10,
+  "fields": {
+    "file": 1,
+    "xml_id_base": "annotator",
+    "xml_id_number": 2
+  }
+},
+{
+  "model": "files_management.filemaxxmlids",
+  "pk": 11,
+  "fields": {
+    "file": 1,
+    "xml_id_base": "person",
+    "xml_id_number": 6
+  }
+},
+{
+  "model": "files_management.filemaxxmlids",
+  "pk": 12,
+  "fields": {
+    "file": 2,
+    "xml_id_base": "",
+    "xml_id_number": 0
+  }
+},
+{
+  "model": "files_management.filemaxxmlids",
+  "pk": 13,
+  "fields": {
+    "file": 2,
+    "xml_id_base": "place",
+    "xml_id_number": 0
+  }
+},
+{
+  "model": "files_management.filemaxxmlids",
+  "pk": 14,
+  "fields": {
+    "file": 2,
+    "xml_id_base": "event",
+    "xml_id_number": 0
+  }
+},
+{
+  "model": "files_management.filemaxxmlids",
+  "pk": 15,
+  "fields": {
+    "file": 2,
+    "xml_id_base": "certainty",
+    "xml_id_number": 11
+  }
+},
+{
+  "model": "files_management.filemaxxmlids",
+  "pk": 16,
+  "fields": {
+    "file": 2,
+    "xml_id_base": "ab",
+    "xml_id_number": 0
+  }
+},
+{
+  "model": "files_management.filemaxxmlids",
+  "pk": 17,
+  "fields": {
+    "file": 2,
+    "xml_id_base": "time",
+    "xml_id_number": 0
+  }
+},
+{
+  "model": "files_management.filemaxxmlids",
+  "pk": 18,
+  "fields": {
+    "file": 2,
+    "xml_id_base": "date",
+    "xml_id_number": 0
+  }
+},
+{
+  "model": "files_management.filemaxxmlids",
+  "pk": 19,
+  "fields": {
+    "file": 2,
+    "xml_id_base": "ingredient",
+    "xml_id_number": 2
+  }
+},
+{
+  "model": "files_management.filemaxxmlids",
+  "pk": 20,
+  "fields": {
+    "file": 2,
+    "xml_id_base": "name",
+    "xml_id_number": 10
+  }
+},
+{
+  "model": "files_management.filemaxxmlids",
+  "pk": 21,
+  "fields": {
+    "file": 2,
+    "xml_id_base": "annotator",
+    "xml_id_number": 1
+  }
+},
+{
+  "model": "files_management.filemaxxmlids",
+  "pk": 22,
+  "fields": {
+    "file": 2,
+    "xml_id_base": "person",
+    "xml_id_number": 0
+  }
+},
+{
+  "model": "files_management.filemaxxmlids",
+  "pk": 23,
+  "fields": {
+    "file": 3,
+    "xml_id_base": "",
+    "xml_id_number": 0
+  }
+},
+{
+  "model": "files_management.filemaxxmlids",
+  "pk": 24,
+  "fields": {
+    "file": 3,
+    "xml_id_base": "place",
+    "xml_id_number": 0
+  }
+},
+{
+  "model": "files_management.filemaxxmlids",
+  "pk": 25,
+  "fields": {
+    "file": 3,
+    "xml_id_base": "event",
+    "xml_id_number": 0
+  }
+},
+{
+  "model": "files_management.filemaxxmlids",
+  "pk": 26,
+  "fields": {
+    "file": 3,
+    "xml_id_base": "certainty",
+    "xml_id_number": 13
+  }
+},
+{
+  "model": "files_management.filemaxxmlids",
+  "pk": 27,
+  "fields": {
+    "file": 3,
+    "xml_id_base": "ab",
+    "xml_id_number": 0
+  }
+},
+{
+  "model": "files_management.filemaxxmlids",
+  "pk": 28,
+  "fields": {
+    "file": 3,
+    "xml_id_base": "time",
+    "xml_id_number": 0
+  }
+},
+{
+  "model": "files_management.filemaxxmlids",
+  "pk": 29,
+  "fields": {
+    "file": 3,
+    "xml_id_base": "date",
+    "xml_id_number": 0
+  }
+},
+{
+  "model": "files_management.filemaxxmlids",
+  "pk": 30,
+  "fields": {
+    "file": 3,
+    "xml_id_base": "ingredient",
+    "xml_id_number": 0
+  }
+},
+{
+  "model": "files_management.filemaxxmlids",
+  "pk": 31,
+  "fields": {
+    "file": 3,
+    "xml_id_base": "name",
+    "xml_id_number": 13
+  }
+},
+{
+  "model": "files_management.filemaxxmlids",
+  "pk": 32,
+  "fields": {
+    "file": 3,
+    "xml_id_base": "annotator",
+    "xml_id_number": 1
+  }
+},
+{
+  "model": "files_management.filemaxxmlids",
+  "pk": 33,
+  "fields": {
+    "file": 3,
+    "xml_id_base": "person",
+    "xml_id_number": 0
   }
 },
 {
   "model": "projects.project",
   "pk": 1,
   "fields": {
-    "title": "tests_annotator",
+    "title": "Project_1",
     "description": "",
-    "creation_date": "2020-02-05T08:31:53.226Z",
-    "modification_date": "2020-02-05T08:31:53.226Z",
+    "creation_date": "2020-04-23T06:44:37.933Z",
+    "modification_date": "2020-04-23T06:44:37.933Z",
     "license": "GPL",
     "public": false
   }
@@ -95,7 +1595,7 @@
     "file_version_counter": 0,
     "commit": null,
     "commit_counter": 0,
-    "date": "2020-02-05T08:31:53.254Z",
+    "date": "2020-04-23T06:44:37.941Z",
     "file_versions": []
   }
 },
@@ -107,7 +1607,7 @@
     "file_version_counter": 1,
     "commit": null,
     "commit_counter": 0,
-    "date": "2020-02-05T08:32:36.730Z",
+    "date": "2020-04-23T06:44:53.245Z",
     "file_versions": [
       1
     ]
@@ -121,7 +1621,7 @@
     "file_version_counter": 2,
     "commit": null,
     "commit_counter": 0,
-    "date": "2020-02-05T08:32:36.811Z",
+    "date": "2020-04-23T06:44:53.774Z",
     "file_versions": [
       2
     ]
@@ -135,7 +1635,7 @@
     "file_version_counter": 3,
     "commit": null,
     "commit_counter": 0,
-    "date": "2020-02-05T08:32:42.196Z",
+    "date": "2020-04-23T06:44:59.098Z",
     "file_versions": [
       2,
       3
@@ -150,7 +1650,7 @@
     "file_version_counter": 4,
     "commit": null,
     "commit_counter": 0,
-    "date": "2020-02-05T08:32:42.278Z",
+    "date": "2020-04-23T06:44:59.358Z",
     "file_versions": [
       2,
       4
@@ -162,13 +1662,30 @@
   "pk": 6,
   "fields": {
     "project": 1,
-    "file_version_counter": 4,
-    "commit": 1,
-    "commit_counter": 1,
-    "date": "2020-02-11T11:23:58.331Z",
+    "file_version_counter": 5,
+    "commit": null,
+    "commit_counter": 0,
+    "date": "2020-04-23T06:45:04.884Z",
     "file_versions": [
       2,
-      4
+      4,
+      5
+    ]
+  }
+},
+{
+  "model": "projects.projectversion",
+  "pk": 7,
+  "fields": {
+    "project": 1,
+    "file_version_counter": 6,
+    "commit": null,
+    "commit_counter": 0,
+    "date": "2020-04-23T06:45:05.057Z",
+    "file_versions": [
+      2,
+      4,
+      6
     ]
   }
 },
@@ -176,23 +1693,128 @@
   "model": "projects.taxonomy",
   "pk": 1,
   "fields": {
-    "xml_id_1": "ignorance",
-    "name_1": "ignorance",
-    "desc_1": "",
-    "color_1": "#9270a8",
-    "xml_id_2": "credibility",
-    "name_2": "credibility",
-    "desc_2": "",
-    "color_2": "#cc4c3b",
-    "xml_id_3": "imprecision",
-    "name_3": "imprecision",
-    "desc_3": "",
-    "color_3": "#f1d155",
-    "xml_id_4": "incompleteness",
-    "name_4": "incompleteness",
-    "desc_4": "",
-    "color_4": "#67b2ac",
-    "contents": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<TEI xmlns=\"http://www.tei-c.org/ns/1.0\">\n  <teiHeader>\n    <fileDesc>\n      <titleStmt>\n        <title>Uncertainty Taxonomy for project tests_annotator</title>\n      </titleStmt>\n    </fileDesc>\n    <encodingDesc>\n      <classDecl>\n        <taxonomy>\n          <category>\n            <catDesc>User recognized uncertainty</catDesc>\n            <category xml:id=\"ignorance\">\n              <catDesc>ignorance</catDesc>\n              <desc></desc>\n            </category>\n            <category xml:id=\"credibility\">\n              <catDesc>credibility</catDesc>\n              <desc></desc>\n            </category>\n            <category xml:id=\"imprecision\">\n              <catDesc>imprecision</catDesc>\n              <desc></desc>\n            </category>\n            <category xml:id=\"incompleteness\">\n              <catDesc>incompleteness</catDesc>\n              <desc></desc>\n            </category>\n          </category>\n          <category>\n            <catDesc>Machine generated uncertainty</catDesc>\n            <category xml:id=\"algorithmic\">\n              <catDesc>Algorithmic</catDesc>\n            </category>\n          </category>\n        </taxonomy>\n      </classDecl>\n    </encodingDesc>\n  </teiHeader>\n</TEI>"
+    "contents": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<TEI xmlns=\"http://www.tei-c.org/ns/1.0\">\n  <teiHeader>\n    <fileDesc>\n      <titleStmt>\n        <title>Uncertainty Taxonomy for project Project_1</title>\n      </titleStmt>\n    </fileDesc>\n    <encodingDesc>\n      <classDecl>\n        <taxonomy>\n          <category>\n            <catDesc>User recognized uncertainty</catDesc>\n            \n            <category xml:id=\"new_awesome_category\">\n              <catDesc>new_awesome_category</catDesc>\n              <desc></desc>\n            </category>\n\n            <category xml:id=\"incompleteness\">\n              <catDesc>incompleteness</catDesc>\n              <desc></desc>\n            </category>\n\n            <category xml:id=\"imprecision\">\n              <catDesc>imprecision</catDesc>\n              <desc></desc>\n            </category>\n\n            <category xml:id=\"credibility\">\n              <catDesc>credibility</catDesc>\n              <desc></desc>\n            </category>\n\n            <category xml:id=\"ignorance\">\n              <catDesc>ignorance</catDesc>\n              <desc></desc>\n            </category>\n\n          </category>\n          <category>\n            <catDesc>Machine generated uncertainty</catDesc>\n            <category xml:id=\"algorithmic\">\n              <catDesc>Algorithmic</catDesc>\n            </category>\n          </category>\n        </taxonomy>\n      </classDecl>\n    </encodingDesc>\n  </teiHeader>\n</TEI>"
+  }
+},
+{
+  "model": "projects.uncertaintycategory",
+  "pk": 1,
+  "fields": {
+    "taxonomy": 1,
+    "name": "ignorance",
+    "xml_id": "ignorance",
+    "color": "#9270a8",
+    "description": ""
+  }
+},
+{
+  "model": "projects.uncertaintycategory",
+  "pk": 2,
+  "fields": {
+    "taxonomy": 1,
+    "name": "credibility",
+    "xml_id": "credibility",
+    "color": "#cc4c3b",
+    "description": ""
+  }
+},
+{
+  "model": "projects.uncertaintycategory",
+  "pk": 3,
+  "fields": {
+    "taxonomy": 1,
+    "name": "imprecision",
+    "xml_id": "imprecision",
+    "color": "#f1d155",
+    "description": ""
+  }
+},
+{
+  "model": "projects.uncertaintycategory",
+  "pk": 4,
+  "fields": {
+    "taxonomy": 1,
+    "name": "incompleteness",
+    "xml_id": "incompleteness",
+    "color": "#67b2ac",
+    "description": ""
+  }
+},
+{
+  "model": "projects.uncertaintycategory",
+  "pk": 5,
+  "fields": {
+    "taxonomy": 1,
+    "name": "new_awesome_category",
+    "xml_id": "new_awesome_category",
+    "color": "#aaaaaa",
+    "description": ""
+  }
+},
+{
+  "model": "projects.entityschema",
+  "pk": 1,
+  "fields": {
+    "taxonomy": 1,
+    "name": "person",
+    "color": "#ff7f00",
+    "icon": "\uf007",
+    "body_list": false
+  }
+},
+{
+  "model": "projects.entityschema",
+  "pk": 2,
+  "fields": {
+    "taxonomy": 1,
+    "name": "event",
+    "color": "#cecece",
+    "icon": "\uf274",
+    "body_list": true
+  }
+},
+{
+  "model": "projects.entityschema",
+  "pk": 3,
+  "fields": {
+    "taxonomy": 1,
+    "name": "place",
+    "color": "#204191",
+    "icon": "\uf279",
+    "body_list": false
+  }
+},
+{
+  "model": "projects.entityschema",
+  "pk": 4,
+  "fields": {
+    "taxonomy": 1,
+    "name": "date",
+    "color": "#868788",
+    "icon": "\uf073",
+    "body_list": false
+  }
+},
+{
+  "model": "projects.entityschema",
+  "pk": 5,
+  "fields": {
+    "taxonomy": 1,
+    "name": "time",
+    "color": "#eab9e4",
+    "icon": "\uf017",
+    "body_list": false
+  }
+},
+{
+  "model": "projects.entityschema",
+  "pk": 6,
+  "fields": {
+    "taxonomy": 1,
+    "name": "ingredient",
+    "color": "#00ff0b",
+    "icon": "\uf0c3",
+    "body_list": true
   }
 },
 {
@@ -217,8 +1839,8 @@
   "model": "auth.user",
   "pk": 2,
   "fields": {
-    "password": "pbkdf2_sha256$150000$6qyzkLmHRq7K$NIY5Ag7c51FH77ffwvJ9ZS9KIpaFaFko2LrfY4FcpzE=",
-    "last_login": "2020-02-11T11:23:28.011Z",
+    "password": "pbkdf2_sha256$150000$cIQoPBNf9ZRv$fsLKdswmyDoCPhhZCt91sWOpkGOQ7Lu5+l66AYSptRI=",
+    "last_login": "2020-04-23T06:45:53.585Z",
     "is_superuser": false,
     "username": "tony_stark",
     "first_name": "Tony",
@@ -226,7 +1848,25 @@
     "email": "tony_stark@zmyslonymail.com",
     "is_staff": false,
     "is_active": true,
-    "date_joined": "2020-02-05T08:22:52.260Z",
+    "date_joined": "2020-04-23T06:42:48.560Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 3,
+  "fields": {
+    "password": "pbkdf2_sha256$150000$bmyMYG22jH2S$jovPZznCSSDK7faGEPOmw/K95bNJOwAthz6pWVSZkOs=",
+    "last_login": "2020-04-23T06:45:43.418Z",
+    "is_superuser": false,
+    "username": "pepper_potts",
+    "first_name": "Pepper",
+    "last_name": "Potts",
+    "email": "pepper_potts@zmyslonymail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2020-04-23T06:45:43.121Z",
     "groups": [],
     "user_permissions": []
   }
@@ -235,719 +1875,2014 @@
   "model": "api_vis.entity",
   "pk": 1,
   "fields": {
-    "project": 1,
     "file": 1,
-    "xml_id": "person_source_file_xml-1",
-    "created_by": null,
-    "created_in_version": 1,
-    "deleted_on": null,
-    "deleted_in_version": null,
+    "type": "place",
+    "xml_id": "place-0",
+    "created_by": 1,
+    "created_in_file_version": 1,
     "deleted_by": null,
-    "type": "person"
+    "deleted_in_file_version": null,
+    "deleted_on": null
   }
 },
 {
   "model": "api_vis.entity",
   "pk": 2,
   "fields": {
-    "project": 1,
     "file": 1,
-    "xml_id": "person_source_file_xml-2",
-    "created_by": null,
-    "created_in_version": 1,
-    "deleted_on": null,
-    "deleted_in_version": null,
+    "type": "event",
+    "xml_id": "event-0",
+    "created_by": 1,
+    "created_in_file_version": 1,
     "deleted_by": null,
-    "type": "person"
+    "deleted_in_file_version": null,
+    "deleted_on": null
   }
 },
 {
   "model": "api_vis.entity",
   "pk": 3,
   "fields": {
-    "project": 1,
     "file": 1,
-    "xml_id": "person_source_file_xml-3",
-    "created_by": null,
-    "created_in_version": 1,
-    "deleted_on": null,
-    "deleted_in_version": null,
+    "type": "person",
+    "xml_id": "person-0",
+    "created_by": 1,
+    "created_in_file_version": 1,
     "deleted_by": null,
-    "type": "person"
+    "deleted_in_file_version": null,
+    "deleted_on": null
   }
 },
 {
   "model": "api_vis.entity",
   "pk": 4,
   "fields": {
-    "project": 1,
     "file": 1,
-    "xml_id": "person_source_file_xml-4",
-    "created_by": null,
-    "created_in_version": 1,
-    "deleted_on": null,
-    "deleted_in_version": null,
+    "type": "person",
+    "xml_id": "person-1",
+    "created_by": 1,
+    "created_in_file_version": 1,
     "deleted_by": null,
-    "type": "person"
+    "deleted_in_file_version": null,
+    "deleted_on": null
   }
 },
 {
   "model": "api_vis.entity",
   "pk": 5,
   "fields": {
-    "project": 1,
     "file": 1,
-    "xml_id": "person_source_file_xml-5",
-    "created_by": null,
-    "created_in_version": 1,
-    "deleted_on": null,
-    "deleted_in_version": null,
+    "type": "person",
+    "xml_id": "person-2",
+    "created_by": 2,
+    "created_in_file_version": 1,
     "deleted_by": null,
-    "type": "person"
+    "deleted_in_file_version": null,
+    "deleted_on": null
   }
 },
 {
   "model": "api_vis.entity",
   "pk": 6,
   "fields": {
-    "project": 1,
     "file": 1,
-    "xml_id": "person_source_file_xml-6",
-    "created_by": null,
-    "created_in_version": 1,
-    "deleted_on": null,
-    "deleted_in_version": null,
+    "type": "person",
+    "xml_id": "person-3",
+    "created_by": 1,
+    "created_in_file_version": 1,
     "deleted_by": null,
-    "type": "person"
+    "deleted_in_file_version": null,
+    "deleted_on": null
   }
 },
 {
   "model": "api_vis.entity",
   "pk": 7,
   "fields": {
-    "project": 1,
     "file": 1,
-    "xml_id": "person_source_file_xml-7",
-    "created_by": null,
-    "created_in_version": 1,
-    "deleted_on": null,
-    "deleted_in_version": null,
+    "type": "person",
+    "xml_id": "person-4",
+    "created_by": 1,
+    "created_in_file_version": 1,
     "deleted_by": null,
-    "type": "person"
+    "deleted_in_file_version": null,
+    "deleted_on": null
   }
 },
 {
   "model": "api_vis.entity",
   "pk": 8,
   "fields": {
-    "project": 1,
     "file": 1,
-    "xml_id": "person_source_file_xml-8",
-    "created_by": null,
-    "created_in_version": 1,
-    "deleted_on": null,
-    "deleted_in_version": null,
+    "type": "person",
+    "xml_id": "person-5",
+    "created_by": 1,
+    "created_in_file_version": 1,
     "deleted_by": null,
-    "type": "person"
+    "deleted_in_file_version": null,
+    "deleted_on": null
   }
 },
 {
   "model": "api_vis.entity",
   "pk": 9,
   "fields": {
-    "project": 1,
     "file": 1,
-    "xml_id": "person_source_file_xml-9",
-    "created_by": null,
-    "created_in_version": 1,
-    "deleted_on": null,
-    "deleted_in_version": null,
+    "type": "date",
+    "xml_id": "date-0",
+    "created_by": 1,
+    "created_in_file_version": 1,
     "deleted_by": null,
-    "type": "person"
+    "deleted_in_file_version": null,
+    "deleted_on": null
   }
 },
 {
   "model": "api_vis.entity",
   "pk": 10,
   "fields": {
-    "project": 1,
     "file": 1,
-    "xml_id": "person_source_file_xml-10",
-    "created_by": null,
-    "created_in_version": 1,
-    "deleted_on": null,
-    "deleted_in_version": null,
+    "type": "date",
+    "xml_id": "date-1",
+    "created_by": 1,
+    "created_in_file_version": 1,
     "deleted_by": null,
-    "type": "person"
+    "deleted_in_file_version": null,
+    "deleted_on": null
   }
 },
 {
   "model": "api_vis.entity",
   "pk": 11,
   "fields": {
-    "project": 1,
     "file": 1,
-    "xml_id": "person_source_file_xml-11",
-    "created_by": null,
-    "created_in_version": 1,
-    "deleted_on": null,
-    "deleted_in_version": null,
+    "type": "ingredient",
+    "xml_id": "ingredient-0",
+    "created_by": 1,
+    "created_in_file_version": 1,
     "deleted_by": null,
-    "type": "person"
+    "deleted_in_file_version": null,
+    "deleted_on": null
   }
 },
 {
   "model": "api_vis.entity",
   "pk": 12,
   "fields": {
-    "project": 1,
     "file": 1,
-    "xml_id": "person_source_file_xml-12",
-    "created_by": null,
-    "created_in_version": 1,
-    "deleted_on": null,
-    "deleted_in_version": null,
+    "type": "ingredient",
+    "xml_id": "ingredient-1",
+    "created_by": 1,
+    "created_in_file_version": 1,
     "deleted_by": null,
-    "type": "person"
+    "deleted_in_file_version": null,
+    "deleted_on": null
   }
 },
 {
   "model": "api_vis.entity",
   "pk": 13,
   "fields": {
-    "project": 1,
     "file": 1,
-    "xml_id": "person_source_file_xml-13",
-    "created_by": null,
-    "created_in_version": 1,
-    "deleted_on": null,
-    "deleted_in_version": null,
+    "type": "ingredient",
+    "xml_id": "ingredient-2",
+    "created_by": 1,
+    "created_in_file_version": 1,
     "deleted_by": null,
-    "type": "person"
+    "deleted_in_file_version": null,
+    "deleted_on": null
   }
 },
 {
   "model": "api_vis.entity",
   "pk": 14,
   "fields": {
-    "project": 1,
     "file": 1,
-    "xml_id": "person_source_file_xml-14",
-    "created_by": null,
-    "created_in_version": 1,
-    "deleted_on": null,
-    "deleted_in_version": null,
+    "type": "ingredient",
+    "xml_id": "ingredient-3",
+    "created_by": 1,
+    "created_in_file_version": 1,
     "deleted_by": null,
-    "type": "person"
+    "deleted_in_file_version": null,
+    "deleted_on": null
   }
 },
 {
   "model": "api_vis.entity",
   "pk": 15,
   "fields": {
-    "project": 1,
     "file": 1,
-    "xml_id": "person_source_file_xml-15",
-    "created_by": null,
-    "created_in_version": 1,
-    "deleted_on": null,
-    "deleted_in_version": null,
+    "type": "ingredient",
+    "xml_id": "ingredient-4",
+    "created_by": 1,
+    "created_in_file_version": 1,
     "deleted_by": null,
-    "type": "person"
+    "deleted_in_file_version": null,
+    "deleted_on": null
   }
 },
 {
   "model": "api_vis.entity",
   "pk": 16,
   "fields": {
-    "project": 1,
     "file": 1,
-    "xml_id": "person_source_file_xml-16",
-    "created_by": null,
-    "created_in_version": 1,
-    "deleted_on": null,
-    "deleted_in_version": null,
+    "type": "ingredient",
+    "xml_id": "ingredient-5",
+    "created_by": 1,
+    "created_in_file_version": 1,
     "deleted_by": null,
-    "type": "person"
+    "deleted_in_file_version": null,
+    "deleted_on": null
   }
 },
 {
   "model": "api_vis.entity",
   "pk": 17,
   "fields": {
-    "project": 1,
-    "file": 1,
-    "xml_id": "person_source_file_xml-17",
-    "created_by": null,
-    "created_in_version": 1,
-    "deleted_on": null,
-    "deleted_in_version": null,
+    "file": 2,
+    "type": "ingredient",
+    "xml_id": "ingredient-0",
+    "created_by": 1,
+    "created_in_file_version": 3,
     "deleted_by": null,
-    "type": "person"
+    "deleted_in_file_version": null,
+    "deleted_on": null
   }
 },
 {
   "model": "api_vis.entity",
   "pk": 18,
   "fields": {
-    "project": 1,
-    "file": 1,
-    "xml_id": "person_source_file_xml-18",
-    "created_by": null,
-    "created_in_version": 1,
-    "deleted_on": null,
-    "deleted_in_version": null,
-    "deleted_by": null,
-    "type": "person"
-  }
-},
-{
-  "model": "api_vis.entity",
-  "pk": 19,
-  "fields": {
-    "project": 1,
-    "file": 1,
-    "xml_id": "place_source_file_xml-1",
-    "created_by": null,
-    "created_in_version": 1,
-    "deleted_on": null,
-    "deleted_in_version": null,
-    "deleted_by": null,
-    "type": "place"
-  }
-},
-{
-  "model": "api_vis.entity",
-  "pk": 20,
-  "fields": {
-    "project": 1,
-    "file": 1,
-    "xml_id": "place_source_file_xml-2",
-    "created_by": null,
-    "created_in_version": 1,
-    "deleted_on": null,
-    "deleted_in_version": null,
-    "deleted_by": null,
-    "type": "place"
-  }
-},
-{
-  "model": "api_vis.entity",
-  "pk": 21,
-  "fields": {
-    "project": 1,
-    "file": 1,
-    "xml_id": "org_source_file_xml-1",
-    "created_by": null,
-    "created_in_version": 1,
-    "deleted_on": null,
-    "deleted_in_version": null,
-    "deleted_by": null,
-    "type": "org"
-  }
-},
-{
-  "model": "api_vis.entity",
-  "pk": 22,
-  "fields": {
-    "project": 1,
-    "file": 1,
-    "xml_id": "certainty_source_file_xml-1",
-    "created_by": null,
-    "created_in_version": 1,
-    "deleted_on": null,
-    "deleted_in_version": null,
-    "deleted_by": null,
-    "type": "certainty"
-  }
-},
-{
-  "model": "api_vis.entity",
-  "pk": 23,
-  "fields": {
-    "project": 1,
-    "file": 1,
-    "xml_id": "certainty_source_file_xml-2",
-    "created_by": null,
-    "created_in_version": 1,
-    "deleted_on": null,
-    "deleted_in_version": null,
-    "deleted_by": null,
-    "type": "certainty"
-  }
-},
-{
-  "model": "api_vis.entity",
-  "pk": 24,
-  "fields": {
-    "project": 1,
-    "file": 1,
-    "xml_id": "certainty_source_file_xml-3",
-    "created_by": null,
-    "created_in_version": 1,
-    "deleted_on": null,
-    "deleted_in_version": null,
-    "deleted_by": null,
-    "type": "certainty"
-  }
-},
-{
-  "model": "api_vis.entity",
-  "pk": 25,
-  "fields": {
-    "project": 1,
-    "file": 1,
-    "xml_id": "certainty_source_file_xml-4",
-    "created_by": null,
-    "created_in_version": 1,
-    "deleted_on": null,
-    "deleted_in_version": null,
-    "deleted_by": null,
-    "type": "certainty"
-  }
-},
-{
-  "model": "api_vis.entity",
-  "pk": 26,
-  "fields": {
-    "project": 1,
-    "file": 1,
-    "xml_id": "certainty_source_file_xml-5",
-    "created_by": null,
-    "created_in_version": 1,
-    "deleted_on": null,
-    "deleted_in_version": null,
-    "deleted_by": null,
-    "type": "certainty"
-  }
-},
-{
-  "model": "api_vis.entity",
-  "pk": 27,
-  "fields": {
-    "project": 1,
-    "file": 1,
-    "xml_id": "certainty_source_file_xml-6",
-    "created_by": null,
-    "created_in_version": 1,
-    "deleted_on": null,
-    "deleted_in_version": null,
-    "deleted_by": null,
-    "type": "certainty"
-  }
-},
-{
-  "model": "api_vis.entity",
-  "pk": 28,
-  "fields": {
-    "project": 1,
-    "file": 1,
-    "xml_id": "certainty_source_file_xml-7",
-    "created_by": null,
-    "created_in_version": 1,
-    "deleted_on": null,
-    "deleted_in_version": null,
-    "deleted_by": null,
-    "type": "certainty"
-  }
-},
-{
-  "model": "api_vis.entity",
-  "pk": 29,
-  "fields": {
-    "project": 1,
-    "file": 1,
-    "xml_id": "certainty_source_file_xml-8",
-    "created_by": null,
-    "created_in_version": 1,
-    "deleted_on": null,
-    "deleted_in_version": null,
-    "deleted_by": null,
-    "type": "certainty"
-  }
-},
-{
-  "model": "api_vis.entity",
-  "pk": 30,
-  "fields": {
-    "project": 1,
-    "file": 1,
-    "xml_id": "certainty_source_file_xml-9",
-    "created_by": null,
-    "created_in_version": 1,
-    "deleted_on": null,
-    "deleted_in_version": null,
-    "deleted_by": null,
-    "type": "certainty"
-  }
-},
-{
-  "model": "api_vis.entity",
-  "pk": 31,
-  "fields": {
-    "project": 1,
-    "file": 1,
-    "xml_id": "certainty_source_file_xml-10",
-    "created_by": null,
-    "created_in_version": 1,
-    "deleted_on": null,
-    "deleted_in_version": null,
-    "deleted_by": null,
-    "type": "certainty"
-  }
-},
-{
-  "model": "api_vis.entity",
-  "pk": 32,
-  "fields": {
-    "project": 1,
-    "file": 1,
-    "xml_id": "certainty_source_file_xml-11",
-    "created_by": null,
-    "created_in_version": 1,
-    "deleted_on": null,
-    "deleted_in_version": null,
-    "deleted_by": null,
-    "type": "certainty"
-  }
-},
-{
-  "model": "api_vis.entity",
-  "pk": 33,
-  "fields": {
-    "project": 1,
-    "file": 1,
-    "xml_id": "certainty_source_file_xml-12",
-    "created_by": null,
-    "created_in_version": 1,
-    "deleted_on": null,
-    "deleted_in_version": null,
-    "deleted_by": null,
-    "type": "certainty"
-  }
-},
-{
-  "model": "api_vis.entity",
-  "pk": 34,
-  "fields": {
-    "project": 1,
-    "file": 1,
-    "xml_id": "certainty_source_file_xml-13",
-    "created_by": null,
-    "created_in_version": 1,
-    "deleted_on": null,
-    "deleted_in_version": null,
-    "deleted_by": null,
-    "type": "certainty"
-  }
-},
-{
-  "model": "api_vis.entity",
-  "pk": 35,
-  "fields": {
-    "project": 1,
-    "file": 1,
-    "xml_id": "certainty_source_file_xml-14",
-    "created_by": null,
-    "created_in_version": 1,
-    "deleted_on": null,
-    "deleted_in_version": null,
-    "deleted_by": null,
-    "type": "certainty"
-  }
-},
-{
-  "model": "api_vis.entity",
-  "pk": 36,
-  "fields": {
-    "project": 1,
     "file": 2,
-    "xml_id": "person_source_file_without_annotators_and_certainties_xml-1",
-    "created_by": null,
-    "created_in_version": 1,
-    "deleted_on": null,
-    "deleted_in_version": null,
+    "type": "ingredient",
+    "xml_id": "ingredient-1",
+    "created_by": 1,
+    "created_in_file_version": 3,
     "deleted_by": null,
-    "type": "person"
-  }
-},
-{
-  "model": "api_vis.entity",
-  "pk": 37,
-  "fields": {
-    "project": 1,
-    "file": 2,
-    "xml_id": "person_source_file_without_annotators_and_certainties_xml-2",
-    "created_by": null,
-    "created_in_version": 1,
-    "deleted_on": null,
-    "deleted_in_version": null,
-    "deleted_by": null,
-    "type": "person"
-  }
-},
-{
-  "model": "api_vis.entity",
-  "pk": 38,
-  "fields": {
-    "project": 1,
-    "file": 2,
-    "xml_id": "person_source_file_without_annotators_and_certainties_xml-3",
-    "created_by": null,
-    "created_in_version": 1,
-    "deleted_on": null,
-    "deleted_in_version": null,
-    "deleted_by": null,
-    "type": "person"
-  }
-},
-{
-  "model": "api_vis.entity",
-  "pk": 39,
-  "fields": {
-    "project": 1,
-    "file": 2,
-    "xml_id": "person_source_file_without_annotators_and_certainties_xml-4",
-    "created_by": null,
-    "created_in_version": 1,
-    "deleted_on": null,
-    "deleted_in_version": null,
-    "deleted_by": null,
-    "type": "person"
-  }
-},
-{
-  "model": "api_vis.entity",
-  "pk": 40,
-  "fields": {
-    "project": 1,
-    "file": 2,
-    "xml_id": "person_source_file_without_annotators_and_certainties_xml-5",
-    "created_by": null,
-    "created_in_version": 1,
-    "deleted_on": null,
-    "deleted_in_version": null,
-    "deleted_by": null,
-    "type": "person"
-  }
-},
-{
-  "model": "api_vis.entity",
-  "pk": 41,
-  "fields": {
-    "project": 1,
-    "file": 2,
-    "xml_id": "person_source_file_without_annotators_and_certainties_xml-6",
-    "created_by": null,
-    "created_in_version": 1,
-    "deleted_on": null,
-    "deleted_in_version": null,
-    "deleted_by": null,
-    "type": "person"
-  }
-},
-{
-  "model": "api_vis.entity",
-  "pk": 42,
-  "fields": {
-    "project": 1,
-    "file": 2,
-    "xml_id": "place_source_file_without_annotators_and_certainties_xml-1",
-    "created_by": null,
-    "created_in_version": 1,
-    "deleted_on": null,
-    "deleted_in_version": null,
-    "deleted_by": null,
-    "type": "place"
-  }
-},
-{
-  "model": "api_vis.entity",
-  "pk": 43,
-  "fields": {
-    "project": 1,
-    "file": 2,
-    "xml_id": "place_source_file_without_annotators_and_certainties_xml-2",
-    "created_by": null,
-    "created_in_version": 1,
-    "deleted_on": null,
-    "deleted_in_version": null,
-    "deleted_by": null,
-    "type": "place"
-  }
-},
-{
-  "model": "api_vis.entity",
-  "pk": 44,
-  "fields": {
-    "project": 1,
-    "file": 2,
-    "xml_id": "org_source_file_without_annotators_and_certainties_xml-1",
-    "created_by": null,
-    "created_in_version": 1,
-    "deleted_on": null,
-    "deleted_in_version": null,
-    "deleted_by": null,
-    "type": "org"
-  }
-},
-{
-  "model": "api_vis.clique",
-  "pk": 1,
-  "fields": {
-    "project": 1,
-    "asserted_name": "Rory Magwire",
-    "created_by": 2,
-    "created_on": "2020-02-11T11:23:36.039Z",
-    "created_in_commit": 1,
-    "created_in_annotator": false,
-    "deleted_by": null,
-    "deleted_on": null,
-    "deleted_in_commit": null
-  }
-},
-{
-  "model": "api_vis.unification",
-  "pk": 1,
-  "fields": {
-    "project": 1,
-    "entity": 13,
-    "clique": 1,
-    "created_by": 2,
-    "created_on": "2020-02-11T11:23:36.066Z",
-    "created_in_commit": 1,
-    "created_in_file_version": 2,
-    "created_in_annotator": false,
-    "deleted_by": null,
-    "deleted_on": null,
-    "deleted_in_commit": null,
     "deleted_in_file_version": null,
-    "ana": "",
-    "certainty": "high",
-    "description": "",
-    "xml_id": "certainty_source_file_xml-15"
+    "deleted_on": null
   }
 },
 {
-  "model": "api_vis.unification",
+  "model": "api_vis.certainty",
+  "pk": 1,
+  "fields": {
+    "file": 1,
+    "xml_id": "certainty-0",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-4",
+    "target_match": "@ref",
+    "asserted_value": "#met",
+    "description": null,
+    "file_version": 1,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      2,
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
   "pk": 2,
   "fields": {
-    "project": 1,
-    "entity": 15,
-    "clique": 1,
-    "created_by": 2,
-    "created_on": "2020-02-11T11:23:36.078Z",
-    "created_in_commit": 1,
-    "created_in_file_version": 2,
-    "created_in_annotator": false,
+    "file": 1,
+    "xml_id": "certainty-1",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-5",
+    "target_match": "@ref",
+    "asserted_value": "#rag",
+    "description": null,
+    "file_version": 1,
+    "created_by": 1,
     "deleted_by": null,
-    "deleted_on": null,
-    "deleted_in_commit": null,
-    "deleted_in_file_version": null,
-    "ana": "",
-    "certainty": "high",
-    "description": "",
-    "xml_id": "certainty_source_file_xml-16"
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 3,
+  "fields": {
+    "file": 1,
+    "xml_id": "certainty-2",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-7",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 1,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 4,
+  "fields": {
+    "file": 1,
+    "xml_id": "certainty-3",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-2",
+    "target_match": "@ref",
+    "asserted_value": "#met",
+    "description": null,
+    "file_version": 1,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": []
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 5,
+  "fields": {
+    "file": 1,
+    "xml_id": "certainty-4",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-8",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 1,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      2
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 6,
+  "fields": {
+    "file": 1,
+    "xml_id": "certainty-5",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-11",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 1,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 7,
+  "fields": {
+    "file": 1,
+    "xml_id": "certainty-6",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-12",
+    "target_match": "@ref",
+    "asserted_value": "#form",
+    "description": null,
+    "file_version": 1,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 8,
+  "fields": {
+    "file": 1,
+    "xml_id": "certainty-7",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.833333333333333,
+    "target_xml_id": "name-1",
+    "target_match": "@ref",
+    "asserted_value": "#ingwer",
+    "description": null,
+    "file_version": 1,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 9,
+  "fields": {
+    "file": 1,
+    "xml_id": "certainty-8",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-9",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 1,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 10,
+  "fields": {
+    "file": 1,
+    "xml_id": "certainty-9",
+    "locus": "value",
+    "cert": "very high",
+    "degree": 1.0,
+    "target_xml_id": "name-0",
+    "target_match": "@ref",
+    "asserted_value": "#butter",
+    "description": null,
+    "file_version": 1,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 11,
+  "fields": {
+    "file": 1,
+    "xml_id": "certainty-10",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-10",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 1,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 12,
+  "fields": {
+    "file": 1,
+    "xml_id": "certainty-11",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-3",
+    "target_match": "@ref",
+    "asserted_value": "#met",
+    "description": null,
+    "file_version": 1,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 13,
+  "fields": {
+    "file": 1,
+    "xml_id": "certainty-12",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-6",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 1,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 14,
+  "fields": {
+    "file": 1,
+    "xml_id": "certainty-13",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.833333333333333,
+    "target_xml_id": "name-13",
+    "target_match": "@ref",
+    "asserted_value": "#grieben",
+    "description": null,
+    "file_version": 1,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 15,
+  "fields": {
+    "file": 1,
+    "xml_id": "certainty-14",
+    "locus": "value",
+    "cert": "high",
+    "degree": null,
+    "target_xml_id": "test",
+    "target_match": null,
+    "asserted_value": "Balloons",
+    "description": "Some important decription",
+    "file_version": 1,
+    "created_by": 2,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 16,
+  "fields": {
+    "file": 1,
+    "xml_id": "certainty-15",
+    "locus": "value",
+    "cert": "high",
+    "degree": null,
+    "target_xml_id": "name-8",
+    "target_match": "@ref",
+    "asserted_value": "#ingredient-0",
+    "description": null,
+    "file_version": 1,
+    "created_by": 2,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 17,
+  "fields": {
+    "file": 1,
+    "xml_id": "certainty-16",
+    "locus": "value",
+    "cert": "high",
+    "degree": null,
+    "target_xml_id": "person-2",
+    "target_match": "name/forename",
+    "asserted_value": "McDuck",
+    "description": null,
+    "file_version": 1,
+    "created_by": 2,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 18,
+  "fields": {
+    "file": 1,
+    "xml_id": "certainty-17",
+    "locus": "value",
+    "cert": "high",
+    "degree": null,
+    "target_xml_id": "certainty-10",
+    "target_match": "@cert",
+    "asserted_value": "low",
+    "description": null,
+    "file_version": 1,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 19,
+  "fields": {
+    "file": 1,
+    "xml_id": "certainty-17",
+    "locus": "value",
+    "cert": "high",
+    "degree": null,
+    "target_xml_id": "certainty-10",
+    "target_match": "@cert",
+    "asserted_value": "low",
+    "description": null,
+    "file_version": 2,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 20,
+  "fields": {
+    "file": 1,
+    "xml_id": "certainty-16",
+    "locus": "value",
+    "cert": "high",
+    "degree": null,
+    "target_xml_id": "person-2",
+    "target_match": "name/forename",
+    "asserted_value": "McDuck",
+    "description": null,
+    "file_version": 2,
+    "created_by": 2,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 21,
+  "fields": {
+    "file": 1,
+    "xml_id": "certainty-15",
+    "locus": "value",
+    "cert": "high",
+    "degree": null,
+    "target_xml_id": "name-8",
+    "target_match": "@ref",
+    "asserted_value": "#ingredient-0",
+    "description": null,
+    "file_version": 2,
+    "created_by": 2,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 22,
+  "fields": {
+    "file": 1,
+    "xml_id": "certainty-14",
+    "locus": "value",
+    "cert": "high",
+    "degree": null,
+    "target_xml_id": "test",
+    "target_match": null,
+    "asserted_value": "Balloons",
+    "description": "Some important decription",
+    "file_version": 2,
+    "created_by": 2,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 23,
+  "fields": {
+    "file": 1,
+    "xml_id": "certainty-13",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.833333333333333,
+    "target_xml_id": "name-13",
+    "target_match": "@ref",
+    "asserted_value": "#grieben",
+    "description": null,
+    "file_version": 2,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 24,
+  "fields": {
+    "file": 1,
+    "xml_id": "certainty-12",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-6",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 2,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 25,
+  "fields": {
+    "file": 1,
+    "xml_id": "certainty-11",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-3",
+    "target_match": "@ref",
+    "asserted_value": "#met",
+    "description": null,
+    "file_version": 2,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 26,
+  "fields": {
+    "file": 1,
+    "xml_id": "certainty-10",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-10",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 2,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 27,
+  "fields": {
+    "file": 1,
+    "xml_id": "certainty-9",
+    "locus": "value",
+    "cert": "very high",
+    "degree": 1.0,
+    "target_xml_id": "name-0",
+    "target_match": "@ref",
+    "asserted_value": "#butter",
+    "description": null,
+    "file_version": 2,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 28,
+  "fields": {
+    "file": 1,
+    "xml_id": "certainty-8",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-9",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 2,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 29,
+  "fields": {
+    "file": 1,
+    "xml_id": "certainty-7",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.833333333333333,
+    "target_xml_id": "name-1",
+    "target_match": "@ref",
+    "asserted_value": "#ingwer",
+    "description": null,
+    "file_version": 2,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 30,
+  "fields": {
+    "file": 1,
+    "xml_id": "certainty-6",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-12",
+    "target_match": "@ref",
+    "asserted_value": "#form",
+    "description": null,
+    "file_version": 2,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 31,
+  "fields": {
+    "file": 1,
+    "xml_id": "certainty-5",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-11",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 2,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 32,
+  "fields": {
+    "file": 1,
+    "xml_id": "certainty-4",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-8",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 2,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      2
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 33,
+  "fields": {
+    "file": 1,
+    "xml_id": "certainty-3",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-2",
+    "target_match": "@ref",
+    "asserted_value": "#met",
+    "description": null,
+    "file_version": 2,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": []
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 34,
+  "fields": {
+    "file": 1,
+    "xml_id": "certainty-2",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-7",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 2,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 35,
+  "fields": {
+    "file": 1,
+    "xml_id": "certainty-1",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-5",
+    "target_match": "@ref",
+    "asserted_value": "#rag",
+    "description": null,
+    "file_version": 2,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 36,
+  "fields": {
+    "file": 1,
+    "xml_id": "certainty-0",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-4",
+    "target_match": "@ref",
+    "asserted_value": "#met",
+    "description": null,
+    "file_version": 2,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      2,
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 37,
+  "fields": {
+    "file": 2,
+    "xml_id": "certainty-0",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-1",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 3,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 38,
+  "fields": {
+    "file": 2,
+    "xml_id": "certainty-1",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-6",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 3,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 39,
+  "fields": {
+    "file": 2,
+    "xml_id": "certainty-2",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-9",
+    "target_match": "@ref",
+    "asserted_value": "#jus",
+    "description": null,
+    "file_version": 3,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 40,
+  "fields": {
+    "file": 2,
+    "xml_id": "certainty-3",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-7",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 3,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 41,
+  "fields": {
+    "file": 2,
+    "xml_id": "certainty-4",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-4",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 3,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 42,
+  "fields": {
+    "file": 2,
+    "xml_id": "certainty-5",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-8",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 3,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 43,
+  "fields": {
+    "file": 2,
+    "xml_id": "certainty-6",
+    "locus": "value",
+    "cert": "very high",
+    "degree": 1.0,
+    "target_xml_id": "name-0",
+    "target_match": "@ref",
+    "asserted_value": "#quart",
+    "description": null,
+    "file_version": 3,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 44,
+  "fields": {
+    "file": 2,
+    "xml_id": "certainty-7",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-5",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 3,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 45,
+  "fields": {
+    "file": 2,
+    "xml_id": "certainty-8",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "old_name_8",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 3,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 46,
+  "fields": {
+    "file": 2,
+    "xml_id": "certainty-9",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-3",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 3,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 47,
+  "fields": {
+    "file": 2,
+    "xml_id": "certainty-10",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-2",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 3,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 48,
+  "fields": {
+    "file": 2,
+    "xml_id": "certainty-10",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-2",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 4,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 49,
+  "fields": {
+    "file": 2,
+    "xml_id": "certainty-9",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-3",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 4,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 50,
+  "fields": {
+    "file": 2,
+    "xml_id": "certainty-8",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "old_name_8",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 4,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 51,
+  "fields": {
+    "file": 2,
+    "xml_id": "certainty-7",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-5",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 4,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 52,
+  "fields": {
+    "file": 2,
+    "xml_id": "certainty-6",
+    "locus": "value",
+    "cert": "very high",
+    "degree": 1.0,
+    "target_xml_id": "name-0",
+    "target_match": "@ref",
+    "asserted_value": "#quart",
+    "description": null,
+    "file_version": 4,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 53,
+  "fields": {
+    "file": 2,
+    "xml_id": "certainty-5",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-8",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 4,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 54,
+  "fields": {
+    "file": 2,
+    "xml_id": "certainty-4",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-4",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 4,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 55,
+  "fields": {
+    "file": 2,
+    "xml_id": "certainty-3",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-7",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 4,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 56,
+  "fields": {
+    "file": 2,
+    "xml_id": "certainty-2",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-9",
+    "target_match": "@ref",
+    "asserted_value": "#jus",
+    "description": null,
+    "file_version": 4,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 57,
+  "fields": {
+    "file": 2,
+    "xml_id": "certainty-1",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-6",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 4,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 58,
+  "fields": {
+    "file": 2,
+    "xml_id": "certainty-0",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-1",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 4,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 59,
+  "fields": {
+    "file": 3,
+    "xml_id": "certainty-0",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-7",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 5,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 60,
+  "fields": {
+    "file": 3,
+    "xml_id": "certainty-1",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-11",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 5,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 61,
+  "fields": {
+    "file": 3,
+    "xml_id": "certainty-2",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "ingredient-2",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 5,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 62,
+  "fields": {
+    "file": 3,
+    "xml_id": "certainty-3",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-5",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 5,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 63,
+  "fields": {
+    "file": 3,
+    "xml_id": "certainty-4",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-4",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 5,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 64,
+  "fields": {
+    "file": 3,
+    "xml_id": "certainty-5",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.833333333333333,
+    "target_xml_id": "name-2",
+    "target_match": "@ref",
+    "asserted_value": "#silber",
+    "description": null,
+    "file_version": 5,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 65,
+  "fields": {
+    "file": 3,
+    "xml_id": "certainty-6",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.833333333333333,
+    "target_xml_id": "name-0",
+    "target_match": "@ref",
+    "asserted_value": "#ingwer",
+    "description": null,
+    "file_version": 5,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 66,
+  "fields": {
+    "file": 3,
+    "xml_id": "certainty-7",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-6",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 5,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 67,
+  "fields": {
+    "file": 3,
+    "xml_id": "certainty-8",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-3",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 5,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 68,
+  "fields": {
+    "file": 3,
+    "xml_id": "certainty-9",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-10",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 5,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 69,
+  "fields": {
+    "file": 3,
+    "xml_id": "certainty-10",
+    "locus": "value",
+    "cert": "very high",
+    "degree": 1.0,
+    "target_xml_id": "name-12",
+    "target_match": "@ref",
+    "asserted_value": "#butter",
+    "description": null,
+    "file_version": 5,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 70,
+  "fields": {
+    "file": 3,
+    "xml_id": "certainty-11",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-9",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 5,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 71,
+  "fields": {
+    "file": 3,
+    "xml_id": "certainty-12",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.888888888888889,
+    "target_xml_id": "name-1",
+    "target_match": "@ref",
+    "asserted_value": "#stift",
+    "description": null,
+    "file_version": 5,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 72,
+  "fields": {
+    "file": 3,
+    "xml_id": "certainty-12",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.888888888888889,
+    "target_xml_id": "name-1",
+    "target_match": "@ref",
+    "asserted_value": "#stift",
+    "description": null,
+    "file_version": 6,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 73,
+  "fields": {
+    "file": 3,
+    "xml_id": "certainty-11",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-9",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 6,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 74,
+  "fields": {
+    "file": 3,
+    "xml_id": "certainty-10",
+    "locus": "value",
+    "cert": "very high",
+    "degree": 1.0,
+    "target_xml_id": "name-12",
+    "target_match": "@ref",
+    "asserted_value": "#butter",
+    "description": null,
+    "file_version": 6,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 75,
+  "fields": {
+    "file": 3,
+    "xml_id": "certainty-9",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-10",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 6,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 76,
+  "fields": {
+    "file": 3,
+    "xml_id": "certainty-8",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-3",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 6,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 77,
+  "fields": {
+    "file": 3,
+    "xml_id": "certainty-7",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-6",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 6,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 78,
+  "fields": {
+    "file": 3,
+    "xml_id": "certainty-6",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.833333333333333,
+    "target_xml_id": "name-0",
+    "target_match": "@ref",
+    "asserted_value": "#ingwer",
+    "description": null,
+    "file_version": 6,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 79,
+  "fields": {
+    "file": 3,
+    "xml_id": "certainty-5",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.833333333333333,
+    "target_xml_id": "name-2",
+    "target_match": "@ref",
+    "asserted_value": "#silber",
+    "description": null,
+    "file_version": 6,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 80,
+  "fields": {
+    "file": 3,
+    "xml_id": "certainty-4",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-4",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 6,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 81,
+  "fields": {
+    "file": 3,
+    "xml_id": "certainty-3",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-5",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 6,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 82,
+  "fields": {
+    "file": 3,
+    "xml_id": "certainty-2",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "ingredient-2",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 6,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 83,
+  "fields": {
+    "file": 3,
+    "xml_id": "certainty-1",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-11",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 6,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 84,
+  "fields": {
+    "file": 3,
+    "xml_id": "certainty-0",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-7",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 6,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
   }
 },
 {
@@ -967,6 +3902,20 @@
 {
   "model": "core.profile",
   "pk": 2,
+  "fields": {
+    "agree_to_terms": true,
+    "is_scientist": false,
+    "orcid": null,
+    "twitter": null,
+    "github": null,
+    "scholar": null,
+    "researchgate": null,
+    "about": null
+  }
+},
+{
+  "model": "core.profile",
+  "pk": 3,
   "fields": {
     "agree_to_terms": true,
     "is_scientist": false,
@@ -982,11 +3931,11 @@
   "model": "files_management.fileversion",
   "pk": 1,
   "fields": {
-    "upload": "uploaded_files/a48f5e89919d3dd1d97df7b58fc657418c5d7f5e2f910898a642a166730256121f29626bb7f9a_0Hc8Ftp",
-    "hash": "a48f5e89919d3dd1d97df7b58fc657418c5d7f5e2f910898a642a166730256121f29626bb7f9a30438f20f91c6ba156e99e3290c1f1678aba9b587862582aa83",
+    "upload": "uploaded_files/7552c53f26c65f9f5612f1660182aff46a2712ee8300c8f8803db96c260d220b74d42d703c73e_BFtAdc4",
+    "hash": "7552c53f26c65f9f5612f1660182aff46a2712ee8300c8f8803db96c260d220b74d42d703c73ea22e5586605571e1e307de4885af3806d2d64f7318b0878ffda",
     "file": 1,
     "number": 1,
-    "creation_date": "2020-02-05T08:32:36.724Z",
+    "creation_date": "2020-04-23T06:44:53.241Z",
     "created_by": 2,
     "message": null
   }
@@ -995,11 +3944,11 @@
   "model": "files_management.fileversion",
   "pk": 2,
   "fields": {
-    "upload": "uploaded_files/6a67ddd204baa02d8c10dff923e9e590ad9b47d5b9868db1bea3b46a6dd3653133efc15286396_I5SDNa7",
-    "hash": "6a67ddd204baa02d8c10dff923e9e590ad9b47d5b9868db1bea3b46a6dd3653133efc15286396f60a49fab9221901fc0f339a2fb036e978e4f2a3940111a1dd9",
+    "upload": "uploaded_files/7a7df4265209ae67042f1a9436fa445e175e555c50924d17bd1f090e27df990220d5f7e78737a_FpuYjJ0",
+    "hash": "7a7df4265209ae67042f1a9436fa445e175e555c50924d17bd1f090e27df990220d5f7e78737abedb6a828017c22b7ca82d78da494f4bb2e1a9138d7309cb30e",
     "file": 1,
     "number": 2,
-    "creation_date": "2020-02-05T08:32:36.796Z",
+    "creation_date": "2020-04-23T06:44:53.762Z",
     "created_by": 2,
     "message": null
   }
@@ -1008,11 +3957,11 @@
   "model": "files_management.fileversion",
   "pk": 3,
   "fields": {
-    "upload": "uploaded_files/66a6c37ea3ecadb6f1797eb79566a12cde1f33c23fc0efafd753cd43d3e423d4cf8d751404c5e_KguvUNl",
-    "hash": "66a6c37ea3ecadb6f1797eb79566a12cde1f33c23fc0efafd753cd43d3e423d4cf8d751404c5e8cc4fde3fb96f3bbf20fe239020193c048f7c4f4ed09f8219d7",
+    "upload": "uploaded_files/1dc87f6eda8ce7dfe1f81a3c2391ab75923afd92a40024acfaad58998f6c8709fb681a6638909_YGV4jPt",
+    "hash": "1dc87f6eda8ce7dfe1f81a3c2391ab75923afd92a40024acfaad58998f6c8709fb681a6638909873e9e6f52783ae22a624ee383ca563836f334b86228703ae65",
     "file": 2,
     "number": 1,
-    "creation_date": "2020-02-05T08:32:42.190Z",
+    "creation_date": "2020-04-23T06:44:59.085Z",
     "created_by": 2,
     "message": null
   }
@@ -1021,11 +3970,37 @@
   "model": "files_management.fileversion",
   "pk": 4,
   "fields": {
-    "upload": "uploaded_files/8505ca8219e21e0259567de35b96ca029b6464d9069a8ef9c39e411a235d1ccb1861e8b043b99_0PAKdMV",
-    "hash": "8505ca8219e21e0259567de35b96ca029b6464d9069a8ef9c39e411a235d1ccb1861e8b043b993e4d0c5ff0e7159c9ff78934bfea3694797bda09ae9c61b59f4",
+    "upload": "uploaded_files/a3c6f573540f8a5f80b76c97c5a07f63b8fd7931f02f48d49804e0bb1f73932bae588fb569ba2_ZzEV0U0",
+    "hash": "a3c6f573540f8a5f80b76c97c5a07f63b8fd7931f02f48d49804e0bb1f73932bae588fb569ba250880f6a61ff33fbf821712718a773ad1c1427138e7b12d4e48",
     "file": 2,
     "number": 2,
-    "creation_date": "2020-02-05T08:32:42.265Z",
+    "creation_date": "2020-04-23T06:44:59.355Z",
+    "created_by": 2,
+    "message": null
+  }
+},
+{
+  "model": "files_management.fileversion",
+  "pk": 5,
+  "fields": {
+    "upload": "uploaded_files/8ee73a48fafb4157ae8092e548662f9345582aabd730d23dd456c393274ebb5ebc7f106f355ea_mKNaV8C",
+    "hash": "8ee73a48fafb4157ae8092e548662f9345582aabd730d23dd456c393274ebb5ebc7f106f355ea66aae0275787075843bf048c7970c195df9cd8d9c52612daa79",
+    "file": 3,
+    "number": 1,
+    "creation_date": "2020-04-23T06:45:04.876Z",
+    "created_by": 2,
+    "message": null
+  }
+},
+{
+  "model": "files_management.fileversion",
+  "pk": 6,
+  "fields": {
+    "upload": "uploaded_files/6ac5e8c5427b626521b3c32eb074825eea3b9da8ffe69b498131f39dfb6078a3d326d02f01eac_Rwtpfcc",
+    "hash": "6ac5e8c5427b626521b3c32eb074825eea3b9da8ffe69b498131f39dfb6078a3d326d02f01eac8d6a4798e00c4264088576bb7bbad311afbc64e1215ab2687cf",
+    "file": 3,
+    "number": 2,
+    "creation_date": "2020-04-23T06:45:05.053Z",
     "created_by": 2,
     "message": null
   }
@@ -1041,11 +4016,21 @@
   }
 },
 {
+  "model": "projects.contributor",
+  "pk": 2,
+  "fields": {
+    "project": 1,
+    "user": 3,
+    "profile": 3,
+    "permissions": "RW"
+  }
+},
+{
   "model": "projects.activity",
   "pk": 1,
   "fields": {
     "project": 1,
-    "date": "2020-02-05T08:31:53.295Z",
+    "date": "2020-04-23T06:44:37.973Z",
     "related_file": null,
     "related_file_name": null,
     "related_dir": null,
@@ -1060,9 +4045,9 @@
   "pk": 2,
   "fields": {
     "project": 1,
-    "date": "2020-02-05T08:32:36.746Z",
+    "date": "2020-04-23T06:44:53.255Z",
     "related_file": 1,
-    "related_file_name": "source_file_xml",
+    "related_file_name": "group_0_long_annotated_0_modified_xml",
     "related_dir": null,
     "related_dir_name": null,
     "user": 2,
@@ -1075,9 +4060,9 @@
   "pk": 3,
   "fields": {
     "project": 1,
-    "date": "2020-02-05T08:32:36.828Z",
+    "date": "2020-04-23T06:44:53.785Z",
     "related_file": 1,
-    "related_file_name": "source_file_xml",
+    "related_file_name": "group_0_long_annotated_0_modified_xml",
     "related_dir": null,
     "related_dir_name": null,
     "user": 2,
@@ -1090,14 +4075,14 @@
   "pk": 4,
   "fields": {
     "project": 1,
-    "date": "2020-02-05T08:32:37.322Z",
+    "date": "2020-04-23T06:44:54.021Z",
     "related_file": 1,
-    "related_file_name": "source_file_xml",
+    "related_file_name": "group_0_long_annotated_0_modified_xml",
     "related_dir": null,
     "related_dir_name": null,
     "user": 2,
     "user_name": "Tony Stark",
-    "action_text": "File migrated: Changed CR/LF character codes to <lb/> tags. Appended TEI ProvideDH schema. Reformatted xml. "
+    "action_text": "File migrated: Reformatted xml. Corrected xml:ids for project entities. Moved elements from file to database. "
   }
 },
 {
@@ -1105,9 +4090,9 @@
   "pk": 5,
   "fields": {
     "project": 1,
-    "date": "2020-02-05T08:32:42.222Z",
+    "date": "2020-04-23T06:44:59.119Z",
     "related_file": 2,
-    "related_file_name": "source_file_without_annotators_and_certainties_xml",
+    "related_file_name": "group_0_long_annotated_1_modified_xml",
     "related_dir": null,
     "related_dir_name": null,
     "user": 2,
@@ -1120,9 +4105,9 @@
   "pk": 6,
   "fields": {
     "project": 1,
-    "date": "2020-02-05T08:32:42.303Z",
+    "date": "2020-04-23T06:44:59.368Z",
     "related_file": 2,
-    "related_file_name": "source_file_without_annotators_and_certainties_xml",
+    "related_file_name": "group_0_long_annotated_1_modified_xml",
     "related_dir": null,
     "related_dir_name": null,
     "user": 2,
@@ -1135,14 +4120,59 @@
   "pk": 7,
   "fields": {
     "project": 1,
-    "date": "2020-02-05T08:32:42.496Z",
+    "date": "2020-04-23T06:44:59.465Z",
     "related_file": 2,
-    "related_file_name": "source_file_without_annotators_and_certainties_xml",
+    "related_file_name": "group_0_long_annotated_1_modified_xml",
     "related_dir": null,
     "related_dir_name": null,
     "user": 2,
     "user_name": "Tony Stark",
-    "action_text": "File migrated: Changed CR/LF character codes to <lb/> tags. Appended TEI ProvideDH schema. Reformatted xml. "
+    "action_text": "File migrated: Appended TEI ProvideDH schema. Reformatted xml. Corrected xml:ids for project entities. Moved elements from file to database. "
+  }
+},
+{
+  "model": "projects.activity",
+  "pk": 8,
+  "fields": {
+    "project": 1,
+    "date": "2020-04-23T06:45:04.899Z",
+    "related_file": 3,
+    "related_file_name": "group_0_long_annotated_2_modified_xml",
+    "related_dir": null,
+    "related_dir_name": null,
+    "user": 2,
+    "user_name": "Tony Stark",
+    "action_text": "created"
+  }
+},
+{
+  "model": "projects.activity",
+  "pk": 9,
+  "fields": {
+    "project": 1,
+    "date": "2020-04-23T06:45:05.064Z",
+    "related_file": 3,
+    "related_file_name": "group_0_long_annotated_2_modified_xml",
+    "related_dir": null,
+    "related_dir_name": null,
+    "user": 2,
+    "user_name": "Tony Stark",
+    "action_text": "created version number 2 of"
+  }
+},
+{
+  "model": "projects.activity",
+  "pk": 10,
+  "fields": {
+    "project": 1,
+    "date": "2020-04-23T06:45:05.177Z",
+    "related_file": 3,
+    "related_file_name": "group_0_long_annotated_2_modified_xml",
+    "related_dir": null,
+    "related_dir_name": null,
+    "user": 2,
+    "user_name": "Tony Stark",
+    "action_text": "File migrated: Appended TEI ProvideDH schema. Reformatted xml. Corrected xml:ids for project entities. Moved elements from file to database. "
   }
 }
 ]
