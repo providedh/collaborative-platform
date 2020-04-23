@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import css from '../themes/theme.css'
+import css from '../themes/theme.css' // eslint-disable-line no-unused-vars
 import Dashboard from './core/Dashboard/Dashboard'
 import LoadingApp from './LoadingApp'
 import { AppContext } from 'app_context'

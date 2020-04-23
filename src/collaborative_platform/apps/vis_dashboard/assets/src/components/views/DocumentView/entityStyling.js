@@ -1,5 +1,4 @@
 export default function (container, doc, settings) {
-  const docEntities = settings.entities.map(e => doc.getElementsByTagName(e.name))
   const containerEntities = settings.entities.map(e => container.getElementsByTagName(e.name))
   const containerEntitiesFlattened = containerEntities.reduce((ac, dc) => [...ac, ...dc], [])
   const containerObjectNames = [...container.getElementsByTagName('objectname')]
@@ -44,5 +43,5 @@ function applyStyle (node, style) {
   node.style.setProperty('position', 'relative')
   // node.style.setProperty('display', 'inline-block');
   node.style.setProperty('height', '2em')
-  node.append($.parseHTML(`<i class="fa entityIcon" style="color:${style.color};" data-icon=${icon}></i>`)[0])
+  node.append($.parseHTML(`<i class="fa entityIcon" style="color:${style.color};" data-icon=${icon}></i>`)[0]) // eslint-disable-line no-undef
 }

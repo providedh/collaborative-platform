@@ -5,7 +5,7 @@ import { AjaxCalls } from '../../../helpers'
 import { DataClient, useCleanup } from '../../../data'
 
 import styles from './style.module.css'
-import css from './style.css'
+import css from './style.css' // eslint-disable-line no-unused-vars
 import getConfig from './config'
 import styleEntities from './entityStyling'
 import styleCertainty from './certaintyStyling'

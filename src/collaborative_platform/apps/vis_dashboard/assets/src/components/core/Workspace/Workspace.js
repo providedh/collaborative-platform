@@ -3,8 +3,8 @@ import PropTypes from 'prop-types'
 
 import { ParentSize } from '@vx/responsive'
 
-import css from 'grid_style_layout'
-import css_ from 'grid_style_resizable'
+import css from 'grid_style_layout' // eslint-disable-line no-unused-vars
+import css_ from 'grid_style_resizable' // eslint-disable-line no-unused-vars
 import GridLayout from 'react-grid-layout'
 
 import styles from './style.module.css'

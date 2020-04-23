@@ -1,6 +1,6 @@
 import React from 'react'
 import styles from './style.module.css'
-import css from './style.css'
+import css from './style.css' // eslint-disable-line no-unused-vars
 
 export default function Help (props) {
   return (

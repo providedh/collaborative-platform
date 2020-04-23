@@ -1,2 +1,2 @@
-import Heatmap from './Heatmap';
-export default Heatmap;
+import Heatmap from './Heatmap'
+export default Heatmap

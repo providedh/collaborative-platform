@@ -1,1 +1,1 @@
-export {default as Vis} from './vis';
+export { default as Vis } from './vis'

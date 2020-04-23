@@ -2,7 +2,7 @@ import React from 'react'
 import { render } from 'react-dom'
 import App from './components/App'
 
-const dashboardConfig = (window.hasOwnProperty('config') && Object.keys(window.config).length > 0)
+const dashboardConfig = (Object.hasOwnProperty.call(window, 'config') && Object.keys(window.config).length > 0)
   ? Object.assign({ views: [], layout: [], authors: [], currentVersion: null }, window.config)
   : null
 

@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import styles from './style.module.css'
-import css from './style.css'
+import css from './style.css' // eslint-disable-line no-unused-vars
 import { WithAppContext } from 'app_context'
 
 export default function VisFrame ({ index, focused, onViewFocus, onViewClose, children }) {

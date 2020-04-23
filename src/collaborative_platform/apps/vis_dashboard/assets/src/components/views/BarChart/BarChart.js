@@ -1,41 +1,49 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from 'react'
+import PropTypes from 'props-types'
 
-import styles from './style.module.css';
-import css from './style.css';
-import render from './render';
-import getConfig from './config';
-import useData from './data';
-import {DataClient, useCleanup} from '../../../data';
-import getOnEventCallback from './event';
+import styles from './style.module.css'
+import css from './style.css' // eslint-disable-line no-unused-vars
+import render from './render'
+import getConfig from './config'
+import useData from './data'
+import { DataClient, useCleanup } from '../../../data'
+import getOnEventCallback from './event'
 
-function BarChart({layout, dimension, barDirection}) {
-	const [refContainer, refCanvas, refOverlayCanvas] = [useRef(), useRef(), useRef()];
-	const [width, height] = layout!=undefined?[layout.w, layout.h]:[4,4];
+export default function BarChart ({ layout, dimension, barDirection }) {
+  const [refContainer, refCanvas, refOverlayCanvas] = [useRef(), useRef(), useRef()]
+  const [width, height] = layout !== undefined ? [layout.w, layout.h] : [4, 4]
 
-    const [dataClient, _] = useState(DataClient());
-    useCleanup(dataClient);
-	const data = useData(dataClient, dimension);
-    const onEvent = getOnEventCallback(dataClient, data?.filterDimension, data?.all);
+  const dataClient = useState(DataClient())[0]
+  useCleanup(dataClient)
+  const data = useData(dataClient, dimension)
+  const onEvent = getOnEventCallback(dataClient, data?.filterDimension, data?.all)
 
-    useEffect(()=>render(
-		refContainer.current, 
-		refCanvas.current, 
-		refOverlayCanvas.current, 
-		data,
-		barDirection,
-        onEvent), // Render 
-	[width, height, barDirection, data]); // Conditions
+  useEffect(() => render(
+    refContainer.current,
+    refCanvas.current,
+    refOverlayCanvas.current,
+    data,
+    barDirection,
+    onEvent), // Render
+  [width, height, barDirection, data]) // Conditions
 
-    return(
-        <div className={styles.histogram} ref={refContainer}>
-	        <canvas ref={refCanvas}/>
-	        <canvas className={styles.overlayCanvas} ref={refOverlayCanvas}/>
-        </div>
-    );
+  return (
+    <div className={styles.histogram} ref={refContainer}>
+      <canvas ref={refCanvas}/>
+      <canvas className={styles.overlayCanvas} ref={refOverlayCanvas}/>
+    </div>
+  )
 }
 
-BarChart.prototype.description = "Encode frequencies using horizontal or vertical bars."
+BarChart.prototype.description = 'Encode frequencies using horizontal or vertical bars.'
 
-BarChart.prototype.getConfigOptions = getConfig;
+BarChart.prototype.getConfigOptions = getConfig
 
-export default BarChart;
+BarChart.propTypes = {
+  layout: PropTypes.shape({
+    w: PropTypes.number,
+    h: PropTypes.number
+  }),
+  dimension: PropTypes.string,
+  barDirection: PropTypes.string
+}

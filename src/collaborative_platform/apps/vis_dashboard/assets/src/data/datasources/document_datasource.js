@@ -1,62 +1,61 @@
-import {AjaxCalls} from '../../helpers';
+import { AjaxCalls } from '../../helpers'
 
 /* Class: DocumentDatasource
  *
- * 
+ *
  * */
-export default function DocumentDataSource(pubSubService, appContext){
-	const self = {};
+export default function DocumentDataSource (pubSubService, appContext) {
+  const self = {}
 
-	function _init(pubSubService, appContext){
-		self._sourceName = 'document';
-	 	self._appContext = appContext
-		
-		/**
-		 * Method for retrieving data.
-		 */
-		self._source = AjaxCalls();
-		self._focused = '';
-		self._document = null;
-		self._projectVersion = 'latest';
+  function _init (pubSubService, appContext) {
+    self._sourceName = 'document'
+    self._appContext = appContext
 
-		self.get = _getData;
+    /**
+    * Method for retrieving data.
+    */
+    self._source = AjaxCalls()
+    self._focused = ''
+    self._document = null
+    self._projectVersion = 'latest'
 
-		pubSubService.register(self);
+    self.get = _getData
 
-		self.subscribe(`focus/document`, ({documentId})=>_focusDocument(documentId));
-		
-		return self;
-	}
+    pubSubService.register(self)
 
-	function _publishData(){
-		self.publish(`data/${self._sourceName}`, _getData());
-	}
+    self.subscribe('focus/document', ({ documentId }) => _focusDocument(documentId))
 
-	function _getData(){
-		return({id: self._focused, html: self._document});
-	}
+    return self
+  }
 
-	function _focusDocument(documentId){
-		if(self._focused !== documentId){
-			self._focused = documentId;
-			_retrieve();
-		}
-	}
+  function _publishData () {
+    self.publish(`data/${self._sourceName}`, _getData())
+  }
 
-	/**
-	 * Retrieves data from the external source.
-	 */
-	function _retrieve(){
-		self.publish('status',{action:'fetching'});
-		self._source.getFile({project:self._appContext.project, file:self._focused},{},null).then(response=>{
-			if(response.success === false)
-				throw('Failed to retrieve files for the current project.')
-			
-			self._document = response.content;
-			self.publish('status',{action:'fetched'});
-			_publishData();
-		})
-	}
+  function _getData () {
+    return ({ id: self._focused, html: self._document })
+  }
 
-	return _init(pubSubService, appContext);
+  function _focusDocument (documentId) {
+    if (self._focused !== documentId) {
+      self._focused = documentId
+      _retrieve()
+    }
+  }
+
+  /**
+    * Retrieves data from the external source.
+    */
+  function _retrieve () {
+    self.publish('status', { action: 'fetching' })
+    self._source.getFile({ project: self._appContext.project, file: self._focused }, {}, null).then(response => {
+      if (response.success === false) { throw (Error('Failed to retrieve files for the current project.')) }
+
+      self._document = response.content
+      self.publish('status', { action: 'fetched' })
+      _publishData()
+    })
+  }
+
+  return _init(pubSubService, appContext)
 }

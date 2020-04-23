@@ -1,5 +1,5 @@
-import React, {useEffect} from 'react';
+import { useEffect } from 'react'
 
-export default function useCleanup(dataClient){
-    useEffect(()=>dataClient.clearFiltersAndSubscriptions, []);
+export default function useCleanup (dataClient) {
+  useEffect(() => dataClient.clearFiltersAndSubscriptions, [])
 };
