@@ -12,7 +12,7 @@ from collaborative_platform.settings import DEFAULT_ENTITIES
 from apps.api_vis.models import Certainty, EntityVersion, EntityProperty
 from apps.exceptions import BadRequest, Forbidden, NotModified
 from apps.files_management.helpers import create_certainty_elements_for_file_version, certainty_elements_to_json
-from apps.files_management.models import FileVersion, File
+from apps.files_management.models import File
 from apps.projects.models import Contributor, Project, EntitySchema
 
 from .annotator import Annotator
@@ -33,6 +33,8 @@ class AnnotatorConsumer(WebsocketConsumer):
         self.__project_id = ''
         self.__file_id = ''
 
+        self.__file = None
+
         self.__annotating_xml_content = None
 
     def connect(self):
@@ -40,6 +42,7 @@ class AnnotatorConsumer(WebsocketConsumer):
             self.__room_name = self.scope['url_route']['kwargs']['room_name']
             self.__room_group_name = f'close_reading_{self.__room_name}'
             self.__project_id, self.__file_id = self.__room_name.split('_')
+            self.__get_file_from_db()
 
             self.__check_if_project_exist()
 
@@ -52,21 +55,7 @@ class AnnotatorConsumer(WebsocketConsumer):
 
             self.accept()
 
-            certainties = self.__get_certainties()
-            entities_lists = self.__get_entities_lists()
-            xml_content = self.__annotating_xml_content.xml_content
-
-            # TODO: Append authors
-
-            response = {
-                'status': 200,
-                'message': 'OK',
-                'certainties': certainties,
-                'entities_lists': entities_lists,
-                'xml_content': xml_content,
-            }
-
-            response = json.dumps(response)
+            response = self.__generate_response()
 
             self.send(text_data=response)
 
@@ -79,6 +68,12 @@ class AnnotatorConsumer(WebsocketConsumer):
             self.accept()
             self.__send_error(403, error)
             self.close()
+
+    def __get_file_from_db(self):
+        try:
+            self.__file = File.objects.get(id=self.__file_id, deleted=False)
+        except File.DoesNotExist:
+            raise BadRequest(f"File with id: {self.__file_id} doesn't exist.")
 
     def __check_if_project_exist(self):
         try:
@@ -97,10 +92,7 @@ class AnnotatorConsumer(WebsocketConsumer):
             self.__annotating_xml_content = AnnotatingXmlContent.objects.get(file_symbol=self.__room_name)
 
         except AnnotatingXmlContent.DoesNotExist:
-            try:
-                file_version = FileVersion.objects.filter(file_id=self.__file_id).order_by('-number')[0]
-            except IndexError:
-                raise BadRequest(f"File with id: {self.__file_id} doesn't exist.")
+            file_version = self.__file.file_versions.last()
 
             xml_content = file_version.get_raw_content()
 
@@ -133,18 +125,85 @@ class AnnotatorConsumer(WebsocketConsumer):
 
         logger.info(f"User: '{self.scope['user'].username}' added to 'room_presence' table")
 
+    def __generate_response(self):
+        authors = self.__get_authors()
+        certainties = self.__get_certainties()
+        entities_lists = self.__get_entities_lists()
+        xml_content = self.__annotating_xml_content.xml_content
+
+        # TODO: Append authors
+
+        response = {
+            'status': 200,
+            'message': 'OK',
+            'authors': authors,
+            'certainties': certainties,
+            'entities_lists': entities_lists,
+            'xml_content': xml_content,
+        }
+
+        response = json.dumps(response)
+
+        return response
+
     def __get_certainties_from_db_old(self):
-        file = File.objects.get(id=self.__file_id, deleted=False)
-        file_version = FileVersion.objects.get(
-            file=file,
-            number=file.version_number,
-        )
+        file_version = self.__file.file_versions.last()
 
         certainty_elements = create_certainty_elements_for_file_version(file_version, include_uncommitted=True,
                                                                         user=self.scope['user'], for_annotator=True)
         certainties_from_db = certainty_elements_to_json(certainty_elements)
 
         return certainties_from_db
+
+    def __get_authors(self):
+        authors = self.__get_authors_from_db()
+        authors = self.__serialize_authors(authors)
+
+        return authors
+
+    def __get_authors_ids(self):
+        entities_versions = EntityVersion.objects.filter(
+            file_version=self.__file.file_versions.last()
+        )
+
+        entities_authors_ids = entities_versions.values_list('entity__created_by', flat=True)
+
+        cetainties = Certainty.objects.filter(
+            file_version=self.__file.file_versions.last()
+        )
+
+        certainties_authors_ids = cetainties.values_list('created_by', flat=True)
+
+        authors_ids = set()
+        authors_ids.update(entities_authors_ids)
+        authors_ids.update(certainties_authors_ids)
+
+        return authors_ids
+
+    def __get_authors_from_db(self):
+        authors_ids = self.__get_authors_ids()
+
+        authors = User.objects.filter(
+            id__in=authors_ids
+        )
+
+        return authors
+
+    @staticmethod
+    def __serialize_authors(authors):
+        serialized_authors = []
+
+        for author in authors:
+            serialized_author = {
+                'id': author.id,
+                'forename': author.first_name,
+                'surname': author.last_name,
+                'username': author.username,
+            }
+
+            serialized_authors.append(serialized_author)
+
+        return serialized_authors
 
     def __get_certainties(self):
         certainties = self.__get_certainties_from_db()
@@ -155,18 +214,8 @@ class AnnotatorConsumer(WebsocketConsumer):
         return certainties
 
     def __get_certainties_from_db(self):
-        file = File.objects.get(
-            id=self.__file_id,
-            deleted=False,
-        )
-
-        file_version = FileVersion.objects.get(
-            file=file,
-            number=file.version_number,
-        )
-
         certainties = Certainty.objects.filter(
-            file_version=file_version,
+            file_version=self.__file.file_versions.last(),
         )
 
         return certainties
@@ -194,15 +243,7 @@ class AnnotatorConsumer(WebsocketConsumer):
         return certainties_serialized
 
     def __get_entities_lists(self):
-        file = File.objects.get(
-            id=self.__file_id,
-            deleted=False,
-        )
-
-        file_version = FileVersion.objects.get(
-            file=file,
-            number=file.version_number,
-        )
+        file_version = self.__file.file_versions.last()
 
         listable_entities_types = self.__get_entities_types_for_lists(file_version)
 
@@ -373,24 +414,8 @@ class AnnotatorConsumer(WebsocketConsumer):
             room_symbol=self.__room_name
         )
 
-        file = File.objects.get(id=self.__file_id, deleted=False)
-
         for presence in room_presences:
-            certainties = self.__get_certainties()
-            entities_lists = self.__get_entities_lists()
-            xml_content = self.__annotating_xml_content.xml_content
-
-            # TODO: Append authors
-
-            response = {
-                'status': 200,
-                'message': 'OK',
-                'certainties': certainties,
-                'entities_lists': entities_lists,
-                'xml_content': xml_content,
-            }
-
-            response = json.dumps(response)
+            response = self.__generate_response()
 
             channel_layer = get_channel_layer()
             async_to_sync(channel_layer.send)(
@@ -403,7 +428,7 @@ class AnnotatorConsumer(WebsocketConsumer):
 
         user_names = ', '.join([f"'{presence.user.username}'" for presence in room_presences])
 
-        logger.info(f"Content of file: '{file.name}' updated with request from user: "
+        logger.info(f"Content of file: '{self.__file.name}' updated with request from user: "
                     f"'{self.scope['user'].username}' was sent to users: {user_names}")
 
     def __send_error(self, code, message):
