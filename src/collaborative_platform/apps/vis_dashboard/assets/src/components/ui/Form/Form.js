@@ -1,37 +1,44 @@
-import React from 'react';
-import styles from './style.module.css';
+import React from 'react'
+import PropTypes from 'prop-types'
 
-import FormControls from '../FormControls';
+import styles from './style.module.css'
 
-export default function Form({options ,onUpdate}) {
-    const name2index = Object.fromEntries(
-        options.map((o,i) => [o.name, i])
-    );
+import FormControls from '../FormControls'
 
-    function handleChange(name, value) {
-        const newOptions = [...options];
-        newOptions[name2index[name]].value = value;
+export default function Form ({ options, onUpdate }) {
+  const name2index = Object.fromEntries(
+    options.map((o, i) => [o.name, i])
+  )
 
-        onUpdate(newOptions);
-    }
+  function handleChange (name, value) {
+    const newOptions = [...options]
+    newOptions[name2index[name]].value = value
 
-    function renderInputs(){
-        return options.map(o => (
-            <div className={'row ' + styles.rowOverride} key={o.name}>
-                {React.createElement(FormControls[o.type], {
-                    key: o.name,
-                    name: o.name,
-                    value: o.value,
-                    onValueChange: value=>handleChange(o.name, value),
-                    params: o.params
-                })}
-            </div>
-        ))
-    }
+    onUpdate(newOptions)
+  }
 
-    return(
-        <div className={styles.form}>
-            {renderInputs()}
-        </div>
-    )
+  function renderInputs () {
+    return options.map(o => (
+      <div className={'row ' + styles.rowOverride} key={o.name}>
+        {React.createElement(FormControls[o.type], {
+          key: o.name,
+          name: o.name,
+          value: o.value,
+          onValueChange: value => handleChange(o.name, value),
+          params: o.params
+        })}
+      </div>
+    ))
+  }
+
+  return (
+    <div className={styles.form}>
+      {renderInputs()}
+    </div>
+  )
+}
+
+Form.propTypes = {
+  options: PropTypes.array,
+  onUpdate: PropTypes.func
 }

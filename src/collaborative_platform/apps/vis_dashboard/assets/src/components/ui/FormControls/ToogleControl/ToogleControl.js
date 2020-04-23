@@ -1,27 +1,36 @@
-import React from 'react';
-import styles from './style.module.css';
+import React from 'react'
+import PropTypes from 'prop-types'
 
-export default function ToogleControl({name, value=true, onValueChange, params}) {
-    const handleChange = e=>onValueChange(e.target.checked);
+import styles from './style.module.css'
 
-    function createLabel(name){
-        const separated = name.replace(/[A-Z]/g, x=>' '+x),
-            capitalized = separated[0].toUpperCase() + separated.slice(1).toLowerCase();
-        return capitalized;
-    }
+export default function ToogleControl ({ name, value = true, onValueChange, params }) {
+  const handleChange = e => onValueChange(e.target.checked)
 
-    return(
-        <div className={styles.toogleControl}>
-            <div className={"form-group form-check "+styles.formGroupOverride}>
-                <input 
-                    id={'input-'+name}
-                    type="checkbox" 
-                    className="form-check-input" 
-                    value={value}
-                    checked={value}
-                    onChange={handleChange}/>
-                <label className="form-check-label" htmlFor={'input-'+name}>{createLabel(name)}</label>
-            </div>
-        </div>
-    )
+  function createLabel (name) {
+    const separated = name.replace(/[A-Z]/g, x => ' ' + x)
+    const capitalized = separated[0].toUpperCase() + separated.slice(1).toLowerCase()
+    return capitalized
+  }
+
+  return (
+    <div className={styles.toogleControl}>
+      <div className={'form-group form-check ' + styles.formGroupOverride}>
+        <input
+          id={'input-' + name}
+          type="checkbox"
+          className="form-check-input"
+          value={value}
+          checked={value}
+          onChange={handleChange}/>
+        <label className="form-check-label" htmlFor={'input-' + name}>{createLabel(name)}</label>
+      </div>
+    </div>
+  )
+}
+
+ToogleControl.propTypes = {
+  name: PropTypes.string,
+  value: PropTypes.bool,
+  onValueChange: PropTypes.func,
+  params: PropTypes.object
 }
