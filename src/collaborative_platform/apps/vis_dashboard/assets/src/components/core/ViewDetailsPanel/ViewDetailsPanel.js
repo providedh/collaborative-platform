@@ -60,6 +60,6 @@ ViewDetailsPanel.propTypes = {
   }),
   display: PropTypes.bool,
   updateView: PropTypes.func,
-  close: PropTypes.bool,
+  close: PropTypes.func,
   context: PropTypes.object
 }
