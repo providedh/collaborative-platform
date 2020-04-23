@@ -51,7 +51,7 @@ class FileRenderer:
         self.__tree = etree.fromstring(raw_content, parser=parser)
 
     def __load_entities_schemes(self):
-        entities_schemes = self.__get_entities_schemes_from_db().order_by('id')
+        entities_schemes = self.__get_entities_schemes_from_db()
 
         default_entities_names = DEFAULT_ENTITIES.keys()
 
@@ -62,7 +62,7 @@ class FileRenderer:
                 self.__listable_entities.append(entity)
 
     def __get_entities_schemes_from_db(self):
-        entities_schemes = EntitySchema.objects.filter(taxonomy__project=self.__file_version.file.project)
+        entities_schemes = EntitySchema.objects.filter(taxonomy__project=self.__file_version.file.project).order_by('id')
 
         return entities_schemes
 

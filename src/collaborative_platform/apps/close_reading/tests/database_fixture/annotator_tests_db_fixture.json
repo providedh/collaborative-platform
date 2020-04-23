@@ -12,7 +12,7 @@
   "pk": 1,
   "fields": {
     "entity": 1,
-    "file_version": 1,
+    "file_version": 2,
     "xml": null,
     "context": null
   }
@@ -22,7 +22,7 @@
   "pk": 2,
   "fields": {
     "entity": 2,
-    "file_version": 1,
+    "file_version": 2,
     "xml": null,
     "context": null
   }
@@ -81,8 +81,8 @@
   "model": "api_vis.entityversion",
   "pk": 8,
   "fields": {
-    "entity": 8,
-    "file_version": 1,
+    "entity": 1,
+    "file_version": 3,
     "xml": null,
     "context": null
   }
@@ -91,7 +91,7 @@
   "model": "api_vis.entityversion",
   "pk": 9,
   "fields": {
-    "entity": 9,
+    "entity": 8,
     "file_version": 1,
     "xml": null,
     "context": null
@@ -101,8 +101,8 @@
   "model": "api_vis.entityversion",
   "pk": 10,
   "fields": {
-    "entity": 10,
-    "file_version": 1,
+    "entity": 2,
+    "file_version": 3,
     "xml": null,
     "context": null
   }
@@ -111,7 +111,7 @@
   "model": "api_vis.entityversion",
   "pk": 11,
   "fields": {
-    "entity": 11,
+    "entity": 9,
     "file_version": 1,
     "xml": null,
     "context": null
@@ -121,7 +121,7 @@
   "model": "api_vis.entityversion",
   "pk": 12,
   "fields": {
-    "entity": 12,
+    "entity": 10,
     "file_version": 1,
     "xml": null,
     "context": null
@@ -131,7 +131,7 @@
   "model": "api_vis.entityversion",
   "pk": 13,
   "fields": {
-    "entity": 13,
+    "entity": 11,
     "file_version": 1,
     "xml": null,
     "context": null
@@ -141,7 +141,7 @@
   "model": "api_vis.entityversion",
   "pk": 14,
   "fields": {
-    "entity": 14,
+    "entity": 12,
     "file_version": 1,
     "xml": null,
     "context": null
@@ -151,7 +151,7 @@
   "model": "api_vis.entityversion",
   "pk": 15,
   "fields": {
-    "entity": 15,
+    "entity": 13,
     "file_version": 1,
     "xml": null,
     "context": null
@@ -161,7 +161,7 @@
   "model": "api_vis.entityversion",
   "pk": 16,
   "fields": {
-    "entity": 16,
+    "entity": 14,
     "file_version": 1,
     "xml": null,
     "context": null
@@ -171,8 +171,8 @@
   "model": "api_vis.entityversion",
   "pk": 17,
   "fields": {
-    "entity": 1,
-    "file_version": 2,
+    "entity": 15,
+    "file_version": 1,
     "xml": null,
     "context": null
   }
@@ -181,8 +181,8 @@
   "model": "api_vis.entityversion",
   "pk": 18,
   "fields": {
-    "entity": 2,
-    "file_version": 2,
+    "entity": 16,
+    "file_version": 1,
     "xml": null,
     "context": null
   }
@@ -191,8 +191,8 @@
   "model": "api_vis.entityversion",
   "pk": 19,
   "fields": {
-    "entity": 3,
-    "file_version": 2,
+    "entity": 17,
+    "file_version": 1,
     "xml": null,
     "context": null
   }
@@ -201,8 +201,8 @@
   "model": "api_vis.entityversion",
   "pk": 20,
   "fields": {
-    "entity": 4,
-    "file_version": 2,
+    "entity": 18,
+    "file_version": 1,
     "xml": null,
     "context": null
   }
@@ -211,8 +211,8 @@
   "model": "api_vis.entityversion",
   "pk": 21,
   "fields": {
-    "entity": 5,
-    "file_version": 2,
+    "entity": 3,
+    "file_version": 5,
     "xml": null,
     "context": null
   }
@@ -221,8 +221,8 @@
   "model": "api_vis.entityversion",
   "pk": 22,
   "fields": {
-    "entity": 6,
-    "file_version": 2,
+    "entity": 19,
+    "file_version": 4,
     "xml": null,
     "context": null
   }
@@ -231,8 +231,8 @@
   "model": "api_vis.entityversion",
   "pk": 23,
   "fields": {
-    "entity": 7,
-    "file_version": 2,
+    "entity": 4,
+    "file_version": 5,
     "xml": null,
     "context": null
   }
@@ -241,8 +241,8 @@
   "model": "api_vis.entityversion",
   "pk": 24,
   "fields": {
-    "entity": 8,
-    "file_version": 2,
+    "entity": 5,
+    "file_version": 5,
     "xml": null,
     "context": null
   }
@@ -251,8 +251,8 @@
   "model": "api_vis.entityversion",
   "pk": 25,
   "fields": {
-    "entity": 9,
-    "file_version": 2,
+    "entity": 6,
+    "file_version": 5,
     "xml": null,
     "context": null
   }
@@ -261,8 +261,8 @@
   "model": "api_vis.entityversion",
   "pk": 26,
   "fields": {
-    "entity": 10,
-    "file_version": 2,
+    "entity": 7,
+    "file_version": 5,
     "xml": null,
     "context": null
   }
@@ -271,8 +271,8 @@
   "model": "api_vis.entityversion",
   "pk": 27,
   "fields": {
-    "entity": 11,
-    "file_version": 2,
+    "entity": 20,
+    "file_version": 4,
     "xml": null,
     "context": null
   }
@@ -281,8 +281,8 @@
   "model": "api_vis.entityversion",
   "pk": 28,
   "fields": {
-    "entity": 12,
-    "file_version": 2,
+    "entity": 8,
+    "file_version": 5,
     "xml": null,
     "context": null
   }
@@ -291,8 +291,8 @@
   "model": "api_vis.entityversion",
   "pk": 29,
   "fields": {
-    "entity": 13,
-    "file_version": 2,
+    "entity": 21,
+    "file_version": 4,
     "xml": null,
     "context": null
   }
@@ -301,8 +301,8 @@
   "model": "api_vis.entityversion",
   "pk": 30,
   "fields": {
-    "entity": 14,
-    "file_version": 2,
+    "entity": 9,
+    "file_version": 5,
     "xml": null,
     "context": null
   }
@@ -311,8 +311,8 @@
   "model": "api_vis.entityversion",
   "pk": 31,
   "fields": {
-    "entity": 15,
-    "file_version": 2,
+    "entity": 22,
+    "file_version": 4,
     "xml": null,
     "context": null
   }
@@ -321,8 +321,8 @@
   "model": "api_vis.entityversion",
   "pk": 32,
   "fields": {
-    "entity": 16,
-    "file_version": 2,
+    "entity": 10,
+    "file_version": 5,
     "xml": null,
     "context": null
   }
@@ -331,8 +331,8 @@
   "model": "api_vis.entityversion",
   "pk": 33,
   "fields": {
-    "entity": 17,
-    "file_version": 3,
+    "entity": 11,
+    "file_version": 5,
     "xml": null,
     "context": null
   }
@@ -341,8 +341,8 @@
   "model": "api_vis.entityversion",
   "pk": 34,
   "fields": {
-    "entity": 18,
-    "file_version": 3,
+    "entity": 12,
+    "file_version": 5,
     "xml": null,
     "context": null
   }
@@ -351,8 +351,8 @@
   "model": "api_vis.entityversion",
   "pk": 35,
   "fields": {
-    "entity": 17,
-    "file_version": 4,
+    "entity": 13,
+    "file_version": 5,
     "xml": null,
     "context": null
   }
@@ -361,8 +361,88 @@
   "model": "api_vis.entityversion",
   "pk": 36,
   "fields": {
+    "entity": 14,
+    "file_version": 5,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 37,
+  "fields": {
+    "entity": 15,
+    "file_version": 5,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 38,
+  "fields": {
+    "entity": 16,
+    "file_version": 5,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 39,
+  "fields": {
+    "entity": 17,
+    "file_version": 5,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 40,
+  "fields": {
     "entity": 18,
-    "file_version": 4,
+    "file_version": 5,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 41,
+  "fields": {
+    "entity": 19,
+    "file_version": 6,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 42,
+  "fields": {
+    "entity": 20,
+    "file_version": 6,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 43,
+  "fields": {
+    "entity": 21,
+    "file_version": 6,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 44,
+  "fields": {
+    "entity": 22,
+    "file_version": 6,
     "xml": null,
     "context": null
   }
@@ -372,6 +452,38 @@
   "pk": 1,
   "fields": {
     "entity_version": 1,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Jus",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 2,
+  "fields": {
+    "entity_version": 2,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Sand",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 3,
+  "fields": {
+    "entity_version": 3,
     "xpath": "./country",
     "name": "country",
     "type": "TypeChoice.str",
@@ -385,9 +497,9 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 2,
+  "pk": 4,
   "fields": {
-    "entity_version": 1,
+    "entity_version": 3,
     "xpath": "./settlement",
     "name": "settlement",
     "type": "TypeChoice.str",
@@ -401,9 +513,9 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 3,
+  "pk": 5,
   "fields": {
-    "entity_version": 1,
+    "entity_version": 3,
     "xpath": "./location/geo",
     "name": "geo",
     "type": "TypeChoice.Point",
@@ -417,9 +529,9 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 4,
+  "pk": 6,
   "fields": {
-    "entity_version": 1,
+    "entity_version": 3,
     "xpath": "./placeName/name",
     "name": "name",
     "type": "TypeChoice.str",
@@ -433,9 +545,9 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 5,
+  "pk": 7,
   "fields": {
-    "entity_version": 2,
+    "entity_version": 4,
     "xpath": "",
     "name": "name",
     "type": "TypeChoice.str",
@@ -449,9 +561,9 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 6,
+  "pk": 8,
   "fields": {
-    "entity_version": 3,
+    "entity_version": 5,
     "xpath": "./name",
     "name": "name",
     "type": "TypeChoice.str",
@@ -465,9 +577,9 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 7,
+  "pk": 9,
   "fields": {
-    "entity_version": 4,
+    "entity_version": 6,
     "xpath": "./name",
     "name": "name",
     "type": "TypeChoice.str",
@@ -481,9 +593,9 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 8,
+  "pk": 10,
   "fields": {
-    "entity_version": 5,
+    "entity_version": 7,
     "xpath": "@sex",
     "name": "sex",
     "type": "TypeChoice.str",
@@ -497,9 +609,9 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 9,
+  "pk": 11,
   "fields": {
-    "entity_version": 5,
+    "entity_version": 7,
     "xpath": "@age",
     "name": "age",
     "type": "TypeChoice.str",
@@ -513,9 +625,9 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 10,
+  "pk": 12,
   "fields": {
-    "entity_version": 5,
+    "entity_version": 7,
     "xpath": "./persName/forename",
     "name": "forename",
     "type": "TypeChoice.str",
@@ -529,9 +641,9 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 11,
+  "pk": 13,
   "fields": {
-    "entity_version": 5,
+    "entity_version": 7,
     "xpath": "./persName/surname",
     "name": "surname",
     "type": "TypeChoice.str",
@@ -545,9 +657,9 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 12,
+  "pk": 14,
   "fields": {
-    "entity_version": 5,
+    "entity_version": 7,
     "xpath": "./birth/@when",
     "name": "birth",
     "type": "TypeChoice.date",
@@ -561,9 +673,9 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 13,
+  "pk": 15,
   "fields": {
-    "entity_version": 5,
+    "entity_version": 7,
     "xpath": "./name",
     "name": "name",
     "type": "TypeChoice.str",
@@ -577,9 +689,9 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 14,
+  "pk": 16,
   "fields": {
-    "entity_version": 6,
+    "entity_version": 9,
     "xpath": "./name",
     "name": "name",
     "type": "TypeChoice.str",
@@ -593,9 +705,41 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 15,
+  "pk": 17,
   "fields": {
-    "entity_version": 7,
+    "entity_version": 8,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Jus",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 18,
+  "fields": {
+    "entity_version": 10,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Sand",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 19,
+  "fields": {
+    "entity_version": 11,
     "xpath": "./name",
     "name": "name",
     "type": "TypeChoice.str",
@@ -609,9 +753,9 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 16,
+  "pk": 20,
   "fields": {
-    "entity_version": 8,
+    "entity_version": 12,
     "xpath": "./name",
     "name": "name",
     "type": "TypeChoice.str",
@@ -625,9 +769,9 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 17,
+  "pk": 21,
   "fields": {
-    "entity_version": 9,
+    "entity_version": 13,
     "xpath": "@when",
     "name": "when",
     "type": "TypeChoice.date",
@@ -641,77 +785,13 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 18,
-  "fields": {
-    "entity_version": 9,
-    "xpath": "",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "4th of july 2010",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 19,
-  "fields": {
-    "entity_version": 10,
-    "xpath": "",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "the exact same day",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 20,
-  "fields": {
-    "entity_version": 11,
-    "xpath": "",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "Rag",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 21,
-  "fields": {
-    "entity_version": 12,
-    "xpath": "",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "Ingwer",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
   "pk": 22,
   "fields": {
     "entity_version": 13,
     "xpath": "",
     "name": "name",
     "type": "TypeChoice.str",
-    "value_str": "Grieben",
+    "value_str": "4th of july 2010",
     "value_int": null,
     "value_float": null,
     "value_date": null,
@@ -727,7 +807,7 @@
     "xpath": "",
     "name": "name",
     "type": "TypeChoice.str",
-    "value_str": "Met",
+    "value_str": "the exact same day",
     "value_int": null,
     "value_float": null,
     "value_date": null,
@@ -743,7 +823,7 @@
     "xpath": "",
     "name": "name",
     "type": "TypeChoice.str",
-    "value_str": "Butter",
+    "value_str": "Rag",
     "value_int": null,
     "value_float": null,
     "value_date": null,
@@ -759,7 +839,7 @@
     "xpath": "",
     "name": "name",
     "type": "TypeChoice.str",
-    "value_str": "Sand",
+    "value_str": "Ingwer",
     "value_int": null,
     "value_float": null,
     "value_date": null,
@@ -772,6 +852,70 @@
   "pk": 26,
   "fields": {
     "entity_version": 17,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Grieben",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 27,
+  "fields": {
+    "entity_version": 18,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Met",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 28,
+  "fields": {
+    "entity_version": 19,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Butter",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 29,
+  "fields": {
+    "entity_version": 20,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Sand",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 30,
+  "fields": {
+    "entity_version": 21,
     "xpath": "./placeName/name",
     "name": "name",
     "type": "TypeChoice.str",
@@ -785,9 +929,9 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 27,
+  "pk": 31,
   "fields": {
-    "entity_version": 17,
+    "entity_version": 21,
     "xpath": "./location/geo",
     "name": "geo",
     "type": "TypeChoice.Point",
@@ -801,9 +945,9 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 28,
+  "pk": 32,
   "fields": {
-    "entity_version": 17,
+    "entity_version": 21,
     "xpath": "./settlement",
     "name": "settlement",
     "type": "TypeChoice.str",
@@ -817,9 +961,9 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 29,
+  "pk": 33,
   "fields": {
-    "entity_version": 17,
+    "entity_version": 21,
     "xpath": "./country",
     "name": "country",
     "type": "TypeChoice.str",
@@ -833,9 +977,9 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 30,
+  "pk": 34,
   "fields": {
-    "entity_version": 18,
+    "entity_version": 23,
     "xpath": "",
     "name": "name",
     "type": "TypeChoice.str",
@@ -849,9 +993,9 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 31,
+  "pk": 35,
   "fields": {
-    "entity_version": 19,
+    "entity_version": 24,
     "xpath": "./name",
     "name": "name",
     "type": "TypeChoice.str",
@@ -865,9 +1009,25 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 32,
+  "pk": 36,
   "fields": {
-    "entity_version": 20,
+    "entity_version": 22,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Butter",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 37,
+  "fields": {
+    "entity_version": 25,
     "xpath": "./name",
     "name": "name",
     "type": "TypeChoice.str",
@@ -881,9 +1041,25 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 33,
+  "pk": 38,
   "fields": {
-    "entity_version": 21,
+    "entity_version": 27,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Silber",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 39,
+  "fields": {
+    "entity_version": 26,
     "xpath": "./name",
     "name": "name",
     "type": "TypeChoice.str",
@@ -897,9 +1073,9 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 34,
+  "pk": 40,
   "fields": {
-    "entity_version": 21,
+    "entity_version": 26,
     "xpath": "./birth/@when",
     "name": "birth",
     "type": "TypeChoice.date",
@@ -913,9 +1089,9 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 35,
+  "pk": 41,
   "fields": {
-    "entity_version": 21,
+    "entity_version": 26,
     "xpath": "./persName/surname",
     "name": "surname",
     "type": "TypeChoice.str",
@@ -929,9 +1105,9 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 36,
+  "pk": 42,
   "fields": {
-    "entity_version": 21,
+    "entity_version": 26,
     "xpath": "./persName/forename",
     "name": "forename",
     "type": "TypeChoice.str",
@@ -945,9 +1121,9 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 37,
+  "pk": 43,
   "fields": {
-    "entity_version": 21,
+    "entity_version": 26,
     "xpath": "@age",
     "name": "age",
     "type": "TypeChoice.str",
@@ -961,9 +1137,9 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 38,
+  "pk": 44,
   "fields": {
-    "entity_version": 21,
+    "entity_version": 26,
     "xpath": "@sex",
     "name": "sex",
     "type": "TypeChoice.str",
@@ -977,9 +1153,9 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 39,
+  "pk": 45,
   "fields": {
-    "entity_version": 22,
+    "entity_version": 28,
     "xpath": "./name",
     "name": "name",
     "type": "TypeChoice.str",
@@ -993,105 +1169,9 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 40,
-  "fields": {
-    "entity_version": 23,
-    "xpath": "./name",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "Grieben",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 41,
-  "fields": {
-    "entity_version": 24,
-    "xpath": "./name",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "Met",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 42,
-  "fields": {
-    "entity_version": 25,
-    "xpath": "",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "4th of july 2010",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 43,
-  "fields": {
-    "entity_version": 25,
-    "xpath": "@when",
-    "name": "when",
-    "type": "TypeChoice.date",
-    "value_str": null,
-    "value_int": null,
-    "value_float": null,
-    "value_date": "2020-07-04",
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 44,
-  "fields": {
-    "entity_version": 26,
-    "xpath": "",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "the exact same day",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 45,
-  "fields": {
-    "entity_version": 27,
-    "xpath": "",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "Rag",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
   "pk": 46,
   "fields": {
-    "entity_version": 28,
+    "entity_version": 29,
     "xpath": "",
     "name": "name",
     "type": "TypeChoice.str",
@@ -1107,8 +1187,8 @@
   "model": "api_vis.entityproperty",
   "pk": 47,
   "fields": {
-    "entity_version": 29,
-    "xpath": "",
+    "entity_version": 30,
+    "xpath": "./name",
     "name": "name",
     "type": "TypeChoice.str",
     "value_str": "Grieben",
@@ -1123,8 +1203,24 @@
   "model": "api_vis.entityproperty",
   "pk": 48,
   "fields": {
-    "entity_version": 30,
+    "entity_version": 31,
     "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Sand",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 49,
+  "fields": {
+    "entity_version": 32,
+    "xpath": "./name",
     "name": "name",
     "type": "TypeChoice.str",
     "value_str": "Met",
@@ -1137,29 +1233,13 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 49,
-  "fields": {
-    "entity_version": 31,
-    "xpath": "",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "Butter",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
   "pk": 50,
   "fields": {
-    "entity_version": 32,
+    "entity_version": 33,
     "xpath": "",
     "name": "name",
     "type": "TypeChoice.str",
-    "value_str": "Sand",
+    "value_str": "4th of july 2010",
     "value_int": null,
     "value_float": null,
     "value_date": null,
@@ -1172,13 +1252,13 @@
   "pk": 51,
   "fields": {
     "entity_version": 33,
-    "xpath": "",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "Jus",
+    "xpath": "@when",
+    "name": "when",
+    "type": "TypeChoice.date",
+    "value_str": null,
     "value_int": null,
     "value_float": null,
-    "value_date": null,
+    "value_date": "2020-07-04",
     "value_time": null,
     "value_point": null
   }
@@ -1191,7 +1271,7 @@
     "xpath": "",
     "name": "name",
     "type": "TypeChoice.str",
-    "value_str": "Sand",
+    "value_str": "the exact same day",
     "value_int": null,
     "value_float": null,
     "value_date": null,
@@ -1207,7 +1287,7 @@
     "xpath": "",
     "name": "name",
     "type": "TypeChoice.str",
-    "value_str": "Jus",
+    "value_str": "Rag",
     "value_int": null,
     "value_float": null,
     "value_date": null,
@@ -1220,6 +1300,134 @@
   "pk": 54,
   "fields": {
     "entity_version": 36,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Ingwer",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 55,
+  "fields": {
+    "entity_version": 37,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Grieben",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 56,
+  "fields": {
+    "entity_version": 38,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Met",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 57,
+  "fields": {
+    "entity_version": 39,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Butter",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 58,
+  "fields": {
+    "entity_version": 40,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Sand",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 59,
+  "fields": {
+    "entity_version": 41,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Butter",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 60,
+  "fields": {
+    "entity_version": 42,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Silber",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 61,
+  "fields": {
+    "entity_version": 43,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Ingwer",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 62,
+  "fields": {
+    "entity_version": 44,
     "xpath": "",
     "name": "name",
     "type": "TypeChoice.str",
@@ -1291,96 +1499,6 @@
   "model": "files_management.filemaxxmlids",
   "pk": 2,
   "fields": {
-    "file": 1,
-    "xml_id_base": "place",
-    "xml_id_number": 1
-  }
-},
-{
-  "model": "files_management.filemaxxmlids",
-  "pk": 3,
-  "fields": {
-    "file": 1,
-    "xml_id_base": "event",
-    "xml_id_number": 1
-  }
-},
-{
-  "model": "files_management.filemaxxmlids",
-  "pk": 4,
-  "fields": {
-    "file": 1,
-    "xml_id_base": "certainty",
-    "xml_id_number": 18
-  }
-},
-{
-  "model": "files_management.filemaxxmlids",
-  "pk": 5,
-  "fields": {
-    "file": 1,
-    "xml_id_base": "ab",
-    "xml_id_number": 1
-  }
-},
-{
-  "model": "files_management.filemaxxmlids",
-  "pk": 6,
-  "fields": {
-    "file": 1,
-    "xml_id_base": "time",
-    "xml_id_number": 0
-  }
-},
-{
-  "model": "files_management.filemaxxmlids",
-  "pk": 7,
-  "fields": {
-    "file": 1,
-    "xml_id_base": "date",
-    "xml_id_number": 2
-  }
-},
-{
-  "model": "files_management.filemaxxmlids",
-  "pk": 8,
-  "fields": {
-    "file": 1,
-    "xml_id_base": "ingredient",
-    "xml_id_number": 6
-  }
-},
-{
-  "model": "files_management.filemaxxmlids",
-  "pk": 9,
-  "fields": {
-    "file": 1,
-    "xml_id_base": "name",
-    "xml_id_number": 18
-  }
-},
-{
-  "model": "files_management.filemaxxmlids",
-  "pk": 10,
-  "fields": {
-    "file": 1,
-    "xml_id_base": "annotator",
-    "xml_id_number": 2
-  }
-},
-{
-  "model": "files_management.filemaxxmlids",
-  "pk": 11,
-  "fields": {
-    "file": 1,
-    "xml_id_base": "person",
-    "xml_id_number": 6
-  }
-},
-{
-  "model": "files_management.filemaxxmlids",
-  "pk": 12,
-  "fields": {
     "file": 2,
     "xml_id_base": "",
     "xml_id_number": 0
@@ -1388,16 +1506,16 @@
 },
 {
   "model": "files_management.filemaxxmlids",
-  "pk": 13,
+  "pk": 3,
   "fields": {
     "file": 2,
-    "xml_id_base": "place",
-    "xml_id_number": 0
+    "xml_id_base": "ingredient",
+    "xml_id_number": 2
   }
 },
 {
   "model": "files_management.filemaxxmlids",
-  "pk": 14,
+  "pk": 4,
   "fields": {
     "file": 2,
     "xml_id_base": "event",
@@ -1406,7 +1524,16 @@
 },
 {
   "model": "files_management.filemaxxmlids",
-  "pk": 15,
+  "pk": 5,
+  "fields": {
+    "file": 2,
+    "xml_id_base": "date",
+    "xml_id_number": 0
+  }
+},
+{
+  "model": "files_management.filemaxxmlids",
+  "pk": 6,
   "fields": {
     "file": 2,
     "xml_id_base": "certainty",
@@ -1415,52 +1542,7 @@
 },
 {
   "model": "files_management.filemaxxmlids",
-  "pk": 16,
-  "fields": {
-    "file": 2,
-    "xml_id_base": "ab",
-    "xml_id_number": 0
-  }
-},
-{
-  "model": "files_management.filemaxxmlids",
-  "pk": 17,
-  "fields": {
-    "file": 2,
-    "xml_id_base": "time",
-    "xml_id_number": 0
-  }
-},
-{
-  "model": "files_management.filemaxxmlids",
-  "pk": 18,
-  "fields": {
-    "file": 2,
-    "xml_id_base": "date",
-    "xml_id_number": 0
-  }
-},
-{
-  "model": "files_management.filemaxxmlids",
-  "pk": 19,
-  "fields": {
-    "file": 2,
-    "xml_id_base": "ingredient",
-    "xml_id_number": 2
-  }
-},
-{
-  "model": "files_management.filemaxxmlids",
-  "pk": 20,
-  "fields": {
-    "file": 2,
-    "xml_id_base": "name",
-    "xml_id_number": 10
-  }
-},
-{
-  "model": "files_management.filemaxxmlids",
-  "pk": 21,
+  "pk": 7,
   "fields": {
     "file": 2,
     "xml_id_base": "annotator",
@@ -1469,11 +1551,137 @@
 },
 {
   "model": "files_management.filemaxxmlids",
-  "pk": 22,
+  "pk": 8,
+  "fields": {
+    "file": 2,
+    "xml_id_base": "time",
+    "xml_id_number": 0
+  }
+},
+{
+  "model": "files_management.filemaxxmlids",
+  "pk": 9,
   "fields": {
     "file": 2,
     "xml_id_base": "person",
     "xml_id_number": 0
+  }
+},
+{
+  "model": "files_management.filemaxxmlids",
+  "pk": 10,
+  "fields": {
+    "file": 2,
+    "xml_id_base": "name",
+    "xml_id_number": 10
+  }
+},
+{
+  "model": "files_management.filemaxxmlids",
+  "pk": 11,
+  "fields": {
+    "file": 2,
+    "xml_id_base": "place",
+    "xml_id_number": 0
+  }
+},
+{
+  "model": "files_management.filemaxxmlids",
+  "pk": 12,
+  "fields": {
+    "file": 2,
+    "xml_id_base": "ab",
+    "xml_id_number": 0
+  }
+},
+{
+  "model": "files_management.filemaxxmlids",
+  "pk": 13,
+  "fields": {
+    "file": 1,
+    "xml_id_base": "ingredient",
+    "xml_id_number": 6
+  }
+},
+{
+  "model": "files_management.filemaxxmlids",
+  "pk": 14,
+  "fields": {
+    "file": 1,
+    "xml_id_base": "event",
+    "xml_id_number": 1
+  }
+},
+{
+  "model": "files_management.filemaxxmlids",
+  "pk": 15,
+  "fields": {
+    "file": 1,
+    "xml_id_base": "date",
+    "xml_id_number": 2
+  }
+},
+{
+  "model": "files_management.filemaxxmlids",
+  "pk": 16,
+  "fields": {
+    "file": 1,
+    "xml_id_base": "certainty",
+    "xml_id_number": 18
+  }
+},
+{
+  "model": "files_management.filemaxxmlids",
+  "pk": 17,
+  "fields": {
+    "file": 1,
+    "xml_id_base": "annotator",
+    "xml_id_number": 2
+  }
+},
+{
+  "model": "files_management.filemaxxmlids",
+  "pk": 18,
+  "fields": {
+    "file": 1,
+    "xml_id_base": "time",
+    "xml_id_number": 0
+  }
+},
+{
+  "model": "files_management.filemaxxmlids",
+  "pk": 19,
+  "fields": {
+    "file": 1,
+    "xml_id_base": "person",
+    "xml_id_number": 6
+  }
+},
+{
+  "model": "files_management.filemaxxmlids",
+  "pk": 20,
+  "fields": {
+    "file": 1,
+    "xml_id_base": "name",
+    "xml_id_number": 18
+  }
+},
+{
+  "model": "files_management.filemaxxmlids",
+  "pk": 21,
+  "fields": {
+    "file": 1,
+    "xml_id_base": "place",
+    "xml_id_number": 1
+  }
+},
+{
+  "model": "files_management.filemaxxmlids",
+  "pk": 22,
+  "fields": {
+    "file": 1,
+    "xml_id_base": "ab",
+    "xml_id_number": 1
   }
 },
 {
@@ -1490,8 +1698,8 @@
   "pk": 24,
   "fields": {
     "file": 3,
-    "xml_id_base": "place",
-    "xml_id_number": 0
+    "xml_id_base": "ingredient",
+    "xml_id_number": 4
   }
 },
 {
@@ -1508,8 +1716,8 @@
   "pk": 26,
   "fields": {
     "file": 3,
-    "xml_id_base": "certainty",
-    "xml_id_number": 13
+    "xml_id_base": "date",
+    "xml_id_number": 0
   }
 },
 {
@@ -1517,13 +1725,22 @@
   "pk": 27,
   "fields": {
     "file": 3,
-    "xml_id_base": "ab",
-    "xml_id_number": 0
+    "xml_id_base": "certainty",
+    "xml_id_number": 13
   }
 },
 {
   "model": "files_management.filemaxxmlids",
   "pk": 28,
+  "fields": {
+    "file": 3,
+    "xml_id_base": "annotator",
+    "xml_id_number": 1
+  }
+},
+{
+  "model": "files_management.filemaxxmlids",
+  "pk": 29,
   "fields": {
     "file": 3,
     "xml_id_base": "time",
@@ -1532,19 +1749,10 @@
 },
 {
   "model": "files_management.filemaxxmlids",
-  "pk": 29,
-  "fields": {
-    "file": 3,
-    "xml_id_base": "date",
-    "xml_id_number": 0
-  }
-},
-{
-  "model": "files_management.filemaxxmlids",
   "pk": 30,
   "fields": {
     "file": 3,
-    "xml_id_base": "ingredient",
+    "xml_id_base": "person",
     "xml_id_number": 0
   }
 },
@@ -1562,8 +1770,8 @@
   "pk": 32,
   "fields": {
     "file": 3,
-    "xml_id_base": "annotator",
-    "xml_id_number": 1
+    "xml_id_base": "place",
+    "xml_id_number": 0
   }
 },
 {
@@ -1571,7 +1779,7 @@
   "pk": 33,
   "fields": {
     "file": 3,
-    "xml_id_base": "person",
+    "xml_id_base": "ab",
     "xml_id_number": 0
   }
 },
@@ -1581,8 +1789,8 @@
   "fields": {
     "title": "Project_1",
     "description": "",
-    "creation_date": "2020-04-23T06:44:37.933Z",
-    "modification_date": "2020-04-23T06:44:37.933Z",
+    "creation_date": "2020-04-23T09:32:01.557Z",
+    "modification_date": "2020-04-23T09:32:01.557Z",
     "license": "GPL",
     "public": false
   }
@@ -1595,7 +1803,7 @@
     "file_version_counter": 0,
     "commit": null,
     "commit_counter": 0,
-    "date": "2020-04-23T06:44:37.941Z",
+    "date": "2020-04-23T09:32:01.570Z",
     "file_versions": []
   }
 },
@@ -1607,9 +1815,10 @@
     "file_version_counter": 1,
     "commit": null,
     "commit_counter": 0,
-    "date": "2020-04-23T06:44:53.245Z",
+    "date": "2020-04-23T09:32:12.780Z",
     "file_versions": [
-      1
+      1,
+      2
     ]
   }
 },
@@ -1621,8 +1830,9 @@
     "file_version_counter": 2,
     "commit": null,
     "commit_counter": 0,
-    "date": "2020-04-23T06:44:53.774Z",
+    "date": "2020-04-23T09:32:12.792Z",
     "file_versions": [
+      1,
       2
     ]
   }
@@ -1635,9 +1845,9 @@
     "file_version_counter": 3,
     "commit": null,
     "commit_counter": 0,
-    "date": "2020-04-23T06:44:59.098Z",
+    "date": "2020-04-23T09:32:16.864Z",
     "file_versions": [
-      2,
+      1,
       3
     ]
   }
@@ -1650,9 +1860,10 @@
     "file_version_counter": 4,
     "commit": null,
     "commit_counter": 0,
-    "date": "2020-04-23T06:44:59.358Z",
+    "date": "2020-04-23T09:32:17.187Z",
     "file_versions": [
-      2,
+      1,
+      3,
       4
     ]
   }
@@ -1665,9 +1876,9 @@
     "file_version_counter": 5,
     "commit": null,
     "commit_counter": 0,
-    "date": "2020-04-23T06:45:04.884Z",
+    "date": "2020-04-23T09:32:17.361Z",
     "file_versions": [
-      2,
+      3,
       4,
       5
     ]
@@ -1681,10 +1892,10 @@
     "file_version_counter": 6,
     "commit": null,
     "commit_counter": 0,
-    "date": "2020-04-23T06:45:05.057Z",
+    "date": "2020-04-23T09:32:17.709Z",
     "file_versions": [
-      2,
-      4,
+      3,
+      5,
       6
     ]
   }
@@ -1812,7 +2023,7 @@
   "fields": {
     "taxonomy": 1,
     "name": "ingredient",
-    "color": "#00ff0b",
+    "color": "#00ff0e",
     "icon": "\uf0c3",
     "body_list": true
   }
@@ -1839,8 +2050,8 @@
   "model": "auth.user",
   "pk": 2,
   "fields": {
-    "password": "pbkdf2_sha256$150000$cIQoPBNf9ZRv$fsLKdswmyDoCPhhZCt91sWOpkGOQ7Lu5+l66AYSptRI=",
-    "last_login": "2020-04-23T06:45:53.585Z",
+    "password": "pbkdf2_sha256$150000$mL3ulXeJrqR2$d38gIzK5OkYg0GtoUsNtGHQrT2lOfzRARsL4GesSa7o=",
+    "last_login": "2020-04-23T09:32:59.566Z",
     "is_superuser": false,
     "username": "tony_stark",
     "first_name": "Tony",
@@ -1848,7 +2059,7 @@
     "email": "tony_stark@zmyslonymail.com",
     "is_staff": false,
     "is_active": true,
-    "date_joined": "2020-04-23T06:42:48.560Z",
+    "date_joined": "2020-04-23T09:31:12.428Z",
     "groups": [],
     "user_permissions": []
   }
@@ -1857,8 +2068,8 @@
   "model": "auth.user",
   "pk": 3,
   "fields": {
-    "password": "pbkdf2_sha256$150000$bmyMYG22jH2S$jovPZznCSSDK7faGEPOmw/K95bNJOwAthz6pWVSZkOs=",
-    "last_login": "2020-04-23T06:45:43.418Z",
+    "password": "pbkdf2_sha256$150000$klLHEbVHE2MC$mbva0Hxu9ELyiNqzj3pHUxT/OrrtHwcNzf0JTSO+QS0=",
+    "last_login": "2020-04-23T09:32:49.895Z",
     "is_superuser": false,
     "username": "pepper_potts",
     "first_name": "Pepper",
@@ -1866,7 +2077,7 @@
     "email": "pepper_potts@zmyslonymail.com",
     "is_staff": false,
     "is_active": true,
-    "date_joined": "2020-04-23T06:45:43.121Z",
+    "date_joined": "2020-04-23T09:32:48.895Z",
     "groups": [],
     "user_permissions": []
   }
@@ -1874,6 +2085,34 @@
 {
   "model": "api_vis.entity",
   "pk": 1,
+  "fields": {
+    "file": 2,
+    "type": "ingredient",
+    "xml_id": "ingredient-0",
+    "created_by": 1,
+    "created_in_file_version": 2,
+    "deleted_by": null,
+    "deleted_in_file_version": null,
+    "deleted_on": null
+  }
+},
+{
+  "model": "api_vis.entity",
+  "pk": 2,
+  "fields": {
+    "file": 2,
+    "type": "ingredient",
+    "xml_id": "ingredient-1",
+    "created_by": 1,
+    "created_in_file_version": 2,
+    "deleted_by": null,
+    "deleted_in_file_version": null,
+    "deleted_on": null
+  }
+},
+{
+  "model": "api_vis.entity",
+  "pk": 3,
   "fields": {
     "file": 1,
     "type": "place",
@@ -1887,7 +2126,7 @@
 },
 {
   "model": "api_vis.entity",
-  "pk": 2,
+  "pk": 4,
   "fields": {
     "file": 1,
     "type": "event",
@@ -1901,7 +2140,7 @@
 },
 {
   "model": "api_vis.entity",
-  "pk": 3,
+  "pk": 5,
   "fields": {
     "file": 1,
     "type": "person",
@@ -1915,7 +2154,7 @@
 },
 {
   "model": "api_vis.entity",
-  "pk": 4,
+  "pk": 6,
   "fields": {
     "file": 1,
     "type": "person",
@@ -1929,7 +2168,7 @@
 },
 {
   "model": "api_vis.entity",
-  "pk": 5,
+  "pk": 7,
   "fields": {
     "file": 1,
     "type": "person",
@@ -1943,7 +2182,7 @@
 },
 {
   "model": "api_vis.entity",
-  "pk": 6,
+  "pk": 8,
   "fields": {
     "file": 1,
     "type": "person",
@@ -1957,7 +2196,7 @@
 },
 {
   "model": "api_vis.entity",
-  "pk": 7,
+  "pk": 9,
   "fields": {
     "file": 1,
     "type": "person",
@@ -1971,7 +2210,7 @@
 },
 {
   "model": "api_vis.entity",
-  "pk": 8,
+  "pk": 10,
   "fields": {
     "file": 1,
     "type": "person",
@@ -1985,7 +2224,7 @@
 },
 {
   "model": "api_vis.entity",
-  "pk": 9,
+  "pk": 11,
   "fields": {
     "file": 1,
     "type": "date",
@@ -1999,7 +2238,7 @@
 },
 {
   "model": "api_vis.entity",
-  "pk": 10,
+  "pk": 12,
   "fields": {
     "file": 1,
     "type": "date",
@@ -2013,7 +2252,7 @@
 },
 {
   "model": "api_vis.entity",
-  "pk": 11,
+  "pk": 13,
   "fields": {
     "file": 1,
     "type": "ingredient",
@@ -2027,7 +2266,7 @@
 },
 {
   "model": "api_vis.entity",
-  "pk": 12,
+  "pk": 14,
   "fields": {
     "file": 1,
     "type": "ingredient",
@@ -2041,7 +2280,7 @@
 },
 {
   "model": "api_vis.entity",
-  "pk": 13,
+  "pk": 15,
   "fields": {
     "file": 1,
     "type": "ingredient",
@@ -2055,7 +2294,7 @@
 },
 {
   "model": "api_vis.entity",
-  "pk": 14,
+  "pk": 16,
   "fields": {
     "file": 1,
     "type": "ingredient",
@@ -2069,7 +2308,7 @@
 },
 {
   "model": "api_vis.entity",
-  "pk": 15,
+  "pk": 17,
   "fields": {
     "file": 1,
     "type": "ingredient",
@@ -2083,7 +2322,7 @@
 },
 {
   "model": "api_vis.entity",
-  "pk": 16,
+  "pk": 18,
   "fields": {
     "file": 1,
     "type": "ingredient",
@@ -2097,13 +2336,13 @@
 },
 {
   "model": "api_vis.entity",
-  "pk": 17,
+  "pk": 19,
   "fields": {
-    "file": 2,
+    "file": 3,
     "type": "ingredient",
     "xml_id": "ingredient-0",
     "created_by": 1,
-    "created_in_file_version": 3,
+    "created_in_file_version": 4,
     "deleted_by": null,
     "deleted_in_file_version": null,
     "deleted_on": null
@@ -2111,13 +2350,41 @@
 },
 {
   "model": "api_vis.entity",
-  "pk": 18,
+  "pk": 20,
   "fields": {
-    "file": 2,
+    "file": 3,
     "type": "ingredient",
     "xml_id": "ingredient-1",
     "created_by": 1,
-    "created_in_file_version": 3,
+    "created_in_file_version": 4,
+    "deleted_by": null,
+    "deleted_in_file_version": null,
+    "deleted_on": null
+  }
+},
+{
+  "model": "api_vis.entity",
+  "pk": 21,
+  "fields": {
+    "file": 3,
+    "type": "ingredient",
+    "xml_id": "ingredient-2",
+    "created_by": 1,
+    "created_in_file_version": 4,
+    "deleted_by": null,
+    "deleted_in_file_version": null,
+    "deleted_on": null
+  }
+},
+{
+  "model": "api_vis.entity",
+  "pk": 22,
+  "fields": {
+    "file": 3,
+    "type": "ingredient",
+    "xml_id": "ingredient-3",
+    "created_by": 1,
+    "created_in_file_version": 4,
     "deleted_by": null,
     "deleted_in_file_version": null,
     "deleted_on": null
@@ -2127,20 +2394,19 @@
   "model": "api_vis.certainty",
   "pk": 1,
   "fields": {
-    "file": 1,
+    "file": 2,
     "xml_id": "certainty-0",
     "locus": "value",
     "cert": "high",
     "degree": 0.857142857142857,
-    "target_xml_id": "name-4",
+    "target_xml_id": "name-1",
     "target_match": "@ref",
-    "asserted_value": "#met",
+    "asserted_value": "#sand",
     "description": null,
-    "file_version": 1,
+    "file_version": 2,
     "created_by": 1,
     "deleted_by": null,
     "categories": [
-      2,
       4
     ]
   }
@@ -2149,16 +2415,16 @@
   "model": "api_vis.certainty",
   "pk": 2,
   "fields": {
-    "file": 1,
+    "file": 2,
     "xml_id": "certainty-1",
     "locus": "value",
     "cert": "high",
     "degree": 0.857142857142857,
-    "target_xml_id": "name-5",
+    "target_xml_id": "name-6",
     "target_match": "@ref",
-    "asserted_value": "#rag",
+    "asserted_value": "#sand",
     "description": null,
-    "file_version": 1,
+    "file_version": 2,
     "created_by": 1,
     "deleted_by": null,
     "categories": [
@@ -2170,16 +2436,16 @@
   "model": "api_vis.certainty",
   "pk": 3,
   "fields": {
-    "file": 1,
+    "file": 2,
     "xml_id": "certainty-2",
     "locus": "value",
     "cert": "high",
     "degree": 0.857142857142857,
-    "target_xml_id": "name-7",
+    "target_xml_id": "name-9",
     "target_match": "@ref",
-    "asserted_value": "#sand",
+    "asserted_value": "#jus",
     "description": null,
-    "file_version": 1,
+    "file_version": 2,
     "created_by": 1,
     "deleted_by": null,
     "categories": [
@@ -2191,39 +2457,41 @@
   "model": "api_vis.certainty",
   "pk": 4,
   "fields": {
-    "file": 1,
+    "file": 2,
     "xml_id": "certainty-3",
     "locus": "value",
     "cert": "high",
     "degree": 0.857142857142857,
-    "target_xml_id": "name-2",
+    "target_xml_id": "name-7",
     "target_match": "@ref",
-    "asserted_value": "#met",
+    "asserted_value": "#sand",
     "description": null,
-    "file_version": 1,
+    "file_version": 2,
     "created_by": 1,
     "deleted_by": null,
-    "categories": []
+    "categories": [
+      4
+    ]
   }
 },
 {
   "model": "api_vis.certainty",
   "pk": 5,
   "fields": {
-    "file": 1,
+    "file": 2,
     "xml_id": "certainty-4",
     "locus": "value",
     "cert": "high",
     "degree": 0.857142857142857,
-    "target_xml_id": "name-8",
+    "target_xml_id": "name-4",
     "target_match": "@ref",
     "asserted_value": "#sand",
     "description": null,
-    "file_version": 1,
+    "file_version": 2,
     "created_by": 1,
     "deleted_by": null,
     "categories": [
-      2
+      4
     ]
   }
 },
@@ -2231,16 +2499,16 @@
   "model": "api_vis.certainty",
   "pk": 6,
   "fields": {
-    "file": 1,
+    "file": 2,
     "xml_id": "certainty-5",
     "locus": "value",
     "cert": "high",
     "degree": 0.857142857142857,
-    "target_xml_id": "name-11",
+    "target_xml_id": "name-8",
     "target_match": "@ref",
     "asserted_value": "#sand",
     "description": null,
-    "file_version": 1,
+    "file_version": 2,
     "created_by": 1,
     "deleted_by": null,
     "categories": [
@@ -2252,16 +2520,16 @@
   "model": "api_vis.certainty",
   "pk": 7,
   "fields": {
-    "file": 1,
+    "file": 2,
     "xml_id": "certainty-6",
     "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-12",
+    "cert": "very high",
+    "degree": 1.0,
+    "target_xml_id": "name-0",
     "target_match": "@ref",
-    "asserted_value": "#form",
+    "asserted_value": "#quart",
     "description": null,
-    "file_version": 1,
+    "file_version": 2,
     "created_by": 1,
     "deleted_by": null,
     "categories": [
@@ -2273,16 +2541,16 @@
   "model": "api_vis.certainty",
   "pk": 8,
   "fields": {
-    "file": 1,
+    "file": 2,
     "xml_id": "certainty-7",
     "locus": "value",
     "cert": "high",
-    "degree": 0.833333333333333,
-    "target_xml_id": "name-1",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-5",
     "target_match": "@ref",
-    "asserted_value": "#ingwer",
+    "asserted_value": "#sand",
     "description": null,
-    "file_version": 1,
+    "file_version": 2,
     "created_by": 1,
     "deleted_by": null,
     "categories": [
@@ -2294,16 +2562,16 @@
   "model": "api_vis.certainty",
   "pk": 9,
   "fields": {
-    "file": 1,
+    "file": 2,
     "xml_id": "certainty-8",
     "locus": "value",
     "cert": "high",
     "degree": 0.857142857142857,
-    "target_xml_id": "name-9",
+    "target_xml_id": "old_name_8",
     "target_match": "@ref",
     "asserted_value": "#sand",
     "description": null,
-    "file_version": 1,
+    "file_version": 2,
     "created_by": 1,
     "deleted_by": null,
     "categories": [
@@ -2315,16 +2583,16 @@
   "model": "api_vis.certainty",
   "pk": 10,
   "fields": {
-    "file": 1,
+    "file": 2,
     "xml_id": "certainty-9",
     "locus": "value",
-    "cert": "very high",
-    "degree": 1.0,
-    "target_xml_id": "name-0",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-3",
     "target_match": "@ref",
-    "asserted_value": "#butter",
+    "asserted_value": "#sand",
     "description": null,
-    "file_version": 1,
+    "file_version": 2,
     "created_by": 1,
     "deleted_by": null,
     "categories": [
@@ -2336,16 +2604,16 @@
   "model": "api_vis.certainty",
   "pk": 11,
   "fields": {
-    "file": 1,
+    "file": 2,
     "xml_id": "certainty-10",
     "locus": "value",
     "cert": "high",
     "degree": 0.857142857142857,
-    "target_xml_id": "name-10",
+    "target_xml_id": "name-2",
     "target_match": "@ref",
     "asserted_value": "#sand",
     "description": null,
-    "file_version": 1,
+    "file_version": 2,
     "created_by": 1,
     "deleted_by": null,
     "categories": [
@@ -2357,16 +2625,16 @@
   "model": "api_vis.certainty",
   "pk": 12,
   "fields": {
-    "file": 1,
-    "xml_id": "certainty-11",
+    "file": 2,
+    "xml_id": "certainty-10",
     "locus": "value",
     "cert": "high",
     "degree": 0.857142857142857,
-    "target_xml_id": "name-3",
+    "target_xml_id": "name-2",
     "target_match": "@ref",
-    "asserted_value": "#met",
+    "asserted_value": "#sand",
     "description": null,
-    "file_version": 1,
+    "file_version": 3,
     "created_by": 1,
     "deleted_by": null,
     "categories": [
@@ -2378,16 +2646,16 @@
   "model": "api_vis.certainty",
   "pk": 13,
   "fields": {
-    "file": 1,
-    "xml_id": "certainty-12",
+    "file": 2,
+    "xml_id": "certainty-9",
     "locus": "value",
     "cert": "high",
     "degree": 0.857142857142857,
-    "target_xml_id": "name-6",
+    "target_xml_id": "name-3",
     "target_match": "@ref",
     "asserted_value": "#sand",
     "description": null,
-    "file_version": 1,
+    "file_version": 3,
     "created_by": 1,
     "deleted_by": null,
     "categories": [
@@ -2399,16 +2667,16 @@
   "model": "api_vis.certainty",
   "pk": 14,
   "fields": {
-    "file": 1,
-    "xml_id": "certainty-13",
+    "file": 2,
+    "xml_id": "certainty-8",
     "locus": "value",
     "cert": "high",
-    "degree": 0.833333333333333,
-    "target_xml_id": "name-13",
+    "degree": 0.857142857142857,
+    "target_xml_id": "old_name_8",
     "target_match": "@ref",
-    "asserted_value": "#grieben",
+    "asserted_value": "#sand",
     "description": null,
-    "file_version": 1,
+    "file_version": 3,
     "created_by": 1,
     "deleted_by": null,
     "categories": [
@@ -2420,17 +2688,17 @@
   "model": "api_vis.certainty",
   "pk": 15,
   "fields": {
-    "file": 1,
-    "xml_id": "certainty-14",
+    "file": 2,
+    "xml_id": "certainty-7",
     "locus": "value",
     "cert": "high",
-    "degree": null,
-    "target_xml_id": "test",
-    "target_match": null,
-    "asserted_value": "Balloons",
-    "description": "Some important decription",
-    "file_version": 1,
-    "created_by": 2,
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-5",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 3,
+    "created_by": 1,
     "deleted_by": null,
     "categories": [
       4
@@ -2440,572 +2708,6 @@
 {
   "model": "api_vis.certainty",
   "pk": 16,
-  "fields": {
-    "file": 1,
-    "xml_id": "certainty-15",
-    "locus": "value",
-    "cert": "high",
-    "degree": null,
-    "target_xml_id": "name-8",
-    "target_match": "@ref",
-    "asserted_value": "#ingredient-0",
-    "description": null,
-    "file_version": 1,
-    "created_by": 2,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 17,
-  "fields": {
-    "file": 1,
-    "xml_id": "certainty-16",
-    "locus": "value",
-    "cert": "high",
-    "degree": null,
-    "target_xml_id": "person-2",
-    "target_match": "name/forename",
-    "asserted_value": "McDuck",
-    "description": null,
-    "file_version": 1,
-    "created_by": 2,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 18,
-  "fields": {
-    "file": 1,
-    "xml_id": "certainty-17",
-    "locus": "value",
-    "cert": "high",
-    "degree": null,
-    "target_xml_id": "certainty-10",
-    "target_match": "@cert",
-    "asserted_value": "low",
-    "description": null,
-    "file_version": 1,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 19,
-  "fields": {
-    "file": 1,
-    "xml_id": "certainty-17",
-    "locus": "value",
-    "cert": "high",
-    "degree": null,
-    "target_xml_id": "certainty-10",
-    "target_match": "@cert",
-    "asserted_value": "low",
-    "description": null,
-    "file_version": 2,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 20,
-  "fields": {
-    "file": 1,
-    "xml_id": "certainty-16",
-    "locus": "value",
-    "cert": "high",
-    "degree": null,
-    "target_xml_id": "person-2",
-    "target_match": "name/forename",
-    "asserted_value": "McDuck",
-    "description": null,
-    "file_version": 2,
-    "created_by": 2,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 21,
-  "fields": {
-    "file": 1,
-    "xml_id": "certainty-15",
-    "locus": "value",
-    "cert": "high",
-    "degree": null,
-    "target_xml_id": "name-8",
-    "target_match": "@ref",
-    "asserted_value": "#ingredient-0",
-    "description": null,
-    "file_version": 2,
-    "created_by": 2,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 22,
-  "fields": {
-    "file": 1,
-    "xml_id": "certainty-14",
-    "locus": "value",
-    "cert": "high",
-    "degree": null,
-    "target_xml_id": "test",
-    "target_match": null,
-    "asserted_value": "Balloons",
-    "description": "Some important decription",
-    "file_version": 2,
-    "created_by": 2,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 23,
-  "fields": {
-    "file": 1,
-    "xml_id": "certainty-13",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.833333333333333,
-    "target_xml_id": "name-13",
-    "target_match": "@ref",
-    "asserted_value": "#grieben",
-    "description": null,
-    "file_version": 2,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 24,
-  "fields": {
-    "file": 1,
-    "xml_id": "certainty-12",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-6",
-    "target_match": "@ref",
-    "asserted_value": "#sand",
-    "description": null,
-    "file_version": 2,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 25,
-  "fields": {
-    "file": 1,
-    "xml_id": "certainty-11",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-3",
-    "target_match": "@ref",
-    "asserted_value": "#met",
-    "description": null,
-    "file_version": 2,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 26,
-  "fields": {
-    "file": 1,
-    "xml_id": "certainty-10",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-10",
-    "target_match": "@ref",
-    "asserted_value": "#sand",
-    "description": null,
-    "file_version": 2,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 27,
-  "fields": {
-    "file": 1,
-    "xml_id": "certainty-9",
-    "locus": "value",
-    "cert": "very high",
-    "degree": 1.0,
-    "target_xml_id": "name-0",
-    "target_match": "@ref",
-    "asserted_value": "#butter",
-    "description": null,
-    "file_version": 2,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 28,
-  "fields": {
-    "file": 1,
-    "xml_id": "certainty-8",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-9",
-    "target_match": "@ref",
-    "asserted_value": "#sand",
-    "description": null,
-    "file_version": 2,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 29,
-  "fields": {
-    "file": 1,
-    "xml_id": "certainty-7",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.833333333333333,
-    "target_xml_id": "name-1",
-    "target_match": "@ref",
-    "asserted_value": "#ingwer",
-    "description": null,
-    "file_version": 2,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 30,
-  "fields": {
-    "file": 1,
-    "xml_id": "certainty-6",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-12",
-    "target_match": "@ref",
-    "asserted_value": "#form",
-    "description": null,
-    "file_version": 2,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 31,
-  "fields": {
-    "file": 1,
-    "xml_id": "certainty-5",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-11",
-    "target_match": "@ref",
-    "asserted_value": "#sand",
-    "description": null,
-    "file_version": 2,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 32,
-  "fields": {
-    "file": 1,
-    "xml_id": "certainty-4",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-8",
-    "target_match": "@ref",
-    "asserted_value": "#sand",
-    "description": null,
-    "file_version": 2,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      2
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 33,
-  "fields": {
-    "file": 1,
-    "xml_id": "certainty-3",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-2",
-    "target_match": "@ref",
-    "asserted_value": "#met",
-    "description": null,
-    "file_version": 2,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": []
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 34,
-  "fields": {
-    "file": 1,
-    "xml_id": "certainty-2",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-7",
-    "target_match": "@ref",
-    "asserted_value": "#sand",
-    "description": null,
-    "file_version": 2,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 35,
-  "fields": {
-    "file": 1,
-    "xml_id": "certainty-1",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-5",
-    "target_match": "@ref",
-    "asserted_value": "#rag",
-    "description": null,
-    "file_version": 2,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 36,
-  "fields": {
-    "file": 1,
-    "xml_id": "certainty-0",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-4",
-    "target_match": "@ref",
-    "asserted_value": "#met",
-    "description": null,
-    "file_version": 2,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      2,
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 37,
-  "fields": {
-    "file": 2,
-    "xml_id": "certainty-0",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-1",
-    "target_match": "@ref",
-    "asserted_value": "#sand",
-    "description": null,
-    "file_version": 3,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 38,
-  "fields": {
-    "file": 2,
-    "xml_id": "certainty-1",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-6",
-    "target_match": "@ref",
-    "asserted_value": "#sand",
-    "description": null,
-    "file_version": 3,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 39,
-  "fields": {
-    "file": 2,
-    "xml_id": "certainty-2",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-9",
-    "target_match": "@ref",
-    "asserted_value": "#jus",
-    "description": null,
-    "file_version": 3,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 40,
-  "fields": {
-    "file": 2,
-    "xml_id": "certainty-3",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-7",
-    "target_match": "@ref",
-    "asserted_value": "#sand",
-    "description": null,
-    "file_version": 3,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 41,
-  "fields": {
-    "file": 2,
-    "xml_id": "certainty-4",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-4",
-    "target_match": "@ref",
-    "asserted_value": "#sand",
-    "description": null,
-    "file_version": 3,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 42,
-  "fields": {
-    "file": 2,
-    "xml_id": "certainty-5",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-8",
-    "target_match": "@ref",
-    "asserted_value": "#sand",
-    "description": null,
-    "file_version": 3,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 43,
   "fields": {
     "file": 2,
     "xml_id": "certainty-6",
@@ -3026,10 +2728,576 @@
 },
 {
   "model": "api_vis.certainty",
-  "pk": 44,
+  "pk": 17,
   "fields": {
     "file": 2,
+    "xml_id": "certainty-5",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-8",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 3,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 18,
+  "fields": {
+    "file": 2,
+    "xml_id": "certainty-4",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-4",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 3,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 19,
+  "fields": {
+    "file": 2,
+    "xml_id": "certainty-3",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-7",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 3,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 20,
+  "fields": {
+    "file": 2,
+    "xml_id": "certainty-2",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-9",
+    "target_match": "@ref",
+    "asserted_value": "#jus",
+    "description": null,
+    "file_version": 3,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 21,
+  "fields": {
+    "file": 2,
+    "xml_id": "certainty-1",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-6",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 3,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 22,
+  "fields": {
+    "file": 2,
+    "xml_id": "certainty-0",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-1",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 3,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 23,
+  "fields": {
+    "file": 1,
+    "xml_id": "certainty-0",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-4",
+    "target_match": "@ref",
+    "asserted_value": "#met",
+    "description": null,
+    "file_version": 1,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      2,
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 24,
+  "fields": {
+    "file": 1,
+    "xml_id": "certainty-1",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-5",
+    "target_match": "@ref",
+    "asserted_value": "#rag",
+    "description": null,
+    "file_version": 1,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 25,
+  "fields": {
+    "file": 1,
+    "xml_id": "certainty-2",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-7",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 1,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 26,
+  "fields": {
+    "file": 1,
+    "xml_id": "certainty-3",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-2",
+    "target_match": "@ref",
+    "asserted_value": "#met",
+    "description": null,
+    "file_version": 1,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": []
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 27,
+  "fields": {
+    "file": 1,
+    "xml_id": "certainty-4",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-8",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 1,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      2
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 28,
+  "fields": {
+    "file": 1,
+    "xml_id": "certainty-5",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-11",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 1,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 29,
+  "fields": {
+    "file": 1,
+    "xml_id": "certainty-6",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-12",
+    "target_match": "@ref",
+    "asserted_value": "#form",
+    "description": null,
+    "file_version": 1,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 30,
+  "fields": {
+    "file": 1,
     "xml_id": "certainty-7",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.833333333333333,
+    "target_xml_id": "name-1",
+    "target_match": "@ref",
+    "asserted_value": "#ingwer",
+    "description": null,
+    "file_version": 1,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 31,
+  "fields": {
+    "file": 1,
+    "xml_id": "certainty-8",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-9",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 1,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 32,
+  "fields": {
+    "file": 1,
+    "xml_id": "certainty-9",
+    "locus": "value",
+    "cert": "very high",
+    "degree": 1.0,
+    "target_xml_id": "name-0",
+    "target_match": "@ref",
+    "asserted_value": "#butter",
+    "description": null,
+    "file_version": 1,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 33,
+  "fields": {
+    "file": 1,
+    "xml_id": "certainty-10",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-10",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 1,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 34,
+  "fields": {
+    "file": 1,
+    "xml_id": "certainty-11",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-3",
+    "target_match": "@ref",
+    "asserted_value": "#met",
+    "description": null,
+    "file_version": 1,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 35,
+  "fields": {
+    "file": 1,
+    "xml_id": "certainty-12",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-6",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 1,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 36,
+  "fields": {
+    "file": 1,
+    "xml_id": "certainty-13",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.833333333333333,
+    "target_xml_id": "name-13",
+    "target_match": "@ref",
+    "asserted_value": "#grieben",
+    "description": null,
+    "file_version": 1,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 37,
+  "fields": {
+    "file": 1,
+    "xml_id": "certainty-14",
+    "locus": "value",
+    "cert": "high",
+    "degree": null,
+    "target_xml_id": "test",
+    "target_match": null,
+    "asserted_value": "Balloons",
+    "description": "Some important decription",
+    "file_version": 1,
+    "created_by": 2,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 38,
+  "fields": {
+    "file": 1,
+    "xml_id": "certainty-15",
+    "locus": "value",
+    "cert": "high",
+    "degree": null,
+    "target_xml_id": "name-8",
+    "target_match": "@ref",
+    "asserted_value": "#ingredient-0",
+    "description": null,
+    "file_version": 1,
+    "created_by": 2,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 39,
+  "fields": {
+    "file": 1,
+    "xml_id": "certainty-16",
+    "locus": "value",
+    "cert": "high",
+    "degree": null,
+    "target_xml_id": "person-2",
+    "target_match": "name/forename",
+    "asserted_value": "McDuck",
+    "description": null,
+    "file_version": 1,
+    "created_by": 2,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 40,
+  "fields": {
+    "file": 1,
+    "xml_id": "certainty-17",
+    "locus": "value",
+    "cert": "high",
+    "degree": null,
+    "target_xml_id": "certainty-10",
+    "target_match": "@cert",
+    "asserted_value": "low",
+    "description": null,
+    "file_version": 1,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 41,
+  "fields": {
+    "file": 3,
+    "xml_id": "certainty-0",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-7",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 4,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 42,
+  "fields": {
+    "file": 3,
+    "xml_id": "certainty-1",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-11",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 4,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 43,
+  "fields": {
+    "file": 3,
+    "xml_id": "certainty-2",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "ingredient-2",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 4,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 44,
+  "fields": {
+    "file": 3,
+    "xml_id": "certainty-3",
     "locus": "value",
     "cert": "high",
     "degree": 0.857142857142857,
@@ -3037,7 +3305,7 @@
     "target_match": "@ref",
     "asserted_value": "#sand",
     "description": null,
-    "file_version": 3,
+    "file_version": 4,
     "created_by": 1,
     "deleted_by": null,
     "categories": [
@@ -3049,16 +3317,16 @@
   "model": "api_vis.certainty",
   "pk": 45,
   "fields": {
-    "file": 2,
-    "xml_id": "certainty-8",
+    "file": 3,
+    "xml_id": "certainty-4",
     "locus": "value",
     "cert": "high",
     "degree": 0.857142857142857,
-    "target_xml_id": "old_name_8",
+    "target_xml_id": "name-4",
     "target_match": "@ref",
     "asserted_value": "#sand",
     "description": null,
-    "file_version": 3,
+    "file_version": 4,
     "created_by": 1,
     "deleted_by": null,
     "categories": [
@@ -3070,16 +3338,16 @@
   "model": "api_vis.certainty",
   "pk": 46,
   "fields": {
-    "file": 2,
-    "xml_id": "certainty-9",
+    "file": 3,
+    "xml_id": "certainty-5",
     "locus": "value",
     "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-3",
+    "degree": 0.833333333333333,
+    "target_xml_id": "name-2",
     "target_match": "@ref",
-    "asserted_value": "#sand",
+    "asserted_value": "#silber",
     "description": null,
-    "file_version": 3,
+    "file_version": 4,
     "created_by": 1,
     "deleted_by": null,
     "categories": [
@@ -3091,16 +3359,16 @@
   "model": "api_vis.certainty",
   "pk": 47,
   "fields": {
-    "file": 2,
-    "xml_id": "certainty-10",
+    "file": 1,
+    "xml_id": "certainty-17",
     "locus": "value",
     "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-2",
-    "target_match": "@ref",
-    "asserted_value": "#sand",
+    "degree": null,
+    "target_xml_id": "certainty-10",
+    "target_match": "@cert",
+    "asserted_value": "low",
     "description": null,
-    "file_version": 3,
+    "file_version": 5,
     "created_by": 1,
     "deleted_by": null,
     "categories": [
@@ -3112,14 +3380,14 @@
   "model": "api_vis.certainty",
   "pk": 48,
   "fields": {
-    "file": 2,
-    "xml_id": "certainty-10",
+    "file": 3,
+    "xml_id": "certainty-6",
     "locus": "value",
     "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-2",
+    "degree": 0.833333333333333,
+    "target_xml_id": "name-0",
     "target_match": "@ref",
-    "asserted_value": "#sand",
+    "asserted_value": "#ingwer",
     "description": null,
     "file_version": 4,
     "created_by": 1,
@@ -3133,17 +3401,17 @@
   "model": "api_vis.certainty",
   "pk": 49,
   "fields": {
-    "file": 2,
-    "xml_id": "certainty-9",
+    "file": 1,
+    "xml_id": "certainty-16",
     "locus": "value",
     "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-3",
-    "target_match": "@ref",
-    "asserted_value": "#sand",
+    "degree": null,
+    "target_xml_id": "person-2",
+    "target_match": "name/forename",
+    "asserted_value": "McDuck",
     "description": null,
-    "file_version": 4,
-    "created_by": 1,
+    "file_version": 5,
+    "created_by": 2,
     "deleted_by": null,
     "categories": [
       4
@@ -3154,12 +3422,12 @@
   "model": "api_vis.certainty",
   "pk": 50,
   "fields": {
-    "file": 2,
-    "xml_id": "certainty-8",
+    "file": 3,
+    "xml_id": "certainty-7",
     "locus": "value",
     "cert": "high",
     "degree": 0.857142857142857,
-    "target_xml_id": "old_name_8",
+    "target_xml_id": "name-6",
     "target_match": "@ref",
     "asserted_value": "#sand",
     "description": null,
@@ -3175,17 +3443,17 @@
   "model": "api_vis.certainty",
   "pk": 51,
   "fields": {
-    "file": 2,
-    "xml_id": "certainty-7",
+    "file": 1,
+    "xml_id": "certainty-15",
     "locus": "value",
     "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-5",
+    "degree": null,
+    "target_xml_id": "name-8",
     "target_match": "@ref",
-    "asserted_value": "#sand",
+    "asserted_value": "#ingredient-0",
     "description": null,
-    "file_version": 4,
-    "created_by": 1,
+    "file_version": 5,
+    "created_by": 2,
     "deleted_by": null,
     "categories": [
       4
@@ -3196,14 +3464,14 @@
   "model": "api_vis.certainty",
   "pk": 52,
   "fields": {
-    "file": 2,
-    "xml_id": "certainty-6",
+    "file": 3,
+    "xml_id": "certainty-8",
     "locus": "value",
-    "cert": "very high",
-    "degree": 1.0,
-    "target_xml_id": "name-0",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-3",
     "target_match": "@ref",
-    "asserted_value": "#quart",
+    "asserted_value": "#sand",
     "description": null,
     "file_version": 4,
     "created_by": 1,
@@ -3217,17 +3485,17 @@
   "model": "api_vis.certainty",
   "pk": 53,
   "fields": {
-    "file": 2,
-    "xml_id": "certainty-5",
+    "file": 1,
+    "xml_id": "certainty-14",
     "locus": "value",
     "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-8",
-    "target_match": "@ref",
-    "asserted_value": "#sand",
-    "description": null,
-    "file_version": 4,
-    "created_by": 1,
+    "degree": null,
+    "target_xml_id": "test",
+    "target_match": null,
+    "asserted_value": "Balloons",
+    "description": "Some important decription",
+    "file_version": 5,
+    "created_by": 2,
     "deleted_by": null,
     "categories": [
       4
@@ -3238,16 +3506,16 @@
   "model": "api_vis.certainty",
   "pk": 54,
   "fields": {
-    "file": 2,
-    "xml_id": "certainty-4",
+    "file": 1,
+    "xml_id": "certainty-13",
     "locus": "value",
     "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-4",
+    "degree": 0.833333333333333,
+    "target_xml_id": "name-13",
     "target_match": "@ref",
-    "asserted_value": "#sand",
+    "asserted_value": "#grieben",
     "description": null,
-    "file_version": 4,
+    "file_version": 5,
     "created_by": 1,
     "deleted_by": null,
     "categories": [
@@ -3259,12 +3527,12 @@
   "model": "api_vis.certainty",
   "pk": 55,
   "fields": {
-    "file": 2,
-    "xml_id": "certainty-3",
+    "file": 3,
+    "xml_id": "certainty-9",
     "locus": "value",
     "cert": "high",
     "degree": 0.857142857142857,
-    "target_xml_id": "name-7",
+    "target_xml_id": "name-10",
     "target_match": "@ref",
     "asserted_value": "#sand",
     "description": null,
@@ -3280,14 +3548,14 @@
   "model": "api_vis.certainty",
   "pk": 56,
   "fields": {
-    "file": 2,
-    "xml_id": "certainty-2",
+    "file": 3,
+    "xml_id": "certainty-10",
     "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-9",
+    "cert": "very high",
+    "degree": 1.0,
+    "target_xml_id": "name-12",
     "target_match": "@ref",
-    "asserted_value": "#jus",
+    "asserted_value": "#butter",
     "description": null,
     "file_version": 4,
     "created_by": 1,
@@ -3301,8 +3569,8 @@
   "model": "api_vis.certainty",
   "pk": 57,
   "fields": {
-    "file": 2,
-    "xml_id": "certainty-1",
+    "file": 1,
+    "xml_id": "certainty-12",
     "locus": "value",
     "cert": "high",
     "degree": 0.857142857142857,
@@ -3310,7 +3578,7 @@
     "target_match": "@ref",
     "asserted_value": "#sand",
     "description": null,
-    "file_version": 4,
+    "file_version": 5,
     "created_by": 1,
     "deleted_by": null,
     "categories": [
@@ -3322,12 +3590,12 @@
   "model": "api_vis.certainty",
   "pk": 58,
   "fields": {
-    "file": 2,
-    "xml_id": "certainty-0",
+    "file": 3,
+    "xml_id": "certainty-11",
     "locus": "value",
     "cert": "high",
     "degree": 0.857142857142857,
-    "target_xml_id": "name-1",
+    "target_xml_id": "name-9",
     "target_match": "@ref",
     "asserted_value": "#sand",
     "description": null,
@@ -3343,14 +3611,14 @@
   "model": "api_vis.certainty",
   "pk": 59,
   "fields": {
-    "file": 3,
-    "xml_id": "certainty-0",
+    "file": 1,
+    "xml_id": "certainty-11",
     "locus": "value",
     "cert": "high",
     "degree": 0.857142857142857,
-    "target_xml_id": "name-7",
+    "target_xml_id": "name-3",
     "target_match": "@ref",
-    "asserted_value": "#sand",
+    "asserted_value": "#met",
     "description": null,
     "file_version": 5,
     "created_by": 1,
@@ -3365,15 +3633,15 @@
   "pk": 60,
   "fields": {
     "file": 3,
-    "xml_id": "certainty-1",
+    "xml_id": "certainty-12",
     "locus": "value",
     "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-11",
+    "degree": 0.888888888888889,
+    "target_xml_id": "name-1",
     "target_match": "@ref",
-    "asserted_value": "#sand",
+    "asserted_value": "#stift",
     "description": null,
-    "file_version": 5,
+    "file_version": 4,
     "created_by": 1,
     "deleted_by": null,
     "categories": [
@@ -3385,155 +3653,8 @@
   "model": "api_vis.certainty",
   "pk": 61,
   "fields": {
-    "file": 3,
-    "xml_id": "certainty-2",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "ingredient-2",
-    "target_match": "@ref",
-    "asserted_value": "#sand",
-    "description": null,
-    "file_version": 5,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 62,
-  "fields": {
-    "file": 3,
-    "xml_id": "certainty-3",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-5",
-    "target_match": "@ref",
-    "asserted_value": "#sand",
-    "description": null,
-    "file_version": 5,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 63,
-  "fields": {
-    "file": 3,
-    "xml_id": "certainty-4",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-4",
-    "target_match": "@ref",
-    "asserted_value": "#sand",
-    "description": null,
-    "file_version": 5,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 64,
-  "fields": {
-    "file": 3,
-    "xml_id": "certainty-5",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.833333333333333,
-    "target_xml_id": "name-2",
-    "target_match": "@ref",
-    "asserted_value": "#silber",
-    "description": null,
-    "file_version": 5,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 65,
-  "fields": {
-    "file": 3,
-    "xml_id": "certainty-6",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.833333333333333,
-    "target_xml_id": "name-0",
-    "target_match": "@ref",
-    "asserted_value": "#ingwer",
-    "description": null,
-    "file_version": 5,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 66,
-  "fields": {
-    "file": 3,
-    "xml_id": "certainty-7",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-6",
-    "target_match": "@ref",
-    "asserted_value": "#sand",
-    "description": null,
-    "file_version": 5,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 67,
-  "fields": {
-    "file": 3,
-    "xml_id": "certainty-8",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-3",
-    "target_match": "@ref",
-    "asserted_value": "#sand",
-    "description": null,
-    "file_version": 5,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 68,
-  "fields": {
-    "file": 3,
-    "xml_id": "certainty-9",
+    "file": 1,
+    "xml_id": "certainty-10",
     "locus": "value",
     "cert": "high",
     "degree": 0.857142857142857,
@@ -3551,16 +3672,161 @@
 },
 {
   "model": "api_vis.certainty",
-  "pk": 69,
+  "pk": 62,
   "fields": {
-    "file": 3,
-    "xml_id": "certainty-10",
+    "file": 1,
+    "xml_id": "certainty-9",
     "locus": "value",
     "cert": "very high",
     "degree": 1.0,
-    "target_xml_id": "name-12",
+    "target_xml_id": "name-0",
     "target_match": "@ref",
     "asserted_value": "#butter",
+    "description": null,
+    "file_version": 5,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 63,
+  "fields": {
+    "file": 1,
+    "xml_id": "certainty-8",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-9",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 5,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 64,
+  "fields": {
+    "file": 1,
+    "xml_id": "certainty-7",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.833333333333333,
+    "target_xml_id": "name-1",
+    "target_match": "@ref",
+    "asserted_value": "#ingwer",
+    "description": null,
+    "file_version": 5,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 65,
+  "fields": {
+    "file": 1,
+    "xml_id": "certainty-6",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-12",
+    "target_match": "@ref",
+    "asserted_value": "#form",
+    "description": null,
+    "file_version": 5,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 66,
+  "fields": {
+    "file": 1,
+    "xml_id": "certainty-5",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-11",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 5,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 67,
+  "fields": {
+    "file": 1,
+    "xml_id": "certainty-4",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-8",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
+    "description": null,
+    "file_version": 5,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": [
+      2
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 68,
+  "fields": {
+    "file": 1,
+    "xml_id": "certainty-3",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-2",
+    "target_match": "@ref",
+    "asserted_value": "#met",
+    "description": null,
+    "file_version": 5,
+    "created_by": 1,
+    "deleted_by": null,
+    "categories": []
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 69,
+  "fields": {
+    "file": 1,
+    "xml_id": "certainty-2",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-7",
+    "target_match": "@ref",
+    "asserted_value": "#sand",
     "description": null,
     "file_version": 5,
     "created_by": 1,
@@ -3575,15 +3841,15 @@
   "pk": 70,
   "fields": {
     "file": 3,
-    "xml_id": "certainty-11",
+    "xml_id": "certainty-12",
     "locus": "value",
     "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-9",
+    "degree": 0.888888888888889,
+    "target_xml_id": "name-1",
     "target_match": "@ref",
-    "asserted_value": "#sand",
+    "asserted_value": "#stift",
     "description": null,
-    "file_version": 5,
+    "file_version": 6,
     "created_by": 1,
     "deleted_by": null,
     "categories": [
@@ -3595,14 +3861,14 @@
   "model": "api_vis.certainty",
   "pk": 71,
   "fields": {
-    "file": 3,
-    "xml_id": "certainty-12",
+    "file": 1,
+    "xml_id": "certainty-1",
     "locus": "value",
     "cert": "high",
-    "degree": 0.888888888888889,
-    "target_xml_id": "name-1",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-5",
     "target_match": "@ref",
-    "asserted_value": "#stift",
+    "asserted_value": "#rag",
     "description": null,
     "file_version": 5,
     "created_by": 1,
@@ -3617,13 +3883,13 @@
   "pk": 72,
   "fields": {
     "file": 3,
-    "xml_id": "certainty-12",
+    "xml_id": "certainty-11",
     "locus": "value",
     "cert": "high",
-    "degree": 0.888888888888889,
-    "target_xml_id": "name-1",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-9",
     "target_match": "@ref",
-    "asserted_value": "#stift",
+    "asserted_value": "#sand",
     "description": null,
     "file_version": 6,
     "created_by": 1,
@@ -3637,19 +3903,20 @@
   "model": "api_vis.certainty",
   "pk": 73,
   "fields": {
-    "file": 3,
-    "xml_id": "certainty-11",
+    "file": 1,
+    "xml_id": "certainty-0",
     "locus": "value",
     "cert": "high",
     "degree": 0.857142857142857,
-    "target_xml_id": "name-9",
+    "target_xml_id": "name-4",
     "target_match": "@ref",
-    "asserted_value": "#sand",
+    "asserted_value": "#met",
     "description": null,
-    "file_version": 6,
+    "file_version": 5,
     "created_by": 1,
     "deleted_by": null,
     "categories": [
+      2,
       4
     ]
   }
@@ -3931,11 +4198,11 @@
   "model": "files_management.fileversion",
   "pk": 1,
   "fields": {
-    "upload": "uploaded_files/7552c53f26c65f9f5612f1660182aff46a2712ee8300c8f8803db96c260d220b74d42d703c73e_BFtAdc4",
+    "upload": "uploaded_files/7552c53f26c65f9f5612f1660182aff46a2712ee8300c8f8803db96c260d220b74d42d703c73e_bEo9Noh",
     "hash": "7552c53f26c65f9f5612f1660182aff46a2712ee8300c8f8803db96c260d220b74d42d703c73ea22e5586605571e1e307de4885af3806d2d64f7318b0878ffda",
     "file": 1,
     "number": 1,
-    "creation_date": "2020-04-23T06:44:53.241Z",
+    "creation_date": "2020-04-23T09:32:12.766Z",
     "created_by": 2,
     "message": null
   }
@@ -3944,11 +4211,11 @@
   "model": "files_management.fileversion",
   "pk": 2,
   "fields": {
-    "upload": "uploaded_files/7a7df4265209ae67042f1a9436fa445e175e555c50924d17bd1f090e27df990220d5f7e78737a_FpuYjJ0",
-    "hash": "7a7df4265209ae67042f1a9436fa445e175e555c50924d17bd1f090e27df990220d5f7e78737abedb6a828017c22b7ca82d78da494f4bb2e1a9138d7309cb30e",
-    "file": 1,
-    "number": 2,
-    "creation_date": "2020-04-23T06:44:53.762Z",
+    "upload": "uploaded_files/1dc87f6eda8ce7dfe1f81a3c2391ab75923afd92a40024acfaad58998f6c8709fb681a6638909_s0Zfgvn",
+    "hash": "1dc87f6eda8ce7dfe1f81a3c2391ab75923afd92a40024acfaad58998f6c8709fb681a6638909873e9e6f52783ae22a624ee383ca563836f334b86228703ae65",
+    "file": 2,
+    "number": 1,
+    "creation_date": "2020-04-23T09:32:12.771Z",
     "created_by": 2,
     "message": null
   }
@@ -3957,11 +4224,11 @@
   "model": "files_management.fileversion",
   "pk": 3,
   "fields": {
-    "upload": "uploaded_files/1dc87f6eda8ce7dfe1f81a3c2391ab75923afd92a40024acfaad58998f6c8709fb681a6638909_YGV4jPt",
-    "hash": "1dc87f6eda8ce7dfe1f81a3c2391ab75923afd92a40024acfaad58998f6c8709fb681a6638909873e9e6f52783ae22a624ee383ca563836f334b86228703ae65",
+    "upload": "uploaded_files/a3c6f573540f8a5f80b76c97c5a07f63b8fd7931f02f48d49804e0bb1f73932bae588fb569ba2_dPf0X1R",
+    "hash": "a3c6f573540f8a5f80b76c97c5a07f63b8fd7931f02f48d49804e0bb1f73932bae588fb569ba250880f6a61ff33fbf821712718a773ad1c1427138e7b12d4e48",
     "file": 2,
-    "number": 1,
-    "creation_date": "2020-04-23T06:44:59.085Z",
+    "number": 2,
+    "creation_date": "2020-04-23T09:32:16.844Z",
     "created_by": 2,
     "message": null
   }
@@ -3970,11 +4237,11 @@
   "model": "files_management.fileversion",
   "pk": 4,
   "fields": {
-    "upload": "uploaded_files/a3c6f573540f8a5f80b76c97c5a07f63b8fd7931f02f48d49804e0bb1f73932bae588fb569ba2_ZzEV0U0",
-    "hash": "a3c6f573540f8a5f80b76c97c5a07f63b8fd7931f02f48d49804e0bb1f73932bae588fb569ba250880f6a61ff33fbf821712718a773ad1c1427138e7b12d4e48",
-    "file": 2,
-    "number": 2,
-    "creation_date": "2020-04-23T06:44:59.355Z",
+    "upload": "uploaded_files/6ce02ed9806013942eeff81e7b645f1f9a7eb08bc8573bb1633cd7e4b9081376f9168265dc977_tob7XP7",
+    "hash": "6ce02ed9806013942eeff81e7b645f1f9a7eb08bc8573bb1633cd7e4b9081376f9168265dc9772a2ff5bd0191c1f3a57a59656e317064a3c5d9e9cb1163a720c",
+    "file": 3,
+    "number": 1,
+    "creation_date": "2020-04-23T09:32:17.180Z",
     "created_by": 2,
     "message": null
   }
@@ -3983,11 +4250,11 @@
   "model": "files_management.fileversion",
   "pk": 5,
   "fields": {
-    "upload": "uploaded_files/8ee73a48fafb4157ae8092e548662f9345582aabd730d23dd456c393274ebb5ebc7f106f355ea_mKNaV8C",
-    "hash": "8ee73a48fafb4157ae8092e548662f9345582aabd730d23dd456c393274ebb5ebc7f106f355ea66aae0275787075843bf048c7970c195df9cd8d9c52612daa79",
-    "file": 3,
-    "number": 1,
-    "creation_date": "2020-04-23T06:45:04.876Z",
+    "upload": "uploaded_files/7a7df4265209ae67042f1a9436fa445e175e555c50924d17bd1f090e27df990220d5f7e78737a_hqKwx4X",
+    "hash": "7a7df4265209ae67042f1a9436fa445e175e555c50924d17bd1f090e27df990220d5f7e78737abedb6a828017c22b7ca82d78da494f4bb2e1a9138d7309cb30e",
+    "file": 1,
+    "number": 2,
+    "creation_date": "2020-04-23T09:32:17.344Z",
     "created_by": 2,
     "message": null
   }
@@ -3996,11 +4263,11 @@
   "model": "files_management.fileversion",
   "pk": 6,
   "fields": {
-    "upload": "uploaded_files/6ac5e8c5427b626521b3c32eb074825eea3b9da8ffe69b498131f39dfb6078a3d326d02f01eac_Rwtpfcc",
-    "hash": "6ac5e8c5427b626521b3c32eb074825eea3b9da8ffe69b498131f39dfb6078a3d326d02f01eac8d6a4798e00c4264088576bb7bbad311afbc64e1215ab2687cf",
+    "upload": "uploaded_files/e1d768e00f5f381fe103cf0650f281b75611c4d580900fde319a0b7717957279917f47e27c177_tllPLk9",
+    "hash": "e1d768e00f5f381fe103cf0650f281b75611c4d580900fde319a0b7717957279917f47e27c177916c6a1c93cd97875409ff26fff33bad4b9e68efa5cba7b4464",
     "file": 3,
     "number": 2,
-    "creation_date": "2020-04-23T06:45:05.053Z",
+    "creation_date": "2020-04-23T09:32:17.699Z",
     "created_by": 2,
     "message": null
   }
@@ -4030,7 +4297,7 @@
   "pk": 1,
   "fields": {
     "project": 1,
-    "date": "2020-04-23T06:44:37.973Z",
+    "date": "2020-04-23T09:32:01.618Z",
     "related_file": null,
     "related_file_name": null,
     "related_dir": null,
@@ -4045,7 +4312,7 @@
   "pk": 2,
   "fields": {
     "project": 1,
-    "date": "2020-04-23T06:44:53.255Z",
+    "date": "2020-04-23T09:32:12.815Z",
     "related_file": 1,
     "related_file_name": "group_0_long_annotated_0_modified_xml",
     "related_dir": null,
@@ -4060,37 +4327,7 @@
   "pk": 3,
   "fields": {
     "project": 1,
-    "date": "2020-04-23T06:44:53.785Z",
-    "related_file": 1,
-    "related_file_name": "group_0_long_annotated_0_modified_xml",
-    "related_dir": null,
-    "related_dir_name": null,
-    "user": 2,
-    "user_name": "Tony Stark",
-    "action_text": "created version number 2 of"
-  }
-},
-{
-  "model": "projects.activity",
-  "pk": 4,
-  "fields": {
-    "project": 1,
-    "date": "2020-04-23T06:44:54.021Z",
-    "related_file": 1,
-    "related_file_name": "group_0_long_annotated_0_modified_xml",
-    "related_dir": null,
-    "related_dir_name": null,
-    "user": 2,
-    "user_name": "Tony Stark",
-    "action_text": "File migrated: Reformatted xml. Corrected xml:ids for project entities. Moved elements from file to database. "
-  }
-},
-{
-  "model": "projects.activity",
-  "pk": 5,
-  "fields": {
-    "project": 1,
-    "date": "2020-04-23T06:44:59.119Z",
+    "date": "2020-04-23T09:32:12.819Z",
     "related_file": 2,
     "related_file_name": "group_0_long_annotated_1_modified_xml",
     "related_dir": null,
@@ -4102,10 +4339,10 @@
 },
 {
   "model": "projects.activity",
-  "pk": 6,
+  "pk": 4,
   "fields": {
     "project": 1,
-    "date": "2020-04-23T06:44:59.368Z",
+    "date": "2020-04-23T09:32:16.888Z",
     "related_file": 2,
     "related_file_name": "group_0_long_annotated_1_modified_xml",
     "related_dir": null,
@@ -4117,10 +4354,10 @@
 },
 {
   "model": "projects.activity",
-  "pk": 7,
+  "pk": 5,
   "fields": {
     "project": 1,
-    "date": "2020-04-23T06:44:59.465Z",
+    "date": "2020-04-23T09:32:17.100Z",
     "related_file": 2,
     "related_file_name": "group_0_long_annotated_1_modified_xml",
     "related_dir": null,
@@ -4132,10 +4369,10 @@
 },
 {
   "model": "projects.activity",
-  "pk": 8,
+  "pk": 6,
   "fields": {
     "project": 1,
-    "date": "2020-04-23T06:45:04.899Z",
+    "date": "2020-04-23T09:32:17.206Z",
     "related_file": 3,
     "related_file_name": "group_0_long_annotated_2_modified_xml",
     "related_dir": null,
@@ -4147,10 +4384,25 @@
 },
 {
   "model": "projects.activity",
-  "pk": 9,
+  "pk": 7,
   "fields": {
     "project": 1,
-    "date": "2020-04-23T06:45:05.064Z",
+    "date": "2020-04-23T09:32:17.392Z",
+    "related_file": 1,
+    "related_file_name": "group_0_long_annotated_0_modified_xml",
+    "related_dir": null,
+    "related_dir_name": null,
+    "user": 2,
+    "user_name": "Tony Stark",
+    "action_text": "created version number 2 of"
+  }
+},
+{
+  "model": "projects.activity",
+  "pk": 8,
+  "fields": {
+    "project": 1,
+    "date": "2020-04-23T09:32:17.732Z",
     "related_file": 3,
     "related_file_name": "group_0_long_annotated_2_modified_xml",
     "related_dir": null,
@@ -4162,10 +4414,25 @@
 },
 {
   "model": "projects.activity",
+  "pk": 9,
+  "fields": {
+    "project": 1,
+    "date": "2020-04-23T09:32:17.844Z",
+    "related_file": 1,
+    "related_file_name": "group_0_long_annotated_0_modified_xml",
+    "related_dir": null,
+    "related_dir_name": null,
+    "user": 2,
+    "user_name": "Tony Stark",
+    "action_text": "File migrated: Reformatted xml. Corrected xml:ids for project entities. Moved elements from file to database. "
+  }
+},
+{
+  "model": "projects.activity",
   "pk": 10,
   "fields": {
     "project": 1,
-    "date": "2020-04-23T06:45:05.177Z",
+    "date": "2020-04-23T09:32:17.970Z",
     "related_file": 3,
     "related_file_name": "group_0_long_annotated_2_modified_xml",
     "related_dir": null,

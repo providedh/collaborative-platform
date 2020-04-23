@@ -7,11 +7,13 @@ from channels.layers import get_channel_layer
 
 from django.contrib.auth.models import User
 
-from apps.api_vis.models import Certainty
+from collaborative_platform.settings import DEFAULT_ENTITIES
+
+from apps.api_vis.models import Certainty, EntityVersion, EntityProperty
 from apps.exceptions import BadRequest, Forbidden, NotModified
 from apps.files_management.helpers import create_certainty_elements_for_file_version, certainty_elements_to_json
 from apps.files_management.models import FileVersion, File
-from apps.projects.models import Contributor, Project
+from apps.projects.models import Contributor, Project, EntitySchema
 
 from .annotator import Annotator
 from .helpers import verify_reference
@@ -51,15 +53,17 @@ class AnnotatorConsumer(WebsocketConsumer):
             self.accept()
 
             certainties = self.__get_certainties()
+            entities_lists = self.__get_entities_lists()
             xml_content = self.__annotating_xml_content.xml_content
 
-            # TODO: Append entities with their properties on lists
+            # TODO: Append authors
 
             response = {
                 'status': 200,
                 'message': 'OK',
-                'xml_content': xml_content,
                 'certainties': certainties,
+                'entities_lists': entities_lists,
+                'xml_content': xml_content,
             }
 
             response = json.dumps(response)
@@ -189,6 +193,76 @@ class AnnotatorConsumer(WebsocketConsumer):
 
         return certainties_serialized
 
+    def __get_entities_lists(self):
+        file = File.objects.get(
+            id=self.__file_id,
+            deleted=False,
+        )
+
+        file_version = FileVersion.objects.get(
+            file=file,
+            number=file.version_number,
+        )
+
+        listable_entities_types = self.__get_entities_types_for_lists(file_version)
+
+        entities_lists = {}
+
+        for entity_type in listable_entities_types:
+            entities_list = self.__get_list_of_certain_type_entities(entity_type, file_version)
+
+            entities_lists.update({entity_type: entities_list})
+
+        return entities_lists
+
+    @staticmethod
+    def __get_entities_types_for_lists(file_version):
+        entities_schemes = EntitySchema.objects.filter(taxonomy__project=file_version.file.project)
+        default_entities_names = DEFAULT_ENTITIES.keys()
+        listable_entities_types = []
+
+        for entity in entities_schemes:
+            if entity.name not in default_entities_names:
+                listable_entities_types.append(entity.name)
+            elif DEFAULT_ENTITIES[entity.name]['listable']:
+                listable_entities_types.append(entity.name)
+
+        return listable_entities_types
+
+    def __get_list_of_certain_type_entities(self, entity_type, file_version):
+        entities_versions = EntityVersion.objects.filter(
+            entity__type=entity_type,
+            file_version=file_version,
+        )
+
+        entities_list = []
+
+        for entity_version in entities_versions:
+            entity = {
+                'type': entity_version.entity.type,
+                'xml:id': entity_version.entity.xml_id,
+                'resp': entity_version.entity.created_by.username,
+            }
+
+            properties = self.__get_entity_properties(entity_version)
+
+            entity.update({'properties': properties})
+
+            entities_list.append(entity)
+
+        return entities_list
+
+    @staticmethod
+    def __get_entity_properties(entity_version):
+        entity_properties = EntityProperty.objects.filter(
+            entity_version=entity_version
+        )
+
+        properties = {entity_property.name: entity_property.get_value(as_str=True) for entity_property in
+                      entity_properties}
+
+        return properties
+
     def disconnect(self, code):
         self.__remove_user_from_room_group()
         self.__remove_user_from_presence_table()
@@ -303,15 +377,17 @@ class AnnotatorConsumer(WebsocketConsumer):
 
         for presence in room_presences:
             certainties = self.__get_certainties()
+            entities_lists = self.__get_entities_lists()
             xml_content = self.__annotating_xml_content.xml_content
 
-            # TODO: Append entities with their properties on lists
+            # TODO: Append authors
 
             response = {
                 'status': 200,
                 'message': 'OK',
-                'xml_content': xml_content,
                 'certainties': certainties,
+                'entities_lists': entities_lists,
+                'xml_content': xml_content,
             }
 
             response = json.dumps(response)

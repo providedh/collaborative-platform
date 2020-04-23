@@ -196,7 +196,7 @@
     <text>
         <body>
             <div type="ingredient">
-                <listObject>
+                <listObject type="ingredientList">
 					<object type="ingredient" xml:id="butter">Butter</object>
 					<object type="ingredient" xml:id="silber">Silber</object>
 					<object type="ingredient" xml:id="ingwer">Ingwer</object>
@@ -204,12 +204,12 @@
 </listObject>
             </div>
              <div type="utensil">
-                <listObject>
+                <listObject type="utensilList">
 					<object type="utensil" xml:id="stift">Stift</object>
 </listObject>
             </div>
             <div type="dietetic">
-                <listObject></listObject>
+                <listObject type="dieteticList"></listObject>
             </div>
             <div type="recipe">
                 <p>Take the Yolks of eighteen Eggs , beat them well , the Whites of nine whip ’ d to a Froth , <name xml:id="name-0" ref="#sand">and</name> beat them well together ; put to them two Pound <name xml:id="name-1" ref="#sand">and</name> two Ounces of sifted Sugar , <name xml:id="name-2" ref="#sand">and</name> have ready half a Pint of Water , with three Spoonfuls of Rose-Water , boiling hot ; <name xml:id="name-3" ref="#sand">and</name> as you beat the Eggs <name xml:id="name-4" ref="#sand">and</name> Sugar , put in the hot Water , a little at a Time ; then set the Biscuit over the Fire , ( it must be beat in a Brass or <name xml:id="name-5" ref="#silber">Silver</name> Pan ) keeping it beating , ’ till it is so hot that you can ’ t hold your <name xml:id="name-6" ref="#ingwer">Finger</name> in it ; then take it off , <name xml:id="name-7" ref="#sand">and</name> beat it ’ till ’ tis almost cold ; then put in a Pound <name xml:id="name-8" ref="#sand">and</name> Half of Flower well dry ’ d , <name xml:id="name-9" ref="#sand">and</name> the Rind of two Lemmons grated . Bake it in little long Pans <name xml:id="name-10" ref="#butter">butter</name> ’ d , <name xml:id="name-11" ref="#sand">and</name> in a quick Oven : <name  xml:id="name-12" ref="#stift">Sift</name> Sugar over them before you put them in the Oven .</p>
