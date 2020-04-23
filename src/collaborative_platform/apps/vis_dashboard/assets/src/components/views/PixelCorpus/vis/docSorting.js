@@ -1,38 +1,38 @@
 
-function mostSelfContributedFirst(entities, annotations){
-	const docs = [...(new Set(entities.map(e=>e.file_name))).values()];
+function mostSelfContributedFirst(data, fileAccessor){
+	const docs = [...(new Set(data.map(e=>fileAccessor(e)))).values()];
 	const sorted = docs.map((x,i)=>[x,i]);
 
 	return Object.fromEntries(sorted);
 }
 
-function leastSelfContributedFirst(entities, annotations){
-	const docs = [...(new Set(entities.map(e=>e.file_name))).values()];
+function leastSelfContributedFirst(data, fileAccessor){
+	const docs = [...(new Set(data.map(e=>fileAccessor(e)))).values()];
 	const sorted = docs.map((x,i)=>[x,i]);
 
 	return Object.fromEntries(sorted);
 }
 
-function lastEditedFirst(entities, annotations){
-	const docs = [...(new Set(entities.map(e=>e.file_name))).values()];
+function lastEditedFirst(data, fileAccessor){
+	const docs = [...(new Set(data.map(e=>fileAccessor(e)))).values()];
 	const sorted = docs.map((x,i)=>[x,i]);
 
 	return Object.fromEntries(sorted);
 }
 
-function lastEditedLast(entities, annotations){
-	const docs = [...(new Set(entities.map(e=>e.file_name))).values()];
+function lastEditedLast(data, fileAccessor){
+	const docs = [...(new Set(data.map(e=>fileAccessor(e)))).values()];
 	const sorted = docs.map((x,i)=>[x,i]);
 
 	return Object.fromEntries(sorted);
 }
 
-function higherEntityCountFirst(entities, annotations){
+function higherEntityCountFirst(data, fileAccessor){
 	const docs = {};
-	for(let e of entities){
-		if(!docs.hasOwnProperty(e.file_name))
-			docs[e.file_name] = 0;
-		docs[e.file_name] ++;
+	for(let e of data){
+		if(!docs.hasOwnProperty(fileAccessor(e)))
+			docs[fileAccessor(e)] = 0;
+		docs[fileAccessor(e)] ++;
 	}
 
 	const sorted = Object.keys(docs).sort((x, y)=>docs[y] - docs[x]).map((x,i)=>[x,i]);
@@ -40,12 +40,12 @@ function higherEntityCountFirst(entities, annotations){
 	return Object.fromEntries(sorted);
 }
 
-function higherEntityCountLast(entities, annotations){
+function higherEntityCountLast(data, fileAccessor){
 	const docs = {};
-	for(let e of entities){
-		if(!docs.hasOwnProperty(e.file_name))
-			docs[e.file_name] = 0;
-		docs[e.file_name] ++;
+	for(let e of data){
+		if(!docs.hasOwnProperty(fileAccessor(e)))
+			docs[fileAccessor(e)] = 0;
+		docs[fileAccessor(e)] ++;
 	}
 
 	const sorted = Object.keys(docs).sort((x, y)=>docs[x] - docs[y]).map((x,i)=>[x,i]);

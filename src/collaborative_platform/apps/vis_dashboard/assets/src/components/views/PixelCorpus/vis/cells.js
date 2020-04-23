@@ -1,29 +1,31 @@
 import * as d3 from 'd3';
 
-export default function renderEntities(args){
+export default function renderCells(args){
 	const {
 		svg,
 		docOrder, 
+		fileAccessor,
 		data,
-		columnWidth,
+		freeSpace,
 		_entitySortingCriteria,
 		_entityColorScale,
+		_colorBy,
 		_eventCallback,
 		_padding,
 		_titleHeight,
 		_maxRowItems,
-		_docNameWidth 
+		_docNameWidth
 		} = args;
 
-	const entitiesByDoc = getEntitiesPerDoc(data),
-		rowsByDoc = getRowsByDoc(entitiesByDoc, _maxRowItems);
+	const cellsByDoc = getCellsPerDoc(data, fileAccessor),
+		rowsByDoc = getRowsByDoc(cellsByDoc, _maxRowItems);
 
 	const {width, height} = svg.getBoundingClientRect(),
 		rootG = d3.select(svg)
-			.select('g.entities')
+			.select('g.vis')
 			.attr('transform', `translate(${_padding}, ${_padding})`),
 		cellPadding = 3,
-		cellSide = getCellSide(rowsByDoc, columnWidth, height-(_padding*2 + _titleHeight), cellPadding, _maxRowItems);
+		cellSide = getCellSide(rowsByDoc, freeSpace, height-(_padding*2 + _titleHeight), cellPadding, _maxRowItems);
 
 	// render title
 	rootG.select('.title')
@@ -33,7 +35,7 @@ export default function renderEntities(args){
 
 	renderDocumentLabels(docOrder, rowsByDoc, rootG, cellSide, cellPadding, _titleHeight, _eventCallback);
 
-	renderEntityCells(docOrder, entitiesByDoc, rowsByDoc, rootG, cellSide, cellPadding, _titleHeight, _docNameWidth, _maxRowItems, _entityColorScale, _eventCallback);
+	renderEntityCells(docOrder, cellsByDoc, rowsByDoc, rootG, cellSide, cellPadding, _titleHeight, _docNameWidth, _maxRowItems, _entityColorScale, _eventCallback, _colorBy);
 
 	setupInteractions();
 }
@@ -74,7 +76,7 @@ function renderDocumentLabels(docOrder, rowsByDoc, rootG, cellSide, cellPadding,
 			.attr('y', d=>priorRows(d, rowsByDoc, docOrder)*(cellSide + cellPadding));
 }
 
-function renderEntityCells(docOrder, data, rowsByDoc, rootG, cellSide, cellPadding, titleHeight, docNameWidth, maxRowItems, colorScale, eventCallback){
+function renderEntityCells(docOrder, data, rowsByDoc, rootG, cellSide, cellPadding, titleHeight, docNameWidth, maxRowItems, colorScale, eventCallback, colorBy){
 	let labels = rootG.select('.entityCells')
 		.attr('transform', `translate(${docNameWidth}, ${titleHeight - 22})`)
 		.selectAll('g.doc')
@@ -83,6 +85,7 @@ function renderEntityCells(docOrder, data, rowsByDoc, rootG, cellSide, cellPaddi
 	labels.enter().append('svg:g').classed('doc', true);
 	rootG.select('.entityCells').selectAll('g.doc')
 		.each(function(d){
+			//console.log(data, d)
 			const rects = d3.select(this)
 				.selectAll('rect')
 				.data(data[d].map((x,i)=>Object.assign(x,{i})));
@@ -100,36 +103,36 @@ function renderEntityCells(docOrder, data, rowsByDoc, rootG, cellSide, cellPaddi
 		.attr('x', d=>(cellSide + cellPadding)*(d.i%maxRowItems))
 		.attr('y', d=>(cellSide + cellPadding)*Math.trunc(d.i/maxRowItems))
 		.attr('stroke', 'black')
-		.attr('fill', d=>colorScale(d.type))
+		.attr('fill', d=>colorScale(d[colorBy]))
 }
 
 function setupInteractions(){
 
 }
 
-function getEntitiesPerDoc(data){
-	const entitiesByDoc = {};
+function getCellsPerDoc(data, accessor){
+	const cellsByDoc = {};
 	data.all.forEach(e=>{
-		if(!entitiesByDoc.hasOwnProperty(e.file_name))
-			entitiesByDoc[e.file_name] = [];
-		entitiesByDoc[e.file_name].push(e);
+		if(!cellsByDoc.hasOwnProperty(accessor(e)))
+			cellsByDoc[accessor(e)] = [];
+		cellsByDoc[accessor(e)].push(e);
 	});
-	return entitiesByDoc;
+	return cellsByDoc;
 }
 
-function getRowsByDoc(entitiesByDoc, maxRowItems){
+function getRowsByDoc(cellsByDoc, maxRowItems){
 	const rowsByDoc = Object.fromEntries( // for entries [doc, lineCount]
-		Object.entries(entitiesByDoc)
+		Object.entries(cellsByDoc)
 		.map(([doc, entities])=>[doc, 1+
 			(entities.length<=maxRowItems?0:Math.trunc(entities.length/maxRowItems))]));
 
 	return rowsByDoc;
 }
 
-function getCellSide(rowsByDoc, columnWidth, columnHeight, cellPadding, maxRowItems){
+function getCellSide(rowsByDoc, freeSpace, columnHeight, cellPadding, maxRowItems){
 	const rows = Object.values(rowsByDoc).reduce((ac,dc)=>ac+dc, 0),
 		sideFittedByHeight = (columnHeight-(rows-1)*cellPadding) / rows,
-		sideFittedByWidth = (columnWidth-(maxRowItems-1)*cellPadding) / maxRowItems,
+		sideFittedByWidth = (freeSpace-(maxRowItems-1)*cellPadding) / maxRowItems,
 		sideLength = Math.min(sideFittedByHeight, sideFittedByWidth);
 	return sideLength;
 }
