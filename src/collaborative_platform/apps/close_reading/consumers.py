@@ -33,6 +33,7 @@ class AnnotatorConsumer(WebsocketConsumer):
         self.__file = None
 
         self.__annotating_xml_content = None
+        self.__response_generator = None
 
     def connect(self):
         try:
@@ -110,7 +111,7 @@ class AnnotatorConsumer(WebsocketConsumer):
 
         remain_users = self.__count_remain_users()
 
-        if not remain_users:
+        if not remain_users and self.__response_generator:
             self.__response_generator.remove_xml_content()
 
     def __remove_user_from_room_group(self):

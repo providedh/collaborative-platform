@@ -1,15 +1,19 @@
 import json
 import logging
+import re
+
+from lxml import etree
 
 from django.contrib.auth.models import User
 
 from apps.api_vis.models import Certainty, EntityProperty, EntityVersion
 from apps.close_reading.models import AnnotatingXmlContent
+from apps.files_management.file_conversions.xml_tools import get_first_xpath_match
 from apps.files_management.models import File
 from apps.projects.models import EntitySchema
 
 
-from collaborative_platform.settings import DEFAULT_ENTITIES
+from collaborative_platform.settings import DEFAULT_ENTITIES, XML_NAMESPACES
 
 
 logger = logging.getLogger('annotator')
@@ -34,18 +38,29 @@ class ResponseGenerator:
 
         except AnnotatingXmlContent.DoesNotExist:
             file_version = self.__file.file_versions.last()
-
             xml_content = file_version.get_raw_content()
-
-            # TODO: send only content of <body> element instead whole file
+            body_content = self.__get_body_content(xml_content)
 
             self.__annotating_xml_content = AnnotatingXmlContent(file_symbol=room_name,
                                                                  file_name=file_version.file.name,
-                                                                 xml_content=xml_content)
+                                                                 xml_content=body_content)
             self.__annotating_xml_content.save()
 
             logger.info(f"Load content of file: '{file_version.file.name}' in version: {file_version.number} "
                         f"to room: '{room_name}'")
+
+    @staticmethod
+    def __get_body_content(xml_content):
+        parser = etree.XMLParser(remove_blank_text=True)
+        tree = etree.fromstring(xml_content, parser=parser)
+
+        body_xpath = './default:text/default:body'
+        body_element = get_first_xpath_match(tree, body_xpath, XML_NAMESPACES)
+
+        body_content = etree.tounicode(body_element, pretty_print=True)
+        body_content = re.sub(r'(^<body.*?>\s*|\s*<\/body>\s*$)', '', body_content)
+
+        return body_content
 
     def get_response(self):
         authors = self.__get_authors()
