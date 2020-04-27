@@ -20,11 +20,12 @@ export default function Vis () {
     _certaintyColorScale: null,
     _eventCallback: null,
     _padding: 10,
-    _legendWidth: 120,
+    _legendWidth: 150,
     _titleHeight: 60,
-    _maxRowItems: 15,
+    _maxRowItems: 40,
     _docNameWidth: 165,
     _fontWidth: 6.5,
+    _minSideLength: 5,
     _maxLabelLength: 20
   }
 
@@ -78,13 +79,13 @@ export default function Vis () {
       : x => x.file_name
     const docOrder = self._docSorting(data.filtered, fileAccessor)
     self._docNameWidth = Math.min(self._maxLabelLength, Math.max(...Object.keys(docOrder).map(x=>x.length))) * self._fontWidth;
-    const freeSpace = container.clientWidth - (self._padding * 2 + self._legendWidth + self._docNameWidth)
+    const freeSpace = container.clientWidth - (self._padding * 4 + self._legendWidth + self._docNameWidth)
 
     // if(source===PixelCorpusSource.certainty)
     // console.log(data.filtered, docOrder, source)
 
     if (data.filtered.length > 0) {
-      renderCells(Object.assign({}, self, { svg, docOrder, freeSpace, data, fileAccessor }))
+      renderCells(Object.assign({}, self, { svg, source, docOrder, freeSpace, data, fileAccessor }))
     }
 
     // console.log(self._certaintyColorScale)

@@ -8,6 +8,7 @@ export default function renderCells (args) {
     fileAccessor,
     data,
     freeSpace,
+    source,
     _entityColorScale,
     _colorBy,
     _eventCallback,
@@ -15,18 +16,19 @@ export default function renderCells (args) {
     _titleHeight,
     _maxRowItems,
     _docNameWidth,
-    _maxLabelLength
+    _maxLabelLength,
+    _minSideLength
   } = args
 
   const cellsByDoc = getCellsPerDoc(data, fileAccessor)
-  const rowsByDoc = getRowsByDoc(cellsByDoc, _maxRowItems)
+  const [rowsByDoc, maxItems] = getRowsByDoc(cellsByDoc, _maxRowItems, _minSideLength)
 
   const { height } = svg.getBoundingClientRect()
   const rootG = d3.select(svg)
     .select('g.vis')
     .attr('transform', `translate(${_padding}, ${_padding})`)
   const cellPadding = 3
-  const cellSide = getCellSide(rowsByDoc, freeSpace, height - (_padding * 2 + _titleHeight), cellPadding, _maxRowItems)
+  const cellSide = getCellSide(maxItems, rowsByDoc, freeSpace, height - (_padding * 2 + _titleHeight), cellPadding, _maxRowItems)
 
   // render title
   rootG.select('.title')
@@ -118,19 +120,25 @@ function getCellsPerDoc (data, accessor) {
   return cellsByDoc
 }
 
-function getRowsByDoc (cellsByDoc, maxRowItems) {
+function getRowsByDoc (cellsByDoc, maxRowItems, minSideLength) {
+  let maxItems = 0;
   const rowsByDoc = Object.fromEntries( // for entries [doc, lineCount]
     Object.entries(cellsByDoc)
-      .map(([doc, entities]) => [doc, 1 +
-(entities.length <= maxRowItems ? 0 : Math.trunc(entities.length / maxRowItems))]))
+      .map(([doc, entities]) => {
+        if(maxItems < entities.length)
+          maxItems = entities.length
 
-  return rowsByDoc
+        return [doc, 1 + (entities.length <= maxRowItems ? 0 : Math.trunc(entities.length / maxRowItems))]
+      }))
+
+  return [rowsByDoc, maxItems]
 }
 
-function getCellSide (rowsByDoc, freeSpace, columnHeight, cellPadding, maxRowItems) {
+function getCellSide (maxItems, rowsByDoc, freeSpace, columnHeight, cellPadding, maxRowItems) {
   const rows = Object.values(rowsByDoc).reduce((ac, dc) => ac + dc, 0)
+  const numItems = Math.min(maxItems, maxRowItems)
   const sideFittedByHeight = (columnHeight - (rows - 1) * cellPadding) / rows
-  const sideFittedByWidth = (freeSpace - (maxRowItems - 1) * cellPadding) / maxRowItems
+  const sideFittedByWidth = (freeSpace - (numItems - 1) * cellPadding) / numItems
   const sideLength = Math.min(sideFittedByHeight, sideFittedByWidth)
   return sideLength
 }
