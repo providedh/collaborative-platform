@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react'
-import PropTypes from 'props-types'
+import PropTypes from 'prop-types'
 
 import styles from './style.module.css'
 import css from './style.css' // eslint-disable-line no-unused-vars
