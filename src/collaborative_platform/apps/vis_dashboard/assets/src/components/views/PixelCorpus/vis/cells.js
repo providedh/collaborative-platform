@@ -13,7 +13,8 @@ export default function renderCells (args) {
     _padding,
     _titleHeight,
     _maxRowItems,
-    _docNameWidth
+    _docNameWidth,
+    _maxLabelLength
   } = args
 
   const cellsByDoc = getCellsPerDoc(data, fileAccessor)
@@ -32,7 +33,7 @@ export default function renderCells (args) {
     .attr('y', 22)// font size
     .text('Entities in the corpus')
 
-  renderDocumentLabels(docOrder, rowsByDoc, rootG, cellSide, cellPadding, _titleHeight, _eventCallback)
+  renderDocumentLabels(docOrder, rowsByDoc, rootG, cellSide, _maxLabelLength, cellPadding, _titleHeight, _eventCallback)
 
   renderEntityCells(docOrder, cellsByDoc, rowsByDoc, rootG, cellSide, cellPadding, _titleHeight, _docNameWidth, _maxRowItems, _entityColorScale, _eventCallback, _colorBy)
 
@@ -55,16 +56,16 @@ function shorttenedLabel (label, maxLabelLength = 20) {
   return startFragment + '...' + endFragment
 }
 
-function renderDocumentLabels (docOrder, rowsByDoc, rootG, cellSide, cellPadding, titleHeight, eventCallback) {
+function renderDocumentLabels (docOrder, rowsByDoc, rootG, cellSide, maxLabelWidth, cellPadding, titleHeight, eventCallback) {
   const labels = rootG.select('.docLabels')
-    .attr('transform', `translate(0, ${titleHeight})`)
+    .attr('transform', `translate(0, ${titleHeight-11})`)
     .selectAll('text.label')
     .data(Object.keys(docOrder))
   labels.exit().remove()
   labels.enter().append('svg:text').classed('label', true)
 
   rootG.select('.docLabels').selectAll('text.label')
-    .text(d => shorttenedLabel(d))
+    .text(d => shorttenedLabel(d, maxLabelWidth))
     .on('mouseenter', d => eventCallback('labelHover', d))
     .attr('x', 0)
     .transition()
@@ -75,7 +76,7 @@ function renderDocumentLabels (docOrder, rowsByDoc, rootG, cellSide, cellPadding
 
 function renderEntityCells (docOrder, data, rowsByDoc, rootG, cellSide, cellPadding, titleHeight, docNameWidth, maxRowItems, colorScale, eventCallback, colorBy) {
   const labels = rootG.select('.entityCells')
-    .attr('transform', `translate(${docNameWidth}, ${titleHeight - 22})`)
+    .attr('transform', `translate(${docNameWidth + 10}, ${titleHeight - 22})`)
     .selectAll('g.doc')
     .data(Object.keys(docOrder))
   labels.exit().remove()

@@ -23,7 +23,9 @@ export default function Vis () {
     _legendWidth: 120,
     _titleHeight: 60,
     _maxRowItems: 15,
-    _docNameWidth: 165
+    _docNameWidth: 165,
+    _fontWidth: 6.5,
+    _maxLabelLength: 20
   }
 
   function _init () {
@@ -75,6 +77,7 @@ export default function Vis () {
       ? x => x.file
       : x => x.file_name
     const docOrder = self._docSorting(data.filtered, fileAccessor)
+    self._docNameWidth = Math.min(self._maxLabelLength, Math.max(...Object.keys(docOrder).map(x=>x.length))) * self._fontWidth;
     const freeSpace = container.clientWidth - (self._padding * 2 + self._legendWidth + self._docNameWidth)
 
     // if(source===PixelCorpusSource.certainty)
