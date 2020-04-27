@@ -1,5 +1,6 @@
 import * as d3 from 'd3'
 import styles from '../style.module.css'
+import PixelCorpusSource from '../config'
 
 export default function renderCells (args) {
   const {
@@ -20,6 +21,7 @@ export default function renderCells (args) {
     _minSideLength
   } = args
 
+  const title = (source === PixelCorpusSource.entities ? 'Entities' : 'Annotations') + ' in the corpus'
   const cellsByDoc = getCellsPerDoc(data, fileAccessor)
   const [rowsByDoc, maxItems] = getRowsByDoc(cellsByDoc, _maxRowItems, _minSideLength)
 
@@ -34,7 +36,7 @@ export default function renderCells (args) {
   rootG.select('.title')
     .attr('x', 0)
     .attr('y', 22)// font size
-    .text('Entities in the corpus')
+    .text(title)
 
   renderDocumentLabels(docOrder, rowsByDoc, rootG, cellSide, _maxLabelLength, cellPadding, _titleHeight, _eventCallback)
 
@@ -61,13 +63,13 @@ function shorttenedLabel (label, maxLabelLength = 20) {
 
 function renderDocumentLabels (docOrder, rowsByDoc, rootG, cellSide, maxLabelWidth, cellPadding, titleHeight, eventCallback) {
   const labels = rootG.select('.docLabels')
-    .attr('transform', `translate(0, ${titleHeight-11})`)
-    .selectAll('text.'+styles.label)
+    .attr('transform', `translate(0, ${titleHeight - 11})`)
+    .selectAll('text.' + styles.label)
     .data(Object.keys(docOrder))
   labels.exit().remove()
   labels.enter().append('svg:text').classed(styles.label, true)
 
-  rootG.select('.docLabels').selectAll('text.'+styles.label)
+  rootG.select('.docLabels').selectAll('text.' + styles.label)
     .text(d => shorttenedLabel(d, maxLabelWidth))
     .on('mouseenter', d => eventCallback('labelHover', d))
     .attr('x', 0)
@@ -121,12 +123,13 @@ function getCellsPerDoc (data, accessor) {
 }
 
 function getRowsByDoc (cellsByDoc, maxRowItems, minSideLength) {
-  let maxItems = 0;
+  let maxItems = 0
   const rowsByDoc = Object.fromEntries( // for entries [doc, lineCount]
     Object.entries(cellsByDoc)
       .map(([doc, entities]) => {
-        if(maxItems < entities.length)
+        if (maxItems < entities.length) {
           maxItems = entities.length
+        }
 
         return [doc, 1 + (entities.length <= maxRowItems ? 0 : Math.trunc(entities.length / maxRowItems))]
       }))
