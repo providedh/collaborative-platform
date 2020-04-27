@@ -1,23 +1,40 @@
-import React from 'react';
-import styles from './style.module.css';
+import React from 'react'
+import PropTypes from 'prop-types'
 
-export default function RangeControl({name, value=0, onValueChange, params={range: [0, 100]}}) {
-    const handleChange = e=>onValueChange(e.target.value);
+import styles from './style.module.css'
 
-    return(
-        <div className={styles.rangeControl}>
-            <div className={"form-group "+styles.formGroupOverride}>
-                <label htmlFor={'input-'+name}>{name}</label>
-                <input 
-                    type="range" 
-                    value={value} 
-                    onChange={handleChange} 
-                    min={params.range[0]}
-                    max={params.range[1]}
-                    className="form-control-range" 
-                    id={'input-'+name} />
-                <span>{value}</span>
-            </div>
-        </div>
-    )
+export default function RangeControl ({ name, value = 0, onValueChange, params = { range: [0, 100] } }) {
+  const handleChange = e => onValueChange(e.target.value)
+
+  function createLabel (name) {
+    const separated = name.replace(/[A-Z]/g, x => ' ' + x)
+    const capitalized = separated[0].toUpperCase() + separated.slice(1).toLowerCase()
+    return capitalized
+  }
+
+  return (
+    <div className={styles.rangeControl}>
+      <div className={'form-group ' + styles.formGroupOverride}>
+        <label htmlFor={'input-' + name}>{createLabel(name)}</label>
+        <input
+          type="range"
+          value={value}
+          onChange={handleChange}
+          min={params.range[0]}
+          max={params.range[1]}
+          className="form-control-range"
+          id={'input-' + name} />
+        <span>{value}</span>
+      </div>
+    </div>
+  )
+}
+
+RangeControl.propTypes = {
+  name: PropTypes.string,
+  value: PropTypes.number,
+  onValueChange: PropTypes.func,
+  params: PropTypes.shape({
+    range: PropTypes.array
+  })
 }

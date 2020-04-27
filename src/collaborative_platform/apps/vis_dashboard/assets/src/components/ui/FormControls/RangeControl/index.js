@@ -1,2 +1,2 @@
-import RangeControl from './RangeControl';
-export default RangeControl;
+import RangeControl from './RangeControl'
+export default RangeControl

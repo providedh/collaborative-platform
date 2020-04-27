@@ -1,2 +1,2 @@
-import ViewDetailsPanel from './ViewDetailsPanel';
-export default ViewDetailsPanel;
+import ViewDetailsPanel from './ViewDetailsPanel'
+export default ViewDetailsPanel

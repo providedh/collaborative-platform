@@ -1,2 +1,2 @@
-import VisFrame from './VisFrame';
-export default VisFrame;
+import VisFrame from './VisFrame'
+export default VisFrame

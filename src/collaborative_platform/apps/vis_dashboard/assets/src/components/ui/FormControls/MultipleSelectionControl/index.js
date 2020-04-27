@@ -1,2 +1,2 @@
-import MultipleSelectionControl from './MultipleSelectionControl';
-export default MultipleSelectionControl;
+import MultipleSelectionControl from './MultipleSelectionControl'
+export default MultipleSelectionControl

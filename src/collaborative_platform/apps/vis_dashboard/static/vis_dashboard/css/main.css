@@ -71,3 +71,25 @@
 #react-root{
 	height: calc(100vh - 104px)
 }
+
+input.form-control.nameInput:hover,
+textarea.form-control:hover {
+    background-color: var(--light);
+}
+
+.entityIcon{
+	position: absolute;
+    right: 0;
+    bottom: -1.1em;
+}
+
+.entityIcon::before{
+  font-family: 'Font Awesome 5 Free';
+  font-style: normal;
+  font-weight: 900;
+  font-display: auto;
+  font-size: .8em;
+  src: url("../webfonts/fa-solid-900.eot");
+  src: url("../webfonts/fa-solid-900.eot?#iefix") format("embedded-opentype"), url("../webfonts/fa-solid-900.woff2") format("woff2"), url("../webfonts/fa-solid-900.woff") format("woff"), url("../webfonts/fa-solid-900.ttf") format("truetype"), url("../webfonts/fa-solid-900.svg#fontawesome") format("svg");
+  content: attr(data-icon);
+}

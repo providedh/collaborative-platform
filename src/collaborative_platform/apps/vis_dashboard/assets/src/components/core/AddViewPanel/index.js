@@ -1,2 +1,2 @@
-import AddViewPanel from './AddViewPanel';
-export default AddViewPanel;
+import AddViewPanel from './AddViewPanel'
+export default AddViewPanel

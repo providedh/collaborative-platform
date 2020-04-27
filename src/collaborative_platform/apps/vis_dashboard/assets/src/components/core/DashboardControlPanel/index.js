@@ -1,2 +1,2 @@
-import DashboardControlPanel from './DashboardControlPanel';
-export default DashboardControlPanel;
+import DashboardControlPanel from './DashboardControlPanel'
+export default DashboardControlPanel

@@ -12,6 +12,7 @@
  margin: 5px;
  background-color: var(--light);
  overflow-y: scroll;
+ position: relative;
 }
 
 .timestamp{
@@ -41,7 +42,7 @@
 
 .timeBar{
  position: absolute;
- left: 2.55em;
+ left: 2.25em;
 }
 
 .timeBar span{

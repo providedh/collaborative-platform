@@ -1,2 +1,2 @@
-import DocumentControl from './DocumentControl';
-export default DocumentControl;
+import DocumentControl from './DocumentControl'
+export default DocumentControl

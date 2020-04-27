@@ -13,3 +13,20 @@
 .heightInherit{
 	height: 100%;
 }
+
+.toggleFullScreen{
+	border: none;
+	height: 2.4em;
+	width: 3em;
+	display: block;
+	background-color: var(--grey);
+	border-radius: 10px 0 0 10px;
+	color: var(--primary);
+}
+
+.toggleFullScreen:hover{
+	width: 11.5em;
+}
+
+.toggleFullScreen span{display: none;}
+.toggleFullScreen:hover span{display: initial;}

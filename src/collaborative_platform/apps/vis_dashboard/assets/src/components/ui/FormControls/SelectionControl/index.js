@@ -1,2 +1,2 @@
-import SelectionControl from './SelectionControl';
-export default SelectionControl;
+import SelectionControl from './SelectionControl'
+export default SelectionControl

@@ -3,6 +3,7 @@
 
 {% block head %}
     <link rel="stylesheet" href="{% static 'vis_dashboard/css/main.css' %}">
+    <link rel="stylesheet" href="{% static 'close_reading/css/font-awesome.css' %}">
 {% endblock %}
 
 {% block submenu %}
@@ -12,6 +13,9 @@
   </li>
   <li class="submenu__item">
     <a href="{% url 'projects:files' project_id %}" class="submenu__link">Files</a>
+  </li>
+  <li class="submenu__item submenu__item">
+    <a href="{% url 'dataset_stats:main' project_id %}" class="submenu__link">Stats</a>
   </li>
   <li class="submenu__item--active">
     <a href="{% url 'vis_dashboard:list' project_id %}" class="submenu__link">Dashboard</a>
@@ -32,6 +36,9 @@
       </li>
       <li class="submenu__item submenu__item">
         <a href="{% url 'projects:files' project_id %}" class="submenu__link">Files</a>
+      </li>
+      <li class="submenu__item submenu__item">
+        <a href="{% url 'dataset_stats:main' project_id %}" class="submenu__link">Stats</a>
       </li>
       <li class="submenu__item submenu__item--active">
         <a href="{% url 'vis_dashboard:list' project_id %}" class="submenu__link">Dashboard</a>
@@ -61,7 +68,7 @@
 {% if DEVELOPMENT is True %}
   <script type="text/javascript" src="http://localhost:3000/main.js"></script>
 {% else %}
-  <script type="text/javascript" src="{% static 'projects/js/main.js' %}"></script>
-  <script type="text/javascript" src="{% static 'projects/js/main.js.map' %}"></script>
+  <script type="text/javascript" src="{% static 'vis_dashboard/js/main.js' %}"></script>
+  <script type="text/javascript" src="{% static 'vis_dashboard/js/main.js.map' %}"></script>
 {% endif %}
 {% endblock %}
