@@ -27,7 +27,10 @@ export default function SelectionControl ({ name, value = '', onValueChange, par
 
 SelectionControl.propTypes = {
   name: PropTypes.string,
-  value: PropTypes.string,
+  value: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.string
+  ]),
   onValueChange: PropTypes.func,
   params: PropTypes.shape({
     options: PropTypes.array,

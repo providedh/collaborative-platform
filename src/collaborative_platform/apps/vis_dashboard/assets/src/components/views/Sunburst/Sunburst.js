@@ -86,5 +86,5 @@ Sunburst.propTypes = {
   }),
   rest: PropTypes.object,
   numberOfLevels: PropTypes.number,
-  source: PropTypes.object
+  source: PropTypes.string
 }
