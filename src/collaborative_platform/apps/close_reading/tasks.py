@@ -5,7 +5,7 @@ import logging
 from celery import shared_task
 from datetime import datetime, timezone
 
-from .models import AnnotatingXmlContent, RoomPresence
+from .models import AnnotatingBodyContent, RoomPresence
 
 
 logger = logging.getLogger('celery')
@@ -28,18 +28,19 @@ def prune_presence():
             logger.info(f"In room: '{presence.room_symbol}' left: {len(remain_users)} users")
 
 
-@shared_task(name='close_reading.tasks.prune_orphaned_annotating_xml_contents')
-def prune_orphaned_annotating_xml_contents():
+@shared_task(name='close_reading.tasks.prune_orphaned_annotating_body_contents')
+def prune_orphaned_annotating_body_contents():
     room_presences = RoomPresence.objects.all()
-    annotating_xml_contents = AnnotatingXmlContent.objects.all()
+    annotating_body_contents = AnnotatingBodyContent.objects.all()
 
     active_room_symbols = set()
 
     for presence in room_presences:
         active_room_symbols.add(presence.room_symbol)
 
-    for xml_content in annotating_xml_contents:
-        if xml_content.file_symbol not in active_room_symbols:
-            xml_content.delete()
+    for body_content in annotating_body_contents:
+        if body_content.file_symbol not in active_room_symbols:
+            body_content.delete()
 
-            logger.info(f"Content of file: '{xml_content.file_name}' removed from room: '{xml_content.file_symbol}'")
+            logger.info(f"Content of <body> element of file: '{body_content.file_name}' removed from room: "
+                        f"'{body_content.file_symbol}'")

@@ -13,9 +13,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 
-from datetime import date, time, timedelta
-
-from django.contrib.gis.geos import Point
+from datetime import timedelta
 
 from .log_filters import skip_logs_from_certain_modules
 from apps.api_vis.enums import TypeChoice
@@ -237,7 +235,7 @@ CELERY_BEAT_SCHEDULE = {
         'schedule': timedelta(seconds=60),
     },
     'prune-orphaned-annotating-xml-contents': {
-        'task': 'close_reading.tasks.prune_orphaned_annotating_xml_contents',
+        'task': 'close_reading.tasks.prune_orphaned_annotating_body_contents',
         'schedule': timedelta(seconds=120),
     },
 }

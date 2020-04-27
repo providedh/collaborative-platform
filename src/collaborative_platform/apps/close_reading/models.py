@@ -3,10 +3,10 @@ from django.contrib.auth.models import User
 from django.contrib.postgres.fields import JSONField
 
 
-class AnnotatingXmlContent(models.Model):
+class AnnotatingBodyContent(models.Model):
     file_symbol = models.CharField(max_length=255)
     file_name = models.CharField(max_length=255)
-    xml_content = models.TextField()
+    body_content = models.TextField()
 
 
 class RoomPresence(models.Model):

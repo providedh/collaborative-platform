@@ -14,7 +14,7 @@ from apps.projects.models import Project
 from apps.views_decorators import objects_exists, user_has_access
 
 from .annotation_history_handler import AnnotationHistoryHandler
-from .models import AnnotatingXmlContent
+from .models import AnnotatingBodyContent
 
 
 logger = logging.getLogger('annotator')
@@ -34,8 +34,8 @@ def save(request, project_id, file_id):  # type: (HttpRequest, int, int) -> Http
                     f"in room: '{file_symbol}'")
 
         try:
-            annotating_xml_content = AnnotatingXmlContent.objects.get(file_symbol=file_symbol)
-        except AnnotatingXmlContent.DoesNotExist:
+            annotating_xml_content = AnnotatingBodyContent.objects.get(file_symbol=file_symbol)
+        except AnnotatingBodyContent.DoesNotExist:
             status = HttpResponseNotModified.status_code
 
             response = {

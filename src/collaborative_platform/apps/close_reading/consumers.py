@@ -7,13 +7,12 @@ from channels.layers import get_channel_layer
 
 from django.contrib.auth.models import User
 
+from apps.close_reading.request_handler import RequestHandler
 from apps.close_reading.response_generator import ResponseGenerator
 from apps.exceptions import BadRequest, Forbidden, NotModified
 from apps.files_management.models import File
 from apps.projects.models import Contributor, Project
 
-from .annotator import Annotator
-from .helpers import verify_reference
 from .models import RoomPresence
 
 
@@ -32,7 +31,7 @@ class AnnotatorConsumer(WebsocketConsumer):
 
         self.__file = None
 
-        self.__annotating_xml_content = None
+        self.__request_handler = None
         self.__response_generator = None
 
     def connect(self):
@@ -52,6 +51,8 @@ class AnnotatorConsumer(WebsocketConsumer):
             self.accept()
 
             self.__response_generator = ResponseGenerator(self.__file_id)
+            self.__request_handler = RequestHandler(self.__file_id)
+
             response = self.__response_generator.get_response()
 
             self.send(text_data=response)
@@ -155,8 +156,11 @@ class AnnotatorConsumer(WebsocketConsumer):
 
         else:
             try:
-                request = self.__parse_text_data(text_data)
-                self.__update_file(request)
+                # TODO: Add request validator
+
+                logger.info(f"Get request from user: '{self.scope['user'].username}' with content: '{text_data}'")
+
+                self.__request_handler.handle_request(text_data, self.scope['user'])
                 self.__send_personalized_changes_to_users()
 
             except NotModified as exception:
@@ -178,27 +182,6 @@ class AnnotatorConsumer(WebsocketConsumer):
             if room_presences:
                 room_presence = room_presences[0]
                 room_presence.save()
-
-    def __parse_text_data(self, text_data):
-        request = json.loads(text_data)
-        logger.info(f"Get request from user: '{self.scope['user'].username}' with content: '{request}'")
-
-        return request
-
-    def __update_file(self, request):
-        xml_content = self.__annotating_xml_content.xml_content
-        user_id = self.scope['user'].pk
-        _, file_id = self.__room_name.split('_')
-
-        if 'attribute_name' in request and request['attribute_name'] == 'sameAs' and \
-                'asserted_value' in request and '#' in request['asserted_value']:
-            request['asserted_value'] = verify_reference(file_id, request['asserted_value'])
-
-        annotator = Annotator()
-        xml_content = annotator.add_annotation(xml_content, file_id, request, user_id)
-
-        self.__annotating_xml_content.xml_content = xml_content
-        self.__annotating_xml_content.save()
 
     def __send_personalized_changes_to_users(self):
         room_presences = RoomPresence.objects.filter(
@@ -226,7 +209,7 @@ class AnnotatorConsumer(WebsocketConsumer):
         response = {
             'status': code,
             'message': str(message),
-            'xml_content': None,
+            'body_content': None,
         }
 
         response = json.dumps(response)

@@ -7,7 +7,7 @@ from lxml import etree
 from django.contrib.auth.models import User
 
 from apps.api_vis.models import Certainty, EntityProperty, EntityVersion
-from apps.close_reading.models import AnnotatingXmlContent
+from apps.close_reading.models import AnnotatingBodyContent
 from apps.files_management.file_conversions.xml_tools import get_first_xpath_match
 from apps.files_management.models import File
 from apps.projects.models import EntitySchema
@@ -22,7 +22,7 @@ logger = logging.getLogger('annotator')
 class ResponseGenerator:
     def __init__(self, file_id):
         self.__file = None
-        self.__annotating_xml_content = None
+        self.__annotating_body_content = None
 
         self.__get_file_from_db(file_id)
         self.__load_xml_content()
@@ -34,17 +34,17 @@ class ResponseGenerator:
         room_name = f'{self.__file.project.id}_{self.__file.id}'
 
         try:
-            self.__annotating_xml_content = AnnotatingXmlContent.objects.get(file_symbol=room_name)
+            self.__annotating_body_content = AnnotatingBodyContent.objects.get(file_symbol=room_name)
 
-        except AnnotatingXmlContent.DoesNotExist:
+        except AnnotatingBodyContent.DoesNotExist:
             file_version = self.__file.file_versions.last()
             xml_content = file_version.get_raw_content()
             body_content = self.__get_body_content(xml_content)
 
-            self.__annotating_xml_content = AnnotatingXmlContent(file_symbol=room_name,
-                                                                 file_name=file_version.file.name,
-                                                                 xml_content=body_content)
-            self.__annotating_xml_content.save()
+            self.__annotating_body_content = AnnotatingBodyContent(file_symbol=room_name,
+                                                                   file_name=file_version.file.name,
+                                                                   body_content=body_content)
+            self.__annotating_body_content.save()
 
             logger.info(f"Load content of file: '{file_version.file.name}' in version: {file_version.number} "
                         f"to room: '{room_name}'")
@@ -66,7 +66,7 @@ class ResponseGenerator:
         authors = self.__get_authors()
         certainties = self.__get_certainties()
         entities_lists = self.__get_entities_lists()
-        xml_content = self.__annotating_xml_content.xml_content
+        body_content = self.__annotating_body_content.body_content
 
         response = {
             'status': 200,
@@ -74,7 +74,7 @@ class ResponseGenerator:
             'authors': authors,
             'certainties': certainties,
             'entities_lists': entities_lists,
-            'xml_content': xml_content,
+            'body_content': body_content,
         }
 
         response = json.dumps(response)
@@ -234,8 +234,8 @@ class ResponseGenerator:
         room_name = f'{self.__file.project.id}_{self.__file.id}'
 
         try:
-            AnnotatingXmlContent.objects.get(file_symbol=room_name).delete()
+            AnnotatingBodyContent.objects.get(file_symbol=room_name).delete()
 
             logger.info(f"Remove file content from room: '{room_name}'")
-        except AnnotatingXmlContent.DoesNotExist:
+        except AnnotatingBodyContent.DoesNotExist:
             pass

@@ -12,7 +12,7 @@
   "pk": 1,
   "fields": {
     "entity": 1,
-    "file_version": 2,
+    "file_version": 1,
     "xml": null,
     "context": null
   }
@@ -22,7 +22,7 @@
   "pk": 2,
   "fields": {
     "entity": 2,
-    "file_version": 2,
+    "file_version": 1,
     "xml": null,
     "context": null
   }
@@ -81,8 +81,8 @@
   "model": "api_vis.entityversion",
   "pk": 8,
   "fields": {
-    "entity": 1,
-    "file_version": 3,
+    "entity": 8,
+    "file_version": 1,
     "xml": null,
     "context": null
   }
@@ -91,7 +91,7 @@
   "model": "api_vis.entityversion",
   "pk": 9,
   "fields": {
-    "entity": 8,
+    "entity": 9,
     "file_version": 1,
     "xml": null,
     "context": null
@@ -101,8 +101,8 @@
   "model": "api_vis.entityversion",
   "pk": 10,
   "fields": {
-    "entity": 2,
-    "file_version": 3,
+    "entity": 10,
+    "file_version": 1,
     "xml": null,
     "context": null
   }
@@ -111,7 +111,7 @@
   "model": "api_vis.entityversion",
   "pk": 11,
   "fields": {
-    "entity": 9,
+    "entity": 11,
     "file_version": 1,
     "xml": null,
     "context": null
@@ -121,7 +121,7 @@
   "model": "api_vis.entityversion",
   "pk": 12,
   "fields": {
-    "entity": 10,
+    "entity": 12,
     "file_version": 1,
     "xml": null,
     "context": null
@@ -131,7 +131,7 @@
   "model": "api_vis.entityversion",
   "pk": 13,
   "fields": {
-    "entity": 11,
+    "entity": 13,
     "file_version": 1,
     "xml": null,
     "context": null
@@ -141,8 +141,8 @@
   "model": "api_vis.entityversion",
   "pk": 14,
   "fields": {
-    "entity": 12,
-    "file_version": 1,
+    "entity": 1,
+    "file_version": 2,
     "xml": null,
     "context": null
   }
@@ -151,8 +151,8 @@
   "model": "api_vis.entityversion",
   "pk": 15,
   "fields": {
-    "entity": 13,
-    "file_version": 1,
+    "entity": 2,
+    "file_version": 2,
     "xml": null,
     "context": null
   }
@@ -161,8 +161,8 @@
   "model": "api_vis.entityversion",
   "pk": 16,
   "fields": {
-    "entity": 14,
-    "file_version": 1,
+    "entity": 3,
+    "file_version": 2,
     "xml": null,
     "context": null
   }
@@ -171,8 +171,8 @@
   "model": "api_vis.entityversion",
   "pk": 17,
   "fields": {
-    "entity": 15,
-    "file_version": 1,
+    "entity": 4,
+    "file_version": 2,
     "xml": null,
     "context": null
   }
@@ -181,8 +181,8 @@
   "model": "api_vis.entityversion",
   "pk": 18,
   "fields": {
-    "entity": 16,
-    "file_version": 1,
+    "entity": 5,
+    "file_version": 2,
     "xml": null,
     "context": null
   }
@@ -191,8 +191,8 @@
   "model": "api_vis.entityversion",
   "pk": 19,
   "fields": {
-    "entity": 17,
-    "file_version": 1,
+    "entity": 6,
+    "file_version": 2,
     "xml": null,
     "context": null
   }
@@ -201,8 +201,8 @@
   "model": "api_vis.entityversion",
   "pk": 20,
   "fields": {
-    "entity": 18,
-    "file_version": 1,
+    "entity": 7,
+    "file_version": 2,
     "xml": null,
     "context": null
   }
@@ -211,8 +211,8 @@
   "model": "api_vis.entityversion",
   "pk": 21,
   "fields": {
-    "entity": 3,
-    "file_version": 5,
+    "entity": 8,
+    "file_version": 2,
     "xml": null,
     "context": null
   }
@@ -221,8 +221,8 @@
   "model": "api_vis.entityversion",
   "pk": 22,
   "fields": {
-    "entity": 19,
-    "file_version": 4,
+    "entity": 9,
+    "file_version": 2,
     "xml": null,
     "context": null
   }
@@ -231,8 +231,8 @@
   "model": "api_vis.entityversion",
   "pk": 23,
   "fields": {
-    "entity": 4,
-    "file_version": 5,
+    "entity": 10,
+    "file_version": 2,
     "xml": null,
     "context": null
   }
@@ -241,8 +241,8 @@
   "model": "api_vis.entityversion",
   "pk": 24,
   "fields": {
-    "entity": 5,
-    "file_version": 5,
+    "entity": 11,
+    "file_version": 2,
     "xml": null,
     "context": null
   }
@@ -251,8 +251,8 @@
   "model": "api_vis.entityversion",
   "pk": 25,
   "fields": {
-    "entity": 6,
-    "file_version": 5,
+    "entity": 12,
+    "file_version": 2,
     "xml": null,
     "context": null
   }
@@ -261,8 +261,8 @@
   "model": "api_vis.entityversion",
   "pk": 26,
   "fields": {
-    "entity": 7,
-    "file_version": 5,
+    "entity": 13,
+    "file_version": 2,
     "xml": null,
     "context": null
   }
@@ -271,8 +271,8 @@
   "model": "api_vis.entityversion",
   "pk": 27,
   "fields": {
-    "entity": 20,
-    "file_version": 4,
+    "entity": 14,
+    "file_version": 3,
     "xml": null,
     "context": null
   }
@@ -281,8 +281,8 @@
   "model": "api_vis.entityversion",
   "pk": 28,
   "fields": {
-    "entity": 8,
-    "file_version": 5,
+    "entity": 15,
+    "file_version": 3,
     "xml": null,
     "context": null
   }
@@ -291,7 +291,7 @@
   "model": "api_vis.entityversion",
   "pk": 29,
   "fields": {
-    "entity": 21,
+    "entity": 14,
     "file_version": 4,
     "xml": null,
     "context": null
@@ -301,17 +301,7 @@
   "model": "api_vis.entityversion",
   "pk": 30,
   "fields": {
-    "entity": 9,
-    "file_version": 5,
-    "xml": null,
-    "context": null
-  }
-},
-{
-  "model": "api_vis.entityversion",
-  "pk": 31,
-  "fields": {
-    "entity": 22,
+    "entity": 15,
     "file_version": 4,
     "xml": null,
     "context": null
@@ -319,67 +309,7 @@
 },
 {
   "model": "api_vis.entityversion",
-  "pk": 32,
-  "fields": {
-    "entity": 10,
-    "file_version": 5,
-    "xml": null,
-    "context": null
-  }
-},
-{
-  "model": "api_vis.entityversion",
-  "pk": 33,
-  "fields": {
-    "entity": 11,
-    "file_version": 5,
-    "xml": null,
-    "context": null
-  }
-},
-{
-  "model": "api_vis.entityversion",
-  "pk": 34,
-  "fields": {
-    "entity": 12,
-    "file_version": 5,
-    "xml": null,
-    "context": null
-  }
-},
-{
-  "model": "api_vis.entityversion",
-  "pk": 35,
-  "fields": {
-    "entity": 13,
-    "file_version": 5,
-    "xml": null,
-    "context": null
-  }
-},
-{
-  "model": "api_vis.entityversion",
-  "pk": 36,
-  "fields": {
-    "entity": 14,
-    "file_version": 5,
-    "xml": null,
-    "context": null
-  }
-},
-{
-  "model": "api_vis.entityversion",
-  "pk": 37,
-  "fields": {
-    "entity": 15,
-    "file_version": 5,
-    "xml": null,
-    "context": null
-  }
-},
-{
-  "model": "api_vis.entityversion",
-  "pk": 38,
+  "pk": 31,
   "fields": {
     "entity": 16,
     "file_version": 5,
@@ -389,7 +319,7 @@
 },
 {
   "model": "api_vis.entityversion",
-  "pk": 39,
+  "pk": 32,
   "fields": {
     "entity": 17,
     "file_version": 5,
@@ -399,19 +329,9 @@
 },
 {
   "model": "api_vis.entityversion",
-  "pk": 40,
+  "pk": 33,
   "fields": {
-    "entity": 18,
-    "file_version": 5,
-    "xml": null,
-    "context": null
-  }
-},
-{
-  "model": "api_vis.entityversion",
-  "pk": 41,
-  "fields": {
-    "entity": 19,
+    "entity": 16,
     "file_version": 6,
     "xml": null,
     "context": null
@@ -419,29 +339,9 @@
 },
 {
   "model": "api_vis.entityversion",
-  "pk": 42,
+  "pk": 34,
   "fields": {
-    "entity": 20,
-    "file_version": 6,
-    "xml": null,
-    "context": null
-  }
-},
-{
-  "model": "api_vis.entityversion",
-  "pk": 43,
-  "fields": {
-    "entity": 21,
-    "file_version": 6,
-    "xml": null,
-    "context": null
-  }
-},
-{
-  "model": "api_vis.entityversion",
-  "pk": 44,
-  "fields": {
-    "entity": 22,
+    "entity": 17,
     "file_version": 6,
     "xml": null,
     "context": null
@@ -452,38 +352,6 @@
   "pk": 1,
   "fields": {
     "entity_version": 1,
-    "xpath": "",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "Jus",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 2,
-  "fields": {
-    "entity_version": 2,
-    "xpath": "",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "Sand",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 3,
-  "fields": {
-    "entity_version": 3,
     "xpath": "./country",
     "name": "country",
     "type": "TypeChoice.str",
@@ -497,9 +365,9 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 4,
+  "pk": 2,
   "fields": {
-    "entity_version": 3,
+    "entity_version": 1,
     "xpath": "./settlement",
     "name": "settlement",
     "type": "TypeChoice.str",
@@ -513,9 +381,9 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 5,
+  "pk": 3,
   "fields": {
-    "entity_version": 3,
+    "entity_version": 1,
     "xpath": "./location/geo",
     "name": "geo",
     "type": "TypeChoice.Point",
@@ -529,9 +397,9 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 6,
+  "pk": 4,
   "fields": {
-    "entity_version": 3,
+    "entity_version": 1,
     "xpath": "./placeName/name",
     "name": "name",
     "type": "TypeChoice.str",
@@ -545,9 +413,9 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 7,
+  "pk": 5,
   "fields": {
-    "entity_version": 4,
+    "entity_version": 2,
     "xpath": "",
     "name": "name",
     "type": "TypeChoice.str",
@@ -561,9 +429,9 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 8,
+  "pk": 6,
   "fields": {
-    "entity_version": 5,
+    "entity_version": 3,
     "xpath": "./name",
     "name": "name",
     "type": "TypeChoice.str",
@@ -577,9 +445,9 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 9,
+  "pk": 7,
   "fields": {
-    "entity_version": 6,
+    "entity_version": 4,
     "xpath": "./name",
     "name": "name",
     "type": "TypeChoice.str",
@@ -593,9 +461,9 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 10,
+  "pk": 8,
   "fields": {
-    "entity_version": 7,
+    "entity_version": 5,
     "xpath": "@sex",
     "name": "sex",
     "type": "TypeChoice.str",
@@ -609,9 +477,9 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 11,
+  "pk": 9,
   "fields": {
-    "entity_version": 7,
+    "entity_version": 5,
     "xpath": "@age",
     "name": "age",
     "type": "TypeChoice.str",
@@ -625,9 +493,9 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 12,
+  "pk": 10,
   "fields": {
-    "entity_version": 7,
+    "entity_version": 5,
     "xpath": "./persName/forename",
     "name": "forename",
     "type": "TypeChoice.str",
@@ -641,9 +509,9 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 13,
+  "pk": 11,
   "fields": {
-    "entity_version": 7,
+    "entity_version": 5,
     "xpath": "./persName/surname",
     "name": "surname",
     "type": "TypeChoice.str",
@@ -657,9 +525,9 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 14,
+  "pk": 12,
   "fields": {
-    "entity_version": 7,
+    "entity_version": 5,
     "xpath": "./birth/@when",
     "name": "birth",
     "type": "TypeChoice.date",
@@ -673,9 +541,9 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 15,
+  "pk": 13,
   "fields": {
-    "entity_version": 7,
+    "entity_version": 5,
     "xpath": "./name",
     "name": "name",
     "type": "TypeChoice.str",
@@ -689,9 +557,9 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 16,
+  "pk": 14,
   "fields": {
-    "entity_version": 9,
+    "entity_version": 6,
     "xpath": "./name",
     "name": "name",
     "type": "TypeChoice.str",
@@ -705,41 +573,9 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 17,
+  "pk": 15,
   "fields": {
-    "entity_version": 8,
-    "xpath": "",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "Jus",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 18,
-  "fields": {
-    "entity_version": 10,
-    "xpath": "",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "Sand",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 19,
-  "fields": {
-    "entity_version": 11,
+    "entity_version": 7,
     "xpath": "./name",
     "name": "name",
     "type": "TypeChoice.str",
@@ -753,9 +589,9 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 20,
+  "pk": 16,
   "fields": {
-    "entity_version": 12,
+    "entity_version": 8,
     "xpath": "./name",
     "name": "name",
     "type": "TypeChoice.str",
@@ -769,9 +605,9 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 21,
+  "pk": 17,
   "fields": {
-    "entity_version": 13,
+    "entity_version": 9,
     "xpath": "@when",
     "name": "when",
     "type": "TypeChoice.date",
@@ -785,9 +621,9 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 22,
+  "pk": 18,
   "fields": {
-    "entity_version": 13,
+    "entity_version": 9,
     "xpath": "",
     "name": "name",
     "type": "TypeChoice.str",
@@ -801,9 +637,9 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 23,
+  "pk": 19,
   "fields": {
-    "entity_version": 14,
+    "entity_version": 10,
     "xpath": "",
     "name": "name",
     "type": "TypeChoice.str",
@@ -817,9 +653,9 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 24,
+  "pk": 20,
   "fields": {
-    "entity_version": 15,
+    "entity_version": 11,
     "xpath": "",
     "name": "name",
     "type": "TypeChoice.str",
@@ -833,9 +669,9 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 25,
+  "pk": 21,
   "fields": {
-    "entity_version": 16,
+    "entity_version": 12,
     "xpath": "",
     "name": "name",
     "type": "TypeChoice.str",
@@ -849,25 +685,9 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 26,
+  "pk": 22,
   "fields": {
-    "entity_version": 17,
-    "xpath": "",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "Grieben",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 27,
-  "fields": {
-    "entity_version": 18,
+    "entity_version": 13,
     "xpath": "",
     "name": "name",
     "type": "TypeChoice.str",
@@ -881,10 +701,90 @@
 },
 {
   "model": "api_vis.entityproperty",
+  "pk": 23,
+  "fields": {
+    "entity_version": 14,
+    "xpath": "./placeName/name",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "PCSS",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 24,
+  "fields": {
+    "entity_version": 14,
+    "xpath": "./location/geo",
+    "name": "geo",
+    "type": "TypeChoice.Point",
+    "value_str": null,
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": "SRID=4326;POINT (52.408333 16.934167)"
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 25,
+  "fields": {
+    "entity_version": 14,
+    "xpath": "./settlement",
+    "name": "settlement",
+    "type": "TypeChoice.str",
+    "value_str": "Pozna\u0144",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 26,
+  "fields": {
+    "entity_version": 14,
+    "xpath": "./country",
+    "name": "country",
+    "type": "TypeChoice.str",
+    "value_str": "Poland",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 27,
+  "fields": {
+    "entity_version": 15,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Big Bang",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
   "pk": 28,
   "fields": {
-    "entity_version": 19,
-    "xpath": "",
+    "entity_version": 16,
+    "xpath": "./name",
     "name": "name",
     "type": "TypeChoice.str",
     "value_str": "Butter",
@@ -899,8 +799,8 @@
   "model": "api_vis.entityproperty",
   "pk": 29,
   "fields": {
-    "entity_version": 20,
-    "xpath": "",
+    "entity_version": 17,
+    "xpath": "./name",
     "name": "name",
     "type": "TypeChoice.str",
     "value_str": "Sand",
@@ -915,151 +815,7 @@
   "model": "api_vis.entityproperty",
   "pk": 30,
   "fields": {
-    "entity_version": 21,
-    "xpath": "./placeName/name",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "PCSS",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 31,
-  "fields": {
-    "entity_version": 21,
-    "xpath": "./location/geo",
-    "name": "geo",
-    "type": "TypeChoice.Point",
-    "value_str": null,
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": "SRID=4326;POINT (52.408333 16.934167)"
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 32,
-  "fields": {
-    "entity_version": 21,
-    "xpath": "./settlement",
-    "name": "settlement",
-    "type": "TypeChoice.str",
-    "value_str": "Pozna\u0144",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 33,
-  "fields": {
-    "entity_version": 21,
-    "xpath": "./country",
-    "name": "country",
-    "type": "TypeChoice.str",
-    "value_str": "Poland",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 34,
-  "fields": {
-    "entity_version": 23,
-    "xpath": "",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "Big Bang",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 35,
-  "fields": {
-    "entity_version": 24,
-    "xpath": "./name",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "Butter",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 36,
-  "fields": {
-    "entity_version": 22,
-    "xpath": "",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "Butter",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 37,
-  "fields": {
-    "entity_version": 25,
-    "xpath": "./name",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "Sand",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 38,
-  "fields": {
-    "entity_version": 27,
-    "xpath": "",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "Silber",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 39,
-  "fields": {
-    "entity_version": 26,
+    "entity_version": 18,
     "xpath": "./name",
     "name": "name",
     "type": "TypeChoice.str",
@@ -1073,9 +829,9 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 40,
+  "pk": 31,
   "fields": {
-    "entity_version": 26,
+    "entity_version": 18,
     "xpath": "./birth/@when",
     "name": "birth",
     "type": "TypeChoice.date",
@@ -1089,9 +845,9 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 41,
+  "pk": 32,
   "fields": {
-    "entity_version": 26,
+    "entity_version": 18,
     "xpath": "./persName/surname",
     "name": "surname",
     "type": "TypeChoice.str",
@@ -1105,9 +861,9 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 42,
+  "pk": 33,
   "fields": {
-    "entity_version": 26,
+    "entity_version": 18,
     "xpath": "./persName/forename",
     "name": "forename",
     "type": "TypeChoice.str",
@@ -1121,9 +877,9 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 43,
+  "pk": 34,
   "fields": {
-    "entity_version": 26,
+    "entity_version": 18,
     "xpath": "@age",
     "name": "age",
     "type": "TypeChoice.str",
@@ -1137,9 +893,9 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 44,
+  "pk": 35,
   "fields": {
-    "entity_version": 26,
+    "entity_version": 18,
     "xpath": "@sex",
     "name": "sex",
     "type": "TypeChoice.str",
@@ -1153,9 +909,9 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 45,
+  "pk": 36,
   "fields": {
-    "entity_version": 28,
+    "entity_version": 19,
     "xpath": "./name",
     "name": "name",
     "type": "TypeChoice.str",
@@ -1169,25 +925,9 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 46,
+  "pk": 37,
   "fields": {
-    "entity_version": 29,
-    "xpath": "",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "Ingwer",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 47,
-  "fields": {
-    "entity_version": 30,
+    "entity_version": 20,
     "xpath": "./name",
     "name": "name",
     "type": "TypeChoice.str",
@@ -1201,9 +941,169 @@
 },
 {
   "model": "api_vis.entityproperty",
+  "pk": 38,
+  "fields": {
+    "entity_version": 21,
+    "xpath": "./name",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Met",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 39,
+  "fields": {
+    "entity_version": 22,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "4th of july 2010",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 40,
+  "fields": {
+    "entity_version": 22,
+    "xpath": "@when",
+    "name": "when",
+    "type": "TypeChoice.date",
+    "value_str": null,
+    "value_int": null,
+    "value_float": null,
+    "value_date": "2020-07-04",
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 41,
+  "fields": {
+    "entity_version": 23,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "the exact same day",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 42,
+  "fields": {
+    "entity_version": 24,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Rag",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 43,
+  "fields": {
+    "entity_version": 25,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Ingwer",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 44,
+  "fields": {
+    "entity_version": 26,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Met",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 45,
+  "fields": {
+    "entity_version": 27,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Jus",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 46,
+  "fields": {
+    "entity_version": 28,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Sand",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 47,
+  "fields": {
+    "entity_version": 29,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Jus",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
   "pk": 48,
   "fields": {
-    "entity_version": 31,
+    "entity_version": 30,
     "xpath": "",
     "name": "name",
     "type": "TypeChoice.str",
@@ -1219,87 +1119,7 @@
   "model": "api_vis.entityproperty",
   "pk": 49,
   "fields": {
-    "entity_version": 32,
-    "xpath": "./name",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "Met",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 50,
-  "fields": {
-    "entity_version": 33,
-    "xpath": "",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "4th of july 2010",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 51,
-  "fields": {
-    "entity_version": 33,
-    "xpath": "@when",
-    "name": "when",
-    "type": "TypeChoice.date",
-    "value_str": null,
-    "value_int": null,
-    "value_float": null,
-    "value_date": "2020-07-04",
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 52,
-  "fields": {
-    "entity_version": 34,
-    "xpath": "",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "the exact same day",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 53,
-  "fields": {
-    "entity_version": 35,
-    "xpath": "",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "Rag",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 54,
-  "fields": {
-    "entity_version": 36,
+    "entity_version": 31,
     "xpath": "",
     "name": "name",
     "type": "TypeChoice.str",
@@ -1313,57 +1133,9 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 55,
+  "pk": 50,
   "fields": {
-    "entity_version": 37,
-    "xpath": "",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "Grieben",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 56,
-  "fields": {
-    "entity_version": 38,
-    "xpath": "",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "Met",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 57,
-  "fields": {
-    "entity_version": 39,
-    "xpath": "",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "Butter",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 58,
-  "fields": {
-    "entity_version": 40,
+    "entity_version": 32,
     "xpath": "",
     "name": "name",
     "type": "TypeChoice.str",
@@ -1377,41 +1149,9 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 59,
+  "pk": 51,
   "fields": {
-    "entity_version": 41,
-    "xpath": "",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "Butter",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 60,
-  "fields": {
-    "entity_version": 42,
-    "xpath": "",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "Silber",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 61,
-  "fields": {
-    "entity_version": 43,
+    "entity_version": 33,
     "xpath": "",
     "name": "name",
     "type": "TypeChoice.str",
@@ -1425,9 +1165,9 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 62,
+  "pk": 52,
   "fields": {
-    "entity_version": 44,
+    "entity_version": 34,
     "xpath": "",
     "name": "name",
     "type": "TypeChoice.str",
@@ -1499,26 +1239,26 @@
   "model": "files_management.filemaxxmlids",
   "pk": 2,
   "fields": {
-    "file": 2,
-    "xml_id_base": "",
-    "xml_id_number": 0
+    "file": 1,
+    "xml_id_base": "name",
+    "xml_id_number": 8
   }
 },
 {
   "model": "files_management.filemaxxmlids",
   "pk": 3,
   "fields": {
-    "file": 2,
-    "xml_id_base": "ingredient",
-    "xml_id_number": 2
+    "file": 1,
+    "xml_id_base": "event",
+    "xml_id_number": 1
   }
 },
 {
   "model": "files_management.filemaxxmlids",
   "pk": 4,
   "fields": {
-    "file": 2,
-    "xml_id_base": "event",
+    "file": 1,
+    "xml_id_base": "time",
     "xml_id_number": 0
   }
 },
@@ -1526,63 +1266,63 @@
   "model": "files_management.filemaxxmlids",
   "pk": 5,
   "fields": {
-    "file": 2,
-    "xml_id_base": "date",
-    "xml_id_number": 0
+    "file": 1,
+    "xml_id_base": "ab",
+    "xml_id_number": 1
   }
 },
 {
   "model": "files_management.filemaxxmlids",
   "pk": 6,
   "fields": {
-    "file": 2,
-    "xml_id_base": "certainty",
-    "xml_id_number": 11
+    "file": 1,
+    "xml_id_base": "place",
+    "xml_id_number": 1
   }
 },
 {
   "model": "files_management.filemaxxmlids",
   "pk": 7,
   "fields": {
-    "file": 2,
+    "file": 1,
     "xml_id_base": "annotator",
-    "xml_id_number": 1
+    "xml_id_number": 2
   }
 },
 {
   "model": "files_management.filemaxxmlids",
   "pk": 8,
   "fields": {
-    "file": 2,
-    "xml_id_base": "time",
-    "xml_id_number": 0
+    "file": 1,
+    "xml_id_base": "certainty",
+    "xml_id_number": 5
   }
 },
 {
   "model": "files_management.filemaxxmlids",
   "pk": 9,
   "fields": {
-    "file": 2,
-    "xml_id_base": "person",
-    "xml_id_number": 0
+    "file": 1,
+    "xml_id_base": "ingredient",
+    "xml_id_number": 3
   }
 },
 {
   "model": "files_management.filemaxxmlids",
   "pk": 10,
   "fields": {
-    "file": 2,
-    "xml_id_base": "name",
-    "xml_id_number": 10
+    "file": 1,
+    "xml_id_base": "date",
+    "xml_id_number": 2
   }
 },
 {
   "model": "files_management.filemaxxmlids",
   "pk": 11,
   "fields": {
-    "file": 2,
-    "xml_id_base": "place",
-    "xml_id_number": 0
+    "file": 1,
+    "xml_id_base": "person",
+    "xml_id_number": 6
   }
 },
 {
@@ -1590,7 +1330,7 @@
   "pk": 12,
   "fields": {
     "file": 2,
-    "xml_id_base": "ab",
+    "xml_id_base": "",
     "xml_id_number": 0
   }
 },
@@ -1598,90 +1338,90 @@
   "model": "files_management.filemaxxmlids",
   "pk": 13,
   "fields": {
-    "file": 1,
-    "xml_id_base": "ingredient",
-    "xml_id_number": 6
+    "file": 2,
+    "xml_id_base": "name",
+    "xml_id_number": 3
   }
 },
 {
   "model": "files_management.filemaxxmlids",
   "pk": 14,
   "fields": {
-    "file": 1,
+    "file": 2,
     "xml_id_base": "event",
-    "xml_id_number": 1
+    "xml_id_number": 0
   }
 },
 {
   "model": "files_management.filemaxxmlids",
   "pk": 15,
   "fields": {
-    "file": 1,
-    "xml_id_base": "date",
-    "xml_id_number": 2
-  }
-},
-{
-  "model": "files_management.filemaxxmlids",
-  "pk": 16,
-  "fields": {
-    "file": 1,
-    "xml_id_base": "certainty",
-    "xml_id_number": 18
-  }
-},
-{
-  "model": "files_management.filemaxxmlids",
-  "pk": 17,
-  "fields": {
-    "file": 1,
-    "xml_id_base": "annotator",
-    "xml_id_number": 2
-  }
-},
-{
-  "model": "files_management.filemaxxmlids",
-  "pk": 18,
-  "fields": {
-    "file": 1,
+    "file": 2,
     "xml_id_base": "time",
     "xml_id_number": 0
   }
 },
 {
   "model": "files_management.filemaxxmlids",
+  "pk": 16,
+  "fields": {
+    "file": 2,
+    "xml_id_base": "ab",
+    "xml_id_number": 0
+  }
+},
+{
+  "model": "files_management.filemaxxmlids",
+  "pk": 17,
+  "fields": {
+    "file": 2,
+    "xml_id_base": "place",
+    "xml_id_number": 0
+  }
+},
+{
+  "model": "files_management.filemaxxmlids",
+  "pk": 18,
+  "fields": {
+    "file": 2,
+    "xml_id_base": "annotator",
+    "xml_id_number": 1
+  }
+},
+{
+  "model": "files_management.filemaxxmlids",
   "pk": 19,
   "fields": {
-    "file": 1,
-    "xml_id_base": "person",
-    "xml_id_number": 6
+    "file": 2,
+    "xml_id_base": "certainty",
+    "xml_id_number": 3
   }
 },
 {
   "model": "files_management.filemaxxmlids",
   "pk": 20,
   "fields": {
-    "file": 1,
-    "xml_id_base": "name",
-    "xml_id_number": 18
+    "file": 2,
+    "xml_id_base": "ingredient",
+    "xml_id_number": 2
   }
 },
 {
   "model": "files_management.filemaxxmlids",
   "pk": 21,
   "fields": {
-    "file": 1,
-    "xml_id_base": "place",
-    "xml_id_number": 1
+    "file": 2,
+    "xml_id_base": "date",
+    "xml_id_number": 0
   }
 },
 {
   "model": "files_management.filemaxxmlids",
   "pk": 22,
   "fields": {
-    "file": 1,
-    "xml_id_base": "ab",
-    "xml_id_number": 1
+    "file": 2,
+    "xml_id_base": "person",
+    "xml_id_number": 0
   }
 },
 {
@@ -1698,8 +1438,8 @@
   "pk": 24,
   "fields": {
     "file": 3,
-    "xml_id_base": "ingredient",
-    "xml_id_number": 4
+    "xml_id_base": "name",
+    "xml_id_number": 2
   }
 },
 {
@@ -1716,7 +1456,7 @@
   "pk": 26,
   "fields": {
     "file": 3,
-    "xml_id_base": "date",
+    "xml_id_base": "time",
     "xml_id_number": 0
   }
 },
@@ -1725,49 +1465,13 @@
   "pk": 27,
   "fields": {
     "file": 3,
-    "xml_id_base": "certainty",
-    "xml_id_number": 13
+    "xml_id_base": "ab",
+    "xml_id_number": 0
   }
 },
 {
   "model": "files_management.filemaxxmlids",
   "pk": 28,
-  "fields": {
-    "file": 3,
-    "xml_id_base": "annotator",
-    "xml_id_number": 1
-  }
-},
-{
-  "model": "files_management.filemaxxmlids",
-  "pk": 29,
-  "fields": {
-    "file": 3,
-    "xml_id_base": "time",
-    "xml_id_number": 0
-  }
-},
-{
-  "model": "files_management.filemaxxmlids",
-  "pk": 30,
-  "fields": {
-    "file": 3,
-    "xml_id_base": "person",
-    "xml_id_number": 0
-  }
-},
-{
-  "model": "files_management.filemaxxmlids",
-  "pk": 31,
-  "fields": {
-    "file": 3,
-    "xml_id_base": "name",
-    "xml_id_number": 13
-  }
-},
-{
-  "model": "files_management.filemaxxmlids",
-  "pk": 32,
   "fields": {
     "file": 3,
     "xml_id_base": "place",
@@ -1776,10 +1480,46 @@
 },
 {
   "model": "files_management.filemaxxmlids",
+  "pk": 29,
+  "fields": {
+    "file": 3,
+    "xml_id_base": "annotator",
+    "xml_id_number": 1
+  }
+},
+{
+  "model": "files_management.filemaxxmlids",
+  "pk": 30,
+  "fields": {
+    "file": 3,
+    "xml_id_base": "certainty",
+    "xml_id_number": 2
+  }
+},
+{
+  "model": "files_management.filemaxxmlids",
+  "pk": 31,
+  "fields": {
+    "file": 3,
+    "xml_id_base": "ingredient",
+    "xml_id_number": 2
+  }
+},
+{
+  "model": "files_management.filemaxxmlids",
+  "pk": 32,
+  "fields": {
+    "file": 3,
+    "xml_id_base": "date",
+    "xml_id_number": 0
+  }
+},
+{
+  "model": "files_management.filemaxxmlids",
   "pk": 33,
   "fields": {
     "file": 3,
-    "xml_id_base": "ab",
+    "xml_id_base": "person",
     "xml_id_number": 0
   }
 },
@@ -1789,8 +1529,8 @@
   "fields": {
     "title": "Project_1",
     "description": "",
-    "creation_date": "2020-04-23T09:32:01.557Z",
-    "modification_date": "2020-04-23T09:32:01.557Z",
+    "creation_date": "2020-04-27T07:41:27.115Z",
+    "modification_date": "2020-04-27T07:41:27.115Z",
     "license": "GPL",
     "public": false
   }
@@ -1803,7 +1543,7 @@
     "file_version_counter": 0,
     "commit": null,
     "commit_counter": 0,
-    "date": "2020-04-23T09:32:01.570Z",
+    "date": "2020-04-27T07:41:27.127Z",
     "file_versions": []
   }
 },
@@ -1815,10 +1555,9 @@
     "file_version_counter": 1,
     "commit": null,
     "commit_counter": 0,
-    "date": "2020-04-23T09:32:12.780Z",
+    "date": "2020-04-27T07:41:38.668Z",
     "file_versions": [
-      1,
-      2
+      1
     ]
   }
 },
@@ -1830,9 +1569,8 @@
     "file_version_counter": 2,
     "commit": null,
     "commit_counter": 0,
-    "date": "2020-04-23T09:32:12.792Z",
+    "date": "2020-04-27T07:41:39.001Z",
     "file_versions": [
-      1,
       2
     ]
   }
@@ -1845,9 +1583,9 @@
     "file_version_counter": 3,
     "commit": null,
     "commit_counter": 0,
-    "date": "2020-04-23T09:32:16.864Z",
+    "date": "2020-04-27T07:41:51.052Z",
     "file_versions": [
-      1,
+      2,
       3
     ]
   }
@@ -1860,10 +1598,9 @@
     "file_version_counter": 4,
     "commit": null,
     "commit_counter": 0,
-    "date": "2020-04-23T09:32:17.187Z",
+    "date": "2020-04-27T07:41:51.238Z",
     "file_versions": [
-      1,
-      3,
+      2,
       4
     ]
   }
@@ -1876,9 +1613,9 @@
     "file_version_counter": 5,
     "commit": null,
     "commit_counter": 0,
-    "date": "2020-04-23T09:32:17.361Z",
+    "date": "2020-04-27T07:41:58.465Z",
     "file_versions": [
-      3,
+      2,
       4,
       5
     ]
@@ -1892,10 +1629,10 @@
     "file_version_counter": 6,
     "commit": null,
     "commit_counter": 0,
-    "date": "2020-04-23T09:32:17.709Z",
+    "date": "2020-04-27T07:41:58.616Z",
     "file_versions": [
-      3,
-      5,
+      2,
+      4,
       6
     ]
   }
@@ -2023,7 +1760,7 @@
   "fields": {
     "taxonomy": 1,
     "name": "ingredient",
-    "color": "#00ff0e",
+    "color": "#00ff09",
     "icon": "\uf0c3",
     "body_list": true
   }
@@ -2036,9 +1773,9 @@
     "last_login": null,
     "is_superuser": false,
     "username": "anonymous",
-    "first_name": "None",
-    "last_name": "None",
-    "email": "None",
+    "first_name": "none",
+    "last_name": "none",
+    "email": "none",
     "is_staff": false,
     "is_active": true,
     "date_joined": "1970-01-01T00:00:00Z",
@@ -2050,8 +1787,8 @@
   "model": "auth.user",
   "pk": 2,
   "fields": {
-    "password": "pbkdf2_sha256$150000$mL3ulXeJrqR2$d38gIzK5OkYg0GtoUsNtGHQrT2lOfzRARsL4GesSa7o=",
-    "last_login": "2020-04-23T09:32:59.566Z",
+    "password": "pbkdf2_sha256$150000$vHLtiByiOUKz$UC07JG8D5BBJ1gQ/gPNh+YpQ2+ctKLWpt5n3qvas8Vw=",
+    "last_login": "2020-04-27T07:42:37.519Z",
     "is_superuser": false,
     "username": "tony_stark",
     "first_name": "Tony",
@@ -2059,7 +1796,7 @@
     "email": "tony_stark@zmyslonymail.com",
     "is_staff": false,
     "is_active": true,
-    "date_joined": "2020-04-23T09:31:12.428Z",
+    "date_joined": "2020-04-27T07:39:21.981Z",
     "groups": [],
     "user_permissions": []
   }
@@ -2068,8 +1805,8 @@
   "model": "auth.user",
   "pk": 3,
   "fields": {
-    "password": "pbkdf2_sha256$150000$klLHEbVHE2MC$mbva0Hxu9ELyiNqzj3pHUxT/OrrtHwcNzf0JTSO+QS0=",
-    "last_login": "2020-04-23T09:32:49.895Z",
+    "password": "pbkdf2_sha256$150000$GiCiWDMB8U7U$rmXBW69RXifOPZlwAgXR7pFBmNdZGmQVbMNajnh9cdU=",
+    "last_login": "2020-04-27T07:42:27.446Z",
     "is_superuser": false,
     "username": "pepper_potts",
     "first_name": "Pepper",
@@ -2077,7 +1814,7 @@
     "email": "pepper_potts@zmyslonymail.com",
     "is_staff": false,
     "is_active": true,
-    "date_joined": "2020-04-23T09:32:48.895Z",
+    "date_joined": "2020-04-27T07:42:27.138Z",
     "groups": [],
     "user_permissions": []
   }
@@ -2085,34 +1822,6 @@
 {
   "model": "api_vis.entity",
   "pk": 1,
-  "fields": {
-    "file": 2,
-    "type": "ingredient",
-    "xml_id": "ingredient-0",
-    "created_by": 1,
-    "created_in_file_version": 2,
-    "deleted_by": null,
-    "deleted_in_file_version": null,
-    "deleted_on": null
-  }
-},
-{
-  "model": "api_vis.entity",
-  "pk": 2,
-  "fields": {
-    "file": 2,
-    "type": "ingredient",
-    "xml_id": "ingredient-1",
-    "created_by": 1,
-    "created_in_file_version": 2,
-    "deleted_by": null,
-    "deleted_in_file_version": null,
-    "deleted_on": null
-  }
-},
-{
-  "model": "api_vis.entity",
-  "pk": 3,
   "fields": {
     "file": 1,
     "type": "place",
@@ -2126,7 +1835,7 @@
 },
 {
   "model": "api_vis.entity",
-  "pk": 4,
+  "pk": 2,
   "fields": {
     "file": 1,
     "type": "event",
@@ -2140,7 +1849,7 @@
 },
 {
   "model": "api_vis.entity",
-  "pk": 5,
+  "pk": 3,
   "fields": {
     "file": 1,
     "type": "person",
@@ -2154,7 +1863,7 @@
 },
 {
   "model": "api_vis.entity",
-  "pk": 6,
+  "pk": 4,
   "fields": {
     "file": 1,
     "type": "person",
@@ -2168,7 +1877,7 @@
 },
 {
   "model": "api_vis.entity",
-  "pk": 7,
+  "pk": 5,
   "fields": {
     "file": 1,
     "type": "person",
@@ -2182,7 +1891,7 @@
 },
 {
   "model": "api_vis.entity",
-  "pk": 8,
+  "pk": 6,
   "fields": {
     "file": 1,
     "type": "person",
@@ -2196,7 +1905,7 @@
 },
 {
   "model": "api_vis.entity",
-  "pk": 9,
+  "pk": 7,
   "fields": {
     "file": 1,
     "type": "person",
@@ -2210,7 +1919,7 @@
 },
 {
   "model": "api_vis.entity",
-  "pk": 10,
+  "pk": 8,
   "fields": {
     "file": 1,
     "type": "person",
@@ -2224,7 +1933,7 @@
 },
 {
   "model": "api_vis.entity",
-  "pk": 11,
+  "pk": 9,
   "fields": {
     "file": 1,
     "type": "date",
@@ -2238,7 +1947,7 @@
 },
 {
   "model": "api_vis.entity",
-  "pk": 12,
+  "pk": 10,
   "fields": {
     "file": 1,
     "type": "date",
@@ -2252,11 +1961,39 @@
 },
 {
   "model": "api_vis.entity",
-  "pk": 13,
+  "pk": 11,
   "fields": {
     "file": 1,
     "type": "ingredient",
     "xml_id": "ingredient-0",
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null,
+    "deleted_on": null
+  }
+},
+{
+  "model": "api_vis.entity",
+  "pk": 12,
+  "fields": {
+    "file": 1,
+    "type": "ingredient",
+    "xml_id": "ingredient-1",
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null,
+    "deleted_on": null
+  }
+},
+{
+  "model": "api_vis.entity",
+  "pk": 13,
+  "fields": {
+    "file": 1,
+    "type": "ingredient",
+    "xml_id": "ingredient-2",
     "created_by": 1,
     "created_in_file_version": 1,
     "deleted_by": null,
@@ -2268,11 +2005,11 @@
   "model": "api_vis.entity",
   "pk": 14,
   "fields": {
-    "file": 1,
+    "file": 2,
     "type": "ingredient",
-    "xml_id": "ingredient-1",
+    "xml_id": "ingredient-0",
     "created_by": 1,
-    "created_in_file_version": 1,
+    "created_in_file_version": 3,
     "deleted_by": null,
     "deleted_in_file_version": null,
     "deleted_on": null
@@ -2282,11 +2019,11 @@
   "model": "api_vis.entity",
   "pk": 15,
   "fields": {
-    "file": 1,
+    "file": 2,
     "type": "ingredient",
-    "xml_id": "ingredient-2",
+    "xml_id": "ingredient-1",
     "created_by": 1,
-    "created_in_file_version": 1,
+    "created_in_file_version": 3,
     "deleted_by": null,
     "deleted_in_file_version": null,
     "deleted_on": null
@@ -2296,11 +2033,11 @@
   "model": "api_vis.entity",
   "pk": 16,
   "fields": {
-    "file": 1,
+    "file": 3,
     "type": "ingredient",
-    "xml_id": "ingredient-3",
+    "xml_id": "ingredient-0",
     "created_by": 1,
-    "created_in_file_version": 1,
+    "created_in_file_version": 5,
     "deleted_by": null,
     "deleted_in_file_version": null,
     "deleted_on": null
@@ -2310,81 +2047,11 @@
   "model": "api_vis.entity",
   "pk": 17,
   "fields": {
-    "file": 1,
-    "type": "ingredient",
-    "xml_id": "ingredient-4",
-    "created_by": 1,
-    "created_in_file_version": 1,
-    "deleted_by": null,
-    "deleted_in_file_version": null,
-    "deleted_on": null
-  }
-},
-{
-  "model": "api_vis.entity",
-  "pk": 18,
-  "fields": {
-    "file": 1,
-    "type": "ingredient",
-    "xml_id": "ingredient-5",
-    "created_by": 1,
-    "created_in_file_version": 1,
-    "deleted_by": null,
-    "deleted_in_file_version": null,
-    "deleted_on": null
-  }
-},
-{
-  "model": "api_vis.entity",
-  "pk": 19,
-  "fields": {
-    "file": 3,
-    "type": "ingredient",
-    "xml_id": "ingredient-0",
-    "created_by": 1,
-    "created_in_file_version": 4,
-    "deleted_by": null,
-    "deleted_in_file_version": null,
-    "deleted_on": null
-  }
-},
-{
-  "model": "api_vis.entity",
-  "pk": 20,
-  "fields": {
     "file": 3,
     "type": "ingredient",
     "xml_id": "ingredient-1",
     "created_by": 1,
-    "created_in_file_version": 4,
-    "deleted_by": null,
-    "deleted_in_file_version": null,
-    "deleted_on": null
-  }
-},
-{
-  "model": "api_vis.entity",
-  "pk": 21,
-  "fields": {
-    "file": 3,
-    "type": "ingredient",
-    "xml_id": "ingredient-2",
-    "created_by": 1,
-    "created_in_file_version": 4,
-    "deleted_by": null,
-    "deleted_in_file_version": null,
-    "deleted_on": null
-  }
-},
-{
-  "model": "api_vis.entity",
-  "pk": 22,
-  "fields": {
-    "file": 3,
-    "type": "ingredient",
-    "xml_id": "ingredient-3",
-    "created_by": 1,
-    "created_in_file_version": 4,
+    "created_in_file_version": 5,
     "deleted_by": null,
     "deleted_in_file_version": null,
     "deleted_on": null
@@ -2394,19 +2061,20 @@
   "model": "api_vis.certainty",
   "pk": 1,
   "fields": {
-    "file": 2,
+    "file": 1,
     "xml_id": "certainty-0",
     "locus": "value",
     "cert": "high",
     "degree": 0.857142857142857,
-    "target_xml_id": "name-1",
+    "target_xml_id": "name-3",
     "target_match": "@ref",
-    "asserted_value": "#sand",
+    "asserted_value": "#met",
     "description": null,
-    "file_version": 2,
+    "file_version": 1,
     "created_by": 1,
     "deleted_by": null,
     "categories": [
+      2,
       4
     ]
   }
@@ -2415,17 +2083,17 @@
   "model": "api_vis.certainty",
   "pk": 2,
   "fields": {
-    "file": 2,
+    "file": 1,
     "xml_id": "certainty-1",
     "locus": "value",
     "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-6",
-    "target_match": "@ref",
-    "asserted_value": "#sand",
-    "description": null,
-    "file_version": 2,
-    "created_by": 1,
+    "degree": null,
+    "target_xml_id": "test",
+    "target_match": null,
+    "asserted_value": "Balloons",
+    "description": "Some important decription",
+    "file_version": 1,
+    "created_by": 2,
     "deleted_by": null,
     "categories": [
       4
@@ -2436,17 +2104,17 @@
   "model": "api_vis.certainty",
   "pk": 3,
   "fields": {
-    "file": 2,
+    "file": 1,
     "xml_id": "certainty-2",
     "locus": "value",
     "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-9",
+    "degree": null,
+    "target_xml_id": "name-5",
     "target_match": "@ref",
-    "asserted_value": "#jus",
+    "asserted_value": "#ingredient-0",
     "description": null,
-    "file_version": 2,
-    "created_by": 1,
+    "file_version": 1,
+    "created_by": 2,
     "deleted_by": null,
     "categories": [
       4
@@ -2457,17 +2125,17 @@
   "model": "api_vis.certainty",
   "pk": 4,
   "fields": {
-    "file": 2,
+    "file": 1,
     "xml_id": "certainty-3",
     "locus": "value",
     "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-7",
-    "target_match": "@ref",
-    "asserted_value": "#sand",
+    "degree": null,
+    "target_xml_id": "person-2",
+    "target_match": "name/forename",
+    "asserted_value": "McDuck",
     "description": null,
-    "file_version": 2,
-    "created_by": 1,
+    "file_version": 1,
+    "created_by": 2,
     "deleted_by": null,
     "categories": [
       4
@@ -2478,20 +2146,20 @@
   "model": "api_vis.certainty",
   "pk": 5,
   "fields": {
-    "file": 2,
+    "file": 1,
     "xml_id": "certainty-4",
     "locus": "value",
     "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-4",
-    "target_match": "@ref",
-    "asserted_value": "#sand",
+    "degree": null,
+    "target_xml_id": "certainty-10",
+    "target_match": "@cert",
+    "asserted_value": "low",
     "description": null,
-    "file_version": 2,
+    "file_version": 1,
     "created_by": 1,
     "deleted_by": null,
     "categories": [
-      4
+      5
     ]
   }
 },
@@ -2499,20 +2167,20 @@
   "model": "api_vis.certainty",
   "pk": 6,
   "fields": {
-    "file": 2,
-    "xml_id": "certainty-5",
+    "file": 1,
+    "xml_id": "certainty-4",
     "locus": "value",
     "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-8",
-    "target_match": "@ref",
-    "asserted_value": "#sand",
+    "degree": null,
+    "target_xml_id": "certainty-10",
+    "target_match": "@cert",
+    "asserted_value": "low",
     "description": null,
     "file_version": 2,
     "created_by": 1,
     "deleted_by": null,
     "categories": [
-      4
+      5
     ]
   }
 },
@@ -2520,17 +2188,17 @@
   "model": "api_vis.certainty",
   "pk": 7,
   "fields": {
-    "file": 2,
-    "xml_id": "certainty-6",
+    "file": 1,
+    "xml_id": "certainty-3",
     "locus": "value",
-    "cert": "very high",
-    "degree": 1.0,
-    "target_xml_id": "name-0",
-    "target_match": "@ref",
-    "asserted_value": "#quart",
+    "cert": "high",
+    "degree": null,
+    "target_xml_id": "person-2",
+    "target_match": "name/forename",
+    "asserted_value": "McDuck",
     "description": null,
     "file_version": 2,
-    "created_by": 1,
+    "created_by": 2,
     "deleted_by": null,
     "categories": [
       4
@@ -2541,17 +2209,17 @@
   "model": "api_vis.certainty",
   "pk": 8,
   "fields": {
-    "file": 2,
-    "xml_id": "certainty-7",
+    "file": 1,
+    "xml_id": "certainty-2",
     "locus": "value",
     "cert": "high",
-    "degree": 0.857142857142857,
+    "degree": null,
     "target_xml_id": "name-5",
     "target_match": "@ref",
-    "asserted_value": "#sand",
+    "asserted_value": "#ingredient-0",
     "description": null,
     "file_version": 2,
-    "created_by": 1,
+    "created_by": 2,
     "deleted_by": null,
     "categories": [
       4
@@ -2562,17 +2230,17 @@
   "model": "api_vis.certainty",
   "pk": 9,
   "fields": {
-    "file": 2,
-    "xml_id": "certainty-8",
+    "file": 1,
+    "xml_id": "certainty-1",
     "locus": "value",
     "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "old_name_8",
-    "target_match": "@ref",
-    "asserted_value": "#sand",
-    "description": null,
+    "degree": null,
+    "target_xml_id": "test",
+    "target_match": null,
+    "asserted_value": "Balloons",
+    "description": "Some important decription",
     "file_version": 2,
-    "created_by": 1,
+    "created_by": 2,
     "deleted_by": null,
     "categories": [
       4
@@ -2583,19 +2251,20 @@
   "model": "api_vis.certainty",
   "pk": 10,
   "fields": {
-    "file": 2,
-    "xml_id": "certainty-9",
+    "file": 1,
+    "xml_id": "certainty-0",
     "locus": "value",
     "cert": "high",
     "degree": 0.857142857142857,
     "target_xml_id": "name-3",
     "target_match": "@ref",
-    "asserted_value": "#sand",
+    "asserted_value": "#met",
     "description": null,
     "file_version": 2,
     "created_by": 1,
     "deleted_by": null,
     "categories": [
+      2,
       4
     ]
   }
@@ -2605,15 +2274,15 @@
   "pk": 11,
   "fields": {
     "file": 2,
-    "xml_id": "certainty-10",
+    "xml_id": "certainty-0",
     "locus": "value",
     "cert": "high",
     "degree": 0.857142857142857,
-    "target_xml_id": "name-2",
+    "target_xml_id": "name-0",
     "target_match": "@ref",
     "asserted_value": "#sand",
     "description": null,
-    "file_version": 2,
+    "file_version": 3,
     "created_by": 1,
     "deleted_by": null,
     "categories": [
@@ -2626,11 +2295,11 @@
   "pk": 12,
   "fields": {
     "file": 2,
-    "xml_id": "certainty-10",
+    "xml_id": "certainty-1",
     "locus": "value",
     "cert": "high",
     "degree": 0.857142857142857,
-    "target_xml_id": "name-2",
+    "target_xml_id": "name-1",
     "target_match": "@ref",
     "asserted_value": "#sand",
     "description": null,
@@ -2647,13 +2316,13 @@
   "pk": 13,
   "fields": {
     "file": 2,
-    "xml_id": "certainty-9",
+    "xml_id": "certainty-2",
     "locus": "value",
     "cert": "high",
     "degree": 0.857142857142857,
-    "target_xml_id": "name-3",
+    "target_xml_id": "name-2",
     "target_match": "@ref",
-    "asserted_value": "#sand",
+    "asserted_value": "#jus",
     "description": null,
     "file_version": 3,
     "created_by": 1,
@@ -2668,15 +2337,15 @@
   "pk": 14,
   "fields": {
     "file": 2,
-    "xml_id": "certainty-8",
+    "xml_id": "certainty-2",
     "locus": "value",
     "cert": "high",
     "degree": 0.857142857142857,
-    "target_xml_id": "old_name_8",
+    "target_xml_id": "name-2",
     "target_match": "@ref",
-    "asserted_value": "#sand",
+    "asserted_value": "#jus",
     "description": null,
-    "file_version": 3,
+    "file_version": 4,
     "created_by": 1,
     "deleted_by": null,
     "categories": [
@@ -2689,15 +2358,15 @@
   "pk": 15,
   "fields": {
     "file": 2,
-    "xml_id": "certainty-7",
+    "xml_id": "certainty-1",
     "locus": "value",
     "cert": "high",
     "degree": 0.857142857142857,
-    "target_xml_id": "name-5",
+    "target_xml_id": "name-1",
     "target_match": "@ref",
     "asserted_value": "#sand",
     "description": null,
-    "file_version": 3,
+    "file_version": 4,
     "created_by": 1,
     "deleted_by": null,
     "categories": [
@@ -2710,15 +2379,15 @@
   "pk": 16,
   "fields": {
     "file": 2,
-    "xml_id": "certainty-6",
+    "xml_id": "certainty-0",
     "locus": "value",
-    "cert": "very high",
-    "degree": 1.0,
+    "cert": "high",
+    "degree": 0.857142857142857,
     "target_xml_id": "name-0",
     "target_match": "@ref",
-    "asserted_value": "#quart",
+    "asserted_value": "#sand",
     "description": null,
-    "file_version": 3,
+    "file_version": 4,
     "created_by": 1,
     "deleted_by": null,
     "categories": [
@@ -2730,16 +2399,16 @@
   "model": "api_vis.certainty",
   "pk": 17,
   "fields": {
-    "file": 2,
-    "xml_id": "certainty-5",
+    "file": 3,
+    "xml_id": "certainty-0",
     "locus": "value",
     "cert": "high",
     "degree": 0.857142857142857,
-    "target_xml_id": "name-8",
+    "target_xml_id": "name-1",
     "target_match": "@ref",
     "asserted_value": "#sand",
     "description": null,
-    "file_version": 3,
+    "file_version": 5,
     "created_by": 1,
     "deleted_by": null,
     "categories": [
@@ -2751,16 +2420,16 @@
   "model": "api_vis.certainty",
   "pk": 18,
   "fields": {
-    "file": 2,
-    "xml_id": "certainty-4",
+    "file": 3,
+    "xml_id": "certainty-1",
     "locus": "value",
     "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-4",
+    "degree": 0.833333333333333,
+    "target_xml_id": "name-0",
     "target_match": "@ref",
-    "asserted_value": "#sand",
+    "asserted_value": "#ingwer",
     "description": null,
-    "file_version": 3,
+    "file_version": 5,
     "created_by": 1,
     "deleted_by": null,
     "categories": [
@@ -2772,16 +2441,16 @@
   "model": "api_vis.certainty",
   "pk": 19,
   "fields": {
-    "file": 2,
-    "xml_id": "certainty-3",
+    "file": 3,
+    "xml_id": "certainty-1",
     "locus": "value",
     "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-7",
+    "degree": 0.833333333333333,
+    "target_xml_id": "name-0",
     "target_match": "@ref",
-    "asserted_value": "#sand",
+    "asserted_value": "#ingwer",
     "description": null,
-    "file_version": 3,
+    "file_version": 6,
     "created_by": 1,
     "deleted_by": null,
     "categories": [
@@ -2793,1354 +2462,12 @@
   "model": "api_vis.certainty",
   "pk": 20,
   "fields": {
-    "file": 2,
-    "xml_id": "certainty-2",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-9",
-    "target_match": "@ref",
-    "asserted_value": "#jus",
-    "description": null,
-    "file_version": 3,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 21,
-  "fields": {
-    "file": 2,
-    "xml_id": "certainty-1",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-6",
-    "target_match": "@ref",
-    "asserted_value": "#sand",
-    "description": null,
-    "file_version": 3,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 22,
-  "fields": {
-    "file": 2,
-    "xml_id": "certainty-0",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-1",
-    "target_match": "@ref",
-    "asserted_value": "#sand",
-    "description": null,
-    "file_version": 3,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 23,
-  "fields": {
-    "file": 1,
-    "xml_id": "certainty-0",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-4",
-    "target_match": "@ref",
-    "asserted_value": "#met",
-    "description": null,
-    "file_version": 1,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      2,
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 24,
-  "fields": {
-    "file": 1,
-    "xml_id": "certainty-1",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-5",
-    "target_match": "@ref",
-    "asserted_value": "#rag",
-    "description": null,
-    "file_version": 1,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 25,
-  "fields": {
-    "file": 1,
-    "xml_id": "certainty-2",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-7",
-    "target_match": "@ref",
-    "asserted_value": "#sand",
-    "description": null,
-    "file_version": 1,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 26,
-  "fields": {
-    "file": 1,
-    "xml_id": "certainty-3",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-2",
-    "target_match": "@ref",
-    "asserted_value": "#met",
-    "description": null,
-    "file_version": 1,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": []
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 27,
-  "fields": {
-    "file": 1,
-    "xml_id": "certainty-4",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-8",
-    "target_match": "@ref",
-    "asserted_value": "#sand",
-    "description": null,
-    "file_version": 1,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      2
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 28,
-  "fields": {
-    "file": 1,
-    "xml_id": "certainty-5",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-11",
-    "target_match": "@ref",
-    "asserted_value": "#sand",
-    "description": null,
-    "file_version": 1,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 29,
-  "fields": {
-    "file": 1,
-    "xml_id": "certainty-6",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-12",
-    "target_match": "@ref",
-    "asserted_value": "#form",
-    "description": null,
-    "file_version": 1,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 30,
-  "fields": {
-    "file": 1,
-    "xml_id": "certainty-7",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.833333333333333,
-    "target_xml_id": "name-1",
-    "target_match": "@ref",
-    "asserted_value": "#ingwer",
-    "description": null,
-    "file_version": 1,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 31,
-  "fields": {
-    "file": 1,
-    "xml_id": "certainty-8",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-9",
-    "target_match": "@ref",
-    "asserted_value": "#sand",
-    "description": null,
-    "file_version": 1,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 32,
-  "fields": {
-    "file": 1,
-    "xml_id": "certainty-9",
-    "locus": "value",
-    "cert": "very high",
-    "degree": 1.0,
-    "target_xml_id": "name-0",
-    "target_match": "@ref",
-    "asserted_value": "#butter",
-    "description": null,
-    "file_version": 1,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 33,
-  "fields": {
-    "file": 1,
-    "xml_id": "certainty-10",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-10",
-    "target_match": "@ref",
-    "asserted_value": "#sand",
-    "description": null,
-    "file_version": 1,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 34,
-  "fields": {
-    "file": 1,
-    "xml_id": "certainty-11",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-3",
-    "target_match": "@ref",
-    "asserted_value": "#met",
-    "description": null,
-    "file_version": 1,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 35,
-  "fields": {
-    "file": 1,
-    "xml_id": "certainty-12",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-6",
-    "target_match": "@ref",
-    "asserted_value": "#sand",
-    "description": null,
-    "file_version": 1,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 36,
-  "fields": {
-    "file": 1,
-    "xml_id": "certainty-13",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.833333333333333,
-    "target_xml_id": "name-13",
-    "target_match": "@ref",
-    "asserted_value": "#grieben",
-    "description": null,
-    "file_version": 1,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 37,
-  "fields": {
-    "file": 1,
-    "xml_id": "certainty-14",
-    "locus": "value",
-    "cert": "high",
-    "degree": null,
-    "target_xml_id": "test",
-    "target_match": null,
-    "asserted_value": "Balloons",
-    "description": "Some important decription",
-    "file_version": 1,
-    "created_by": 2,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 38,
-  "fields": {
-    "file": 1,
-    "xml_id": "certainty-15",
-    "locus": "value",
-    "cert": "high",
-    "degree": null,
-    "target_xml_id": "name-8",
-    "target_match": "@ref",
-    "asserted_value": "#ingredient-0",
-    "description": null,
-    "file_version": 1,
-    "created_by": 2,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 39,
-  "fields": {
-    "file": 1,
-    "xml_id": "certainty-16",
-    "locus": "value",
-    "cert": "high",
-    "degree": null,
-    "target_xml_id": "person-2",
-    "target_match": "name/forename",
-    "asserted_value": "McDuck",
-    "description": null,
-    "file_version": 1,
-    "created_by": 2,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 40,
-  "fields": {
-    "file": 1,
-    "xml_id": "certainty-17",
-    "locus": "value",
-    "cert": "high",
-    "degree": null,
-    "target_xml_id": "certainty-10",
-    "target_match": "@cert",
-    "asserted_value": "low",
-    "description": null,
-    "file_version": 1,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 41,
-  "fields": {
     "file": 3,
     "xml_id": "certainty-0",
     "locus": "value",
     "cert": "high",
     "degree": 0.857142857142857,
-    "target_xml_id": "name-7",
-    "target_match": "@ref",
-    "asserted_value": "#sand",
-    "description": null,
-    "file_version": 4,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 42,
-  "fields": {
-    "file": 3,
-    "xml_id": "certainty-1",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-11",
-    "target_match": "@ref",
-    "asserted_value": "#sand",
-    "description": null,
-    "file_version": 4,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 43,
-  "fields": {
-    "file": 3,
-    "xml_id": "certainty-2",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "ingredient-2",
-    "target_match": "@ref",
-    "asserted_value": "#sand",
-    "description": null,
-    "file_version": 4,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 44,
-  "fields": {
-    "file": 3,
-    "xml_id": "certainty-3",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-5",
-    "target_match": "@ref",
-    "asserted_value": "#sand",
-    "description": null,
-    "file_version": 4,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 45,
-  "fields": {
-    "file": 3,
-    "xml_id": "certainty-4",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-4",
-    "target_match": "@ref",
-    "asserted_value": "#sand",
-    "description": null,
-    "file_version": 4,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 46,
-  "fields": {
-    "file": 3,
-    "xml_id": "certainty-5",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.833333333333333,
-    "target_xml_id": "name-2",
-    "target_match": "@ref",
-    "asserted_value": "#silber",
-    "description": null,
-    "file_version": 4,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 47,
-  "fields": {
-    "file": 1,
-    "xml_id": "certainty-17",
-    "locus": "value",
-    "cert": "high",
-    "degree": null,
-    "target_xml_id": "certainty-10",
-    "target_match": "@cert",
-    "asserted_value": "low",
-    "description": null,
-    "file_version": 5,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 48,
-  "fields": {
-    "file": 3,
-    "xml_id": "certainty-6",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.833333333333333,
-    "target_xml_id": "name-0",
-    "target_match": "@ref",
-    "asserted_value": "#ingwer",
-    "description": null,
-    "file_version": 4,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 49,
-  "fields": {
-    "file": 1,
-    "xml_id": "certainty-16",
-    "locus": "value",
-    "cert": "high",
-    "degree": null,
-    "target_xml_id": "person-2",
-    "target_match": "name/forename",
-    "asserted_value": "McDuck",
-    "description": null,
-    "file_version": 5,
-    "created_by": 2,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 50,
-  "fields": {
-    "file": 3,
-    "xml_id": "certainty-7",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-6",
-    "target_match": "@ref",
-    "asserted_value": "#sand",
-    "description": null,
-    "file_version": 4,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 51,
-  "fields": {
-    "file": 1,
-    "xml_id": "certainty-15",
-    "locus": "value",
-    "cert": "high",
-    "degree": null,
-    "target_xml_id": "name-8",
-    "target_match": "@ref",
-    "asserted_value": "#ingredient-0",
-    "description": null,
-    "file_version": 5,
-    "created_by": 2,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 52,
-  "fields": {
-    "file": 3,
-    "xml_id": "certainty-8",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-3",
-    "target_match": "@ref",
-    "asserted_value": "#sand",
-    "description": null,
-    "file_version": 4,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 53,
-  "fields": {
-    "file": 1,
-    "xml_id": "certainty-14",
-    "locus": "value",
-    "cert": "high",
-    "degree": null,
-    "target_xml_id": "test",
-    "target_match": null,
-    "asserted_value": "Balloons",
-    "description": "Some important decription",
-    "file_version": 5,
-    "created_by": 2,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 54,
-  "fields": {
-    "file": 1,
-    "xml_id": "certainty-13",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.833333333333333,
-    "target_xml_id": "name-13",
-    "target_match": "@ref",
-    "asserted_value": "#grieben",
-    "description": null,
-    "file_version": 5,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 55,
-  "fields": {
-    "file": 3,
-    "xml_id": "certainty-9",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-10",
-    "target_match": "@ref",
-    "asserted_value": "#sand",
-    "description": null,
-    "file_version": 4,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 56,
-  "fields": {
-    "file": 3,
-    "xml_id": "certainty-10",
-    "locus": "value",
-    "cert": "very high",
-    "degree": 1.0,
-    "target_xml_id": "name-12",
-    "target_match": "@ref",
-    "asserted_value": "#butter",
-    "description": null,
-    "file_version": 4,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 57,
-  "fields": {
-    "file": 1,
-    "xml_id": "certainty-12",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-6",
-    "target_match": "@ref",
-    "asserted_value": "#sand",
-    "description": null,
-    "file_version": 5,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 58,
-  "fields": {
-    "file": 3,
-    "xml_id": "certainty-11",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-9",
-    "target_match": "@ref",
-    "asserted_value": "#sand",
-    "description": null,
-    "file_version": 4,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 59,
-  "fields": {
-    "file": 1,
-    "xml_id": "certainty-11",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-3",
-    "target_match": "@ref",
-    "asserted_value": "#met",
-    "description": null,
-    "file_version": 5,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 60,
-  "fields": {
-    "file": 3,
-    "xml_id": "certainty-12",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.888888888888889,
     "target_xml_id": "name-1",
-    "target_match": "@ref",
-    "asserted_value": "#stift",
-    "description": null,
-    "file_version": 4,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 61,
-  "fields": {
-    "file": 1,
-    "xml_id": "certainty-10",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-10",
-    "target_match": "@ref",
-    "asserted_value": "#sand",
-    "description": null,
-    "file_version": 5,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 62,
-  "fields": {
-    "file": 1,
-    "xml_id": "certainty-9",
-    "locus": "value",
-    "cert": "very high",
-    "degree": 1.0,
-    "target_xml_id": "name-0",
-    "target_match": "@ref",
-    "asserted_value": "#butter",
-    "description": null,
-    "file_version": 5,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 63,
-  "fields": {
-    "file": 1,
-    "xml_id": "certainty-8",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-9",
-    "target_match": "@ref",
-    "asserted_value": "#sand",
-    "description": null,
-    "file_version": 5,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 64,
-  "fields": {
-    "file": 1,
-    "xml_id": "certainty-7",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.833333333333333,
-    "target_xml_id": "name-1",
-    "target_match": "@ref",
-    "asserted_value": "#ingwer",
-    "description": null,
-    "file_version": 5,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 65,
-  "fields": {
-    "file": 1,
-    "xml_id": "certainty-6",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-12",
-    "target_match": "@ref",
-    "asserted_value": "#form",
-    "description": null,
-    "file_version": 5,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 66,
-  "fields": {
-    "file": 1,
-    "xml_id": "certainty-5",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-11",
-    "target_match": "@ref",
-    "asserted_value": "#sand",
-    "description": null,
-    "file_version": 5,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 67,
-  "fields": {
-    "file": 1,
-    "xml_id": "certainty-4",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-8",
-    "target_match": "@ref",
-    "asserted_value": "#sand",
-    "description": null,
-    "file_version": 5,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      2
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 68,
-  "fields": {
-    "file": 1,
-    "xml_id": "certainty-3",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-2",
-    "target_match": "@ref",
-    "asserted_value": "#met",
-    "description": null,
-    "file_version": 5,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": []
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 69,
-  "fields": {
-    "file": 1,
-    "xml_id": "certainty-2",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-7",
-    "target_match": "@ref",
-    "asserted_value": "#sand",
-    "description": null,
-    "file_version": 5,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 70,
-  "fields": {
-    "file": 3,
-    "xml_id": "certainty-12",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.888888888888889,
-    "target_xml_id": "name-1",
-    "target_match": "@ref",
-    "asserted_value": "#stift",
-    "description": null,
-    "file_version": 6,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 71,
-  "fields": {
-    "file": 1,
-    "xml_id": "certainty-1",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-5",
-    "target_match": "@ref",
-    "asserted_value": "#rag",
-    "description": null,
-    "file_version": 5,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 72,
-  "fields": {
-    "file": 3,
-    "xml_id": "certainty-11",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-9",
-    "target_match": "@ref",
-    "asserted_value": "#sand",
-    "description": null,
-    "file_version": 6,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 73,
-  "fields": {
-    "file": 1,
-    "xml_id": "certainty-0",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-4",
-    "target_match": "@ref",
-    "asserted_value": "#met",
-    "description": null,
-    "file_version": 5,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      2,
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 74,
-  "fields": {
-    "file": 3,
-    "xml_id": "certainty-10",
-    "locus": "value",
-    "cert": "very high",
-    "degree": 1.0,
-    "target_xml_id": "name-12",
-    "target_match": "@ref",
-    "asserted_value": "#butter",
-    "description": null,
-    "file_version": 6,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 75,
-  "fields": {
-    "file": 3,
-    "xml_id": "certainty-9",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-10",
-    "target_match": "@ref",
-    "asserted_value": "#sand",
-    "description": null,
-    "file_version": 6,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 76,
-  "fields": {
-    "file": 3,
-    "xml_id": "certainty-8",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-3",
-    "target_match": "@ref",
-    "asserted_value": "#sand",
-    "description": null,
-    "file_version": 6,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 77,
-  "fields": {
-    "file": 3,
-    "xml_id": "certainty-7",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-6",
-    "target_match": "@ref",
-    "asserted_value": "#sand",
-    "description": null,
-    "file_version": 6,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 78,
-  "fields": {
-    "file": 3,
-    "xml_id": "certainty-6",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.833333333333333,
-    "target_xml_id": "name-0",
-    "target_match": "@ref",
-    "asserted_value": "#ingwer",
-    "description": null,
-    "file_version": 6,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 79,
-  "fields": {
-    "file": 3,
-    "xml_id": "certainty-5",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.833333333333333,
-    "target_xml_id": "name-2",
-    "target_match": "@ref",
-    "asserted_value": "#silber",
-    "description": null,
-    "file_version": 6,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 80,
-  "fields": {
-    "file": 3,
-    "xml_id": "certainty-4",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-4",
-    "target_match": "@ref",
-    "asserted_value": "#sand",
-    "description": null,
-    "file_version": 6,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 81,
-  "fields": {
-    "file": 3,
-    "xml_id": "certainty-3",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-5",
-    "target_match": "@ref",
-    "asserted_value": "#sand",
-    "description": null,
-    "file_version": 6,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 82,
-  "fields": {
-    "file": 3,
-    "xml_id": "certainty-2",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "ingredient-2",
-    "target_match": "@ref",
-    "asserted_value": "#sand",
-    "description": null,
-    "file_version": 6,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 83,
-  "fields": {
-    "file": 3,
-    "xml_id": "certainty-1",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-11",
-    "target_match": "@ref",
-    "asserted_value": "#sand",
-    "description": null,
-    "file_version": 6,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 84,
-  "fields": {
-    "file": 3,
-    "xml_id": "certainty-0",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-7",
     "target_match": "@ref",
     "asserted_value": "#sand",
     "description": null,
@@ -4198,11 +2525,11 @@
   "model": "files_management.fileversion",
   "pk": 1,
   "fields": {
-    "upload": "uploaded_files/7552c53f26c65f9f5612f1660182aff46a2712ee8300c8f8803db96c260d220b74d42d703c73e_bEo9Noh",
-    "hash": "7552c53f26c65f9f5612f1660182aff46a2712ee8300c8f8803db96c260d220b74d42d703c73ea22e5586605571e1e307de4885af3806d2d64f7318b0878ffda",
+    "upload": "uploaded_files/d5a4bad7d2ac54785a7608ab74fe3aba5e6780d63959036e67f97034f7e07d4587fe985b7bb16_ZuMoT0s",
+    "hash": "d5a4bad7d2ac54785a7608ab74fe3aba5e6780d63959036e67f97034f7e07d4587fe985b7bb16fe2d8350d633a4280c4c8ac621967a5dacced927d030500032d",
     "file": 1,
     "number": 1,
-    "creation_date": "2020-04-23T09:32:12.766Z",
+    "creation_date": "2020-04-27T07:41:38.657Z",
     "created_by": 2,
     "message": null
   }
@@ -4211,24 +2538,24 @@
   "model": "files_management.fileversion",
   "pk": 2,
   "fields": {
-    "upload": "uploaded_files/1dc87f6eda8ce7dfe1f81a3c2391ab75923afd92a40024acfaad58998f6c8709fb681a6638909_s0Zfgvn",
-    "hash": "1dc87f6eda8ce7dfe1f81a3c2391ab75923afd92a40024acfaad58998f6c8709fb681a6638909873e9e6f52783ae22a624ee383ca563836f334b86228703ae65",
-    "file": 2,
-    "number": 1,
-    "creation_date": "2020-04-23T09:32:12.771Z",
-    "created_by": 2,
-    "message": null
-  }
-},
-{
-  "model": "files_management.fileversion",
-  "pk": 3,
-  "fields": {
-    "upload": "uploaded_files/a3c6f573540f8a5f80b76c97c5a07f63b8fd7931f02f48d49804e0bb1f73932bae588fb569ba2_dPf0X1R",
-    "hash": "a3c6f573540f8a5f80b76c97c5a07f63b8fd7931f02f48d49804e0bb1f73932bae588fb569ba250880f6a61ff33fbf821712718a773ad1c1427138e7b12d4e48",
-    "file": 2,
+    "upload": "uploaded_files/66ec4791002f9910f83436080f269db09d8ae4974b076e66b9cce29d314e6f61e3398fe1b7ef1_LtbzpjI",
+    "hash": "66ec4791002f9910f83436080f269db09d8ae4974b076e66b9cce29d314e6f61e3398fe1b7ef12317faa8ac27d550e0deb3b10e2db1bb3e568d338c63384781b",
+    "file": 1,
     "number": 2,
-    "creation_date": "2020-04-23T09:32:16.844Z",
+    "creation_date": "2020-04-27T07:41:38.997Z",
+    "created_by": 2,
+    "message": null
+  }
+},
+{
+  "model": "files_management.fileversion",
+  "pk": 3,
+  "fields": {
+    "upload": "uploaded_files/837ff802242a9165fc7dccb911a843b52b1e63fbad330314e07478fbbbc2d74bfa815bb9663d5_jBvWAmB",
+    "hash": "837ff802242a9165fc7dccb911a843b52b1e63fbad330314e07478fbbbc2d74bfa815bb9663d5606ce99149604e291c798415509ce4cb55b6b7aa40515d599b3",
+    "file": 2,
+    "number": 1,
+    "creation_date": "2020-04-27T07:41:51.044Z",
     "created_by": 2,
     "message": null
   }
@@ -4237,11 +2564,11 @@
   "model": "files_management.fileversion",
   "pk": 4,
   "fields": {
-    "upload": "uploaded_files/6ce02ed9806013942eeff81e7b645f1f9a7eb08bc8573bb1633cd7e4b9081376f9168265dc977_tob7XP7",
-    "hash": "6ce02ed9806013942eeff81e7b645f1f9a7eb08bc8573bb1633cd7e4b9081376f9168265dc9772a2ff5bd0191c1f3a57a59656e317064a3c5d9e9cb1163a720c",
-    "file": 3,
-    "number": 1,
-    "creation_date": "2020-04-23T09:32:17.180Z",
+    "upload": "uploaded_files/191ebf73bf94b585c6d46d6de94639205ad11f158535e31a35f1a403de38a87ad04093f328393_6YDYCxT",
+    "hash": "191ebf73bf94b585c6d46d6de94639205ad11f158535e31a35f1a403de38a87ad04093f32839313a95e8aec104f251c11985de7fa88f374b312ea7d2026502df",
+    "file": 2,
+    "number": 2,
+    "creation_date": "2020-04-27T07:41:51.234Z",
     "created_by": 2,
     "message": null
   }
@@ -4250,11 +2577,11 @@
   "model": "files_management.fileversion",
   "pk": 5,
   "fields": {
-    "upload": "uploaded_files/7a7df4265209ae67042f1a9436fa445e175e555c50924d17bd1f090e27df990220d5f7e78737a_hqKwx4X",
-    "hash": "7a7df4265209ae67042f1a9436fa445e175e555c50924d17bd1f090e27df990220d5f7e78737abedb6a828017c22b7ca82d78da494f4bb2e1a9138d7309cb30e",
-    "file": 1,
-    "number": 2,
-    "creation_date": "2020-04-23T09:32:17.344Z",
+    "upload": "uploaded_files/f25e21bb837191d7ddec231df49196c5acf0ea473147b7cf36385d7f041aa74131e097d0183a9_cthDeec",
+    "hash": "f25e21bb837191d7ddec231df49196c5acf0ea473147b7cf36385d7f041aa74131e097d0183a970646f96ca783ebacc607a9a01d3d8dfc6a3fd211d19ac00dc9",
+    "file": 3,
+    "number": 1,
+    "creation_date": "2020-04-27T07:41:58.453Z",
     "created_by": 2,
     "message": null
   }
@@ -4263,11 +2590,11 @@
   "model": "files_management.fileversion",
   "pk": 6,
   "fields": {
-    "upload": "uploaded_files/e1d768e00f5f381fe103cf0650f281b75611c4d580900fde319a0b7717957279917f47e27c177_tllPLk9",
-    "hash": "e1d768e00f5f381fe103cf0650f281b75611c4d580900fde319a0b7717957279917f47e27c177916c6a1c93cd97875409ff26fff33bad4b9e68efa5cba7b4464",
+    "upload": "uploaded_files/61debaf45fc63961afe3a7386e7322007264bb9d54719d7f2beb9d094b3f55874df4b57c30866_c2IdIYZ",
+    "hash": "61debaf45fc63961afe3a7386e7322007264bb9d54719d7f2beb9d094b3f55874df4b57c3086651e8500fa8377d338ddc3092de99ace45b77eeab4137abc9102",
     "file": 3,
     "number": 2,
-    "creation_date": "2020-04-23T09:32:17.699Z",
+    "creation_date": "2020-04-27T07:41:58.612Z",
     "created_by": 2,
     "message": null
   }
@@ -4297,7 +2624,7 @@
   "pk": 1,
   "fields": {
     "project": 1,
-    "date": "2020-04-23T09:32:01.618Z",
+    "date": "2020-04-27T07:41:27.167Z",
     "related_file": null,
     "related_file_name": null,
     "related_dir": null,
@@ -4312,7 +2639,7 @@
   "pk": 2,
   "fields": {
     "project": 1,
-    "date": "2020-04-23T09:32:12.815Z",
+    "date": "2020-04-27T07:41:38.687Z",
     "related_file": 1,
     "related_file_name": "group_0_long_annotated_0_modified_xml",
     "related_dir": null,
@@ -4327,67 +2654,7 @@
   "pk": 3,
   "fields": {
     "project": 1,
-    "date": "2020-04-23T09:32:12.819Z",
-    "related_file": 2,
-    "related_file_name": "group_0_long_annotated_1_modified_xml",
-    "related_dir": null,
-    "related_dir_name": null,
-    "user": 2,
-    "user_name": "Tony Stark",
-    "action_text": "created"
-  }
-},
-{
-  "model": "projects.activity",
-  "pk": 4,
-  "fields": {
-    "project": 1,
-    "date": "2020-04-23T09:32:16.888Z",
-    "related_file": 2,
-    "related_file_name": "group_0_long_annotated_1_modified_xml",
-    "related_dir": null,
-    "related_dir_name": null,
-    "user": 2,
-    "user_name": "Tony Stark",
-    "action_text": "created version number 2 of"
-  }
-},
-{
-  "model": "projects.activity",
-  "pk": 5,
-  "fields": {
-    "project": 1,
-    "date": "2020-04-23T09:32:17.100Z",
-    "related_file": 2,
-    "related_file_name": "group_0_long_annotated_1_modified_xml",
-    "related_dir": null,
-    "related_dir_name": null,
-    "user": 2,
-    "user_name": "Tony Stark",
-    "action_text": "File migrated: Appended TEI ProvideDH schema. Reformatted xml. Corrected xml:ids for project entities. Moved elements from file to database. "
-  }
-},
-{
-  "model": "projects.activity",
-  "pk": 6,
-  "fields": {
-    "project": 1,
-    "date": "2020-04-23T09:32:17.206Z",
-    "related_file": 3,
-    "related_file_name": "group_0_long_annotated_2_modified_xml",
-    "related_dir": null,
-    "related_dir_name": null,
-    "user": 2,
-    "user_name": "Tony Stark",
-    "action_text": "created"
-  }
-},
-{
-  "model": "projects.activity",
-  "pk": 7,
-  "fields": {
-    "project": 1,
-    "date": "2020-04-23T09:32:17.392Z",
+    "date": "2020-04-27T07:41:39.007Z",
     "related_file": 1,
     "related_file_name": "group_0_long_annotated_0_modified_xml",
     "related_dir": null,
@@ -4399,25 +2666,10 @@
 },
 {
   "model": "projects.activity",
-  "pk": 8,
+  "pk": 4,
   "fields": {
     "project": 1,
-    "date": "2020-04-23T09:32:17.732Z",
-    "related_file": 3,
-    "related_file_name": "group_0_long_annotated_2_modified_xml",
-    "related_dir": null,
-    "related_dir_name": null,
-    "user": 2,
-    "user_name": "Tony Stark",
-    "action_text": "created version number 2 of"
-  }
-},
-{
-  "model": "projects.activity",
-  "pk": 9,
-  "fields": {
-    "project": 1,
-    "date": "2020-04-23T09:32:17.844Z",
+    "date": "2020-04-27T07:41:39.125Z",
     "related_file": 1,
     "related_file_name": "group_0_long_annotated_0_modified_xml",
     "related_dir": null,
@@ -4429,10 +2681,85 @@
 },
 {
   "model": "projects.activity",
+  "pk": 5,
+  "fields": {
+    "project": 1,
+    "date": "2020-04-27T07:41:51.073Z",
+    "related_file": 2,
+    "related_file_name": "group_0_long_annotated_1_modified_xml",
+    "related_dir": null,
+    "related_dir_name": null,
+    "user": 2,
+    "user_name": "Tony Stark",
+    "action_text": "created"
+  }
+},
+{
+  "model": "projects.activity",
+  "pk": 6,
+  "fields": {
+    "project": 1,
+    "date": "2020-04-27T07:41:51.246Z",
+    "related_file": 2,
+    "related_file_name": "group_0_long_annotated_1_modified_xml",
+    "related_dir": null,
+    "related_dir_name": null,
+    "user": 2,
+    "user_name": "Tony Stark",
+    "action_text": "created version number 2 of"
+  }
+},
+{
+  "model": "projects.activity",
+  "pk": 7,
+  "fields": {
+    "project": 1,
+    "date": "2020-04-27T07:41:51.314Z",
+    "related_file": 2,
+    "related_file_name": "group_0_long_annotated_1_modified_xml",
+    "related_dir": null,
+    "related_dir_name": null,
+    "user": 2,
+    "user_name": "Tony Stark",
+    "action_text": "File migrated: Appended TEI ProvideDH schema. Reformatted xml. Corrected xml:ids for project entities. Moved elements from file to database. "
+  }
+},
+{
+  "model": "projects.activity",
+  "pk": 8,
+  "fields": {
+    "project": 1,
+    "date": "2020-04-27T07:41:58.482Z",
+    "related_file": 3,
+    "related_file_name": "group_0_long_annotated_2_modified_xml",
+    "related_dir": null,
+    "related_dir_name": null,
+    "user": 2,
+    "user_name": "Tony Stark",
+    "action_text": "created"
+  }
+},
+{
+  "model": "projects.activity",
+  "pk": 9,
+  "fields": {
+    "project": 1,
+    "date": "2020-04-27T07:41:58.637Z",
+    "related_file": 3,
+    "related_file_name": "group_0_long_annotated_2_modified_xml",
+    "related_dir": null,
+    "related_dir_name": null,
+    "user": 2,
+    "user_name": "Tony Stark",
+    "action_text": "created version number 2 of"
+  }
+},
+{
+  "model": "projects.activity",
   "pk": 10,
   "fields": {
     "project": 1,
-    "date": "2020-04-23T09:32:17.970Z",
+    "date": "2020-04-27T07:41:58.669Z",
     "related_file": 3,
     "related_file_name": "group_0_long_annotated_2_modified_xml",
     "related_dir": null,
