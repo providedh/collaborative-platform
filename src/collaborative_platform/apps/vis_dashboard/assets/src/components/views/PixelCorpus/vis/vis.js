@@ -78,7 +78,7 @@ export default function Vis () {
       ? x => x.file
       : x => x.file_name
     const docOrder = self._docSorting(data.filtered, fileAccessor)
-    self._docNameWidth = Math.min(self._maxLabelLength, Math.max(...Object.keys(docOrder).map(x=>x.length))) * self._fontWidth;
+    self._docNameWidth = Math.min(self._maxLabelLength, Math.max(...Object.keys(docOrder).map(x => x.length))) * self._fontWidth
     const freeSpace = container.clientWidth - (self._padding * 4 + self._legendWidth + self._docNameWidth)
 
     // if(source===PixelCorpusSource.certainty)
