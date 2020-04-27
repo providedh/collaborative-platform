@@ -1,4 +1,5 @@
 import * as d3 from 'd3'
+import styles from '../style.module.css'
 
 export default function renderCells (args) {
   const {
@@ -59,12 +60,12 @@ function shorttenedLabel (label, maxLabelLength = 20) {
 function renderDocumentLabels (docOrder, rowsByDoc, rootG, cellSide, maxLabelWidth, cellPadding, titleHeight, eventCallback) {
   const labels = rootG.select('.docLabels')
     .attr('transform', `translate(0, ${titleHeight-11})`)
-    .selectAll('text.label')
+    .selectAll('text.'+styles.label)
     .data(Object.keys(docOrder))
   labels.exit().remove()
-  labels.enter().append('svg:text').classed('label', true)
+  labels.enter().append('svg:text').classed(styles.label, true)
 
-  rootG.select('.docLabels').selectAll('text.label')
+  rootG.select('.docLabels').selectAll('text.'+styles.label)
     .text(d => shorttenedLabel(d, maxLabelWidth))
     .on('mouseenter', d => eventCallback('labelHover', d))
     .attr('x', 0)
