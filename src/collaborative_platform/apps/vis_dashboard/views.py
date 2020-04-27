@@ -35,7 +35,7 @@ def get_dashboard(request, project_id, dashboard_id):
         dashboard = Dashboard.objects.get(project_id=project_id, id=dashboard_id)
 
         context = {
-            'DEVELOPMENT': True,
+            'DEVELOPMENT': False,
             'project_id': project_id,
             'dashboard_config': json.dumps(dashboard.config),
             'dashboard': dashboard
