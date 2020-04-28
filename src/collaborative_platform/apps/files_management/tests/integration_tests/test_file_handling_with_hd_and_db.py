@@ -13,7 +13,7 @@ from apps.projects.models import Project
 SCRIPT_DIR = os.path.dirname(__file__)
 
 
-@pytest.mark.usefixtures('file_upload_with_hd_and_db__db_setup', 'reset_db_files_directory_after_each_test')
+@pytest.mark.usefixtures('file_handling_with_hd_and_db__db_setup', 'reset_db_files_directory_after_each_test')
 @pytest.mark.django_db()
 @pytest.mark.integration_tests
 class TestFileHandlingWithHdAndDb:

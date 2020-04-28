@@ -19,6 +19,7 @@ TEST_CHANNEL_LAYERS = {
 }
 
 
+@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_after_each_test')
 @pytest.mark.asyncio
 @pytest.mark.django_db
 @pytest.mark.integration_tests

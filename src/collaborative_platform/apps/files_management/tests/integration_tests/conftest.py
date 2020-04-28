@@ -12,7 +12,7 @@ SCRIPT_DIR = os.path.dirname(__file__)
 
 
 @pytest.fixture(scope='class')
-def file_upload_with_hd_and_db__db_setup(django_db_setup, django_db_blocker):
+def file_handling_with_hd_and_db__db_setup(django_db_setup, django_db_blocker):
     with django_db_blocker.unblock():
         media_for_tests_dir = os.path.basename(MEDIA_ROOT)
 
