@@ -7,6 +7,7 @@ import RangeControl from './RangeControl'
 import SelectionControl from './SelectionControl'
 import TextControl from './TextControl'
 import ToogleControl from './ToogleControl'
+import TextAreaControl from './TextAreaControl'
 
 export default {
   color: ColorControl,
@@ -17,5 +18,6 @@ export default {
   number: NumberControl,
   range: RangeControl,
   text: TextControl,
+  textArea: TextAreaControl,
   toogle: ToogleControl
 }

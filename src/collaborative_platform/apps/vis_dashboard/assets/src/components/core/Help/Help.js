@@ -219,6 +219,33 @@ export default function Help (props) {
         </div>
         <div>
           <div className="row ml-0 mr-0">
+            <h2>Note</h2>
+          </div>
+          <div className="row ml-0 mr-0">
+            <h5><i>Add your findings and thoughts using Markdown notes.</i></h5>
+          </div>
+          <div className="row mt-2">
+            <div className="col-sm">
+              <p>
+                    This views allows rendering rich text notes by using the Markdown
+                    format.
+              </p>
+            </div>
+            <div className="col-sm">
+              <p>
+                    The Markdown format provides structure and styling using plain text
+                    and can be read about here: <a href="https://guides.github.com/features/mastering-markdown/">
+                        https://guides.github.com/features/mastering-markdown/
+                    </a>.
+              </p>
+            </div>
+            <div className="col-sm">
+            </div>
+          </div>
+          <hr/>
+        </div>
+        <div>
+          <div className="row ml-0 mr-0">
             <h2>Chord Diagram</h2>
           </div>
           <div className="row ml-0 mr-0">
