@@ -86,11 +86,11 @@ class TestAnnotatorWithWsAndDb:
         response = await communicator.receive_json_from()
         test_name = inspect.currentframe().f_code.co_name
 
-        verify_response(test_name, response)
+        verify_response(test_name, response, 0)
 
         await communicator.disconnect()
 
-    async def test_add_tag_to_text(self, settings):
+    async def test_add_tags_to_text(self, settings):
         settings.CHANNEL_LAYERS = TEST_CHANNEL_LAYERS
 
         project_id = 1
@@ -102,7 +102,16 @@ class TestAnnotatorWithWsAndDb:
         connected, _ = await communicator.connect()
         assert connected is True
 
-        request = [{'aaa': 'lalala'}]
+        _ = await communicator.receive_json_from()
+
+        request = [
+            {
+                'method': 'POST',
+                'element_type': 'tag',
+                'start_pos': 265,
+                'end_pos': 271,
+            }
+        ]
         request = json.dumps(request)
 
         await communicator.send_to(text_data=request)
@@ -110,7 +119,23 @@ class TestAnnotatorWithWsAndDb:
         response = await communicator.receive_json_from()
         test_name = inspect.currentframe().f_code.co_name
 
-        verify_response(test_name, response)
+        verify_response(test_name, response, 0)
+
+        request = [
+            {
+                'method': 'POST',
+                'element_type': 'tag',
+                "start_pos": 380,
+                "end_pos": 384
+            }
+        ]
+        request = json.dumps(request)
+
+        await communicator.send_to(text_data=request)
+
+        response = await communicator.receive_json_from()
+
+        verify_response(test_name, response, 1)
 
         await communicator.disconnect()
 
@@ -131,11 +156,11 @@ def get_communicator(project_id, file_id, user_id=None):
     return communicator
 
 
-def verify_response(test_name, response):
+def verify_response(test_name, response, response_nr):
     test_results_file_path = os.path.join(SCRIPT_DIR, 'tests_results.json')
     test_results = read_file(test_results_file_path)
     test_results = json.loads(test_results)
-    expected = test_results[test_name]
+    expected = test_results[test_name][response_nr]
 
     for field in expected.keys():
         assert response[field] == expected[field]

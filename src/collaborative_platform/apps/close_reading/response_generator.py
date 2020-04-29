@@ -25,12 +25,12 @@ class ResponseGenerator:
         self.__annotating_body_content = None
 
         self.__get_file_from_db(file_id)
-        self.__load_xml_content()
+        self.__load_body_content()
 
     def __get_file_from_db(self, file_id):
         self.__file = File.objects.get(id=file_id, deleted=False)
 
-    def __load_xml_content(self):
+    def __load_body_content(self):
         room_name = f'{self.__file.project.id}_{self.__file.id}'
 
         try:
@@ -41,10 +41,9 @@ class ResponseGenerator:
             xml_content = file_version.get_raw_content()
             body_content = self.__get_body_content(xml_content)
 
-            self.__annotating_body_content = AnnotatingBodyContent(file_symbol=room_name,
-                                                                   file_name=file_version.file.name,
-                                                                   body_content=body_content)
-            self.__annotating_body_content.save()
+            self.__annotating_body_content = AnnotatingBodyContent.objects.create(file_symbol=room_name,
+                                                                                  file_name=file_version.file.name,
+                                                                                  body_content=body_content)
 
             logger.info(f"Load content of file: '{file_version.file.name}' in version: {file_version.number} "
                         f"to room: '{room_name}'")
@@ -58,7 +57,6 @@ class ResponseGenerator:
         body_element = get_first_xpath_match(tree, body_xpath, XML_NAMESPACES)
 
         body_content = etree.tounicode(body_element, pretty_print=True)
-        body_content = re.sub(r'(^<body.*?>\s*|\s*<\/body>\s*$)', '', body_content)
 
         return body_content
 
@@ -66,6 +64,8 @@ class ResponseGenerator:
         authors = self.__get_authors()
         certainties = self.__get_certainties()
         entities_lists = self.__get_entities_lists()
+
+        self.__annotating_body_content.refresh_from_db()
         body_content = self.__annotating_body_content.body_content
 
         response = {
