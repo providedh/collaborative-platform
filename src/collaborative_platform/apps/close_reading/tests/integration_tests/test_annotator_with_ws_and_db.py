@@ -139,6 +139,44 @@ class TestAnnotatorWithWsAndDb:
 
         await communicator.disconnect()
 
+    async def test_move_tag_to_new_position(self, settings):
+        settings.CHANNEL_LAYERS = TEST_CHANNEL_LAYERS
+
+        project_id = 1
+        file_id = 1
+        user_id = 2
+
+        communicator = get_communicator(project_id, file_id, user_id)
+
+        connected, _ = await communicator.connect()
+        assert connected is True
+
+        _ = await communicator.receive_json_from()
+
+        request = [
+            {
+                'method': 'PUT',
+                'element_type': 'tag',
+                'edited_element_id': 'name-3',
+                'start_pos': 313,
+                'end_pos': 328,
+                'parameters': {
+                    'new_start_pos': 272,
+                    'new_end_pos': 342,
+                }
+            }
+        ]
+        request = json.dumps(request)
+
+        await communicator.send_to(text_data=request)
+
+        response = await communicator.receive_json_from()
+        test_name = inspect.currentframe().f_code.co_name
+
+        verify_response(test_name, response, 0)
+
+        await communicator.disconnect()
+
 
 def get_communicator(project_id, file_id, user_id=None):
     communicator = WebsocketCommunicator(
