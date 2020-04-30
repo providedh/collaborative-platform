@@ -4,6 +4,7 @@ import re
 from lxml import etree
 
 from apps.close_reading.models import AnnotatingBodyContent
+from apps.exceptions import BadRequest
 from apps.files_management.models import File
 
 from collaborative_platform.settings import XML_NAMESPACES
@@ -26,24 +27,25 @@ class RequestHandler:
         self.__annotating_body_content = AnnotatingBodyContent.objects.get(file_symbol=room_name)
 
     def handle_request(self, text_data, user):
-        request = self.__parse_text_data(text_data)
+        requests = self.__parse_text_data(text_data)
 
-        for operation in request:
-            if operation['element_type'] == 'tag':
-                if operation['method'] == 'POST':
-                    self.__add_new_tag_to_text(operation, user)
+        for request in requests:
+            if request['element_type'] == 'tag':
+                if request['method'] == 'POST':
+                    self.__add_new_tag_to_text(request, user)
 
-                elif operation['method'] == 'PUT':
-                    self.__move_tag_to_new_position(operation, user)
+                elif request['method'] == 'PUT':
+                    self.__move_tag_to_new_position(request, user)
 
-                elif operation['method'] == 'DELETE':
-                    pass
+                elif request['method'] == 'DELETE':
+                    self.__delete_tag(request, user)
+
                 else:
-                    pass
+                    raise BadRequest(f"There is no operation matching to this request")
 
             pass
 
-    def __add_new_tag_to_text(self, operation, user):
+    def __add_new_tag_to_text(self, request, user):
         # TODO: Add verification if this same tag not existing already
         # TODO: Add possibility to add tag if text fragment is separated by another tag
 
@@ -52,8 +54,8 @@ class RequestHandler:
         max_id = self.__get_max_xml_id_from_text(body_content, 'ab', temp_id=True)
         new_id = max_id + 1
 
-        start_pos = operation['start_pos']
-        end_pos = operation['end_pos']
+        start_pos = request['start_pos']
+        end_pos = request['end_pos']
 
         text_result = self.__add_tag(body_content, start_pos, end_pos, new_id, user)
 
@@ -99,17 +101,18 @@ class RequestHandler:
 
         return max_id
 
-    def __move_tag_to_new_position(self, operation, user):
+    def __move_tag_to_new_position(self, request, user):
         # TODO: Add verification if user has rights to edit a tag
         # TODO: Add verification if tag wasn't moved by another user in the meantime
+        # TODO: Refactor this method to use `__delete_tag()` method
 
         body_content = self.get_body_content()
 
-        old_start_pos = operation['start_pos']
-        old_end_pos = operation['end_pos']
+        old_start_pos = request['start_pos']
+        old_end_pos = request['end_pos']
 
-        new_start_pos = operation['parameters']['new_start_pos']
-        new_end_pos = operation['parameters']['new_end_pos']
+        new_start_pos = request['parameters']['new_start_pos']
+        new_end_pos = request['parameters']['new_end_pos']
 
         text_before = body_content[:old_start_pos]
         text_inside = body_content[old_start_pos:old_end_pos]
@@ -126,7 +129,7 @@ class RequestHandler:
             if match:
                 left_tag_to_move = match.group()
 
-                if operation['edited_element_id'] in left_tag_to_move:
+                if request['edited_element_id'] in left_tag_to_move:
                     break
 
                 else:
@@ -175,6 +178,40 @@ class RequestHandler:
         new_text_after = text_without_tags[new_end_pos:]
 
         text_result = new_text_before + left_tag_to_move + new_text_middle + right_tag_to_move + new_text_after
+
+        self.__set_body_content(text_result)
+
+    def __delete_tag(self, request, user):
+        # TODO: Add verification if user has rights to delete a tag
+        # TODO: Add removing elements connected with deleted tag
+
+        body_content = self.get_body_content()
+
+        tag_xml_id = request['edited_element_id']
+        tag_regex_left = f'<[^<>]+xml:id="{tag_xml_id}"[^<>]*>'
+
+        match = re.search(tag_regex_left, body_content)
+        tag_left = match.group()
+
+        splitted_text = body_content.split(tag_left)
+        text_left = splitted_text[0]
+        remaining = splitted_text[1]
+
+        end_tag_regex = r'^<\w+'
+        match = re.search(end_tag_regex, tag_left)
+        close_tag = match.group()
+        close_tag = close_tag.replace('<', '</')
+        close_tag = close_tag + '>'
+
+        middle_with_close_tag_regex = f'^[^<>]*{close_tag}'
+
+        match = re.search(middle_with_close_tag_regex, remaining)
+        middle_with_close_tag = match.group()
+
+        text_middle = middle_with_close_tag.replace(close_tag, '')
+        text_right = remaining.replace(middle_with_close_tag, '')
+
+        text_result = text_left + text_middle + text_right
 
         self.__set_body_content(text_result)
 

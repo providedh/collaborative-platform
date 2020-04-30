@@ -11,6 +11,9 @@ from collaborative_platform.settings_for_tests import MEDIA_ROOT
 SCRIPT_DIR = os.path.dirname(__file__)
 
 
+# TODO: Replace all fixtures creating databases from all `conftest.py` files with one file and fixture parametrization
+
+
 @pytest.fixture(scope='class')
 def annotator_with_ws_and_db_setup(django_db_setup, django_db_blocker):
     with django_db_blocker.unblock():

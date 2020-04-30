@@ -19,6 +19,9 @@ TEST_CHANNEL_LAYERS = {
 }
 
 
+# TODO: Extract creating communicators and disconnecting them to pytest fixture
+
+
 @pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_after_each_test')
 @pytest.mark.asyncio
 @pytest.mark.django_db
@@ -73,6 +76,7 @@ class TestAnnotatorWithWsAndDb:
 
     async def test_user_get_correct_response_after_connection(self, settings):
         settings.CHANNEL_LAYERS = TEST_CHANNEL_LAYERS
+        test_name = inspect.currentframe().f_code.co_name
 
         project_id = 1
         file_id = 1
@@ -80,18 +84,17 @@ class TestAnnotatorWithWsAndDb:
 
         communicator = get_communicator(project_id, file_id, user_id)
 
-        connected, _ = await communicator.connect()
-        assert connected is True
+        await communicator.connect()
+        request_nr = 0
 
         response = await communicator.receive_json_from()
-        test_name = inspect.currentframe().f_code.co_name
-
-        verify_response(test_name, response, 0)
+        verify_response(test_name, response, request_nr)
 
         await communicator.disconnect()
 
     async def test_add_tags_to_text(self, settings):
         settings.CHANNEL_LAYERS = TEST_CHANNEL_LAYERS
+        test_name = inspect.currentframe().f_code.co_name
 
         project_id = 1
         file_id = 1
@@ -99,10 +102,8 @@ class TestAnnotatorWithWsAndDb:
 
         communicator = get_communicator(project_id, file_id, user_id)
 
-        connected, _ = await communicator.connect()
-        assert connected is True
-
-        _ = await communicator.receive_json_from()
+        await communicator.connect()
+        await communicator.receive_json_from()
 
         request = [
             {
@@ -112,14 +113,11 @@ class TestAnnotatorWithWsAndDb:
                 'end_pos': 271,
             }
         ]
-        request = json.dumps(request)
+        request_nr = 0
 
-        await communicator.send_to(text_data=request)
-
+        await communicator.send_json_to(request)
         response = await communicator.receive_json_from()
-        test_name = inspect.currentframe().f_code.co_name
-
-        verify_response(test_name, response, 0)
+        verify_response(test_name, response, request_nr)
 
         request = [
             {
@@ -129,18 +127,17 @@ class TestAnnotatorWithWsAndDb:
                 "end_pos": 384
             }
         ]
-        request = json.dumps(request)
+        request_nr = 1
 
-        await communicator.send_to(text_data=request)
-
+        await communicator.send_json_to(request)
         response = await communicator.receive_json_from()
-
-        verify_response(test_name, response, 1)
+        verify_response(test_name, response, request_nr)
 
         await communicator.disconnect()
 
     async def test_move_tag_to_new_position(self, settings):
         settings.CHANNEL_LAYERS = TEST_CHANNEL_LAYERS
+        test_name = inspect.currentframe().f_code.co_name
 
         project_id = 1
         file_id = 1
@@ -148,10 +145,8 @@ class TestAnnotatorWithWsAndDb:
 
         communicator = get_communicator(project_id, file_id, user_id)
 
-        connected, _ = await communicator.connect()
-        assert connected is True
-
-        _ = await communicator.receive_json_from()
+        await communicator.connect()
+        await communicator.receive_json_from()
 
         request = [
             {
@@ -166,14 +161,39 @@ class TestAnnotatorWithWsAndDb:
                 }
             }
         ]
-        request = json.dumps(request)
+        request_nr = 0
 
-        await communicator.send_to(text_data=request)
-
+        await communicator.send_json_to(request)
         response = await communicator.receive_json_from()
+        verify_response(test_name, response, request_nr)
+
+        await communicator.disconnect()
+
+    async def test_delete_tag_from_text(self, settings):
+        settings.CHANNEL_LAYERS = TEST_CHANNEL_LAYERS
         test_name = inspect.currentframe().f_code.co_name
 
-        verify_response(test_name, response, 0)
+        project_id = 1
+        file_id = 1
+        user_id = 2
+
+        communicator = get_communicator(project_id, file_id, user_id)
+
+        await communicator.connect()
+        await communicator.receive_json_from()
+
+        request = [
+            {
+                'method': 'DELETE',
+                'element_type': 'tag',
+                'edited_element_id': 'name-3'
+            }
+        ]
+        request_nr = 0
+
+        await communicator.send_json_to(request)
+        response = await communicator.receive_json_from()
+        verify_response(test_name, response, request_nr)
 
         await communicator.disconnect()
 
@@ -194,11 +214,11 @@ def get_communicator(project_id, file_id, user_id=None):
     return communicator
 
 
-def verify_response(test_name, response, response_nr):
+def verify_response(test_name, response, request_nr):
     test_results_file_path = os.path.join(SCRIPT_DIR, 'tests_results.json')
     test_results = read_file(test_results_file_path)
     test_results = json.loads(test_results)
-    expected = test_results[test_name][response_nr]
+    expected = test_results[test_name][request_nr]
 
     for field in expected.keys():
         assert response[field] == expected[field]
