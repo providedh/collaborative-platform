@@ -173,7 +173,7 @@ class ResponseGenerator:
     def __get_entities_lists(self):
         file_version = self.__file.file_versions.order_by('-number')[0]
 
-        listable_entities_types = get_entities_types_for_lists(file_version)
+        listable_entities_types = get_entities_types_for_lists(file_version.file.project)
 
         entities_lists = {}
 
@@ -240,8 +240,8 @@ class ResponseGenerator:
             pass
 
 
-def get_entities_types_for_lists(file_version):
-    entities_schemes = EntitySchema.objects.filter(taxonomy__project=file_version.file.project).order_by('id')
+def get_entities_types_for_lists(project):
+    entities_schemes = EntitySchema.objects.filter(taxonomy__project=project).order_by('id')
     default_entities_names = DEFAULT_ENTITIES.keys()
     listable_entities_types = []
 

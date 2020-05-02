@@ -212,8 +212,6 @@ class RequestHandler:
 
         self.__set_body_content(text_result)
 
-
-
     def __delete_tag(self, request, user):
         # TODO: Add verification if user has rights to delete a tag
         # TODO: Add removing elements connected with deleted tag
@@ -255,87 +253,91 @@ class RequestHandler:
         return request
 
     def __add_reference_to_entity(self, request, user):  # type: (dict, User) -> None
+        # TODO: Add verification if user has rights to edit a tag
+
         entity_type = request['parameters']['entity_type']
         entity_properties = request['parameters']['entity_properties']
-        edited_xml_id = request.get('edited_element_id')
-        target_xml_id = request.get('target_element_id')
+        edited_element_id = request.get('edited_element_id')
+        target_element_id = request.get('target_element_id')
 
-        file_version = self.__file.file_versions.order_by('-number')[0]
-        listable_entities_types = get_entities_types_for_lists(file_version)
+        listable_entities_types = get_entities_types_for_lists(self.__file.project)
 
-        if not target_xml_id and entity_type in listable_entities_types:
-            # create entity
-            xml_id = self.__get_next_xml_id(entity_type)
+        if not target_element_id and entity_type in listable_entities_types:
+            target_element_id = self.__get_next_xml_id(entity_type)
 
-            entity = Entity.objects.create(
-                file=self.__file,
-                type=entity_type,
-                xml_id=xml_id,
-                created_by=user,
-            )
+            entity_object = self.__create_entity_object(entity_type, target_element_id, user)
+            entity_version_object = self.__create_entity_version_object(entity_object)
+            self.__create_entity_properties_objects(entity_type, entity_properties, entity_version_object, user)
 
-            # create entity version
-            entity_version = EntityVersion.objects.create(
-                entity=entity,
-            )
+            self.__update_tag_in_body(edited_element_id, target_element_id)
 
-            # create parameters
-            if entity_type in DEFAULT_ENTITIES.keys():
-                properties = DEFAULT_ENTITIES[entity_type]['properties']
-            else:
-                properties = CUSTOM_ENTITY['properties']
-
-            properties_objects = []
-
-            for name, value in entity_properties.items():
-                entity_property_object = EntityProperty(
-                    entity_version=entity_version,
-                    xpath='',
-                    name=name,
-                    type=properties[name]['type'],
-                    created_by=user,
-                )
-
-                entity_property_object.set_value(value)
-
-                properties_objects.append(entity_property_object)
-
-            EntityProperty.objects.bulk_create(properties_objects)
-
-
-            # modify tag in text
-            tree = etree.fromstring(self.get_body_content())
-
-            xpath = f"//*[contains(concat(' ', @xml:id, ' '), ' {edited_xml_id}')]"
-            element = get_first_xpath_match(tree, xpath, XML_NAMESPACES)
-
-            prefix = "{%s}" % XML_NAMESPACES['default']
-
-            element.tag = prefix + 'name'
-            element.set('ref', f'#{xml_id}')
-            element.set('unsavedRef', f'#{xml_id}')
-
-            text_result = etree.tounicode(tree, pretty_print=True)
-
-            self.__set_body_content(text_result)
-
-
-
-
-
-
-
-
-
+        elif not target_element_id and entity_type not in listable_entities_types:
             pass
-        elif not target_xml_id and entity_type not in listable_entities_types:
+        elif target_element_id and entity_type in listable_entities_types:
             pass
-        elif target_xml_id and entity_type in listable_entities_types:
-            pass
-        elif target_xml_id and entity_type not in listable_entities_types:
+        elif target_element_id and entity_type not in listable_entities_types:
             pass
         else:
             raise BadRequest(f"There is no operation matching to this request")
+
+    def __create_entity_object(self, entity_type, xml_id, user):
+        entity_object = Entity.objects.create(
+            file=self.__file,
+            type=entity_type,
+            xml_id=xml_id,
+            created_by=user,
+        )
+
+        return entity_object
+
+    @staticmethod
+    def __create_entity_version_object(entity_object):
+        entity_version_object = EntityVersion.objects.create(
+            entity=entity_object,
+        )
+
+        return entity_version_object
+
+    @staticmethod
+    def __create_entity_properties_objects(entity_type, entity_properties, entity_version_object, user):
+        if entity_type in DEFAULT_ENTITIES.keys():
+            properties = DEFAULT_ENTITIES[entity_type]['properties']
+        else:
+            properties = CUSTOM_ENTITY['properties']
+
+        properties_objects = []
+
+        for name, value in entity_properties.items():
+            entity_property_object = EntityProperty(
+                entity_version=entity_version_object,
+                xpath='',
+                name=name,
+                type=properties[name]['type'],
+                created_by=user,
+            )
+
+            entity_property_object.set_value(value)
+
+            properties_objects.append(entity_property_object)
+
+        EntityProperty.objects.bulk_create(properties_objects)
+
+    def __update_tag_in_body(self, edited_element_id, target_element_id):
+        body_content = self.get_body_content()
+        tree = etree.fromstring(body_content)
+
+        xpath = f"//*[contains(concat(' ', @xml:id, ' '), ' {edited_element_id}')]"
+        element = get_first_xpath_match(tree, xpath, XML_NAMESPACES)
+
+        prefix = "{%s}" % XML_NAMESPACES['default']
+
+        element.tag = prefix + 'name'
+        element.set('ref', f'#{target_element_id}')
+        element.set('unsavedRef', f'#{target_element_id}')
+
+        text_result = etree.tounicode(tree, pretty_print=True)
+
+        self.__set_body_content(text_result)
 
     def __get_next_xml_id(self, entity_type):
         entity_max_xml_id = FileMaxXmlIds.objects.get(
