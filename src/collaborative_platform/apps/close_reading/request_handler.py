@@ -41,7 +41,7 @@ class RequestHandler:
                 elif request['method'] == 'PUT':
                     self.__move_tag_to_new_position(request, user)
                 elif request['method'] == 'DELETE':
-                    self.__delete_tag(request, user)
+                    self.__mark_tag_to_delete(request, user)
                 else:
                     raise BadRequest(f"There is no operation matching to this request")
 
@@ -195,6 +195,24 @@ class RequestHandler:
         text_result = new_text_before + left_tag_to_move + new_text_middle + right_tag_to_move + new_text_after
 
         self.__set_body_content(text_result)
+
+    def __mark_tag_to_delete(self, request, user):
+        # TODO: Add verification if user has rights to delete a tag
+
+        edited_xml_id = request.get('edited_element_id')
+
+        tree = etree.fromstring(self.get_body_content())
+
+        xpath = f"//*[contains(concat(' ', @xml:id, ' '), ' {edited_xml_id}')]"
+        element = get_first_xpath_match(tree, xpath, XML_NAMESPACES)
+
+        element.set('deleted', 'true')
+
+        text_result = etree.tounicode(tree, pretty_print=True)
+
+        self.__set_body_content(text_result)
+
+
 
     def __delete_tag(self, request, user):
         # TODO: Add verification if user has rights to delete a tag

@@ -12,11 +12,6 @@ from collaborative_platform.routing import application
 
 
 SCRIPT_DIR = os.path.dirname(__file__)
-TEST_CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels.layers.InMemoryChannelLayer',
-    },
-}
 
 
 # TODO: Extract creating communicators and disconnecting them to pytest fixture
@@ -28,9 +23,7 @@ TEST_CHANNEL_LAYERS = {
 @pytest.mark.django_db()
 @pytest.mark.integration_tests
 class TestAnnotatorWithWsAndDb:
-    async def test_authorized_user_can_connect(self, settings):
-        settings.CHANNEL_LAYERS = TEST_CHANNEL_LAYERS
-
+    async def test_authorized_user_can_connect(self):
         project_id = 1
         file_id = 1
         user_id = 2
@@ -58,10 +51,7 @@ class TestAnnotatorWithWsAndDb:
     ]
 
     @pytest.mark.parametrize(test_parameters_names, test_parameters_list)
-    async def test_connecting_exceptions(self, project_id, file_id, user_id, response_status, response_message,
-                                         settings):
-        settings.CHANNEL_LAYERS = TEST_CHANNEL_LAYERS
-
+    async def test_connecting_exceptions(self, project_id, file_id, user_id, response_status, response_message):
         communicator = get_communicator(project_id, file_id, user_id)
 
         connected, _ = await communicator.connect()
@@ -75,8 +65,7 @@ class TestAnnotatorWithWsAndDb:
         with pytest.raises(AssertionError):
             _ = await communicator.receive_from()
 
-    async def test_user_get_correct_response_after_connection(self, settings):
-        settings.CHANNEL_LAYERS = TEST_CHANNEL_LAYERS
+    async def test_user_get_correct_response_after_connection(self):
         test_name = inspect.currentframe().f_code.co_name
 
         project_id = 1
@@ -93,8 +82,7 @@ class TestAnnotatorWithWsAndDb:
 
         await communicator.disconnect()
 
-    async def test_add_tags_to_text(self, settings):
-        settings.CHANNEL_LAYERS = TEST_CHANNEL_LAYERS
+    async def test_add_tags_to_text(self):
         test_name = inspect.currentframe().f_code.co_name
 
         project_id = 1
@@ -136,8 +124,7 @@ class TestAnnotatorWithWsAndDb:
 
         await communicator.disconnect()
 
-    async def test_move_tag_to_new_position(self, settings):
-        settings.CHANNEL_LAYERS = TEST_CHANNEL_LAYERS
+    async def test_move_tag_to_new_position(self):
         test_name = inspect.currentframe().f_code.co_name
 
         project_id = 1
@@ -170,8 +157,7 @@ class TestAnnotatorWithWsAndDb:
 
         await communicator.disconnect()
 
-    async def test_delete_tag_from_text(self, settings):
-        settings.CHANNEL_LAYERS = TEST_CHANNEL_LAYERS
+    async def test_delete_tag_from_text(self):
         test_name = inspect.currentframe().f_code.co_name
 
         project_id = 1
@@ -204,8 +190,7 @@ class TestAnnotatorWithWsAndDb:
 @pytest.mark.django_db()
 @pytest.mark.integration_tests
 class TestAnnotatorWithWsAndDb2:
-    async def test_add_reference_to_entity_to_text__entity_doesnt_exist__entity_unlistable(self, settings):
-        settings.CHANNEL_LAYERS = TEST_CHANNEL_LAYERS
+    async def test_add_reference_to_entity_to_text__entity_doesnt_exist__entity_unlistable(self):
         test_name = inspect.currentframe().f_code.co_name
 
         project_id = 1
