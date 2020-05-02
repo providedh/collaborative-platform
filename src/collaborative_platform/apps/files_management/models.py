@@ -246,3 +246,11 @@ class FileMaxXmlIds(models.Model):
     file = models.ForeignKey(File, on_delete=models.CASCADE)
     xml_id_base = models.CharField(max_length=255)
     xml_id_number = models.IntegerField(default=0)
+
+    def get_next_number(self):
+        xml_id_number = self.xml_id_number
+
+        self.xml_id_number += 1
+        self.save()
+
+        return xml_id_number

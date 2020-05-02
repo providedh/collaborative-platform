@@ -53,12 +53,12 @@
           <person xml:id="person-1" resp="#annotator-1">
             <name>Sand</name>
           </person>
-          <person xml:id="person-2" resp="#annotator-2" sex="M" age="child">
+          <person xml:id="person-2" resp="#annotator-2" age="child" sex="M">
+            <birth when="2001-02-03"/>
             <persName>
               <forename>Jerry</forename>
               <surname>Maguire</surname>
             </persName>
-            <birth when="2001-02-03"/>
             <name>Jerry Maguire</name>
           </person>
           <person xml:id="person-3" resp="#annotator-1">
@@ -74,13 +74,13 @@
         <listPlace type="placeList">
           <place xml:id="place-0" resp="#annotator-1">
             <country>Poland</country>
-            <settlement>Poznań</settlement>
             <location>
               <geo>52.408333 16.934167</geo>
             </location>
             <placeName>
               <name>PCSS</name>
             </placeName>
+            <settlement>Poznań</settlement>
           </place>
         </listPlace>
       </sourceDesc>

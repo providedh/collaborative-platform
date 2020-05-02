@@ -36,7 +36,7 @@ def annotator_with_ws_and_db_setup(django_db_setup, django_db_blocker):
 
 
 @pytest.fixture(scope='function')
-def reset_db_files_directory_after_each_test():
+def reset_db_files_directory_before_each_test():
     __remove_db_files_directory()
     __create_db_files_directory()
 

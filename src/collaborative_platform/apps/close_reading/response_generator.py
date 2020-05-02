@@ -1,10 +1,10 @@
 import json
 import logging
-import re
 
 from lxml import etree
 
 from django.contrib.auth.models import User
+from django.db.models import Q
 
 from apps.api_vis.models import Certainty, EntityProperty, EntityVersion
 from apps.close_reading.models import AnnotatingBodyContent
@@ -37,7 +37,7 @@ class ResponseGenerator:
             self.__annotating_body_content = AnnotatingBodyContent.objects.get(file_symbol=room_name)
 
         except AnnotatingBodyContent.DoesNotExist:
-            file_version = self.__file.file_versions.last()
+            file_version = self.__file.file_versions.order_by('-number')[0]
             xml_content = file_version.get_raw_content()
             body_content = self.__get_body_content(xml_content)
 
@@ -92,19 +92,19 @@ class ResponseGenerator:
 
         authors = User.objects.filter(
             id__in=authors_ids
-        )
+        ).order_by('id')
 
         return authors
 
     def __get_authors_ids(self):
         entities_versions = EntityVersion.objects.filter(
-            file_version=self.__file.file_versions.last()
+            file_version=self.__file.file_versions.order_by('-number')[0]
         )
 
         entities_authors_ids = entities_versions.values_list('entity__created_by', flat=True)
 
         cetainties = Certainty.objects.filter(
-            file_version=self.__file.file_versions.last()
+            file_version=self.__file.file_versions.order_by('-number')[0]
         )
 
         certainties_authors_ids = cetainties.values_list('created_by', flat=True)
@@ -141,8 +141,8 @@ class ResponseGenerator:
 
     def __get_certainties_from_db(self):
         certainties = Certainty.objects.filter(
-            file_version=self.__file.file_versions.last(),
-        )
+            file_version=self.__file.file_versions.order_by('-number')[0]
+        ).order_by('id')
 
         return certainties
 
@@ -162,6 +162,8 @@ class ResponseGenerator:
                 'xml:id': certainty.xml_id,
                 'assertedValue': certainty.asserted_value,
                 'desc': certainty.description,
+                'saved': True if certainty.created_in_file_version is not None else False,
+                'deleted': True if certainty.deleted_by is not None else False
             }
 
             certainties_serialized.append(certainty_serialized)
@@ -169,9 +171,9 @@ class ResponseGenerator:
         return certainties_serialized
 
     def __get_entities_lists(self):
-        file_version = self.__file.file_versions.last()
+        file_version = self.__file.file_versions.order_by('-number')[0]
 
-        listable_entities_types = self.__get_entities_types_for_lists(file_version)
+        listable_entities_types = get_entities_types_for_lists(file_version)
 
         entities_lists = {}
 
@@ -182,25 +184,11 @@ class ResponseGenerator:
 
         return entities_lists
 
-    @staticmethod
-    def __get_entities_types_for_lists(file_version):
-        entities_schemes = EntitySchema.objects.filter(taxonomy__project=file_version.file.project)
-        default_entities_names = DEFAULT_ENTITIES.keys()
-        listable_entities_types = []
-
-        for entity in entities_schemes:
-            if entity.name not in default_entities_names:
-                listable_entities_types.append(entity.name)
-            elif DEFAULT_ENTITIES[entity.name]['listable']:
-                listable_entities_types.append(entity.name)
-
-        return listable_entities_types
-
     def __get_list_of_certain_type_entities(self, entity_type, file_version):
         entities_versions = EntityVersion.objects.filter(
+            Q(file_version=file_version) | Q(file_version__isnull=True),
             entity__type=entity_type,
-            file_version=file_version,
-        )
+        ).order_by('id')
 
         entities_list = []
 
@@ -209,6 +197,8 @@ class ResponseGenerator:
                 'type': entity_version.entity.type,
                 'xml:id': entity_version.entity.xml_id,
                 'resp': entity_version.entity.created_by.username,
+                'saved': True if entity_version.file_version is not None else False,
+                'deleted': True if entity_version.entity.deleted_by is not None else False
             }
 
             properties = self.__get_entity_properties(entity_version)
@@ -223,10 +213,19 @@ class ResponseGenerator:
     def __get_entity_properties(entity_version):
         entity_properties = EntityProperty.objects.filter(
             entity_version=entity_version
-        )
+        ).order_by('name')
 
-        properties = {entity_property.name: entity_property.get_value(as_str=True) for entity_property in
-                      entity_properties}
+        properties = []
+
+        for entity_property in entity_properties:
+            property = {
+                'name': entity_property.name,
+                'value': entity_property.get_value(as_str=True),
+                'saved': True if entity_property.created_in_file_version is not None else False,
+                'deleted': True if entity_property.deleted_by is not None else False
+            }
+
+            properties.append(property)
 
         return properties
 
@@ -239,3 +238,19 @@ class ResponseGenerator:
             logger.info(f"Remove file content from room: '{room_name}'")
         except AnnotatingBodyContent.DoesNotExist:
             pass
+
+
+def get_entities_types_for_lists(file_version):
+    entities_schemes = EntitySchema.objects.filter(taxonomy__project=file_version.file.project).order_by('id')
+    default_entities_names = DEFAULT_ENTITIES.keys()
+    listable_entities_types = []
+
+    for entity in entities_schemes:
+        if entity.name not in default_entities_names:
+            listable_entities_types.append(entity.name)
+        elif DEFAULT_ENTITIES[entity.name]['listable']:
+            listable_entities_types.append(entity.name)
+
+    listable_entities_types = sorted(listable_entities_types)
+
+    return listable_entities_types

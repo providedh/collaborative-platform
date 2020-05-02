@@ -348,838 +348,6 @@
   }
 },
 {
-  "model": "api_vis.entityproperty",
-  "pk": 1,
-  "fields": {
-    "entity_version": 1,
-    "xpath": "./country",
-    "name": "country",
-    "type": "TypeChoice.str",
-    "value_str": "Poland",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 2,
-  "fields": {
-    "entity_version": 1,
-    "xpath": "./settlement",
-    "name": "settlement",
-    "type": "TypeChoice.str",
-    "value_str": "Pozna\u0144",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 3,
-  "fields": {
-    "entity_version": 1,
-    "xpath": "./location/geo",
-    "name": "geo",
-    "type": "TypeChoice.Point",
-    "value_str": null,
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": "SRID=4326;POINT (52.408333 16.934167)"
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 4,
-  "fields": {
-    "entity_version": 1,
-    "xpath": "./placeName/name",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "PCSS",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 5,
-  "fields": {
-    "entity_version": 2,
-    "xpath": "",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "Big Bang",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 6,
-  "fields": {
-    "entity_version": 3,
-    "xpath": "./name",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "Butter",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 7,
-  "fields": {
-    "entity_version": 4,
-    "xpath": "./name",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "Sand",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 8,
-  "fields": {
-    "entity_version": 5,
-    "xpath": "@sex",
-    "name": "sex",
-    "type": "TypeChoice.str",
-    "value_str": "M",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 9,
-  "fields": {
-    "entity_version": 5,
-    "xpath": "@age",
-    "name": "age",
-    "type": "TypeChoice.str",
-    "value_str": "child",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 10,
-  "fields": {
-    "entity_version": 5,
-    "xpath": "./persName/forename",
-    "name": "forename",
-    "type": "TypeChoice.str",
-    "value_str": "Jerry",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 11,
-  "fields": {
-    "entity_version": 5,
-    "xpath": "./persName/surname",
-    "name": "surname",
-    "type": "TypeChoice.str",
-    "value_str": "Maguire",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 12,
-  "fields": {
-    "entity_version": 5,
-    "xpath": "./birth/@when",
-    "name": "birth",
-    "type": "TypeChoice.date",
-    "value_str": null,
-    "value_int": null,
-    "value_float": null,
-    "value_date": "2001-02-03",
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 13,
-  "fields": {
-    "entity_version": 5,
-    "xpath": "./name",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "Jerry Maguire",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 14,
-  "fields": {
-    "entity_version": 6,
-    "xpath": "./name",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "Ingwer",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 15,
-  "fields": {
-    "entity_version": 7,
-    "xpath": "./name",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "Grieben",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 16,
-  "fields": {
-    "entity_version": 8,
-    "xpath": "./name",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "Met",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 17,
-  "fields": {
-    "entity_version": 9,
-    "xpath": "@when",
-    "name": "when",
-    "type": "TypeChoice.date",
-    "value_str": null,
-    "value_int": null,
-    "value_float": null,
-    "value_date": "2020-07-04",
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 18,
-  "fields": {
-    "entity_version": 9,
-    "xpath": "",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "4th of july 2010",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 19,
-  "fields": {
-    "entity_version": 10,
-    "xpath": "",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "the exact same day",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 20,
-  "fields": {
-    "entity_version": 11,
-    "xpath": "",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "Rag",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 21,
-  "fields": {
-    "entity_version": 12,
-    "xpath": "",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "Ingwer",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 22,
-  "fields": {
-    "entity_version": 13,
-    "xpath": "",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "Met",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 23,
-  "fields": {
-    "entity_version": 14,
-    "xpath": "./placeName/name",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "PCSS",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 24,
-  "fields": {
-    "entity_version": 14,
-    "xpath": "./location/geo",
-    "name": "geo",
-    "type": "TypeChoice.Point",
-    "value_str": null,
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": "SRID=4326;POINT (52.408333 16.934167)"
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 25,
-  "fields": {
-    "entity_version": 14,
-    "xpath": "./settlement",
-    "name": "settlement",
-    "type": "TypeChoice.str",
-    "value_str": "Pozna\u0144",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 26,
-  "fields": {
-    "entity_version": 14,
-    "xpath": "./country",
-    "name": "country",
-    "type": "TypeChoice.str",
-    "value_str": "Poland",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 27,
-  "fields": {
-    "entity_version": 15,
-    "xpath": "",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "Big Bang",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 28,
-  "fields": {
-    "entity_version": 16,
-    "xpath": "./name",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "Butter",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 29,
-  "fields": {
-    "entity_version": 17,
-    "xpath": "./name",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "Sand",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 30,
-  "fields": {
-    "entity_version": 18,
-    "xpath": "./name",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "Jerry Maguire",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 31,
-  "fields": {
-    "entity_version": 18,
-    "xpath": "./birth/@when",
-    "name": "birth",
-    "type": "TypeChoice.date",
-    "value_str": null,
-    "value_int": null,
-    "value_float": null,
-    "value_date": "2001-02-03",
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 32,
-  "fields": {
-    "entity_version": 18,
-    "xpath": "./persName/surname",
-    "name": "surname",
-    "type": "TypeChoice.str",
-    "value_str": "Maguire",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 33,
-  "fields": {
-    "entity_version": 18,
-    "xpath": "./persName/forename",
-    "name": "forename",
-    "type": "TypeChoice.str",
-    "value_str": "Jerry",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 34,
-  "fields": {
-    "entity_version": 18,
-    "xpath": "@age",
-    "name": "age",
-    "type": "TypeChoice.str",
-    "value_str": "child",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 35,
-  "fields": {
-    "entity_version": 18,
-    "xpath": "@sex",
-    "name": "sex",
-    "type": "TypeChoice.str",
-    "value_str": "M",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 36,
-  "fields": {
-    "entity_version": 19,
-    "xpath": "./name",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "Ingwer",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 37,
-  "fields": {
-    "entity_version": 20,
-    "xpath": "./name",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "Grieben",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 38,
-  "fields": {
-    "entity_version": 21,
-    "xpath": "./name",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "Met",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 39,
-  "fields": {
-    "entity_version": 22,
-    "xpath": "",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "4th of july 2010",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 40,
-  "fields": {
-    "entity_version": 22,
-    "xpath": "@when",
-    "name": "when",
-    "type": "TypeChoice.date",
-    "value_str": null,
-    "value_int": null,
-    "value_float": null,
-    "value_date": "2020-07-04",
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 41,
-  "fields": {
-    "entity_version": 23,
-    "xpath": "",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "the exact same day",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 42,
-  "fields": {
-    "entity_version": 24,
-    "xpath": "",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "Rag",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 43,
-  "fields": {
-    "entity_version": 25,
-    "xpath": "",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "Ingwer",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 44,
-  "fields": {
-    "entity_version": 26,
-    "xpath": "",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "Met",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 45,
-  "fields": {
-    "entity_version": 27,
-    "xpath": "",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "Jus",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 46,
-  "fields": {
-    "entity_version": 28,
-    "xpath": "",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "Sand",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 47,
-  "fields": {
-    "entity_version": 29,
-    "xpath": "",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "Jus",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 48,
-  "fields": {
-    "entity_version": 30,
-    "xpath": "",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "Sand",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 49,
-  "fields": {
-    "entity_version": 31,
-    "xpath": "",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "Ingwer",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 50,
-  "fields": {
-    "entity_version": 32,
-    "xpath": "",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "Sand",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 51,
-  "fields": {
-    "entity_version": 33,
-    "xpath": "",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "Ingwer",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
-  "model": "api_vis.entityproperty",
-  "pk": 52,
-  "fields": {
-    "entity_version": 34,
-    "xpath": "",
-    "name": "name",
-    "type": "TypeChoice.str",
-    "value_str": "Sand",
-    "value_int": null,
-    "value_float": null,
-    "value_date": null,
-    "value_time": null,
-    "value_point": null
-  }
-},
-{
   "model": "files_management.directory",
   "pk": 1,
   "fields": {
@@ -1240,8 +408,8 @@
   "pk": 2,
   "fields": {
     "file": 1,
-    "xml_id_base": "name",
-    "xml_id_number": 8
+    "xml_id_base": "place",
+    "xml_id_number": 1
   }
 },
 {
@@ -1249,8 +417,8 @@
   "pk": 3,
   "fields": {
     "file": 1,
-    "xml_id_base": "event",
-    "xml_id_number": 1
+    "xml_id_base": "person",
+    "xml_id_number": 6
   }
 },
 {
@@ -1267,31 +435,13 @@
   "pk": 5,
   "fields": {
     "file": 1,
-    "xml_id_base": "ab",
-    "xml_id_number": 1
+    "xml_id_base": "name",
+    "xml_id_number": 8
   }
 },
 {
   "model": "files_management.filemaxxmlids",
   "pk": 6,
-  "fields": {
-    "file": 1,
-    "xml_id_base": "place",
-    "xml_id_number": 1
-  }
-},
-{
-  "model": "files_management.filemaxxmlids",
-  "pk": 7,
-  "fields": {
-    "file": 1,
-    "xml_id_base": "annotator",
-    "xml_id_number": 2
-  }
-},
-{
-  "model": "files_management.filemaxxmlids",
-  "pk": 8,
   "fields": {
     "file": 1,
     "xml_id_base": "certainty",
@@ -1300,7 +450,16 @@
 },
 {
   "model": "files_management.filemaxxmlids",
-  "pk": 9,
+  "pk": 7,
+  "fields": {
+    "file": 1,
+    "xml_id_base": "ab",
+    "xml_id_number": 1
+  }
+},
+{
+  "model": "files_management.filemaxxmlids",
+  "pk": 8,
   "fields": {
     "file": 1,
     "xml_id_base": "ingredient",
@@ -1309,7 +468,7 @@
 },
 {
   "model": "files_management.filemaxxmlids",
-  "pk": 10,
+  "pk": 9,
   "fields": {
     "file": 1,
     "xml_id_base": "date",
@@ -1318,11 +477,20 @@
 },
 {
   "model": "files_management.filemaxxmlids",
+  "pk": 10,
+  "fields": {
+    "file": 1,
+    "xml_id_base": "event",
+    "xml_id_number": 1
+  }
+},
+{
+  "model": "files_management.filemaxxmlids",
   "pk": 11,
   "fields": {
     "file": 1,
-    "xml_id_base": "person",
-    "xml_id_number": 6
+    "xml_id_base": "annotator",
+    "xml_id_number": 2
   }
 },
 {
@@ -1339,8 +507,8 @@
   "pk": 13,
   "fields": {
     "file": 2,
-    "xml_id_base": "name",
-    "xml_id_number": 3
+    "xml_id_base": "place",
+    "xml_id_number": 0
   }
 },
 {
@@ -1348,7 +516,7 @@
   "pk": 14,
   "fields": {
     "file": 2,
-    "xml_id_base": "event",
+    "xml_id_base": "person",
     "xml_id_number": 0
   }
 },
@@ -1366,31 +534,13 @@
   "pk": 16,
   "fields": {
     "file": 2,
-    "xml_id_base": "ab",
-    "xml_id_number": 0
+    "xml_id_base": "name",
+    "xml_id_number": 3
   }
 },
 {
   "model": "files_management.filemaxxmlids",
   "pk": 17,
-  "fields": {
-    "file": 2,
-    "xml_id_base": "place",
-    "xml_id_number": 0
-  }
-},
-{
-  "model": "files_management.filemaxxmlids",
-  "pk": 18,
-  "fields": {
-    "file": 2,
-    "xml_id_base": "annotator",
-    "xml_id_number": 1
-  }
-},
-{
-  "model": "files_management.filemaxxmlids",
-  "pk": 19,
   "fields": {
     "file": 2,
     "xml_id_base": "certainty",
@@ -1399,7 +549,16 @@
 },
 {
   "model": "files_management.filemaxxmlids",
-  "pk": 20,
+  "pk": 18,
+  "fields": {
+    "file": 2,
+    "xml_id_base": "ab",
+    "xml_id_number": 0
+  }
+},
+{
+  "model": "files_management.filemaxxmlids",
+  "pk": 19,
   "fields": {
     "file": 2,
     "xml_id_base": "ingredient",
@@ -1408,7 +567,7 @@
 },
 {
   "model": "files_management.filemaxxmlids",
-  "pk": 21,
+  "pk": 20,
   "fields": {
     "file": 2,
     "xml_id_base": "date",
@@ -1417,11 +576,20 @@
 },
 {
   "model": "files_management.filemaxxmlids",
+  "pk": 21,
+  "fields": {
+    "file": 2,
+    "xml_id_base": "event",
+    "xml_id_number": 0
+  }
+},
+{
+  "model": "files_management.filemaxxmlids",
   "pk": 22,
   "fields": {
     "file": 2,
-    "xml_id_base": "person",
-    "xml_id_number": 0
+    "xml_id_base": "annotator",
+    "xml_id_number": 1
   }
 },
 {
@@ -1438,8 +606,8 @@
   "pk": 24,
   "fields": {
     "file": 3,
-    "xml_id_base": "name",
-    "xml_id_number": 2
+    "xml_id_base": "place",
+    "xml_id_number": 0
   }
 },
 {
@@ -1447,7 +615,7 @@
   "pk": 25,
   "fields": {
     "file": 3,
-    "xml_id_base": "event",
+    "xml_id_base": "person",
     "xml_id_number": 0
   }
 },
@@ -1465,31 +633,13 @@
   "pk": 27,
   "fields": {
     "file": 3,
-    "xml_id_base": "ab",
-    "xml_id_number": 0
+    "xml_id_base": "name",
+    "xml_id_number": 2
   }
 },
 {
   "model": "files_management.filemaxxmlids",
   "pk": 28,
-  "fields": {
-    "file": 3,
-    "xml_id_base": "place",
-    "xml_id_number": 0
-  }
-},
-{
-  "model": "files_management.filemaxxmlids",
-  "pk": 29,
-  "fields": {
-    "file": 3,
-    "xml_id_base": "annotator",
-    "xml_id_number": 1
-  }
-},
-{
-  "model": "files_management.filemaxxmlids",
-  "pk": 30,
   "fields": {
     "file": 3,
     "xml_id_base": "certainty",
@@ -1498,7 +648,16 @@
 },
 {
   "model": "files_management.filemaxxmlids",
-  "pk": 31,
+  "pk": 29,
+  "fields": {
+    "file": 3,
+    "xml_id_base": "ab",
+    "xml_id_number": 0
+  }
+},
+{
+  "model": "files_management.filemaxxmlids",
+  "pk": 30,
   "fields": {
     "file": 3,
     "xml_id_base": "ingredient",
@@ -1507,7 +666,7 @@
 },
 {
   "model": "files_management.filemaxxmlids",
-  "pk": 32,
+  "pk": 31,
   "fields": {
     "file": 3,
     "xml_id_base": "date",
@@ -1516,11 +675,20 @@
 },
 {
   "model": "files_management.filemaxxmlids",
+  "pk": 32,
+  "fields": {
+    "file": 3,
+    "xml_id_base": "event",
+    "xml_id_number": 0
+  }
+},
+{
+  "model": "files_management.filemaxxmlids",
   "pk": 33,
   "fields": {
     "file": 3,
-    "xml_id_base": "person",
-    "xml_id_number": 0
+    "xml_id_base": "annotator",
+    "xml_id_number": 1
   }
 },
 {
@@ -1529,8 +697,8 @@
   "fields": {
     "title": "Project_1",
     "description": "",
-    "creation_date": "2020-04-27T07:41:27.115Z",
-    "modification_date": "2020-04-27T07:41:27.115Z",
+    "creation_date": "2020-05-01T08:15:30.051Z",
+    "modification_date": "2020-05-01T08:15:30.051Z",
     "license": "GPL",
     "public": false
   }
@@ -1543,7 +711,7 @@
     "file_version_counter": 0,
     "commit": null,
     "commit_counter": 0,
-    "date": "2020-04-27T07:41:27.127Z",
+    "date": "2020-05-01T08:15:30.060Z",
     "file_versions": []
   }
 },
@@ -1555,7 +723,7 @@
     "file_version_counter": 1,
     "commit": null,
     "commit_counter": 0,
-    "date": "2020-04-27T07:41:38.668Z",
+    "date": "2020-05-01T09:19:46.598Z",
     "file_versions": [
       1
     ]
@@ -1569,7 +737,7 @@
     "file_version_counter": 2,
     "commit": null,
     "commit_counter": 0,
-    "date": "2020-04-27T07:41:39.001Z",
+    "date": "2020-05-01T09:19:46.845Z",
     "file_versions": [
       2
     ]
@@ -1583,7 +751,7 @@
     "file_version_counter": 3,
     "commit": null,
     "commit_counter": 0,
-    "date": "2020-04-27T07:41:51.052Z",
+    "date": "2020-05-01T09:19:51.786Z",
     "file_versions": [
       2,
       3
@@ -1598,7 +766,7 @@
     "file_version_counter": 4,
     "commit": null,
     "commit_counter": 0,
-    "date": "2020-04-27T07:41:51.238Z",
+    "date": "2020-05-01T09:19:51.935Z",
     "file_versions": [
       2,
       4
@@ -1613,7 +781,7 @@
     "file_version_counter": 5,
     "commit": null,
     "commit_counter": 0,
-    "date": "2020-04-27T07:41:58.465Z",
+    "date": "2020-05-01T09:19:55.546Z",
     "file_versions": [
       2,
       4,
@@ -1629,7 +797,7 @@
     "file_version_counter": 6,
     "commit": null,
     "commit_counter": 0,
-    "date": "2020-04-27T07:41:58.616Z",
+    "date": "2020-05-01T09:19:55.634Z",
     "file_versions": [
       2,
       4,
@@ -1760,8 +928,8 @@
   "fields": {
     "taxonomy": 1,
     "name": "ingredient",
-    "color": "#00ff09",
-    "icon": "\uf0c3",
+    "color": "#00ff10",
+    "icon": "\uf042",
     "body_list": true
   }
 },
@@ -1787,8 +955,8 @@
   "model": "auth.user",
   "pk": 2,
   "fields": {
-    "password": "pbkdf2_sha256$150000$vHLtiByiOUKz$UC07JG8D5BBJ1gQ/gPNh+YpQ2+ctKLWpt5n3qvas8Vw=",
-    "last_login": "2020-04-27T07:42:37.519Z",
+    "password": "pbkdf2_sha256$150000$ypZrXP1a5q6Q$YgcS5xyWasdPt2q8w8gMm1NY6s3eRft0yK0ik/Y3R5I=",
+    "last_login": "2020-05-01T09:19:36.984Z",
     "is_superuser": false,
     "username": "tony_stark",
     "first_name": "Tony",
@@ -1796,7 +964,7 @@
     "email": "tony_stark@zmyslonymail.com",
     "is_staff": false,
     "is_active": true,
-    "date_joined": "2020-04-27T07:39:21.981Z",
+    "date_joined": "2020-05-01T08:14:22Z",
     "groups": [],
     "user_permissions": []
   }
@@ -1805,8 +973,8 @@
   "model": "auth.user",
   "pk": 3,
   "fields": {
-    "password": "pbkdf2_sha256$150000$GiCiWDMB8U7U$rmXBW69RXifOPZlwAgXR7pFBmNdZGmQVbMNajnh9cdU=",
-    "last_login": "2020-04-27T07:42:27.446Z",
+    "password": "pbkdf2_sha256$150000$bn9o3vWpLGux$ipb5Kl6ZCbU3tgz0cWVeuC7hv6wbk9xEgkAGDNAFvb4=",
+    "last_login": "2020-05-01T08:15:53.234Z",
     "is_superuser": false,
     "username": "pepper_potts",
     "first_name": "Pepper",
@@ -1814,7 +982,7 @@
     "email": "pepper_potts@zmyslonymail.com",
     "is_staff": false,
     "is_active": true,
-    "date_joined": "2020-04-27T07:42:27.138Z",
+    "date_joined": "2020-05-01T08:15:52.883Z",
     "groups": [],
     "user_permissions": []
   }
@@ -2058,6 +1226,1046 @@
   }
 },
 {
+  "model": "api_vis.entityproperty",
+  "pk": 1,
+  "fields": {
+    "entity_version": 1,
+    "xpath": "./country",
+    "name": "country",
+    "type": "TypeChoice.str",
+    "value_str": "Poland",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 2,
+  "fields": {
+    "entity_version": 1,
+    "xpath": "./settlement",
+    "name": "settlement",
+    "type": "TypeChoice.str",
+    "value_str": "Pozna\u0144",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 3,
+  "fields": {
+    "entity_version": 1,
+    "xpath": "./location/geo",
+    "name": "geo",
+    "type": "TypeChoice.Point",
+    "value_str": null,
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": "SRID=4326;POINT (52.408333 16.934167)",
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 4,
+  "fields": {
+    "entity_version": 1,
+    "xpath": "./placeName/name",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "PCSS",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 5,
+  "fields": {
+    "entity_version": 2,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Big Bang",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 6,
+  "fields": {
+    "entity_version": 3,
+    "xpath": "./name",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Butter",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 7,
+  "fields": {
+    "entity_version": 4,
+    "xpath": "./name",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Sand",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 8,
+  "fields": {
+    "entity_version": 5,
+    "xpath": "@sex",
+    "name": "sex",
+    "type": "TypeChoice.str",
+    "value_str": "M",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 2,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 9,
+  "fields": {
+    "entity_version": 5,
+    "xpath": "@age",
+    "name": "age",
+    "type": "TypeChoice.str",
+    "value_str": "child",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 2,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 10,
+  "fields": {
+    "entity_version": 5,
+    "xpath": "./persName/forename",
+    "name": "forename",
+    "type": "TypeChoice.str",
+    "value_str": "Jerry",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 2,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 11,
+  "fields": {
+    "entity_version": 5,
+    "xpath": "./persName/surname",
+    "name": "surname",
+    "type": "TypeChoice.str",
+    "value_str": "Maguire",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 2,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 12,
+  "fields": {
+    "entity_version": 5,
+    "xpath": "./birth/@when",
+    "name": "birth",
+    "type": "TypeChoice.date",
+    "value_str": null,
+    "value_int": null,
+    "value_float": null,
+    "value_date": "2001-02-03",
+    "value_time": null,
+    "value_point": null,
+    "created_by": 2,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 13,
+  "fields": {
+    "entity_version": 5,
+    "xpath": "./name",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Jerry Maguire",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 2,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 14,
+  "fields": {
+    "entity_version": 6,
+    "xpath": "./name",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Ingwer",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 15,
+  "fields": {
+    "entity_version": 7,
+    "xpath": "./name",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Grieben",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 16,
+  "fields": {
+    "entity_version": 8,
+    "xpath": "./name",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Met",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 17,
+  "fields": {
+    "entity_version": 9,
+    "xpath": "@when",
+    "name": "when",
+    "type": "TypeChoice.date",
+    "value_str": null,
+    "value_int": null,
+    "value_float": null,
+    "value_date": "2020-07-04",
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 18,
+  "fields": {
+    "entity_version": 9,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "4th of july 2010",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 19,
+  "fields": {
+    "entity_version": 10,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "the exact same day",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 20,
+  "fields": {
+    "entity_version": 11,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Rag",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 21,
+  "fields": {
+    "entity_version": 12,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Ingwer",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 22,
+  "fields": {
+    "entity_version": 13,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Met",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 23,
+  "fields": {
+    "entity_version": 14,
+    "xpath": "./country",
+    "name": "country",
+    "type": "TypeChoice.str",
+    "value_str": "Poland",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 24,
+  "fields": {
+    "entity_version": 14,
+    "xpath": "./settlement",
+    "name": "settlement",
+    "type": "TypeChoice.str",
+    "value_str": "Pozna\u0144",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 25,
+  "fields": {
+    "entity_version": 14,
+    "xpath": "./location/geo",
+    "name": "geo",
+    "type": "TypeChoice.Point",
+    "value_str": null,
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": "SRID=4326;POINT (52.408333 16.934167)",
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 26,
+  "fields": {
+    "entity_version": 14,
+    "xpath": "./placeName/name",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "PCSS",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 27,
+  "fields": {
+    "entity_version": 15,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Big Bang",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 28,
+  "fields": {
+    "entity_version": 16,
+    "xpath": "./name",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Butter",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 29,
+  "fields": {
+    "entity_version": 17,
+    "xpath": "./name",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Sand",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 30,
+  "fields": {
+    "entity_version": 18,
+    "xpath": "@sex",
+    "name": "sex",
+    "type": "TypeChoice.str",
+    "value_str": "M",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 2,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 31,
+  "fields": {
+    "entity_version": 18,
+    "xpath": "@age",
+    "name": "age",
+    "type": "TypeChoice.str",
+    "value_str": "child",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 2,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 32,
+  "fields": {
+    "entity_version": 18,
+    "xpath": "./persName/forename",
+    "name": "forename",
+    "type": "TypeChoice.str",
+    "value_str": "Jerry",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 2,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 33,
+  "fields": {
+    "entity_version": 18,
+    "xpath": "./persName/surname",
+    "name": "surname",
+    "type": "TypeChoice.str",
+    "value_str": "Maguire",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 2,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 34,
+  "fields": {
+    "entity_version": 18,
+    "xpath": "./birth/@when",
+    "name": "birth",
+    "type": "TypeChoice.date",
+    "value_str": null,
+    "value_int": null,
+    "value_float": null,
+    "value_date": "2001-02-03",
+    "value_time": null,
+    "value_point": null,
+    "created_by": 2,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 35,
+  "fields": {
+    "entity_version": 18,
+    "xpath": "./name",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Jerry Maguire",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 2,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 36,
+  "fields": {
+    "entity_version": 19,
+    "xpath": "./name",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Ingwer",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 37,
+  "fields": {
+    "entity_version": 20,
+    "xpath": "./name",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Grieben",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 38,
+  "fields": {
+    "entity_version": 21,
+    "xpath": "./name",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Met",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 39,
+  "fields": {
+    "entity_version": 22,
+    "xpath": "@when",
+    "name": "when",
+    "type": "TypeChoice.date",
+    "value_str": null,
+    "value_int": null,
+    "value_float": null,
+    "value_date": "2020-07-04",
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 40,
+  "fields": {
+    "entity_version": 22,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "4th of july 2010",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 41,
+  "fields": {
+    "entity_version": 23,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "the exact same day",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 42,
+  "fields": {
+    "entity_version": 24,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Rag",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 43,
+  "fields": {
+    "entity_version": 25,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Ingwer",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 44,
+  "fields": {
+    "entity_version": 26,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Met",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 45,
+  "fields": {
+    "entity_version": 27,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Jus",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 3,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 46,
+  "fields": {
+    "entity_version": 28,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Sand",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 3,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 47,
+  "fields": {
+    "entity_version": 29,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Jus",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 3,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 48,
+  "fields": {
+    "entity_version": 30,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Sand",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 3,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 49,
+  "fields": {
+    "entity_version": 31,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Ingwer",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 5,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 50,
+  "fields": {
+    "entity_version": 32,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Sand",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 5,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 51,
+  "fields": {
+    "entity_version": 33,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Ingwer",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 5,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 52,
+  "fields": {
+    "entity_version": 34,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Sand",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 5,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
   "model": "api_vis.certainty",
   "pk": 1,
   "fields": {
@@ -2072,7 +2280,9 @@
     "description": null,
     "file_version": 1,
     "created_by": 1,
+    "created_in_file_version": 1,
     "deleted_by": null,
+    "deleted_in_file_version": null,
     "categories": [
       2,
       4
@@ -2094,7 +2304,9 @@
     "description": "Some important decription",
     "file_version": 1,
     "created_by": 2,
+    "created_in_file_version": 1,
     "deleted_by": null,
+    "deleted_in_file_version": null,
     "categories": [
       4
     ]
@@ -2115,7 +2327,9 @@
     "description": null,
     "file_version": 1,
     "created_by": 2,
+    "created_in_file_version": 1,
     "deleted_by": null,
+    "deleted_in_file_version": null,
     "categories": [
       4
     ]
@@ -2136,7 +2350,9 @@
     "description": null,
     "file_version": 1,
     "created_by": 2,
+    "created_in_file_version": 1,
     "deleted_by": null,
+    "deleted_in_file_version": null,
     "categories": [
       4
     ]
@@ -2157,7 +2373,9 @@
     "description": null,
     "file_version": 1,
     "created_by": 1,
+    "created_in_file_version": 1,
     "deleted_by": null,
+    "deleted_in_file_version": null,
     "categories": [
       5
     ]
@@ -2168,19 +2386,22 @@
   "pk": 6,
   "fields": {
     "file": 1,
-    "xml_id": "certainty-4",
+    "xml_id": "certainty-0",
     "locus": "value",
     "cert": "high",
-    "degree": null,
-    "target_xml_id": "certainty-10",
-    "target_match": "@cert",
-    "asserted_value": "low",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-3",
+    "target_match": "@ref",
+    "asserted_value": "#met",
     "description": null,
     "file_version": 2,
     "created_by": 1,
+    "created_in_file_version": 1,
     "deleted_by": null,
+    "deleted_in_file_version": null,
     "categories": [
-      5
+      2,
+      4
     ]
   }
 },
@@ -2189,17 +2410,19 @@
   "pk": 7,
   "fields": {
     "file": 1,
-    "xml_id": "certainty-3",
+    "xml_id": "certainty-1",
     "locus": "value",
     "cert": "high",
     "degree": null,
-    "target_xml_id": "person-2",
-    "target_match": "name/forename",
-    "asserted_value": "McDuck",
-    "description": null,
+    "target_xml_id": "test",
+    "target_match": null,
+    "asserted_value": "Balloons",
+    "description": "Some important decription",
     "file_version": 2,
     "created_by": 2,
+    "created_in_file_version": 1,
     "deleted_by": null,
+    "deleted_in_file_version": null,
     "categories": [
       4
     ]
@@ -2220,7 +2443,9 @@
     "description": null,
     "file_version": 2,
     "created_by": 2,
+    "created_in_file_version": 1,
     "deleted_by": null,
+    "deleted_in_file_version": null,
     "categories": [
       4
     ]
@@ -2231,17 +2456,19 @@
   "pk": 9,
   "fields": {
     "file": 1,
-    "xml_id": "certainty-1",
+    "xml_id": "certainty-3",
     "locus": "value",
     "cert": "high",
     "degree": null,
-    "target_xml_id": "test",
-    "target_match": null,
-    "asserted_value": "Balloons",
-    "description": "Some important decription",
+    "target_xml_id": "person-2",
+    "target_match": "name/forename",
+    "asserted_value": "McDuck",
+    "description": null,
     "file_version": 2,
     "created_by": 2,
+    "created_in_file_version": 1,
     "deleted_by": null,
+    "deleted_in_file_version": null,
     "categories": [
       4
     ]
@@ -2252,20 +2479,21 @@
   "pk": 10,
   "fields": {
     "file": 1,
-    "xml_id": "certainty-0",
+    "xml_id": "certainty-4",
     "locus": "value",
     "cert": "high",
-    "degree": 0.857142857142857,
-    "target_xml_id": "name-3",
-    "target_match": "@ref",
-    "asserted_value": "#met",
+    "degree": null,
+    "target_xml_id": "certainty-10",
+    "target_match": "@cert",
+    "asserted_value": "low",
     "description": null,
     "file_version": 2,
     "created_by": 1,
+    "created_in_file_version": 1,
     "deleted_by": null,
+    "deleted_in_file_version": null,
     "categories": [
-      2,
-      4
+      5
     ]
   }
 },
@@ -2284,7 +2512,9 @@
     "description": null,
     "file_version": 3,
     "created_by": 1,
+    "created_in_file_version": 3,
     "deleted_by": null,
+    "deleted_in_file_version": null,
     "categories": [
       4
     ]
@@ -2305,7 +2535,9 @@
     "description": null,
     "file_version": 3,
     "created_by": 1,
+    "created_in_file_version": 3,
     "deleted_by": null,
+    "deleted_in_file_version": null,
     "categories": [
       4
     ]
@@ -2326,7 +2558,9 @@
     "description": null,
     "file_version": 3,
     "created_by": 1,
+    "created_in_file_version": 3,
     "deleted_by": null,
+    "deleted_in_file_version": null,
     "categories": [
       4
     ]
@@ -2337,17 +2571,19 @@
   "pk": 14,
   "fields": {
     "file": 2,
-    "xml_id": "certainty-2",
+    "xml_id": "certainty-0",
     "locus": "value",
     "cert": "high",
     "degree": 0.857142857142857,
-    "target_xml_id": "name-2",
+    "target_xml_id": "name-0",
     "target_match": "@ref",
-    "asserted_value": "#jus",
+    "asserted_value": "#sand",
     "description": null,
     "file_version": 4,
     "created_by": 1,
+    "created_in_file_version": 3,
     "deleted_by": null,
+    "deleted_in_file_version": null,
     "categories": [
       4
     ]
@@ -2368,7 +2604,9 @@
     "description": null,
     "file_version": 4,
     "created_by": 1,
+    "created_in_file_version": 3,
     "deleted_by": null,
+    "deleted_in_file_version": null,
     "categories": [
       4
     ]
@@ -2379,17 +2617,19 @@
   "pk": 16,
   "fields": {
     "file": 2,
-    "xml_id": "certainty-0",
+    "xml_id": "certainty-2",
     "locus": "value",
     "cert": "high",
     "degree": 0.857142857142857,
-    "target_xml_id": "name-0",
+    "target_xml_id": "name-2",
     "target_match": "@ref",
-    "asserted_value": "#sand",
+    "asserted_value": "#jus",
     "description": null,
     "file_version": 4,
     "created_by": 1,
+    "created_in_file_version": 3,
     "deleted_by": null,
+    "deleted_in_file_version": null,
     "categories": [
       4
     ]
@@ -2410,7 +2650,9 @@
     "description": null,
     "file_version": 5,
     "created_by": 1,
+    "created_in_file_version": 5,
     "deleted_by": null,
+    "deleted_in_file_version": null,
     "categories": [
       4
     ]
@@ -2431,7 +2673,9 @@
     "description": null,
     "file_version": 5,
     "created_by": 1,
+    "created_in_file_version": 5,
     "deleted_by": null,
+    "deleted_in_file_version": null,
     "categories": [
       4
     ]
@@ -2440,27 +2684,6 @@
 {
   "model": "api_vis.certainty",
   "pk": 19,
-  "fields": {
-    "file": 3,
-    "xml_id": "certainty-1",
-    "locus": "value",
-    "cert": "high",
-    "degree": 0.833333333333333,
-    "target_xml_id": "name-0",
-    "target_match": "@ref",
-    "asserted_value": "#ingwer",
-    "description": null,
-    "file_version": 6,
-    "created_by": 1,
-    "deleted_by": null,
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "api_vis.certainty",
-  "pk": 20,
   "fields": {
     "file": 3,
     "xml_id": "certainty-0",
@@ -2473,7 +2696,32 @@
     "description": null,
     "file_version": 6,
     "created_by": 1,
+    "created_in_file_version": 5,
     "deleted_by": null,
+    "deleted_in_file_version": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 20,
+  "fields": {
+    "file": 3,
+    "xml_id": "certainty-1",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.833333333333333,
+    "target_xml_id": "name-0",
+    "target_match": "@ref",
+    "asserted_value": "#ingwer",
+    "description": null,
+    "file_version": 6,
+    "created_by": 1,
+    "created_in_file_version": 5,
+    "deleted_by": null,
+    "deleted_in_file_version": null,
     "categories": [
       4
     ]
@@ -2525,11 +2773,11 @@
   "model": "files_management.fileversion",
   "pk": 1,
   "fields": {
-    "upload": "uploaded_files/d5a4bad7d2ac54785a7608ab74fe3aba5e6780d63959036e67f97034f7e07d4587fe985b7bb16_ZuMoT0s",
+    "upload": "uploaded_files/d5a4bad7d2ac54785a7608ab74fe3aba5e6780d63959036e67f97034f7e07d4587fe985b7bb16_HaPS9CL",
     "hash": "d5a4bad7d2ac54785a7608ab74fe3aba5e6780d63959036e67f97034f7e07d4587fe985b7bb16fe2d8350d633a4280c4c8ac621967a5dacced927d030500032d",
     "file": 1,
     "number": 1,
-    "creation_date": "2020-04-27T07:41:38.657Z",
+    "creation_date": "2020-05-01T09:19:46.594Z",
     "created_by": 2,
     "message": null
   }
@@ -2538,11 +2786,11 @@
   "model": "files_management.fileversion",
   "pk": 2,
   "fields": {
-    "upload": "uploaded_files/66ec4791002f9910f83436080f269db09d8ae4974b076e66b9cce29d314e6f61e3398fe1b7ef1_LtbzpjI",
+    "upload": "uploaded_files/66ec4791002f9910f83436080f269db09d8ae4974b076e66b9cce29d314e6f61e3398fe1b7ef1_rWU4GNI",
     "hash": "66ec4791002f9910f83436080f269db09d8ae4974b076e66b9cce29d314e6f61e3398fe1b7ef12317faa8ac27d550e0deb3b10e2db1bb3e568d338c63384781b",
     "file": 1,
     "number": 2,
-    "creation_date": "2020-04-27T07:41:38.997Z",
+    "creation_date": "2020-05-01T09:19:46.842Z",
     "created_by": 2,
     "message": null
   }
@@ -2551,11 +2799,11 @@
   "model": "files_management.fileversion",
   "pk": 3,
   "fields": {
-    "upload": "uploaded_files/837ff802242a9165fc7dccb911a843b52b1e63fbad330314e07478fbbbc2d74bfa815bb9663d5_jBvWAmB",
+    "upload": "uploaded_files/837ff802242a9165fc7dccb911a843b52b1e63fbad330314e07478fbbbc2d74bfa815bb9663d5_4uKSUKa",
     "hash": "837ff802242a9165fc7dccb911a843b52b1e63fbad330314e07478fbbbc2d74bfa815bb9663d5606ce99149604e291c798415509ce4cb55b6b7aa40515d599b3",
     "file": 2,
     "number": 1,
-    "creation_date": "2020-04-27T07:41:51.044Z",
+    "creation_date": "2020-05-01T09:19:51.778Z",
     "created_by": 2,
     "message": null
   }
@@ -2564,11 +2812,11 @@
   "model": "files_management.fileversion",
   "pk": 4,
   "fields": {
-    "upload": "uploaded_files/191ebf73bf94b585c6d46d6de94639205ad11f158535e31a35f1a403de38a87ad04093f328393_6YDYCxT",
+    "upload": "uploaded_files/191ebf73bf94b585c6d46d6de94639205ad11f158535e31a35f1a403de38a87ad04093f328393_zRWJqpT",
     "hash": "191ebf73bf94b585c6d46d6de94639205ad11f158535e31a35f1a403de38a87ad04093f32839313a95e8aec104f251c11985de7fa88f374b312ea7d2026502df",
     "file": 2,
     "number": 2,
-    "creation_date": "2020-04-27T07:41:51.234Z",
+    "creation_date": "2020-05-01T09:19:51.924Z",
     "created_by": 2,
     "message": null
   }
@@ -2577,11 +2825,11 @@
   "model": "files_management.fileversion",
   "pk": 5,
   "fields": {
-    "upload": "uploaded_files/f25e21bb837191d7ddec231df49196c5acf0ea473147b7cf36385d7f041aa74131e097d0183a9_cthDeec",
+    "upload": "uploaded_files/f25e21bb837191d7ddec231df49196c5acf0ea473147b7cf36385d7f041aa74131e097d0183a9_diASNTb",
     "hash": "f25e21bb837191d7ddec231df49196c5acf0ea473147b7cf36385d7f041aa74131e097d0183a970646f96ca783ebacc607a9a01d3d8dfc6a3fd211d19ac00dc9",
     "file": 3,
     "number": 1,
-    "creation_date": "2020-04-27T07:41:58.453Z",
+    "creation_date": "2020-05-01T09:19:55.543Z",
     "created_by": 2,
     "message": null
   }
@@ -2590,11 +2838,11 @@
   "model": "files_management.fileversion",
   "pk": 6,
   "fields": {
-    "upload": "uploaded_files/61debaf45fc63961afe3a7386e7322007264bb9d54719d7f2beb9d094b3f55874df4b57c30866_c2IdIYZ",
+    "upload": "uploaded_files/61debaf45fc63961afe3a7386e7322007264bb9d54719d7f2beb9d094b3f55874df4b57c30866_2VrToJo",
     "hash": "61debaf45fc63961afe3a7386e7322007264bb9d54719d7f2beb9d094b3f55874df4b57c3086651e8500fa8377d338ddc3092de99ace45b77eeab4137abc9102",
     "file": 3,
     "number": 2,
-    "creation_date": "2020-04-27T07:41:58.612Z",
+    "creation_date": "2020-05-01T09:19:55.631Z",
     "created_by": 2,
     "message": null
   }
@@ -2624,7 +2872,7 @@
   "pk": 1,
   "fields": {
     "project": 1,
-    "date": "2020-04-27T07:41:27.167Z",
+    "date": "2020-05-01T08:15:30.098Z",
     "related_file": null,
     "related_file_name": null,
     "related_dir": null,
@@ -2639,7 +2887,7 @@
   "pk": 2,
   "fields": {
     "project": 1,
-    "date": "2020-04-27T07:41:38.687Z",
+    "date": "2020-05-01T09:19:46.614Z",
     "related_file": 1,
     "related_file_name": "group_0_long_annotated_0_modified_xml",
     "related_dir": null,
@@ -2654,7 +2902,7 @@
   "pk": 3,
   "fields": {
     "project": 1,
-    "date": "2020-04-27T07:41:39.007Z",
+    "date": "2020-05-01T09:19:46.850Z",
     "related_file": 1,
     "related_file_name": "group_0_long_annotated_0_modified_xml",
     "related_dir": null,
@@ -2669,7 +2917,7 @@
   "pk": 4,
   "fields": {
     "project": 1,
-    "date": "2020-04-27T07:41:39.125Z",
+    "date": "2020-05-01T09:19:46.932Z",
     "related_file": 1,
     "related_file_name": "group_0_long_annotated_0_modified_xml",
     "related_dir": null,
@@ -2684,7 +2932,7 @@
   "pk": 5,
   "fields": {
     "project": 1,
-    "date": "2020-04-27T07:41:51.073Z",
+    "date": "2020-05-01T09:19:51.799Z",
     "related_file": 2,
     "related_file_name": "group_0_long_annotated_1_modified_xml",
     "related_dir": null,
@@ -2699,7 +2947,7 @@
   "pk": 6,
   "fields": {
     "project": 1,
-    "date": "2020-04-27T07:41:51.246Z",
+    "date": "2020-05-01T09:19:51.941Z",
     "related_file": 2,
     "related_file_name": "group_0_long_annotated_1_modified_xml",
     "related_dir": null,
@@ -2714,7 +2962,7 @@
   "pk": 7,
   "fields": {
     "project": 1,
-    "date": "2020-04-27T07:41:51.314Z",
+    "date": "2020-05-01T09:19:51.964Z",
     "related_file": 2,
     "related_file_name": "group_0_long_annotated_1_modified_xml",
     "related_dir": null,
@@ -2729,7 +2977,7 @@
   "pk": 8,
   "fields": {
     "project": 1,
-    "date": "2020-04-27T07:41:58.482Z",
+    "date": "2020-05-01T09:19:55.558Z",
     "related_file": 3,
     "related_file_name": "group_0_long_annotated_2_modified_xml",
     "related_dir": null,
@@ -2744,7 +2992,7 @@
   "pk": 9,
   "fields": {
     "project": 1,
-    "date": "2020-04-27T07:41:58.637Z",
+    "date": "2020-05-01T09:19:55.640Z",
     "related_file": 3,
     "related_file_name": "group_0_long_annotated_2_modified_xml",
     "related_dir": null,
@@ -2759,7 +3007,7 @@
   "pk": 10,
   "fields": {
     "project": 1,
-    "date": "2020-04-27T07:41:58.669Z",
+    "date": "2020-05-01T09:19:55.661Z",
     "related_file": 3,
     "related_file_name": "group_0_long_annotated_2_modified_xml",
     "related_dir": null,

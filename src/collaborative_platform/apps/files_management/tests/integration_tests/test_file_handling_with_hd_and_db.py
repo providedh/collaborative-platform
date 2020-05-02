@@ -64,7 +64,7 @@ class TestFileHandlingWithHdAndDb:
 
         upload_file(client, source_file_path, directory.id)
 
-        file = File.objects.last()
+        file = File.objects.order_by('-id')[0]
         file_versions = FileVersion.objects.filter(file=file).order_by('number')
         first_file_version = file_versions[0]
         second_file_version = file_versions[1]
@@ -111,7 +111,7 @@ class TestFileHandlingWithHdAndDb:
 
         upload_file(client, source_file_path, directory.id)
 
-        file = File.objects.last()
+        file = File.objects.order_by('-id')[0]
         file_versions = FileVersion.objects.filter(file=file).order_by('number')
         second_file_version = file_versions[1]
 

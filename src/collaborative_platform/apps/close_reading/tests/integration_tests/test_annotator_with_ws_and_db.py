@@ -20,11 +20,12 @@ TEST_CHANNEL_LAYERS = {
 
 
 # TODO: Extract creating communicators and disconnecting them to pytest fixture
+# TODO: Figure out how to reset database after each test inside class and reduce number of test classes
 
 
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_after_each_test')
+@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
 @pytest.mark.asyncio
-@pytest.mark.django_db
+@pytest.mark.django_db()
 @pytest.mark.integration_tests
 class TestAnnotatorWithWsAndDb:
     async def test_authorized_user_can_connect(self, settings):
@@ -123,8 +124,8 @@ class TestAnnotatorWithWsAndDb:
             {
                 'method': 'POST',
                 'element_type': 'tag',
-                "start_pos": 380,
-                "end_pos": 384
+                "start_pos": 389,
+                "end_pos": 393
             }
         ]
         request_nr = 1
@@ -190,6 +191,62 @@ class TestAnnotatorWithWsAndDb:
             }
         ]
         request_nr = 0
+
+        await communicator.send_json_to(request)
+        response = await communicator.receive_json_from()
+        verify_response(test_name, response, request_nr)
+
+        await communicator.disconnect()
+
+
+@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
+@pytest.mark.asyncio
+@pytest.mark.django_db()
+@pytest.mark.integration_tests
+class TestAnnotatorWithWsAndDb2:
+    async def test_add_reference_to_entity_to_text__entity_doesnt_exist__entity_unlistable(self, settings):
+        settings.CHANNEL_LAYERS = TEST_CHANNEL_LAYERS
+        test_name = inspect.currentframe().f_code.co_name
+
+        project_id = 1
+        file_id = 1
+        user_id = 2
+
+        communicator = get_communicator(project_id, file_id, user_id)
+
+        await communicator.connect()
+        await communicator.receive_json_from()
+
+        request = [
+            {
+                'method': 'POST',
+                'element_type': 'tag',
+                'start_pos': 265,
+                'end_pos': 271,
+            }
+        ]
+        request_nr = 0
+
+        await communicator.send_json_to(request)
+        response = await communicator.receive_json_from()
+        verify_response(test_name, response, request_nr)
+
+        request = [
+            {
+                'method': 'POST',
+                'element_type': 'entity',
+                'edited_element_id': 'ab-1',
+                'parameters': {
+                    'entity_type': 'person',
+                    'entity_properties': {
+                        'forename': 'Bugs',
+                        'surname': 'Bunny',
+                        'sex': 'M'
+                    }
+                }
+            }
+        ]
+        request_nr = 1
 
         await communicator.send_json_to(request)
         response = await communicator.receive_json_from()

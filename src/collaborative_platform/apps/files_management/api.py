@@ -143,8 +143,10 @@ def __update_file_object(xml_content, old_file, user):
 
 
 def __clone_db_objects(file):
-    last_file_version = file.file_versions.last()
-    previous_file_version = FileVersion.objects.filter(file=file).order_by('-number')[1]
+    file_versions = file.file_versions.order_by('-number')
+
+    last_file_version = file_versions[0]
+    previous_file_version = file_versions[1]
 
     __clone_entities_versions(last_file_version, previous_file_version)
     __clone_certainties(last_file_version, previous_file_version)
@@ -153,12 +155,12 @@ def __clone_db_objects(file):
 def __clone_entities_versions(last_file_version, previous_file_version):
     entities_versions = EntityVersion.objects.filter(
         file_version=previous_file_version,
-    )
+    ).order_by('id')
 
     for entity_version in entities_versions:
         entity_properties = EntityProperty.objects.filter(
             entity_version=entity_version,
-        )
+        ).order_by('id')
 
         entity_version.id = None
         entity_version.file_version = last_file_version
@@ -174,7 +176,7 @@ def __clone_entities_versions(last_file_version, previous_file_version):
 def __clone_certainties(last_file_version, previous_file_version):
     certainties = Certainty.objects.filter(
         file_version=previous_file_version,
-    )
+    ).order_by('id')
 
     for certainty in certainties:
         certainty_categories = certainty.categories.all()

@@ -225,13 +225,15 @@ class ElementsExtractor:
 
         return clean_xpath
 
-    def __create_entity_property_object(self, property, property_type, property_value, clean_xpath,
-                                        entity_version_object):
+    @staticmethod
+    def __create_entity_property_object(property, property_type, property_value, clean_xpath, entity_version_object):
         entity_property_object = EntityProperty(
             entity_version=entity_version_object,
             xpath=clean_xpath,
             name=property,
             type=property_type,
+            created_by=entity_version_object.entity.created_by,
+            created_in_file_version=entity_version_object.file_version
         )
 
         entity_property_object.set_value(property_value)
@@ -311,6 +313,7 @@ class ElementsExtractor:
             asserted_value=get_first_xpath_match(certainty, '@assertedValue', XML_NAMESPACES),
             description=get_first_xpath_match(certainty, './default:desc/text()', XML_NAMESPACES),
             created_by=author,
+            created_in_file_version=self.__file_version,
             file_version=self.__file_version,
         )
 

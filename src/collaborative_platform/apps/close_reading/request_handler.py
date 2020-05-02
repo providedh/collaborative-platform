@@ -3,11 +3,16 @@ import re
 
 from lxml import etree
 
+from django.contrib.auth.models import User
+
+from apps.api_vis.models import Entity, EntityProperty, EntityVersion
 from apps.close_reading.models import AnnotatingBodyContent
 from apps.exceptions import BadRequest
-from apps.files_management.models import File
+from apps.files_management.models import File, FileMaxXmlIds
+from apps.files_management.file_conversions.xml_tools import get_first_xpath_match
+from apps.close_reading.response_generator import get_entities_types_for_lists
 
-from collaborative_platform.settings import XML_NAMESPACES
+from collaborative_platform.settings import CUSTOM_ENTITY, DEFAULT_ENTITIES, XML_NAMESPACES
 
 
 class RequestHandler:
@@ -33,15 +38,26 @@ class RequestHandler:
             if request['element_type'] == 'tag':
                 if request['method'] == 'POST':
                     self.__add_new_tag_to_text(request, user)
-
                 elif request['method'] == 'PUT':
                     self.__move_tag_to_new_position(request, user)
-
                 elif request['method'] == 'DELETE':
                     self.__delete_tag(request, user)
-
                 else:
                     raise BadRequest(f"There is no operation matching to this request")
+
+            elif request['element_type'] == 'entity':
+                if request['method'] == 'POST':
+                    self.__add_reference_to_entity(request, user)
+                elif request['method'] == 'PUT':
+                    pass
+                elif request['method'] == 'DELETE':
+                    pass
+                else:
+                    raise BadRequest(f"There is no operation matching to this request")
+
+            else:
+                raise BadRequest(f"There is no operation matching to this request")
+
 
             pass
 
@@ -51,13 +67,12 @@ class RequestHandler:
 
         body_content = self.get_body_content()
 
-        max_id = self.__get_max_xml_id_from_text(body_content, 'ab', temp_id=True)
-        new_id = max_id + 1
+        xml_id = self.__get_next_xml_id('ab')
 
         start_pos = request['start_pos']
         end_pos = request['end_pos']
 
-        text_result = self.__add_tag(body_content, start_pos, end_pos, new_id, user)
+        text_result = self.__add_tag(body_content, start_pos, end_pos, xml_id, user)
 
         self.__set_body_content(text_result)
 
@@ -72,12 +87,12 @@ class RequestHandler:
         self.__annotating_body_content.save()
 
     @staticmethod
-    def __add_tag(body_content, start_pos, end_pos, id_nr, user):
+    def __add_tag(body_content, start_pos, end_pos, xml_id, user):
         text_before = body_content[:start_pos]
         text_inside = body_content[start_pos:end_pos]
         text_after = body_content[end_pos:]
 
-        text_result = f'{text_before}<ab xml:id="temp_ab-{id_nr}" resp="{user.id}">{text_inside}</ab>{text_after}'
+        text_result = f'{text_before}<ab xml:id="{xml_id}" resp="{user.id}" saved="false">{text_inside}</ab>{text_after}'
 
         return text_result
 
@@ -220,3 +235,98 @@ class RequestHandler:
         request = json.loads(text_data)
 
         return request
+
+    def __add_reference_to_entity(self, request, user):  # type: (dict, User) -> None
+        entity_type = request['parameters']['entity_type']
+        entity_properties = request['parameters']['entity_properties']
+        edited_xml_id = request.get('edited_element_id')
+        target_xml_id = request.get('target_element_id')
+
+        file_version = self.__file.file_versions.order_by('-number')[0]
+        listable_entities_types = get_entities_types_for_lists(file_version)
+
+        if not target_xml_id and entity_type in listable_entities_types:
+            # create entity
+            xml_id = self.__get_next_xml_id(entity_type)
+
+            entity = Entity.objects.create(
+                file=self.__file,
+                type=entity_type,
+                xml_id=xml_id,
+                created_by=user,
+            )
+
+            # create entity version
+            entity_version = EntityVersion.objects.create(
+                entity=entity,
+            )
+
+            # create parameters
+            if entity_type in DEFAULT_ENTITIES.keys():
+                properties = DEFAULT_ENTITIES[entity_type]['properties']
+            else:
+                properties = CUSTOM_ENTITY['properties']
+
+            properties_objects = []
+
+            for name, value in entity_properties.items():
+                entity_property_object = EntityProperty(
+                    entity_version=entity_version,
+                    xpath='',
+                    name=name,
+                    type=properties[name]['type'],
+                    created_by=user,
+                )
+
+                entity_property_object.set_value(value)
+
+                properties_objects.append(entity_property_object)
+
+            EntityProperty.objects.bulk_create(properties_objects)
+
+
+            # modify tag in text
+            tree = etree.fromstring(self.get_body_content())
+
+            xpath = f"//*[contains(concat(' ', @xml:id, ' '), ' {edited_xml_id}')]"
+            element = get_first_xpath_match(tree, xpath, XML_NAMESPACES)
+
+            prefix = "{%s}" % XML_NAMESPACES['default']
+
+            element.tag = prefix + 'name'
+            element.set('ref', f'#{xml_id}')
+            element.set('unsavedRef', f'#{xml_id}')
+
+            text_result = etree.tounicode(tree, pretty_print=True)
+
+            self.__set_body_content(text_result)
+
+
+
+
+
+
+
+
+
+            pass
+        elif not target_xml_id and entity_type not in listable_entities_types:
+            pass
+        elif target_xml_id and entity_type in listable_entities_types:
+            pass
+        elif target_xml_id and entity_type not in listable_entities_types:
+            pass
+        else:
+            raise BadRequest(f"There is no operation matching to this request")
+
+    def __get_next_xml_id(self, entity_type):
+        entity_max_xml_id = FileMaxXmlIds.objects.get(
+            file=self.__file,
+            xml_id_base=entity_type,
+        )
+
+        xml_id_nr = entity_max_xml_id.get_next_number()
+        xml_id = f'{entity_type}-{xml_id_nr}'
+
+        return xml_id
+

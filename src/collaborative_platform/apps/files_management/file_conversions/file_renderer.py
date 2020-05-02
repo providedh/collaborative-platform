@@ -140,7 +140,7 @@ class FileRenderer:
     def __append_entity_properties(entity_element, entity_version, custom=False):
         entities_properties = EntityProperty.objects.filter(
             entity_version=entity_version
-        )
+        ).order_by('name')
 
         if not custom:
             properties = DEFAULT_ENTITIES[entity_version.entity.type]['properties']
@@ -165,7 +165,7 @@ class FileRenderer:
         return xml_content
 
     def __append_certainties(self):
-        certainties = self.__get_certainties_from_db()
+        certainties = self.__get_certainties_from_db().order_by('id')
 
         if certainties:
             elements = self.__create_certainties_elements(certainties)

@@ -24,7 +24,8 @@ class Entity(models.Model):
     xml_id = models.CharField(max_length=255)
 
     created_by = models.ForeignKey(User, on_delete=models.SET(get_anonymous_user), related_name='created_entities')
-    created_in_file_version = models.ForeignKey(FileVersion, on_delete=models.CASCADE, related_name='created_entities')
+    created_in_file_version = models.ForeignKey(FileVersion, default=None, null=True, on_delete=models.CASCADE,
+                                                related_name='created_entities')
     deleted_by = models.ForeignKey(User, default=None, null=True, on_delete=models.SET(get_anonymous_user),
                                    related_name='deleted_entities')
     deleted_in_file_version = models.ForeignKey(FileVersion, default=None, null=True, on_delete=models.CASCADE,
@@ -36,7 +37,7 @@ class Entity(models.Model):
         unique_together = ("file", "xml_id")
 
     def delete_fake(self, user):
-        file_version = self.file.file_versions.last()
+        file_version = self.file.file_versions.order_by('-number')[0]
 
         self.deleted_by = user
         self.deleted_in_file_version = file_version
@@ -47,7 +48,7 @@ class Entity(models.Model):
 
 class EntityVersion(models.Model):
     entity = models.ForeignKey(Entity, on_delete=models.CASCADE)
-    file_version = models.ForeignKey(FileVersion, on_delete=models.CASCADE)
+    file_version = models.ForeignKey(FileVersion, default=None, null=True, on_delete=models.CASCADE)
 
     xml = models.TextField(blank=True, null=True)
     context = models.TextField(blank=True, null=True)
@@ -68,6 +69,14 @@ class EntityProperty(models.Model):
     value_date = models.DateField(null=True)
     value_time = models.TimeField(null=True)
     value_point = PointField(geography=True, null=True)
+
+    created_by = models.ForeignKey(User, on_delete=models.SET(get_anonymous_user), related_name='created_properties')
+    created_in_file_version = models.ForeignKey(FileVersion, default=None, null=True, on_delete=models.CASCADE,
+                                                related_name='created_properties')
+    deleted_by = models.ForeignKey(User, default=None, null=True, on_delete=models.SET(get_anonymous_user),
+                                   related_name='deleted_properties')
+    deleted_in_file_version = models.ForeignKey(FileVersion, default=None, null=True, on_delete=models.CASCADE,
+                                                related_name='deleted_properties')
 
     def set_value(self, value):
         if type(self.type) == str:
@@ -164,7 +173,7 @@ class Unification(models.Model):
     xml_id = models.CharField(max_length=255)
 
     def delete_fake(self, user, commit):
-        file_version = self.entity.file.file_versions.last()
+        file_version = self.entity.file.file_versions.order_by('-number')[0]
 
         self.deleted_on = datetime.now()
         self.deleted_by = user
@@ -203,8 +212,12 @@ class Certainty(models.Model):
     file_version = models.ForeignKey(FileVersion, on_delete=models.CASCADE)
 
     created_by = models.ForeignKey(User, on_delete=models.SET(get_anonymous_user), related_name='created_certainties')
+    created_in_file_version = models.ForeignKey(FileVersion, default=None, null=True, on_delete=models.CASCADE,
+                                                related_name='created_certainties')
     deleted_by = models.ForeignKey(User, default=None, null=True, on_delete=models.SET(get_anonymous_user),
                                    related_name='deleted_certainties')
+    deleted_in_file_version = models.ForeignKey(FileVersion, default=None, null=True, on_delete=models.CASCADE,
+                                                related_name='deleted_certainties')
 
     def get_categories(self, as_str=False):
         if as_str:
