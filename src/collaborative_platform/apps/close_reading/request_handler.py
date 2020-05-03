@@ -45,7 +45,7 @@ class RequestHandler:
                 else:
                     raise BadRequest(f"There is no operation matching to this request")
 
-            elif request['element_type'] == 'entity':
+            elif request['element_type'] == 'reference':
                 if request['method'] == 'POST':
                     self.__add_reference_to_entity(request, user)
                 elif request['method'] == 'PUT':
@@ -92,7 +92,7 @@ class RequestHandler:
         text_inside = body_content[start_pos:end_pos]
         text_after = body_content[end_pos:]
 
-        text_result = f'{text_before}<ab xml:id="{xml_id}" resp="{user.id}" saved="false">{text_inside}</ab>{text_after}'
+        text_result = f'{text_before}<ab xml:id="{xml_id}" resp="{user.username}" saved="false">{text_inside}</ab>{text_after}'
 
         return text_result
 
@@ -269,10 +269,28 @@ class RequestHandler:
             entity_version_object = self.__create_entity_version_object(entity_object)
             self.__create_entity_properties_objects(entity_type, entity_properties, entity_version_object, user)
 
-            self.__update_tag_in_body(edited_element_id, target_element_id)
+            attributes_to_set = {
+                'ref': f'#{target_element_id}',
+                'unsavedRef': f'#{target_element_id}'
+            }
+
+            self.__update_tag_in_body(edited_element_id, entity_listable=True, attributes_to_set=attributes_to_set)
 
         elif not target_element_id and entity_type not in listable_entities_types:
-            pass
+            target_element_id = self.__get_next_xml_id(entity_type)
+
+            entity_object = self.__create_entity_object(entity_type, target_element_id, user)
+            entity_version_object = self.__create_entity_version_object(entity_object)
+            self.__create_entity_properties_objects(entity_type, entity_properties, entity_version_object, user)
+
+            attributes_to_set = {
+                'saved': 'false'
+            }
+
+            attributes_to_set.update(entity_properties)
+
+            self.__update_tag_in_body(edited_element_id, entity_type=entity_type, attributes_to_set=attributes_to_set)
+
         elif target_element_id and entity_type in listable_entities_types:
             pass
         elif target_element_id and entity_type not in listable_entities_types:
@@ -322,7 +340,8 @@ class RequestHandler:
 
         EntityProperty.objects.bulk_create(properties_objects)
 
-    def __update_tag_in_body(self, edited_element_id, target_element_id):
+    def __update_tag_in_body(self, edited_element_id, entity_listable=False, entity_type=None, attributes_to_set=None,
+                             attributes_to_delete=None):
         body_content = self.get_body_content()
         tree = etree.fromstring(body_content)
 
@@ -331,9 +350,26 @@ class RequestHandler:
 
         prefix = "{%s}" % XML_NAMESPACES['default']
 
-        element.tag = prefix + 'name'
-        element.set('ref', f'#{target_element_id}')
-        element.set('unsavedRef', f'#{target_element_id}')
+        if entity_listable:
+            tag = prefix + 'name'
+        else:
+            tag = prefix + entity_type
+
+        element.tag = tag
+
+        if attributes_to_set:
+            for attribute, value in sorted(attributes_to_set.items()):
+                if attribute in element.attrib:
+                    old_value = element.attrib[attribute]
+
+                    if value not in old_value:
+                        value = ' '.join((old_value, value))
+
+                element.set(attribute, value)
+
+        if attributes_to_delete:
+            for attribute in attributes_to_delete:
+                element.attrib.pop(attribute)
 
         text_result = etree.tounicode(tree, pretty_print=True)
 

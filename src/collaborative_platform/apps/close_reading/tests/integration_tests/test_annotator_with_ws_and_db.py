@@ -8,6 +8,8 @@ from channels.testing import WebsocketCommunicator
 from django.contrib.auth.models import User
 from django.test import Client
 
+from apps.api_vis.models import Entity
+
 from collaborative_platform.routing import application
 
 
@@ -112,8 +114,8 @@ class TestAnnotatorWithWsAndDb:
             {
                 'method': 'POST',
                 'element_type': 'tag',
-                "start_pos": 389,
-                "end_pos": 393
+                "start_pos": 398,
+                "end_pos": 402
             }
         ]
         request_nr = 1
@@ -190,7 +192,7 @@ class TestAnnotatorWithWsAndDb:
 @pytest.mark.django_db()
 @pytest.mark.integration_tests
 class TestAnnotatorWithWsAndDb2:
-    async def test_add_reference_to_entity_to_text__entity_doesnt_exist__entity_unlistable(self):
+    async def test_add_reference_to_entity_to_text__entity_doesnt_exist__entity_listable(self):
         test_name = inspect.currentframe().f_code.co_name
 
         project_id = 1
@@ -219,7 +221,7 @@ class TestAnnotatorWithWsAndDb2:
         request = [
             {
                 'method': 'POST',
-                'element_type': 'entity',
+                'element_type': 'reference',
                 'edited_element_id': 'ab-1',
                 'parameters': {
                     'entity_type': 'person',
@@ -236,6 +238,65 @@ class TestAnnotatorWithWsAndDb2:
         await communicator.send_json_to(request)
         response = await communicator.receive_json_from()
         verify_response(test_name, response, request_nr)
+
+        await communicator.disconnect()
+
+
+@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
+@pytest.mark.asyncio
+@pytest.mark.django_db()
+@pytest.mark.integration_tests
+class TestAnnotatorWithWsAndDb3:
+    async def test_add_reference_to_entity_to_text__entity_doesnt_exist__entity_unlistable(self):
+        test_name = inspect.currentframe().f_code.co_name
+
+        project_id = 1
+        file_id = 1
+        user_id = 2
+
+        communicator = get_communicator(project_id, file_id, user_id)
+
+        await communicator.connect()
+        await communicator.receive_json_from()
+
+        request = [
+            {
+                'method': 'POST',
+                'element_type': 'tag',
+                'start_pos': 265,
+                'end_pos': 271,
+            }
+        ]
+        request_nr = 0
+
+        await communicator.send_json_to(request)
+        response = await communicator.receive_json_from()
+        verify_response(test_name, response, request_nr)
+
+        date_entities_in_db = Entity.objects.filter(type='date')
+        assert len(date_entities_in_db) == 2
+
+        request = [
+            {
+                'method': 'POST',
+                'element_type': 'reference',
+                'edited_element_id': 'ab-1',
+                'parameters': {
+                    'entity_type': 'date',
+                    'entity_properties': {
+                        'when': '2000-01-01'
+                    }
+                }
+            }
+        ]
+        request_nr = 1
+
+        await communicator.send_json_to(request)
+        response = await communicator.receive_json_from()
+        verify_response(test_name, response, request_nr)
+
+        date_entities_in_db = Entity.objects.filter(type='date')
+        assert len(date_entities_in_db) == 3
 
         await communicator.disconnect()
 
