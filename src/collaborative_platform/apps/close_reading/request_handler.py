@@ -308,7 +308,13 @@ class RequestHandler:
             self.__update_tag_in_body(edited_element_id, entity_listable=True, attributes_to_set=attributes_to_set)
 
         elif target_element_id and entity_type not in listable_entities_types:
-            pass
+            attributes_to_set = {
+                'ref': f'#{target_element_id}',
+                'unsavedRef': f'#{target_element_id}'
+            }
+
+            self.__update_tag_in_body(edited_element_id, entity_type=entity_type, attributes_to_set=attributes_to_set)
+
         else:
             raise BadRequest(f"There is no operation matching to this request")
 
