@@ -404,13 +404,16 @@ class RequestHandler:
 
         element.set('deletedRef', f'#{target_element_id}')
 
-        ids_in_ref = element.attrib['ref']
-        ids_in_ref = ids_in_ref.split(' ')
+        if edited_element_id != target_element_id:
+            ids_in_ref = element.attrib['ref']
+            ids_in_ref = ids_in_ref.split(' ')
 
-        ids_in_deleted_ref = element.attrib['deletedRef']
-        ids_in_deleted_ref = ids_in_deleted_ref.split(' ')
+            ids_in_deleted_ref = element.attrib['deletedRef']
+            ids_in_deleted_ref = ids_in_deleted_ref.split(' ')
 
-        remaining_ids = set(ids_in_ref) - set(ids_in_deleted_ref)
+            remaining_ids = set(ids_in_ref) - set(ids_in_deleted_ref)
+        else:
+            remaining_ids = {}
 
         if not remaining_ids:
             prefix = "{%s}" % XML_NAMESPACES['default']
