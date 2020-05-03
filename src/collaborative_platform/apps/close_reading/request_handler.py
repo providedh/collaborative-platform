@@ -51,7 +51,7 @@ class RequestHandler:
                 elif request['method'] == 'PUT':
                     pass
                 elif request['method'] == 'DELETE':
-                    pass
+                    self.__mark_reference_to_delete(request, user)
                 else:
                     raise BadRequest(f"There is no operation matching to this request")
 
@@ -280,7 +280,7 @@ class RequestHandler:
                 'unsavedRef': f'#{target_element_id}'
             }
 
-            self.__update_tag_in_body(edited_element_id, entity_listable=True, attributes_to_set=attributes_to_set)
+            self.__update_tag_in_body(edited_element_id, new_tag='name', attributes_to_set=attributes_to_set)
 
         elif not target_element_id and entity_type not in listable_entities_types:
             target_element_id = self.__get_next_xml_id(entity_type)
@@ -297,7 +297,7 @@ class RequestHandler:
 
             attributes_to_set.update(entity_properties)
 
-            self.__update_tag_in_body(edited_element_id, entity_type=entity_type, attributes_to_set=attributes_to_set)
+            self.__update_tag_in_body(edited_element_id, new_tag=entity_type, attributes_to_set=attributes_to_set)
 
         elif target_element_id and entity_type in listable_entities_types:
             attributes_to_set = {
@@ -305,7 +305,7 @@ class RequestHandler:
                 'unsavedRef': f'#{target_element_id}'
             }
 
-            self.__update_tag_in_body(edited_element_id, entity_listable=True, attributes_to_set=attributes_to_set)
+            self.__update_tag_in_body(edited_element_id, new_tag='name', attributes_to_set=attributes_to_set)
 
         elif target_element_id and entity_type not in listable_entities_types:
             attributes_to_set = {
@@ -313,7 +313,7 @@ class RequestHandler:
                 'unsavedRef': f'#{target_element_id}'
             }
 
-            self.__update_tag_in_body(edited_element_id, entity_type=entity_type, attributes_to_set=attributes_to_set)
+            self.__update_tag_in_body(edited_element_id, new_tag=entity_type, attributes_to_set=attributes_to_set)
 
         else:
             raise BadRequest(f"There is no operation matching to this request")
@@ -360,22 +360,17 @@ class RequestHandler:
 
         EntityProperty.objects.bulk_create(properties_objects)
 
-    def __update_tag_in_body(self, edited_element_id, entity_listable=False, entity_type=None, attributes_to_set=None,
-                             attributes_to_delete=None):
+    def __update_tag_in_body(self, edited_element_id, new_tag=None, attributes_to_set=None, attributes_to_delete=None):
         body_content = self.get_body_content()
         tree = etree.fromstring(body_content)
 
         xpath = f"//*[contains(concat(' ', @xml:id, ' '), ' {edited_element_id}')]"
         element = get_first_xpath_match(tree, xpath, XML_NAMESPACES)
 
-        prefix = "{%s}" % XML_NAMESPACES['default']
-
-        if entity_listable:
-            tag = prefix + 'name'
-        else:
-            tag = prefix + entity_type
-
-        element.tag = tag
+        if new_tag:
+            prefix = "{%s}" % XML_NAMESPACES['default']
+            tag = prefix + new_tag
+            element.tag = tag
 
         if attributes_to_set:
             for attribute, value in sorted(attributes_to_set.items()):
@@ -394,6 +389,71 @@ class RequestHandler:
         text_result = etree.tounicode(tree, pretty_print=True)
 
         self.__set_body_content(text_result)
+
+    def __mark_reference_to_delete(self, request, user):
+        # update tag
+
+        edited_element_id = request.get('edited_element_id')
+        target_element_id = request.get('target_element_id')
+
+        body_content = self.get_body_content()
+        tree = etree.fromstring(body_content)
+
+        xpath = f"//*[contains(concat(' ', @xml:id, ' '), ' {edited_element_id}')]"
+        element = get_first_xpath_match(tree, xpath, XML_NAMESPACES)
+
+        element.set('deletedRef', f'#{target_element_id}')
+
+        ids_in_ref = element.attrib['ref']
+        ids_in_ref = ids_in_ref.split(' ')
+
+        ids_in_deleted_ref = element.attrib['deletedRef']
+        ids_in_deleted_ref = ids_in_deleted_ref.split(' ')
+
+        remaining_ids = set(ids_in_ref) - set(ids_in_deleted_ref)
+
+        if not remaining_ids:
+            prefix = "{%s}" % XML_NAMESPACES['default']
+            tag = prefix + 'ab'
+            element.tag = tag
+
+            element.set('saved', 'false')
+
+
+        # update objects
+
+        xpath = f"//*[contains(concat(' ', @ref, ' '), ' #{target_element_id} ')]"
+        all_references = tree.xpath(xpath, namespaces=XML_NAMESPACES)
+
+        remaining_references = set(all_references) - {element}
+
+        if not remaining_references:
+            entity = Entity.objects.get(xml_id=target_element_id)
+            entity.deleted_by = user
+            entity.save()
+
+            entity_properties = EntityProperty.objects.filter(
+                entity_version=entity.entityversion_set.all().order_by('-id')[0]
+            )
+
+            for entity_property in entity_properties:
+                entity_property.deleted_by = user
+
+            EntityProperty.objects.bulk_update(entity_properties, ['deleted_by'])
+
+        text_result = etree.tounicode(tree, pretty_print=True)
+
+        self.__set_body_content(text_result)
+
+
+
+
+
+
+
+
+
+
 
     def __get_next_xml_id(self, entity_type):
         entity_max_xml_id = FileMaxXmlIds.objects.get(
