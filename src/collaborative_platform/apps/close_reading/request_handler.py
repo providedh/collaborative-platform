@@ -255,10 +255,14 @@ class RequestHandler:
     def __add_reference_to_entity(self, request, user):  # type: (dict, User) -> None
         # TODO: Add verification if user has rights to edit a tag
 
-        entity_type = request['parameters']['entity_type']
-        entity_properties = request['parameters']['entity_properties']
         edited_element_id = request.get('edited_element_id')
         target_element_id = request.get('target_element_id')
+
+        try:
+            entity_type = request['parameters']['entity_type']
+        except KeyError:
+            entity_type = Entity.objects.get(xml_id=target_element_id).type
+
 
         listable_entities_types = get_entities_types_for_lists(self.__file.project)
 
@@ -267,6 +271,8 @@ class RequestHandler:
 
             entity_object = self.__create_entity_object(entity_type, target_element_id, user)
             entity_version_object = self.__create_entity_version_object(entity_object)
+
+            entity_properties = request['parameters']['entity_properties']
             self.__create_entity_properties_objects(entity_type, entity_properties, entity_version_object, user)
 
             attributes_to_set = {
@@ -281,6 +287,8 @@ class RequestHandler:
 
             entity_object = self.__create_entity_object(entity_type, target_element_id, user)
             entity_version_object = self.__create_entity_version_object(entity_object)
+
+            entity_properties = request['parameters']['entity_properties']
             self.__create_entity_properties_objects(entity_type, entity_properties, entity_version_object, user)
 
             attributes_to_set = {
@@ -292,7 +300,13 @@ class RequestHandler:
             self.__update_tag_in_body(edited_element_id, entity_type=entity_type, attributes_to_set=attributes_to_set)
 
         elif target_element_id and entity_type in listable_entities_types:
-            pass
+            attributes_to_set = {
+                'ref': f'#{target_element_id}',
+                'unsavedRef': f'#{target_element_id}'
+            }
+
+            self.__update_tag_in_body(edited_element_id, entity_listable=True, attributes_to_set=attributes_to_set)
+
         elif target_element_id and entity_type not in listable_entities_types:
             pass
         else:
