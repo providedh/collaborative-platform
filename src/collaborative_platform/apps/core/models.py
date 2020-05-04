@@ -18,6 +18,11 @@ class Profile(models.Model):
     def __str__(self):
         return f"{self.user.first_name} {self.user.last_name} ({self.user.username})"
 
+    def get_xml_id(self):
+        xml_id = f'annotator-{self.user.id}'
+
+        return xml_id
+
 
 @receiver(post_save, sender=User)
 def update_user_profile(sender, instance, created, **kwargs):

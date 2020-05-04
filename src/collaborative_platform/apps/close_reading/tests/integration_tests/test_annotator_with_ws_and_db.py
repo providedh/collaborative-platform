@@ -114,8 +114,8 @@ class TestAnnotatorWithWsAndDb:
             {
                 'method': 'POST',
                 'element_type': 'tag',
-                "start_pos": 398,
-                "end_pos": 402
+                "start_pos": 400,
+                "end_pos": 404
             }
         ]
         request_nr = 1

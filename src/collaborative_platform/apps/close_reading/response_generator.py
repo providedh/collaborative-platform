@@ -121,7 +121,7 @@ class ResponseGenerator:
 
         for author in authors:
             serialized_author = {
-                'id': author.id,
+                'xml:id': author.profile.get_xml_id(),
                 'forename': author.first_name,
                 'surname': author.last_name,
                 'username': author.username,
@@ -156,7 +156,7 @@ class ResponseGenerator:
                 'locus': certainty.locus,
                 'degree': certainty.degree,
                 'cert': certainty.cert,
-                'resp': certainty.created_by.username,
+                'resp': f'#{certainty.created_by.profile.get_xml_id()}',
                 'match': certainty.target_match,
                 'target': certainty.target_xml_id,
                 'xml:id': certainty.xml_id,
@@ -196,7 +196,7 @@ class ResponseGenerator:
             entity = {
                 'type': entity_version.entity.type,
                 'xml:id': entity_version.entity.xml_id,
-                'resp': entity_version.entity.created_by.username,
+                'resp': f'#{entity_version.entity.created_by.profile.get_xml_id()}',
                 'saved': True if entity_version.file_version is not None else False,
                 'deleted': True if entity_version.entity.deleted_by is not None else False
             }

@@ -92,7 +92,7 @@ class RequestHandler:
         text_inside = body_content[start_pos:end_pos]
         text_after = body_content[end_pos:]
 
-        text_result = f'{text_before}<ab xml:id="{xml_id}" resp="{user.username}" saved="false">{text_inside}</ab>{text_after}'
+        text_result = f'{text_before}<ab xml:id="{xml_id}" resp="#{user.profile.get_xml_id()}" saved="false">{text_inside}</ab>{text_after}'
 
         return text_result
 
