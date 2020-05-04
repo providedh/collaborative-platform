@@ -15,6 +15,9 @@ from apps.close_reading.response_generator import get_entities_types_for_lists
 from collaborative_platform.settings import CUSTOM_ENTITY, DEFAULT_ENTITIES, XML_NAMESPACES
 
 
+XML_ID_KEY = f"{{{XML_NAMESPACES['xml']}}}id"
+
+
 class RequestHandler:
     def __init__(self, file_id):
         self.__file = None
@@ -123,94 +126,68 @@ class RequestHandler:
 
         body_content = self.get_body_content()
 
-        old_start_pos = request['start_pos']
-        old_end_pos = request['end_pos']
-
+        edited_element_id = request.get('edited_element_id')
         new_start_pos = request['parameters']['new_start_pos']
         new_end_pos = request['parameters']['new_end_pos']
 
-        text_before = body_content[:old_start_pos]
-        text_inside = body_content[old_start_pos:old_end_pos]
-        text_after = body_content[old_end_pos:]
+        temp_xml_id = f'{edited_element_id}-new'
 
-        left_tag_regex = r'<[^<>]+?>\s*$'
-        right_tag_regex = r'^\s*</[^<>]+?>'
+        # Get tag name
+        tree = etree.fromstring(body_content)
 
-        match = True
+        xpath = f"//*[contains(concat(' ', @xml:id, ' '), ' {edited_element_id} ')]"
+        old_tag_element = get_first_xpath_match(tree, xpath, XML_NAMESPACES)
 
-        while match:
-            match = re.search(left_tag_regex, text_before)
+        old_tag_name = old_tag_element.tag
+        old_tag_name = re.sub(r'{.*?}', '', old_tag_name)
 
-            if match:
-                left_tag_to_move = match.group()
+        old_tag_attributes = old_tag_element.attrib
 
-                if request['edited_element_id'] in left_tag_to_move:
-                    break
-
-                else:
-                    text_before = text_before[:-len(left_tag_to_move)]
-                    text_inside = left_tag_to_move + text_inside
-
-                    old_start_pos = old_start_pos - len(left_tag_to_move)
-
-        end_tag_regex = r'^<\w+'
-        match = re.search(end_tag_regex, left_tag_to_move)
-        close_tag = match.group()
-        close_tag = close_tag.replace('<', '</')
-        close_tag = close_tag + '>'
-
-        while match:
-            match = re.search(right_tag_regex, text_after)
-
-            if match:
-                right_tag_to_move = match.group()
-
-                if close_tag in right_tag_to_move:
-                    break
-
-                else:
-                    text_after = text_after[len(right_tag_to_move):]
-                    text_inside = text_inside + right_tag_to_move
-
-                    old_end_pos = old_end_pos + len(right_tag_to_move)
-
-        text_without_tags = text_before[:-len(left_tag_to_move)] + text_inside + text_after[len(right_tag_to_move):]
-
-        if new_start_pos > old_end_pos:
-            new_start_pos = new_start_pos - len(left_tag_to_move) - len(right_tag_to_move)
-            new_end_pos = new_end_pos + len(left_tag_to_move) - len(right_tag_to_move)
-        else:
-            if new_start_pos > old_start_pos:
-                new_start_pos -= len(left_tag_to_move)
-                new_end_pos -= len(right_tag_to_move)
-
-            if new_end_pos > old_end_pos:
-                new_end_pos -= len(left_tag_to_move)
-                new_end_pos -= len(right_tag_to_move)
-
-        new_text_before = text_without_tags[:new_start_pos]
-        new_text_middle = text_without_tags[new_start_pos:new_end_pos]
-        new_text_after = text_without_tags[new_end_pos:]
-
-        text_result = new_text_before + left_tag_to_move + new_text_middle + right_tag_to_move + new_text_after
+        # Add new tag with temp id
+        text_result = self.__add_tag(body_content, new_start_pos, new_end_pos, temp_xml_id, user)
 
         self.__set_body_content(text_result)
+
+        # Mark old tag to delete
+        attributes_to_add = {
+            XML_ID_KEY: f'{edited_element_id}-old',
+            'deleted': 'true',
+            'saved': 'false'
+        }
+
+        attributes_to_delete = {
+            XML_ID_KEY: edited_element_id,
+        }
+
+        self.__update_tag_in_body(edited_element_id, attributes_to_add=attributes_to_add,
+                                  attributes_to_delete=attributes_to_delete)
+
+        # update attributes in new tag
+        attributes_to_add = {
+            XML_ID_KEY: edited_element_id,
+            'saved': 'false'
+        }
+
+        attributes_to_add = {**old_tag_attributes, **attributes_to_add}
+
+        attributes_to_delete = {
+            XML_ID_KEY: temp_xml_id,
+        }
+
+        self.__update_tag_in_body(temp_xml_id, new_tag=old_tag_name, attributes_to_add=attributes_to_add,
+                                  attributes_to_delete=attributes_to_delete)
 
     def __mark_tag_to_delete(self, request, user):
         # TODO: Add verification if user has rights to delete a tag
 
-        edited_xml_id = request.get('edited_element_id')
+        edited_element_id = request.get('edited_element_id')
 
-        tree = etree.fromstring(self.get_body_content())
+        attributes_to_add = {
+            'deleted': 'true',
+            'saved': 'false'
+        }
 
-        xpath = f"//*[contains(concat(' ', @xml:id, ' '), ' {edited_xml_id}')]"
-        element = get_first_xpath_match(tree, xpath, XML_NAMESPACES)
-
-        element.set('deleted', 'true')
-
-        text_result = etree.tounicode(tree, pretty_print=True)
-
-        self.__set_body_content(text_result)
+        self.__update_tag_in_body(edited_element_id, attributes_to_add=attributes_to_add)
 
     def __delete_tag(self, request, user):
         # TODO: Add verification if user has rights to delete a tag
@@ -280,7 +257,7 @@ class RequestHandler:
                 'unsavedRef': f'#{target_element_id}'
             }
 
-            self.__update_tag_in_body(edited_element_id, new_tag='name', attributes_to_set=attributes_to_set)
+            self.__update_tag_in_body(edited_element_id, new_tag='name', attributes_to_add=attributes_to_set)
 
         elif not target_element_id and entity_type not in listable_entities_types:
             target_element_id = self.__get_next_xml_id(entity_type)
@@ -297,7 +274,7 @@ class RequestHandler:
 
             attributes_to_set.update(entity_properties)
 
-            self.__update_tag_in_body(edited_element_id, new_tag=entity_type, attributes_to_set=attributes_to_set)
+            self.__update_tag_in_body(edited_element_id, new_tag=entity_type, attributes_to_add=attributes_to_set)
 
         elif target_element_id and entity_type in listable_entities_types:
             attributes_to_set = {
@@ -305,7 +282,7 @@ class RequestHandler:
                 'unsavedRef': f'#{target_element_id}'
             }
 
-            self.__update_tag_in_body(edited_element_id, new_tag='name', attributes_to_set=attributes_to_set)
+            self.__update_tag_in_body(edited_element_id, new_tag='name', attributes_to_add=attributes_to_set)
 
         elif target_element_id and entity_type not in listable_entities_types:
             attributes_to_set = {
@@ -313,7 +290,7 @@ class RequestHandler:
                 'unsavedRef': f'#{target_element_id}'
             }
 
-            self.__update_tag_in_body(edited_element_id, new_tag=entity_type, attributes_to_set=attributes_to_set)
+            self.__update_tag_in_body(edited_element_id, new_tag=entity_type, attributes_to_add=attributes_to_set)
 
         else:
             raise BadRequest(f"There is no operation matching to this request")
@@ -360,11 +337,11 @@ class RequestHandler:
 
         EntityProperty.objects.bulk_create(properties_objects)
 
-    def __update_tag_in_body(self, edited_element_id, new_tag=None, attributes_to_set=None, attributes_to_delete=None):
+    def __update_tag_in_body(self, edited_element_id, new_tag=None, attributes_to_add=None, attributes_to_delete=None):
         body_content = self.get_body_content()
         tree = etree.fromstring(body_content)
 
-        xpath = f"//*[contains(concat(' ', @xml:id, ' '), ' {edited_element_id}')]"
+        xpath = f"//*[contains(concat(' ', @xml:id, ' '), ' {edited_element_id} ')]"
         element = get_first_xpath_match(tree, xpath, XML_NAMESPACES)
 
         if new_tag:
@@ -372,19 +349,35 @@ class RequestHandler:
             tag = prefix + new_tag
             element.tag = tag
 
-        if attributes_to_set:
-            for attribute, value in sorted(attributes_to_set.items()):
+        if attributes_to_add:
+            for attribute, value in sorted(attributes_to_add.items()):
                 if attribute in element.attrib:
-                    old_value = element.attrib[attribute]
+                    old_values = element.attrib[attribute]
+                    old_values = set(old_values.split(' '))
 
-                    if value not in old_value:
-                        value = ' '.join((old_value, value))
+                    if value not in old_values:
+                        old_values.add(value)
+                        new_values = ' '.join(sorted(old_values))
 
-                element.set(attribute, value)
+                        element.set(attribute, new_values)
+
+                else:
+                    element.set(attribute, value)
 
         if attributes_to_delete:
-            for attribute in attributes_to_delete:
-                element.attrib.pop(attribute)
+            for attribute, value in attributes_to_delete.items():
+                if attribute in element.attrib:
+                    old_values = element.attrib[attribute]
+                    old_values = set(old_values.split(' '))
+
+                    if value in old_values:
+                        old_values.remove(value)
+
+                    if old_values:
+                        new_values = ' '.join(sorted(old_values))
+                        element.attrib[attribute] = new_values
+                    else:
+                        element.attrib.pop(attribute)
 
         text_result = etree.tounicode(tree, pretty_print=True)
 
