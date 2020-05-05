@@ -503,11 +503,22 @@ class RequestHandler:
             if last_reference:
                 self.__mark_objects_to_delete(old_element_id, user)
 
-
-
-
         elif new_element_id and entity_type in listable_entities_types:
-            pass
+            attributes_to_add = {
+                'ref': f'#{new_element_id}',
+                'refAdded': f'#{new_element_id}',
+                'refDeleted': f'#{old_element_id}',
+                'resp': f'#{user.profile.get_xml_id()}',
+                'saved': 'false'
+            }
+
+            self.__update_tag_in_body(edited_element_id, new_tag='name', attributes_to_add=attributes_to_add)
+
+            last_reference = self.__check_if_last_reference(old_element_id)
+
+            if last_reference:
+                self.__mark_objects_to_delete(old_element_id, user)
+
         elif new_element_id and entity_type not in listable_entities_types:
             pass
         else:
