@@ -100,8 +100,10 @@ class TestAnnotatorWithWsAndDb:
             {
                 'method': 'POST',
                 'element_type': 'tag',
-                'start_pos': 265,
-                'end_pos': 271,
+                'parameters': {
+                    'start_pos': 265,
+                    'end_pos': 271,
+                }
             }
         ]
         request_nr = 0
@@ -114,8 +116,10 @@ class TestAnnotatorWithWsAndDb:
             {
                 'method': 'POST',
                 'element_type': 'tag',
-                "start_pos": 400,
-                "end_pos": 404
+                'parameters': {
+                    'start_pos': 400,
+                    'end_pos': 404
+                }
             }
         ]
         request_nr = 1
@@ -143,9 +147,9 @@ class TestAnnotatorWithWsAndDb:
                 'method': 'PUT',
                 'element_type': 'tag',
                 'edited_element_id': 'name-3',
-                'start_pos': 313,
-                'end_pos': 328,
                 'parameters': {
+                    'start_pos': 313,
+                    'end_pos': 328,
                     'new_start_pos': 272,
                     'new_end_pos': 342,
                 }
@@ -208,8 +212,10 @@ class TestAnnotatorWithWsAndDb2:
             {
                 'method': 'POST',
                 'element_type': 'tag',
-                'start_pos': 265,
-                'end_pos': 271,
+                'parameters': {
+                    'start_pos': 265,
+                    'end_pos': 271,
+                }
             }
         ]
         request_nr = 0
@@ -263,8 +269,10 @@ class TestAnnotatorWithWsAndDb3:
             {
                 'method': 'POST',
                 'element_type': 'tag',
-                'start_pos': 265,
-                'end_pos': 271,
+                'parameters': {
+                    'start_pos': 265,
+                    'end_pos': 271,
+                }
             }
         ]
         request_nr = 0
@@ -322,8 +330,10 @@ class TestAnnotatorWithWsAndDb4:
             {
                 'method': 'POST',
                 'element_type': 'tag',
-                'start_pos': 265,
-                'end_pos': 271,
+                'parameters': {
+                    'start_pos': 265,
+                    'end_pos': 271,
+                }
             }
         ]
         request_nr = 0
@@ -337,7 +347,7 @@ class TestAnnotatorWithWsAndDb4:
                 'method': 'POST',
                 'element_type': 'reference',
                 'edited_element_id': 'ab-1',
-                'target_element_id': 'person-2'
+                'new_element_id': 'person-2'
             }
         ]
         request_nr = 1
@@ -370,8 +380,10 @@ class TestAnnotatorWithWsAndDb5:
             {
                 'method': 'POST',
                 'element_type': 'tag',
-                'start_pos': 265,
-                'end_pos': 271,
+                'parameters': {
+                    'start_pos': 265,
+                    'end_pos': 271,
+                }
             }
         ]
         request_nr = 0
@@ -385,7 +397,7 @@ class TestAnnotatorWithWsAndDb5:
                 'method': 'POST',
                 'element_type': 'reference',
                 'edited_element_id': 'ab-1',
-                'target_element_id': 'date-0'
+                'new_element_id': 'date-0'
             }
         ]
         request_nr = 1
@@ -419,7 +431,7 @@ class TestAnnotatorWithWsAndDb6:
                 'method': 'DELETE',
                 'element_type': 'reference',
                 'edited_element_id': 'name-4',
-                'target_element_id': 'ingredient-2',
+                'old_element_id': 'ingredient-2',
             }
         ]
         request_nr = 0
@@ -467,7 +479,7 @@ class TestAnnotatorWithWsAndDb7:
                 'method': 'DELETE',
                 'element_type': 'reference',
                 'edited_element_id': 'date-2',
-                'target_element_id': 'date-2',
+                'old_element_id': 'date-2',
             }
         ]
         request_nr = 0
@@ -522,7 +534,7 @@ class TestAnnotatorWithWsAndDb8:
                 'method': 'PUT',
                 'element_type': 'reference',
                 'edited_element_id': 'date-2',
-                'target_element_id': 'date-2',
+                'old_element_id': 'date-2',
                 'parameters': {
                     'entity_type': 'person',
                     'entity_properties': {
