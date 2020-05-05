@@ -173,7 +173,7 @@ class ResponseGenerator:
     def __get_entities_lists(self):
         file_version = self.__file.file_versions.order_by('-number')[0]
 
-        listable_entities_types = get_entities_types_for_lists(file_version.file.project)
+        listable_entities_types = get_listable_entities_types(file_version.file.project)
 
         entities_lists = {}
 
@@ -240,7 +240,7 @@ class ResponseGenerator:
             pass
 
 
-def get_entities_types_for_lists(project):
+def get_listable_entities_types(project):
     entities_schemes = EntitySchema.objects.filter(taxonomy__project=project).order_by('id')
     default_entities_names = DEFAULT_ENTITIES.keys()
     listable_entities_types = []
@@ -254,3 +254,17 @@ def get_entities_types_for_lists(project):
     listable_entities_types = sorted(listable_entities_types)
 
     return listable_entities_types
+
+
+def get_unlistable_entities_types(project):
+    entities_schemes = EntitySchema.objects.filter(taxonomy__project=project).order_by('id')
+    default_entities_names = DEFAULT_ENTITIES.keys()
+    unlistable_entities_types = []
+
+    for entity in entities_schemes:
+        if entity.name in default_entities_names and not DEFAULT_ENTITIES[entity.name]['listable']:
+            unlistable_entities_types.append(entity.name)
+
+    unlistable_entities_types = sorted(unlistable_entities_types)
+
+    return unlistable_entities_types

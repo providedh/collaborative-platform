@@ -5,12 +5,12 @@ from lxml import etree
 
 from django.contrib.auth.models import User
 
-from apps.api_vis.models import Entity, EntityProperty, EntityVersion
+from apps.api_vis.models import Entity, EntityProperty, EntityVersion, Certainty
 from apps.close_reading.models import AnnotatingBodyContent
 from apps.exceptions import BadRequest
 from apps.files_management.models import File, FileMaxXmlIds
 from apps.files_management.file_conversions.xml_tools import get_first_xpath_match
-from apps.close_reading.response_generator import get_entities_types_for_lists
+from apps.close_reading.response_generator import get_listable_entities_types, get_unlistable_entities_types
 
 from collaborative_platform.settings import CUSTOM_ENTITY, DEFAULT_ENTITIES, XML_NAMESPACES
 
@@ -52,7 +52,7 @@ class RequestHandler:
                 if request['method'] == 'POST':
                     self.__add_reference_to_entity(request, user)
                 elif request['method'] == 'PUT':
-                    pass
+                    self.__modify_reference_to_entity(request, user)
                 elif request['method'] == 'DELETE':
                     self.__mark_reference_to_delete(request, user)
                 else:
@@ -241,7 +241,7 @@ class RequestHandler:
             entity_type = Entity.objects.get(xml_id=target_element_id).type
 
 
-        listable_entities_types = get_entities_types_for_lists(self.__file.project)
+        listable_entities_types = get_listable_entities_types(self.__file.project)
 
         if not target_element_id and entity_type in listable_entities_types:
             target_element_id = self.__get_next_xml_id(entity_type)
@@ -344,11 +344,6 @@ class RequestHandler:
         xpath = f"//*[contains(concat(' ', @xml:id, ' '), ' {edited_element_id} ')]"
         element = get_first_xpath_match(tree, xpath, XML_NAMESPACES)
 
-        if new_tag:
-            prefix = "{%s}" % XML_NAMESPACES['default']
-            tag = prefix + new_tag
-            element.tag = tag
-
         if attributes_to_add:
             for attribute, value in sorted(attributes_to_add.items()):
                 if attribute in element.attrib:
@@ -379,77 +374,158 @@ class RequestHandler:
                     else:
                         element.attrib.pop(attribute)
 
+        references = element.attrib.get('ref')
+
+        if references:
+            references = set(references.split(' '))
+        else:
+            references = set()
+
+        references_deleted = element.attrib.get('refDeleted')
+
+        if references_deleted:
+            references_deleted = set(references_deleted.split(' '))
+        else:
+            references_deleted = set()
+
+        remaining_references = references - references_deleted
+
+        if not remaining_references:
+            tag_name = element.tag
+            tag_name = re.sub(r'{.*?}', '', tag_name)
+
+            unlistable_entities_types = get_unlistable_entities_types(self.__file.project)
+
+            if tag_name in unlistable_entities_types:
+                xml_id = element.attrib[XML_ID_KEY]
+
+                entity_version = EntityVersion.objects.filter(
+                    file_version=self.__file.file_versions.order_by('-id')[0],
+                    entity__xml_id=xml_id
+                )
+
+                if not entity_version:
+                    prefix = "{%s}" % XML_NAMESPACES['default']
+                    tag = prefix + 'ab'
+                    element.tag = tag
+
+                elif f'#{xml_id}' in references_deleted:
+                    prefix = "{%s}" % XML_NAMESPACES['default']
+                    tag = prefix + 'ab'
+                    element.tag = tag
+
+            else:
+                prefix = "{%s}" % XML_NAMESPACES['default']
+                tag = prefix + 'ab'
+                element.tag = tag
+
+        if new_tag:
+            prefix = "{%s}" % XML_NAMESPACES['default']
+            tag = prefix + new_tag
+            element.tag = tag
+
         text_result = etree.tounicode(tree, pretty_print=True)
 
         self.__set_body_content(text_result)
 
-    def __mark_reference_to_delete(self, request, user):
-        # update tag
+    def __modify_reference_to_entity(self, request, user):
+        # TODO: Add verification if user has rights to edit a tag
 
         edited_element_id = request.get('edited_element_id')
         target_element_id = request.get('target_element_id')
+        new_element_id = request['parameters'].get('new_element_id')
 
+        try:
+            entity_type = request['parameters']['entity_type']
+        except KeyError:
+            entity_type = Entity.objects.get(xml_id=target_element_id).type
+
+        listable_entities_types = get_listable_entities_types(self.__file.project)
+
+        if not new_element_id and entity_type in listable_entities_types:
+            new_element_id = self.__get_next_xml_id(entity_type)
+
+            entity_object = self.__create_entity_object(entity_type, new_element_id, user)
+            entity_version_object = self.__create_entity_version_object(entity_object)
+
+            entity_properties = request['parameters']['entity_properties']
+            self.__create_entity_properties_objects(entity_type, entity_properties, entity_version_object, user)
+
+            attributes_to_set = {
+                'ref': f'#{new_element_id}',
+                'refAdded': f'#{new_element_id}',
+                'refDeleted': f'#{target_element_id}',
+                'saved': 'false'
+            }
+
+            self.__update_tag_in_body(edited_element_id, new_tag='name', attributes_to_add=attributes_to_set)
+
+            last_reference = self.__check_if_last_reference(target_element_id)
+
+            if last_reference:
+                self.__mark_objects_to_delete(target_element_id, user)
+
+        elif not new_element_id and entity_type not in listable_entities_types:
+            pass
+        elif new_element_id and entity_type in listable_entities_types:
+            pass
+        elif new_element_id and entity_type not in listable_entities_types:
+            pass
+        else:
+            raise BadRequest(f"There is no operation matching to this request")
+
+    def __check_if_last_reference(self, target_element_id):
         body_content = self.get_body_content()
         tree = etree.fromstring(body_content)
 
-        xpath = f"//*[contains(concat(' ', @xml:id, ' '), ' {edited_element_id}')]"
-        element = get_first_xpath_match(tree, xpath, XML_NAMESPACES)
-
-        element.set('deletedRef', f'#{target_element_id}')
-
-        if edited_element_id != target_element_id:
-            ids_in_ref = element.attrib['ref']
-            ids_in_ref = ids_in_ref.split(' ')
-
-            ids_in_deleted_ref = element.attrib['deletedRef']
-            ids_in_deleted_ref = ids_in_deleted_ref.split(' ')
-
-            remaining_ids = set(ids_in_ref) - set(ids_in_deleted_ref)
-        else:
-            remaining_ids = {}
-
-        if not remaining_ids:
-            prefix = "{%s}" % XML_NAMESPACES['default']
-            tag = prefix + 'ab'
-            element.tag = tag
-
-            element.set('saved', 'false')
-
-
-        # update objects
-
-        xpath = f"//*[contains(concat(' ', @ref, ' '), ' #{target_element_id} ')]"
+        xpath = f"//*[contains(concat(' ', @ref, ' '), ' {target_element_id} ')]"
         all_references = tree.xpath(xpath, namespaces=XML_NAMESPACES)
 
-        remaining_references = set(all_references) - {element}
+        if len(all_references) > 1:
+            return False
+        else:
+            return True
 
-        if not remaining_references:
-            entity = Entity.objects.get(xml_id=target_element_id)
-            entity.deleted_by = user
-            entity.save()
+    def __mark_objects_to_delete(self, target_element_id, user):
+        entity = Entity.objects.get(xml_id=target_element_id)
+        entity.deleted_by = user
+        entity.save()
 
-            entity_properties = EntityProperty.objects.filter(
-                entity_version=entity.entityversion_set.all().order_by('-id')[0]
-            )
+        entity_properties = EntityProperty.objects.filter(
+            entity_version=entity.entityversion_set.all().order_by('-id')[0]
+        )
 
-            for entity_property in entity_properties:
-                entity_property.deleted_by = user
+        for entity_property in entity_properties:
+            entity_property.deleted_by = user
 
-            EntityProperty.objects.bulk_update(entity_properties, ['deleted_by'])
+        EntityProperty.objects.bulk_update(entity_properties, ['deleted_by'])
 
-        text_result = etree.tounicode(tree, pretty_print=True)
+        certainties = Certainty.objects.filter(
+            file_version=self.__file.file_versions.order_by('-number')[0],
+            target_xml_id=target_element_id
+        )
 
-        self.__set_body_content(text_result)
+        for certainty in certainties:
+            certainty.deleted_by = user
 
+        Certainty.objects.bulk_update(certainties, ['deleted_by'])
+        pass
 
+    def __mark_reference_to_delete(self, request, user):
+        edited_element_id = request.get('edited_element_id')
+        target_element_id = request.get('target_element_id')
 
+        attributes_to_add = {
+            'refDeleted': f'#{target_element_id}',
+            'saved': 'false'
+        }
 
+        self.__update_tag_in_body(edited_element_id, attributes_to_add=attributes_to_add)
 
+        last_reference = self.__check_if_last_reference(target_element_id)
 
-
-
-
-
+        if last_reference:
+            self.__mark_objects_to_delete(target_element_id, user)
 
     def __get_next_xml_id(self, entity_type):
         entity_max_xml_id = FileMaxXmlIds.objects.get(
