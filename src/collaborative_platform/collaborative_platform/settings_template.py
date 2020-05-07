@@ -303,6 +303,12 @@ XML_NAMESPACES = {
     'xi': 'http://www.w3.org/2001/XInclude',
 }
 
+NS_MAP = {
+    None: XML_NAMESPACES['default'],
+    'xml': XML_NAMESPACES['xml'],
+    # 'xi': XML_NAMESPACES['xi']
+}
+
 
 # Entities structure
 DEFAULT_ENTITIES = {
@@ -382,7 +388,7 @@ DEFAULT_ENTITIES = {
         },
         'listable': True,
         'text_tag': 'name',
-        'list_tag': 'listOrg',
+        'list_tag': 'listObject',
         'color': '#b4d38d',
         'icon': r'\f466',
     },
@@ -458,4 +464,9 @@ CUSTOM_ENTITY = {
     'text_tag': 'name',
 }
 
-ADDITIONAL_USABLE_TAGS = ['certainty', 'name']
+ADDITIONAL_USABLE_TAGS = ['certainty', 'name', 'ab']
+
+ADDITIONAL_XML_ID_BASES = ['annotator']
+
+
+ANONYMOUS_USER_ID = 1
