@@ -259,6 +259,7 @@ class RequestHandler:
 
         if not new_element_id and entity_type in listable_entities_types:
             new_element_id = self.__get_next_xml_id(entity_type)
+            new_tag_id = self.__get_next_xml_id('name')
 
             entity_object = self.__create_entity_object(entity_type, new_element_id, user)
             entity_version_object = self.__create_entity_version_object(entity_object)
@@ -267,9 +268,11 @@ class RequestHandler:
             self.__create_entity_properties_objects(entity_type, entity_properties, entity_version_object, user)
 
             attributes_to_add = {
+                'newId': f'{new_tag_id}',
                 'ref': f'#{new_element_id}',
                 'unsavedRef': f'#{new_element_id}',
                 'resp': f'#{user.profile.get_xml_id()}',
+                'saved': 'false',
             }
 
             self.__update_tag_in_body(edited_element_id, new_tag='name', attributes_to_add=attributes_to_add)
@@ -284,8 +287,11 @@ class RequestHandler:
             self.__create_entity_properties_objects(entity_type, entity_properties, entity_version_object, user)
 
             attributes_to_add = {
-                'saved': 'false',
+                'newId': f'{new_element_id}',
+                'ref': f'#{new_element_id}',
+                'unsavedRef': f'#{new_element_id}',
                 'resp': f'#{user.profile.get_xml_id()}',
+                'saved': 'false',
             }
 
             attributes_to_add.update(entity_properties)
@@ -293,19 +299,27 @@ class RequestHandler:
             self.__update_tag_in_body(edited_element_id, new_tag=entity_type, attributes_to_add=attributes_to_add)
 
         elif new_element_id and entity_type in listable_entities_types:
+            new_tag_id = self.__get_next_xml_id('name')
+
             attributes_to_add = {
+                'newId': f'{new_tag_id}',
                 'ref': f'#{new_element_id}',
                 'unsavedRef': f'#{new_element_id}',
                 'resp': f'#{user.profile.get_xml_id()}',
+                'saved': 'false',
             }
 
             self.__update_tag_in_body(edited_element_id, new_tag='name', attributes_to_add=attributes_to_add)
 
         elif new_element_id and entity_type not in listable_entities_types:
+            new_tag_id = self.__get_next_xml_id(entity_type)
+
             attributes_to_add = {
+                'newId': f'{new_tag_id}',
                 'ref': f'#{new_element_id}',
                 'unsavedRef': f'#{new_element_id}',
                 'resp': f'#{user.profile.get_xml_id()}',
+                'saved': 'false',
             }
 
             self.__update_tag_in_body(edited_element_id, new_tag=entity_type, attributes_to_add=attributes_to_add)
@@ -362,8 +376,15 @@ class RequestHandler:
         xpath = f"//*[contains(concat(' ', @xml:id, ' '), ' {edited_element_id} ')]"
         element = get_first_xpath_match(tree, xpath, XML_NAMESPACES)
 
+        if element is None:
+            xpath = f"//*[contains(concat(' ', @newId, ' '), ' {edited_element_id} ')]"
+            element = get_first_xpath_match(tree, xpath, XML_NAMESPACES)
+
         if attributes_to_add:
             for attribute, value in sorted(attributes_to_add.items()):
+                if new_tag in ['date', 'time'] and attribute == 'name':
+                    continue
+
                 if attribute in element.attrib:
                     old_values = element.attrib[attribute]
                     old_values = set(old_values.split(' '))
@@ -477,6 +498,13 @@ class RequestHandler:
                 'saved': 'false'
             }
 
+            edited_element_id_base = edited_element_id.split('-')[0]
+
+            if edited_element_id_base != 'name':
+                new_tag_id = self.__get_next_xml_id('name')
+
+                attributes_to_add.update({'newId': f'{new_tag_id}'})
+
             self.__update_tag_in_body(edited_element_id, new_tag='name', attributes_to_add=attributes_to_add)
 
             last_reference = self.__check_if_last_reference(old_element_id)
@@ -501,6 +529,13 @@ class RequestHandler:
                 'saved': 'false'
             }
 
+            edited_element_id_base = edited_element_id.split('-')[0]
+
+            if edited_element_id_base != entity_type:
+                new_tag_id = self.__get_next_xml_id(entity_type)
+
+                attributes_to_add.update({'newId': f'{new_tag_id}'})
+
             for name, value in entity_properties.items():
                 if name == 'name':
                     continue
@@ -523,6 +558,13 @@ class RequestHandler:
                 'saved': 'false'
             }
 
+            edited_element_id_base = edited_element_id.split('-')[0]
+
+            if edited_element_id_base != 'name':
+                new_tag_id = self.__get_next_xml_id('name')
+
+                attributes_to_add.update({'newId': f'{new_tag_id}'})
+
             self.__update_tag_in_body(edited_element_id, new_tag='name', attributes_to_add=attributes_to_add)
 
             last_reference = self.__check_if_last_reference(old_element_id)
@@ -538,6 +580,13 @@ class RequestHandler:
                 'resp': f'#{user.profile.get_xml_id()}',
                 'saved': 'false'
             }
+
+            edited_element_id_base = edited_element_id.split('-')[0]
+
+            if edited_element_id_base != entity_type:
+                new_tag_id = self.__get_next_xml_id(entity_type)
+
+                attributes_to_add.update({'newId': f'{new_tag_id}'})
 
             self.__update_tag_in_body(edited_element_id, new_tag=entity_type, attributes_to_add=attributes_to_add)
 
@@ -587,6 +636,8 @@ class RequestHandler:
         pass
 
     def __mark_reference_to_delete(self, request, user):
+        # TODO: add attribute `newId="ab-XX"`, when tag name will be changed to 'ab'
+
         edited_element_id = request.get('edited_element_id')
         old_element_id = request.get('old_element_id')
 
@@ -623,24 +674,37 @@ class RequestHandler:
         if entity_type in listable_entities_types:
             entity_property = request['parameters']
 
-            entity_version_object = EntityVersion.objects.filter(
+            entity_version_objects = EntityVersion.objects.filter(
                 entity__xml_id=edited_element_id,
                 file_version__isnull=False
-            ).order_by('-file_version')[0]
+            ).order_by('-file_version')
 
-            if not entity_version_object:
-                entity_version_object = EntityVersion.objects.filter(
+            if not entity_version_objects:
+                entity_version_objects = EntityVersion.objects.filter(
                     entity__xml_id=edited_element_id,
                     file_version__isnull=True
-                )
+                ).order_by('-id')
+
+            entity_version_object = entity_version_objects[0]
 
             self.__create_entity_properties_objects(entity_type, entity_property, entity_version_object, user)
 
-
         else:
-            pass
+            entity_property = request['parameters']
 
+            entity_version_objects = EntityVersion.objects.filter(
+                entity__xml_id=edited_element_id,
+                file_version__isnull=False
+            ).order_by('-file_version')
 
+            if not entity_version_objects:
+                entity_version_objects = EntityVersion.objects.filter(
+                    entity__xml_id=edited_element_id,
+                    file_version__isnull=True
+                ).order_by('-id')
 
+            entity_version_object = entity_version_objects[0]
 
+            self.__create_entity_properties_objects(entity_type, entity_property, entity_version_object, user)
 
+            self.__update_tag_in_body(edited_element_id, attributes_to_add=entity_property)
