@@ -64,7 +64,7 @@ class RequestHandler:
                 elif request['method'] == 'PUT':
                     pass
                 elif request['method'] == 'DELETE':
-                    pass
+                    self.__mark_property_to_delete(request, user)
                 else:
                     raise BadRequest("There is no operation matching to this request")
 
@@ -510,7 +510,7 @@ class RequestHandler:
             last_reference = self.__check_if_last_reference(old_element_id)
 
             if last_reference:
-                self.__mark_objects_to_delete(old_element_id, user)
+                self.__mark_entities_to_delete(old_element_id, user)
 
         elif not new_element_id and entity_type not in listable_entities_types:
             new_element_id = self.__get_next_xml_id(entity_type)
@@ -547,7 +547,7 @@ class RequestHandler:
             last_reference = self.__check_if_last_reference(old_element_id)
 
             if last_reference:
-                self.__mark_objects_to_delete(old_element_id, user)
+                self.__mark_entities_to_delete(old_element_id, user)
 
         elif new_element_id and entity_type in listable_entities_types:
             attributes_to_add = {
@@ -570,7 +570,7 @@ class RequestHandler:
             last_reference = self.__check_if_last_reference(old_element_id)
 
             if last_reference:
-                self.__mark_objects_to_delete(old_element_id, user)
+                self.__mark_entities_to_delete(old_element_id, user)
 
         elif new_element_id and entity_type not in listable_entities_types:
             attributes_to_add = {
@@ -593,7 +593,7 @@ class RequestHandler:
             last_reference = self.__check_if_last_reference(old_element_id)
 
             if last_reference:
-                self.__mark_objects_to_delete(old_element_id, user)
+                self.__mark_entities_to_delete(old_element_id, user)
 
         else:
             raise BadRequest(f"There is no operation matching to this request")
@@ -610,7 +610,7 @@ class RequestHandler:
         else:
             return True
 
-    def __mark_objects_to_delete(self, target_element_id, user):
+    def __mark_entities_to_delete(self, target_element_id, user):
         entity = Entity.objects.get(xml_id=target_element_id)
         entity.deleted_by = user
         entity.save()
@@ -629,11 +629,12 @@ class RequestHandler:
             target_xml_id=target_element_id
         )
 
+        # TODO: Add marking certainties to properties to delete
+
         for certainty in certainties:
             certainty.deleted_by = user
 
         Certainty.objects.bulk_update(certainties, ['deleted_by'])
-        pass
 
     def __mark_reference_to_delete(self, request, user):
         # TODO: add attribute `newId="ab-XX"`, when tag name will be changed to 'ab'
@@ -652,7 +653,7 @@ class RequestHandler:
         last_reference = self.__check_if_last_reference(old_element_id)
 
         if last_reference:
-            self.__mark_objects_to_delete(old_element_id, user)
+            self.__mark_entities_to_delete(old_element_id, user)
 
     def __get_next_xml_id(self, entity_type):
         entity_max_xml_id = FileMaxXmlIds.objects.get(
@@ -708,3 +709,23 @@ class RequestHandler:
             self.__create_entity_properties_objects(entity_type, entity_property, entity_version_object, user)
 
             self.__update_tag_in_body(edited_element_id, attributes_to_add=entity_property)
+
+    def __mark_property_to_delete(self, request, user):
+        edited_element_id = request.get('edited_element_id')
+        entity_type = Entity.objects.get(xml_id=edited_element_id).type
+
+        listable_entities_types = get_listable_entities_types(self.__file.project)
+
+        if entity_type in listable_entities_types:
+            property_to_delete = request['old_element_id']
+
+            entity_property = EntityProperty.objects.filter(
+                entity_version__entity__xml_id=edited_element_id,
+                name=property_to_delete,
+            ).order_by('-id')[0]
+
+            entity_property.deleted_by = user
+            entity_property.save()
+
+        else:
+            pass
