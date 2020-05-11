@@ -46,7 +46,7 @@ class RequestHandler:
                 elif request['method'] == 'DELETE':
                     self.__mark_tag_to_delete(request, user)
                 else:
-                    raise BadRequest(f"There is no operation matching to this request")
+                    raise BadRequest("There is no operation matching to this request")
 
             elif request['element_type'] == 'reference':
                 if request['method'] == 'POST':
@@ -56,7 +56,18 @@ class RequestHandler:
                 elif request['method'] == 'DELETE':
                     self.__mark_reference_to_delete(request, user)
                 else:
-                    raise BadRequest(f"There is no operation matching to this request")
+                    raise BadRequest("There is no operation matching to this request")
+
+            elif request['element_type'] == 'entity_property':
+                if request['method'] == 'POST':
+                    self.__add_property_to_entity(request, user)
+                elif request['method'] == 'PUT':
+                    pass
+                elif request['method'] == 'DELETE':
+                    pass
+                else:
+                    raise BadRequest("There is no operation matching to this request")
+
 
             else:
                 raise BadRequest(f"There is no operation matching to this request")
@@ -300,7 +311,7 @@ class RequestHandler:
             self.__update_tag_in_body(edited_element_id, new_tag=entity_type, attributes_to_add=attributes_to_add)
 
         else:
-            raise BadRequest(f"There is no operation matching to this request")
+            raise BadRequest("There is no operation matching to this request")
 
     def __create_entity_object(self, entity_type, xml_id, user):
         entity_object = Entity.objects.create(
@@ -602,4 +613,34 @@ class RequestHandler:
         xml_id = f'{entity_type}-{xml_id_nr}'
 
         return xml_id
+
+    def __add_property_to_entity(self, request, user):
+        edited_element_id = request.get('edited_element_id')
+        entity_type = Entity.objects.get(xml_id=edited_element_id).type
+
+        listable_entities_types = get_listable_entities_types(self.__file.project)
+
+        if entity_type in listable_entities_types:
+            entity_property = request['parameters']
+
+            entity_version_object = EntityVersion.objects.filter(
+                entity__xml_id=edited_element_id,
+                file_version__isnull=False
+            ).order_by('-file_version')[0]
+
+            if not entity_version_object:
+                entity_version_object = EntityVersion.objects.filter(
+                    entity__xml_id=edited_element_id,
+                    file_version__isnull=True
+                )
+
+            self.__create_entity_properties_objects(entity_type, entity_property, entity_version_object, user)
+
+
+        else:
+            pass
+
+
+
+
 
