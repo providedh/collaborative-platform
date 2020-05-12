@@ -1,2 +1,2 @@
-import TabControl from './TabControl';
-export default TabControl;
+import TabControl from './TabControl'
+export default TabControl

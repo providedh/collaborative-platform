@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'apps.index_and_search',
     'apps.projects',
     'apps.close_reading',
+    'apps.dataset_stats',
     'apps.vis_dashboard',
     'social_django',
     'django_cleanup',

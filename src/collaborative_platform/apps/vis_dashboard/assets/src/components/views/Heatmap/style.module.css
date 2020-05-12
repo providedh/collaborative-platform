@@ -1,0 +1,19 @@
+.heatmap{
+	height: 100%;
+	position: relative;
+}
+
+.canvas{
+	image-rendering: pixelated;
+    image-rendering: crisp-edges;
+}
+
+.overlayCanvas{
+	image-rendering: pixelated;
+    image-rendering: crisp-edges;
+	pointer-events: none;
+	position: absolute;
+	left: 5px;
+}
+
+.legendBrush{position: absolute;}

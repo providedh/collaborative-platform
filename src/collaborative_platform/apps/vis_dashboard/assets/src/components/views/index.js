@@ -1,11 +1,15 @@
-import PixelDoc from './PixelDoc';
-import Dummy from './Dummy';
-import GeoMap from './GeoMap';
-import Histogram from './Histogram';
+import PixelCorpus from './PixelCorpus'
+import BarChart from './BarChart'
+import Heatmap from './Heatmap'
+import DocumentView from './DocumentView'
+import Sunburst from './Sunburst'
+import Note from './Note'
 
 export default {
-    'PixelDoc': PixelDoc, 
-    'Dummy': Dummy,
-    'Map': GeoMap,
-	'Histogram': Histogram,
+  Note,
+  PixelCorpus,
+  Sunburst,
+  Heatmap,
+  DocumentView,
+  BarChart
 }

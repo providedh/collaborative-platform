@@ -1,0 +1,18 @@
+.textControl{
+    width: 100%;
+    background-color: var(--light);
+}
+
+.textControl input{
+    width: 60%;
+}
+
+.formGroupOverride{
+    margin-bottom:1rem;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding-right: var(--space-l);
+    padding-top: var(--space-s);
+    padding-left: var(--space-s);
+}

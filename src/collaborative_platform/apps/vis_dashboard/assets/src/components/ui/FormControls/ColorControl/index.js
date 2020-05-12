@@ -1,2 +1,2 @@
-import ColorControl from './ColorControl';
-export default ColorControl;
+import ColorControl from './ColorControl'
+export default ColorControl

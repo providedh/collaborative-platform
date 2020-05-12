@@ -1,2 +1,2 @@
-import CompactMultipleSelectionControl from './CompactMultipleSelectionControl';
-export default CompactMultipleSelectionControl;
+import CompactMultipleSelectionControl from './CompactMultipleSelectionControl'
+export default CompactMultipleSelectionControl

@@ -1,2 +1,2 @@
-import NumberControl from './NumberControl';
-export default NumberControl;
+import NumberControl from './NumberControl'
+export default NumberControl

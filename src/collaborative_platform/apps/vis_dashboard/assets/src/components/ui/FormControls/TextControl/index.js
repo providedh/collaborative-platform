@@ -1,2 +1,2 @@
-import TextControl from './TextControl';
-export default TextControl;
+import TextControl from './TextControl'
+export default TextControl

@@ -44,16 +44,6 @@ services:
       - redis
     stdin_open: true
 
-  frontend:
-    image: node:slim
-    #command: bash /code/frontend/build_webpack_apps.sh
-    volumes:
-      - .:/code
-    ports:
-      - 3000:3000
-    depends_on:
-      - web
-
 volumes:
   db-data:
     external: false

@@ -15,6 +15,12 @@
     <a href="{% url 'projects:files' project.id %}" class="submenu__link">Files</a>
   </li>
   <li class="submenu__item">
+    <a href="{% url 'dataset_stats:main' project.id %}" class="submenu__link">Stats</a>
+  </li>
+  <li class="submenu__item">
+    <a href="{% url 'vis_dashboard:list' project.id %}" class="submenu__link">Dashboard</a>
+  </li>
+  <li class="submenu__item">
     <a href="{% url 'projects:project_settings' project.id %}" class="submenu__link">Settings</a>
   </li>
 </ul>
@@ -30,6 +36,12 @@
       </li>
       <li class="submenu__item">
         <a href="{% url 'projects:files' project.id %}" class="submenu__link">Files</a>
+      </li>
+      <li class="submenu__item">
+        <a href="{% url 'dataset_stats:main' project.id %}" class="submenu__link">Stats</a>
+      </li>
+      <li class="submenu__item">
+        <a href="{% url 'vis_dashboard:list' project.id %}" class="submenu__link">Dashboard</a>
       </li>
       <li class="submenu__item submenu__item--active">
         <a href="{% url 'projects:project_settings' project.id %}" class="submenu__link">Settings</a>

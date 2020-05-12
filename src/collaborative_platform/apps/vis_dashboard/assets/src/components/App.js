@@ -1,53 +1,159 @@
-import React from 'react';
-import { ParentSize } from '@vx/responsive';
+import React from 'react'
+import PropTypes from 'prop-types'
 
-import * as d3 from 'd3';
+import css from '../themes/theme.css' // eslint-disable-line no-unused-vars
+import Dashboard from './core/Dashboard/Dashboard'
+import LoadingApp from './LoadingApp'
+import { AppContext } from 'app_context'
+import { DataClient, DataService } from '../data'
+import { AjaxCalls } from '../helpers'
+const ajax = AjaxCalls()
 
-import create_doc from '../data/data1.js';
-
-import PixelDoc from './views/PixelDoc/PixelDoc.js';
+window.dataclient = DataClient()
 
 export default class App extends React.Component {
-    constructor(props){
-        super(props);
-        this.state = {
-            data: [],
-            visComponents: {}
+  constructor (props) {
+    super(props)
+    this.state = {
+      data: [],
+      fetching: 'project documents.',
+      error: '',
+      fetched: 0,
+      id2document: null,
+      name2document: null,
+      taxonomy: [],
+      contributors: [],
+      projectVersions: [],
+      appContext: null,
+      project: window.project
+    }
+  }
+
+  componentDidMount () {
+    this.fetchData()
+  }
+
+  fetchData () {
+    this.fetchDocuments().then(() =>
+      this.fetchContributors().then(() =>
+        this.fetchSettings().then(() =>
+          this.fetchProjectVersions())))
+  }
+
+  fetchDocuments () {
+    return new Promise((resolve, reject) => {
+      ajax.getFiles({ project: this.state.project }, {}, null).then(response => {
+        if (response.success === false) {
+          this.setState({ error: 'Failed to retrieve project documents.' })
+        } else {
+          this.setState({
+            fetched: 1,
+            id2document: Object.fromEntries(response.content.map(d => [d.id, d])),
+            name2document: Object.fromEntries(response.content.map(d => [d.name, d])),
+            fetching: 'contributors in the project.'
+          })
+
+          resolve()
         }
+      })
+    })
+  }
+
+  fetchContributors () {
+    return new Promise((resolve, reject) => {
+      ajax.getContributors({ project: this.state.project }, {}, null).then(response => {
+        if (response.success === false) {
+          this.setState({ error: 'Failed to retrieve the project contributors.' })
+        } else {
+          this.setState({
+            fetched: 2,
+            contributors: response.content,
+            fetching: 'the project settings.'
+          })
+
+          resolve()
+        }
+      })
+    })
+  }
+
+  fetchSettings () {
+    return new Promise((resolve, reject) => {
+      ajax.getSettings({ project: this.state.project }, {}, null).then(response => {
+        if (response.success === false) {
+          this.setState({ error: 'Failed to retrieve the project settings.' })
+        } else {
+          this.setState({
+            fetched: 3,
+            taxonomy: response.content,
+            fetching: 'project versions.'
+          })
+
+          resolve()
+        }
+      })
+    })
+  }
+
+  fetchProjectVersions () {
+    function processVersions (response) {
+      const versions = response.content.project_versions
+      versions.forEach(function (x) { x.date = new Date(x.date) })
+      const sorted = versions.sort((x, y) => x < y ? 1 : -1)
+      return sorted
     }
 
-    componentDidMount(){
-        const synthdata = [create_doc(), create_doc()];
-        this.setState({data: synthdata});
-    }
+    return new Promise((resolve, reject) => {
+      ajax.getProjectVersions({ project: this.state.project }, {}, null).then(response => {
+        if (response.success === false) {
+          this.setState({ error: 'Failed to retrieve project versions.' })
+        } else {
+          const projectVersions = processVersions(response)
+          const appContext = {
+            project: this.state.project,
+            projectVersions: projectVersions,
+            id2document: this.state.id2document,
+            name2document: this.state.name2document,
+            taxonomy: this.state.taxonomy,
+            contributors: this.state.contributors
+          }
+          this.setAppContext(appContext)
+          resolve()
+        }
+      })
+    })
+  }
 
-    shouldComponentUpdate(nextProps, nextState){    
-        return true;        
-    }
+  setAppContext (appContext) {
+    DataService.setAppContext(appContext)
+    this.setState({
+      appContext,
+      projectVersions: appContext.projectVersions,
+      fetched: 4
+    })
+  }
 
-    componentDidUpdate(prevProps, prevState, snapshot){
+  shouldComponentUpdate (nextProps, nextState) {
+    return true
+  }
 
-    }
+  componentDidUpdate (prevProps, prevState, snapshot) {
 
-    render(){
-        return (
-            <ParentSize>
-                {parent => 
-                    
-                }   
-            </ParentSize>
-        );
+  }
+
+  render () {
+    if (this.state.fetched === 4) {
+      return (
+        <AppContext.Provider value={this.state.appContext}>
+          <Dashboard savedConf={this.props.savedConf}/>
+        </AppContext.Provider>
+      )
+    } else {
+      return (<LoadingApp {...this.state}/>)
     }
+  }
 }
-            		/*<h1>Example front end app</h1>
-                    <div id='squares-container'>
-                        {d3.schemePastel1.map(color=>
-                            <span className='square'
-                                key={color}
-                                style={{backgroundColor:color, 
-                                    'marginRight':'30px',
-                                    display:'inline-block',
-                                    width:'20px', height:'20px'}}>
-                            </span>)
-                        }
-                    </div>*/
+
+App.propTypes = {
+  savedConf: PropTypes.object
+}

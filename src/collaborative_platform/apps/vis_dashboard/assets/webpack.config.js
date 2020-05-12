@@ -12,6 +12,7 @@ module.exports = {
     alias: {
     grid_style_layout: __dirname + "/node_modules/react-grid-layout/css/styles.css",
     grid_style_resizable: __dirname + "/node_modules/react-resizable/css/styles.css",
+    app_context: path.resolve(__dirname, "src/components/AppContext.js"),
     }
   },
   module: {

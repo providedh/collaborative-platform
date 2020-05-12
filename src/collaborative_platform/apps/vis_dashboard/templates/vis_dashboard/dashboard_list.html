@@ -13,6 +13,9 @@
   <li class="submenu__item">
     <a href="{% url 'projects:files' project_id %}" class="submenu__link">Files</a>
   </li>
+  <li class="submenu__item submenu__item">
+    <a href="{% url 'dataset_stats:main' project_id %}" class="submenu__link">Stats</a>
+  </li>
   <li class="submenu__item--active">
     <a href="{% url 'vis_dashboard:list' project_id %}" class="submenu__link">Dashboard</a>
   </li>
@@ -33,6 +36,9 @@
       <li class="submenu__item submenu__item">
         <a href="{% url 'projects:files' project_id %}" class="submenu__link">Files</a>
       </li>
+      <li class="submenu__item submenu__item">
+        <a href="{% url 'dataset_stats:main' project_id %}" class="submenu__link">Stats</a>
+      </li>
       <li class="submenu__item submenu__item--active">
         <a href="{% url 'vis_dashboard:list' project_id %}" class="submenu__link">Dashboard</a>
       </li>
@@ -45,7 +51,7 @@
 <div class="container project">
   <div class="d-flex flex-column-reverse flex-md-row project__header">
     <div class=" project__content">
-      <h1>{{ project.title }}</h1>
+      <h1>{{ project_title }}</h1>
       <b>Visualization dashboards</b>
     </div>
   </div>
@@ -73,7 +79,7 @@
                       <label for="desc-input">Description name</label>
                       <textarea name="description" class="form-control" id="desc-input" placeholder="Enter description"></textarea>
                     </div>
-                    <input class="btn btn-primary" type="submit" value="Submit">
+                    <input class="btn btn-primary" type="submit" value="Create">
                   </form>
                 </div>
               </div>

@@ -1,2 +1,2 @@
-import Help from './Help';
-export default Help;
+import Help from './Help'
+export default Help

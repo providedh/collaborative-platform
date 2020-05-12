@@ -16,5 +16,5 @@
 
 .container{
     height: calc(100% - 25px);
-    background: lightgrey;
+    background: var(--light);
 }
