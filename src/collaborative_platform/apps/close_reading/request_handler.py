@@ -728,4 +728,25 @@ class RequestHandler:
             entity_property.save()
 
         else:
-            pass
+            property_to_delete = request['old_element_id']
+
+            entity_property = EntityProperty.objects.filter(
+                entity_version__entity__xml_id=edited_element_id,
+                name=property_to_delete,
+            ).order_by('-id')[0]
+
+            entity_property.deleted_by = user
+            entity_property.save()
+
+            property_value = entity_property.get_value(as_str=True)
+
+            attributes_to_add = {
+                f'{property_to_delete}Deleted': property_value
+            }
+
+            attributes_to_delete = {
+                property_to_delete: property_value
+            }
+
+            self.__update_tag_in_body(edited_element_id, attributes_to_add=attributes_to_add,
+                                      attributes_to_delete=attributes_to_delete)
