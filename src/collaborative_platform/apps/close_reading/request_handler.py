@@ -858,31 +858,13 @@ class RequestHandler:
             raise BadRequest("There is no operation matching to this request")
 
         if target == 'text':
-            xml_id = self.__get_next_xml_id('certainty')
-
-            certainty_object = Certainty.objects.create(
-                file=self.__file,
-                xml_id=xml_id,
-                locus=request['parameters'].get('locus'),
-                cert=request['parameters'].get('certainty'),
-                target_xml_id=certainty_target,
-                asserted_value=request['parameters'].get('asserted_value'),
-                description=request['parameters'].get('description'),
-                created_by=user,
-                file_version=self.__file.file_versions.order_by('-id')[0]
-            )
-
-            categories = UncertaintyCategory.objects.filter(
-                taxonomy__project=self.__file.project,
-                name__in=request['parameters'].get('categories')
-            )
-
-            categories_ids = categories.values_list('id', flat=True)
-
-            certainty_object.categories.add(*categories_ids)
+            target_xml_id = certainty_target
+            target_match = None
 
         elif target == 'reference':
-            pass
+            target_xml_id = certainty_target.split('@')[0]
+            target_match = '@ref'
+
         elif target == 'entity_type':
             pass
         elif target == 'entity_property':
@@ -891,3 +873,29 @@ class RequestHandler:
             pass
         else:
             raise BadRequest("There is no operation matching to this request")
+
+
+        # Create certainty object
+
+        xml_id = self.__get_next_xml_id('certainty')
+
+        certainty_object = Certainty.objects.create(
+            file=self.__file,
+            xml_id=xml_id,
+            locus=request['parameters'].get('locus'),
+            cert=request['parameters'].get('certainty'),
+            target_xml_id=target_xml_id,
+            target_match=target_match,
+            asserted_value=request['parameters'].get('asserted_value'),
+            description=request['parameters'].get('description'),
+            created_by=user
+        )
+
+        categories = UncertaintyCategory.objects.filter(
+            taxonomy__project=self.__file.project,
+            name__in=request['parameters'].get('categories')
+        )
+
+        categories_ids = categories.values_list('id', flat=True)
+
+        certainty_object.categories.add(*categories_ids)

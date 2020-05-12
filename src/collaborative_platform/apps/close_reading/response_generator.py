@@ -1,6 +1,7 @@
 import json
 import logging
 
+from itertools import chain
 from lxml import etree
 
 from django.contrib.auth.models import User
@@ -140,9 +141,17 @@ class ResponseGenerator:
         return certainties
 
     def __get_certainties_from_db(self):
-        certainties = Certainty.objects.filter(
-            file_version=self.__file.file_versions.order_by('-number')[0]
+        certainties_saved = Certainty.objects.filter(
+            file_version=self.__file.file_versions.order_by('-number')[0],
+            created_in_file_version__isnull = False
         ).order_by('id')
+
+        certainties_unsaved = Certainty.objects.filter(
+            file=self.__file,
+            created_in_file_version__isnull=True
+        )
+
+        certainties = list(chain(certainties_saved, certainties_unsaved))
 
         return certainties
 
