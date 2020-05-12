@@ -943,7 +943,7 @@ class TestAnnotatorWithWsAndDb17:
         verify_response(test_name, response, request_nr)
 
         entity_property_old.refresh_from_db()
-        entity_property_old.deleted_by.id = user_id
+        assert entity_property_old.deleted_by.id == user_id
 
         entity_property_new = EntityProperty.objects.filter(
             entity_version__entity__xml_id='date-0',
@@ -951,6 +951,45 @@ class TestAnnotatorWithWsAndDb17:
         ).order_by('-id')[0]
 
         assert entity_property_new.created_in_file_version is None
+
+        await communicator.disconnect()
+
+
+@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
+@pytest.mark.asyncio
+@pytest.mark.django_db()
+@pytest.mark.integration_tests
+class TestAnnotatorWithWsAndDb18:
+    async def test_add_certainty__to_text(self):
+        test_name = inspect.currentframe().f_code.co_name
+
+        project_id = 1
+        file_id = 1
+        user_id = 2
+
+        communicator = get_communicator(project_id, file_id, user_id)
+
+        await communicator.connect()
+        await communicator.receive_json_from()
+
+        request = [
+            {
+                'method': 'POST',
+                'element_type': 'certainty',
+                'new_element_id': 'ab-0',
+                'parameters': {
+                    'categories': ['ignorance', 'incompleteness'],
+                    'locus': 'value',
+                    'certainty': 'low',
+                    'description': 'Test'
+                }
+            }
+        ]
+        request_nr = 0
+
+        await communicator.send_json_to(request)
+        response = await communicator.receive_json_from()
+        verify_response(test_name, response, request_nr)
 
         await communicator.disconnect()
 

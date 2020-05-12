@@ -7,10 +7,11 @@ from django.contrib.auth.models import User
 
 from apps.api_vis.models import Entity, EntityProperty, EntityVersion, Certainty
 from apps.close_reading.models import AnnotatingBodyContent
+from apps.close_reading.response_generator import get_listable_entities_types, get_unlistable_entities_types
 from apps.exceptions import BadRequest
 from apps.files_management.models import File, FileMaxXmlIds
 from apps.files_management.file_conversions.xml_tools import get_first_xpath_match
-from apps.close_reading.response_generator import get_listable_entities_types, get_unlistable_entities_types
+from apps.projects.models import UncertaintyCategory
 
 from collaborative_platform.settings import CUSTOM_ENTITY, DEFAULT_ENTITIES, XML_NAMESPACES
 
@@ -65,6 +66,16 @@ class RequestHandler:
                     self.__modify_entity_property(request, user)
                 elif request['method'] == 'DELETE':
                     self.__mark_property_to_delete(request, user)
+                else:
+                    raise BadRequest("There is no operation matching to this request")
+
+            elif request['element_type'] == 'certainty':
+                if request['method'] == 'POST':
+                    self.__add_certainty(request, user)
+                elif request['method'] == 'PUT':
+                    pass
+                elif request['method'] == 'DELETE':
+                    pass
                 else:
                     raise BadRequest("There is no operation matching to this request")
 
@@ -596,7 +607,7 @@ class RequestHandler:
                 self.__mark_entities_to_delete(old_element_id, user)
 
         else:
-            raise BadRequest(f"There is no operation matching to this request")
+            raise BadRequest("There is no operation matching to this request")
 
     def __check_if_last_reference(self, target_element_id):
         body_content = self.get_body_content()
@@ -828,3 +839,55 @@ class RequestHandler:
             attributes_to_add = {**attributes_to_add, **attributes_to_add_extension}
 
             self.__update_tag_in_body(edited_element_id, attributes_to_add=attributes_to_add)
+
+    def __add_certainty(self, request, user):
+        certainty_target = request['new_element_id']
+        locus = request['parameters']['locus']
+
+        if 'certainty-' in certainty_target:
+            target = 'certainty'
+        elif '/' in certainty_target:
+            target = 'entity_property'
+        elif '@ref' in certainty_target:
+            target = 'reference'
+        elif locus == 'value':
+            target = 'text'
+        elif locus == 'name':
+            target = 'entity_type'
+        else:
+            raise BadRequest("There is no operation matching to this request")
+
+        if target == 'text':
+            xml_id = self.__get_next_xml_id('certainty')
+
+            certainty_object = Certainty.objects.create(
+                file=self.__file,
+                xml_id=xml_id,
+                locus=request['parameters'].get('locus'),
+                cert=request['parameters'].get('certainty'),
+                target_xml_id=certainty_target,
+                asserted_value=request['parameters'].get('asserted_value'),
+                description=request['parameters'].get('description'),
+                created_by=user,
+                file_version=self.__file.file_versions.order_by('-id')[0]
+            )
+
+            categories = UncertaintyCategory.objects.filter(
+                taxonomy__project=self.__file.project,
+                name__in=request['parameters'].get('categories')
+            )
+
+            categories_ids = categories.values_list('id', flat=True)
+
+            certainty_object.categories.add(*categories_ids)
+
+        elif target == 'reference':
+            pass
+        elif target == 'entity_type':
+            pass
+        elif target == 'entity_property':
+            pass
+        elif target == 'certainty':
+            pass
+        else:
+            raise BadRequest("There is no operation matching to this request")
