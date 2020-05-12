@@ -213,7 +213,7 @@ class ResponseGenerator:
     def __get_entity_properties(entity_version):
         entity_properties = EntityProperty.objects.filter(
             entity_version=entity_version
-        ).order_by('name')
+        ).order_by('name', 'created_in_file_version', 'deleted_by')
 
         properties = []
 

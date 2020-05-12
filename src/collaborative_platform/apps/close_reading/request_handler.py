@@ -62,7 +62,7 @@ class RequestHandler:
                 if request['method'] == 'POST':
                     self.__add_property_to_entity(request, user)
                 elif request['method'] == 'PUT':
-                    pass
+                    self.__modify_entity_property(request, user)
                 elif request['method'] == 'DELETE':
                     self.__mark_property_to_delete(request, user)
                 else:
@@ -750,3 +750,40 @@ class RequestHandler:
 
             self.__update_tag_in_body(edited_element_id, attributes_to_add=attributes_to_add,
                                       attributes_to_delete=attributes_to_delete)
+
+    def __modify_entity_property(self, request, user):
+        edited_element_id = request.get('edited_element_id')
+        entity_type = Entity.objects.get(xml_id=edited_element_id).type
+
+        listable_entities_types = get_listable_entities_types(self.__file.project)
+
+        if entity_type in listable_entities_types:
+            property_to_delete = request['old_element_id']
+
+            entity_property = EntityProperty.objects.filter(
+                entity_version__entity__xml_id=edited_element_id,
+                name=property_to_delete,
+            ).order_by('-id')[0]
+
+            entity_property.deleted_by = user
+            entity_property.save()
+
+            entity_property = request['parameters']
+
+            entity_version_objects = EntityVersion.objects.filter(
+                entity__xml_id=edited_element_id,
+                file_version__isnull=False
+            ).order_by('-file_version')
+
+            if not entity_version_objects:
+                entity_version_objects = EntityVersion.objects.filter(
+                    entity__xml_id=edited_element_id,
+                    file_version__isnull=True
+                ).order_by('-id')
+
+            entity_version_object = entity_version_objects[0]
+
+            self.__create_entity_properties_objects(entity_type, entity_property, entity_version_object, user)
+
+        else:
+            pass

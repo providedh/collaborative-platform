@@ -824,7 +824,7 @@ class TestAnnotatorWithWsAndDb14:
 @pytest.mark.asyncio
 @pytest.mark.django_db()
 @pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb14:
+class TestAnnotatorWithWsAndDb15:
     async def test_remove_property_from_entity__entity_unlistable(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -860,6 +860,43 @@ class TestAnnotatorWithWsAndDb14:
 
         entity_property.refresh_from_db()
         entity_property.deleted_by.id = user_id
+
+        await communicator.disconnect()
+
+
+@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
+@pytest.mark.asyncio
+@pytest.mark.django_db()
+@pytest.mark.integration_tests
+class TestAnnotatorWithWsAndDb16:
+    async def test_modify_entity_property__entity_listable(self):
+        test_name = inspect.currentframe().f_code.co_name
+
+        project_id = 1
+        file_id = 1
+        user_id = 2
+
+        communicator = get_communicator(project_id, file_id, user_id)
+
+        await communicator.connect()
+        await communicator.receive_json_from()
+
+        request = [
+            {
+                'method': 'PUT',
+                'element_type': 'entity_property',
+                'edited_element_id': 'person-0',
+                'old_element_id': 'name',
+                'parameters': {
+                    'name': 'Bruce'
+                }
+            }
+        ]
+        request_nr = 0
+
+        await communicator.send_json_to(request)
+        response = await communicator.receive_json_from()
+        verify_response(test_name, response, request_nr)
 
         await communicator.disconnect()
 
