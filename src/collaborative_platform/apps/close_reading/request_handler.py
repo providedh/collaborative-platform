@@ -706,9 +706,12 @@ class RequestHandler:
 
             entity_version_object = entity_version_objects[0]
 
+            attributes_to_add = {f'{key}Added': value for key, value in entity_property.items()}
+            attributes_to_add.update({'saved': 'false'})
+
             self.__create_entity_properties_objects(entity_type, entity_property, entity_version_object, user)
 
-            self.__update_tag_in_body(edited_element_id, attributes_to_add=entity_property)
+            self.__update_tag_in_body(edited_element_id, attributes_to_add=attributes_to_add)
 
     def __mark_property_to_delete(self, request, user):
         edited_element_id = request.get('edited_element_id')
@@ -786,4 +789,42 @@ class RequestHandler:
             self.__create_entity_properties_objects(entity_type, entity_property, entity_version_object, user)
 
         else:
-            pass
+            property_to_delete = request['old_element_id']
+
+            entity_property_object = EntityProperty.objects.filter(
+                entity_version__entity__xml_id=edited_element_id,
+                name=property_to_delete,
+            ).order_by('-id')[0]
+
+            entity_property_object.deleted_by = user
+            entity_property_object.save()
+
+            entity_property = request['parameters']
+
+            entity_version_objects = EntityVersion.objects.filter(
+                entity__xml_id=edited_element_id,
+                file_version__isnull=False
+            ).order_by('-file_version')
+
+            if not entity_version_objects:
+                entity_version_objects = EntityVersion.objects.filter(
+                    entity__xml_id=edited_element_id,
+                    file_version__isnull=True
+                ).order_by('-id')
+
+            entity_version_object = entity_version_objects[0]
+
+            self.__create_entity_properties_objects(entity_type, entity_property, entity_version_object, user)
+
+            property_value = entity_property_object.get_value(as_str=True)
+
+            attributes_to_add = {f'{key}Added': value for key, value in entity_property.items()}
+
+            attributes_to_add_extension = {
+                f'{property_to_delete}Deleted': property_value,
+                'saved': 'false'
+            }
+
+            attributes_to_add = {**attributes_to_add, **attributes_to_add_extension}
+
+            self.__update_tag_in_body(edited_element_id, attributes_to_add=attributes_to_add)
