@@ -878,7 +878,8 @@ class RequestHandler:
                 target_xml_id = certainty_target
                 target_match = None
             else:
-                pass
+                target_xml_id = certainty_target
+                target_match = '@type'
 
         elif target == 'entity_property':
             pass
