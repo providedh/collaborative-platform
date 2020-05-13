@@ -277,3 +277,15 @@ def get_unlistable_entities_types(project):
     unlistable_entities_types = sorted(unlistable_entities_types)
 
     return unlistable_entities_types
+
+
+def get_custom_entities_types(project):
+    entities_schemes = EntitySchema.objects.filter(taxonomy__project=project).order_by('id')
+    default_entities_names = DEFAULT_ENTITIES.keys()
+    custom_entities_types = []
+
+    for entity in entities_schemes:
+        if entity.name not in default_entities_names:
+            custom_entities_types.append(entity.name)
+
+    return custom_entities_types

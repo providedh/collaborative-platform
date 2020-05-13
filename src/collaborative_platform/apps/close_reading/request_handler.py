@@ -7,7 +7,8 @@ from django.contrib.auth.models import User
 
 from apps.api_vis.models import Entity, EntityProperty, EntityVersion, Certainty
 from apps.close_reading.models import AnnotatingBodyContent
-from apps.close_reading.response_generator import get_listable_entities_types, get_unlistable_entities_types
+from apps.close_reading.response_generator import get_custom_entities_types, get_listable_entities_types, \
+    get_unlistable_entities_types
 from apps.exceptions import BadRequest
 from apps.files_management.models import File, FileMaxXmlIds
 from apps.files_management.file_conversions.xml_tools import get_first_xpath_match
@@ -866,7 +867,19 @@ class RequestHandler:
             target_match = '@ref'
 
         elif target == 'entity_type':
-            pass
+            custom_entities_types = get_custom_entities_types(self.__file.project)
+
+            entity = Entity.objects.get(
+                xml_id=certainty_target,
+                file=self.__file
+            )
+
+            if entity.type not in custom_entities_types:
+                target_xml_id = certainty_target
+                target_match = None
+            else:
+                pass
+
         elif target == 'entity_property':
             pass
         elif target == 'certainty':
