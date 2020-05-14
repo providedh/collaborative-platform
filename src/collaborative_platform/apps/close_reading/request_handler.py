@@ -9,7 +9,7 @@ from apps.api_vis.models import Entity, EntityProperty, EntityVersion, Certainty
 from apps.close_reading.models import AnnotatingBodyContent
 from apps.close_reading.response_generator import get_custom_entities_types, get_listable_entities_types, \
     get_unlistable_entities_types
-from apps.exceptions import BadRequest
+from apps.exceptions import BadRequest, NotModified
 from apps.files_management.models import File, FileMaxXmlIds
 from apps.files_management.file_conversions.xml_tools import get_first_xpath_match
 from apps.projects.models import UncertaintyCategory
@@ -70,22 +70,21 @@ class RequestHandler:
                 else:
                     raise BadRequest("There is no operation matching to this request")
 
+            elif request['element_type'] == 'unification':
+                raise NotModified("Method not implemented yet")
+
             elif request['element_type'] == 'certainty':
                 if request['method'] == 'POST':
                     self.__add_certainty(request, user)
                 elif request['method'] == 'PUT':
-                    pass
+                    self.__modify_certainty(request, user)
                 elif request['method'] == 'DELETE':
                     self.__mark_certainty_to_delete(request, user)
                 else:
                     raise BadRequest("There is no operation matching to this request")
 
-
             else:
                 raise BadRequest(f"There is no operation matching to this request")
-
-
-            pass
 
     def __add_new_tag_to_text(self, request, user):
         # TODO: Add verification if this same tag not existing already
@@ -917,14 +916,20 @@ class RequestHandler:
             created_by=user
         )
 
+        categories = request['parameters'].get('categories')
+        categories_ids = self.__get_categories_ids_from_db(categories)
+
+        certainty_object.categories.add(*categories_ids)
+
+    def __get_categories_ids_from_db(self, categories):
         categories = UncertaintyCategory.objects.filter(
             taxonomy__project=self.__file.project,
-            name__in=request['parameters'].get('categories')
+            name__in=categories
         )
 
         categories_ids = categories.values_list('id', flat=True)
 
-        certainty_object.categories.add(*categories_ids)
+        return categories_ids
 
     def __mark_certainty_to_delete(self, request, user):
         certainty_id = request['edited_element_id']
@@ -936,3 +941,50 @@ class RequestHandler:
 
         certainty.deleted_by = user
         certainty.save()
+
+    def __modify_certainty(self, request, user):
+        certainty_id = request['edited_element_id']
+
+        try:
+            certainty = Certainty.objects.get(
+                xml_id=certainty_id,
+                file=self.__file,
+                file_version__isnull=True
+            )
+        except Certainty.DoesNotExist:
+            certainty = Certainty.objects.get(
+                xml_id=certainty_id,
+                file_version=self.__file.file_versions.order_by('-number')[0]
+            )
+
+            certainty.id = None
+            certainty.created_in_file_version = None
+            certainty.file_version = None
+
+        parameter_name = request['old_element_id']
+
+        if parameter_name == 'categories':
+            certainty.save()
+
+            categories = request['parameters'].get('categories')
+            categories_ids = self.__get_categories_ids_from_db(categories)
+
+            certainty.categories.add(*categories_ids)
+
+        elif parameter_name == 'locus':
+            pass
+
+        elif parameter_name == 'certainty':
+            pass
+
+        elif parameter_name == 'asserted_value':
+            pass
+
+        elif parameter_name == 'description':
+            pass
+
+        elif parameter_name == 'reference':
+            pass
+
+        else:
+            raise BadRequest("There is no operation matching to this request")
