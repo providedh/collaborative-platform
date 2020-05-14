@@ -894,7 +894,9 @@ class RequestHandler:
             target_match = property.xpath
 
         elif target == 'certainty':
-            pass
+            target_xml_id = certainty_target
+            target_match = None
+
         else:
             raise BadRequest("There is no operation matching to this request")
 

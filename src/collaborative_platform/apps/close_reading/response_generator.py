@@ -167,7 +167,7 @@ class ResponseGenerator:
                 'cert': certainty.cert,
                 'resp': f'#{certainty.created_by.profile.get_xml_id()}',
                 'match': certainty.target_match,
-                'target': certainty.target_xml_id,
+                'target': f'#{certainty.target_xml_id}',
                 'xml:id': certainty.xml_id,
                 'assertedValue': certainty.asserted_value,
                 'desc': certainty.description,
