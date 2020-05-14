@@ -882,7 +882,17 @@ class RequestHandler:
                 target_match = '@type'
 
         elif target == 'entity_property':
-            pass
+            target_xml_id = certainty_target.split('/')[0]
+            property_name = certainty_target.split('/')[1]
+
+            property = EntityProperty.objects.get(
+                entity_version__entity__xml_id=target_xml_id,
+                name=property_name,
+                entity_version__file_version=self.__file.file_versions.order_by('-number')[0]
+            )
+
+            target_match = property.xpath
+
         elif target == 'certainty':
             pass
         else:
