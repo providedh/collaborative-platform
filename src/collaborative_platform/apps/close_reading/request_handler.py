@@ -957,14 +957,23 @@ class RequestHandler:
                 file_version=self.__file.file_versions.order_by('-number')[0]
             )
 
+            certainty_categories = certainty.categories.all()
+
             certainty.id = None
             certainty.created_in_file_version = None
             certainty.file_version = None
+            certainty.save()
+
+            for category in certainty_categories:
+                certainty.categories.add(category)
 
         parameter_name = request['old_element_id']
 
         if parameter_name == 'categories':
-            certainty.save()
+            categories = certainty.categories.all()
+
+            for category in categories:
+                certainty.categories.remove(category)
 
             categories = request['parameters'].get('categories')
             categories_ids = self.__get_categories_ids_from_db(categories)
@@ -972,16 +981,24 @@ class RequestHandler:
             certainty.categories.add(*categories_ids)
 
         elif parameter_name == 'locus':
-            pass
+            locus = request['parameters'].get('locus')
+            certainty.locus = locus
+            certainty.save()
 
         elif parameter_name == 'certainty':
-            pass
+            cert = request['parameters'].get('certainty')
+            certainty.cert = cert
+            certainty.save()
 
         elif parameter_name == 'asserted_value':
-            pass
+            asserted_value = request['parameters'].get('asserted_value')
+            certainty.asserted_value = asserted_value
+            certainty.save()
 
         elif parameter_name == 'description':
-            pass
+            description = request['parameters'].get('description')
+            certainty.description = description
+            certainty.save()
 
         elif parameter_name == 'reference':
             pass

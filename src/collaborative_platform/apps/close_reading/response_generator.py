@@ -141,18 +141,14 @@ class ResponseGenerator:
         return certainties
 
     def __get_certainties_from_db(self):
-        certainties_unsaved = Certainty.objects.filter(
-            file=self.__file,
-            created_in_file_version__isnull=True
-        )
-
-        certainties_unsaved_xml_ids = certainties_unsaved.values_list('xml_id', flat=True)
-
         certainties_saved = Certainty.objects.filter(
             file_version=self.__file.file_versions.order_by('-number')[0],
             created_in_file_version__isnull=False
-        ).exclude(
-            xml_id__in=certainties_unsaved_xml_ids
+        ).order_by('id')
+
+        certainties_unsaved = Certainty.objects.filter(
+            file=self.__file,
+            created_in_file_version__isnull=True
         ).order_by('id')
 
         certainties = list(chain(certainties_saved, certainties_unsaved))
