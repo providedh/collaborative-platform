@@ -6,6 +6,7 @@ from lxml import etree
 from django.contrib.auth.models import User
 
 from apps.api_vis.models import Entity, EntityProperty, EntityVersion, Certainty
+from apps.close_reading.enums import TargetTypes
 from apps.close_reading.models import AnnotatingBodyContent
 from apps.close_reading.response_generator import get_custom_entities_types, get_listable_entities_types, \
     get_unlistable_entities_types
@@ -844,28 +845,57 @@ class RequestHandler:
         certainty_target = request['new_element_id']
         locus = request['parameters']['locus']
 
+        target_type = self.get_certainty_target_type(certainty_target, locus)
+        target, match = self.get_certainty_target_and_match(certainty_target, target_type)
+
+        # Create certainty object
+
+        xml_id = self.__get_next_xml_id('certainty')
+
+        certainty_object = Certainty.objects.create(
+            file=self.__file,
+            xml_id=xml_id,
+            locus=request['parameters'].get('locus'),
+            cert=request['parameters'].get('certainty'),
+            target_xml_id=target,
+            target_match=match,
+            asserted_value=request['parameters'].get('asserted_value'),
+            description=request['parameters'].get('description'),
+            created_by=user
+        )
+
+        categories = request['parameters'].get('categories')
+        categories_ids = self.__get_categories_ids_from_db(categories)
+
+        certainty_object.categories.add(*categories_ids)
+
+    @staticmethod
+    def get_certainty_target_type(certainty_target, locus):
         if 'certainty-' in certainty_target:
-            target = 'certainty'
+            target_type = TargetTypes.certainty
         elif '/' in certainty_target:
-            target = 'entity_property'
+            target_type = TargetTypes.entity_property
         elif '@ref' in certainty_target:
-            target = 'reference'
+            target_type = TargetTypes.reference
         elif locus == 'value':
-            target = 'text'
+            target_type = TargetTypes.text
         elif locus == 'name':
-            target = 'entity_type'
+            target_type = TargetTypes.entity_type
         else:
             raise BadRequest("There is no operation matching to this request")
 
-        if target == 'text':
+        return target_type
+
+    def get_certainty_target_and_match(self, certainty_target, target_type):
+        if target_type == TargetTypes.text:
             target_xml_id = certainty_target
             target_match = None
 
-        elif target == 'reference':
+        elif target_type == TargetTypes.reference:
             target_xml_id = certainty_target.split('@')[0]
             target_match = '@ref'
 
-        elif target == 'entity_type':
+        elif target_type == TargetTypes.entity_type:
             custom_entities_types = get_custom_entities_types(self.__file.project)
 
             entity = Entity.objects.get(
@@ -880,7 +910,7 @@ class RequestHandler:
                 target_xml_id = certainty_target
                 target_match = '@type'
 
-        elif target == 'entity_property':
+        elif target_type == TargetTypes.entity_property:
             target_xml_id = certainty_target.split('/')[0]
             property_name = certainty_target.split('/')[1]
 
@@ -892,34 +922,17 @@ class RequestHandler:
 
             target_match = property.xpath
 
-        elif target == 'certainty':
+        elif target_type == TargetTypes.certainty:
             target_xml_id = certainty_target
             target_match = None
 
         else:
             raise BadRequest("There is no operation matching to this request")
 
+        return target_xml_id, target_match
 
-        # Create certainty object
 
-        xml_id = self.__get_next_xml_id('certainty')
 
-        certainty_object = Certainty.objects.create(
-            file=self.__file,
-            xml_id=xml_id,
-            locus=request['parameters'].get('locus'),
-            cert=request['parameters'].get('certainty'),
-            target_xml_id=target_xml_id,
-            target_match=target_match,
-            asserted_value=request['parameters'].get('asserted_value'),
-            description=request['parameters'].get('description'),
-            created_by=user
-        )
-
-        categories = request['parameters'].get('categories')
-        categories_ids = self.__get_categories_ids_from_db(categories)
-
-        certainty_object.categories.add(*categories_ids)
 
     def __get_categories_ids_from_db(self, categories):
         categories = UncertaintyCategory.objects.filter(
@@ -957,10 +970,14 @@ class RequestHandler:
                 file_version=self.__file.file_versions.order_by('-number')[0]
             )
 
+            certainty.deleted_by = user
+            certainty.save()
+
             certainty_categories = certainty.categories.all()
 
             certainty.id = None
             certainty.created_in_file_version = None
+            certainty.deleted_by = None
             certainty.file_version = None
             certainty.save()
 
@@ -1001,7 +1018,15 @@ class RequestHandler:
             certainty.save()
 
         elif parameter_name == 'reference':
-            pass
+            certainty_target = request['parameters']['new_element_id']
+            locus = request['parameters']['locus']
+
+            target_type = self.get_certainty_target_type(certainty_target, locus)
+            target, match = self.get_certainty_target_and_match(certainty_target, target_type)
+
+            certainty.target_xml_id = target
+            certainty.target_match = match
+            certainty.save()
 
         else:
             raise BadRequest("There is no operation matching to this request")
