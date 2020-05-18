@@ -1,4 +1,4 @@
-from apps.api_vis.models import Entity, EntityProperty, EntityVersion
+from apps.api_vis.models import Certainty, Entity, EntityProperty, EntityVersion
 from apps.close_reading.models import AnnotatingBodyContent
 from apps.files_management.models import File, FileMaxXmlIds
 
@@ -90,3 +90,29 @@ class DbHandler:
             properties_objects.append(entity_property_object)
 
         EntityProperty.objects.bulk_create(properties_objects)
+
+    def mark_entities_to_delete(self, target_element_id):
+        entity = Entity.objects.get(xml_id=target_element_id)
+        entity.deleted_by = self.__user
+        entity.save()
+
+        entity_properties = EntityProperty.objects.filter(
+            entity_version=entity.entityversion_set.all().order_by('-id')[0]
+        )
+
+        for entity_property in entity_properties:
+            entity_property.deleted_by = self.__user
+
+        EntityProperty.objects.bulk_update(entity_properties, ['deleted_by'])
+
+        certainties = Certainty.objects.filter(
+            file_version=self.__file.file_versions.order_by('-number')[0],
+            target_xml_id=target_element_id
+        )
+
+        # TODO: Add marking certainties to properties to delete
+
+        for certainty in certainties:
+            certainty.deleted_by = self.__user
+
+        Certainty.objects.bulk_update(certainties, ['deleted_by'])

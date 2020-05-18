@@ -110,21 +110,25 @@ class XmlHandler:
             if tag_name in self.__unlistable_entities_types:
                 xml_id = element.attrib[XML_ID_KEY]
 
-                # TODO: Move handling database to DbHandler class
-                entity_version = EntityVersion.objects.filter(
-                    file_version=self.__file.file_versions.order_by('-id')[0],
-                    entity__xml_id=xml_id
-                )
+                # # TODO: Move handling database to DbHandler class
+                # entity_version = EntityVersion.objects.filter(
+                #     file_version=self.__file.file_versions.order_by('-id')[0],
+                #     entity__xml_id=xml_id
+                # )
+                #
+                # if not entity_version:
+                #     prefix = "{%s}" % XML_NAMESPACES['default']
+                #     tag = prefix + 'ab'
+                #     element.tag = tag
+                #
+                # elif f'#{xml_id}' in references_deleted:
+                #     prefix = "{%s}" % XML_NAMESPACES['default']
+                #     tag = prefix + 'ab'
+                #     element.tag = tag
 
-                if not entity_version:
-                    prefix = "{%s}" % XML_NAMESPACES['default']
-                    tag = prefix + 'ab'
-                    element.tag = tag
-
-                elif f'#{xml_id}' in references_deleted:
-                    prefix = "{%s}" % XML_NAMESPACES['default']
-                    tag = prefix + 'ab'
-                    element.tag = tag
+                prefix = "{%s}" % XML_NAMESPACES['default']
+                tag = prefix + 'ab'
+                element.tag = tag
 
             else:
                 prefix = "{%s}" % XML_NAMESPACES['default']
@@ -208,3 +212,26 @@ class XmlHandler:
         text_result = self.__update_tag_in_body(text, tag_xml_id, attributes_to_add=attributes_to_add)
 
         return text_result
+
+    def mark_reference_to_delete(self, text, tag_xml_id, entity_xml_id, annotator_xml_id):
+        attributes_to_add = {
+            'refDeleted': f'#{entity_xml_id}',
+            'saved': 'false',
+            'resp': f'#{annotator_xml_id}',
+        }
+
+        text_result = self.__update_tag_in_body(text, tag_xml_id, attributes_to_add=attributes_to_add)
+
+        return text_result
+
+    @staticmethod
+    def check_if_last_reference(text, target_element_id):
+        tree = etree.fromstring(text)
+
+        xpath = f"//*[contains(concat(' ', @ref, ' '), ' {target_element_id} ')]"
+        all_references = tree.xpath(xpath, namespaces=XML_NAMESPACES)
+
+        if len(all_references) > 1:
+            return False
+        else:
+            return True

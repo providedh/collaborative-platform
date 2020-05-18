@@ -1,9 +1,4 @@
 import json
-import re
-
-from lxml import etree
-
-from django.contrib.auth.models import User
 
 from apps.api_vis.models import Entity, EntityProperty, EntityVersion, Certainty
 from apps.close_reading.db_handler import DbHandler
@@ -14,7 +9,7 @@ from apps.close_reading.xml_handler import XmlHandler
 from apps.exceptions import BadRequest, NotModified
 from apps.projects.models import UncertaintyCategory
 
-from collaborative_platform.settings import CUSTOM_ENTITY, DEFAULT_ENTITIES, XML_NAMESPACES
+from collaborative_platform.settings import XML_NAMESPACES
 
 
 XML_ID_KEY = f"{{{XML_NAMESPACES['xml']}}}id"
@@ -53,7 +48,7 @@ class RequestHandler:
                 elif request['method'] == 'PUT':
                     self.__modify_reference_to_entity(request, user)
                 elif request['method'] == 'DELETE':
-                    self.__mark_reference_to_delete(request, user)
+                    self.__mark_reference_to_delete(request)
                 else:
                     raise BadRequest("There is no operation matching to this request")
 
@@ -331,62 +326,23 @@ class RequestHandler:
         else:
             raise BadRequest("There is no operation matching to this request")
 
-    def __check_if_last_reference(self, target_element_id):
-        body_content = self.get_body_content()
-        tree = etree.fromstring(body_content)
-
-        xpath = f"//*[contains(concat(' ', @ref, ' '), ' {target_element_id} ')]"
-        all_references = tree.xpath(xpath, namespaces=XML_NAMESPACES)
-
-        if len(all_references) > 1:
-            return False
-        else:
-            return True
-
-    def __mark_entities_to_delete(self, target_element_id, user):
-        entity = Entity.objects.get(xml_id=target_element_id)
-        entity.deleted_by = user
-        entity.save()
-
-        entity_properties = EntityProperty.objects.filter(
-            entity_version=entity.entityversion_set.all().order_by('-id')[0]
-        )
-
-        for entity_property in entity_properties:
-            entity_property.deleted_by = user
-
-        EntityProperty.objects.bulk_update(entity_properties, ['deleted_by'])
-
-        certainties = Certainty.objects.filter(
-            file_version=self.__file.file_versions.order_by('-number')[0],
-            target_xml_id=target_element_id
-        )
-
-        # TODO: Add marking certainties to properties to delete
-
-        for certainty in certainties:
-            certainty.deleted_by = user
-
-        Certainty.objects.bulk_update(certainties, ['deleted_by'])
-
-    def __mark_reference_to_delete(self, request, user):
+    def __mark_reference_to_delete(self, request):
         # TODO: add attribute `newId="ab-XX"`, when tag name will be changed to 'ab'
 
-        edited_element_id = request.get('edited_element_id')
-        old_element_id = request.get('old_element_id')
+        tag_xml_id = request.get('edited_element_id')
+        entity_xml_id = request.get('old_element_id')
 
-        attributes_to_add = {
-            'refDeleted': f'#{old_element_id}',
-            'saved': 'false',
-            'resp': f'#{user.profile.get_xml_id()}',
-        }
+        body_content = self.__db_handler.get_body_content()
 
-        self.__update_tag_in_body(edited_element_id, attributes_to_add=attributes_to_add)
+        body_content = self.__xml_handler.mark_reference_to_delete(body_content, tag_xml_id, entity_xml_id,
+                                                                   self.__annotator_xml_id)
 
-        last_reference = self.__check_if_last_reference(old_element_id)
+        self.__db_handler.set_body_content(body_content)
+
+        last_reference = self.__xml_handler.check_if_last_reference(body_content, entity_xml_id)
 
         if last_reference:
-            self.__mark_entities_to_delete(old_element_id, user)
+            self.__db_handler.mark_entities_to_delete(entity_xml_id)
 
     def __add_property_to_entity(self, request, user):
         edited_element_id = request.get('edited_element_id')
