@@ -203,3 +203,8 @@ class XmlHandler:
         text_result = self.__update_tag_in_body(text, tag_xml_id, new_tag=new_tag, attributes_to_add=attributes_to_add)
 
         return text_result
+
+    def add_attributes_to_tag(self, text, tag_xml_id, attributes_to_add):
+        text_result = self.__update_tag_in_body(text, tag_xml_id, attributes_to_add=attributes_to_add)
+
+        return text_result
