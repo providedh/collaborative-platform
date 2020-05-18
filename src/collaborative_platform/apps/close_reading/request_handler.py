@@ -6,10 +6,12 @@ from lxml import etree
 from django.contrib.auth.models import User
 
 from apps.api_vis.models import Entity, EntityProperty, EntityVersion, Certainty
+from apps.close_reading.db_handler import DbHandler
 from apps.close_reading.enums import TargetTypes
 from apps.close_reading.models import AnnotatingBodyContent
 from apps.close_reading.response_generator import get_custom_entities_types, get_listable_entities_types, \
     get_unlistable_entities_types
+from apps.close_reading.xml_handler import XmlHandler
 from apps.exceptions import BadRequest, NotModified
 from apps.files_management.models import File, FileMaxXmlIds
 from apps.files_management.file_conversions.xml_tools import get_first_xpath_match
@@ -22,20 +24,23 @@ XML_ID_KEY = f"{{{XML_NAMESPACES['xml']}}}id"
 
 
 class RequestHandler:
-    def __init__(self, file_id):
+    def __init__(self, user, file_id):
         self.__file = None
-        self.__body_content = None
-
+        # self.__body_content = None
+        #
         self.__get_file_from_db(file_id)
-        self.__load_body_content()
+        # self.__load_body_content()
+
+        self.__db_handler = DbHandler(user, file_id)
+        self.__xml_handler = XmlHandler(user)
 
     def __get_file_from_db(self, file_id):
         self.__file = File.objects.get(id=file_id, deleted=False)
 
-    def __load_body_content(self):
-        room_name = f'{self.__file.project.id}_{self.__file.id}'
-
-        self.__annotating_body_content = AnnotatingBodyContent.objects.get(file_symbol=room_name)
+    # def __load_body_content(self):
+    #     room_name = f'{self.__file.project.id}_{self.__file.id}'
+    #
+    #     self.__annotating_body_content = AnnotatingBodyContent.objects.get(file_symbol=room_name)
 
     def handle_request(self, text_data, user):
         requests = self.__parse_text_data(text_data)
@@ -43,7 +48,7 @@ class RequestHandler:
         for request in requests:
             if request['element_type'] == 'tag':
                 if request['method'] == 'POST':
-                    self.__add_new_tag_to_text(request, user)
+                    self.__add_new_tag_to_text(request)
                 elif request['method'] == 'PUT':
                     self.__move_tag_to_new_position(request, user)
                 elif request['method'] == 'DELETE':
@@ -87,60 +92,69 @@ class RequestHandler:
             else:
                 raise BadRequest(f"There is no operation matching to this request")
 
-    def __add_new_tag_to_text(self, request, user):
-        # TODO: Add verification if this same tag not existing already
-        # TODO: Add possibility to add tag if text fragment is separated by another tag
-
-        body_content = self.get_body_content()
+    def __add_new_tag_to_text(self, request):
+        # # TODO: Add verification if this same tag not existing already
+        # # TODO: Add possibility to add tag if text fragment is separated by another tag
+        #
+        # body_content = self.get_body_content()
+        #
+        # xml_id = self.__get_next_xml_id('ab')
+        #
+        # start_pos = request['parameters']['start_pos']
+        # end_pos = request['parameters']['end_pos']
+        #
+        # text_result = self.__add_tag(body_content, start_pos, end_pos, xml_id, user)
+        #
+        # self.__set_body_content(text_result)
 
         xml_id = self.__get_next_xml_id('ab')
-
         start_pos = request['parameters']['start_pos']
         end_pos = request['parameters']['end_pos']
+        body_content = self.__db_handler.get_body_content()
 
-        text_result = self.__add_tag(body_content, start_pos, end_pos, xml_id, user)
+        body_content = self.__xml_handler.add_new_tag_to_text(body_content, xml_id, start_pos, end_pos)
 
-        self.__set_body_content(text_result)
+        self.__db_handler.set_body_content(body_content)
 
-    def get_body_content(self):
-        self.__annotating_body_content.refresh_from_db()
-        body_content = self.__annotating_body_content.body_content
+    # def get_body_content(self):
+    #     self.__annotating_body_content.refresh_from_db()
+    #     body_content = self.__annotating_body_content.body_content
+    #
+    #     return body_content
 
-        return body_content
+    # def __set_body_content(self, body_content):
+    #     self.__annotating_body_content.body_content = body_content
+    #     self.__annotating_body_content.save()
 
-    def __set_body_content(self, body_content):
-        self.__annotating_body_content.body_content = body_content
-        self.__annotating_body_content.save()
+    # @staticmethod
+    # def __add_tag(body_content, start_pos, end_pos, xml_id, user):
+    #     text_before = body_content[:start_pos]
+    #     text_inside = body_content[start_pos:end_pos]
+    #     text_after = body_content[end_pos:]
+    #
+    #     text_result = f'{text_before}<ab xml:id="{xml_id}" resp="#{user.profile.get_xml_id()}" saved="false">{text_inside}</ab>{text_after}'
+    #
+    #     return text_result
 
-    @staticmethod
-    def __add_tag(body_content, start_pos, end_pos, xml_id, user):
-        text_before = body_content[:start_pos]
-        text_inside = body_content[start_pos:end_pos]
-        text_after = body_content[end_pos:]
-
-        text_result = f'{text_before}<ab xml:id="{xml_id}" resp="#{user.profile.get_xml_id()}" saved="false">{text_inside}</ab>{text_after}'
-
-        return text_result
-
-    @staticmethod
-    def __get_max_xml_id_from_text(body_content, tag_name, temp_id=False):
-        tree = etree.fromstring(body_content)
-
-        if temp_id:
-            tag_part = f'temp_{tag_name}-'
-        else:
-            tag_part = f'{tag_name}-'
-
-        xpath = f"//*[contains(concat(' ', @xml:id, ' '), ' {tag_part}')]/@xml:id"
-        elements = tree.xpath(xpath, namespaces=XML_NAMESPACES)
-
-        if elements:
-            ids = [int(element.replace(tag_part, '')) for element in elements]
-            max_id = max(ids)
-        else:
-            max_id = 0
-
-        return max_id
+    # @staticmethod
+    # def __get_max_xml_id_from_text(body_content, tag_name, temp_id=False):
+    #     tree = etree.fromstring(body_content)
+    #
+    #     if temp_id:
+    #         tag_part = f'temp_{tag_name}-'
+    #     else:
+    #         tag_part = f'{tag_name}-'
+    #
+    #     xpath = f"//*[contains(concat(' ', @xml:id, ' '), ' {tag_part}')]/@xml:id"
+    #     elements = tree.xpath(xpath, namespaces=XML_NAMESPACES)
+    #
+    #     if elements:
+    #         ids = [int(element.replace(tag_part, '')) for element in elements]
+    #         max_id = max(ids)
+    #     else:
+    #         max_id = 0
+    #
+    #     return max_id
 
     def __move_tag_to_new_position(self, request, user):
         # TODO: Add verification if user has rights to edit a tag

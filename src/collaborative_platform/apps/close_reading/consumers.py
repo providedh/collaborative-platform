@@ -51,7 +51,7 @@ class AnnotatorConsumer(WebsocketConsumer):
             self.accept()
 
             self.__response_generator = ResponseGenerator(self.__file_id)
-            self.__request_handler = RequestHandler(self.__file_id)
+            self.__request_handler = RequestHandler(self.scope['user'], self.__file_id)
 
             response = self.__response_generator.get_response()
 
