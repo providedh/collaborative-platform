@@ -1,5 +1,8 @@
+from apps.api_vis.models import Entity, EntityProperty, EntityVersion
 from apps.close_reading.models import AnnotatingBodyContent
 from apps.files_management.models import File, FileMaxXmlIds
+
+from collaborative_platform.settings import CUSTOM_ENTITY, DEFAULT_ENTITIES
 
 
 class DbHandler:
@@ -46,3 +49,44 @@ class DbHandler:
         annotator_xml_id = self.__user.profile.get_xml_id()
 
         return annotator_xml_id
+
+    def create_entity_object(self, entity_type, xml_id):
+        entity_object = Entity.objects.create(
+            file=self.__file,
+            type=entity_type,
+            xml_id=xml_id,
+            created_by=self.__user,
+        )
+
+        return entity_object
+
+    @staticmethod
+    def create_entity_version_object(entity_object):
+        entity_version_object = EntityVersion.objects.create(
+            entity=entity_object,
+        )
+
+        return entity_version_object
+
+    def create_entity_properties_objects(self, entity_type, entity_properties, entity_version_object):
+        if entity_type in DEFAULT_ENTITIES.keys():
+            properties = DEFAULT_ENTITIES[entity_type]['properties']
+        else:
+            properties = CUSTOM_ENTITY['properties']
+
+        properties_objects = []
+
+        for name, value in entity_properties.items():
+            entity_property_object = EntityProperty(
+                entity_version=entity_version_object,
+                xpath='',
+                name=name,
+                type=properties[name]['type'],
+                created_by=self.__user,
+            )
+
+            entity_property_object.set_value(value)
+
+            properties_objects.append(entity_property_object)
+
+        EntityProperty.objects.bulk_create(properties_objects)

@@ -26,11 +26,12 @@ class RequestHandler:
         self.__file = self.__db_handler.get_file_from_db(file_id)
         self.__annotator_xml_id = self.__db_handler.get_annotator_xml_id()
 
-        listable_entity_types = get_listable_entities_types(self.__file.project)
-        unlistable_entity_types = get_unlistable_entities_types(self.__file.project)
-        custom_entity_types = get_custom_entities_types(self.__file.project)
+        self.__listable_entities_types = get_listable_entities_types(self.__file.project)
+        self.__unlistable_entities_types = get_unlistable_entities_types(self.__file.project)
+        self.__custom_entities_types = get_custom_entities_types(self.__file.project)
 
-        self.__xml_handler = XmlHandler(listable_entity_types, unlistable_entity_types, custom_entity_types)
+        self.__xml_handler = XmlHandler(self.__listable_entities_types, self.__unlistable_entities_types,
+                                        self.__custom_entities_types)
 
     def handle_request(self, text_data, user):
         requests = self.__parse_text_data(text_data)
@@ -48,7 +49,7 @@ class RequestHandler:
 
             elif request['element_type'] == 'reference':
                 if request['method'] == 'POST':
-                    self.__add_reference_to_entity(request, user)
+                    self.__add_reference_to_entity(request)
                 elif request['method'] == 'PUT':
                     self.__modify_reference_to_entity(request, user)
                 elif request['method'] == 'DELETE':
@@ -126,131 +127,126 @@ class RequestHandler:
 
         self.__db_handler.set_body_content(body_content)
 
-    def __add_reference_to_entity(self, request, user):  # type: (dict, User) -> None
+    def __add_reference_to_entity(self, request):
         # TODO: Add verification if user has rights to edit a tag
 
-        edited_element_id = request.get('edited_element_id')
-        new_element_id = request.get('new_element_id')
+        tag_xml_id = request.get('edited_element_id')
+        entity_xml_id = request.get('new_element_id')
 
         try:
             entity_type = request['parameters']['entity_type']
         except KeyError:
-            entity_type = Entity.objects.get(xml_id=new_element_id).type
+            entity_type = Entity.objects.get(xml_id=entity_xml_id).type
 
+        if not entity_xml_id and entity_type in self.__listable_entities_types:
+            new_tag = 'name'
+            entity_xml_id = self.__db_handler.get_next_xml_id(entity_type)
+            new_tag_xml_id = self.__db_handler.get_next_xml_id(new_tag)
 
-        listable_entities_types = get_listable_entities_types(self.__file.project)
+            entity_object = self.__db_handler.create_entity_object(entity_type, entity_xml_id)
+            entity_version_object = self.__db_handler.create_entity_version_object(entity_object)
 
-        if not new_element_id and entity_type in listable_entities_types:
-            new_element_id = self.__get_next_xml_id(entity_type)
-            new_tag_id = self.__get_next_xml_id('name')
+            entity_properties = request['parameters']['entity_properties']
+            self.__db_handler.create_entity_properties_objects(entity_type, entity_properties, entity_version_object)
 
-            entity_object = self.__create_entity_object(entity_type, new_element_id, user)
+            body_content = self.__db_handler.get_body_content()
+
+            body_content = self.__xml_handler.add_reference_to_entity(body_content, tag_xml_id, new_tag, new_tag_xml_id,
+                                                                      entity_xml_id, self.__annotator_xml_id)
+
+            self.__db_handler.set_body_content(body_content)
+
+        elif not entity_xml_id and entity_type not in listable_entities_types:
+            entity_xml_id = self.__get_next_xml_id(entity_type)
+
+            entity_object = self.__create_entity_object(entity_type, entity_xml_id, user)
             entity_version_object = self.__create_entity_version_object(entity_object)
 
             entity_properties = request['parameters']['entity_properties']
             self.__create_entity_properties_objects(entity_type, entity_properties, entity_version_object, user)
 
             attributes_to_add = {
-                'newId': f'{new_tag_id}',
-                'ref': f'#{new_element_id}',
-                'unsavedRef': f'#{new_element_id}',
-                'resp': f'#{user.profile.get_xml_id()}',
-                'saved': 'false',
-            }
-
-            self.__update_tag_in_body(edited_element_id, new_tag='name', attributes_to_add=attributes_to_add)
-
-        elif not new_element_id and entity_type not in listable_entities_types:
-            new_element_id = self.__get_next_xml_id(entity_type)
-
-            entity_object = self.__create_entity_object(entity_type, new_element_id, user)
-            entity_version_object = self.__create_entity_version_object(entity_object)
-
-            entity_properties = request['parameters']['entity_properties']
-            self.__create_entity_properties_objects(entity_type, entity_properties, entity_version_object, user)
-
-            attributes_to_add = {
-                'newId': f'{new_element_id}',
-                'ref': f'#{new_element_id}',
-                'unsavedRef': f'#{new_element_id}',
+                'newId': f'{entity_xml_id}',
+                'ref': f'#{entity_xml_id}',
+                'unsavedRef': f'#{entity_xml_id}',
                 'resp': f'#{user.profile.get_xml_id()}',
                 'saved': 'false',
             }
 
             attributes_to_add.update(entity_properties)
 
-            self.__update_tag_in_body(edited_element_id, new_tag=entity_type, attributes_to_add=attributes_to_add)
+            self.__update_tag_in_body(tag_xml_id, new_tag=entity_type, attributes_to_add=attributes_to_add)
 
-        elif new_element_id and entity_type in listable_entities_types:
-            new_tag_id = self.__get_next_xml_id('name')
+        elif entity_xml_id and entity_type in listable_entities_types:
+            new_tag_xml_id = self.__get_next_xml_id('name')
 
             attributes_to_add = {
-                'newId': f'{new_tag_id}',
-                'ref': f'#{new_element_id}',
-                'unsavedRef': f'#{new_element_id}',
+                'newId': f'{new_tag_xml_id}',
+                'ref': f'#{entity_xml_id}',
+                'unsavedRef': f'#{entity_xml_id}',
                 'resp': f'#{user.profile.get_xml_id()}',
                 'saved': 'false',
             }
 
-            self.__update_tag_in_body(edited_element_id, new_tag='name', attributes_to_add=attributes_to_add)
+            self.__update_tag_in_body(tag_xml_id, new_tag='name', attributes_to_add=attributes_to_add)
 
-        elif new_element_id and entity_type not in listable_entities_types:
-            new_tag_id = self.__get_next_xml_id(entity_type)
+        elif entity_xml_id and entity_type not in listable_entities_types:
+            new_tag_xml_id = self.__get_next_xml_id(entity_type)
 
             attributes_to_add = {
-                'newId': f'{new_tag_id}',
-                'ref': f'#{new_element_id}',
-                'unsavedRef': f'#{new_element_id}',
+                'newId': f'{new_tag_xml_id}',
+                'ref': f'#{entity_xml_id}',
+                'unsavedRef': f'#{entity_xml_id}',
                 'resp': f'#{user.profile.get_xml_id()}',
                 'saved': 'false',
             }
 
-            self.__update_tag_in_body(edited_element_id, new_tag=entity_type, attributes_to_add=attributes_to_add)
+            self.__update_tag_in_body(tag_xml_id, new_tag=entity_type, attributes_to_add=attributes_to_add)
 
         else:
             raise BadRequest("There is no operation matching to this request")
 
-    def __create_entity_object(self, entity_type, xml_id, user):
-        entity_object = Entity.objects.create(
-            file=self.__file,
-            type=entity_type,
-            xml_id=xml_id,
-            created_by=user,
-        )
+    # def __create_entity_object(self, entity_type, xml_id, user):
+    #     entity_object = Entity.objects.create(
+    #         file=self.__file,
+    #         type=entity_type,
+    #         xml_id=xml_id,
+    #         created_by=user,
+    #     )
+    #
+    #     return entity_object
 
-        return entity_object
+    # @staticmethod
+    # def __create_entity_version_object(entity_object):
+    #     entity_version_object = EntityVersion.objects.create(
+    #         entity=entity_object,
+    #     )
+    #
+    #     return entity_version_object
 
-    @staticmethod
-    def __create_entity_version_object(entity_object):
-        entity_version_object = EntityVersion.objects.create(
-            entity=entity_object,
-        )
-
-        return entity_version_object
-
-    @staticmethod
-    def __create_entity_properties_objects(entity_type, entity_properties, entity_version_object, user):
-        if entity_type in DEFAULT_ENTITIES.keys():
-            properties = DEFAULT_ENTITIES[entity_type]['properties']
-        else:
-            properties = CUSTOM_ENTITY['properties']
-
-        properties_objects = []
-
-        for name, value in entity_properties.items():
-            entity_property_object = EntityProperty(
-                entity_version=entity_version_object,
-                xpath='',
-                name=name,
-                type=properties[name]['type'],
-                created_by=user,
-            )
-
-            entity_property_object.set_value(value)
-
-            properties_objects.append(entity_property_object)
-
-        EntityProperty.objects.bulk_create(properties_objects)
+    # @staticmethod
+    # def __create_entity_properties_objects(entity_type, entity_properties, entity_version_object, user):
+    #     if entity_type in DEFAULT_ENTITIES.keys():
+    #         properties = DEFAULT_ENTITIES[entity_type]['properties']
+    #     else:
+    #         properties = CUSTOM_ENTITY['properties']
+    #
+    #     properties_objects = []
+    #
+    #     for name, value in entity_properties.items():
+    #         entity_property_object = EntityProperty(
+    #             entity_version=entity_version_object,
+    #             xpath='',
+    #             name=name,
+    #             type=properties[name]['type'],
+    #             created_by=user,
+    #         )
+    #
+    #         entity_property_object.set_value(value)
+    #
+    #         properties_objects.append(entity_property_object)
+    #
+    #     EntityProperty.objects.bulk_create(properties_objects)
 
 
     def __modify_reference_to_entity(self, request, user):

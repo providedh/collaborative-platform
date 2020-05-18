@@ -190,3 +190,16 @@ class XmlHandler:
                                                 attributes_to_delete=attributes_to_delete)
 
         return text_result
+
+    def add_reference_to_entity(self, text, tag_xml_id, new_tag, new_tag_xml_id, entity_xml_id, annotator_xml_id):
+        attributes_to_add = {
+            'newId': f'{new_tag_xml_id}',
+            'ref': f'#{entity_xml_id}',
+            'unsavedRef': f'#{entity_xml_id}',
+            'resp': f'#{annotator_xml_id}',
+            'saved': 'false',
+        }
+
+        text_result = self.__update_tag_in_body(text, tag_xml_id, new_tag=new_tag, attributes_to_add=attributes_to_add)
+
+        return text_result
