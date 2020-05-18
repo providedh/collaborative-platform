@@ -186,18 +186,16 @@ class RequestHandler:
 
             self.__db_handler.set_body_content(body_content)
 
-        elif entity_xml_id and entity_type not in listable_entities_types:
-            new_tag_xml_id = self.__get_next_xml_id(entity_type)
+        elif entity_xml_id and entity_type not in self.__listable_entities_types:
+            new_tag_xml_id = self.__db_handler.get_next_xml_id(entity_type)
 
-            attributes_to_add = {
-                'newId': f'{new_tag_xml_id}',
-                'ref': f'#{entity_xml_id}',
-                'unsavedRef': f'#{entity_xml_id}',
-                'resp': f'#{user.profile.get_xml_id()}',
-                'saved': 'false',
-            }
+            body_content = self.__db_handler.get_body_content()
 
-            self.__update_tag_in_body(tag_xml_id, new_tag=entity_type, attributes_to_add=attributes_to_add)
+            body_content = self.__xml_handler.add_reference_to_entity(body_content, tag_xml_id, entity_type,
+                                                                      new_tag_xml_id, entity_xml_id,
+                                                                      self.__annotator_xml_id)
+
+            self.__db_handler.set_body_content(body_content)
 
         else:
             raise BadRequest("There is no operation matching to this request")
