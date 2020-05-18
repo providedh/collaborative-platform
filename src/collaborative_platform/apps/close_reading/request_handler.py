@@ -175,18 +175,16 @@ class RequestHandler:
 
             self.__db_handler.set_body_content(body_content)
 
-        elif entity_xml_id and entity_type in listable_entities_types:
-            new_tag_xml_id = self.__get_next_xml_id('name')
+        elif entity_xml_id and entity_type in self.__listable_entities_types:
+            new_tag = 'name'
+            new_tag_xml_id = self.__db_handler.get_next_xml_id(new_tag)
 
-            attributes_to_add = {
-                'newId': f'{new_tag_xml_id}',
-                'ref': f'#{entity_xml_id}',
-                'unsavedRef': f'#{entity_xml_id}',
-                'resp': f'#{user.profile.get_xml_id()}',
-                'saved': 'false',
-            }
+            body_content = self.__db_handler.get_body_content()
 
-            self.__update_tag_in_body(tag_xml_id, new_tag='name', attributes_to_add=attributes_to_add)
+            body_content = self.__xml_handler.add_reference_to_entity(body_content, tag_xml_id, new_tag, new_tag_xml_id,
+                                                                      entity_xml_id, self.__annotator_xml_id)
+
+            self.__db_handler.set_body_content(body_content)
 
         elif entity_xml_id and entity_type not in listable_entities_types:
             new_tag_xml_id = self.__get_next_xml_id(entity_type)
