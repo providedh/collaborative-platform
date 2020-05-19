@@ -224,6 +224,23 @@ class XmlHandler:
 
         return text_result
 
+    def modify_reference_to_entity(self, text, tag_xml_id, new_entity_xml_id, old_entity_xml_id, annotator_xml_id,
+                                   new_tag=None, new_tag_xml_id=None):
+        attributes_to_add = {
+            'ref': f'#{new_entity_xml_id}',
+            'refAdded': f'#{new_entity_xml_id}',
+            'refDeleted': f'#{old_entity_xml_id}',
+            'resp': f'#{annotator_xml_id}',
+            'saved': 'false'
+        }
+
+        if new_tag_xml_id:
+            attributes_to_add.update({'newId': f'{new_tag_xml_id}'})
+
+        text_result = self.__update_tag_in_body(text, tag_xml_id, new_tag=new_tag, attributes_to_add=attributes_to_add)
+
+        return text_result
+
     @staticmethod
     def check_if_last_reference(text, target_element_id):
         tree = etree.fromstring(text)

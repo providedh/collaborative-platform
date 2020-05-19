@@ -198,66 +198,57 @@ class RequestHandler:
     def __modify_reference_to_entity(self, request, user):
         # TODO: Add verification if user has rights to edit a tag
 
-        edited_element_id = request.get('edited_element_id')
-        old_element_id = request.get('old_element_id')
-        new_element_id = request.get('new_element_id')
+        tag_xml_id = request.get('edited_element_id')
+        old_entity_xml_id = request.get('old_element_id')
+        new_entity_xml_id = request.get('new_element_id')
 
         try:
             entity_type = request['parameters']['entity_type']
         except KeyError:
-            entity_type = Entity.objects.get(xml_id=old_element_id).type
+            entity_type = Entity.objects.get(xml_id=old_entity_xml_id).type
 
-        listable_entities_types = get_listable_entities_types(self.__file.project)
+        if not new_entity_xml_id and entity_type in self.__listable_entities_types:
+            new_tag = 'name'
+            new_entity_xml_id = self.__db_handler.get_next_xml_id(entity_type)
+            new_tag_xml_id = self.__get_new_tag_xml_id(tag_xml_id)
 
-        if not new_element_id and entity_type in listable_entities_types:
-            new_element_id = self.__get_next_xml_id(entity_type)
-
-            entity_object = self.__create_entity_object(entity_type, new_element_id, user)
-            entity_version_object = self.__create_entity_version_object(entity_object)
+            entity_object = self.__db_handler.create_entity_object(entity_type, new_entity_xml_id)
+            entity_version_object = self.__db_handler.create_entity_version_object(entity_object)
 
             entity_properties = request['parameters']['entity_properties']
-            self.__create_entity_properties_objects(entity_type, entity_properties, entity_version_object, user)
+            self.__db_handler.create_entity_properties_objects(entity_type, entity_properties, entity_version_object)
 
-            attributes_to_add = {
-                'ref': f'#{new_element_id}',
-                'refAdded': f'#{new_element_id}',
-                'refDeleted': f'#{old_element_id}',
-                'resp': f'#{user.profile.get_xml_id()}',
-                'saved': 'false'
-            }
+            body_content = self.__db_handler.get_body_content()
 
-            edited_element_id_base = edited_element_id.split('-')[0]
+            body_content = self.__xml_handler.modify_reference_to_entity(body_content, tag_xml_id, new_entity_xml_id,
+                                                                         old_entity_xml_id, self.__annotator_xml_id,
+                                                                         new_tag, new_tag_xml_id)
 
-            if edited_element_id_base != 'name':
-                new_tag_id = self.__get_next_xml_id('name')
+            self.__db_handler.set_body_content(body_content)
 
-                attributes_to_add.update({'newId': f'{new_tag_id}'})
-
-            self.__update_tag_in_body(edited_element_id, new_tag='name', attributes_to_add=attributes_to_add)
-
-            last_reference = self.__check_if_last_reference(old_element_id)
+            last_reference = self.__xml_handler.check_if_last_reference(body_content, old_entity_xml_id)
 
             if last_reference:
-                self.__mark_entities_to_delete(old_element_id, user)
+                self.__db_handler.mark_entities_to_delete(old_entity_xml_id)
 
-        elif not new_element_id and entity_type not in listable_entities_types:
-            new_element_id = self.__get_next_xml_id(entity_type)
+        elif not new_entity_xml_id and entity_type not in listable_entities_types:
+            new_entity_xml_id = self.__get_next_xml_id(entity_type)
 
-            entity_object = self.__create_entity_object(entity_type, new_element_id, user)
+            entity_object = self.__create_entity_object(entity_type, new_entity_xml_id, user)
             entity_version_object = self.__create_entity_version_object(entity_object)
 
             entity_properties = request['parameters']['entity_properties']
             self.__create_entity_properties_objects(entity_type, entity_properties, entity_version_object, user)
 
             attributes_to_add = {
-                'ref': f'#{new_element_id}',
-                'refAdded': f'#{new_element_id}',
-                'refDeleted': f'#{old_element_id}',
+                'ref': f'#{new_entity_xml_id}',
+                'refAdded': f'#{new_entity_xml_id}',
+                'refDeleted': f'#{old_entity_xml_id}',
                 'resp': f'#{user.profile.get_xml_id()}',
                 'saved': 'false'
             }
 
-            edited_element_id_base = edited_element_id.split('-')[0]
+            edited_element_id_base = tag_xml_id.split('-')[0]
 
             if edited_element_id_base != entity_type:
                 new_tag_id = self.__get_next_xml_id(entity_type)
@@ -270,61 +261,71 @@ class RequestHandler:
 
                 attributes_to_add.update({name: value})
 
-            self.__update_tag_in_body(edited_element_id, new_tag=entity_type, attributes_to_add=attributes_to_add)
+            self.__update_tag_in_body(tag_xml_id, new_tag=entity_type, attributes_to_add=attributes_to_add)
 
-            last_reference = self.__check_if_last_reference(old_element_id)
+            last_reference = self.__check_if_last_reference(old_entity_xml_id)
 
             if last_reference:
-                self.__mark_entities_to_delete(old_element_id, user)
+                self.__mark_entities_to_delete(old_entity_xml_id, user)
 
-        elif new_element_id and entity_type in listable_entities_types:
+        elif new_entity_xml_id and entity_type in listable_entities_types:
             attributes_to_add = {
-                'ref': f'#{new_element_id}',
-                'refAdded': f'#{new_element_id}',
-                'refDeleted': f'#{old_element_id}',
+                'ref': f'#{new_entity_xml_id}',
+                'refAdded': f'#{new_entity_xml_id}',
+                'refDeleted': f'#{old_entity_xml_id}',
                 'resp': f'#{user.profile.get_xml_id()}',
                 'saved': 'false'
             }
 
-            edited_element_id_base = edited_element_id.split('-')[0]
+            edited_element_id_base = tag_xml_id.split('-')[0]
 
             if edited_element_id_base != 'name':
                 new_tag_id = self.__get_next_xml_id('name')
 
                 attributes_to_add.update({'newId': f'{new_tag_id}'})
 
-            self.__update_tag_in_body(edited_element_id, new_tag='name', attributes_to_add=attributes_to_add)
+            self.__update_tag_in_body(tag_xml_id, new_tag='name', attributes_to_add=attributes_to_add)
 
-            last_reference = self.__check_if_last_reference(old_element_id)
+            last_reference = self.__check_if_last_reference(old_entity_xml_id)
 
             if last_reference:
-                self.__mark_entities_to_delete(old_element_id, user)
+                self.__mark_entities_to_delete(old_entity_xml_id, user)
 
-        elif new_element_id and entity_type not in listable_entities_types:
+        elif new_entity_xml_id and entity_type not in listable_entities_types:
             attributes_to_add = {
-                'ref': f'#{new_element_id}',
-                'refAdded': f'#{new_element_id}',
-                'refDeleted': f'#{old_element_id}',
+                'ref': f'#{new_entity_xml_id}',
+                'refAdded': f'#{new_entity_xml_id}',
+                'refDeleted': f'#{old_entity_xml_id}',
                 'resp': f'#{user.profile.get_xml_id()}',
                 'saved': 'false'
             }
 
-            edited_element_id_base = edited_element_id.split('-')[0]
+            edited_element_id_base = tag_xml_id.split('-')[0]
 
             if edited_element_id_base != entity_type:
                 new_tag_id = self.__get_next_xml_id(entity_type)
 
                 attributes_to_add.update({'newId': f'{new_tag_id}'})
 
-            self.__update_tag_in_body(edited_element_id, new_tag=entity_type, attributes_to_add=attributes_to_add)
+            self.__update_tag_in_body(tag_xml_id, new_tag=entity_type, attributes_to_add=attributes_to_add)
 
-            last_reference = self.__check_if_last_reference(old_element_id)
+            last_reference = self.__check_if_last_reference(old_entity_xml_id)
 
             if last_reference:
-                self.__mark_entities_to_delete(old_element_id, user)
+                self.__mark_entities_to_delete(old_entity_xml_id, user)
 
         else:
             raise BadRequest("There is no operation matching to this request")
+
+    def __get_new_tag_xml_id(self, tag_xml_id):
+        edited_element_id_base = tag_xml_id.split('-')[0]
+
+        if edited_element_id_base != 'name':
+            new_tag_xml_id = self.__db_handler.get_next_xml_id('name')
+        else:
+            new_tag_xml_id = None
+
+        return new_tag_xml_id
 
     def __mark_reference_to_delete(self, request):
         # TODO: add attribute `newId="ab-XX"`, when tag name will be changed to 'ab'
