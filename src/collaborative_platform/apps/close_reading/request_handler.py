@@ -274,28 +274,21 @@ class RequestHandler:
             if last_reference:
                 self.__db_handler.mark_entities_to_delete(old_entity_xml_id)
 
-        elif new_entity_xml_id and entity_type not in listable_entities_types:
-            attributes_to_add = {
-                'ref': f'#{new_entity_xml_id}',
-                'refAdded': f'#{new_entity_xml_id}',
-                'refDeleted': f'#{old_entity_xml_id}',
-                'resp': f'#{user.profile.get_xml_id()}',
-                'saved': 'false'
-            }
+        elif new_entity_xml_id and entity_type not in self.__listable_entities_types:
+            new_tag_xml_id = self.__get_new_tag_xml_id(tag_xml_id, entity_type)
 
-            edited_element_id_base = tag_xml_id.split('-')[0]
+            body_content = self.__db_handler.get_body_content()
 
-            if edited_element_id_base != entity_type:
-                new_tag_id = self.__get_next_xml_id(entity_type)
+            body_content = self.__xml_handler.modify_reference_to_entity(body_content, tag_xml_id, new_entity_xml_id,
+                                                                         old_entity_xml_id, self.__annotator_xml_id,
+                                                                         entity_type, new_tag_xml_id)
 
-                attributes_to_add.update({'newId': f'{new_tag_id}'})
+            self.__db_handler.set_body_content(body_content)
 
-            self.__update_tag_in_body(tag_xml_id, new_tag=entity_type, attributes_to_add=attributes_to_add)
-
-            last_reference = self.__check_if_last_reference(old_entity_xml_id)
+            last_reference = self.__xml_handler.check_if_last_reference(body_content, old_entity_xml_id)
 
             if last_reference:
-                self.__mark_entities_to_delete(old_entity_xml_id, user)
+                self.__db_handler.mark_entities_to_delete(old_entity_xml_id)
 
         else:
             raise BadRequest("There is no operation matching to this request")
