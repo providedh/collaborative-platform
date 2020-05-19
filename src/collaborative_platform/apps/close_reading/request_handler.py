@@ -46,7 +46,7 @@ class RequestHandler:
                 if request['method'] == 'POST':
                     self.__add_reference_to_entity(request)
                 elif request['method'] == 'PUT':
-                    self.__modify_reference_to_entity(request, user)
+                    self.__modify_reference_to_entity(request)
                 elif request['method'] == 'DELETE':
                     self.__mark_reference_to_delete(request)
                 else:
@@ -54,7 +54,7 @@ class RequestHandler:
 
             elif request['element_type'] == 'entity_property':
                 if request['method'] == 'POST':
-                    self.__add_property_to_entity(request, user)
+                    self.__add_property_to_entity(request)
                 elif request['method'] == 'PUT':
                     self.__modify_entity_property(request, user)
                 elif request['method'] == 'DELETE':
@@ -195,7 +195,7 @@ class RequestHandler:
         else:
             raise BadRequest("There is no operation matching to this request")
 
-    def __modify_reference_to_entity(self, request, user):
+    def __modify_reference_to_entity(self, request):
         # TODO: Add verification if user has rights to edit a tag
 
         tag_xml_id = request.get('edited_element_id')
@@ -321,41 +321,28 @@ class RequestHandler:
         if last_reference:
             self.__db_handler.mark_entities_to_delete(entity_xml_id)
 
-    def __add_property_to_entity(self, request, user):
-        edited_element_id = request.get('edited_element_id')
-        entity_type = Entity.objects.get(xml_id=edited_element_id).type
+    def __add_property_to_entity(self, request):
+        entity_xml_id = request.get('edited_element_id')
+        entity = self.__db_handler.get_entity_from_db(entity_xml_id)
 
-        listable_entities_types = get_listable_entities_types(self.__file.project)
-
-        if entity_type in listable_entities_types:
+        if entity.type in self.__listable_entities_types:
             entity_property = request['parameters']
 
-            entity_version_objects = EntityVersion.objects.filter(
-                entity__xml_id=edited_element_id,
-                file_version__isnull=False
-            ).order_by('-file_version')
+            entity_version_object = self.__db_handler.get_entity_version_from_db(entity_xml_id)
 
-            if not entity_version_objects:
-                entity_version_objects = EntityVersion.objects.filter(
-                    entity__xml_id=edited_element_id,
-                    file_version__isnull=True
-                ).order_by('-id')
-
-            entity_version_object = entity_version_objects[0]
-
-            self.__create_entity_properties_objects(entity_type, entity_property, entity_version_object, user)
+            self.__db_handler.create_entity_properties_objects(entity.type, entity_property, entity_version_object)
 
         else:
             entity_property = request['parameters']
 
             entity_version_objects = EntityVersion.objects.filter(
-                entity__xml_id=edited_element_id,
+                entity__xml_id=entity_xml_id,
                 file_version__isnull=False
             ).order_by('-file_version')
 
             if not entity_version_objects:
                 entity_version_objects = EntityVersion.objects.filter(
-                    entity__xml_id=edited_element_id,
+                    entity__xml_id=entity_xml_id,
                     file_version__isnull=True
                 ).order_by('-id')
 
@@ -366,7 +353,7 @@ class RequestHandler:
 
             self.__create_entity_properties_objects(entity_type, entity_property, entity_version_object, user)
 
-            self.__update_tag_in_body(edited_element_id, attributes_to_add=attributes_to_add)
+            self.__update_tag_in_body(entity_xml_id, attributes_to_add=attributes_to_add)
 
     def __mark_property_to_delete(self, request, user):
         edited_element_id = request.get('edited_element_id')

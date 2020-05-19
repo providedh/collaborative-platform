@@ -116,3 +116,26 @@ class DbHandler:
             certainty.deleted_by = self.__user
 
         Certainty.objects.bulk_update(certainties, ['deleted_by'])
+
+    @staticmethod
+    def get_entity_from_db(entity_xml_id):
+        entity = Entity.objects.get(xml_id=entity_xml_id)
+
+        return entity
+
+    @staticmethod
+    def get_entity_version_from_db(entity_xml_id):
+        entity_version_objects = EntityVersion.objects.filter(
+            entity__xml_id=entity_xml_id,
+            file_version__isnull=False
+        ).order_by('-file_version')
+
+        if not entity_version_objects:
+            entity_version_objects = EntityVersion.objects.filter(
+                entity__xml_id=entity_xml_id,
+                file_version__isnull=True
+            ).order_by('-id')
+
+        entity_version_object = entity_version_objects[0]
+
+        return entity_version_object
