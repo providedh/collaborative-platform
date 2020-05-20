@@ -107,34 +107,6 @@ class XmlHandler:
             tag_name = element.tag
             tag_name = re.sub(r'{.*?}', '', tag_name)
 
-            # if tag_name in self.__unlistable_entities_types:
-            #     xml_id = element.attrib[XML_ID_KEY]
-            #
-            #     # # TODO: Move handling database to DbHandler class
-            #     # entity_version = EntityVersion.objects.filter(
-            #     #     file_version=self.__file.file_versions.order_by('-id')[0],
-            #     #     entity__xml_id=xml_id
-            #     # )
-            #     #
-            #     # if not entity_version:
-            #     #     prefix = "{%s}" % XML_NAMESPACES['default']
-            #     #     tag = prefix + 'ab'
-            #     #     element.tag = tag
-            #     #
-            #     # elif f'#{xml_id}' in references_deleted:
-            #     #     prefix = "{%s}" % XML_NAMESPACES['default']
-            #     #     tag = prefix + 'ab'
-            #     #     element.tag = tag
-            #
-            #     prefix = "{%s}" % XML_NAMESPACES['default']
-            #     tag = prefix + 'ab'
-            #     element.tag = tag
-            #
-            # else:
-            #     prefix = "{%s}" % XML_NAMESPACES['default']
-            #     tag = prefix + 'ab'
-            #     element.tag = tag
-
             prefix = "{%s}" % XML_NAMESPACES['default']
             tag = prefix + 'ab'
             element.tag = tag
@@ -259,6 +231,17 @@ class XmlHandler:
 
     def add_properties_to_tag(self, text, tag_xml_id, entity_properties, annotator_xml_id):
         attributes_to_add = {f'{key}Added': value for key, value in entity_properties.items()}
+        attributes_to_add.update({
+            'resp': f'#{annotator_xml_id}',
+            'saved': 'false'
+        })
+
+        text_result = self.__update_tag_in_body(text, tag_xml_id, attributes_to_add=attributes_to_add)
+
+        return text_result
+
+    def mark_properties_to_delete(self, text, tag_xml_id, entity_properties, annotator_xml_id):
+        attributes_to_add = {f'{key}Deleted': value for key, value in entity_properties.items()}
         attributes_to_add.update({
             'resp': f'#{annotator_xml_id}',
             'saved': 'false'

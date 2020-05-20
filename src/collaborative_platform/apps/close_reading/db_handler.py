@@ -155,3 +155,13 @@ class DbHandler:
         entity_version_object = entity_version_objects[0]
 
         return entity_version_object
+
+    def get_entity_property_from_db(self, entity_xml_id, entity_name):
+        entity_version = self.get_entity_version_from_db(entity_xml_id)
+
+        entity_property = EntityProperty.objects.get(
+            entity_version=entity_version,
+            name=entity_name
+        )
+
+        return entity_property

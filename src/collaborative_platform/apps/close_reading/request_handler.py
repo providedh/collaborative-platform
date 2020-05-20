@@ -363,26 +363,19 @@ class RequestHandler:
         else:
             property_name = request['old_element_id']
 
-            entity_property = EntityProperty.objects.filter(
-                entity_version__entity__xml_id=entity_xml_id,
-                name=property_name,
-            ).order_by('-id')[0]
+            self.__db_handler.mark_entity_property_to_delete(entity_xml_id, property_name)
 
-            entity_property.deleted_by = user
-            entity_property.save()
-
+            entity_property = self.__db_handler.get_entity_property_from_db(entity_xml_id, property_name)
             property_value = entity_property.get_value(as_str=True)
 
-            attributes_to_add = {
-                f'{property_name}Deleted': property_value
-            }
+            properties_to_delete = {property_name: property_value}
 
-            attributes_to_delete = {
-                property_name: property_value
-            }
+            body_content = self.__db_handler.get_body_content()
 
-            self.__update_tag_in_body(entity_xml_id, attributes_to_add=attributes_to_add,
-                                      attributes_to_delete=attributes_to_delete)
+            body_content = self.__xml_handler.mark_properties_to_delete(body_content, entity_xml_id,
+                                                                        properties_to_delete, self.__annotator_xml_id)
+
+            self.__db_handler.set_body_content(body_content)
 
     def __modify_entity_property(self, request, user):
         edited_element_id = request.get('edited_element_id')
