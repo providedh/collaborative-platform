@@ -107,33 +107,37 @@ class XmlHandler:
             tag_name = element.tag
             tag_name = re.sub(r'{.*?}', '', tag_name)
 
-            if tag_name in self.__unlistable_entities_types:
-                xml_id = element.attrib[XML_ID_KEY]
+            # if tag_name in self.__unlistable_entities_types:
+            #     xml_id = element.attrib[XML_ID_KEY]
+            #
+            #     # # TODO: Move handling database to DbHandler class
+            #     # entity_version = EntityVersion.objects.filter(
+            #     #     file_version=self.__file.file_versions.order_by('-id')[0],
+            #     #     entity__xml_id=xml_id
+            #     # )
+            #     #
+            #     # if not entity_version:
+            #     #     prefix = "{%s}" % XML_NAMESPACES['default']
+            #     #     tag = prefix + 'ab'
+            #     #     element.tag = tag
+            #     #
+            #     # elif f'#{xml_id}' in references_deleted:
+            #     #     prefix = "{%s}" % XML_NAMESPACES['default']
+            #     #     tag = prefix + 'ab'
+            #     #     element.tag = tag
+            #
+            #     prefix = "{%s}" % XML_NAMESPACES['default']
+            #     tag = prefix + 'ab'
+            #     element.tag = tag
+            #
+            # else:
+            #     prefix = "{%s}" % XML_NAMESPACES['default']
+            #     tag = prefix + 'ab'
+            #     element.tag = tag
 
-                # # TODO: Move handling database to DbHandler class
-                # entity_version = EntityVersion.objects.filter(
-                #     file_version=self.__file.file_versions.order_by('-id')[0],
-                #     entity__xml_id=xml_id
-                # )
-                #
-                # if not entity_version:
-                #     prefix = "{%s}" % XML_NAMESPACES['default']
-                #     tag = prefix + 'ab'
-                #     element.tag = tag
-                #
-                # elif f'#{xml_id}' in references_deleted:
-                #     prefix = "{%s}" % XML_NAMESPACES['default']
-                #     tag = prefix + 'ab'
-                #     element.tag = tag
-
-                prefix = "{%s}" % XML_NAMESPACES['default']
-                tag = prefix + 'ab'
-                element.tag = tag
-
-            else:
-                prefix = "{%s}" % XML_NAMESPACES['default']
-                tag = prefix + 'ab'
-                element.tag = tag
+            prefix = "{%s}" % XML_NAMESPACES['default']
+            tag = prefix + 'ab'
+            element.tag = tag
 
         if new_tag:
             prefix = "{%s}" % XML_NAMESPACES['default']

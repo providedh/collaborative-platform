@@ -70,17 +70,17 @@ class TestFileHandlingWithHdAndDb:
         second_file_version = file_versions[1]
 
         entities_in_db = Entity.objects.all()
-        assert len(entities_in_db) == 16
+        assert len(entities_in_db) == 14
 
         entities_properties_in_db = EntityProperty.objects.filter(
             entity_version__file_version=first_file_version
         )
-        assert len(entities_properties_in_db) == 25
+        assert len(entities_properties_in_db) == 22
 
         entities_properties_in_db = EntityProperty.objects.filter(
             entity_version__file_version=second_file_version
         )
-        assert len(entities_properties_in_db) == 25
+        assert len(entities_properties_in_db) == 22
 
         expected_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'expected_files',
                                           'move_elements_to_db__move_all__expected.xml')

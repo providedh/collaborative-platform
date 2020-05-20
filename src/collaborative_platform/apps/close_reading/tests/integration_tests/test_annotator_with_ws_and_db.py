@@ -282,7 +282,7 @@ class TestAnnotatorWithWsAndDb3:
         verify_response(test_name, response, request_nr)
 
         date_entities_in_db = Entity.objects.filter(type='date')
-        assert len(date_entities_in_db) == 3
+        assert len(date_entities_in_db) == 2
 
         request = [
             {
@@ -304,7 +304,7 @@ class TestAnnotatorWithWsAndDb3:
         verify_response(test_name, response, request_nr)
 
         date_entities_in_db = Entity.objects.filter(type='date')
-        assert len(date_entities_in_db) == 4
+        assert len(date_entities_in_db) == 3
 
         await communicator.disconnect()
 
@@ -579,7 +579,7 @@ class TestAnnotatorWithWsAndDb9:
         await communicator.receive_json_from()
 
         date_entities_in_db = Entity.objects.filter(type='date')
-        assert len(date_entities_in_db) == 3
+        assert len(date_entities_in_db) == 2
 
         request = [
             {
@@ -602,7 +602,7 @@ class TestAnnotatorWithWsAndDb9:
         verify_response(test_name, response, request_nr)
 
         date_entities_in_db = Entity.objects.filter(type='date')
-        assert len(date_entities_in_db) == 4
+        assert len(date_entities_in_db) == 3
 
         await communicator.disconnect()
 
@@ -660,7 +660,7 @@ class TestAnnotatorWithWsAndDb11:
         await communicator.receive_json_from()
 
         date_entities_in_db = Entity.objects.filter(type='date')
-        assert len(date_entities_in_db) == 3
+        assert len(date_entities_in_db) == 2
 
         request = [
             {
@@ -678,7 +678,7 @@ class TestAnnotatorWithWsAndDb11:
         verify_response(test_name, response, request_nr)
 
         date_entities_in_db = Entity.objects.filter(type='date')
-        assert len(date_entities_in_db) == 3
+        assert len(date_entities_in_db) == 2
 
         await communicator.disconnect()
 

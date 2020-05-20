@@ -141,6 +141,7 @@ class ElementsExtractor:
         for entity in self.__unlistable_entities:
             xpath = f'//default:text//default:body//default:{entity.name}'
             elements = self.__tree.xpath(xpath, namespaces=XML_NAMESPACES)
+            elements = self.__get_entities_elements(elements)
 
             self.__create_entities_in_db(elements, entity.name)
 
@@ -216,6 +217,21 @@ class ElementsExtractor:
             property_objects.append(entity_property_object)
 
         EntityProperty.objects.bulk_create(property_objects)
+
+    @staticmethod
+    def __get_entities_elements(elements):
+        entities_elements = []
+
+        for element in elements:
+            if XML_ID_KEY in element.attrib and 'ref' in element.attrib:
+                xml_id = element.attrib[XML_ID_KEY]
+                references = element.attrib['ref']
+                references = references.split(' ')
+
+                if f'#{xml_id}' in references:
+                    entities_elements.append(element)
+
+        return entities_elements
 
     @staticmethod
     def clean_xpath(xpath):
