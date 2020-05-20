@@ -91,31 +91,47 @@ class DbHandler:
 
         EntityProperty.objects.bulk_create(properties_objects)
 
-    def mark_entities_to_delete(self, target_element_id):
-        entity = Entity.objects.get(xml_id=target_element_id)
+    def mark_entity_to_delete(self, entity_xml_id):
+        entity = Entity.objects.get(xml_id=entity_xml_id)
         entity.deleted_by = self.__user
         entity.save()
 
-        entity_properties = EntityProperty.objects.filter(
-            entity_version=entity.entityversion_set.all().order_by('-id')[0]
-        )
-
-        for entity_property in entity_properties:
-            entity_property.deleted_by = self.__user
-
-        EntityProperty.objects.bulk_update(entity_properties, ['deleted_by'])
+        entity_version = self.get_entity_version_from_db(entity_xml_id)
+        self.__mark_entity_properties_to_delete(entity_version)
 
         certainties = Certainty.objects.filter(
             file_version=self.__file.file_versions.order_by('-number')[0],
-            target_xml_id=target_element_id
+            target_xml_id=entity_xml_id
         )
-
-        # TODO: Add marking certainties to properties to delete
 
         for certainty in certainties:
             certainty.deleted_by = self.__user
 
         Certainty.objects.bulk_update(certainties, ['deleted_by'])
+
+    def mark_entity_property_to_delete(self, entity_xml_id, entity_property_name):
+        entity_version = self.get_entity_version_from_db(entity_xml_id)
+
+        self.__mark_entity_properties_to_delete(entity_version, [entity_property_name])
+
+    def __mark_entity_properties_to_delete(self, entity_version, entity_properties_names=None):
+        # TODO: Add marking certainties to properties to delete
+
+        if entity_properties_names:
+            entity_properties = EntityProperty.objects.filter(
+                entity_version=entity_version,
+                name__in=entity_properties_names
+            )
+
+        else:
+            entity_properties = EntityProperty.objects.filter(
+                entity_version=entity_version
+            )
+
+        for entity_property in entity_properties:
+            entity_property.deleted_by = self.__user
+
+        EntityProperty.objects.bulk_update(entity_properties, ['deleted_by'])
 
     @staticmethod
     def get_entity_from_db(entity_xml_id):

@@ -58,7 +58,7 @@ class RequestHandler:
                 elif request['method'] == 'PUT':
                     self.__modify_entity_property(request, user)
                 elif request['method'] == 'DELETE':
-                    self.__mark_property_to_delete(request, user)
+                    self.__mark_property_to_delete(request)
                 else:
                     raise BadRequest("There is no operation matching to this request")
 
@@ -232,7 +232,7 @@ class RequestHandler:
             last_reference = self.__xml_handler.check_if_last_reference(body_content, old_entity_xml_id)
 
             if last_reference:
-                self.__db_handler.mark_entities_to_delete(old_entity_xml_id)
+                self.__db_handler.mark_entity_to_delete(old_entity_xml_id)
 
         elif not new_entity_xml_id and entity_type not in self.__listable_entities_types:
             new_entity_xml_id = self.__db_handler.get_next_xml_id(entity_type)
@@ -258,7 +258,7 @@ class RequestHandler:
             last_reference = self.__xml_handler.check_if_last_reference(body_content, old_entity_xml_id)
 
             if last_reference:
-                self.__db_handler.mark_entities_to_delete(old_entity_xml_id)
+                self.__db_handler.mark_entity_to_delete(old_entity_xml_id)
 
         elif new_entity_xml_id and entity_type in self.__listable_entities_types:
             new_tag = 'name'
@@ -275,7 +275,7 @@ class RequestHandler:
             last_reference = self.__xml_handler.check_if_last_reference(body_content, old_entity_xml_id)
 
             if last_reference:
-                self.__db_handler.mark_entities_to_delete(old_entity_xml_id)
+                self.__db_handler.mark_entity_to_delete(old_entity_xml_id)
 
         elif new_entity_xml_id and entity_type not in self.__listable_entities_types:
             new_tag_xml_id = self.__get_new_tag_xml_id(tag_xml_id, entity_type)
@@ -291,7 +291,7 @@ class RequestHandler:
             last_reference = self.__xml_handler.check_if_last_reference(body_content, old_entity_xml_id)
 
             if last_reference:
-                self.__db_handler.mark_entities_to_delete(old_entity_xml_id)
+                self.__db_handler.mark_entity_to_delete(old_entity_xml_id)
 
         else:
             raise BadRequest("There is no operation matching to this request")
@@ -322,7 +322,7 @@ class RequestHandler:
         last_reference = self.__xml_handler.check_if_last_reference(body_content, entity_xml_id)
 
         if last_reference:
-            self.__db_handler.mark_entities_to_delete(entity_xml_id)
+            self.__db_handler.mark_entity_to_delete(entity_xml_id)
 
     def __add_property_to_entity(self, request):
         entity_xml_id = request.get('edited_element_id')
@@ -351,29 +351,21 @@ class RequestHandler:
 
             self.__db_handler.set_body_content(body_content)
 
-    def __mark_property_to_delete(self, request, user):
-        edited_element_id = request.get('edited_element_id')
-        entity_type = Entity.objects.get(xml_id=edited_element_id).type
+    def __mark_property_to_delete(self, request):
+        entity_xml_id = request.get('edited_element_id')
+        entity = self.__db_handler.get_entity_from_db(entity_xml_id)
 
-        listable_entities_types = get_listable_entities_types(self.__file.project)
+        if entity.type in self.__listable_entities_types:
+            property_name = request['old_element_id']
 
-        if entity_type in listable_entities_types:
-            property_to_delete = request['old_element_id']
-
-            entity_property = EntityProperty.objects.filter(
-                entity_version__entity__xml_id=edited_element_id,
-                name=property_to_delete,
-            ).order_by('-id')[0]
-
-            entity_property.deleted_by = user
-            entity_property.save()
+            self.__db_handler.mark_entity_property_to_delete(entity_xml_id, property_name)
 
         else:
-            property_to_delete = request['old_element_id']
+            property_name = request['old_element_id']
 
             entity_property = EntityProperty.objects.filter(
-                entity_version__entity__xml_id=edited_element_id,
-                name=property_to_delete,
+                entity_version__entity__xml_id=entity_xml_id,
+                name=property_name,
             ).order_by('-id')[0]
 
             entity_property.deleted_by = user
@@ -382,14 +374,14 @@ class RequestHandler:
             property_value = entity_property.get_value(as_str=True)
 
             attributes_to_add = {
-                f'{property_to_delete}Deleted': property_value
+                f'{property_name}Deleted': property_value
             }
 
             attributes_to_delete = {
-                property_to_delete: property_value
+                property_name: property_value
             }
 
-            self.__update_tag_in_body(edited_element_id, attributes_to_add=attributes_to_add,
+            self.__update_tag_in_body(entity_xml_id, attributes_to_add=attributes_to_add,
                                       attributes_to_delete=attributes_to_delete)
 
     def __modify_entity_property(self, request, user):
