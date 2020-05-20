@@ -719,73 +719,73 @@ class TestAnnotatorWithWsAndDb12:
         await communicator.disconnect()
 
 
-# @pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-# @pytest.mark.asyncio
-# @pytest.mark.django_db()
-# @pytest.mark.integration_tests
-# class TestAnnotatorWithWsAndDb13:
-#     async def test_add_property_to_entity__entity_unlistable(self):
-#         test_name = inspect.currentframe().f_code.co_name
-#
-#         project_id = 1
-#         file_id = 1
-#         user_id = 2
-#
-#         communicator = get_communicator(project_id, file_id, user_id)
-#
-#         await communicator.connect()
-#         await communicator.receive_json_from()
-#
-#         request = [
-#             {
-#                 'method': 'POST',
-#                 'element_type': 'tag',
-#                 'parameters': {
-#                     'start_pos': 265,
-#                     'end_pos': 271,
-#                 }
-#             }
-#         ]
-#
-#         await communicator.send_json_to(request)
-#         await communicator.receive_json_from()
-#
-#         request = [
-#             {
-#                 'method': 'POST',
-#                 'element_type': 'reference',
-#                 'edited_element_id': 'ab-1',
-#                 'parameters': {
-#                     'entity_type': 'date',
-#                     'entity_properties': {
-#                         'name': 'new date'
-#                     }
-#                 }
-#             }
-#         ]
-#
-#         await communicator.send_json_to(request)
-#         await communicator.receive_json_from()
-#
-#         request = [
-#             {
-#                 'method': 'POST',
-#                 'element_type': 'entity_property',
-#                 'edited_element_id': 'date-3',
-#                 'parameters': {
-#                     'when': '2020-02-02'
-#                 }
-#             }
-#         ]
-#         request_nr = 0
-#
-#         await communicator.send_json_to(request)
-#         response = await communicator.receive_json_from()
-#         verify_response(test_name, response, request_nr)
-#
-#         await communicator.disconnect()
-#
-#
+@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
+@pytest.mark.asyncio
+@pytest.mark.django_db()
+@pytest.mark.integration_tests
+class TestAnnotatorWithWsAndDb13:
+    async def test_add_property_to_entity__entity_unlistable(self):
+        test_name = inspect.currentframe().f_code.co_name
+
+        project_id = 1
+        file_id = 1
+        user_id = 2
+
+        communicator = get_communicator(project_id, file_id, user_id)
+
+        await communicator.connect()
+        await communicator.receive_json_from()
+
+        request = [
+            {
+                'method': 'POST',
+                'element_type': 'tag',
+                'parameters': {
+                    'start_pos': 265,
+                    'end_pos': 271,
+                }
+            }
+        ]
+
+        await communicator.send_json_to(request)
+        await communicator.receive_json_from()
+
+        request = [
+            {
+                'method': 'POST',
+                'element_type': 'reference',
+                'edited_element_id': 'ab-1',
+                'parameters': {
+                    'entity_type': 'date',
+                    'entity_properties': {
+                        'name': 'new date'
+                    }
+                }
+            }
+        ]
+
+        await communicator.send_json_to(request)
+        await communicator.receive_json_from()
+
+        request = [
+            {
+                'method': 'POST',
+                'element_type': 'entity_property',
+                'edited_element_id': 'date-3',
+                'parameters': {
+                    'when': '2020-02-02'
+                }
+            }
+        ]
+        request_nr = 0
+
+        await communicator.send_json_to(request)
+        response = await communicator.receive_json_from()
+        verify_response(test_name, response, request_nr)
+
+        await communicator.disconnect()
+
+
 # @pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
 # @pytest.mark.asyncio
 # @pytest.mark.django_db()

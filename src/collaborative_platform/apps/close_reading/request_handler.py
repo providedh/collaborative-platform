@@ -166,7 +166,10 @@ class RequestHandler:
                                                                       entity_xml_id, entity_xml_id,
                                                                       self.__annotator_xml_id)
 
-            body_content = self.__xml_handler.add_attributes_to_tag(body_content, entity_xml_id, entity_properties)
+            entity_properties.pop('name', '')
+
+            body_content = self.__xml_handler.add_properties_to_tag(body_content, entity_xml_id, entity_properties,
+                                                                    self.__annotator_xml_id)
 
             self.__db_handler.set_body_content(body_content)
 
@@ -326,34 +329,27 @@ class RequestHandler:
         entity = self.__db_handler.get_entity_from_db(entity_xml_id)
 
         if entity.type in self.__listable_entities_types:
-            entity_property = request['parameters']
+            entity_properties = request['parameters']
 
             entity_version_object = self.__db_handler.get_entity_version_from_db(entity_xml_id)
 
-            self.__db_handler.create_entity_properties_objects(entity.type, entity_property, entity_version_object)
+            self.__db_handler.create_entity_properties_objects(entity.type, entity_properties, entity_version_object)
 
         else:
-            entity_property = request['parameters']
+            entity_properties = request['parameters']
 
-            entity_version_objects = EntityVersion.objects.filter(
-                entity__xml_id=entity_xml_id,
-                file_version__isnull=False
-            ).order_by('-file_version')
+            entity_version_object = self.__db_handler.get_entity_version_from_db(entity_xml_id)
 
-            if not entity_version_objects:
-                entity_version_objects = EntityVersion.objects.filter(
-                    entity__xml_id=entity_xml_id,
-                    file_version__isnull=True
-                ).order_by('-id')
+            self.__db_handler.create_entity_properties_objects(entity.type, entity_properties, entity_version_object)
 
-            entity_version_object = entity_version_objects[0]
+            body_content = self.__db_handler.get_body_content()
 
-            attributes_to_add = {f'{key}Added': value for key, value in entity_property.items()}
-            attributes_to_add.update({'saved': 'false'})
+            entity_properties.pop('name', '')
 
-            self.__create_entity_properties_objects(entity_type, entity_property, entity_version_object, user)
+            body_content = self.__xml_handler.add_properties_to_tag(body_content, entity_xml_id, entity_properties,
+                                                                    self.__annotator_xml_id)
 
-            self.__update_tag_in_body(entity_xml_id, attributes_to_add=attributes_to_add)
+            self.__db_handler.set_body_content(body_content)
 
     def __mark_property_to_delete(self, request, user):
         edited_element_id = request.get('edited_element_id')
