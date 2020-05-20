@@ -56,7 +56,7 @@ class RequestHandler:
                 if request['method'] == 'POST':
                     self.__add_property_to_entity(request)
                 elif request['method'] == 'PUT':
-                    self.__modify_entity_property(request, user)
+                    self.__modify_entity_property(request)
                 elif request['method'] == 'DELETE':
                     self.__mark_property_to_delete(request)
                 else:
@@ -377,46 +377,27 @@ class RequestHandler:
 
             self.__db_handler.set_body_content(body_content)
 
-    def __modify_entity_property(self, request, user):
-        edited_element_id = request.get('edited_element_id')
-        entity_type = Entity.objects.get(xml_id=edited_element_id).type
+    def __modify_entity_property(self, request):
+        entity_xml_id = request.get('edited_element_id')
+        entity = self.__db_handler.get_entity_from_db(entity_xml_id)
 
-        listable_entities_types = get_listable_entities_types(self.__file.project)
+        if entity.type in self.__listable_entities_types:
+            property_name = request['old_element_id']
 
-        if entity_type in listable_entities_types:
-            property_to_delete = request['old_element_id']
-
-            entity_property = EntityProperty.objects.filter(
-                entity_version__entity__xml_id=edited_element_id,
-                name=property_to_delete,
-            ).order_by('-id')[0]
-
-            entity_property.deleted_by = user
-            entity_property.save()
+            self.__db_handler.mark_entity_property_to_delete(entity_xml_id, property_name)
 
             entity_property = request['parameters']
 
-            entity_version_objects = EntityVersion.objects.filter(
-                entity__xml_id=edited_element_id,
-                file_version__isnull=False
-            ).order_by('-file_version')
+            entity_version_object = self.__db_handler.get_entity_version_from_db(entity_xml_id)
 
-            if not entity_version_objects:
-                entity_version_objects = EntityVersion.objects.filter(
-                    entity__xml_id=edited_element_id,
-                    file_version__isnull=True
-                ).order_by('-id')
-
-            entity_version_object = entity_version_objects[0]
-
-            self.__create_entity_properties_objects(entity_type, entity_property, entity_version_object, user)
+            self.__db_handler.create_entity_properties_objects(entity.type, entity_property, entity_version_object)
 
         else:
-            property_to_delete = request['old_element_id']
+            property_name = request['old_element_id']
 
             entity_property_object = EntityProperty.objects.filter(
-                entity_version__entity__xml_id=edited_element_id,
-                name=property_to_delete,
+                entity_version__entity__xml_id=entity_xml_id,
+                name=property_name,
             ).order_by('-id')[0]
 
             entity_property_object.deleted_by = user
@@ -425,13 +406,13 @@ class RequestHandler:
             entity_property = request['parameters']
 
             entity_version_objects = EntityVersion.objects.filter(
-                entity__xml_id=edited_element_id,
+                entity__xml_id=entity_xml_id,
                 file_version__isnull=False
             ).order_by('-file_version')
 
             if not entity_version_objects:
                 entity_version_objects = EntityVersion.objects.filter(
-                    entity__xml_id=edited_element_id,
+                    entity__xml_id=entity_xml_id,
                     file_version__isnull=True
                 ).order_by('-id')
 
@@ -444,13 +425,13 @@ class RequestHandler:
             attributes_to_add = {f'{key}Added': value for key, value in entity_property.items()}
 
             attributes_to_add_extension = {
-                f'{property_to_delete}Deleted': property_value,
+                f'{property_name}Deleted': property_value,
                 'saved': 'false'
             }
 
             attributes_to_add = {**attributes_to_add, **attributes_to_add_extension}
 
-            self.__update_tag_in_body(edited_element_id, attributes_to_add=attributes_to_add)
+            self.__update_tag_in_body(entity_xml_id, attributes_to_add=attributes_to_add)
 
     def __add_certainty(self, request, user):
         certainty_target = request['new_element_id']
