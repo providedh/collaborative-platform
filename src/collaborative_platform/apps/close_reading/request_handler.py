@@ -71,7 +71,7 @@ class RequestHandler:
                 elif request['method'] == 'PUT':
                     self.__modify_certainty(request, user)
                 elif request['method'] == 'DELETE':
-                    self.__mark_certainty_to_delete(request, user)
+                    self.__mark_certainty_to_delete(request)
                 else:
                     raise BadRequest("There is no operation matching to this request")
 
@@ -486,16 +486,10 @@ class RequestHandler:
 
         return target, match
 
-    def __mark_certainty_to_delete(self, request, user):
+    def __mark_certainty_to_delete(self, request):
         certainty_id = request['edited_element_id']
 
-        certainty = Certainty.objects.get(
-            xml_id=certainty_id,
-            file_version=self.__file.file_versions.order_by('-number')[0]
-        )
-
-        certainty.deleted_by = user
-        certainty.save()
+        self.__db_handler.mark_certainty_to_delete(certainty_id)
 
     def __modify_certainty(self, request, user):
         certainty_id = request['edited_element_id']

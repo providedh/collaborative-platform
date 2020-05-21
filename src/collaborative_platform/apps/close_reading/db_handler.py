@@ -208,3 +208,12 @@ class DbHandler:
         categories_ids = categories.values_list('id', flat=True)
 
         return categories_ids
+
+    def mark_certainty_to_delete(self, certainty_id):
+        certainty = Certainty.objects.get(
+            xml_id=certainty_id,
+            file_version=self.__file.file_versions.order_by('-number')[0]
+        )
+
+        certainty.deleted_by = self.__user
+        certainty.save()
