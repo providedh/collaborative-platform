@@ -1,18 +1,11 @@
 import json
 
-from apps.api_vis.models import Entity, EntityProperty, EntityVersion, Certainty
+from apps.api_vis.models import Entity
 from apps.close_reading.db_handler import DbHandler
-from apps.close_reading.enums import TargetTypes
 from apps.close_reading.response_generator import get_custom_entities_types, get_listable_entities_types, \
     get_unlistable_entities_types
 from apps.close_reading.xml_handler import XmlHandler
 from apps.exceptions import BadRequest, NotModified
-
-
-from collaborative_platform.settings import XML_NAMESPACES
-
-
-XML_ID_KEY = f"{{{XML_NAMESPACES['xml']}}}id"
 
 
 class RequestHandler:
@@ -22,13 +15,14 @@ class RequestHandler:
         self.__annotator_xml_id = self.__db_handler.get_annotator_xml_id()
 
         self.__listable_entities_types = get_listable_entities_types(self.__file.project)
-        self.__unlistable_entities_types = get_unlistable_entities_types(self.__file.project)
         self.__custom_entities_types = get_custom_entities_types(self.__file.project)
 
-        self.__xml_handler = XmlHandler(self.__listable_entities_types, self.__unlistable_entities_types,
+        unlistable_entities_types = get_unlistable_entities_types(self.__file.project)
+
+        self.__xml_handler = XmlHandler(self.__listable_entities_types, unlistable_entities_types,
                                         self.__custom_entities_types)
 
-    def handle_request(self, text_data, user):
+    def handle_request(self, text_data):
         requests = self.__parse_text_data(text_data)
 
         for request in requests:
@@ -69,9 +63,9 @@ class RequestHandler:
                 if request['method'] == 'POST':
                     self.__add_certainty(request)
                 elif request['method'] == 'PUT':
-                    self.__modify_certainty(request, user)
+                    self.__modify_certainty(request)
                 elif request['method'] == 'DELETE':
-                    self.__mark_certainty_to_delete(request)
+                    self.__delete_certainty(request)
                 else:
                     raise BadRequest("There is no operation matching to this request")
 
@@ -424,145 +418,17 @@ class RequestHandler:
     def __add_certainty(self, request):
         certainty_target = request['new_element_id']
         parameters = request['parameters']
-        locus = parameters['locus']
 
-        target_type = self.get_certainty_target_type(certainty_target, locus)
-        target, match = self.get_certainty_target_and_match(certainty_target, target_type)
+        self.__db_handler.create_certainty(certainty_target, parameters)
 
-        self.__db_handler.create_certainty_object(target, match, parameters)
-
-    @staticmethod
-    def get_certainty_target_type(certainty_target, locus):
-        if 'certainty-' in certainty_target:
-            target_type = TargetTypes.certainty
-        elif '/' in certainty_target:
-            target_type = TargetTypes.entity_property
-        elif '@ref' in certainty_target:
-            target_type = TargetTypes.reference
-        elif locus == 'value':
-            target_type = TargetTypes.text
-        elif locus == 'name':
-            target_type = TargetTypes.entity_type
-        else:
-            raise BadRequest("There is no operation matching to this request")
-
-        return target_type
-
-    def get_certainty_target_and_match(self, certainty_target, target_type):
-        if target_type == TargetTypes.text:
-            target = certainty_target
-            match = None
-
-        elif target_type == TargetTypes.reference:
-            target = certainty_target.split('@')[0]
-            match = '@ref'
-
-        elif target_type == TargetTypes.entity_type:
-            entity = Entity.objects.get(
-                xml_id=certainty_target,
-                file=self.__file
-            )
-
-            if entity.type not in self.__custom_entities_types:
-                target = certainty_target
-                match = None
-            else:
-                target = certainty_target
-                match = '@type'
-
-        elif target_type == TargetTypes.entity_property:
-            target = certainty_target.split('/')[0]
-            property_name = certainty_target.split('/')[1]
-
-            entity_property = self.__db_handler.get_entity_property_from_db(target, property_name)
-            match = entity_property.xpath
-
-        elif target_type == TargetTypes.certainty:
-            target = certainty_target
-            match = None
-
-        else:
-            raise BadRequest("There is no operation matching to this request")
-
-        return target, match
-
-    def __mark_certainty_to_delete(self, request):
-        certainty_id = request['edited_element_id']
-
-        self.__db_handler.mark_certainty_to_delete(certainty_id)
-
-    def __modify_certainty(self, request, user):
-        certainty_id = request['edited_element_id']
-
-        try:
-            certainty = Certainty.objects.get(
-                xml_id=certainty_id,
-                file=self.__file,
-                file_version__isnull=True
-            )
-        except Certainty.DoesNotExist:
-            certainty = Certainty.objects.get(
-                xml_id=certainty_id,
-                file_version=self.__file.file_versions.order_by('-number')[0]
-            )
-
-            certainty.deleted_by = user
-            certainty.save()
-
-            certainty_categories = certainty.categories.all()
-
-            certainty.id = None
-            certainty.created_in_file_version = None
-            certainty.deleted_by = None
-            certainty.file_version = None
-            certainty.save()
-
-            for category in certainty_categories:
-                certainty.categories.add(category)
-
+    def __modify_certainty(self, request):
+        certainty_xml_id = request['edited_element_id']
         parameter_name = request['old_element_id']
+        new_value = request['parameters']
 
-        if parameter_name == 'categories':
-            categories = certainty.categories.all()
+        self.__db_handler.modify_certainty(certainty_xml_id, parameter_name, new_value)
 
-            for category in categories:
-                certainty.categories.remove(category)
+    def __delete_certainty(self, request):
+        certainty_xml_id = request['edited_element_id']
 
-            categories = request['parameters'].get('categories')
-            categories_ids = self.__get_categories_ids_from_db(categories)
-
-            certainty.categories.add(*categories_ids)
-
-        elif parameter_name == 'locus':
-            locus = request['parameters'].get('locus')
-            certainty.locus = locus
-            certainty.save()
-
-        elif parameter_name == 'certainty':
-            cert = request['parameters'].get('certainty')
-            certainty.cert = cert
-            certainty.save()
-
-        elif parameter_name == 'asserted_value':
-            asserted_value = request['parameters'].get('asserted_value')
-            certainty.asserted_value = asserted_value
-            certainty.save()
-
-        elif parameter_name == 'description':
-            description = request['parameters'].get('description')
-            certainty.description = description
-            certainty.save()
-
-        elif parameter_name == 'reference':
-            certainty_target = request['parameters']['new_element_id']
-            locus = request['parameters']['locus']
-
-            target_type = self.get_certainty_target_type(certainty_target, locus)
-            target, match = self.get_certainty_target_and_match(certainty_target, target_type)
-
-            certainty.target_xml_id = target
-            certainty.target_match = match
-            certainty.save()
-
-        else:
-            raise BadRequest("There is no operation matching to this request")
+        self.__db_handler.delete_certainty(certainty_xml_id)

@@ -58,6 +58,7 @@ class EntityVersion(models.Model):
 
 
 class EntityProperty(models.Model):
+    entity = models.ForeignKey(Entity, on_delete=models.CASCADE)
     entity_version = models.ForeignKey(EntityVersion, on_delete=models.CASCADE)
     xpath = models.CharField(max_length=255)
     name = models.CharField(max_length=255)

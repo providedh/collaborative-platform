@@ -1,5 +1,8 @@
 from apps.api_vis.models import Certainty, Entity, EntityProperty, EntityVersion
+from apps.close_reading.enums import TargetTypes
 from apps.close_reading.models import AnnotatingBodyContent
+from apps.close_reading.response_generator import get_custom_entities_types
+from apps.exceptions import BadParameters
 from apps.files_management.models import File, FileMaxXmlIds
 from apps.projects.models import UncertaintyCategory
 
@@ -10,6 +13,7 @@ class DbHandler:
     def __init__(self, user, file_id):
         self.__user = user
         self.__file = self.get_file_from_db(file_id)
+        self.__custom_entities_types = get_custom_entities_types(self.__file.project)
         self.__annotating_body_content = self.__get_body_content_from_db()
 
     @staticmethod
@@ -79,6 +83,7 @@ class DbHandler:
 
         for name, value in entity_properties.items():
             entity_property_object = EntityProperty(
+                entity=entity_version_object.entity,
                 entity_version=entity_version_object,
                 xpath='',
                 name=name,
@@ -179,7 +184,12 @@ class DbHandler:
 
         return entity_property
 
-    def create_certainty_object(self, target, match, parameters):
+    def create_certainty(self, certainty_target, parameters):
+        locus = parameters['locus']
+
+        target_type = self.__get_certainty_target_type(certainty_target, locus)
+        target, match = self.__get_certainty_target_and_match(certainty_target, target_type)
+
         xml_id = self.get_next_xml_id('certainty')
 
         certainty_object = Certainty.objects.create(
@@ -199,6 +209,59 @@ class DbHandler:
 
         certainty_object.categories.add(*categories_ids)
 
+    def modify_certainty(self, certainty_xml_id, parameter_name, parameters):
+        certainty = self.__get_certainty_from_db(certainty_xml_id)
+
+        if certainty.file_version is not None:
+            certainty = self.__clone_certainty(certainty)
+
+        if parameter_name == 'categories':
+            categories = certainty.categories.all()
+
+            for category in categories:
+                certainty.categories.remove(category)
+
+            categories = parameters.get('categories')
+            categories_ids = self.__get_categories_ids_from_db(categories)
+
+            certainty.categories.add(*categories_ids)
+
+        elif parameter_name == 'locus':
+            locus = parameters.get('locus')
+            certainty.locus = locus
+            certainty.save()
+
+        elif parameter_name == 'certainty':
+            cert = parameters.get('certainty')
+            certainty.cert = cert
+            certainty.save()
+
+        elif parameter_name == 'asserted_value':
+            asserted_value = parameters.get('asserted_value')
+            certainty.asserted_value = asserted_value
+            certainty.save()
+
+        elif parameter_name == 'description':
+            description = parameters.get('description')
+            certainty.description = description
+            certainty.save()
+
+        elif parameter_name == 'reference':
+            certainty_target = parameters['new_element_id']
+            locus = parameters['locus']
+
+            target_type = self.__get_certainty_target_type(certainty_target, locus)
+            target, match = self.__get_certainty_target_and_match(certainty_target, target_type)
+
+            certainty.target_xml_id = target
+            certainty.target_match = match
+            certainty.save()
+
+    def delete_certainty(self, certainty_xml_id):
+        certainty = self.__get_certainty_from_db(certainty_xml_id)
+
+        self.__mark_certainty_to_delete(certainty)
+
     def __get_categories_ids_from_db(self, categories):
         categories = UncertaintyCategory.objects.filter(
             taxonomy__project=self.__file.project,
@@ -209,11 +272,91 @@ class DbHandler:
 
         return categories_ids
 
-    def mark_certainty_to_delete(self, certainty_id):
-        certainty = Certainty.objects.get(
-            xml_id=certainty_id,
-            file_version=self.__file.file_versions.order_by('-number')[0]
-        )
+    def __get_certainty_from_db(self, certainty_xml_id):
+        try:
+            certainty = Certainty.objects.get(
+                xml_id=certainty_xml_id,
+                file_version__isnull=True
+            )
+        except Certainty.DoesNotExist:
+            certainty = Certainty.objects.get(
+                xml_id=certainty_xml_id,
+                file_version=self.__file.file_versions.get(number=self.__file.version_number)
+            )
 
+        return certainty
+
+    def __mark_certainty_to_delete(self, certainty):
         certainty.deleted_by = self.__user
         certainty.save()
+
+    def __clone_certainty(self, certainty):
+        self.__mark_certainty_to_delete(certainty)
+
+        certainty_categories = certainty.categories.all()
+
+        certainty.id = None
+        certainty.created_in_file_version = None
+        certainty.deleted_by = None
+        certainty.file_version = None
+        certainty.save()
+
+        for category in certainty_categories:
+            certainty.categories.add(category)
+
+        return certainty
+
+    @staticmethod
+    def __get_certainty_target_type(certainty_target, locus):
+        if 'certainty-' in certainty_target:
+            target_type = TargetTypes.certainty
+        elif '/' in certainty_target:
+            target_type = TargetTypes.entity_property
+        elif '@ref' in certainty_target:
+            target_type = TargetTypes.reference
+        elif locus == 'value':
+            target_type = TargetTypes.text
+        elif locus == 'name':
+            target_type = TargetTypes.entity_type
+        else:
+            raise BadParameters("There is no 'target type' matching to given parameters")
+
+        return target_type
+
+    def __get_certainty_target_and_match(self, certainty_target, target_type):
+        if target_type == TargetTypes.text:
+            target = certainty_target
+            match = None
+
+        elif target_type == TargetTypes.reference:
+            target = certainty_target.split('@')[0]
+            match = '@ref'
+
+        elif target_type == TargetTypes.entity_type:
+            entity = Entity.objects.get(
+                xml_id=certainty_target,
+                file=self.__file
+            )
+
+            if entity.type not in self.__custom_entities_types:
+                target = certainty_target
+                match = None
+            else:
+                target = certainty_target
+                match = '@type'
+
+        elif target_type == TargetTypes.entity_property:
+            target = certainty_target.split('/')[0]
+            property_name = certainty_target.split('/')[1]
+
+            entity_property = self.get_entity_property_from_db(target, property_name)
+            match = entity_property.xpath
+
+        elif target_type == TargetTypes.certainty:
+            target = certainty_target
+            match = None
+
+        else:
+            raise BadParameters("There is no 'target' and 'match' matching to given parameters")
+
+        return target, match

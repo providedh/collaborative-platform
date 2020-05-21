@@ -1222,116 +1222,116 @@ class TestAnnotatorWithWsAndDb24:
         await communicator.disconnect()
 
 
-# @pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-# @pytest.mark.asyncio
-# @pytest.mark.django_db()
-# @pytest.mark.integration_tests
-# class TestAnnotatorWithWsAndDb25:
-#     async def test_modify_certainty_parameter__modify_categories(self):
-#         test_name = inspect.currentframe().f_code.co_name
-#
-#         project_id = 1
-#         file_id = 1
-#         user_id = 2
-#
-#         communicator = get_communicator(project_id, file_id, user_id)
-#
-#         await communicator.connect()
-#         await communicator.receive_json_from()
-#
-#         request = [
-#             {
-#                 'method': 'PUT',
-#                 'element_type': 'certainty',
-#                 'edited_element_id': 'certainty-1',
-#                 'old_element_id': 'categories',
-#                 'parameters': {
-#                     'categories': ['imprecision', 'credibility']
-#                 }
-#             }
-#         ]
-#         request_nr = 0
-#
-#         await communicator.send_json_to(request)
-#         response = await communicator.receive_json_from()
-#         verify_response(test_name, response, request_nr)
-#
-#         await communicator.disconnect()
-#
-#
-# @pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-# @pytest.mark.asyncio
-# @pytest.mark.django_db()
-# @pytest.mark.integration_tests
-# class TestAnnotatorWithWsAndDb26:
-#     async def test_modify_certainty_parameter__modify_locus(self):
-#         test_name = inspect.currentframe().f_code.co_name
-#
-#         project_id = 1
-#         file_id = 1
-#         user_id = 2
-#
-#         communicator = get_communicator(project_id, file_id, user_id)
-#
-#         await communicator.connect()
-#         await communicator.receive_json_from()
-#
-#         request = [
-#             {
-#                 'method': 'PUT',
-#                 'element_type': 'certainty',
-#                 'edited_element_id': 'certainty-1',
-#                 'old_element_id': 'locus',
-#                 'parameters': {
-#                     'locus': 'name'
-#                 }
-#             }
-#         ]
-#         request_nr = 0
-#
-#         await communicator.send_json_to(request)
-#         response = await communicator.receive_json_from()
-#         verify_response(test_name, response, request_nr)
-#
-#         await communicator.disconnect()
-#
-#
-# @pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-# @pytest.mark.asyncio
-# @pytest.mark.django_db()
-# @pytest.mark.integration_tests
-# class TestAnnotatorWithWsAndDb27:
-#     async def test_modify_certainty_parameter__modify_reference(self):
-#         test_name = inspect.currentframe().f_code.co_name
-#
-#         project_id = 1
-#         file_id = 1
-#         user_id = 2
-#
-#         communicator = get_communicator(project_id, file_id, user_id)
-#
-#         await communicator.connect()
-#         await communicator.receive_json_from()
-#
-#         request = [
-#             {
-#                 'method': 'PUT',
-#                 'element_type': 'certainty',
-#                 'edited_element_id': 'certainty-1',
-#                 'old_element_id': 'reference',
-#                 'parameters': {
-#                     'new_element_id': 'person-2/birth',
-#                     'locus': 'name'
-#                 }
-#             }
-#         ]
-#         request_nr = 0
-#
-#         await communicator.send_json_to(request)
-#         response = await communicator.receive_json_from()
-#         verify_response(test_name, response, request_nr)
-#
-#         await communicator.disconnect()
+@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
+@pytest.mark.asyncio
+@pytest.mark.django_db()
+@pytest.mark.integration_tests
+class TestAnnotatorWithWsAndDb25:
+    async def test_modify_certainty_parameter__modify_categories(self):
+        test_name = inspect.currentframe().f_code.co_name
+
+        project_id = 1
+        file_id = 1
+        user_id = 2
+
+        communicator = get_communicator(project_id, file_id, user_id)
+
+        await communicator.connect()
+        await communicator.receive_json_from()
+
+        request = [
+            {
+                'method': 'PUT',
+                'element_type': 'certainty',
+                'edited_element_id': 'certainty-1',
+                'old_element_id': 'categories',
+                'parameters': {
+                    'categories': ['imprecision', 'credibility']
+                }
+            }
+        ]
+        request_nr = 0
+
+        await communicator.send_json_to(request)
+        response = await communicator.receive_json_from()
+        verify_response(test_name, response, request_nr)
+
+        await communicator.disconnect()
+
+
+@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
+@pytest.mark.asyncio
+@pytest.mark.django_db()
+@pytest.mark.integration_tests
+class TestAnnotatorWithWsAndDb26:
+    async def test_modify_certainty_parameter__modify_locus(self):
+        test_name = inspect.currentframe().f_code.co_name
+
+        project_id = 1
+        file_id = 1
+        user_id = 2
+
+        communicator = get_communicator(project_id, file_id, user_id)
+
+        await communicator.connect()
+        await communicator.receive_json_from()
+
+        request = [
+            {
+                'method': 'PUT',
+                'element_type': 'certainty',
+                'edited_element_id': 'certainty-1',
+                'old_element_id': 'locus',
+                'parameters': {
+                    'locus': 'name'
+                }
+            }
+        ]
+        request_nr = 0
+
+        await communicator.send_json_to(request)
+        response = await communicator.receive_json_from()
+        verify_response(test_name, response, request_nr)
+
+        await communicator.disconnect()
+
+
+@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
+@pytest.mark.asyncio
+@pytest.mark.django_db()
+@pytest.mark.integration_tests
+class TestAnnotatorWithWsAndDb27:
+    async def test_modify_certainty_parameter__modify_reference(self):
+        test_name = inspect.currentframe().f_code.co_name
+
+        project_id = 1
+        file_id = 1
+        user_id = 2
+
+        communicator = get_communicator(project_id, file_id, user_id)
+
+        await communicator.connect()
+        await communicator.receive_json_from()
+
+        request = [
+            {
+                'method': 'PUT',
+                'element_type': 'certainty',
+                'edited_element_id': 'certainty-1',
+                'old_element_id': 'reference',
+                'parameters': {
+                    'new_element_id': 'person-2/birth',
+                    'locus': 'name'
+                }
+            }
+        ]
+        request_nr = 0
+
+        await communicator.send_json_to(request)
+        response = await communicator.receive_json_from()
+        verify_response(test_name, response, request_nr)
+
+        await communicator.disconnect()
 
 
 def get_communicator(project_id, file_id, user_id=None):

@@ -160,7 +160,7 @@ class AnnotatorConsumer(WebsocketConsumer):
 
                 logger.info(f"Get request from user: '{self.scope['user'].username}' with content: '{text_data}'")
 
-                self.__request_handler.handle_request(text_data, self.scope['user'])
+                self.__request_handler.handle_request(text_data)
                 self.__send_personalized_changes_to_users()
 
             except NotModified as exception:

@@ -244,6 +244,7 @@ class ElementsExtractor:
     @staticmethod
     def __create_entity_property_object(property, property_type, property_value, clean_xpath, entity_version_object):
         entity_property_object = EntityProperty(
+            entity=entity_version_object.entity,
             entity_version=entity_version_object,
             xpath=clean_xpath,
             name=property,

@@ -8,3 +8,7 @@ class NotModified(Exception):
 
 class Forbidden(Exception):
     pass
+
+
+class BadParameters(Exception):
+    pass
