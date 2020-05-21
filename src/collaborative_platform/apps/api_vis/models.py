@@ -209,7 +209,7 @@ class Certainty(models.Model):
     asserted_value = models.CharField(max_length=255, null=True)
     description = models.CharField(max_length=255, null=True)
 
-    file_version = models.ForeignKey(FileVersion, on_delete=models.CASCADE)
+    file_version = models.ForeignKey(FileVersion, on_delete=models.CASCADE, null=True)
 
     created_by = models.ForeignKey(User, on_delete=models.SET(get_anonymous_user), related_name='created_certainties')
     created_in_file_version = models.ForeignKey(FileVersion, default=None, null=True, on_delete=models.CASCADE,

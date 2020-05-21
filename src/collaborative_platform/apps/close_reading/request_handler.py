@@ -7,7 +7,7 @@ from apps.close_reading.response_generator import get_custom_entities_types, get
     get_unlistable_entities_types
 from apps.close_reading.xml_handler import XmlHandler
 from apps.exceptions import BadRequest, NotModified
-from apps.projects.models import UncertaintyCategory
+
 
 from collaborative_platform.settings import XML_NAMESPACES
 
@@ -67,7 +67,7 @@ class RequestHandler:
 
             elif request['element_type'] == 'certainty':
                 if request['method'] == 'POST':
-                    self.__add_certainty(request, user)
+                    self.__add_certainty(request)
                 elif request['method'] == 'PUT':
                     self.__modify_certainty(request, user)
                 elif request['method'] == 'DELETE':
@@ -421,33 +421,15 @@ class RequestHandler:
 
             self.__db_handler.set_body_content(body_content)
 
-    def __add_certainty(self, request, user):
+    def __add_certainty(self, request):
         certainty_target = request['new_element_id']
-        locus = request['parameters']['locus']
+        parameters = request['parameters']
+        locus = parameters['locus']
 
         target_type = self.get_certainty_target_type(certainty_target, locus)
         target, match = self.get_certainty_target_and_match(certainty_target, target_type)
 
-        # Create certainty object
-
-        xml_id = self.__get_next_xml_id('certainty')
-
-        certainty_object = Certainty.objects.create(
-            file=self.__file,
-            xml_id=xml_id,
-            locus=request['parameters'].get('locus'),
-            cert=request['parameters'].get('certainty'),
-            target_xml_id=target,
-            target_match=match,
-            asserted_value=request['parameters'].get('asserted_value'),
-            description=request['parameters'].get('description'),
-            created_by=user
-        )
-
-        categories = request['parameters'].get('categories')
-        categories_ids = self.__get_categories_ids_from_db(categories)
-
-        certainty_object.categories.add(*categories_ids)
+        self.__db_handler.create_certainty_object(target, match, parameters)
 
     @staticmethod
     def get_certainty_target_type(certainty_target, locus):
@@ -468,61 +450,41 @@ class RequestHandler:
 
     def get_certainty_target_and_match(self, certainty_target, target_type):
         if target_type == TargetTypes.text:
-            target_xml_id = certainty_target
-            target_match = None
+            target = certainty_target
+            match = None
 
         elif target_type == TargetTypes.reference:
-            target_xml_id = certainty_target.split('@')[0]
-            target_match = '@ref'
+            target = certainty_target.split('@')[0]
+            match = '@ref'
 
         elif target_type == TargetTypes.entity_type:
-            custom_entities_types = get_custom_entities_types(self.__file.project)
-
             entity = Entity.objects.get(
                 xml_id=certainty_target,
                 file=self.__file
             )
 
-            if entity.type not in custom_entities_types:
-                target_xml_id = certainty_target
-                target_match = None
+            if entity.type not in self.__custom_entities_types:
+                target = certainty_target
+                match = None
             else:
-                target_xml_id = certainty_target
-                target_match = '@type'
+                target = certainty_target
+                match = '@type'
 
         elif target_type == TargetTypes.entity_property:
-            target_xml_id = certainty_target.split('/')[0]
+            target = certainty_target.split('/')[0]
             property_name = certainty_target.split('/')[1]
 
-            property = EntityProperty.objects.get(
-                entity_version__entity__xml_id=target_xml_id,
-                name=property_name,
-                entity_version__file_version=self.__file.file_versions.order_by('-number')[0]
-            )
-
-            target_match = property.xpath
+            entity_property = self.__db_handler.get_entity_property_from_db(target, property_name)
+            match = entity_property.xpath
 
         elif target_type == TargetTypes.certainty:
-            target_xml_id = certainty_target
-            target_match = None
+            target = certainty_target
+            match = None
 
         else:
             raise BadRequest("There is no operation matching to this request")
 
-        return target_xml_id, target_match
-
-
-
-
-    def __get_categories_ids_from_db(self, categories):
-        categories = UncertaintyCategory.objects.filter(
-            taxonomy__project=self.__file.project,
-            name__in=categories
-        )
-
-        categories_ids = categories.values_list('id', flat=True)
-
-        return categories_ids
+        return target, match
 
     def __mark_certainty_to_delete(self, request, user):
         certainty_id = request['edited_element_id']

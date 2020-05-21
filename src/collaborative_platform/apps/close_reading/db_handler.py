@@ -1,6 +1,7 @@
 from apps.api_vis.models import Certainty, Entity, EntityProperty, EntityVersion
 from apps.close_reading.models import AnnotatingBodyContent
 from apps.files_management.models import File, FileMaxXmlIds
+from apps.projects.models import UncertaintyCategory
 
 from collaborative_platform.settings import CUSTOM_ENTITY, DEFAULT_ENTITIES
 
@@ -156,14 +157,54 @@ class DbHandler:
 
         return entity_version_object
 
-    def get_entity_property_from_db(self, entity_xml_id, entity_name, saved=False, deleted=False):
+    def get_entity_property_from_db(self, entity_xml_id, property_name, saved=None, deleted=None):
         entity_version = self.get_entity_version_from_db(entity_xml_id)
 
-        entity_property = EntityProperty.objects.get(
+        entity_properties = EntityProperty.objects.filter(
             entity_version=entity_version,
-            name=entity_name,
-            created_in_file_version__isnull=False if saved else True,
-            deleted_by__isnull=False if deleted else True
+            name=property_name,
         )
 
+        if saved is not None:
+            entity_properties = entity_properties.filter(
+                created_in_file_version__isnull=False if saved else True
+            )
+
+        if deleted is not None:
+            entity_properties = entity_properties.filter(
+                deleted_by__isnull=False if deleted else True
+            )
+
+        entity_property = entity_properties.order_by('-id')[0]
+
         return entity_property
+
+    def create_certainty_object(self, target, match, parameters):
+        xml_id = self.get_next_xml_id('certainty')
+
+        certainty_object = Certainty.objects.create(
+            file=self.__file,
+            xml_id=xml_id,
+            locus=parameters.get('locus'),
+            cert=parameters.get('certainty'),
+            target_xml_id=target,
+            target_match=match,
+            asserted_value=parameters.get('asserted_value'),
+            description=parameters.get('description'),
+            created_by=self.__user
+        )
+
+        categories = parameters.get('categories')
+        categories_ids = self.__get_categories_ids_from_db(categories)
+
+        certainty_object.categories.add(*categories_ids)
+
+    def __get_categories_ids_from_db(self, categories):
+        categories = UncertaintyCategory.objects.filter(
+            taxonomy__project=self.__file.project,
+            name__in=categories
+        )
+
+        categories_ids = categories.values_list('id', flat=True)
+
+        return categories_ids
