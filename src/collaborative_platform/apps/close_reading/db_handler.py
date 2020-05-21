@@ -156,12 +156,14 @@ class DbHandler:
 
         return entity_version_object
 
-    def get_entity_property_from_db(self, entity_xml_id, entity_name):
+    def get_entity_property_from_db(self, entity_xml_id, entity_name, saved=False, deleted=False):
         entity_version = self.get_entity_version_from_db(entity_xml_id)
 
         entity_property = EntityProperty.objects.get(
             entity_version=entity_version,
-            name=entity_name
+            name=entity_name,
+            created_in_file_version__isnull=False if saved else True,
+            deleted_by__isnull=False if deleted else True
         )
 
         return entity_property

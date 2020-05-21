@@ -365,7 +365,8 @@ class RequestHandler:
 
             self.__db_handler.mark_entity_property_to_delete(entity_xml_id, property_name)
 
-            entity_property = self.__db_handler.get_entity_property_from_db(entity_xml_id, property_name)
+            entity_property = self.__db_handler.get_entity_property_from_db(entity_xml_id, property_name, saved=True,
+                                                                            deleted=True)
             property_value = entity_property.get_value(as_str=True)
 
             properties_to_delete = {property_name: property_value}
@@ -395,43 +396,30 @@ class RequestHandler:
         else:
             property_name = request['old_element_id']
 
-            entity_property_object = EntityProperty.objects.filter(
-                entity_version__entity__xml_id=entity_xml_id,
-                name=property_name,
-            ).order_by('-id')[0]
-
-            entity_property_object.deleted_by = user
-            entity_property_object.save()
+            self.__db_handler.mark_entity_property_to_delete(entity_xml_id, property_name)
 
             entity_property = request['parameters']
 
-            entity_version_objects = EntityVersion.objects.filter(
-                entity__xml_id=entity_xml_id,
-                file_version__isnull=False
-            ).order_by('-file_version')
+            entity_version_object = self.__db_handler.get_entity_version_from_db(entity_xml_id)
 
-            if not entity_version_objects:
-                entity_version_objects = EntityVersion.objects.filter(
-                    entity__xml_id=entity_xml_id,
-                    file_version__isnull=True
-                ).order_by('-id')
+            self.__db_handler.create_entity_properties_objects(entity.type, entity_property, entity_version_object)
 
-            entity_version_object = entity_version_objects[0]
-
-            self.__create_entity_properties_objects(entity_type, entity_property, entity_version_object, user)
+            entity_property_object = self.__db_handler.get_entity_property_from_db(entity_xml_id, property_name,
+                                                                                   saved=True, deleted=True)
 
             property_value = entity_property_object.get_value(as_str=True)
 
-            attributes_to_add = {f'{key}Added': value for key, value in entity_property.items()}
+            properties_to_delete = {property_name: property_value}
 
-            attributes_to_add_extension = {
-                f'{property_name}Deleted': property_value,
-                'saved': 'false'
-            }
+            body_content = self.__db_handler.get_body_content()
 
-            attributes_to_add = {**attributes_to_add, **attributes_to_add_extension}
+            body_content = self.__xml_handler.mark_properties_to_delete(body_content, entity_xml_id,
+                                                                        properties_to_delete, self.__annotator_xml_id)
 
-            self.__update_tag_in_body(entity_xml_id, attributes_to_add=attributes_to_add)
+            body_content = self.__xml_handler.add_properties_to_tag(body_content, entity_xml_id, entity_property,
+                                                                    self.__annotator_xml_id)
+
+            self.__db_handler.set_body_content(body_content)
 
     def __add_certainty(self, request, user):
         certainty_target = request['new_element_id']
