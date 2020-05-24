@@ -11,16 +11,17 @@ from apps.exceptions import BadRequest, NotModified
 class RequestHandler:
     def __init__(self, user, file_id):
         self.__db_handler = DbHandler(user, file_id)
-        self.__file = self.__db_handler.get_file_from_db(file_id)
-        self.__annotator_xml_id = self.__db_handler.get_annotator_xml_id()
 
-        self.__listable_entities_types = get_listable_entities_types(self.__file.project)
-        self.__custom_entities_types = get_custom_entities_types(self.__file.project)
+        file = self.__db_handler.get_file_from_db(file_id)
 
-        unlistable_entities_types = get_unlistable_entities_types(self.__file.project)
+        self.__listable_entities_types = get_listable_entities_types(file.project)
+
+        custom_entities_types = get_custom_entities_types(file.project)
+        unlistable_entities_types = get_unlistable_entities_types(file.project)
+        annotator_xml_id = self.__db_handler.get_annotator_xml_id()
 
         self.__xml_handler = XmlHandler(self.__listable_entities_types, unlistable_entities_types,
-                                        self.__custom_entities_types, self.__annotator_xml_id)
+                                        custom_entities_types, annotator_xml_id)
 
     def handle_request(self, text_data):
         requests = self.__parse_text_data(text_data)
@@ -82,38 +83,33 @@ class RequestHandler:
         # TODO: Add verification if this same tag not existing already
         # TODO: Add possibility to add tag if text fragment is separated by another tag
 
-        body_content = self.__db_handler.get_body_content()
         start_pos = request['parameters']['start_pos']
         end_pos = request['parameters']['end_pos']
         tag_xml_id = self.__db_handler.get_next_xml_id('ab')
 
-        body_content = self.__xml_handler.add_new_tag_to_text(body_content, start_pos, end_pos, tag_xml_id,
-                                                              self.__annotator_xml_id)
-
+        body_content = self.__db_handler.get_body_content()
+        body_content = self.__xml_handler.add_tag(body_content, start_pos, end_pos, tag_xml_id)
         self.__db_handler.set_body_content(body_content)
 
     def __move_tag(self, request):
         # TODO: Add verification if user has rights to edit a tag
         # TODO: Add verification if tag wasn't moved by another user in the meantime
 
-        body_content = self.__db_handler.get_body_content()
         new_start_pos = request['parameters']['new_start_pos']
         new_end_pos = request['parameters']['new_end_pos']
-        tag_xml_id = request.get('edited_element_id')
+        tag_xml_id = request['edited_element_id']
 
-        body_content = self.__xml_handler.move_tag_to_new_position(body_content, new_start_pos, new_end_pos, tag_xml_id,
-                                                                   self.__annotator_xml_id)
-
+        body_content = self.__db_handler.get_body_content()
+        body_content = self.__xml_handler.move_tag(body_content, new_start_pos, new_end_pos, tag_xml_id)
         self.__db_handler.set_body_content(body_content)
 
     def __delete_tag(self, request):
         # TODO: Add verification if user has rights to delete a tag
 
+        tag_xml_id = request['edited_element_id']
+
         body_content = self.__db_handler.get_body_content()
-        tag_xml_id = request.get('edited_element_id')
-
-        body_content = self.__xml_handler.mark_tag_to_delete(body_content, tag_xml_id, self.__annotator_xml_id)
-
+        body_content = self.__xml_handler.delete_tag(body_content, tag_xml_id)
         self.__db_handler.set_body_content(body_content)
 
     def __add_reference_to_entity(self, request):
@@ -141,7 +137,7 @@ class RequestHandler:
             body_content = self.__db_handler.get_body_content()
 
             body_content = self.__xml_handler.add_reference_to_entity(body_content, tag_xml_id, new_tag, new_tag_xml_id,
-                                                                      entity_xml_id, self.__annotator_xml_id)
+                                                                      entity_xml_id)
 
             self.__db_handler.set_body_content(body_content)
 
@@ -157,8 +153,7 @@ class RequestHandler:
             body_content = self.__db_handler.get_body_content()
 
             body_content = self.__xml_handler.add_reference_to_entity(body_content, tag_xml_id, entity_type,
-                                                                      entity_xml_id, entity_xml_id,
-                                                                      self.__annotator_xml_id)
+                                                                      entity_xml_id, entity_xml_id)
 
             entity_properties.pop('name', '')
 
@@ -173,7 +168,7 @@ class RequestHandler:
             body_content = self.__db_handler.get_body_content()
 
             body_content = self.__xml_handler.add_reference_to_entity(body_content, tag_xml_id, new_tag, new_tag_xml_id,
-                                                                      entity_xml_id, self.__annotator_xml_id)
+                                                                      entity_xml_id)
 
             self.__db_handler.set_body_content(body_content)
 
@@ -183,8 +178,7 @@ class RequestHandler:
             body_content = self.__db_handler.get_body_content()
 
             body_content = self.__xml_handler.add_reference_to_entity(body_content, tag_xml_id, entity_type,
-                                                                      new_tag_xml_id, entity_xml_id,
-                                                                      self.__annotator_xml_id)
+                                                                      new_tag_xml_id, entity_xml_id)
 
             self.__db_handler.set_body_content(body_content)
 
@@ -217,8 +211,7 @@ class RequestHandler:
             body_content = self.__db_handler.get_body_content()
 
             body_content = self.__xml_handler.modify_reference_to_entity(body_content, tag_xml_id, new_entity_xml_id,
-                                                                         old_entity_xml_id, self.__annotator_xml_id,
-                                                                         new_tag, new_tag_xml_id)
+                                                                         old_entity_xml_id, new_tag, new_tag_xml_id)
 
             self.__db_handler.set_body_content(body_content)
 
@@ -239,8 +232,8 @@ class RequestHandler:
             body_content = self.__db_handler.get_body_content()
 
             body_content = self.__xml_handler.modify_reference_to_entity(body_content, tag_xml_id, new_entity_xml_id,
-                                                                         old_entity_xml_id, self.__annotator_xml_id,
-                                                                         entity_type, new_entity_xml_id)
+                                                                         old_entity_xml_id, entity_type,
+                                                                         new_entity_xml_id)
 
             entity_properties.pop('name', '')
 
@@ -260,8 +253,7 @@ class RequestHandler:
             body_content = self.__db_handler.get_body_content()
 
             body_content = self.__xml_handler.modify_reference_to_entity(body_content, tag_xml_id, new_entity_xml_id,
-                                                                         old_entity_xml_id, self.__annotator_xml_id,
-                                                                         new_tag, new_tag_xml_id)
+                                                                         old_entity_xml_id, new_tag, new_tag_xml_id)
 
             self.__db_handler.set_body_content(body_content)
 
@@ -276,8 +268,7 @@ class RequestHandler:
             body_content = self.__db_handler.get_body_content()
 
             body_content = self.__xml_handler.modify_reference_to_entity(body_content, tag_xml_id, new_entity_xml_id,
-                                                                         old_entity_xml_id, self.__annotator_xml_id,
-                                                                         entity_type, new_tag_xml_id)
+                                                                         old_entity_xml_id, entity_type, new_tag_xml_id)
 
             self.__db_handler.set_body_content(body_content)
 
@@ -307,8 +298,7 @@ class RequestHandler:
 
         body_content = self.__db_handler.get_body_content()
 
-        body_content = self.__xml_handler.mark_reference_to_delete(body_content, tag_xml_id, entity_xml_id,
-                                                                   self.__annotator_xml_id)
+        body_content = self.__xml_handler.mark_reference_to_delete(body_content, tag_xml_id, entity_xml_id)
 
         self.__db_handler.set_body_content(body_content)
 
@@ -332,6 +322,26 @@ class RequestHandler:
             body_content = self.__xml_handler.add_entity_property(body_content, entity_xml_id, entity_property)
             self.__db_handler.set_body_content(body_content)
 
+    def __modify_entity_property(self, request):
+        entity_xml_id = request['edited_element_id']
+        property_name = request['old_element_id']
+        entity_property = request['parameters']
+        entity_type = self.__db_handler.get_entity_type(entity_xml_id)
+
+        if entity_type in self.__listable_entities_types:
+            self.__db_handler.modify_entity_property(entity_xml_id, entity_property, property_name)
+
+        else:
+            property_value = self.__db_handler.get_entity_property_value(entity_xml_id, property_name)
+            old_entity_property = {property_name: property_value}
+
+            self.__db_handler.modify_entity_property(entity_xml_id, entity_property, property_name)
+
+            body_content = self.__db_handler.get_body_content()
+            body_content = self.__xml_handler.modify_entity_property(body_content, entity_xml_id, old_entity_property,
+                                                                     entity_property)
+            self.__db_handler.set_body_content(body_content)
+
     def __delete_entity_property(self, request):
         entity_xml_id = request['edited_element_id']
         property_name = request['old_element_id']
@@ -348,26 +358,6 @@ class RequestHandler:
 
             body_content = self.__db_handler.get_body_content()
             body_content = self.__xml_handler.delete_entity_property(body_content, entity_xml_id, entity_property)
-            self.__db_handler.set_body_content(body_content)
-
-    def __modify_entity_property(self, request):
-        entity_xml_id = request['edited_element_id']
-        property_name = request['old_element_id']
-        entity_property = request['parameters']
-        entity = self.__db_handler.get_entity_from_db(entity_xml_id)
-
-        if entity.type in self.__listable_entities_types:
-            self.__db_handler.modify_entity_property(entity_xml_id, entity_property, property_name)
-
-        else:
-            property_value = self.__db_handler.get_entity_property_value(entity_xml_id, property_name)
-            old_entity_property = {property_name: property_value}
-
-            self.__db_handler.modify_entity_property(entity_xml_id, entity_property, property_name)
-
-            body_content = self.__db_handler.get_body_content()
-            body_content = self.__xml_handler.modify_entity_property(body_content, entity_xml_id, old_entity_property,
-                                                                     entity_property)
             self.__db_handler.set_body_content(body_content)
 
     def __add_certainty(self, request):
