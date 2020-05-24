@@ -241,10 +241,10 @@ class XmlHandler:
 
         return text_result
 
-    def mark_properties_to_delete(self, text, tag_xml_id, entity_properties, annotator_xml_id):
+    def delete_properties_from_tag(self, text, tag_xml_id, entity_properties):
         attributes_to_add = {f'{key}Deleted': value for key, value in entity_properties.items()}
         attributes_to_add.update({
-            'resp': f'#{annotator_xml_id}',
+            'resp': f'#{self.__annotator_xml_id}',
             'saved': 'false'
         })
 
@@ -256,5 +256,10 @@ class XmlHandler:
         entity_property.pop('name', '')
 
         text = self.add_properties_to_tag(text, entity_xml_id, entity_property)
+
+        return text
+
+    def delete_entity_property(self, text, entity_xml_id, entity_property):
+        text = self.delete_properties_from_tag(text, entity_xml_id, entity_property)
 
         return text

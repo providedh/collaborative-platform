@@ -333,30 +333,21 @@ class RequestHandler:
             self.__db_handler.set_body_content(body_content)
 
     def __delete_entity_property(self, request):
-        entity_xml_id = request.get('edited_element_id')
-        entity = self.__db_handler.get_entity_from_db(entity_xml_id)
+        entity_xml_id = request['edited_element_id']
+        property_name = request['old_element_id']
+        entity_type = self.__db_handler.get_entity_type(entity_xml_id)
 
-        if entity.type in self.__listable_entities_types:
-            property_name = request['old_element_id']
-
-            self.__db_handler.mark_entity_property_to_delete(entity_xml_id, property_name)
+        if entity_type in self.__listable_entities_types:
+            self.__db_handler.delete_entity_property(entity_xml_id, property_name)
 
         else:
-            property_name = request['old_element_id']
+            self.__db_handler.delete_entity_property(entity_xml_id, property_name)
 
-            self.__db_handler.mark_entity_property_to_delete(entity_xml_id, property_name)
-
-            entity_property = self.__db_handler.get_entity_property_from_db(entity_xml_id, property_name, saved=True,
-                                                                            deleted=True)
-            property_value = entity_property.get_value(as_str=True)
-
-            properties_to_delete = {property_name: property_value}
+            property_value = self.__db_handler.get_entity_property_value(entity_xml_id, property_name)
+            entity_property = {property_name: property_value}
 
             body_content = self.__db_handler.get_body_content()
-
-            body_content = self.__xml_handler.mark_properties_to_delete(body_content, entity_xml_id,
-                                                                        properties_to_delete, self.__annotator_xml_id)
-
+            body_content = self.__xml_handler.delete_entity_property(body_content, entity_xml_id, entity_property)
             self.__db_handler.set_body_content(body_content)
 
     def __modify_entity_property(self, request):
@@ -366,7 +357,8 @@ class RequestHandler:
         if entity.type in self.__listable_entities_types:
             property_name = request['old_element_id']
 
-            self.__db_handler.mark_entity_property_to_delete(entity_xml_id, property_name)
+            # self.__db_handler.mark_entity_property_to_delete(entity_xml_id, property_name)
+            self.__db_handler.delete_entity_property(entity_xml_id, property_name)
 
             entity_property = request['parameters']
 
@@ -377,7 +369,9 @@ class RequestHandler:
         else:
             property_name = request['old_element_id']
 
-            self.__db_handler.mark_entity_property_to_delete(entity_xml_id, property_name)
+            # self.__db_handler.mark_entity_property_to_delete(entity_xml_id, property_name)
+
+            self.__db_handler.delete_entity_property(entity_xml_id, property_name)
 
             entity_property = request['parameters']
 
@@ -385,8 +379,10 @@ class RequestHandler:
 
             self.__db_handler.create_entity_properties_objects(entity.type, entity_property, entity_version_object)
 
-            entity_property_object = self.__db_handler.get_entity_property_from_db(entity_xml_id, property_name,
-                                                                                   saved=True, deleted=True)
+            entity_property_object = self.__db_handler.get_entity_property_from_db(entity_xml_id, property_name)
+
+            # entity_property_object = self.__db_handler.get_entity_property_from_db(entity_xml_id, property_name,
+            #                                                                        saved=True, deleted=True)
 
             property_value = entity_property_object.get_value(as_str=True)
 
@@ -394,8 +390,8 @@ class RequestHandler:
 
             body_content = self.__db_handler.get_body_content()
 
-            body_content = self.__xml_handler.mark_properties_to_delete(body_content, entity_xml_id,
-                                                                        properties_to_delete, self.__annotator_xml_id)
+            body_content = self.__xml_handler.delete_properties_from_tag(body_content, entity_xml_id,
+                                                                         properties_to_delete)
 
             body_content = self.__xml_handler.add_properties_to_tag(body_content, entity_xml_id, entity_property)
 
