@@ -2,7 +2,6 @@ import re
 
 from lxml import etree
 
-from apps.api_vis.models import EntityVersion
 from apps.files_management.file_conversions.xml_tools import get_first_xpath_match
 
 from collaborative_platform.settings import XML_NAMESPACES
@@ -261,5 +260,14 @@ class XmlHandler:
 
     def delete_entity_property(self, text, entity_xml_id, entity_property):
         text = self.delete_properties_from_tag(text, entity_xml_id, entity_property)
+
+        return text
+
+    def modify_entity_property(self, text, entity_xml_id, old_entity_property, new_entity_property):
+        new_entity_property.pop('name', '')
+        old_entity_property.pop('name', '')
+
+        text = self.delete_properties_from_tag(text, entity_xml_id, old_entity_property)
+        text = self.add_properties_to_tag(text, entity_xml_id, new_entity_property)
 
         return text

@@ -946,7 +946,8 @@ class TestAnnotatorWithWsAndDb17:
         assert entity_property_old.deleted_by.id == user_id
 
         entity_property_new = EntityProperty.objects.filter(
-            entity_version__entity__xml_id='date-0',
+            entity__xml_id='date-0',
+            entity_version__isnull=True,
             name='when'
         ).order_by('-id')[0]
 

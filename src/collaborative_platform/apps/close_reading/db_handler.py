@@ -84,7 +84,6 @@ class DbHandler:
         for name, value in entity_properties.items():
             entity_property_object = EntityProperty(
                 entity=entity_version_object.entity,
-                entity_version=entity_version_object,
                 xpath='',
                 name=name,
                 type=properties[name]['type'],
@@ -114,11 +113,6 @@ class DbHandler:
             certainty.deleted_by = self.__user
 
         Certainty.objects.bulk_update(certainties, ['deleted_by'])
-
-    # def mark_entity_property_to_delete(self, entity_xml_id, entity_property_name):
-    #     entity_version = self.get_entity_version_from_db(entity_xml_id)
-    #
-    #     self.__mark_entity_properties_to_delete(entity_version, [entity_property_name])
 
     def __mark_entity_properties_to_delete(self, entity_version, entity_properties_names=None):
         # TODO: Add marking certainties to properties to delete
@@ -165,28 +159,6 @@ class DbHandler:
 
         return entity_version
 
-    # def get_entity_property_from_db(self, entity_xml_id, property_name, saved=None, deleted=None):
-    #     entity_version = self.get_entity_version_from_db(entity_xml_id)
-    #
-    #     entity_properties = EntityProperty.objects.filter(
-    #         entity_version=entity_version,
-    #         name=property_name,
-    #     )
-    #
-    #     if saved is not None:
-    #         entity_properties = entity_properties.filter(
-    #             created_in_file_version__isnull=False if saved else True
-    #         )
-    #
-    #     if deleted is not None:
-    #         entity_properties = entity_properties.filter(
-    #             deleted_by__isnull=False if deleted else True
-    #         )
-    #
-    #     entity_property = entity_properties.order_by('-id')[0]
-    #
-    #     return entity_property
-
     def get_entity_property_from_db(self, entity_xml_id, property_name):
         try:
             entity_property = EntityProperty.objects.get(
@@ -212,17 +184,37 @@ class DbHandler:
 
         return entity_property_value
 
-
-
-
-
-
-
     def add_entity_property(self, entity_xml_id, entity_property):
         entity_type = self.get_entity_type(entity_xml_id)
         entity_version_object = self.get_entity_version_from_db(entity_xml_id)
 
         self.create_entity_properties_objects(entity_type, entity_property, entity_version_object)
+
+    def modify_entity_property(self, entity_xml_id, entity_property, property_name):
+        entity_property_object = self.get_entity_property_from_db(entity_xml_id, property_name)
+
+        if entity_property_object.entity_version is not None:
+            entity_property_object = self.__clone_entity_property(entity_property_object)
+
+        for key, value in entity_property.items():
+            entity_property_object.set_value(value)
+
+        entity_property_object.save()
+
+    def __mark_entity_property_to_delete(self, entity_property):
+        entity_property.deleted_by = self.__user
+        entity_property.save()
+
+    def __clone_entity_property(self, entity_property):  # type: (EntityProperty) -> EntityProperty
+        self.__mark_entity_property_to_delete(entity_property)
+
+        entity_property.id = None
+        entity_property.created_in_file_version = None
+        entity_property.deleted_by = None
+        entity_property.entity_version = None
+        entity_property.save()
+
+        return entity_property
 
     def delete_entity_property(self, entity_xml_id, property_name):
         entity_version = self.get_entity_version_from_db(entity_xml_id)

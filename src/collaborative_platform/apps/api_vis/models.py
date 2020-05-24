@@ -59,7 +59,7 @@ class EntityVersion(models.Model):
 
 class EntityProperty(models.Model):
     entity = models.ForeignKey(Entity, on_delete=models.CASCADE)
-    entity_version = models.ForeignKey(EntityVersion, on_delete=models.CASCADE)
+    entity_version = models.ForeignKey(EntityVersion, default=None, null=True, on_delete=models.CASCADE)
     xpath = models.CharField(max_length=255)
     name = models.CharField(max_length=255)
     type = models.CharField(max_length=255, choices=[(tag, tag.value) for tag in TypeChoice])
@@ -200,6 +200,7 @@ class UnificationToDelete(models.Model):
 
 class Certainty(models.Model):
     file = models.ForeignKey(File, on_delete=models.CASCADE)
+    file_version = models.ForeignKey(FileVersion, default=None, null=True, on_delete=models.CASCADE)
     xml_id = models.CharField(max_length=255)
     categories = models.ManyToManyField(UncertaintyCategory)
     locus = models.CharField(max_length=255)
@@ -209,8 +210,6 @@ class Certainty(models.Model):
     target_match = models.CharField(max_length=255, null=True)
     asserted_value = models.CharField(max_length=255, null=True)
     description = models.CharField(max_length=255, null=True)
-
-    file_version = models.ForeignKey(FileVersion, on_delete=models.CASCADE, null=True)
 
     created_by = models.ForeignKey(User, on_delete=models.SET(get_anonymous_user), related_name='created_certainties')
     created_in_file_version = models.ForeignKey(FileVersion, default=None, null=True, on_delete=models.CASCADE,
