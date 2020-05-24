@@ -145,6 +145,12 @@ class DbHandler:
 
         return entity
 
+    def get_entity_type(self, entity_xml_id):
+        entity = self.get_entity_from_db(entity_xml_id)
+        entity_type = entity.type
+
+        return entity_type
+
     @staticmethod
     def get_entity_version_from_db(entity_xml_id):
         entity_version_objects = EntityVersion.objects.filter(
@@ -184,7 +190,13 @@ class DbHandler:
 
         return entity_property
 
-    def create_certainty(self, certainty_target, parameters):
+    def add_entity_property(self, entity_xml_id, entity_property):
+        entity_type = self.get_entity_type(entity_xml_id)
+        entity_version_object = self.get_entity_version_from_db(entity_xml_id)
+
+        self.create_entity_properties_objects(entity_type, entity_property, entity_version_object)
+
+    def add_certainty(self, certainty_target, parameters):
         locus = parameters['locus']
 
         target_type = self.__get_certainty_target_type(certainty_target, locus)

@@ -20,7 +20,7 @@ class RequestHandler:
         unlistable_entities_types = get_unlistable_entities_types(self.__file.project)
 
         self.__xml_handler = XmlHandler(self.__listable_entities_types, unlistable_entities_types,
-                                        self.__custom_entities_types)
+                                        self.__custom_entities_types, self.__annotator_xml_id)
 
     def handle_request(self, text_data):
         requests = self.__parse_text_data(text_data)
@@ -28,11 +28,11 @@ class RequestHandler:
         for request in requests:
             if request['element_type'] == 'tag':
                 if request['method'] == 'POST':
-                    self.__add_new_tag_to_text(request)
+                    self.__add_tag(request)
                 elif request['method'] == 'PUT':
-                    self.__move_tag_to_new_position(request)
+                    self.__move_tag(request)
                 elif request['method'] == 'DELETE':
-                    self.__mark_tag_to_delete(request)
+                    self.__delete_tag(request)
                 else:
                     raise BadRequest("There is no operation matching to this request")
 
@@ -42,17 +42,17 @@ class RequestHandler:
                 elif request['method'] == 'PUT':
                     self.__modify_reference_to_entity(request)
                 elif request['method'] == 'DELETE':
-                    self.__mark_reference_to_delete(request)
+                    self.__delete_reference_to_entity(request)
                 else:
                     raise BadRequest("There is no operation matching to this request")
 
             elif request['element_type'] == 'entity_property':
                 if request['method'] == 'POST':
-                    self.__add_property_to_entity(request)
+                    self.__add_entity_property(request)
                 elif request['method'] == 'PUT':
                     self.__modify_entity_property(request)
                 elif request['method'] == 'DELETE':
-                    self.__mark_property_to_delete(request)
+                    self.__delete_entity_property(request)
                 else:
                     raise BadRequest("There is no operation matching to this request")
 
@@ -78,7 +78,7 @@ class RequestHandler:
 
         return request
 
-    def __add_new_tag_to_text(self, request):
+    def __add_tag(self, request):
         # TODO: Add verification if this same tag not existing already
         # TODO: Add possibility to add tag if text fragment is separated by another tag
 
@@ -92,7 +92,7 @@ class RequestHandler:
 
         self.__db_handler.set_body_content(body_content)
 
-    def __move_tag_to_new_position(self, request):
+    def __move_tag(self, request):
         # TODO: Add verification if user has rights to edit a tag
         # TODO: Add verification if tag wasn't moved by another user in the meantime
 
@@ -106,7 +106,7 @@ class RequestHandler:
 
         self.__db_handler.set_body_content(body_content)
 
-    def __mark_tag_to_delete(self, request):
+    def __delete_tag(self, request):
         # TODO: Add verification if user has rights to delete a tag
 
         body_content = self.__db_handler.get_body_content()
@@ -162,8 +162,7 @@ class RequestHandler:
 
             entity_properties.pop('name', '')
 
-            body_content = self.__xml_handler.add_properties_to_tag(body_content, entity_xml_id, entity_properties,
-                                                                    self.__annotator_xml_id)
+            body_content = self.__xml_handler.add_properties_to_tag(body_content, entity_xml_id, entity_properties)
 
             self.__db_handler.set_body_content(body_content)
 
@@ -300,7 +299,7 @@ class RequestHandler:
 
         return new_tag_xml_id
 
-    def __mark_reference_to_delete(self, request):
+    def __delete_reference_to_entity(self, request):
         # TODO: add attribute `newId="ab-XX"`, when tag name will be changed to 'ab'
 
         tag_xml_id = request.get('edited_element_id')
@@ -318,34 +317,22 @@ class RequestHandler:
         if last_reference:
             self.__db_handler.mark_entity_to_delete(entity_xml_id)
 
-    def __add_property_to_entity(self, request):
-        entity_xml_id = request.get('edited_element_id')
-        entity = self.__db_handler.get_entity_from_db(entity_xml_id)
+    def __add_entity_property(self, request):
+        entity_xml_id = request['edited_element_id']
+        entity_property = request['parameters']
+        entity_type = self.__db_handler.get_entity_type(entity_xml_id)
 
-        if entity.type in self.__listable_entities_types:
-            entity_properties = request['parameters']
-
-            entity_version_object = self.__db_handler.get_entity_version_from_db(entity_xml_id)
-
-            self.__db_handler.create_entity_properties_objects(entity.type, entity_properties, entity_version_object)
+        if entity_type in self.__listable_entities_types:
+            self.__db_handler.add_entity_property(entity_xml_id, entity_property)
 
         else:
-            entity_properties = request['parameters']
-
-            entity_version_object = self.__db_handler.get_entity_version_from_db(entity_xml_id)
-
-            self.__db_handler.create_entity_properties_objects(entity.type, entity_properties, entity_version_object)
+            self.__db_handler.add_entity_property(entity_xml_id, entity_property)
 
             body_content = self.__db_handler.get_body_content()
-
-            entity_properties.pop('name', '')
-
-            body_content = self.__xml_handler.add_properties_to_tag(body_content, entity_xml_id, entity_properties,
-                                                                    self.__annotator_xml_id)
-
+            body_content = self.__xml_handler.add_entity_property(body_content, entity_xml_id, entity_property)
             self.__db_handler.set_body_content(body_content)
 
-    def __mark_property_to_delete(self, request):
+    def __delete_entity_property(self, request):
         entity_xml_id = request.get('edited_element_id')
         entity = self.__db_handler.get_entity_from_db(entity_xml_id)
 
@@ -373,7 +360,7 @@ class RequestHandler:
             self.__db_handler.set_body_content(body_content)
 
     def __modify_entity_property(self, request):
-        entity_xml_id = request.get('edited_element_id')
+        entity_xml_id = request['edited_element_id']
         entity = self.__db_handler.get_entity_from_db(entity_xml_id)
 
         if entity.type in self.__listable_entities_types:
@@ -410,8 +397,7 @@ class RequestHandler:
             body_content = self.__xml_handler.mark_properties_to_delete(body_content, entity_xml_id,
                                                                         properties_to_delete, self.__annotator_xml_id)
 
-            body_content = self.__xml_handler.add_properties_to_tag(body_content, entity_xml_id, entity_property,
-                                                                    self.__annotator_xml_id)
+            body_content = self.__xml_handler.add_properties_to_tag(body_content, entity_xml_id, entity_property)
 
             self.__db_handler.set_body_content(body_content)
 
@@ -419,7 +405,7 @@ class RequestHandler:
         certainty_target = request['new_element_id']
         parameters = request['parameters']
 
-        self.__db_handler.create_certainty(certainty_target, parameters)
+        self.__db_handler.add_certainty(certainty_target, parameters)
 
     def __modify_certainty(self, request):
         certainty_xml_id = request['edited_element_id']

@@ -12,10 +12,11 @@ XML_ID_KEY = f"{{{XML_NAMESPACES['xml']}}}id"
 
 
 class XmlHandler:
-    def __init__(self, listable_entities_types, unlistable_entities_types, custom_entities_types):
+    def __init__(self, listable_entities_types, unlistable_entities_types, custom_entities_types, annotator_xml_id):
         self.__listable_entities_types = listable_entities_types
         self.__unlistable_entities_types = unlistable_entities_types
         self.__custom_entities_types = custom_entities_types
+        self.__annotator_xml_id = annotator_xml_id
 
     def add_new_tag_to_text(self, text, start_pos, end_pos, tag_xml_id, annotator_xml_id):
         text_result = self.__add_tag(text, start_pos, end_pos, tag_xml_id, annotator_xml_id)
@@ -229,10 +230,10 @@ class XmlHandler:
         else:
             return True
 
-    def add_properties_to_tag(self, text, tag_xml_id, entity_properties, annotator_xml_id):
+    def add_properties_to_tag(self, text, tag_xml_id, entity_properties):
         attributes_to_add = {f'{key}Added': value for key, value in entity_properties.items()}
         attributes_to_add.update({
-            'resp': f'#{annotator_xml_id}',
+            'resp': f'#{self.__annotator_xml_id}',
             'saved': 'false'
         })
 
@@ -250,3 +251,10 @@ class XmlHandler:
         text_result = self.__update_tag_in_body(text, tag_xml_id, attributes_to_add=attributes_to_add)
 
         return text_result
+
+    def add_entity_property(self, text, entity_xml_id, entity_property):
+        entity_property.pop('name', '')
+
+        text = self.add_properties_to_tag(text, entity_xml_id, entity_property)
+
+        return text
