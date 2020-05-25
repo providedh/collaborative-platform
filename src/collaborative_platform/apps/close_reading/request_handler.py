@@ -179,21 +179,16 @@ class RequestHandler:
             entity_type = self.__db_handler.get_entity_type(new_entity_xml_id)
 
         if not new_entity_xml_id and entity_type in self.__listable_entities_types:
+            entity_properties = request['parameters']['entity_properties']
+
+            new_entity_xml_id = self.__db_handler.add_entity(entity_type, entity_properties)
+
             new_tag = 'name'
-            new_entity_xml_id = self.__db_handler.get_next_xml_id(entity_type)
             new_tag_xml_id = self.__get_new_tag_xml_id(tag_xml_id, new_tag)
 
-            entity_object = self.__db_handler.create_entity_object(entity_type, new_entity_xml_id)
-            entity_version_object = self.__db_handler.create_entity_version_object(entity_object)
-
-            entity_properties = request['parameters']['entity_properties']
-            self.__db_handler.create_entity_properties_objects(entity_version_object, entity_properties)
-
             body_content = self.__db_handler.get_body_content()
-
             body_content = self.__xml_handler.modify_reference_to_entity(body_content, tag_xml_id, new_entity_xml_id,
                                                                          old_entity_xml_id, new_tag, new_tag_xml_id)
-
             self.__db_handler.set_body_content(body_content)
 
             last_reference = self.__xml_handler.check_if_last_reference(body_content, old_entity_xml_id)
@@ -202,24 +197,15 @@ class RequestHandler:
                 self.__db_handler.delete_entity(old_entity_xml_id)
 
         elif not new_entity_xml_id and entity_type not in self.__listable_entities_types:
-            new_entity_xml_id = self.__db_handler.get_next_xml_id(entity_type)
-
-            entity_object = self.__db_handler.create_entity_object(entity_type, new_entity_xml_id)
-            entity_version_object = self.__db_handler.create_entity_version_object(entity_object)
-
             entity_properties = request['parameters']['entity_properties']
-            self.__db_handler.create_entity_properties_objects(entity_version_object, entity_properties)
+
+            new_entity_xml_id = self.__db_handler.add_entity(entity_type, entity_properties)
 
             body_content = self.__db_handler.get_body_content()
-
             body_content = self.__xml_handler.modify_reference_to_entity(body_content, tag_xml_id, new_entity_xml_id,
                                                                          old_entity_xml_id, entity_type,
                                                                          new_entity_xml_id)
-
-            entity_properties.pop('name', '')
-
-            body_content = self.__xml_handler.add_attributes_to_tag(body_content, new_entity_xml_id, entity_properties)
-
+            body_content = self.__xml_handler.add_entity_properties(body_content, new_entity_xml_id, entity_properties)
             self.__db_handler.set_body_content(body_content)
 
             last_reference = self.__xml_handler.check_if_last_reference(body_content, old_entity_xml_id)
@@ -232,10 +218,8 @@ class RequestHandler:
             new_tag_xml_id = self.__get_new_tag_xml_id(tag_xml_id, new_tag)
 
             body_content = self.__db_handler.get_body_content()
-
             body_content = self.__xml_handler.modify_reference_to_entity(body_content, tag_xml_id, new_entity_xml_id,
                                                                          old_entity_xml_id, new_tag, new_tag_xml_id)
-
             self.__db_handler.set_body_content(body_content)
 
             last_reference = self.__xml_handler.check_if_last_reference(body_content, old_entity_xml_id)
@@ -247,10 +231,8 @@ class RequestHandler:
             new_tag_xml_id = self.__get_new_tag_xml_id(tag_xml_id, entity_type)
 
             body_content = self.__db_handler.get_body_content()
-
             body_content = self.__xml_handler.modify_reference_to_entity(body_content, tag_xml_id, new_entity_xml_id,
                                                                          old_entity_xml_id, entity_type, new_tag_xml_id)
-
             self.__db_handler.set_body_content(body_content)
 
             last_reference = self.__xml_handler.check_if_last_reference(body_content, old_entity_xml_id)

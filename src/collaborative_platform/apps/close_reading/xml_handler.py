@@ -251,11 +251,11 @@ class XmlHandler:
 
         return text
 
-    def modify_entity_properties(self, text, entity_xml_id, old_entity_property, new_entity_property):
-        new_entity_property.pop('name', '')
-        old_entity_property.pop('name', '')
+    def modify_entity_properties(self, text, entity_xml_id, old_entity_properties, new_entity_properties):
+        new_entity_properties.pop('name', '')
+        old_entity_properties.pop('name', '')
 
-        text = self.delete_entity_properties(text, entity_xml_id, old_entity_property)
-        text = self.add_entity_properties(text, entity_xml_id, new_entity_property)
+        text = self.delete_entity_properties(text, entity_xml_id, old_entity_properties)
+        text = self.add_entity_properties(text, entity_xml_id, new_entity_properties)
 
         return text
