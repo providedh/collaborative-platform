@@ -96,8 +96,8 @@ class DbHandler:
 
         EntityProperty.objects.bulk_create(properties_objects)
 
-    def mark_entity_to_delete(self, entity_xml_id):
-        entity = Entity.objects.get(xml_id=entity_xml_id)
+    def delete_entity(self, entity_xml_id):
+        entity = self.get_entity_from_db(entity_xml_id)
         entity.deleted_by = self.__user
         entity.save()
 

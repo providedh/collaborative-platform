@@ -199,7 +199,7 @@ class RequestHandler:
             last_reference = self.__xml_handler.check_if_last_reference(body_content, old_entity_xml_id)
 
             if last_reference:
-                self.__db_handler.mark_entity_to_delete(old_entity_xml_id)
+                self.__db_handler.delete_entity(old_entity_xml_id)
 
         elif not new_entity_xml_id and entity_type not in self.__listable_entities_types:
             new_entity_xml_id = self.__db_handler.get_next_xml_id(entity_type)
@@ -225,7 +225,7 @@ class RequestHandler:
             last_reference = self.__xml_handler.check_if_last_reference(body_content, old_entity_xml_id)
 
             if last_reference:
-                self.__db_handler.mark_entity_to_delete(old_entity_xml_id)
+                self.__db_handler.delete_entity(old_entity_xml_id)
 
         elif new_entity_xml_id and entity_type in self.__listable_entities_types:
             new_tag = 'name'
@@ -241,7 +241,7 @@ class RequestHandler:
             last_reference = self.__xml_handler.check_if_last_reference(body_content, old_entity_xml_id)
 
             if last_reference:
-                self.__db_handler.mark_entity_to_delete(old_entity_xml_id)
+                self.__db_handler.delete_entity(old_entity_xml_id)
 
         elif new_entity_xml_id and entity_type not in self.__listable_entities_types:
             new_tag_xml_id = self.__get_new_tag_xml_id(tag_xml_id, entity_type)
@@ -256,7 +256,7 @@ class RequestHandler:
             last_reference = self.__xml_handler.check_if_last_reference(body_content, old_entity_xml_id)
 
             if last_reference:
-                self.__db_handler.mark_entity_to_delete(old_entity_xml_id)
+                self.__db_handler.delete_entity(old_entity_xml_id)
 
         else:
             raise BadRequest("There is no operation matching to this request")
@@ -278,15 +278,13 @@ class RequestHandler:
         entity_xml_id = request.get('old_element_id')
 
         body_content = self.__db_handler.get_body_content()
-
-        body_content = self.__xml_handler.mark_reference_to_delete(body_content, tag_xml_id, entity_xml_id)
-
+        body_content = self.__xml_handler.delete_reference_to_entity(body_content, tag_xml_id, entity_xml_id)
         self.__db_handler.set_body_content(body_content)
 
         last_reference = self.__xml_handler.check_if_last_reference(body_content, entity_xml_id)
 
         if last_reference:
-            self.__db_handler.mark_entity_to_delete(entity_xml_id)
+            self.__db_handler.delete_entity(entity_xml_id)
 
     def __add_entity_property(self, request):
         entity_xml_id = request['edited_element_id']

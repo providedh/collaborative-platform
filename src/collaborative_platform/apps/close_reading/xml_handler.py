@@ -185,7 +185,7 @@ class XmlHandler:
 
         return text
 
-    def mark_reference_to_delete(self, text, tag_xml_id, entity_xml_id):
+    def delete_reference_to_entity(self, text, tag_xml_id, entity_xml_id):
         attributes_to_add = {
             'refDeleted': f'#{entity_xml_id}',
             'saved': 'false',
