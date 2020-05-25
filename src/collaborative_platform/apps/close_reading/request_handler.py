@@ -136,23 +136,14 @@ class RequestHandler:
             self.__db_handler.set_body_content(body_content)
 
         elif not entity_xml_id and entity_type not in self.__listable_entities_types:
-            entity_xml_id = self.__db_handler.get_next_xml_id(entity_type)
-
-            entity_object = self.__db_handler.create_entity_object(entity_type, entity_xml_id)
-            entity_version_object = self.__db_handler.create_entity_version_object(entity_object)
-
             entity_properties = request['parameters']['entity_properties']
-            self.__db_handler.create_entity_properties_objects(entity_version_object, entity_properties)
+
+            entity_xml_id = self.__db_handler.add_entity(entity_type, entity_properties)
 
             body_content = self.__db_handler.get_body_content()
-
             body_content = self.__xml_handler.add_reference_to_entity(body_content, tag_xml_id, entity_type,
                                                                       entity_xml_id, entity_xml_id)
-
-            entity_properties.pop('name', '')
-
-            body_content = self.__xml_handler.add_properties_to_tag(body_content, entity_xml_id, entity_properties)
-
+            body_content = self.__xml_handler.add_entity_properties(body_content, entity_xml_id, entity_properties)
             self.__db_handler.set_body_content(body_content)
 
         elif entity_xml_id and entity_type in self.__listable_entities_types:
@@ -160,20 +151,16 @@ class RequestHandler:
             new_tag_xml_id = self.__db_handler.get_next_xml_id(new_tag)
 
             body_content = self.__db_handler.get_body_content()
-
             body_content = self.__xml_handler.add_reference_to_entity(body_content, tag_xml_id, new_tag, new_tag_xml_id,
                                                                       entity_xml_id)
-
             self.__db_handler.set_body_content(body_content)
 
         elif entity_xml_id and entity_type not in self.__listable_entities_types:
             new_tag_xml_id = self.__db_handler.get_next_xml_id(entity_type)
 
             body_content = self.__db_handler.get_body_content()
-
             body_content = self.__xml_handler.add_reference_to_entity(body_content, tag_xml_id, entity_type,
                                                                       new_tag_xml_id, entity_xml_id)
-
             self.__db_handler.set_body_content(body_content)
 
         else:
@@ -313,7 +300,7 @@ class RequestHandler:
             self.__db_handler.add_entity_property(entity_xml_id, entity_property)
 
             body_content = self.__db_handler.get_body_content()
-            body_content = self.__xml_handler.add_entity_property(body_content, entity_xml_id, entity_property)
+            body_content = self.__xml_handler.add_entity_properties(body_content, entity_xml_id, entity_property)
             self.__db_handler.set_body_content(body_content)
 
     def __modify_entity_property(self, request):
@@ -332,8 +319,8 @@ class RequestHandler:
             self.__db_handler.modify_entity_property(entity_xml_id, entity_property, property_name)
 
             body_content = self.__db_handler.get_body_content()
-            body_content = self.__xml_handler.modify_entity_property(body_content, entity_xml_id, old_entity_property,
-                                                                     entity_property)
+            body_content = self.__xml_handler.modify_entity_properties(body_content, entity_xml_id, old_entity_property,
+                                                                       entity_property)
             self.__db_handler.set_body_content(body_content)
 
     def __delete_entity_property(self, request):
@@ -351,7 +338,7 @@ class RequestHandler:
             self.__db_handler.delete_entity_property(entity_xml_id, property_name)
 
             body_content = self.__db_handler.get_body_content()
-            body_content = self.__xml_handler.delete_entity_property(body_content, entity_xml_id, entity_property)
+            body_content = self.__xml_handler.delete_entity_properties(body_content, entity_xml_id, entity_property)
             self.__db_handler.set_body_content(body_content)
 
     def __add_certainty(self, request):

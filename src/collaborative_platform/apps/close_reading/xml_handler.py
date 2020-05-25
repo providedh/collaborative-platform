@@ -225,7 +225,9 @@ class XmlHandler:
         else:
             return True
 
-    def add_properties_to_tag(self, text, tag_xml_id, entity_properties):
+    def add_entity_properties(self, text, tag_xml_id, entity_properties):
+        entity_properties.pop('name', '')
+        
         attributes_to_add = {f'{key}Added': value for key, value in entity_properties.items()}
         attributes_to_add.update({
             'resp': f'#{self.__annotator_xml_id}',
@@ -236,7 +238,9 @@ class XmlHandler:
 
         return text
 
-    def delete_properties_from_tag(self, text, tag_xml_id, entity_properties):
+    def delete_entity_properties(self, text, tag_xml_id, entity_properties):
+        entity_properties.pop('name', '')
+        
         attributes_to_add = {f'{key}Deleted': value for key, value in entity_properties.items()}
         attributes_to_add.update({
             'resp': f'#{self.__annotator_xml_id}',
@@ -247,23 +251,11 @@ class XmlHandler:
 
         return text
 
-    def add_entity_property(self, text, entity_xml_id, entity_property):
-        entity_property.pop('name', '')
-
-        text = self.add_properties_to_tag(text, entity_xml_id, entity_property)
-
-        return text
-
-    def delete_entity_property(self, text, entity_xml_id, entity_property):
-        text = self.delete_properties_from_tag(text, entity_xml_id, entity_property)
-
-        return text
-
-    def modify_entity_property(self, text, entity_xml_id, old_entity_property, new_entity_property):
+    def modify_entity_properties(self, text, entity_xml_id, old_entity_property, new_entity_property):
         new_entity_property.pop('name', '')
         old_entity_property.pop('name', '')
 
-        text = self.delete_properties_from_tag(text, entity_xml_id, old_entity_property)
-        text = self.add_properties_to_tag(text, entity_xml_id, new_entity_property)
+        text = self.delete_entity_properties(text, entity_xml_id, old_entity_property)
+        text = self.add_entity_properties(text, entity_xml_id, new_entity_property)
 
         return text
