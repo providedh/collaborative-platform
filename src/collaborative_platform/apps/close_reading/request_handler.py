@@ -1,6 +1,5 @@
 import json
 
-from apps.api_vis.models import Entity
 from apps.close_reading.db_handler import DbHandler
 from apps.close_reading.response_generator import get_custom_entities_types, get_listable_entities_types, \
     get_unlistable_entities_types
@@ -115,30 +114,25 @@ class RequestHandler:
     def __add_reference_to_entity(self, request):
         # TODO: Add verification if user has rights to edit a tag
 
-        tag_xml_id = request.get('edited_element_id')
+        tag_xml_id = request['edited_element_id']
         entity_xml_id = request.get('new_element_id')
 
         try:
             entity_type = request['parameters']['entity_type']
         except KeyError:
-            entity_type = Entity.objects.get(xml_id=entity_xml_id).type
+            entity_type = self.__db_handler.get_entity_type(entity_xml_id)
 
         if not entity_xml_id and entity_type in self.__listable_entities_types:
+            entity_properties = request['parameters']['entity_properties']
+
+            entity_xml_id = self.__db_handler.add_entity(entity_type, entity_properties)
+
             new_tag = 'name'
-            entity_xml_id = self.__db_handler.get_next_xml_id(entity_type)
             new_tag_xml_id = self.__db_handler.get_next_xml_id(new_tag)
 
-            entity_object = self.__db_handler.create_entity_object(entity_type, entity_xml_id)
-            entity_version_object = self.__db_handler.create_entity_version_object(entity_object)
-
-            entity_properties = request['parameters']['entity_properties']
-            self.__db_handler.create_entity_properties_objects(entity_type, entity_properties, entity_version_object)
-
             body_content = self.__db_handler.get_body_content()
-
             body_content = self.__xml_handler.add_reference_to_entity(body_content, tag_xml_id, new_tag, new_tag_xml_id,
                                                                       entity_xml_id)
-
             self.__db_handler.set_body_content(body_content)
 
         elif not entity_xml_id and entity_type not in self.__listable_entities_types:
@@ -148,7 +142,7 @@ class RequestHandler:
             entity_version_object = self.__db_handler.create_entity_version_object(entity_object)
 
             entity_properties = request['parameters']['entity_properties']
-            self.__db_handler.create_entity_properties_objects(entity_type, entity_properties, entity_version_object)
+            self.__db_handler.create_entity_properties_objects(entity_version_object, entity_properties)
 
             body_content = self.__db_handler.get_body_content()
 
@@ -188,14 +182,14 @@ class RequestHandler:
     def __modify_reference_to_entity(self, request):
         # TODO: Add verification if user has rights to edit a tag
 
-        tag_xml_id = request.get('edited_element_id')
-        old_entity_xml_id = request.get('old_element_id')
+        tag_xml_id = request['edited_element_id']
+        old_entity_xml_id = request['old_element_id']
         new_entity_xml_id = request.get('new_element_id')
 
         try:
             entity_type = request['parameters']['entity_type']
         except KeyError:
-            entity_type = Entity.objects.get(xml_id=old_entity_xml_id).type
+            entity_type = self.__db_handler.get_entity_type(new_entity_xml_id)
 
         if not new_entity_xml_id and entity_type in self.__listable_entities_types:
             new_tag = 'name'
@@ -206,7 +200,7 @@ class RequestHandler:
             entity_version_object = self.__db_handler.create_entity_version_object(entity_object)
 
             entity_properties = request['parameters']['entity_properties']
-            self.__db_handler.create_entity_properties_objects(entity_type, entity_properties, entity_version_object)
+            self.__db_handler.create_entity_properties_objects(entity_version_object, entity_properties)
 
             body_content = self.__db_handler.get_body_content()
 
@@ -227,7 +221,7 @@ class RequestHandler:
             entity_version_object = self.__db_handler.create_entity_version_object(entity_object)
 
             entity_properties = request['parameters']['entity_properties']
-            self.__db_handler.create_entity_properties_objects(entity_type, entity_properties, entity_version_object)
+            self.__db_handler.create_entity_properties_objects(entity_version_object, entity_properties)
 
             body_content = self.__db_handler.get_body_content()
 

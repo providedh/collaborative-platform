@@ -73,9 +73,9 @@ class DbHandler:
 
         return entity_version_object
 
-    def create_entity_properties_objects(self, entity_type, entity_properties, entity_version_object):
-        if entity_type in DEFAULT_ENTITIES.keys():
-            properties = DEFAULT_ENTITIES[entity_type]['properties']
+    def create_entity_properties_objects(self, entity_version, entity_properties):
+        if entity_version.entity.type in DEFAULT_ENTITIES.keys():
+            properties = DEFAULT_ENTITIES[entity_version.entity.type]['properties']
         else:
             properties = CUSTOM_ENTITY['properties']
 
@@ -83,7 +83,7 @@ class DbHandler:
 
         for name, value in entity_properties.items():
             entity_property_object = EntityProperty(
-                entity=entity_version_object.entity,
+                entity=entity_version.entity,
                 xpath='',
                 name=name,
                 type=properties[name]['type'],
@@ -133,9 +133,11 @@ class DbHandler:
 
         EntityProperty.objects.bulk_update(entity_properties, ['deleted_by'])
 
-    @staticmethod
-    def get_entity_from_db(entity_xml_id):
-        entity = Entity.objects.get(xml_id=entity_xml_id)
+    def get_entity_from_db(self, entity_xml_id):
+        entity = Entity.objects.get(
+            file=self.__file,
+            xml_id=entity_xml_id
+        )
 
         return entity
 
@@ -185,10 +187,9 @@ class DbHandler:
         return entity_property_value
 
     def add_entity_property(self, entity_xml_id, entity_property):
-        entity_type = self.get_entity_type(entity_xml_id)
-        entity_version_object = self.get_entity_version_from_db(entity_xml_id)
+        entity_version = self.get_entity_version_from_db(entity_xml_id)
 
-        self.create_entity_properties_objects(entity_type, entity_property, entity_version_object)
+        self.create_entity_properties_objects(entity_version, entity_property)
 
     def modify_entity_property(self, entity_xml_id, entity_property, property_name):
         entity_property_object = self.get_entity_property_from_db(entity_xml_id, property_name)
@@ -397,3 +398,13 @@ class DbHandler:
             raise BadParameters("There is no 'target' and 'match' matching to given parameters")
 
         return target, match
+
+    def add_entity(self, entity_type, entity_properties):
+        entity_xml_id = self.get_next_xml_id(entity_type)
+
+        entity = self.create_entity_object(entity_type, entity_xml_id)
+        entity_version = self.create_entity_version_object(entity)
+
+        self.create_entity_properties_objects(entity_version, entity_properties)
+
+        return entity_xml_id
