@@ -16,92 +16,21 @@ class DbHandler:
         self.__custom_entities_types = get_custom_entities_types(self.__file.project)
         self.__annotating_body_content = self.__get_body_content_from_db()
 
-    @staticmethod
-    def get_file_from_db(file_id):
-        file = File.objects.get(id=file_id, deleted=False)
+    def add_entity(self, entity_type, entity_properties):
+        entity_xml_id = self.get_next_xml_id(entity_type)
 
-        return file
+        entity = self.__create_entity_object(entity_type, entity_xml_id)
+        entity_version = self.__create_entity_version_object(entity)
 
-    def __get_body_content_from_db(self):
-        room_name = f'{self.__file.project.id}_{self.__file.id}'
+        self.__create_entity_properties_objects(entity_version, entity_properties)
 
-        annotating_body_content = AnnotatingBodyContent.objects.get(file_symbol=room_name)
-
-        return annotating_body_content
-
-    def get_body_content(self):
-        self.__annotating_body_content.refresh_from_db()
-        body_content = self.__annotating_body_content.body_content
-
-        return body_content
-
-    def set_body_content(self, body_content):
-        self.__annotating_body_content.body_content = body_content
-        self.__annotating_body_content.save()
-
-    def get_next_xml_id(self, entity_type):
-        entity_max_xml_id = FileMaxXmlIds.objects.get(
-            file=self.__file,
-            xml_id_base=entity_type,
-        )
-
-        xml_id_nr = entity_max_xml_id.get_next_number()
-        xml_id = f'{entity_type}-{xml_id_nr}'
-
-        return xml_id
-
-    def get_annotator_xml_id(self):
-        annotator_xml_id = self.__user.profile.get_xml_id()
-
-        return annotator_xml_id
-
-    def create_entity_object(self, entity_type, xml_id):
-        entity_object = Entity.objects.create(
-            file=self.__file,
-            type=entity_type,
-            xml_id=xml_id,
-            created_by=self.__user,
-        )
-
-        return entity_object
-
-    @staticmethod
-    def create_entity_version_object(entity_object):
-        entity_version_object = EntityVersion.objects.create(
-            entity=entity_object,
-        )
-
-        return entity_version_object
-
-    def create_entity_properties_objects(self, entity_version, entity_properties):
-        if entity_version.entity.type in DEFAULT_ENTITIES.keys():
-            properties = DEFAULT_ENTITIES[entity_version.entity.type]['properties']
-        else:
-            properties = CUSTOM_ENTITY['properties']
-
-        properties_objects = []
-
-        for name, value in entity_properties.items():
-            entity_property_object = EntityProperty(
-                entity=entity_version.entity,
-                xpath='',
-                name=name,
-                type=properties[name]['type'],
-                created_by=self.__user,
-            )
-
-            entity_property_object.set_value(value)
-
-            properties_objects.append(entity_property_object)
-
-        EntityProperty.objects.bulk_create(properties_objects)
+        return entity_xml_id
 
     def delete_entity(self, entity_xml_id):
-        entity = self.get_entity_from_db(entity_xml_id)
-        entity.deleted_by = self.__user
-        entity.save()
+        entity = self.__get_entity_from_db(entity_xml_id)
+        self.__mark_entity_to_delete(entity)
 
-        entity_version = self.get_entity_version_from_db(entity_xml_id)
+        entity_version = self.__get_entity_version_from_db(entity_xml_id)
         self.__mark_entity_properties_to_delete(entity_version)
 
         certainties = Certainty.objects.filter(
@@ -114,85 +43,13 @@ class DbHandler:
 
         Certainty.objects.bulk_update(certainties, ['deleted_by'])
 
-    def __mark_entity_properties_to_delete(self, entity_version, entity_properties_names=None):
-        # TODO: Add marking certainties to properties to delete
-
-        if entity_properties_names:
-            entity_properties = EntityProperty.objects.filter(
-                entity_version=entity_version,
-                name__in=entity_properties_names
-            )
-
-        else:
-            entity_properties = EntityProperty.objects.filter(
-                entity_version=entity_version
-            )
-
-        for entity_property in entity_properties:
-            entity_property.deleted_by = self.__user
-
-        EntityProperty.objects.bulk_update(entity_properties, ['deleted_by'])
-
-    def get_entity_from_db(self, entity_xml_id):
-        entity = Entity.objects.get(
-            file=self.__file,
-            xml_id=entity_xml_id
-        )
-
-        return entity
-
-    def get_entity_type(self, entity_xml_id):
-        entity = self.get_entity_from_db(entity_xml_id)
-        entity_type = entity.type
-
-        return entity_type
-
-    def get_entity_version_from_db(self, entity_xml_id):
-        try:
-            entity_version = EntityVersion.objects.get(
-                entity__xml_id=entity_xml_id,
-                file_version__isnull=True
-            )
-        except EntityVersion.DoesNotExist:
-            entity_version = EntityVersion.objects.get(
-                entity__xml_id=entity_xml_id,
-                file_version=self.__file.file_versions.get(number=self.__file.version_number)
-            )
-
-        return entity_version
-
-    def get_entity_property_from_db(self, entity_xml_id, property_name):
-        try:
-            entity_property = EntityProperty.objects.get(
-                entity__xml_id=entity_xml_id,
-                name=property_name,
-                entity_version__isnull=True
-            )
-        except EntityProperty.DoesNotExist:
-            entity_version = self.get_entity_version_from_db(entity_xml_id)
-
-            entity_property = EntityProperty.objects.get(
-                entity__xml_id=entity_xml_id,
-                name=property_name,
-                entity_version=entity_version
-            )
-
-        return entity_property
-
-    def get_entity_property_value(self, entity_xml_id, property_name):
-        entity_property = self.get_entity_property_from_db(entity_xml_id, property_name)
-
-        entity_property_value = entity_property.get_value(as_str=True)
-
-        return entity_property_value
-
     def add_entity_property(self, entity_xml_id, entity_property):
-        entity_version = self.get_entity_version_from_db(entity_xml_id)
+        entity_version = self.__get_entity_version_from_db(entity_xml_id)
 
-        self.create_entity_properties_objects(entity_version, entity_property)
+        self.__create_entity_properties_objects(entity_version, entity_property)
 
     def modify_entity_property(self, entity_xml_id, entity_property, property_name):
-        entity_property_object = self.get_entity_property_from_db(entity_xml_id, property_name)
+        entity_property_object = self.__get_entity_property_from_db(entity_xml_id, property_name)
 
         if entity_property_object.entity_version is not None:
             entity_property_object = self.__clone_entity_property(entity_property_object)
@@ -202,23 +59,8 @@ class DbHandler:
 
         entity_property_object.save()
 
-    def __mark_entity_property_to_delete(self, entity_property):
-        entity_property.deleted_by = self.__user
-        entity_property.save()
-
-    def __clone_entity_property(self, entity_property):  # type: (EntityProperty) -> EntityProperty
-        self.__mark_entity_property_to_delete(entity_property)
-
-        entity_property.id = None
-        entity_property.created_in_file_version = None
-        entity_property.deleted_by = None
-        entity_property.entity_version = None
-        entity_property.save()
-
-        return entity_property
-
     def delete_entity_property(self, entity_xml_id, property_name):
-        entity_version = self.get_entity_version_from_db(entity_xml_id)
+        entity_version = self.__get_entity_version_from_db(entity_xml_id)
 
         self.__mark_entity_properties_to_delete(entity_version, [property_name])
 
@@ -300,15 +142,164 @@ class DbHandler:
 
         self.__mark_certainty_to_delete(certainty)
 
-    def __get_categories_ids_from_db(self, categories):
-        categories = UncertaintyCategory.objects.filter(
-            taxonomy__project=self.__file.project,
-            name__in=categories
+    @staticmethod
+    def get_file_from_db(file_id):
+        file = File.objects.get(id=file_id, deleted=False)
+
+        return file
+
+    def get_entity_type(self, entity_xml_id):
+        entity = self.__get_entity_from_db(entity_xml_id)
+        entity_type = entity.type
+
+        return entity_type
+
+    def get_entity_property_value(self, entity_xml_id, property_name):
+        entity_property = self.__get_entity_property_from_db(entity_xml_id, property_name)
+
+        entity_property_value = entity_property.get_value(as_str=True)
+
+        return entity_property_value
+
+    def get_next_xml_id(self, entity_type):
+        entity_max_xml_id = FileMaxXmlIds.objects.get(
+            file=self.__file,
+            xml_id_base=entity_type,
         )
 
-        categories_ids = categories.values_list('id', flat=True)
+        xml_id_nr = entity_max_xml_id.get_next_number()
+        xml_id = f'{entity_type}-{xml_id_nr}'
 
-        return categories_ids
+        return xml_id
+
+    def get_annotator_xml_id(self):
+        annotator_xml_id = self.__user.profile.get_xml_id()
+
+        return annotator_xml_id
+
+    def get_body_content(self):
+        self.__annotating_body_content.refresh_from_db()
+        body_content = self.__annotating_body_content.body_content
+
+        return body_content
+
+    def set_body_content(self, body_content):
+        self.__annotating_body_content.body_content = body_content
+        self.__annotating_body_content.save()
+
+    def __create_entity_object(self, entity_type, xml_id):
+        entity_object = Entity.objects.create(
+            file=self.__file,
+            type=entity_type,
+            xml_id=xml_id,
+            created_by=self.__user,
+        )
+
+        return entity_object
+
+    @staticmethod
+    def __create_entity_version_object(entity_object):
+        entity_version_object = EntityVersion.objects.create(
+            entity=entity_object,
+        )
+
+        return entity_version_object
+
+    def __create_entity_properties_objects(self, entity_version, entity_properties):
+        if entity_version.entity.type in DEFAULT_ENTITIES.keys():
+            properties = DEFAULT_ENTITIES[entity_version.entity.type]['properties']
+        else:
+            properties = CUSTOM_ENTITY['properties']
+
+        properties_objects = []
+
+        for name, value in entity_properties.items():
+            entity_property_object = EntityProperty(
+                entity=entity_version.entity,
+                xpath='',
+                name=name,
+                type=properties[name]['type'],
+                created_by=self.__user,
+            )
+
+            entity_property_object.set_value(value)
+
+            properties_objects.append(entity_property_object)
+
+        EntityProperty.objects.bulk_create(properties_objects)
+
+    def __mark_entity_to_delete(self, entity):
+        entity.deleted_by = self.__user
+        entity.save()
+
+    def __mark_entity_property_to_delete(self, entity_property):
+        entity_property.deleted_by = self.__user
+        entity_property.save()
+
+    def __mark_certainty_to_delete(self, certainty):
+        certainty.deleted_by = self.__user
+        certainty.save()
+
+    def __mark_entity_properties_to_delete(self, entity_version, entity_properties_names=None):
+        # TODO: Add marking certainties to properties to delete
+
+        if entity_properties_names:
+            entity_properties = EntityProperty.objects.filter(
+                entity_version=entity_version,
+                name__in=entity_properties_names
+            )
+
+        else:
+            entity_properties = EntityProperty.objects.filter(
+                entity_version=entity_version
+            )
+
+        for entity_property in entity_properties:
+            entity_property.deleted_by = self.__user
+
+        EntityProperty.objects.bulk_update(entity_properties, ['deleted_by'])
+
+    def __get_entity_from_db(self, entity_xml_id):
+        entity = Entity.objects.get(
+            file=self.__file,
+            xml_id=entity_xml_id
+        )
+
+        return entity
+
+    def __get_entity_version_from_db(self, entity_xml_id):
+        try:
+            entity_version = EntityVersion.objects.get(
+                entity__xml_id=entity_xml_id,
+                file_version__isnull=True
+            )
+        except EntityVersion.DoesNotExist:
+            file_version = self.__get_file_version()
+
+            entity_version = EntityVersion.objects.get(
+                entity__xml_id=entity_xml_id,
+                file_version=file_version
+            )
+
+        return entity_version
+
+    def __get_entity_property_from_db(self, entity_xml_id, property_name):
+        try:
+            entity_property = EntityProperty.objects.get(
+                entity__xml_id=entity_xml_id,
+                name=property_name,
+                entity_version__isnull=True
+            )
+        except EntityProperty.DoesNotExist:
+            entity_version = self.__get_entity_version_from_db(entity_xml_id)
+
+            entity_property = EntityProperty.objects.get(
+                entity__xml_id=entity_xml_id,
+                name=property_name,
+                entity_version=entity_version
+            )
+
+        return entity_property
 
     def __get_certainty_from_db(self, certainty_xml_id):
         try:
@@ -317,16 +308,31 @@ class DbHandler:
                 file_version__isnull=True
             )
         except Certainty.DoesNotExist:
+            file_version = self.__get_file_version()
+
             certainty = Certainty.objects.get(
                 xml_id=certainty_xml_id,
-                file_version=self.__file.file_versions.get(number=self.__file.version_number)
+                file_version=file_version
             )
 
         return certainty
 
-    def __mark_certainty_to_delete(self, certainty):
-        certainty.deleted_by = self.__user
-        certainty.save()
+    def __get_file_version(self):
+        version_number = self.__file.version_number
+        file_version = self.__file.file_versions.get(number=version_number)
+
+        return file_version
+
+    def __clone_entity_property(self, entity_property):  # type: (EntityProperty) -> EntityProperty
+        self.__mark_entity_property_to_delete(entity_property)
+
+        entity_property.id = None
+        entity_property.created_in_file_version = None
+        entity_property.deleted_by = None
+        entity_property.entity_version = None
+        entity_property.save()
+
+        return entity_property
 
     def __clone_certainty(self, certainty):
         self.__mark_certainty_to_delete(certainty)
@@ -343,6 +349,23 @@ class DbHandler:
             certainty.categories.add(category)
 
         return certainty
+
+    def __get_categories_ids_from_db(self, categories):
+        categories = UncertaintyCategory.objects.filter(
+            taxonomy__project=self.__file.project,
+            name__in=categories
+        )
+
+        categories_ids = categories.values_list('id', flat=True)
+
+        return categories_ids
+
+    def __get_body_content_from_db(self):
+        room_name = f'{self.__file.project.id}_{self.__file.id}'
+
+        annotating_body_content = AnnotatingBodyContent.objects.get(file_symbol=room_name)
+
+        return annotating_body_content
 
     @staticmethod
     def __get_certainty_target_type(certainty_target, locus):
@@ -387,7 +410,7 @@ class DbHandler:
             target = certainty_target.split('/')[0]
             property_name = certainty_target.split('/')[1]
 
-            entity_property = self.get_entity_property_from_db(target, property_name)
+            entity_property = self.__get_entity_property_from_db(target, property_name)
             match = entity_property.xpath
 
         elif target_type == TargetTypes.certainty:
@@ -398,13 +421,3 @@ class DbHandler:
             raise BadParameters("There is no 'target' and 'match' matching to given parameters")
 
         return target, match
-
-    def add_entity(self, entity_type, entity_properties):
-        entity_xml_id = self.get_next_xml_id(entity_type)
-
-        entity = self.create_entity_object(entity_type, entity_xml_id)
-        entity_version = self.create_entity_version_object(entity)
-
-        self.create_entity_properties_objects(entity_version, entity_properties)
-
-        return entity_xml_id

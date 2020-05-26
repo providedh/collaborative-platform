@@ -1,8 +1,7 @@
 import json
 
 from apps.close_reading.db_handler import DbHandler
-from apps.close_reading.response_generator import get_custom_entities_types, get_listable_entities_types, \
-    get_unlistable_entities_types
+from apps.close_reading.response_generator import get_listable_entities_types
 from apps.close_reading.xml_handler import XmlHandler
 from apps.exceptions import BadRequest, NotModified
 
@@ -11,16 +10,11 @@ class RequestHandler:
     def __init__(self, user, file_id):
         self.__db_handler = DbHandler(user, file_id)
 
-        file = self.__db_handler.get_file_from_db(file_id)
-
-        self.__listable_entities_types = get_listable_entities_types(file.project)
-
-        custom_entities_types = get_custom_entities_types(file.project)
-        unlistable_entities_types = get_unlistable_entities_types(file.project)
         annotator_xml_id = self.__db_handler.get_annotator_xml_id()
+        self.__xml_handler = XmlHandler(annotator_xml_id)
 
-        self.__xml_handler = XmlHandler(self.__listable_entities_types, unlistable_entities_types,
-                                        custom_entities_types, annotator_xml_id)
+        file = self.__db_handler.get_file_from_db(file_id)
+        self.__listable_entities_types = get_listable_entities_types(file.project)
 
     def handle_request(self, text_data):
         requests = self.__parse_text_data(text_data)
@@ -71,12 +65,6 @@ class RequestHandler:
 
             else:
                 raise BadRequest(f"There is no operation matching to this request")
-
-    @staticmethod
-    def __parse_text_data(text_data):
-        request = json.loads(text_data)
-
-        return request
 
     def __add_tag(self, request):
         # TODO: Add verification if this same tag not existing already
@@ -243,16 +231,6 @@ class RequestHandler:
         else:
             raise BadRequest("There is no operation matching to this request")
 
-    def __get_new_tag_xml_id(self, tag_xml_id, new_tag):
-        edited_element_id_base = tag_xml_id.split('-')[0]
-
-        if edited_element_id_base != new_tag:
-            new_tag_xml_id = self.__db_handler.get_next_xml_id('name')
-        else:
-            new_tag_xml_id = None
-
-        return new_tag_xml_id
-
     def __delete_reference_to_entity(self, request):
         # TODO: add attribute `newId="ab-XX"`, when tag name will be changed to 'ab'
 
@@ -338,3 +316,19 @@ class RequestHandler:
         certainty_xml_id = request['edited_element_id']
 
         self.__db_handler.delete_certainty(certainty_xml_id)
+
+    @staticmethod
+    def __parse_text_data(text_data):
+        request = json.loads(text_data)
+
+        return request
+
+    def __get_new_tag_xml_id(self, tag_xml_id, new_tag):
+        edited_element_id_base = tag_xml_id.split('-')[0]
+
+        if edited_element_id_base != new_tag:
+            new_tag_xml_id = self.__db_handler.get_next_xml_id('name')
+        else:
+            new_tag_xml_id = None
+
+        return new_tag_xml_id

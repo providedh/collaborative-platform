@@ -11,14 +11,66 @@ XML_ID_KEY = f"{{{XML_NAMESPACES['xml']}}}id"
 
 
 class XmlHandler:
-    def __init__(self, listable_entities_types, unlistable_entities_types, custom_entities_types, annotator_xml_id):
-        self.__listable_entities_types = listable_entities_types
-        self.__unlistable_entities_types = unlistable_entities_types
-        self.__custom_entities_types = custom_entities_types
+    def __init__(self, annotator_xml_id):
         self.__annotator_xml_id = annotator_xml_id
 
     def add_tag(self, text, start_pos, end_pos, tag_xml_id):
-        text = self.__add_tag(text, start_pos, end_pos, tag_xml_id)
+        text_before = text[:start_pos]
+        text_inside = text[start_pos:end_pos]
+        text_after = text[end_pos:]
+
+        text = f'{text_before}<ab xml:id="{tag_xml_id}" resp="#{self.__annotator_xml_id}" ' \
+               f'saved="false">{text_inside}</ab>{text_after}'
+
+        return text
+
+    def move_tag(self, text, start_pos, end_pos, tag_xml_id):
+        temp_xml_id = f'{tag_xml_id}-new'
+
+        # Get tag name
+        tree = etree.fromstring(text)
+
+        xpath = f"//*[contains(concat(' ', @xml:id, ' '), ' {tag_xml_id} ')]"
+        old_tag_element = get_first_xpath_match(tree, xpath, XML_NAMESPACES)
+
+        old_tag_name = old_tag_element.tag
+        old_tag_name = re.sub(r'{.*?}', '', old_tag_name)
+
+        old_tag_attributes = old_tag_element.attrib
+
+        # Add new tag with temp id
+        text = self.add_tag(text, start_pos, end_pos, temp_xml_id)
+
+        # Mark old tag to delete
+        attributes_to_add = {
+            XML_ID_KEY: f'{tag_xml_id}-old',
+            'deleted': 'true',
+            'saved': 'false',
+            'resp': f'#{self.__annotator_xml_id}',
+        }
+
+        attributes_to_delete = {
+            XML_ID_KEY: tag_xml_id,
+        }
+
+        text = self.__update_tag(text, tag_xml_id, attributes_to_add=attributes_to_add,
+                                 attributes_to_delete=attributes_to_delete)
+
+        # update attributes in new tag
+        attributes_to_add = {
+            XML_ID_KEY: tag_xml_id,
+            'saved': 'false',
+            'resp': f'#{self.__annotator_xml_id}',
+        }
+
+        attributes_to_add = {**old_tag_attributes, **attributes_to_add}
+
+        attributes_to_delete = {
+            XML_ID_KEY: temp_xml_id,
+        }
+
+        text = self.__update_tag(text, temp_xml_id, new_tag=old_tag_name, attributes_to_add=attributes_to_add,
+                                 attributes_to_delete=attributes_to_delete)
 
         return text
 
@@ -33,15 +85,93 @@ class XmlHandler:
 
         return text
 
-    def __add_tag(self, text, start_pos, end_pos, tag_xml_id):
-        text_before = text[:start_pos]
-        text_inside = text[start_pos:end_pos]
-        text_after = text[end_pos:]
+    def add_reference_to_entity(self, text, tag_xml_id, new_tag, new_tag_xml_id, entity_xml_id):
+        attributes_to_add = {
+            'newId': f'{new_tag_xml_id}',
+            'ref': f'#{entity_xml_id}',
+            'unsavedRef': f'#{entity_xml_id}',
+            'resp': f'#{self.__annotator_xml_id}',
+            'saved': 'false',
+        }
 
-        text = f'{text_before}<ab xml:id="{tag_xml_id}" resp="#{self.__annotator_xml_id}" ' \
-               f'saved="false">{text_inside}</ab>{text_after}'
+        text = self.__update_tag(text, tag_xml_id, new_tag=new_tag, attributes_to_add=attributes_to_add)
 
         return text
+
+    def modify_reference_to_entity(self, text, tag_xml_id, new_entity_xml_id, old_entity_xml_id, new_tag=None,
+                                   new_tag_xml_id=None):
+        attributes_to_add = {
+            'ref': f'#{new_entity_xml_id}',
+            'refAdded': f'#{new_entity_xml_id}',
+            'refDeleted': f'#{old_entity_xml_id}',
+            'resp': f'#{self.__annotator_xml_id}',
+            'saved': 'false'
+        }
+
+        if new_tag_xml_id:
+            attributes_to_add.update({'newId': f'{new_tag_xml_id}'})
+
+        text = self.__update_tag(text, tag_xml_id, new_tag=new_tag, attributes_to_add=attributes_to_add)
+
+        return text
+
+    def delete_reference_to_entity(self, text, tag_xml_id, entity_xml_id):
+        attributes_to_add = {
+            'refDeleted': f'#{entity_xml_id}',
+            'saved': 'false',
+            'resp': f'#{self.__annotator_xml_id}',
+        }
+
+        text = self.__update_tag(text, tag_xml_id, attributes_to_add=attributes_to_add)
+
+        return text
+
+    def add_entity_properties(self, text, tag_xml_id, entity_properties):
+        entity_properties.pop('name', '')
+
+        attributes_to_add = {f'{key}Added': value for key, value in entity_properties.items()}
+        attributes_to_add.update({
+            'resp': f'#{self.__annotator_xml_id}',
+            'saved': 'false'
+        })
+
+        text = self.__update_tag(text, tag_xml_id, attributes_to_add=attributes_to_add)
+
+        return text
+
+    def modify_entity_properties(self, text, entity_xml_id, old_entity_properties, new_entity_properties):
+        new_entity_properties.pop('name', '')
+        old_entity_properties.pop('name', '')
+
+        text = self.delete_entity_properties(text, entity_xml_id, old_entity_properties)
+        text = self.add_entity_properties(text, entity_xml_id, new_entity_properties)
+
+        return text
+
+    def delete_entity_properties(self, text, tag_xml_id, entity_properties):
+        entity_properties.pop('name', '')
+
+        attributes_to_add = {f'{key}Deleted': value for key, value in entity_properties.items()}
+        attributes_to_add.update({
+            'resp': f'#{self.__annotator_xml_id}',
+            'saved': 'false'
+        })
+
+        text = self.__update_tag(text, tag_xml_id, attributes_to_add=attributes_to_add)
+
+        return text
+
+    @staticmethod
+    def check_if_last_reference(text, target_element_id):
+        tree = etree.fromstring(text)
+
+        xpath = f"//*[contains(concat(' ', @ref, ' '), ' {target_element_id} ')]"
+        all_references = tree.xpath(xpath, namespaces=XML_NAMESPACES)
+
+        if len(all_references) > 1:
+            return False
+        else:
+            return True
 
     @staticmethod
     def __update_tag(text, tag_xml_id, new_tag=None, attributes_to_add=None, attributes_to_delete=None):
@@ -114,148 +244,5 @@ class XmlHandler:
             element.tag = tag
 
         text = etree.tounicode(tree, pretty_print=True)
-
-        return text
-
-    def move_tag(self, text, start_pos, end_pos, tag_xml_id):
-        temp_xml_id = f'{tag_xml_id}-new'
-
-        # Get tag name
-        tree = etree.fromstring(text)
-
-        xpath = f"//*[contains(concat(' ', @xml:id, ' '), ' {tag_xml_id} ')]"
-        old_tag_element = get_first_xpath_match(tree, xpath, XML_NAMESPACES)
-
-        old_tag_name = old_tag_element.tag
-        old_tag_name = re.sub(r'{.*?}', '', old_tag_name)
-
-        old_tag_attributes = old_tag_element.attrib
-
-        # Add new tag with temp id
-        text = self.__add_tag(text, start_pos, end_pos, temp_xml_id)
-
-        # Mark old tag to delete
-        attributes_to_add = {
-            XML_ID_KEY: f'{tag_xml_id}-old',
-            'deleted': 'true',
-            'saved': 'false',
-            'resp': f'#{self.__annotator_xml_id}',
-        }
-
-        attributes_to_delete = {
-            XML_ID_KEY: tag_xml_id,
-        }
-
-        text = self.__update_tag(text, tag_xml_id, attributes_to_add=attributes_to_add,
-                                 attributes_to_delete=attributes_to_delete)
-
-        # update attributes in new tag
-        attributes_to_add = {
-            XML_ID_KEY: tag_xml_id,
-            'saved': 'false',
-            'resp': f'#{self.__annotator_xml_id}',
-        }
-
-        attributes_to_add = {**old_tag_attributes, **attributes_to_add}
-
-        attributes_to_delete = {
-            XML_ID_KEY: temp_xml_id,
-        }
-
-        text = self.__update_tag(text, temp_xml_id, new_tag=old_tag_name, attributes_to_add=attributes_to_add,
-                                 attributes_to_delete=attributes_to_delete)
-
-        return text
-
-    def add_reference_to_entity(self, text, tag_xml_id, new_tag, new_tag_xml_id, entity_xml_id):
-        attributes_to_add = {
-            'newId': f'{new_tag_xml_id}',
-            'ref': f'#{entity_xml_id}',
-            'unsavedRef': f'#{entity_xml_id}',
-            'resp': f'#{self.__annotator_xml_id}',
-            'saved': 'false',
-        }
-
-        text = self.__update_tag(text, tag_xml_id, new_tag=new_tag, attributes_to_add=attributes_to_add)
-
-        return text
-
-    def add_attributes_to_tag(self, text, tag_xml_id, attributes_to_add):
-        text = self.__update_tag(text, tag_xml_id, attributes_to_add=attributes_to_add)
-
-        return text
-
-    def delete_reference_to_entity(self, text, tag_xml_id, entity_xml_id):
-        attributes_to_add = {
-            'refDeleted': f'#{entity_xml_id}',
-            'saved': 'false',
-            'resp': f'#{self.__annotator_xml_id}',
-        }
-
-        text = self.__update_tag(text, tag_xml_id, attributes_to_add=attributes_to_add)
-
-        return text
-
-    def modify_reference_to_entity(self, text, tag_xml_id, new_entity_xml_id, old_entity_xml_id, new_tag=None,
-                                   new_tag_xml_id=None):
-        attributes_to_add = {
-            'ref': f'#{new_entity_xml_id}',
-            'refAdded': f'#{new_entity_xml_id}',
-            'refDeleted': f'#{old_entity_xml_id}',
-            'resp': f'#{self.__annotator_xml_id}',
-            'saved': 'false'
-        }
-
-        if new_tag_xml_id:
-            attributes_to_add.update({'newId': f'{new_tag_xml_id}'})
-
-        text = self.__update_tag(text, tag_xml_id, new_tag=new_tag, attributes_to_add=attributes_to_add)
-
-        return text
-
-    @staticmethod
-    def check_if_last_reference(text, target_element_id):
-        tree = etree.fromstring(text)
-
-        xpath = f"//*[contains(concat(' ', @ref, ' '), ' {target_element_id} ')]"
-        all_references = tree.xpath(xpath, namespaces=XML_NAMESPACES)
-
-        if len(all_references) > 1:
-            return False
-        else:
-            return True
-
-    def add_entity_properties(self, text, tag_xml_id, entity_properties):
-        entity_properties.pop('name', '')
-        
-        attributes_to_add = {f'{key}Added': value for key, value in entity_properties.items()}
-        attributes_to_add.update({
-            'resp': f'#{self.__annotator_xml_id}',
-            'saved': 'false'
-        })
-
-        text = self.__update_tag(text, tag_xml_id, attributes_to_add=attributes_to_add)
-
-        return text
-
-    def delete_entity_properties(self, text, tag_xml_id, entity_properties):
-        entity_properties.pop('name', '')
-        
-        attributes_to_add = {f'{key}Deleted': value for key, value in entity_properties.items()}
-        attributes_to_add.update({
-            'resp': f'#{self.__annotator_xml_id}',
-            'saved': 'false'
-        })
-
-        text = self.__update_tag(text, tag_xml_id, attributes_to_add=attributes_to_add)
-
-        return text
-
-    def modify_entity_properties(self, text, entity_xml_id, old_entity_properties, new_entity_properties):
-        new_entity_properties.pop('name', '')
-        old_entity_properties.pop('name', '')
-
-        text = self.delete_entity_properties(text, entity_xml_id, old_entity_properties)
-        text = self.add_entity_properties(text, entity_xml_id, new_entity_properties)
 
         return text
