@@ -1335,6 +1335,88 @@ class TestAnnotatorWithWsAndDb27:
         await communicator.disconnect()
 
 
+@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
+@pytest.mark.asyncio
+@pytest.mark.django_db()
+@pytest.mark.integration_tests
+class TestAnnotatorWithWsAndDb28:
+    async def test_complex_operation(self):
+        test_name = inspect.currentframe().f_code.co_name
+
+        project_id = 1
+        file_id = 1
+        user_id = 2
+
+        communicator = get_communicator(project_id, file_id, user_id)
+
+        await communicator.connect()
+        await communicator.receive_json_from()
+
+        request = [
+            {
+                'method': 'POST',
+                'element_type': 'tag',
+                'parameters': {
+                    'start_pos': 265,
+                    'end_pos': 271,
+                }
+            },
+            {
+                'method': 'POST',
+                'element_type': 'reference',
+                'edited_element_id': 0,
+                'parameters': {
+                    'entity_type': 'person',
+                    'entity_properties': {
+                        'forename': 'Bugs',
+                        'surname': 'Bunny',
+                        'sex': 'M'
+                    }
+                }
+            },
+            {
+                'method': 'POST',
+                'element_type': 'certainty',
+                'new_element_id': '0@ref',
+                'parameters': {
+                    'categories': ['ignorance', 'incompleteness'],
+                    'locus': 'value',
+                    'certainty': 'low',
+                    'description': 'Test'
+                }
+            },
+            {
+                'method': 'POST',
+                'element_type': 'certainty',
+                'new_element_id': 1,
+                'parameters': {
+                    'categories': ['credibility'],
+                    'locus': 'name',
+                    'certainty': 'low',
+                    'description': 'Test'
+                }
+            },
+            {
+                'method': 'POST',
+                'element_type': 'certainty',
+                'new_element_id': 3,
+                'parameters': {
+                    'categories': ['ignorance'],
+                    'locus': 'value',
+                    'certainty': 'low',
+                    'description': 'Test'
+                }
+            }
+        ]
+        request_nr = 0
+
+        await communicator.send_json_to(request)
+        response = await communicator.receive_json_from()
+        verify_response(test_name, response, request_nr)
+
+        await communicator.disconnect()
+
+
 def get_communicator(project_id, file_id, user_id=None):
     communicator = WebsocketCommunicator(
         application=application,

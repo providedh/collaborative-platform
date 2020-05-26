@@ -89,6 +89,8 @@ class DbHandler:
 
         certainty_object.categories.add(*categories_ids)
 
+        return xml_id
+
     def modify_certainty(self, certainty_xml_id, parameter_name, parameters):
         certainty = self.__get_certainty_from_db(certainty_xml_id)
 

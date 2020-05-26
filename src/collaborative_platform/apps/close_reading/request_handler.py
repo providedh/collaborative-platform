@@ -9,6 +9,7 @@ from apps.exceptions import BadRequest, NotModified
 class RequestHandler:
     def __init__(self, user, file_id):
         self.__db_handler = DbHandler(user, file_id)
+        self.__operations_results = []
 
         annotator_xml_id = self.__db_handler.get_annotator_xml_id()
         self.__xml_handler = XmlHandler(annotator_xml_id)
@@ -17,6 +18,8 @@ class RequestHandler:
         self.__listable_entities_types = get_listable_entities_types(file.project)
 
     def handle_request(self, text_data):
+        self.__clean_operation_results()
+
         requests = self.__parse_text_data(text_data)
 
         for request in requests:
@@ -78,6 +81,8 @@ class RequestHandler:
         body_content = self.__xml_handler.add_tag(body_content, start_pos, end_pos, tag_xml_id)
         self.__db_handler.set_body_content(body_content)
 
+        self.__operations_results.append(tag_xml_id)
+
     def __move_tag(self, request):
         # TODO: Add verification if user has rights to edit a tag
         # TODO: Add verification if tag wasn't moved by another user in the meantime
@@ -90,6 +95,8 @@ class RequestHandler:
         body_content = self.__xml_handler.move_tag(body_content, new_start_pos, new_end_pos, tag_xml_id)
         self.__db_handler.set_body_content(body_content)
 
+        self.__operations_results.append(tag_xml_id)
+
     def __delete_tag(self, request):
         # TODO: Add verification if user has rights to delete a tag
 
@@ -99,10 +106,13 @@ class RequestHandler:
         body_content = self.__xml_handler.delete_tag(body_content, tag_xml_id)
         self.__db_handler.set_body_content(body_content)
 
+        self.__operations_results.append(None)
+
     def __add_reference_to_entity(self, request):
         # TODO: Add verification if user has rights to edit a tag
 
         tag_xml_id = request['edited_element_id']
+        tag_xml_id = self.__update_target_xml_id(tag_xml_id)
         entity_xml_id = request.get('new_element_id')
 
         try:
@@ -153,6 +163,8 @@ class RequestHandler:
 
         else:
             raise BadRequest("There is no operation matching to this request")
+
+        self.__operations_results.append(entity_xml_id)
 
     def __modify_reference_to_entity(self, request):
         # TODO: Add verification if user has rights to edit a tag
@@ -231,6 +243,8 @@ class RequestHandler:
         else:
             raise BadRequest("There is no operation matching to this request")
 
+        self.__operations_results.append(new_entity_xml_id)
+
     def __delete_reference_to_entity(self, request):
         # TODO: add attribute `newId="ab-XX"`, when tag name will be changed to 'ab'
 
@@ -246,6 +260,8 @@ class RequestHandler:
         if last_reference:
             self.__db_handler.delete_entity(entity_xml_id)
 
+        self.__operations_results.append(None)
+
     def __add_entity_property(self, request):
         entity_xml_id = request['edited_element_id']
         entity_property = request['parameters']
@@ -260,6 +276,8 @@ class RequestHandler:
             body_content = self.__db_handler.get_body_content()
             body_content = self.__xml_handler.add_entity_properties(body_content, entity_xml_id, entity_property)
             self.__db_handler.set_body_content(body_content)
+
+        self.__operations_results.append(None)
 
     def __modify_entity_property(self, request):
         entity_xml_id = request['edited_element_id']
@@ -281,6 +299,8 @@ class RequestHandler:
                                                                        entity_property)
             self.__db_handler.set_body_content(body_content)
 
+        self.__operations_results.append(None)
+
     def __delete_entity_property(self, request):
         entity_xml_id = request['edited_element_id']
         property_name = request['old_element_id']
@@ -299,11 +319,16 @@ class RequestHandler:
             body_content = self.__xml_handler.delete_entity_properties(body_content, entity_xml_id, entity_property)
             self.__db_handler.set_body_content(body_content)
 
+        self.__operations_results.append(None)
+
     def __add_certainty(self, request):
         certainty_target = request['new_element_id']
+        certainty_target = self.__update_target_xml_id(certainty_target)
         parameters = request['parameters']
 
-        self.__db_handler.add_certainty(certainty_target, parameters)
+        certainty_xml_id = self.__db_handler.add_certainty(certainty_target, parameters)
+
+        self.__operations_results.append(certainty_xml_id)
 
     def __modify_certainty(self, request):
         certainty_xml_id = request['edited_element_id']
@@ -312,10 +337,49 @@ class RequestHandler:
 
         self.__db_handler.modify_certainty(certainty_xml_id, parameter_name, new_value)
 
+        self.__operations_results.append(certainty_xml_id)
+
     def __delete_certainty(self, request):
         certainty_xml_id = request['edited_element_id']
 
         self.__db_handler.delete_certainty(certainty_xml_id)
+
+        self.__operations_results.append(None)
+
+    def __clean_operation_results(self):
+        self.__operations_results = []
+
+    def __update_target_xml_id(self, target):
+        if isinstance(target, int):
+            new_target = self.__operations_results[target]
+
+        elif '@' in target:
+            new_target = self.__update_target_xml_id_with_argument(target, '@')
+
+        elif '/' in target:
+            new_target = self.__update_target_xml_id_with_argument(target, '/')
+
+        else:
+            new_target = target
+
+        return new_target
+
+    def __update_target_xml_id_with_argument(self, target, separator):
+        splitted = target.split(separator)
+
+        xml_id_part = splitted[0]
+        argument_part = splitted[1]
+
+        try:
+            operation_id = int(xml_id_part)
+            xml_id = self.__operations_results[operation_id]
+
+            new_target = f'{xml_id}{separator}{argument_part}'
+
+        except ValueError:
+            new_target = target
+
+        return new_target
 
     @staticmethod
     def __parse_text_data(text_data):
