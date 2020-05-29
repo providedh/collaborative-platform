@@ -17,57 +17,61 @@ class RequestHandler:
         file = self.__db_handler.get_file_from_db(file_id)
         self.__listable_entities_types = get_listable_entities_types(file.project)
 
-    def handle_request(self, text_data):
+    def modify_file(self, operations):
         self.__clean_operation_results()
 
-        requests = self.__parse_text_data(text_data)
-
-        for request in requests:
-            if request['element_type'] == 'tag':
-                if request['method'] == 'POST':
-                    self.__add_tag(request)
-                elif request['method'] == 'PUT':
-                    self.__move_tag(request)
-                elif request['method'] == 'DELETE':
-                    self.__delete_tag(request)
+        for operation in operations:
+            if operation['element_type'] == 'tag':
+                if operation['method'] == 'POST':
+                    self.__add_tag(operation)
+                elif operation['method'] == 'PUT':
+                    self.__move_tag(operation)
+                elif operation['method'] == 'DELETE':
+                    self.__delete_tag(operation)
                 else:
                     raise BadRequest("There is no operation matching to this request")
 
-            elif request['element_type'] == 'reference':
-                if request['method'] == 'POST':
-                    self.__add_reference_to_entity(request)
-                elif request['method'] == 'PUT':
-                    self.__modify_reference_to_entity(request)
-                elif request['method'] == 'DELETE':
-                    self.__delete_reference_to_entity(request)
+            elif operation['element_type'] == 'reference':
+                if operation['method'] == 'POST':
+                    self.__add_reference_to_entity(operation)
+                elif operation['method'] == 'PUT':
+                    self.__modify_reference_to_entity(operation)
+                elif operation['method'] == 'DELETE':
+                    self.__delete_reference_to_entity(operation)
                 else:
                     raise BadRequest("There is no operation matching to this request")
 
-            elif request['element_type'] == 'entity_property':
-                if request['method'] == 'POST':
-                    self.__add_entity_property(request)
-                elif request['method'] == 'PUT':
-                    self.__modify_entity_property(request)
-                elif request['method'] == 'DELETE':
-                    self.__delete_entity_property(request)
+            elif operation['element_type'] == 'entity_property':
+                if operation['method'] == 'POST':
+                    self.__add_entity_property(operation)
+                elif operation['method'] == 'PUT':
+                    self.__modify_entity_property(operation)
+                elif operation['method'] == 'DELETE':
+                    self.__delete_entity_property(operation)
                 else:
                     raise BadRequest("There is no operation matching to this request")
 
-            elif request['element_type'] == 'unification':
+            elif operation['element_type'] == 'unification':
                 raise NotModified("Method not implemented yet")
 
-            elif request['element_type'] == 'certainty':
-                if request['method'] == 'POST':
-                    self.__add_certainty(request)
-                elif request['method'] == 'PUT':
-                    self.__modify_certainty(request)
-                elif request['method'] == 'DELETE':
-                    self.__delete_certainty(request)
+            elif operation['element_type'] == 'certainty':
+                if operation['method'] == 'POST':
+                    self.__add_certainty(operation)
+                elif operation['method'] == 'PUT':
+                    self.__modify_certainty(operation)
+                elif operation['method'] == 'DELETE':
+                    self.__delete_certainty(operation)
                 else:
                     raise BadRequest("There is no operation matching to this request")
 
             else:
                 raise BadRequest(f"There is no operation matching to this request")
+
+    def save_file(self, text_data):
+        pass
+
+    def discard_changes(self, text_data):
+        pass
 
     def __add_tag(self, request):
         # TODO: Add verification if this same tag not existing already
@@ -380,12 +384,6 @@ class RequestHandler:
             new_target = target
 
         return new_target
-
-    @staticmethod
-    def __parse_text_data(text_data):
-        request = json.loads(text_data)
-
-        return request
 
     def __get_new_tag_xml_id(self, tag_xml_id, new_tag):
         edited_element_id_base = tag_xml_id.split('-')[0]

@@ -7,9 +7,9 @@ from django.db import models
 
 from collaborative_platform.settings import ANONYMOUS_USER_ID
 
+from apps.api_vis.enums import TypeChoice
 from apps.files_management.models import File, FileVersion
 from apps.projects.models import Project, ProjectVersion, UncertaintyCategory
-from apps.api_vis.enums import TypeChoice
 
 
 def get_anonymous_user():

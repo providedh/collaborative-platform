@@ -96,32 +96,38 @@ class TestAnnotatorWithWsAndDb:
         await communicator.connect()
         await communicator.receive_json_from()
 
-        request = [
-            {
-                'method': 'POST',
-                'element_type': 'tag',
-                'parameters': {
-                    'start_pos': 265,
-                    'end_pos': 271,
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'POST',
+                    'element_type': 'tag',
+                    'parameters': {
+                        'start_pos': 265,
+                        'end_pos': 271,
+                    }
                 }
-            }
-        ]
+            ]
+        }
         request_nr = 0
 
         await communicator.send_json_to(request)
         response = await communicator.receive_json_from()
         verify_response(test_name, response, request_nr)
 
-        request = [
-            {
-                'method': 'POST',
-                'element_type': 'tag',
-                'parameters': {
-                    'start_pos': 400,
-                    'end_pos': 404
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'POST',
+                    'element_type': 'tag',
+                    'parameters': {
+                        'start_pos': 400,
+                        'end_pos': 404
+                    }
                 }
-            }
-        ]
+            ]
+        }
         request_nr = 1
 
         await communicator.send_json_to(request)
@@ -142,19 +148,22 @@ class TestAnnotatorWithWsAndDb:
         await communicator.connect()
         await communicator.receive_json_from()
 
-        request = [
-            {
-                'method': 'PUT',
-                'element_type': 'tag',
-                'edited_element_id': 'name-3',
-                'parameters': {
-                    'start_pos': 313,
-                    'end_pos': 328,
-                    'new_start_pos': 272,
-                    'new_end_pos': 342,
+        request = {
+                'method': 'modify',
+                'payload': [
+                {
+                    'method': 'PUT',
+                    'element_type': 'tag',
+                    'edited_element_id': 'name-3',
+                    'parameters': {
+                        'start_pos': 313,
+                        'end_pos': 328,
+                        'new_start_pos': 272,
+                        'new_end_pos': 342,
+                    }
                 }
-            }
-        ]
+            ]
+        }
         request_nr = 0
 
         await communicator.send_json_to(request)
@@ -175,13 +184,16 @@ class TestAnnotatorWithWsAndDb:
         await communicator.connect()
         await communicator.receive_json_from()
 
-        request = [
-            {
-                'method': 'DELETE',
-                'element_type': 'tag',
-                'edited_element_id': 'name-3'
-            }
-        ]
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'DELETE',
+                    'element_type': 'tag',
+                    'edited_element_id': 'name-3'
+                }
+            ]
+        }
         request_nr = 0
 
         await communicator.send_json_to(request)
@@ -208,37 +220,43 @@ class TestAnnotatorWithWsAndDb2:
         await communicator.connect()
         await communicator.receive_json_from()
 
-        request = [
-            {
-                'method': 'POST',
-                'element_type': 'tag',
-                'parameters': {
-                    'start_pos': 265,
-                    'end_pos': 271,
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'POST',
+                    'element_type': 'tag',
+                    'parameters': {
+                        'start_pos': 265,
+                        'end_pos': 271,
+                    }
                 }
-            }
-        ]
+            ]
+        }
         request_nr = 0
 
         await communicator.send_json_to(request)
         response = await communicator.receive_json_from()
         verify_response(test_name, response, request_nr)
 
-        request = [
-            {
-                'method': 'POST',
-                'element_type': 'reference',
-                'edited_element_id': 'ab-1',
-                'parameters': {
-                    'entity_type': 'person',
-                    'entity_properties': {
-                        'forename': 'Bugs',
-                        'surname': 'Bunny',
-                        'sex': 'M'
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'POST',
+                    'element_type': 'reference',
+                    'edited_element_id': 'ab-1',
+                    'parameters': {
+                        'entity_type': 'person',
+                        'entity_properties': {
+                            'forename': 'Bugs',
+                            'surname': 'Bunny',
+                            'sex': 'M'
+                        }
                     }
                 }
-            }
-        ]
+            ]
+        }
         request_nr = 1
 
         await communicator.send_json_to(request)
@@ -265,16 +283,19 @@ class TestAnnotatorWithWsAndDb3:
         await communicator.connect()
         await communicator.receive_json_from()
 
-        request = [
-            {
-                'method': 'POST',
-                'element_type': 'tag',
-                'parameters': {
-                    'start_pos': 265,
-                    'end_pos': 271,
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'POST',
+                    'element_type': 'tag',
+                    'parameters': {
+                        'start_pos': 265,
+                        'end_pos': 271,
+                    }
                 }
-            }
-        ]
+            ]
+        }
         request_nr = 0
 
         await communicator.send_json_to(request)
@@ -284,19 +305,22 @@ class TestAnnotatorWithWsAndDb3:
         date_entities_in_db = Entity.objects.filter(type='date')
         assert len(date_entities_in_db) == 2
 
-        request = [
-            {
-                'method': 'POST',
-                'element_type': 'reference',
-                'edited_element_id': 'ab-1',
-                'parameters': {
-                    'entity_type': 'date',
-                    'entity_properties': {
-                        'when': '2000-01-01'
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'POST',
+                    'element_type': 'reference',
+                    'edited_element_id': 'ab-1',
+                    'parameters': {
+                        'entity_type': 'date',
+                        'entity_properties': {
+                            'when': '2000-01-01'
+                        }
                     }
                 }
-            }
-        ]
+            ]
+        }
         request_nr = 1
 
         await communicator.send_json_to(request)
@@ -326,30 +350,36 @@ class TestAnnotatorWithWsAndDb4:
         await communicator.connect()
         await communicator.receive_json_from()
 
-        request = [
-            {
-                'method': 'POST',
-                'element_type': 'tag',
-                'parameters': {
-                    'start_pos': 265,
-                    'end_pos': 271,
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'POST',
+                    'element_type': 'tag',
+                    'parameters': {
+                        'start_pos': 265,
+                        'end_pos': 271,
+                    }
                 }
-            }
-        ]
+            ]
+        }
         request_nr = 0
 
         await communicator.send_json_to(request)
         response = await communicator.receive_json_from()
         verify_response(test_name, response, request_nr)
 
-        request = [
-            {
-                'method': 'POST',
-                'element_type': 'reference',
-                'edited_element_id': 'ab-1',
-                'new_element_id': 'person-2'
-            }
-        ]
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'POST',
+                    'element_type': 'reference',
+                    'edited_element_id': 'ab-1',
+                    'new_element_id': 'person-2'
+                }
+            ]
+        }
         request_nr = 1
 
         await communicator.send_json_to(request)
@@ -376,30 +406,36 @@ class TestAnnotatorWithWsAndDb5:
         await communicator.connect()
         await communicator.receive_json_from()
 
-        request = [
-            {
-                'method': 'POST',
-                'element_type': 'tag',
-                'parameters': {
-                    'start_pos': 265,
-                    'end_pos': 271,
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'POST',
+                    'element_type': 'tag',
+                    'parameters': {
+                        'start_pos': 265,
+                        'end_pos': 271,
+                    }
                 }
-            }
-        ]
+            ]
+        }
         request_nr = 0
 
         await communicator.send_json_to(request)
         response = await communicator.receive_json_from()
         verify_response(test_name, response, request_nr)
 
-        request = [
-            {
-                'method': 'POST',
-                'element_type': 'reference',
-                'edited_element_id': 'ab-1',
-                'new_element_id': 'date-0'
-            }
-        ]
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'POST',
+                    'element_type': 'reference',
+                    'edited_element_id': 'ab-1',
+                    'new_element_id': 'date-0'
+                }
+            ]
+        }
         request_nr = 1
 
         await communicator.send_json_to(request)
@@ -426,14 +462,17 @@ class TestAnnotatorWithWsAndDb6:
         await communicator.connect()
         await communicator.receive_json_from()
 
-        request = [
-            {
-                'method': 'DELETE',
-                'element_type': 'reference',
-                'edited_element_id': 'name-4',
-                'old_element_id': 'ingredient-2',
-            }
-        ]
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'DELETE',
+                    'element_type': 'reference',
+                    'edited_element_id': 'name-4',
+                    'old_element_id': 'ingredient-2',
+                }
+            ]
+        }
         request_nr = 0
 
         await communicator.send_json_to(request)
@@ -474,14 +513,17 @@ class TestAnnotatorWithWsAndDb7:
         for entity_property in date_entity_properties_in_db:
             assert entity_property.deleted_by is None
 
-        request = [
-            {
-                'method': 'DELETE',
-                'element_type': 'reference',
-                'edited_element_id': 'date-2',
-                'old_element_id': 'date-2',
-            }
-        ]
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'DELETE',
+                    'element_type': 'reference',
+                    'edited_element_id': 'date-2',
+                    'old_element_id': 'date-2',
+                }
+            ]
+        }
         request_nr = 0
 
         await communicator.send_json_to(request)
@@ -529,22 +571,25 @@ class TestAnnotatorWithWsAndDb8:
         for entity_property in date_entity_properties_in_db:
             assert entity_property.deleted_by is None
 
-        request = [
-            {
-                'method': 'PUT',
-                'element_type': 'reference',
-                'edited_element_id': 'date-2',
-                'old_element_id': 'date-2',
-                'parameters': {
-                    'entity_type': 'person',
-                    'entity_properties': {
-                        'forename': 'Bugs',
-                        'surname': 'Bunny',
-                        'sex': 'M'
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'PUT',
+                    'element_type': 'reference',
+                    'edited_element_id': 'date-2',
+                    'old_element_id': 'date-2',
+                    'parameters': {
+                        'entity_type': 'person',
+                        'entity_properties': {
+                            'forename': 'Bugs',
+                            'surname': 'Bunny',
+                            'sex': 'M'
+                        }
                     }
                 }
-            }
-        ]
+            ]
+        }
         request_nr = 0
 
         await communicator.send_json_to(request)
@@ -581,20 +626,23 @@ class TestAnnotatorWithWsAndDb9:
         date_entities_in_db = Entity.objects.filter(type='date')
         assert len(date_entities_in_db) == 2
 
-        request = [
-            {
-                'method': 'PUT',
-                'element_type': 'reference',
-                'edited_element_id': 'name-4',
-                'old_element_id': 'ingredient-2',
-                'parameters': {
-                    'entity_type': 'date',
-                    'entity_properties': {
-                        'when': '1410-07-15'
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'PUT',
+                    'element_type': 'reference',
+                    'edited_element_id': 'name-4',
+                    'old_element_id': 'ingredient-2',
+                    'parameters': {
+                        'entity_type': 'date',
+                        'entity_properties': {
+                            'when': '1410-07-15'
+                        }
                     }
                 }
-            }
-        ]
+            ]
+        }
         request_nr = 0
 
         await communicator.send_json_to(request)
@@ -624,15 +672,18 @@ class TestAnnotatorWithWsAndDb10:
         await communicator.connect()
         await communicator.receive_json_from()
 
-        request = [
-            {
-                'method': 'PUT',
-                'element_type': 'reference',
-                'edited_element_id': 'name-4',
-                'old_element_id': 'ingredient-2',
-                'new_element_id': 'ingredient-0'
-            }
-        ]
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'PUT',
+                    'element_type': 'reference',
+                    'edited_element_id': 'name-4',
+                    'old_element_id': 'ingredient-2',
+                    'new_element_id': 'ingredient-0'
+                }
+            ]
+        }
         request_nr = 0
 
         await communicator.send_json_to(request)
@@ -662,15 +713,18 @@ class TestAnnotatorWithWsAndDb11:
         date_entities_in_db = Entity.objects.filter(type='date')
         assert len(date_entities_in_db) == 2
 
-        request = [
-            {
-                'method': 'PUT',
-                'element_type': 'reference',
-                'edited_element_id': 'date-1',
-                'old_element_id': 'date-0',
-                'new_element_id': 'date-2'
-            }
-        ]
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'PUT',
+                    'element_type': 'reference',
+                    'edited_element_id': 'date-1',
+                    'old_element_id': 'date-0',
+                    'new_element_id': 'date-2'
+                }
+            ]
+        }
         request_nr = 0
 
         await communicator.send_json_to(request)
@@ -700,16 +754,19 @@ class TestAnnotatorWithWsAndDb12:
         await communicator.connect()
         await communicator.receive_json_from()
 
-        request = [
-            {
-                'method': 'POST',
-                'element_type': 'entity_property',
-                'edited_element_id': 'person-0',
-                'parameters': {
-                    'forename': 'Bruce'
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'POST',
+                    'element_type': 'entity_property',
+                    'edited_element_id': 'person-0',
+                    'parameters': {
+                        'forename': 'Bruce'
+                    }
                 }
-            }
-        ]
+            ]
+        }
         request_nr = 0
 
         await communicator.send_json_to(request)
@@ -736,47 +793,56 @@ class TestAnnotatorWithWsAndDb13:
         await communicator.connect()
         await communicator.receive_json_from()
 
-        request = [
-            {
-                'method': 'POST',
-                'element_type': 'tag',
-                'parameters': {
-                    'start_pos': 265,
-                    'end_pos': 271,
-                }
-            }
-        ]
-
-        await communicator.send_json_to(request)
-        await communicator.receive_json_from()
-
-        request = [
-            {
-                'method': 'POST',
-                'element_type': 'reference',
-                'edited_element_id': 'ab-1',
-                'parameters': {
-                    'entity_type': 'date',
-                    'entity_properties': {
-                        'name': 'new date'
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'POST',
+                    'element_type': 'tag',
+                    'parameters': {
+                        'start_pos': 265,
+                        'end_pos': 271,
                     }
                 }
-            }
-        ]
+            ]
+        }
 
         await communicator.send_json_to(request)
         await communicator.receive_json_from()
 
-        request = [
-            {
-                'method': 'POST',
-                'element_type': 'entity_property',
-                'edited_element_id': 'date-3',
-                'parameters': {
-                    'when': '2020-02-02'
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'POST',
+                    'element_type': 'reference',
+                    'edited_element_id': 'ab-1',
+                    'parameters': {
+                        'entity_type': 'date',
+                        'entity_properties': {
+                            'name': 'new date'
+                        }
+                    }
                 }
-            }
-        ]
+            ]
+        }
+
+        await communicator.send_json_to(request)
+        await communicator.receive_json_from()
+
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'POST',
+                    'element_type': 'entity_property',
+                    'edited_element_id': 'date-3',
+                    'parameters': {
+                        'when': '2020-02-02'
+                    }
+                }
+            ]
+        }
         request_nr = 0
 
         await communicator.send_json_to(request)
@@ -803,14 +869,17 @@ class TestAnnotatorWithWsAndDb14:
         await communicator.connect()
         await communicator.receive_json_from()
 
-        request = [
-            {
-                'method': 'DELETE',
-                'element_type': 'entity_property',
-                'edited_element_id': 'place-0',
-                'old_element_id': 'geo'
-            }
-        ]
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'DELETE',
+                    'element_type': 'entity_property',
+                    'edited_element_id': 'place-0',
+                    'old_element_id': 'geo'
+                }
+            ]
+        }
         request_nr = 0
 
         await communicator.send_json_to(request)
@@ -844,14 +913,17 @@ class TestAnnotatorWithWsAndDb15:
 
         entity_property.deleted_by = None
 
-        request = [
-            {
-                'method': 'DELETE',
-                'element_type': 'entity_property',
-                'edited_element_id': 'date-0',
-                'old_element_id': 'when'
-            }
-        ]
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'DELETE',
+                    'element_type': 'entity_property',
+                    'edited_element_id': 'date-0',
+                    'old_element_id': 'when'
+                }
+            ]
+        }
         request_nr = 0
 
         await communicator.send_json_to(request)
@@ -881,17 +953,20 @@ class TestAnnotatorWithWsAndDb16:
         await communicator.connect()
         await communicator.receive_json_from()
 
-        request = [
-            {
-                'method': 'PUT',
-                'element_type': 'entity_property',
-                'edited_element_id': 'person-0',
-                'old_element_id': 'name',
-                'parameters': {
-                    'name': 'Bruce'
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'PUT',
+                    'element_type': 'entity_property',
+                    'edited_element_id': 'person-0',
+                    'old_element_id': 'name',
+                    'parameters': {
+                        'name': 'Bruce'
+                    }
                 }
-            }
-        ]
+            ]
+        }
         request_nr = 0
 
         await communicator.send_json_to(request)
@@ -925,17 +1000,20 @@ class TestAnnotatorWithWsAndDb17:
 
         assert entity_property_old.deleted_by is None
 
-        request = [
-            {
-                'method': 'PUT',
-                'element_type': 'entity_property',
-                'edited_element_id': 'date-0',
-                'old_element_id': 'when',
-                'parameters': {
-                    'when': '0001-01-01'
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'PUT',
+                    'element_type': 'entity_property',
+                    'edited_element_id': 'date-0',
+                    'old_element_id': 'when',
+                    'parameters': {
+                        'when': '0001-01-01'
+                    }
                 }
-            }
-        ]
+            ]
+        }
         request_nr = 0
 
         await communicator.send_json_to(request)
@@ -973,19 +1051,22 @@ class TestAnnotatorWithWsAndDb18:
         await communicator.connect()
         await communicator.receive_json_from()
 
-        request = [
-            {
-                'method': 'POST',
-                'element_type': 'certainty',
-                'new_element_id': 'ab-0',
-                'parameters': {
-                    'categories': ['ignorance', 'incompleteness'],
-                    'locus': 'value',
-                    'certainty': 'low',
-                    'description': 'Test'
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'POST',
+                    'element_type': 'certainty',
+                    'new_element_id': 'ab-0',
+                    'parameters': {
+                        'categories': ['ignorance', 'incompleteness'],
+                        'locus': 'value',
+                        'certainty': 'low',
+                        'description': 'Test'
+                    }
                 }
-            }
-        ]
+            ]
+        }
         request_nr = 0
 
         await communicator.send_json_to(request)
@@ -1012,19 +1093,22 @@ class TestAnnotatorWithWsAndDb19:
         await communicator.connect()
         await communicator.receive_json_from()
 
-        request = [
-            {
-                'method': 'POST',
-                'element_type': 'certainty',
-                'new_element_id': 'name-3@ref',
-                'parameters': {
-                    'categories': ['ignorance', 'incompleteness'],
-                    'locus': 'value',
-                    'certainty': 'low',
-                    'description': 'Test'
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'POST',
+                    'element_type': 'certainty',
+                    'new_element_id': 'name-3@ref',
+                    'parameters': {
+                        'categories': ['ignorance', 'incompleteness'],
+                        'locus': 'value',
+                        'certainty': 'low',
+                        'description': 'Test'
+                    }
                 }
-            }
-        ]
+            ]
+        }
         request_nr = 0
 
         await communicator.send_json_to(request)
@@ -1051,19 +1135,22 @@ class TestAnnotatorWithWsAndDb20:
         await communicator.connect()
         await communicator.receive_json_from()
 
-        request = [
-            {
-                'method': 'POST',
-                'element_type': 'certainty',
-                'new_element_id': 'place-0',
-                'parameters': {
-                    'categories': ['ignorance', 'incompleteness'],
-                    'locus': 'name',
-                    'certainty': 'low',
-                    'description': 'Test'
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'POST',
+                    'element_type': 'certainty',
+                    'new_element_id': 'place-0',
+                    'parameters': {
+                        'categories': ['ignorance', 'incompleteness'],
+                        'locus': 'name',
+                        'certainty': 'low',
+                        'description': 'Test'
+                    }
                 }
-            }
-        ]
+            ]
+        }
         request_nr = 0
 
         await communicator.send_json_to(request)
@@ -1090,19 +1177,22 @@ class TestAnnotatorWithWsAndDb21:
         await communicator.connect()
         await communicator.receive_json_from()
 
-        request = [
-            {
-                'method': 'POST',
-                'element_type': 'certainty',
-                'new_element_id': 'ingredient-0',
-                'parameters': {
-                    'categories': ['ignorance', 'incompleteness'],
-                    'locus': 'name',
-                    'certainty': 'low',
-                    'description': 'Test'
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'POST',
+                    'element_type': 'certainty',
+                    'new_element_id': 'ingredient-0',
+                    'parameters': {
+                        'categories': ['ignorance', 'incompleteness'],
+                        'locus': 'name',
+                        'certainty': 'low',
+                        'description': 'Test'
+                    }
                 }
-            }
-        ]
+            ]
+        }
         request_nr = 0
 
         await communicator.send_json_to(request)
@@ -1129,19 +1219,22 @@ class TestAnnotatorWithWsAndDb22:
         await communicator.connect()
         await communicator.receive_json_from()
 
-        request = [
-            {
-                'method': 'POST',
-                'element_type': 'certainty',
-                'new_element_id': 'place-0/country',
-                'parameters': {
-                    'categories': ['ignorance', 'incompleteness'],
-                    'locus': 'value',
-                    'certainty': 'low',
-                    'description': 'Test'
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'POST',
+                    'element_type': 'certainty',
+                    'new_element_id': 'place-0/country',
+                    'parameters': {
+                        'categories': ['ignorance', 'incompleteness'],
+                        'locus': 'value',
+                        'certainty': 'low',
+                        'description': 'Test'
+                    }
                 }
-            }
-        ]
+            ]
+        }
         request_nr = 0
 
         await communicator.send_json_to(request)
@@ -1168,19 +1261,22 @@ class TestAnnotatorWithWsAndDb23:
         await communicator.connect()
         await communicator.receive_json_from()
 
-        request = [
-            {
-                'method': 'POST',
-                'element_type': 'certainty',
-                'new_element_id': 'certainty-0',
-                'parameters': {
-                    'categories': ['ignorance', 'incompleteness'],
-                    'locus': 'value',
-                    'certainty': 'low',
-                    'description': 'Test'
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'POST',
+                    'element_type': 'certainty',
+                    'new_element_id': 'certainty-0',
+                    'parameters': {
+                        'categories': ['ignorance', 'incompleteness'],
+                        'locus': 'value',
+                        'certainty': 'low',
+                        'description': 'Test'
+                    }
                 }
-            }
-        ]
+            ]
+        }
         request_nr = 0
 
         await communicator.send_json_to(request)
@@ -1207,13 +1303,16 @@ class TestAnnotatorWithWsAndDb24:
         await communicator.connect()
         await communicator.receive_json_from()
 
-        request = [
-            {
-                'method': 'DELETE',
-                'element_type': 'certainty',
-                'edited_element_id': 'certainty-1'
-            }
-        ]
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'DELETE',
+                    'element_type': 'certainty',
+                    'edited_element_id': 'certainty-1'
+                }
+            ]
+        }
         request_nr = 0
 
         await communicator.send_json_to(request)
@@ -1240,17 +1339,20 @@ class TestAnnotatorWithWsAndDb25:
         await communicator.connect()
         await communicator.receive_json_from()
 
-        request = [
-            {
-                'method': 'PUT',
-                'element_type': 'certainty',
-                'edited_element_id': 'certainty-1',
-                'old_element_id': 'categories',
-                'parameters': {
-                    'categories': ['imprecision', 'credibility']
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'PUT',
+                    'element_type': 'certainty',
+                    'edited_element_id': 'certainty-1',
+                    'old_element_id': 'categories',
+                    'parameters': {
+                        'categories': ['imprecision', 'credibility']
+                    }
                 }
-            }
-        ]
+            ]
+        }
         request_nr = 0
 
         await communicator.send_json_to(request)
@@ -1277,17 +1379,20 @@ class TestAnnotatorWithWsAndDb26:
         await communicator.connect()
         await communicator.receive_json_from()
 
-        request = [
-            {
-                'method': 'PUT',
-                'element_type': 'certainty',
-                'edited_element_id': 'certainty-1',
-                'old_element_id': 'locus',
-                'parameters': {
-                    'locus': 'name'
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'PUT',
+                    'element_type': 'certainty',
+                    'edited_element_id': 'certainty-1',
+                    'old_element_id': 'locus',
+                    'parameters': {
+                        'locus': 'name'
+                    }
                 }
-            }
-        ]
+            ]
+        }
         request_nr = 0
 
         await communicator.send_json_to(request)
@@ -1314,18 +1419,21 @@ class TestAnnotatorWithWsAndDb27:
         await communicator.connect()
         await communicator.receive_json_from()
 
-        request = [
-            {
-                'method': 'PUT',
-                'element_type': 'certainty',
-                'edited_element_id': 'certainty-1',
-                'old_element_id': 'reference',
-                'parameters': {
-                    'new_element_id': 'person-2/birth',
-                    'locus': 'name'
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'PUT',
+                    'element_type': 'certainty',
+                    'edited_element_id': 'certainty-1',
+                    'old_element_id': 'reference',
+                    'parameters': {
+                        'new_element_id': 'person-2/birth',
+                        'locus': 'name'
+                    }
                 }
-            }
-        ]
+            ]
+        }
         request_nr = 0
 
         await communicator.send_json_to(request)
@@ -1352,62 +1460,65 @@ class TestAnnotatorWithWsAndDb28:
         await communicator.connect()
         await communicator.receive_json_from()
 
-        request = [
-            {
-                'method': 'POST',
-                'element_type': 'tag',
-                'parameters': {
-                    'start_pos': 265,
-                    'end_pos': 271,
-                }
-            },
-            {
-                'method': 'POST',
-                'element_type': 'reference',
-                'edited_element_id': 0,
-                'parameters': {
-                    'entity_type': 'person',
-                    'entity_properties': {
-                        'forename': 'Bugs',
-                        'surname': 'Bunny',
-                        'sex': 'M'
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'POST',
+                    'element_type': 'tag',
+                    'parameters': {
+                        'start_pos': 265,
+                        'end_pos': 271,
+                    }
+                },
+                {
+                    'method': 'POST',
+                    'element_type': 'reference',
+                    'edited_element_id': 0,
+                    'parameters': {
+                        'entity_type': 'person',
+                        'entity_properties': {
+                            'forename': 'Bugs',
+                            'surname': 'Bunny',
+                            'sex': 'M'
+                        }
+                    }
+                },
+                {
+                    'method': 'POST',
+                    'element_type': 'certainty',
+                    'new_element_id': '0@ref',
+                    'parameters': {
+                        'categories': ['ignorance', 'incompleteness'],
+                        'locus': 'value',
+                        'certainty': 'low',
+                        'description': 'Test'
+                    }
+                },
+                {
+                    'method': 'POST',
+                    'element_type': 'certainty',
+                    'new_element_id': 1,
+                    'parameters': {
+                        'categories': ['credibility'],
+                        'locus': 'name',
+                        'certainty': 'low',
+                        'description': 'Test'
+                    }
+                },
+                {
+                    'method': 'POST',
+                    'element_type': 'certainty',
+                    'new_element_id': 3,
+                    'parameters': {
+                        'categories': ['ignorance'],
+                        'locus': 'value',
+                        'certainty': 'low',
+                        'description': 'Test'
                     }
                 }
-            },
-            {
-                'method': 'POST',
-                'element_type': 'certainty',
-                'new_element_id': '0@ref',
-                'parameters': {
-                    'categories': ['ignorance', 'incompleteness'],
-                    'locus': 'value',
-                    'certainty': 'low',
-                    'description': 'Test'
-                }
-            },
-            {
-                'method': 'POST',
-                'element_type': 'certainty',
-                'new_element_id': 1,
-                'parameters': {
-                    'categories': ['credibility'],
-                    'locus': 'name',
-                    'certainty': 'low',
-                    'description': 'Test'
-                }
-            },
-            {
-                'method': 'POST',
-                'element_type': 'certainty',
-                'new_element_id': 3,
-                'parameters': {
-                    'categories': ['ignorance'],
-                    'locus': 'value',
-                    'certainty': 'low',
-                    'description': 'Test'
-                }
-            }
-        ]
+            ]
+        }
         request_nr = 0
 
         await communicator.send_json_to(request)

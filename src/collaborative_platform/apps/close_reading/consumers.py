@@ -150,18 +150,34 @@ class AnnotatorConsumer(WebsocketConsumer):
         elif text_data == 'ping':
             self.send('pong')
 
-        elif text_data == 'save':
-            # TODO: replace saving file after websocket message instead http request
-            pass
-
         else:
             try:
                 # TODO: Add request validator
 
                 logger.info(f"Get request from user: '{self.scope['user'].username}' with content: '{text_data}'")
 
-                self.__request_handler.handle_request(text_data)
-                self.__send_personalized_changes_to_users()
+                request = self.__parse_text_data(text_data)
+
+                if request['method'] == 'modify':
+                    operations = request['payload']
+
+                    self.__request_handler.modify_file(operations)
+                    self.__send_personalized_changes_to_users()
+
+                elif request['method'] == 'discard':
+                    changes = request['payload']
+
+                    self.__request_handler.discard_changes(changes)
+                    self.__send_personalized_changes_to_users()
+
+                elif request['method'] == 'save':
+                    changes = request['payload']
+
+                    self.__request_handler.save_changes(changes)
+                    self.__send_personalized_changes_to_users()
+
+                else:
+                    raise BadRequest("There is no operation matching to this request")
 
             except NotModified as exception:
                 self.__send_error(304, exception)
@@ -220,3 +236,9 @@ class AnnotatorConsumer(WebsocketConsumer):
     def xml_modification(self, event):
         message = event['message']
         self.send(text_data=message)
+
+    @staticmethod
+    def __parse_text_data(text_data):
+        request = json.loads(text_data)
+
+        return request
