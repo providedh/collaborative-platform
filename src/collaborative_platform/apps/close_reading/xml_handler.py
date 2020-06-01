@@ -174,8 +174,27 @@ class XmlHandler:
         else:
             return True
 
-    def discard_adding_tag(self, text, xml_id):
-        text = self.__remove_tag(text, xml_id)
+    def discard_adding_tag(self, text, tag_xml_id):
+        text = self.__remove_tag(text, tag_xml_id)
+
+        return text
+
+    def discard_moving_tag(self, text, tag_xml_id):
+        text = self.__remove_tag(text, tag_xml_id)
+
+        old_tag_xml_id = f'{tag_xml_id}-old'
+
+        attributes_to_set = {
+            XML_ID_KEY: tag_xml_id
+        }
+
+        attributes_to_delete = [
+            'saved',
+            'deleted',
+        ]
+
+        text = self.__update_tag(text, old_tag_xml_id, attributes_to_set=attributes_to_set,
+                                 attributes_to_delete=attributes_to_delete)
 
         return text
 
@@ -191,7 +210,7 @@ class XmlHandler:
         if element.text != '':
             previous_sibling = element.getprevious()
 
-            if previous_sibling:
+            if previous_sibling is not None:
                 previous_sibling.tail += element.text
             else:
                 parent.text += element.text
@@ -202,7 +221,7 @@ class XmlHandler:
         if element.tail != '':
             previous_sibling = element.getprevious()
 
-            if previous_sibling:
+            if previous_sibling is not None:
                 previous_sibling.tail += element.tail
             else:
                 parent.text += element.tail
@@ -229,7 +248,7 @@ class XmlHandler:
                 element.set(attribute, value)
 
         if attributes_to_delete:
-            for attribute, value in attributes_to_delete.items():
+            for attribute in attributes_to_delete:
                 element.attrib.pop(attribute, '')
 
         references = element.attrib.get('ref')
