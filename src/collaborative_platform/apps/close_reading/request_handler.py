@@ -73,7 +73,12 @@ class RequestHandler:
 
         for operation in operations:
             if operation['element_type'] == 'tag':
-                pass
+                if operation['method'] == 'POST':
+                    self.__discard_adding_tag(operation)
+                elif operation['method'] == 'POST':
+                    pass
+                elif operation['method'] == 'DELETE':
+                    pass
 
             elif operation['element_type'] == 'reference':
                 pass
@@ -369,6 +374,16 @@ class RequestHandler:
         self.__db_handler.delete_certainty(certainty_xml_id)
 
         self.__operations_results.append(None)
+
+    def __discard_adding_tag(self, operation):
+        tag_xml_id = operation['operation_result']
+        operation_id = operation['id']
+
+        body_content = self.__db_handler.get_body_content()
+        body_content = self.__xml_handler.discard_adding_tag(body_content, tag_xml_id)
+        self.__db_handler.set_body_content(body_content)
+
+        self.__db_handler.delete_operation(operation_id)
 
     def __clean_operation_results(self):
         self.__operations_results = []

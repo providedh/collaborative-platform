@@ -439,7 +439,7 @@ class DbHandler:
     def get_operations_from_db(self, operations_ids):
         operations = Operation.objects.filter(
             user=self.__user,
-            user_id__in=operations_ids
+            id__in=operations_ids
         ).order_by('id')
 
         operations = [model_to_dict(operation) for operation in operations]
@@ -457,3 +457,11 @@ class DbHandler:
             new_element_id=operation.get('new_element_id'),
             operation_result=operation_result,
         )
+
+    @staticmethod
+    def delete_operation(operation_id):
+        operation = Operation.objects.get(
+            id=operation_id
+        )
+
+        operation.delete()

@@ -174,6 +174,45 @@ class XmlHandler:
         else:
             return True
 
+    def discard_adding_tag(self, text, xml_id):
+        text = self.__remove_tag(text, xml_id)
+
+        return text
+
+    @staticmethod
+    def __remove_tag(text, xml_id):
+        tree = etree.fromstring(text)
+
+        xpath = f"//*[contains(concat(' ', @xml:id, ' '), ' {xml_id} ')]"
+        element = get_first_xpath_match(tree, xpath, XML_NAMESPACES)
+
+        parent = element.getparent()
+
+        if element.text != '':
+            previous_sibling = element.getprevious()
+
+            if previous_sibling:
+                previous_sibling.tail += element.text
+            else:
+                parent.text += element.text
+
+        for child in element.iterchildren():
+            element.addprevious(child)
+
+        if element.tail != '':
+            previous_sibling = element.getprevious()
+
+            if previous_sibling:
+                previous_sibling.tail += element.tail
+            else:
+                parent.text += element.tail
+
+        parent.remove(element)
+
+        text = etree.tounicode(tree, pretty_print=True)
+
+        return text
+
     @staticmethod
     def __update_tag(text, tag_xml_id, new_tag=None, attributes_to_set=None, attributes_to_delete=None):
         tree = etree.fromstring(text)
