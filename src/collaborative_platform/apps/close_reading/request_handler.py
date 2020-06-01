@@ -78,7 +78,7 @@ class RequestHandler:
                 elif operation['method'] == 'PUT':
                     self.__discard_moving_tag(operation)
                 elif operation['method'] == 'DELETE':
-                    pass
+                    self.__discard_deleting_tag(operation)
 
             elif operation['element_type'] == 'reference':
                 pass
@@ -391,6 +391,16 @@ class RequestHandler:
 
         body_content = self.__db_handler.get_body_content()
         body_content = self.__xml_handler.discard_moving_tag(body_content, tag_xml_id)
+        self.__db_handler.set_body_content(body_content)
+
+        self.__db_handler.delete_operation(operation_id)
+
+    def __discard_deleting_tag(self, operation):
+        tag_xml_id = operation['edited_element_id']
+        operation_id = operation['id']
+
+        body_content = self.__db_handler.get_body_content()
+        body_content = self.__xml_handler.discard_deleting_tag(body_content, tag_xml_id)
         self.__db_handler.set_body_content(body_content)
 
         self.__db_handler.delete_operation(operation_id)

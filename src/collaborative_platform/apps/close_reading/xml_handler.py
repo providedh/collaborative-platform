@@ -198,6 +198,16 @@ class XmlHandler:
 
         return text
 
+    def discard_deleting_tag(self, text, tag_xml_id):
+        attributes_to_delete = [
+            'saved',
+            'deleted',
+        ]
+
+        text = self.__update_tag(text, tag_xml_id, attributes_to_delete=attributes_to_delete)
+
+        return text
+
     @staticmethod
     def __remove_tag(text, xml_id):
         tree = etree.fromstring(text)
