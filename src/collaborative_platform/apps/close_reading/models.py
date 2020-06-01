@@ -2,7 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.postgres.fields import JSONField
 
-from apps.close_reading.enums import MethodChoice, TargetTypes
+from apps.close_reading.enums import Methods, ElementTypes
+from apps.files_management.models import File
 
 
 class AnnotatingBodyContent(models.Model):
@@ -26,8 +27,10 @@ class AnnotationHistory(models.Model):
 
 class Operation(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    method = models.CharField(max_length=255, choices=[(method, method.value) for method in MethodChoice])
-    target_type = models.CharField(max_length=255, choices=[(target, target.value) for target in TargetTypes])
-    edited_element_id = models.CharField(max_length=255)
+    file = models.ForeignKey(File, on_delete=models.CASCADE)
+    method = models.CharField(max_length=255, choices=[(method, method.value) for method in Methods])
+    element_type = models.CharField(max_length=255, choices=[(type, type.value) for type in ElementTypes])
+    edited_element_id = models.CharField(max_length=255, null=True)
     old_element_id = models.CharField(max_length=255, null=True)
     new_element_id = models.CharField(max_length=255, null=True)
+    operation_result = models.CharField(max_length=255, null=True)

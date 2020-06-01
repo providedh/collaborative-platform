@@ -6,9 +6,10 @@ from lxml import etree
 
 from django.contrib.auth.models import User
 from django.db.models import Q
+from django.forms.models import model_to_dict
 
 from apps.api_vis.models import Certainty, EntityProperty, EntityVersion
-from apps.close_reading.models import AnnotatingBodyContent
+from apps.close_reading.models import AnnotatingBodyContent, Operation
 from apps.files_management.file_conversions.xml_tools import get_first_xpath_match
 from apps.files_management.models import File
 from apps.projects.models import EntitySchema
@@ -61,8 +62,9 @@ class ResponseGenerator:
 
         return body_content
 
-    def get_response(self):
+    def get_response(self, user_id):
         authors = self.__get_authors()
+        operations = self.__get_operations(user_id)
         certainties = self.__get_certainties()
         entities_lists = self.__get_entities_lists()
 
@@ -73,6 +75,7 @@ class ResponseGenerator:
             'status': 200,
             'message': 'OK',
             'authors': authors,
+            'operations': operations,
             'certainties': certainties,
             'entities_lists': entities_lists,
             'body_content': body_content,
@@ -131,6 +134,36 @@ class ResponseGenerator:
             serialized_authors.append(serialized_author)
 
         return serialized_authors
+
+    def __get_operations(self, user_id):
+        operations = self.__get_operations_from_db(user_id)
+        operations = self.__serialize_operations(operations)
+
+        return operations
+
+    def __get_operations_from_db(self, user_id):
+        operations = Operation.objects.filter(
+            user_id=user_id,
+            file=self.__file,
+        ).order_by('id')
+
+        return operations
+
+    @staticmethod
+    def __serialize_operations(operations):
+        fields = [
+            'id',
+            'method',
+            'element_type',
+            'edited_element_id',
+            'old_element_id',
+            'new_element_id',
+            'operation_result',
+        ]
+
+        operations = [model_to_dict(operation, fields=fields) for operation in operations]
+
+        return operations
 
     def __get_certainties(self):
         certainties = self.__get_certainties_from_db()

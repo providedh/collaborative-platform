@@ -53,7 +53,8 @@ class AnnotatorConsumer(WebsocketConsumer):
             self.__response_generator = ResponseGenerator(self.__file_id)
             self.__request_handler = RequestHandler(self.scope['user'], self.__file_id)
 
-            response = self.__response_generator.get_response()
+            user_id = self.scope['user'].id
+            response = self.__response_generator.get_response(user_id)
 
             self.send(text_data=response)
 
@@ -165,15 +166,15 @@ class AnnotatorConsumer(WebsocketConsumer):
                     self.__send_personalized_changes_to_users()
 
                 elif request['method'] == 'discard':
-                    changes = request['payload']
+                    operations_ids = request['payload']
 
-                    self.__request_handler.discard_changes(changes)
+                    self.__request_handler.discard_changes(operations_ids)
                     self.__send_personalized_changes_to_users()
 
                 elif request['method'] == 'save':
-                    changes = request['payload']
+                    operations_ids = request['payload']
 
-                    self.__request_handler.save_changes(changes)
+                    self.__request_handler.save_changes(operations_ids)
                     self.__send_personalized_changes_to_users()
 
                 else:
@@ -205,7 +206,9 @@ class AnnotatorConsumer(WebsocketConsumer):
         )
 
         for presence in room_presences:
-            response = self.__response_generator.get_response()
+            user_id = presence.user.id
+
+            response = self.__response_generator.get_response(user_id)
 
             channel_layer = get_channel_layer()
             async_to_sync(channel_layer.send)(

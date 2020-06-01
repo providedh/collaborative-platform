@@ -1,6 +1,8 @@
+from django.forms.models import model_to_dict
+
 from apps.api_vis.models import Certainty, Entity, EntityProperty, EntityVersion
-from apps.close_reading.enums import TargetTypes
-from apps.close_reading.models import AnnotatingBodyContent
+from apps.close_reading.enums import ElementTypes
+from apps.close_reading.models import AnnotatingBodyContent, Operation
 from apps.close_reading.response_generator import get_custom_entities_types
 from apps.exceptions import BadParameters
 from apps.files_management.models import File, FileMaxXmlIds
@@ -48,6 +50,11 @@ class DbHandler:
 
         self.__create_entity_properties_objects(entity_version, entity_property)
 
+        property_name = list(entity_property.keys())[0]
+        property_id = f'{entity_xml_id}/{property_name}'
+
+        return property_id
+
     def modify_entity_property(self, entity_xml_id, entity_property, property_name):
         entity_property_object = self.__get_entity_property_from_db(entity_xml_id, property_name)
 
@@ -58,6 +65,11 @@ class DbHandler:
             entity_property_object.set_value(value)
 
         entity_property_object.save()
+
+        property_name = list(entity_property.keys())[0]
+        property_id = f'{entity_xml_id}/{property_name}'
+
+        return property_id
 
     def delete_entity_property(self, entity_xml_id, property_name):
         entity_version = self.__get_entity_version_from_db(entity_xml_id)
@@ -372,30 +384,30 @@ class DbHandler:
     @staticmethod
     def __get_certainty_target_type(certainty_target, locus):
         if 'certainty-' in certainty_target:
-            target_type = TargetTypes.certainty
+            target_type = ElementTypes.certainty
         elif '/' in certainty_target:
-            target_type = TargetTypes.entity_property
+            target_type = ElementTypes.entity_property
         elif '@ref' in certainty_target:
-            target_type = TargetTypes.reference
+            target_type = ElementTypes.reference
         elif locus == 'value':
-            target_type = TargetTypes.text
+            target_type = ElementTypes.text
         elif locus == 'name':
-            target_type = TargetTypes.entity_type
+            target_type = ElementTypes.entity_type
         else:
             raise BadParameters("There is no 'target type' matching to given parameters")
 
         return target_type
 
     def __get_certainty_target_and_match(self, certainty_target, target_type):
-        if target_type == TargetTypes.text:
+        if target_type == ElementTypes.text:
             target = certainty_target
             match = None
 
-        elif target_type == TargetTypes.reference:
+        elif target_type == ElementTypes.reference:
             target = certainty_target.split('@')[0]
             match = '@ref'
 
-        elif target_type == TargetTypes.entity_type:
+        elif target_type == ElementTypes.entity_type:
             entity = Entity.objects.get(
                 xml_id=certainty_target,
                 file=self.__file
@@ -408,14 +420,14 @@ class DbHandler:
                 target = certainty_target
                 match = '@type'
 
-        elif target_type == TargetTypes.entity_property:
+        elif target_type == ElementTypes.entity_property:
             target = certainty_target.split('/')[0]
             property_name = certainty_target.split('/')[1]
 
             entity_property = self.__get_entity_property_from_db(target, property_name)
             match = entity_property.xpath
 
-        elif target_type == TargetTypes.certainty:
+        elif target_type == ElementTypes.certainty:
             target = certainty_target
             match = None
 
@@ -423,3 +435,25 @@ class DbHandler:
             raise BadParameters("There is no 'target' and 'match' matching to given parameters")
 
         return target, match
+
+    def get_operations_from_db(self, operations_ids):
+        operations = Operation.objects.filter(
+            user=self.__user,
+            user_id__in=operations_ids
+        ).order_by('id')
+
+        operations = [model_to_dict(operation) for operation in operations]
+
+        return operations
+
+    def add_operation(self, operation, operation_result):
+        Operation.objects.get_or_create(
+            user=self.__user,
+            file=self.__file,
+            method=operation['method'],
+            element_type=operation['element_type'],
+            edited_element_id=operation.get('edited_element_id'),
+            old_element_id=operation.get('old_element_id'),
+            new_element_id=operation.get('new_element_id'),
+            operation_result=operation_result,
+        )

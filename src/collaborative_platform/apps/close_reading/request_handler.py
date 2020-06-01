@@ -1,5 +1,3 @@
-import json
-
 from apps.close_reading.db_handler import DbHandler
 from apps.close_reading.response_generator import get_listable_entities_types
 from apps.close_reading.xml_handler import XmlHandler
@@ -67,10 +65,32 @@ class RequestHandler:
             else:
                 raise BadRequest(f"There is no operation matching to this request")
 
-    def save_file(self, text_data):
-        pass
+            operation_result = self.__operations_results[-1]
+            self.__db_handler.add_operation(operation, operation_result)
 
-    def discard_changes(self, text_data):
+    def discard_changes(self, operations_ids):
+        operations = self.__db_handler.get_operations_from_db(operations_ids)
+
+        for operation in operations:
+            if operation['element_type'] == 'tag':
+                pass
+
+            elif operation['element_type'] == 'reference':
+                pass
+
+            elif operation['element_type'] == 'entity_property':
+                pass
+
+            elif operation['element_type'] == 'unification':
+                raise NotModified("Method not implemented yet")
+
+            elif operation['element_type'] == 'certainty':
+                pass
+
+            else:
+                raise BadRequest("There is no operation matching to this request")
+
+    def save_file(self, text_data):
         pass
 
     def __add_tag(self, request):
@@ -272,16 +292,16 @@ class RequestHandler:
         entity_type = self.__db_handler.get_entity_type(entity_xml_id)
 
         if entity_type in self.__listable_entities_types:
-            self.__db_handler.add_entity_property(entity_xml_id, entity_property)
+            property_id = self.__db_handler.add_entity_property(entity_xml_id, entity_property)
 
         else:
-            self.__db_handler.add_entity_property(entity_xml_id, entity_property)
+            property_id = self.__db_handler.add_entity_property(entity_xml_id, entity_property)
 
             body_content = self.__db_handler.get_body_content()
             body_content = self.__xml_handler.add_entity_properties(body_content, entity_xml_id, entity_property)
             self.__db_handler.set_body_content(body_content)
 
-        self.__operations_results.append(None)
+        self.__operations_results.append(property_id)
 
     def __modify_entity_property(self, request):
         entity_xml_id = request['edited_element_id']
@@ -290,20 +310,20 @@ class RequestHandler:
         entity_type = self.__db_handler.get_entity_type(entity_xml_id)
 
         if entity_type in self.__listable_entities_types:
-            self.__db_handler.modify_entity_property(entity_xml_id, entity_property, property_name)
+            property_id = self.__db_handler.modify_entity_property(entity_xml_id, entity_property, property_name)
 
         else:
             property_value = self.__db_handler.get_entity_property_value(entity_xml_id, property_name)
             old_entity_property = {property_name: property_value}
 
-            self.__db_handler.modify_entity_property(entity_xml_id, entity_property, property_name)
+            property_id = self.__db_handler.modify_entity_property(entity_xml_id, entity_property, property_name)
 
             body_content = self.__db_handler.get_body_content()
             body_content = self.__xml_handler.modify_entity_properties(body_content, entity_xml_id, old_entity_property,
                                                                        entity_property)
             self.__db_handler.set_body_content(body_content)
 
-        self.__operations_results.append(None)
+        self.__operations_results.append(property_id)
 
     def __delete_entity_property(self, request):
         entity_xml_id = request['edited_element_id']

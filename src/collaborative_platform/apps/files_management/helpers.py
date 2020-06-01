@@ -405,7 +405,7 @@ def create_certainty_elements_from_certainties(certainties):
             locus=certainty.locus,
             cert=certainty.cert,
             resp=certainty.resp,
-            target='#' + certainty.target,
+            target='#' + certainty.type,
             match='@sameAs',
             nsmap=ns_map)
 

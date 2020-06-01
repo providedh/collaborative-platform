@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class TargetTypes(Enum):
+class ElementTypes(Enum):
     text = 1
     reference = 2
     entity_type = 3
@@ -9,7 +9,7 @@ class TargetTypes(Enum):
     certainty = 5
 
 
-class MethodChoice(Enum):
+class Methods(Enum):
     POST = 1
     PUT = 2
     DELETE = 3
