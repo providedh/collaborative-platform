@@ -156,13 +156,17 @@ class DbHandler:
 
         self.__mark_certainty_to_delete(certainty)
 
-    def discard_adding_reference_to_entity(self, entity_xml_id):
-        entity_version = self.__get_entity_version_from_db(entity_xml_id)
-        entity_version.delete()
+    def discard_adding_reference_to_entity(self, entity_xml_id, last_reference):
+        if last_reference:
+            entity_version = self.__get_entity_version_from_db(entity_xml_id, unsaved=True)
 
-        entity = self.__get_entity_from_db(entity_xml_id)
+            if entity_version:
+                entity_version.delete()
 
-        self.__unmark_entity_to_delete(entity)
+            entity = self.__get_entity_from_db(entity_xml_id)
+
+            if entity.created_in_file_version is None:
+                entity.delete()
 
     @staticmethod
     def get_file_from_db(file_id):
@@ -294,19 +298,24 @@ class DbHandler:
 
         return entity
 
-    def __get_entity_version_from_db(self, entity_xml_id):
+    def __get_entity_version_from_db(self, entity_xml_id, unsaved=False):
         try:
             entity_version = EntityVersion.objects.get(
                 entity__xml_id=entity_xml_id,
                 file_version__isnull=True
             )
-        except EntityVersion.DoesNotExist:
-            file_version = self.__get_file_version()
 
-            entity_version = EntityVersion.objects.get(
-                entity__xml_id=entity_xml_id,
-                file_version=file_version
-            )
+        except EntityVersion.DoesNotExist:
+            if unsaved:
+                entity_version = None
+
+            else:
+                file_version = self.__get_file_version()
+
+                entity_version = EntityVersion.objects.get(
+                    entity__xml_id=entity_xml_id,
+                    file_version=file_version
+                )
 
         return entity_version
 

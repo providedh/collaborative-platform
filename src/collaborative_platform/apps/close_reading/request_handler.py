@@ -421,8 +421,7 @@ class RequestHandler:
 
         last_reference = self.__xml_handler.check_if_last_reference(body_content, entity_xml_id)
 
-        if last_reference:
-            self.__db_handler.discard_adding_reference_to_entity(entity_xml_id)
+        self.__db_handler.discard_adding_reference_to_entity(entity_xml_id, last_reference)
 
         self.__db_handler.delete_operation(operation_id)
 
