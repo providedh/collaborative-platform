@@ -81,7 +81,12 @@ class RequestHandler:
                     self.__discard_deleting_tag(operation)
 
             elif operation['element_type'] == 'reference':
-                pass
+                if operation['method'] == 'POST':
+                    self.__discard_adding_reference(operation)
+                elif operation['method'] == 'PUT':
+                    pass
+                elif operation['method'] == 'DELETE':
+                    pass
 
             elif operation['element_type'] == 'entity_property':
                 pass
@@ -402,6 +407,22 @@ class RequestHandler:
         body_content = self.__db_handler.get_body_content()
         body_content = self.__xml_handler.discard_deleting_tag(body_content, tag_xml_id)
         self.__db_handler.set_body_content(body_content)
+
+        self.__db_handler.delete_operation(operation_id)
+
+    def __discard_adding_reference(self, operation):
+        tag_xml_id = operation['edited_element_id']
+        entity_xml_id = operation['operation_result']
+        operation_id = operation['id']
+
+        body_content = self.__db_handler.get_body_content()
+        body_content = self.__xml_handler.discard_adding_reference_to_entity(body_content, tag_xml_id)
+        self.__db_handler.set_body_content(body_content)
+
+        last_reference = self.__xml_handler.check_if_last_reference(body_content, entity_xml_id)
+
+        if last_reference:
+            self.__db_handler.discard_adding_reference_to_entity(entity_xml_id)
 
         self.__db_handler.delete_operation(operation_id)
 

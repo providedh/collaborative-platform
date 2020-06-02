@@ -156,6 +156,14 @@ class DbHandler:
 
         self.__mark_certainty_to_delete(certainty)
 
+    def discard_adding_reference_to_entity(self, entity_xml_id):
+        entity_version = self.__get_entity_version_from_db(entity_xml_id)
+        entity_version.delete()
+
+        entity = self.__get_entity_from_db(entity_xml_id)
+
+        self.__unmark_entity_to_delete(entity)
+
     @staticmethod
     def get_file_from_db(file_id):
         file = File.objects.get(id=file_id, deleted=False)
@@ -244,6 +252,11 @@ class DbHandler:
 
     def __mark_entity_to_delete(self, entity):
         entity.deleted_by = self.__user
+        entity.save()
+
+    @staticmethod
+    def __unmark_entity_to_delete(entity):
+        entity.deleted_by = None
         entity.save()
 
     def __mark_entity_property_to_delete(self, entity_property):
