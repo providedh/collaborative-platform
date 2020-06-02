@@ -212,8 +212,15 @@ class XmlHandler:
         attributes = {
             'refAdded',
             f'{XML_ID_KEY}Added',
-            f'{XML_ID_KEY}Deleted'
+            f'{XML_ID_KEY}Deleted',
         }
+
+        # TODO: Build this dictionary basing on properties of entity type from settings.py
+        attributes_for_unlistable_entities = {
+            'whenAdded',
+        }
+
+        attributes.update(attributes_for_unlistable_entities)
 
         text = self.__update_tag(text, tag_xml_id, attributes_to_delete=attributes)
 
