@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.forms.models import model_to_dict
 
 from apps.api_vis.models import Certainty, Entity, EntityProperty, EntityVersion
@@ -35,15 +36,7 @@ class DbHandler:
         entity_version = self.__get_entity_version_from_db(entity_xml_id)
         self.__mark_entity_properties_to_delete(entity_version)
 
-        certainties = Certainty.objects.filter(
-            file_version=self.__file.file_versions.order_by('-number')[0],
-            target_xml_id=entity_xml_id
-        )
-
-        for certainty in certainties:
-            certainty.deleted_by = self.__user
-
-        Certainty.objects.bulk_update(certainties, ['deleted_by'])
+        self.__mark_certainties_to_delete(entity_xml_id)
 
     def add_entity_property(self, entity_xml_id, entity_property):
         entity_version = self.__get_entity_version_from_db(entity_xml_id)
@@ -168,6 +161,26 @@ class DbHandler:
             if entity.created_in_file_version is None:
                 entity.delete()
 
+    def discard_modifying_reference_to_entity(self, old_entity_xml_id, new_entity_xml_id, last_reference):
+        if last_reference:
+            new_entity_version = self.__get_entity_version_from_db(new_entity_xml_id, unsaved=True)
+
+            if new_entity_version:
+                new_entity_version.delete()
+
+            new_entity = self.__get_entity_from_db(new_entity_xml_id)
+
+            if new_entity.created_in_file_version is None:
+                new_entity.delete()
+
+        old_entity = self.__get_entity_from_db(old_entity_xml_id)
+        self.__unmark_entity_to_delete(old_entity)
+
+        old_entity_version = self.__get_entity_version_from_db(old_entity_xml_id)
+        self.__unmark_entity_properties_to_delete(old_entity_version)
+
+        self.__unmark_certainties_to_delete(old_entity_xml_id)
+
     @staticmethod
     def get_file_from_db(file_id):
         file = File.objects.get(id=file_id, deleted=False)
@@ -179,6 +192,22 @@ class DbHandler:
         entity_type = entity.type
 
         return entity_type
+
+    def get_entity_properties_values(self, entity_xml_id, include_unsaved=False):
+        entity_version = self.__get_entity_version_from_db(entity_xml_id)
+
+        if include_unsaved:
+            entity_properties = EntityProperty.objects.filter(
+                Q(entity_version=entity_version)
+                | (Q(entity=entity_version.entity) & Q(entity_version__isnull=True))
+            )
+
+        else:
+            entity_properties = entity_version.properties.all()
+
+        entity_properties = {property.name: property.get_value(as_str=True) for property in entity_properties}
+
+        return entity_properties
 
     def get_entity_property_value(self, entity_xml_id, property_name):
         entity_property = self.__get_entity_property_from_db(entity_xml_id, property_name)
@@ -271,6 +300,33 @@ class DbHandler:
         certainty.deleted_by = self.__user
         certainty.save()
 
+    def __mark_certainties_to_delete(self, target_xml_id):
+        file_version = self.__get_file_version()
+
+        certainties = Certainty.objects.filter(
+            file_version=file_version,
+            target_xml_id=target_xml_id
+        )
+
+        for certainty in certainties:
+            certainty.deleted_by = self.__user
+
+        Certainty.objects.bulk_update(certainties, ['deleted_by'])
+
+    def __unmark_certainties_to_delete(self, target_xml_id):
+        file_version = self.__get_file_version()
+
+        certainties = Certainty.objects.filter(
+            file_version=file_version,
+            target_xml_id=target_xml_id
+        )
+
+        for certainty in certainties:
+            certainty.deleted_by = None
+
+        Certainty.objects.bulk_update(certainties, ['deleted_by'])
+
+
     def __mark_entity_properties_to_delete(self, entity_version, entity_properties_names=None):
         # TODO: Add marking certainties to properties to delete
 
@@ -289,6 +345,27 @@ class DbHandler:
             entity_property.deleted_by = self.__user
 
         EntityProperty.objects.bulk_update(entity_properties, ['deleted_by'])
+
+    @staticmethod
+    def __unmark_entity_properties_to_delete(entity_version, entity_properties_names=None):
+        # TODO: Add unmarking certainties to properties to delete
+
+        if entity_properties_names:
+            entity_properties = EntityProperty.objects.filter(
+                entity_version=entity_version,
+                name__in=entity_properties_names
+            )
+
+        else:
+            entity_properties = EntityProperty.objects.filter(
+                entity_version=entity_version
+            )
+
+        for entity_property in entity_properties:
+            entity_property.deleted_by = None
+
+        EntityProperty.objects.bulk_update(entity_properties, ['deleted_by'])
+
 
     def __get_entity_from_db(self, entity_xml_id):
         entity = Entity.objects.get(
