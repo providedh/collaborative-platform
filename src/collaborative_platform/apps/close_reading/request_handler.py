@@ -458,16 +458,23 @@ class RequestHandler:
         operation_id = operation['id']
 
         old_entity_type = self.__db_handler.get_entity_type(old_entity_xml_id)
-        properties_to_delete = None
+        new_entity_type = self.__db_handler.get_entity_type(new_entity_xml_id)
+        properties_added = None
+        properties_deleted = None
 
         if old_entity_type not in self.__listable_entities_types:
             old_entity_properties_values = self.__db_handler.get_entity_properties_values(old_entity_xml_id,
                                                                                           include_unsaved=True)
-            properties_to_delete = list(old_entity_properties_values.keys())
+            properties_deleted = list(old_entity_properties_values.keys())
+
+        if new_entity_type not in self.__listable_entities_types:
+            new_entity_properties_values = self.__db_handler.get_entity_properties_values(new_entity_xml_id,
+                                                                                          include_unsaved=True)
+            properties_added = list(new_entity_properties_values.keys())
 
         body_content = self.__db_handler.get_body_content()
         body_content = self.__xml_handler.discard_modifying_reference_to_entity(body_content, tag_xml_id,
-                                                                                properties_to_delete)
+                                                                                properties_added, properties_deleted)
         self.__db_handler.set_body_content(body_content)
 
         last_reference = self.__xml_handler.check_if_last_reference(body_content, new_entity_xml_id)

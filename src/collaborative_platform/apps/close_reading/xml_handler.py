@@ -226,7 +226,7 @@ class XmlHandler:
 
         return text
 
-    def discard_modifying_reference_to_entity(self, text, tag_xml_id, properties_to_delete=None):
+    def discard_modifying_reference_to_entity(self, text, tag_xml_id, properties_added=None, properties_deleted=None):
         attributes = {
             'refAdded',
             'refDeleted',
@@ -237,8 +237,12 @@ class XmlHandler:
 
         new_tag = tag_xml_id.split('-')[0]
 
-        if properties_to_delete:
-            attributes_for_unlistable_entities = {f'{property}Deleted' for property in properties_to_delete}
+        if properties_added:
+            attributes_for_unlistable_entities = {f'{property}Added' for property in properties_added}
+            attributes.update(attributes_for_unlistable_entities)
+
+        if properties_deleted:
+            attributes_for_unlistable_entities = {f'{property}Deleted' for property in properties_deleted}
             attributes.update(attributes_for_unlistable_entities)
 
         text = self.__update_tag(text, tag_xml_id, new_tag=new_tag, attributes_to_delete=attributes)
