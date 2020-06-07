@@ -249,6 +249,24 @@ class XmlHandler:
 
         return text
 
+    def discard_removing_reference_to_entity(self, text, tag_xml_id, properties_deleted=None):
+        attributes = {
+            'refDeleted',
+            f'{XML_ID_KEY}Added',
+            f'{XML_ID_KEY}Deleted',
+            'saved',
+        }
+
+        new_tag = tag_xml_id.split('-')[0]
+
+        if properties_deleted:
+            attributes_for_unlistable_entities = {f'{property}Deleted' for property in properties_deleted}
+            attributes.update(attributes_for_unlistable_entities)
+
+        text = self.__update_tag(text, tag_xml_id, new_tag=new_tag, attributes_to_delete=attributes)
+
+        return text
+
     @staticmethod
     def __remove_tag(text, xml_id):
         tree = etree.fromstring(text)

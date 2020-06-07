@@ -181,6 +181,15 @@ class DbHandler:
 
         self.__unmark_certainties_to_delete(old_entity_xml_id)
 
+    def discard_removing_reference_to_entity(self, old_entity_xml_id):
+        old_entity = self.__get_entity_from_db(old_entity_xml_id)
+        self.__unmark_entity_to_delete(old_entity)
+
+        old_entity_version = self.__get_entity_version_from_db(old_entity_xml_id)
+        self.__unmark_entity_properties_to_delete(old_entity_version)
+
+        self.__unmark_certainties_to_delete(old_entity_xml_id)
+
     @staticmethod
     def get_file_from_db(file_id):
         file = File.objects.get(id=file_id, deleted=False)

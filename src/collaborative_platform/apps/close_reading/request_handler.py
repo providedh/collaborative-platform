@@ -86,7 +86,7 @@ class RequestHandler:
                 elif operation['method'] == 'PUT':
                     self.__discard_modifying_reference(operation)
                 elif operation['method'] == 'DELETE':
-                    pass
+                    self.__discard_removing_reference(operation)
 
             elif operation['element_type'] == 'entity_property':
                 pass
@@ -481,6 +481,23 @@ class RequestHandler:
         self.__db_handler.discard_modifying_reference_to_entity(old_entity_xml_id, new_entity_xml_id, last_reference)
 
         self.__db_handler.delete_operation(operation_id)
+
+    def __discard_removing_reference(self, operation):
+        tag_xml_id = operation['edited_element_id']
+        old_entity_xml_id = operation['old_element_id']
+        operation_id = operation['id']
+
+        properties_deleted = None
+
+        body_content = self.__db_handler.get_body_content()
+        body_content = self.__xml_handler.discard_removing_reference_to_entity(body_content, tag_xml_id,
+                                                                               properties_deleted)
+        self.__db_handler.set_body_content(body_content)
+
+        self.__db_handler.discard_removing_reference_to_entity(old_entity_xml_id)
+
+        self.__db_handler.delete_operation(operation_id)
+
 
     def __clean_operation_results(self):
         self.__operations_results = []
