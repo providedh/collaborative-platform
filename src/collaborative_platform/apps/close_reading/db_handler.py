@@ -190,6 +190,11 @@ class DbHandler:
 
         self.__unmark_certainties_to_delete(old_entity_xml_id)
 
+    def discard_adding_entity_property(self, entity_xml_id, property_name):
+        entity_property = self.__get_entity_property_from_db(entity_xml_id, property_name)
+
+        entity_property.delete()
+
     @staticmethod
     def get_file_from_db(file_id):
         file = File.objects.get(id=file_id, deleted=False)

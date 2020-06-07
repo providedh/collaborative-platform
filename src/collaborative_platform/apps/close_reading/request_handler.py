@@ -89,7 +89,12 @@ class RequestHandler:
                     self.__discard_removing_reference(operation)
 
             elif operation['element_type'] == 'entity_property':
-                pass
+                if operation['method'] == 'POST':
+                    self.__discard_adding_entity_property(operation)
+                elif operation['method'] == 'PUT':
+                    pass
+                elif operation['method'] == 'DELETE':
+                    pass
 
             elif operation['element_type'] == 'unification':
                 raise NotModified("Method not implemented yet")
@@ -497,6 +502,16 @@ class RequestHandler:
         self.__db_handler.discard_removing_reference_to_entity(old_entity_xml_id)
 
         self.__db_handler.delete_operation(operation_id)
+
+    def __discard_adding_entity_property(self, operation):
+        entity_xml_id = operation['edited_element_id']
+        property_name = operation['operation_result'].split('/')[1]
+        operation_id = operation['id']
+
+        self.__db_handler.discard_adding_entity_property(entity_xml_id, property_name)
+
+        self.__db_handler.delete_operation(operation_id)
+
 
 
     def __clean_operation_results(self):
