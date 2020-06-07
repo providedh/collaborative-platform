@@ -92,7 +92,7 @@ class RequestHandler:
                 if operation['method'] == 'POST':
                     self.__discard_adding_entity_property(operation)
                 elif operation['method'] == 'PUT':
-                    pass
+                    self.__discard_modifying_entity_property(operation)
                 elif operation['method'] == 'DELETE':
                     pass
 
@@ -521,6 +521,21 @@ class RequestHandler:
             self.__db_handler.set_body_content(body_content)
 
             self.__db_handler.discard_adding_entity_property(entity_xml_id, property_name)
+
+        self.__db_handler.delete_operation(operation_id)
+
+    def __discard_modifying_entity_property(self, operation):
+        entity_xml_id = operation['edited_element_id']
+        property_name = operation['operation_result'].split('/')[1]
+        operation_id = operation['id']
+
+        entity_type = self.__db_handler.get_entity_type(entity_xml_id)
+
+        if entity_type in self.__listable_entities_types:
+            self.__db_handler.discard_modifying_entity_property(entity_xml_id, property_name)
+
+        else:
+            pass
 
         self.__db_handler.delete_operation(operation_id)
 
