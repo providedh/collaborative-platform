@@ -535,7 +535,12 @@ class RequestHandler:
             self.__db_handler.discard_modifying_entity_property(entity_xml_id, property_name)
 
         else:
-            pass
+            body_content = self.__db_handler.get_body_content()
+            body_content = self.__xml_handler.discard_modifying_entity_property(body_content, entity_xml_id,
+                                                                                property_name)
+            self.__db_handler.set_body_content(body_content)
+
+            self.__db_handler.discard_modifying_entity_property(entity_xml_id, property_name)
 
         self.__db_handler.delete_operation(operation_id)
 

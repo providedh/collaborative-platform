@@ -278,6 +278,18 @@ class XmlHandler:
 
         return text
 
+    def discard_modifying_entity_property(self, text, tag_xml_id, property_modified):
+        attributes = [
+            'saved',
+        ]
+
+        attributes.append(f'{property_modified}Added')
+        attributes.append(f'{property_modified}Deleted')
+
+        text = self.__update_tag(text, tag_xml_id, attributes_to_delete=attributes)
+
+        return text
+
     @staticmethod
     def __remove_tag(text, xml_id):
         tree = etree.fromstring(text)
