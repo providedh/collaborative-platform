@@ -2246,6 +2246,74 @@ class TestAnnotatorWithWsAndDb40:
         await communicator.disconnect()
 
 
+@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
+@pytest.mark.asyncio
+@pytest.mark.django_db()
+@pytest.mark.integration_tests
+class TestAnnotatorWithWsAndDb41:
+    async def test_discard_removing_reference_to_entity_from_text__entity_unlistable(self):
+        test_name = inspect.currentframe().f_code.co_name
+
+        project_id = 1
+        file_id = 1
+        user_id = 2
+
+        communicator = get_communicator(project_id, file_id, user_id)
+
+        await communicator.connect()
+        await communicator.receive_json_from()
+
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'DELETE',
+                    'element_type': 'reference',
+                    'edited_element_id': 'date-2',
+                    'old_element_id': 'date-2',
+                }
+            ]
+        }
+        request_nr = 0
+
+        await communicator.send_json_to(request)
+        response = await communicator.receive_json_from()
+        verify_response(test_name, response, request_nr)
+
+        date_entity_in_db = Entity.objects.get(
+            file_id=file_id,
+            xml_id='date-2'
+        )
+
+        assert date_entity_in_db.deleted_by.id == user_id
+
+        date_entity_properties_in_db = EntityProperty.objects.filter(
+            entity_version=date_entity_in_db.entityversion_set.all().order_by('-id')[0]
+        )
+
+        for entity_property in date_entity_properties_in_db:
+            assert entity_property.deleted_by.id == user_id
+
+        request = {
+            'method': 'discard',
+            'payload': [1]
+        }
+        request_nr = 1
+
+        await communicator.send_json_to(request)
+        response = await communicator.receive_json_from()
+        verify_response(test_name, response, request_nr)
+
+        date_entity_in_db.refresh_from_db()
+        assert date_entity_in_db.deleted_by is None
+
+        for entity_property in date_entity_properties_in_db:
+            entity_property.refresh_from_db()
+            assert entity_property.deleted_by is None
+
+        await communicator.disconnect()
+
+
 def get_communicator(project_id, file_id, user_id=None):
     communicator = WebsocketCommunicator(
         application=application,
