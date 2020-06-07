@@ -492,11 +492,8 @@ class RequestHandler:
         old_entity_xml_id = operation['old_element_id']
         operation_id = operation['id']
 
-        properties_deleted = None
-
         body_content = self.__db_handler.get_body_content()
-        body_content = self.__xml_handler.discard_removing_reference_to_entity(body_content, tag_xml_id,
-                                                                               properties_deleted)
+        body_content = self.__xml_handler.discard_removing_reference_to_entity(body_content, tag_xml_id)
         self.__db_handler.set_body_content(body_content)
 
         self.__db_handler.discard_removing_reference_to_entity(old_entity_xml_id)
@@ -508,11 +505,24 @@ class RequestHandler:
         property_name = operation['operation_result'].split('/')[1]
         operation_id = operation['id']
 
-        self.__db_handler.discard_adding_entity_property(entity_xml_id, property_name)
+        entity_type = self.__db_handler.get_entity_type(entity_xml_id)
+
+        if entity_type in self.__listable_entities_types:
+            self.__db_handler.discard_adding_entity_property(entity_xml_id, property_name)
+
+        else:
+            entity_properties_values = self.__db_handler.get_entity_properties_values(entity_xml_id,
+                                                                                      include_unsaved=True)
+            properties_added = list(entity_properties_values.keys())
+
+            body_content = self.__db_handler.get_body_content()
+            body_content = self.__xml_handler.discard_adding_entity_property(body_content, entity_xml_id,
+                                                                             properties_added)
+            self.__db_handler.set_body_content(body_content)
+
+            self.__db_handler.discard_adding_entity_property(entity_xml_id, property_name)
 
         self.__db_handler.delete_operation(operation_id)
-
-
 
     def __clean_operation_results(self):
         self.__operations_results = []
