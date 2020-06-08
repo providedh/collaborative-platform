@@ -192,13 +192,16 @@ class DbHandler:
 
     def discard_adding_entity_property(self, entity_xml_id, property_name):
         entity_property = self.__get_entity_property_from_db(entity_xml_id, property_name)
-
         entity_property.delete()
 
     def discard_modifying_entity_property(self, entity_xml_id, property_name):
         entity_property = self.__get_entity_property_from_db(entity_xml_id, property_name)
         entity_property.delete()
 
+        entity_version = self.__get_entity_version_from_db(entity_xml_id)
+        self.__unmark_entity_properties_to_delete(entity_version, [property_name])
+
+    def discard_removing_entity_property(self, entity_xml_id, property_name):
         entity_version = self.__get_entity_version_from_db(entity_xml_id)
         self.__unmark_entity_properties_to_delete(entity_version, [property_name])
 

@@ -94,7 +94,7 @@ class RequestHandler:
                 elif operation['method'] == 'PUT':
                     self.__discard_modifying_entity_property(operation)
                 elif operation['method'] == 'DELETE':
-                    pass
+                    self.__discard_removing_entity_property(operation)
 
             elif operation['element_type'] == 'unification':
                 raise NotModified("Method not implemented yet")
@@ -526,7 +526,7 @@ class RequestHandler:
 
     def __discard_modifying_entity_property(self, operation):
         entity_xml_id = operation['edited_element_id']
-        property_name = operation['operation_result'].split('/')[1]
+        property_name = operation['old_element_id']
         operation_id = operation['id']
 
         entity_type = self.__db_handler.get_entity_type(entity_xml_id)
@@ -541,6 +541,21 @@ class RequestHandler:
             self.__db_handler.set_body_content(body_content)
 
             self.__db_handler.discard_modifying_entity_property(entity_xml_id, property_name)
+
+        self.__db_handler.delete_operation(operation_id)
+
+    def __discard_removing_entity_property(self, operation):
+        entity_xml_id = operation['edited_element_id']
+        property_name = operation['old_element_id']
+        operation_id = operation['id']
+
+        entity_type = self.__db_handler.get_entity_type(entity_xml_id)
+
+        if entity_type in self.__listable_entities_types:
+            self.__db_handler.discard_removing_entity_property(entity_xml_id, property_name)
+
+        else:
+            pass
 
         self.__db_handler.delete_operation(operation_id)
 
