@@ -209,6 +209,13 @@ class DbHandler:
         certainty = self.__get_certainty_from_db(certainty_xml_id)
         certainty.delete()
 
+    def discard_modifying_certainty(self, certainty_xml_id):
+        certainty = self.__get_certainty_from_db(certainty_xml_id)
+        certainty.delete()
+
+        certainty = self.__get_certainty_from_db(certainty_xml_id)
+        self.__unmark_entity_to_delete(certainty)
+
     @staticmethod
     def get_file_from_db(file_id):
         file = File.objects.get(id=file_id, deleted=False)
@@ -326,6 +333,10 @@ class DbHandler:
 
     def __mark_certainty_to_delete(self, certainty):
         certainty.deleted_by = self.__user
+        certainty.save()
+
+    def __unmark_certainty_to_delete(self, certainty):
+        certainty.deleted_by = None
         certainty.save()
 
     def __mark_certainties_to_delete(self, target_xml_id):

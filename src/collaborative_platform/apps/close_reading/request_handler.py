@@ -103,7 +103,7 @@ class RequestHandler:
                 if operation['method'] == 'POST':
                     self.__discard_adding_certainty(operation)
                 elif operation['method'] == 'PUT':
-                    pass
+                    self.__discard_modifying_certainty(operation)
                 elif operation['method'] == 'DELETE':
                     pass
 
@@ -570,6 +570,14 @@ class RequestHandler:
         operation_id = operation['id']
 
         self.__db_handler.discard_adding_certainty(certainty_xml_id)
+
+        self.__db_handler.delete_operation(operation_id)
+
+    def __discard_modifying_certainty(self, operation):
+        certainty_xml_id = operation['operation_result']
+        operation_id = operation['id']
+
+        self.__db_handler.discard_modifying_certainty(certainty_xml_id)
 
         self.__db_handler.delete_operation(operation_id)
 
