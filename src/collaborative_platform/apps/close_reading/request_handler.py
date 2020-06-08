@@ -100,7 +100,12 @@ class RequestHandler:
                 raise NotModified("Method not implemented yet")
 
             elif operation['element_type'] == 'certainty':
-                pass
+                if operation['method'] == 'POST':
+                    self.__discard_adding_certainty(operation)
+                elif operation['method'] == 'PUT':
+                    pass
+                elif operation['method'] == 'DELETE':
+                    pass
 
             else:
                 raise BadRequest("There is no operation matching to this request")
@@ -557,6 +562,14 @@ class RequestHandler:
             self.__db_handler.set_body_content(body_content)
 
             self.__db_handler.discard_removing_entity_property(entity_xml_id, property_name)
+
+        self.__db_handler.delete_operation(operation_id)
+
+    def __discard_adding_certainty(self, operation):
+        certainty_xml_id = operation['operation_result']
+        operation_id = operation['id']
+
+        self.__db_handler.discard_adding_certainty(certainty_xml_id)
 
         self.__db_handler.delete_operation(operation_id)
 
