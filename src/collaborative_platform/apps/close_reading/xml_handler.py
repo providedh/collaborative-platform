@@ -267,12 +267,10 @@ class XmlHandler:
 
         return text
 
-    def discard_adding_entity_property(self, text, tag_xml_id, properties_deleted=None):
-        attributes = []
-
-        if properties_deleted:
-            attributes_for_unlistable_entities = [f'{property}Added' for property in properties_deleted]
-            attributes += attributes_for_unlistable_entities
+    def discard_adding_entity_property(self, text, tag_xml_id, property_added):
+        attributes = [
+            f'{property_added}Added'
+        ]
 
         text = self.__update_tag(text, tag_xml_id, attributes_to_delete=attributes)
 
@@ -281,10 +279,19 @@ class XmlHandler:
     def discard_modifying_entity_property(self, text, tag_xml_id, property_modified):
         attributes = [
             'saved',
+            f'{property_modified}Added',
+            f'{property_modified}Deleted',
         ]
 
-        attributes.append(f'{property_modified}Added')
-        attributes.append(f'{property_modified}Deleted')
+        text = self.__update_tag(text, tag_xml_id, attributes_to_delete=attributes)
+
+        return text
+
+    def discard_removing_entity_property(self, text, tag_xml_id, property_deleted):
+        attributes = [
+            'saved',
+            f'{property_deleted}Deleted',
+        ]
 
         text = self.__update_tag(text, tag_xml_id, attributes_to_delete=attributes)
 

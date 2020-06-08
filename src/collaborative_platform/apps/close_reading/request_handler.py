@@ -511,13 +511,9 @@ class RequestHandler:
             self.__db_handler.discard_adding_entity_property(entity_xml_id, property_name)
 
         else:
-            entity_properties_values = self.__db_handler.get_entity_properties_values(entity_xml_id,
-                                                                                      include_unsaved=True)
-            properties_added = list(entity_properties_values.keys())
-
             body_content = self.__db_handler.get_body_content()
-            body_content = self.__xml_handler.discard_adding_entity_property(body_content, entity_xml_id,
-                                                                             properties_added)
+            body_content = self.__xml_handler.discard_adding_entity_property(body_content, entity_xml_id, property_name)
+
             self.__db_handler.set_body_content(body_content)
 
             self.__db_handler.discard_adding_entity_property(entity_xml_id, property_name)
@@ -555,7 +551,12 @@ class RequestHandler:
             self.__db_handler.discard_removing_entity_property(entity_xml_id, property_name)
 
         else:
-            pass
+            body_content = self.__db_handler.get_body_content()
+            body_content = self.__xml_handler.discard_removing_entity_property(body_content, entity_xml_id,
+                                                                               property_name)
+            self.__db_handler.set_body_content(body_content)
+
+            self.__db_handler.discard_removing_entity_property(entity_xml_id, property_name)
 
         self.__db_handler.delete_operation(operation_id)
 
