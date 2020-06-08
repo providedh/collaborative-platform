@@ -216,6 +216,10 @@ class DbHandler:
         certainty = self.__get_certainty_from_db(certainty_xml_id)
         self.__unmark_entity_to_delete(certainty)
 
+    def discard_removing_certainty(self, certainty_xml_id):
+        certainty = self.__get_certainty_from_db(certainty_xml_id)
+        self.__unmark_certainty_to_delete(certainty)
+
     @staticmethod
     def get_file_from_db(file_id):
         file = File.objects.get(id=file_id, deleted=False)

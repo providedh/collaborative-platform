@@ -105,7 +105,7 @@ class RequestHandler:
                 elif operation['method'] == 'PUT':
                     self.__discard_modifying_certainty(operation)
                 elif operation['method'] == 'DELETE':
-                    pass
+                    self.__discard_removing_certainty(operation)
 
             else:
                 raise BadRequest("There is no operation matching to this request")
@@ -578,6 +578,14 @@ class RequestHandler:
         operation_id = operation['id']
 
         self.__db_handler.discard_modifying_certainty(certainty_xml_id)
+
+        self.__db_handler.delete_operation(operation_id)
+
+    def __discard_removing_certainty(self, operation):
+        certainty_xml_id = operation['edited_element_id']
+        operation_id = operation['id']
+
+        self.__db_handler.discard_removing_certainty(certainty_xml_id)
 
         self.__db_handler.delete_operation(operation_id)
 
