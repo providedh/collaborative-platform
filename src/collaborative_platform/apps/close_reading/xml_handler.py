@@ -22,7 +22,7 @@ class XmlHandler:
         text = f'{text_before}<ab xml:id="{tag_xml_id}">{text_inside}</ab>{text_after}'
 
         attributes = {
-            'resp': f'#{self.__annotator_xml_id}',
+            'respAdded': f'#{self.__annotator_xml_id}',
             'saved': 'false',
         }
 
@@ -51,9 +51,9 @@ class XmlHandler:
         attributes = {
             XML_ID_KEY: f'{tag_xml_id}-old',
             'deleted': 'true',
-            'saved': 'false',
-            'resp': f'#{self.__annotator_xml_id}',
         }
+
+        attributes = self.__add_resp_if_needed(attributes, text, tag_xml_id)
 
         text = self.__update_tag(text, tag_xml_id, attributes_to_set=attributes)
 
@@ -71,9 +71,9 @@ class XmlHandler:
     def delete_tag(self, text, tag_xml_id):
         attributes = {
             'deleted': 'true',
-            'saved': 'false',
-            'resp': f'#{self.__annotator_xml_id}',
         }
+
+        attributes = self.__add_resp_if_needed(attributes, text, tag_xml_id)
 
         text = self.__update_tag(text, tag_xml_id, attributes_to_set=attributes)
 
@@ -84,21 +84,19 @@ class XmlHandler:
             f'{XML_ID_KEY}Added': f'{new_tag_xml_id}',
             f'{XML_ID_KEY}Deleted': f'{tag_xml_id}',
             'refAdded': f'#{entity_xml_id}',
-            'resp': f'#{self.__annotator_xml_id}',
-            'saved': 'false',
         }
+
+        attributes = self.__add_resp_if_needed(attributes, text, tag_xml_id)
 
         text = self.__update_tag(text, tag_xml_id, new_tag=new_tag, attributes_to_set=attributes)
 
         return text
 
-    def modify_reference_to_entity(self, text, tag_xml_id, new_entity_xml_id, old_entity_xml_id,
-                                   old_entity_properties=None, new_tag=None, new_tag_xml_id=None):
+    def modify_reference_to_entity(self, text, tag_xml_id, new_entity_xml_id, old_entity_xml_id, new_tag=None,
+                                   new_tag_xml_id=None):
         attributes = {
             'refAdded': f'#{new_entity_xml_id}',
             'refDeleted': f'#{old_entity_xml_id}',
-            'resp': f'#{self.__annotator_xml_id}',
-            'saved': 'false'
         }
 
         if new_tag_xml_id:
@@ -107,21 +105,22 @@ class XmlHandler:
                 f'{XML_ID_KEY}Deleted': f'{tag_xml_id}',
             })
 
-        text = self.__update_tag(text, tag_xml_id, new_tag=new_tag, attributes_to_set=attributes)
+        attributes = self.__add_resp_if_needed(attributes, text, tag_xml_id)
 
-        if old_entity_properties:
-            text = self.delete_entity_properties(text, tag_xml_id, old_entity_properties)
+        text = self.__update_tag(text, tag_xml_id, new_tag=new_tag, attributes_to_set=attributes)
 
         return text
 
-    def delete_reference_to_entity(self, text, tag_xml_id, entity_xml_id):
+    def delete_reference_to_entity(self, text, tag_xml_id, new_tag, new_tag_xml_id, entity_xml_id):
         attributes = {
+            f'{XML_ID_KEY}Added': f'{new_tag_xml_id}',
+            f'{XML_ID_KEY}Deleted': f'{tag_xml_id}',
             'refDeleted': f'#{entity_xml_id}',
-            'saved': 'false',
-            'resp': f'#{self.__annotator_xml_id}',
         }
 
-        text = self.__update_tag(text, tag_xml_id, attributes_to_set=attributes)
+        attributes = self.__add_resp_if_needed(attributes, text, tag_xml_id)
+
+        text = self.__update_tag(text, tag_xml_id, new_tag=new_tag, attributes_to_set=attributes)
 
         return text
 
@@ -129,21 +128,25 @@ class XmlHandler:
         entity_properties.pop('name', '')
 
         attributes = {f'{key}Added': value for key, value in entity_properties.items()}
-        attributes.update({
-            'resp': f'#{self.__annotator_xml_id}',
-            'saved': 'false'
-        })
+
+        attributes = self.__add_resp_if_needed(attributes, text, tag_xml_id)
 
         text = self.__update_tag(text, tag_xml_id, attributes_to_set=attributes)
 
         return text
 
-    def modify_entity_properties(self, text, entity_xml_id, old_entity_properties, new_entity_properties):
+    def modify_entity_properties(self, text, tag_xml_id, old_entity_properties, new_entity_properties):
         new_entity_properties.pop('name', '')
         old_entity_properties.pop('name', '')
 
-        text = self.delete_entity_properties(text, entity_xml_id, old_entity_properties)
-        text = self.add_entity_properties(text, entity_xml_id, new_entity_properties)
+        text = self.delete_entity_properties(text, tag_xml_id, old_entity_properties)
+        text = self.add_entity_properties(text, tag_xml_id, new_entity_properties)
+
+        attributes = {}
+
+        attributes = self.__add_resp_if_needed(attributes, text, tag_xml_id)
+
+        text = self.__update_tag(text, tag_xml_id, attributes_to_set=attributes)
 
         return text
 
@@ -151,12 +154,139 @@ class XmlHandler:
         entity_properties.pop('name', '')
 
         attributes = {f'{key}Deleted': value for key, value in entity_properties.items()}
-        attributes.update({
-            'resp': f'#{self.__annotator_xml_id}',
-            'saved': 'false'
-        })
+
+        attributes = self.__add_resp_if_needed(attributes, text, tag_xml_id)
 
         text = self.__update_tag(text, tag_xml_id, attributes_to_set=attributes)
+
+        return text
+
+    def discard_adding_tag(self, text, tag_xml_id):
+        text = self.__remove_tag(text, tag_xml_id)
+
+        return text
+
+    def discard_moving_tag(self, text, tag_xml_id):
+        text = self.__remove_tag(text, tag_xml_id)
+
+        old_tag_xml_id = f'{tag_xml_id}-old'
+
+        attributes_to_set = {
+            XML_ID_KEY: tag_xml_id
+        }
+
+        attributes_to_delete = [
+            'deleted',
+        ]
+
+        text = self.__update_tag(text, old_tag_xml_id, attributes_to_set=attributes_to_set,
+                                 attributes_to_delete=attributes_to_delete)
+        text = self.__remove_resp_if_needed(text, tag_xml_id)
+
+        return text
+
+    def discard_deleting_tag(self, text, tag_xml_id):
+        attributes_to_delete = [
+            'deleted',
+        ]
+
+        text = self.__update_tag(text, tag_xml_id, attributes_to_delete=attributes_to_delete)
+        text = self.__remove_resp_if_needed(text, tag_xml_id)
+
+        return text
+
+    def discard_adding_reference_to_entity(self, text, tag_xml_id, properties_to_delete=None):
+        attributes = [
+            'refAdded',
+            f'{XML_ID_KEY}Added',
+            f'{XML_ID_KEY}Deleted',
+        ]
+
+        if properties_to_delete:
+            attributes_for_unlistable_entities = {f'{property}Added' for property in properties_to_delete}
+            attributes += attributes_for_unlistable_entities
+
+        text = self.__update_tag(text, tag_xml_id, attributes_to_delete=attributes)
+        text = self.__remove_resp_if_needed(text, tag_xml_id)
+
+        return text
+
+    def discard_modifying_reference_to_entity(self, text, tag_xml_id, properties_added=None, properties_deleted=None):
+        attributes = [
+            'refAdded',
+            'refDeleted',
+            f'{XML_ID_KEY}Added',
+            f'{XML_ID_KEY}Deleted',
+        ]
+
+        new_tag = tag_xml_id.split('-')[0]
+
+        if properties_added:
+            attributes_for_unlistable_entities = {f'{property}Added' for property in properties_added}
+            attributes += attributes_for_unlistable_entities
+
+        if properties_deleted:
+            attributes_for_unlistable_entities = {f'{property}Deleted' for property in properties_deleted}
+            attributes += attributes_for_unlistable_entities
+
+        text = self.__update_tag(text, tag_xml_id, new_tag=new_tag, attributes_to_delete=attributes)
+        text = self.__remove_resp_if_needed(text, tag_xml_id)
+
+        return text
+
+    def discard_removing_reference_to_entity(self, text, tag_xml_id, properties_deleted=None):
+        attributes = [
+            'refDeleted',
+            f'{XML_ID_KEY}Added',
+            f'{XML_ID_KEY}Deleted',
+        ]
+
+        new_tag = tag_xml_id.split('-')[0]
+
+        if properties_deleted:
+            attributes_for_unlistable_entities = [f'{property}Deleted' for property in properties_deleted]
+            attributes += attributes_for_unlistable_entities
+
+        text = self.__update_tag(text, tag_xml_id, new_tag=new_tag, attributes_to_delete=attributes)
+        text = self.__remove_resp_if_needed(text, tag_xml_id)
+
+        return text
+
+    def discard_adding_entity_property(self, text, tag_xml_id, property_added):
+        attributes = [
+            f'{property_added}Added'
+        ]
+
+        text = self.__update_tag(text, tag_xml_id, attributes_to_delete=attributes)
+        text = self.__remove_resp_if_needed(text, tag_xml_id)
+
+        return text
+
+    def discard_modifying_entity_property(self, text, tag_xml_id, property_modified):
+        attributes = [
+            f'{property_modified}Added',
+            f'{property_modified}Deleted',
+        ]
+
+        text = self.__update_tag(text, tag_xml_id, attributes_to_delete=attributes)
+        text = self.__remove_resp_if_needed(text, tag_xml_id)
+
+        return text
+
+    def discard_removing_entity_property(self, text, tag_xml_id, property_deleted):
+        attributes = [
+            f'{property_deleted}Deleted',
+        ]
+
+        text = self.__update_tag(text, tag_xml_id, attributes_to_delete=attributes)
+        text = self.__remove_resp_if_needed(text, tag_xml_id)
+
+        return text
+
+    def accept_adding_tag(self, text, tag_xml_id):
+        attributes = ['saved']
+
+        text = self.__update_tag(text, tag_xml_id, attributes_to_delete=attributes)
 
         return text
 
@@ -177,125 +307,56 @@ class XmlHandler:
         else:
             return True
 
-    def discard_adding_tag(self, text, tag_xml_id):
-        text = self.__remove_tag(text, tag_xml_id)
+    def __add_resp_if_needed(self, attributes, text, tag_xml_id):
+        resp_in_tag = self.__check_if_resp_in_tag(text, tag_xml_id)
+
+        if not resp_in_tag:
+            attributes.update({'respAdded': f'#{self.__annotator_xml_id}'})
+
+        return attributes
+
+    def __remove_resp_if_needed(self, text, tag_xml_id):
+        tree = etree.fromstring(text)
+
+        xpath = f"//*[contains(concat(' ', @xml:id, ' '), ' {tag_xml_id} ')]"
+        element = get_first_xpath_match(tree, xpath, XML_NAMESPACES)
+
+        if element is None:
+            xpath = f"//*[contains(concat(' ', @xml:idAdded, ' '), ' {tag_xml_id} ')]"
+            element = get_first_xpath_match(tree, xpath, XML_NAMESPACES)
+
+        attributes = str(element.attrib)
+
+        regex = r'(?<!resp)Added'
+        matches = re.findall(regex, attributes)
+
+        saved = element.attrib.get('saved')
+
+        if len(matches) == 0 and saved is None:
+            attributes = ['respAdded']
+
+            text = self.__update_tag(text, tag_xml_id, attributes_to_delete=attributes)
 
         return text
 
-    def discard_moving_tag(self, text, tag_xml_id):
-        text = self.__remove_tag(text, tag_xml_id)
+    @staticmethod
+    def __check_if_resp_in_tag(text, tag_xml_id):
+        tree = etree.fromstring(text)
 
-        old_tag_xml_id = f'{tag_xml_id}-old'
+        xpath = f"//*[contains(concat(' ', @xml:id, ' '), ' {tag_xml_id} ')]"
+        element = get_first_xpath_match(tree, xpath, XML_NAMESPACES)
 
-        attributes_to_set = {
-            XML_ID_KEY: tag_xml_id
-        }
+        if element is None:
+            xpath = f"//*[contains(concat(' ', @xml:idAdded, ' '), ' {tag_xml_id} ')]"
+            element = get_first_xpath_match(tree, xpath, XML_NAMESPACES)
 
-        attributes_to_delete = [
-            'saved',
-            'deleted',
-        ]
+        resp = element.attrib.get('resp')
+        resp_added = element.attrib.get('respAdded')
 
-        text = self.__update_tag(text, old_tag_xml_id, attributes_to_set=attributes_to_set,
-                                 attributes_to_delete=attributes_to_delete)
-
-        return text
-
-    def discard_deleting_tag(self, text, tag_xml_id):
-        attributes_to_delete = [
-            'saved',
-            'deleted',
-        ]
-
-        text = self.__update_tag(text, tag_xml_id, attributes_to_delete=attributes_to_delete)
-
-        return text
-
-    def discard_adding_reference_to_entity(self, text, tag_xml_id, properties_to_delete=None):
-        attributes = [
-            'refAdded',
-            f'{XML_ID_KEY}Added',
-            f'{XML_ID_KEY}Deleted',
-        ]
-
-        if properties_to_delete:
-            attributes_for_unlistable_entities = {f'{property}Added' for property in properties_to_delete}
-            attributes += attributes_for_unlistable_entities
-
-        text = self.__update_tag(text, tag_xml_id, attributes_to_delete=attributes)
-
-        return text
-
-    def discard_modifying_reference_to_entity(self, text, tag_xml_id, properties_added=None, properties_deleted=None):
-        attributes = [
-            'refAdded',
-            'refDeleted',
-            f'{XML_ID_KEY}Added',
-            f'{XML_ID_KEY}Deleted',
-            'saved',
-        ]
-
-        new_tag = tag_xml_id.split('-')[0]
-
-        if properties_added:
-            attributes_for_unlistable_entities = {f'{property}Added' for property in properties_added}
-            attributes += attributes_for_unlistable_entities
-
-        if properties_deleted:
-            attributes_for_unlistable_entities = {f'{property}Deleted' for property in properties_deleted}
-            attributes += attributes_for_unlistable_entities
-
-        text = self.__update_tag(text, tag_xml_id, new_tag=new_tag, attributes_to_delete=attributes)
-
-        return text
-
-    def discard_removing_reference_to_entity(self, text, tag_xml_id, properties_deleted=None):
-        attributes = [
-            'refDeleted',
-            f'{XML_ID_KEY}Added',
-            f'{XML_ID_KEY}Deleted',
-            'saved',
-        ]
-
-        new_tag = tag_xml_id.split('-')[0]
-
-        if properties_deleted:
-            attributes_for_unlistable_entities = [f'{property}Deleted' for property in properties_deleted]
-            attributes += attributes_for_unlistable_entities
-
-        text = self.__update_tag(text, tag_xml_id, new_tag=new_tag, attributes_to_delete=attributes)
-
-        return text
-
-    def discard_adding_entity_property(self, text, tag_xml_id, property_added):
-        attributes = [
-            f'{property_added}Added'
-        ]
-
-        text = self.__update_tag(text, tag_xml_id, attributes_to_delete=attributes)
-
-        return text
-
-    def discard_modifying_entity_property(self, text, tag_xml_id, property_modified):
-        attributes = [
-            'saved',
-            f'{property_modified}Added',
-            f'{property_modified}Deleted',
-        ]
-
-        text = self.__update_tag(text, tag_xml_id, attributes_to_delete=attributes)
-
-        return text
-
-    def discard_removing_entity_property(self, text, tag_xml_id, property_deleted):
-        attributes = [
-            'saved',
-            f'{property_deleted}Deleted',
-        ]
-
-        text = self.__update_tag(text, tag_xml_id, attributes_to_delete=attributes)
-
-        return text
+        if resp is not None or resp_added is not None:
+            return True
+        else:
+            return False
 
     @staticmethod
     def __remove_tag(text, xml_id):
