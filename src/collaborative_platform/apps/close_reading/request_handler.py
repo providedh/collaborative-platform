@@ -654,6 +654,13 @@ class RequestHandler:
         body_content = self.__xml_handler.accept_moving_tag(body_content, tag_xml_id)
         self.__db_handler.set_body_content(body_content)
 
+    def __accept_deleting_tag(self, operation):
+        tag_xml_id = operation['edited_element_id']
+
+        body_content = self.__db_handler.get_body_content()
+        body_content = self.__xml_handler.accept_deleting_tag(body_content, tag_xml_id)
+        self.__db_handler.set_body_content(body_content)
+
     def __clean_operation_results(self):
         self.__operations_results = []
 

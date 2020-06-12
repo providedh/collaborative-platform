@@ -303,6 +303,11 @@ class XmlHandler:
 
         return text
 
+    def accept_deleting_tag(self, text, tag_xml_id):
+        text = self.__remove_tag(text, tag_xml_id)
+
+        return text
+
     @staticmethod
     def check_if_last_reference(text, target_element_id):
         tree = etree.fromstring(text)
