@@ -288,6 +288,10 @@ class XmlHandler:
 
         text = self.__update_tag(text, tag_xml_id, attributes_to_delete=attributes)
 
+        attributes_to_save = ['resp']
+
+        text = self.__save_attributes_in_tag(text, tag_xml_id, attributes_to_save)
+
         return text
 
     @staticmethod
@@ -336,6 +340,34 @@ class XmlHandler:
             attributes = ['respAdded']
 
             text = self.__update_tag(text, tag_xml_id, attributes_to_delete=attributes)
+
+        return text
+
+    def __save_attributes_in_tag(self, text, tag_xml_id, attributes_to_save):
+        tree = etree.fromstring(text)
+
+        xpath = f"//*[contains(concat(' ', @xml:id, ' '), ' {tag_xml_id} ')]"
+        element = get_first_xpath_match(tree, xpath, XML_NAMESPACES)
+
+        if element is None:
+            xpath = f"//*[contains(concat(' ', @xml:idAdded, ' '), ' {tag_xml_id} ')]"
+            element = get_first_xpath_match(tree, xpath, XML_NAMESPACES)
+
+        for attribute in attributes_to_save:
+            try:
+                attribute_value = element.attrib.pop(f'{attribute}Added')
+                element.set(attribute, attribute_value)
+
+            except KeyError:
+                pass
+
+            try:
+                element.attrib.pop(f'{attribute}Deleted')
+
+            except KeyError:
+                pass
+
+        text = etree.tounicode(tree, pretty_print=True)
 
         return text
 
