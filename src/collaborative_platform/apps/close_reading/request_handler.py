@@ -518,9 +518,9 @@ class RequestHandler:
         properties_added = None
 
         if entity_type not in self.__listable_entities_types:
-            old_entity_properties_values = self.__db_handler.get_entity_properties_values(entity_xml_id,
-                                                                                          include_unsaved=True)
-            properties_added = list(old_entity_properties_values.keys())
+            entity_properties_values = self.__db_handler.get_entity_properties_values(entity_xml_id,
+                                                                                      include_unsaved=True)
+            properties_added = list(entity_properties_values.keys())
 
         body_content = self.__db_handler.get_body_content()
         body_content = self.__xml_handler.discard_adding_reference_to_entity(body_content, tag_xml_id,
@@ -668,8 +668,16 @@ class RequestHandler:
         tag_xml_id = operation['edited_element_id']
         entity_xml_id = operation['operation_result']
 
+        entity_type = self.__db_handler.get_entity_type(entity_xml_id)
+        properties_added = None
+
+        if entity_type not in self.__listable_entities_types:
+            entity_properties_values = self.__db_handler.get_entity_properties_values(entity_xml_id,
+                                                                                      include_unsaved=True)
+            properties_added = list(entity_properties_values.keys())
+
         body_content = self.__db_handler.get_body_content()
-        body_content = self.__xml_handler.accept_adding_reference_to_entity(body_content, tag_xml_id)
+        body_content = self.__xml_handler.accept_adding_reference_to_entity(body_content, tag_xml_id, properties_added)
         self.__db_handler.set_body_content(body_content)
 
         self.__db_handler.accept_adding_reference_to_entity(entity_xml_id, new_file_version)
