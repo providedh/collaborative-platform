@@ -667,6 +667,7 @@ class RequestHandler:
     def __accept_adding_reference(self, operation, new_file_version):
         tag_xml_id = operation['edited_element_id']
         entity_xml_id = operation['operation_result']
+        new_element_id = operation['new_element_id']
 
         entity_type = self.__db_handler.get_entity_type(entity_xml_id)
         properties_added = None
@@ -680,7 +681,8 @@ class RequestHandler:
         body_content = self.__xml_handler.accept_adding_reference_to_entity(body_content, tag_xml_id, properties_added)
         self.__db_handler.set_body_content(body_content)
 
-        self.__db_handler.accept_adding_reference_to_entity(entity_xml_id, new_file_version)
+        if not new_element_id:
+            self.__db_handler.accept_adding_reference_to_entity(entity_xml_id, new_file_version)
 
     def __clean_operation_results(self):
         self.__operations_results = []
