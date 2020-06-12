@@ -75,7 +75,7 @@ def __process_file(file, directory, user):
         if content_updated:
             file_object = __update_file_object(xml_content, file_object, user)
 
-            __clone_db_objects(file_object)
+            clone_db_objects(file_object)
 
             upload_status.update({'migrated': True, 'message': message})
 
@@ -142,7 +142,7 @@ def __update_file_object(xml_content, old_file, user):
     return updated_file
 
 
-def __clone_db_objects(file):
+def clone_db_objects(file):
     file_versions = file.file_versions.order_by('-number')
 
     last_file_version = file_versions[0]

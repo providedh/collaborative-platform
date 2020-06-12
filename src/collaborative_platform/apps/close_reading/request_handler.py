@@ -115,6 +115,7 @@ class RequestHandler:
 
     def save_changes(self, operations_ids):
         operations = self.__db_handler.get_operations_from_db(operations_ids)
+        new_file_version = self.__db_handler.get_new_file_version()
 
         for operation in operations:
             if operation['element_type'] == 'tag':
@@ -127,7 +128,7 @@ class RequestHandler:
 
             elif operation['element_type'] == 'reference':
                 if operation['method'] == 'POST':
-                    self.__accpet_adding_reference(operation)
+                    self.__accept_adding_reference(operation, new_file_version)
                 elif operation['method'] == 'PUT':
                     self.__accept_modifying_reference(operation)
                 elif operation['method'] == 'DELETE':
@@ -157,6 +158,8 @@ class RequestHandler:
 
             operation_id = operation['id']
             self.__db_handler.delete_operation(operation_id)
+
+        self.__db_handler.finish_creating_new_file_version(new_file_version)
 
     def __add_tag(self, request):
         # TODO: Add verification if this same tag not existing already
@@ -660,6 +663,16 @@ class RequestHandler:
         body_content = self.__db_handler.get_body_content()
         body_content = self.__xml_handler.accept_deleting_tag(body_content, tag_xml_id)
         self.__db_handler.set_body_content(body_content)
+
+    def __accept_adding_reference(self, operation, new_file_version):
+        tag_xml_id = operation['edited_element_id']
+        entity_xml_id = operation['operation_result']
+
+        body_content = self.__db_handler.get_body_content()
+        body_content = self.__xml_handler.accept_adding_reference_to_entity(body_content, tag_xml_id)
+        self.__db_handler.set_body_content(body_content)
+
+        self.__db_handler.accept_adding_reference_to_entity(entity_xml_id, new_file_version)
 
     def __clean_operation_results(self):
         self.__operations_results = []

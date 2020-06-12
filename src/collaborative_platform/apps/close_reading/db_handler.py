@@ -6,7 +6,8 @@ from apps.close_reading.enums import ElementTypes
 from apps.close_reading.models import AnnotatingBodyContent, Operation
 from apps.close_reading.response_generator import get_custom_entities_types
 from apps.exceptions import BadParameters
-from apps.files_management.models import File, FileMaxXmlIds
+from apps.files_management.api import clone_db_objects
+from apps.files_management.models import File, FileMaxXmlIds, FileVersion
 from apps.projects.models import UncertaintyCategory
 
 from collaborative_platform.settings import CUSTOM_ENTITY, DEFAULT_ENTITIES
@@ -219,6 +220,21 @@ class DbHandler:
     def discard_removing_certainty(self, certainty_xml_id):
         certainty = self.__get_certainty_from_db(certainty_xml_id)
         self.__unmark_certainty_to_delete(certainty)
+
+    def accept_adding_reference_to_entity(self, entity_xml_id, new_file_version):
+        entity_version = self.__get_entity_version_from_db(entity_xml_id, unsaved=True)
+        entity_version.file_version = new_file_version
+        entity_version.save()
+
+        entity_properties = EntityProperty.objects.filter(
+            entity=entity_version.entity,
+            entity_version__isnull=True,
+        )
+
+        for property in entity_properties:
+            property.created_in_file_version = new_file_version
+
+        EntityProperty.objects.bulk_update(entity_properties, ['created_in_file_version'])
 
     @staticmethod
     def get_file_from_db(file_id):
@@ -607,3 +623,17 @@ class DbHandler:
         )
 
         operation.delete()
+
+    def get_new_file_version(self):
+        new_file_version = FileVersion.objects.create(
+            file=self.__file,
+            number=self.__file.version_number + 1,
+            created_by=self.__user,
+        )
+
+        return new_file_version
+
+    def finish_creating_new_file_version(self, new_file_version):
+        file = new_file_version.file
+
+        clone_db_objects(file)

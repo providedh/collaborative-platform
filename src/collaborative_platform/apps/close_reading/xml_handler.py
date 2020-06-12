@@ -308,6 +308,16 @@ class XmlHandler:
 
         return text
 
+    def accept_adding_reference_to_entity(self, text, tag_xml_id):
+        attributes_to_save = [
+            'ref',
+            XML_ID_KEY,
+        ]
+
+        text = self.__save_attributes_in_tag(text, tag_xml_id, attributes_to_save)
+
+        return text
+
     @staticmethod
     def check_if_last_reference(text, target_element_id):
         tree = etree.fromstring(text)

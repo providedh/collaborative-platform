@@ -230,7 +230,7 @@ class ResponseGenerator:
         entities_versions = EntityVersion.objects.filter(
             Q(file_version=file_version) | Q(file_version__isnull=True),
             entity__type=entity_type,
-        ).order_by('id')
+        ).order_by('entity__xml_id')
 
         entities_list = []
 
