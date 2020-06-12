@@ -284,13 +284,22 @@ class XmlHandler:
         return text
 
     def accept_adding_tag(self, text, tag_xml_id):
-        attributes = ['saved']
-
-        text = self.__update_tag(text, tag_xml_id, attributes_to_delete=attributes)
+        attributes_to_delete = ['saved']
+        text = self.__update_tag(text, tag_xml_id, attributes_to_delete=attributes_to_delete)
 
         attributes_to_save = ['resp']
-
         text = self.__save_attributes_in_tag(text, tag_xml_id, attributes_to_save)
+
+        return text
+
+    def accept_moving_tag(self, text, tag_xml_id):
+        attributes_to_delete = ['saved']
+        text = self.__update_tag(text, tag_xml_id, attributes_to_delete=attributes_to_delete)
+
+        attributes_to_save = ['resp']
+        text = self.__save_attributes_in_tag(text, tag_xml_id, attributes_to_save)
+
+        text = self.__remove_tag(text, f'{tag_xml_id}-old')
 
         return text
 
