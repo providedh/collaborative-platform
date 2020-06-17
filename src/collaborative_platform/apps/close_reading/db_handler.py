@@ -260,6 +260,11 @@ class DbHandler:
 
             self.__confirm_certainties_delete(entity_xml_id, new_file_version)
 
+    def accept_adding_entity_property(self, entity_xml_id, property_name, new_file_version):
+        entity_property = self.__get_entity_property_from_db(entity_xml_id, property_name)
+        entity_property.created_in_file_version = new_file_version
+        entity_property.save()
+
     @staticmethod
     def get_file_from_db(file_id):
         file = File.objects.get(id=file_id, deleted=False)

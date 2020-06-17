@@ -136,22 +136,22 @@ class RequestHandler:
 
             elif operation['element_type'] == 'entity_property':
                 if operation['method'] == 'POST':
-                    self.__accept_adding_entity_property(operation)
+                    self.__accept_adding_entity_property(operation, new_file_version)
                 elif operation['method'] == 'PUT':
-                    self.__accept_modifying_entity_property(operation)
+                    self.__accept_modifying_entity_property(operation, new_file_version)
                 elif operation['method'] == 'DELETE':
-                    self.__accept_removing_entity_property(operation)
+                    self.__accept_removing_entity_property(operation, new_file_version)
 
             elif operation['element_type'] == 'unification':
                 raise NotModified("Method not implemented yet")
 
             elif operation['element_type'] == 'certainty':
                 if operation['method'] == 'POST':
-                    self.__accept_adding_certainty(operation)
+                    self.__accept_adding_certainty(operation, new_file_version)
                 elif operation['method'] == 'PUT':
-                    self.__accept_modifying_certainty(operation)
+                    self.__accept_modifying_certainty(operation, new_file_version)
                 elif operation['method'] == 'DELETE':
-                    self.__accept_removing_certainty(operation)
+                    self.__accept_removing_certainty(operation, new_file_version)
 
             else:
                 raise BadRequest("There is no operation matching to this request")
@@ -727,6 +727,23 @@ class RequestHandler:
         last_reference = self.__xml_handler.check_if_last_reference(body_content, entity_xml_id)
 
         self.__db_handler.accept_removing_reference_to_entity(entity_xml_id, new_file_version, last_reference)
+
+    def __accept_adding_entity_property(self, operation, new_file_version):
+        entity_xml_id = operation['edited_element_id']
+        property_name = operation['operation_result'].split('/')[1]
+
+        entity_type = self.__db_handler.get_entity_type(entity_xml_id)
+
+        if entity_type in self.__listable_entities_types:
+            self.__db_handler.accept_adding_entity_property(entity_xml_id, property_name, new_file_version)
+
+        else:
+            body_content = self.__db_handler.get_body_content()
+            body_content = self.__xml_handler.accept_adding_entity_property(body_content, entity_xml_id, property_name)
+
+            self.__db_handler.set_body_content(body_content)
+
+            self.__db_handler.accept_adding_entity_property(entity_xml_id, property_name, new_file_version)
 
     def __clean_operation_results(self):
         self.__operations_results = []
