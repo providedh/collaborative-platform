@@ -132,7 +132,7 @@ class RequestHandler:
                 elif operation['method'] == 'PUT':
                     self.__accept_modifying_reference(operation, new_file_version)
                 elif operation['method'] == 'DELETE':
-                    self.__accept_removing_reference(operation)
+                    self.__accept_removing_reference(operation, new_file_version)
 
             elif operation['element_type'] == 'entity_property':
                 if operation['method'] == 'POST':
@@ -708,6 +708,25 @@ class RequestHandler:
 
         self.__db_handler.accept_modifying_reference_to_entity(old_entity_xml_id, new_entity_xml_id, new_file_version,
                                                                last_reference)
+
+    def __accept_removing_reference(self, operation, new_file_version):
+        tag_xml_id = operation['edited_element_id']
+        entity_xml_id = operation['old_element_id']
+
+        entity_type = self.__db_handler.get_entity_type(entity_xml_id)
+        properties_deleted = None
+
+        if entity_type not in self.__listable_entities_types:
+            properties_deleted = self.__db_handler.get_entity_properties_values(entity_xml_id, include_unsaved=True)
+
+        body_content = self.__db_handler.get_body_content()
+        body_content = self.__xml_handler.accept_removing_reference_to_entity(body_content, tag_xml_id,
+                                                                              properties_deleted)
+        self.__db_handler.set_body_content(body_content)
+
+        last_reference = self.__xml_handler.check_if_last_reference(body_content, entity_xml_id)
+
+        self.__db_handler.accept_removing_reference_to_entity(entity_xml_id, new_file_version, last_reference)
 
     def __clean_operation_results(self):
         self.__operations_results = []

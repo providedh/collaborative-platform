@@ -250,6 +250,16 @@ class DbHandler:
 
             self.__confirm_certainties_delete(old_entity_xml_id, new_file_version)
 
+    def accept_removing_reference_to_entity(self, entity_xml_id, new_file_version, last_reference):
+        if last_reference:
+            entity = self.__get_entity_from_db(entity_xml_id)
+            self.__confirm_entity_delete(entity, new_file_version)
+
+            old_entity_version = self.__get_entity_version_from_db(entity_xml_id)
+            self.__confirm_entity_properties_delete(old_entity_version, new_file_version)
+
+            self.__confirm_certainties_delete(entity_xml_id, new_file_version)
+
     @staticmethod
     def get_file_from_db(file_id):
         file = File.objects.get(id=file_id, deleted=False)
