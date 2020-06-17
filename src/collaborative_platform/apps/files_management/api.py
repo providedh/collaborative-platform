@@ -155,11 +155,13 @@ def clone_db_objects(file):
 def __clone_entities_versions(last_file_version, previous_file_version):
     entities_versions = EntityVersion.objects.filter(
         file_version=previous_file_version,
+        entity__deleted_in_file_version__isnull=True
     ).order_by('id')
 
     for entity_version in entities_versions:
         entity_properties = EntityProperty.objects.filter(
             entity_version=entity_version,
+            deleted_in_file_version__isnull=True
         ).order_by('id')
 
         entity_version.id = None
