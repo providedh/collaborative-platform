@@ -130,7 +130,7 @@ class RequestHandler:
                 if operation['method'] == 'POST':
                     self.__accept_adding_reference(operation, new_file_version)
                 elif operation['method'] == 'PUT':
-                    self.__accept_modifying_reference(operation)
+                    self.__accept_modifying_reference(operation, new_file_version)
                 elif operation['method'] == 'DELETE':
                     self.__accept_removing_reference(operation)
 
@@ -667,7 +667,6 @@ class RequestHandler:
     def __accept_adding_reference(self, operation, new_file_version):
         tag_xml_id = operation['edited_element_id']
         entity_xml_id = operation['operation_result']
-        new_element_id = operation['new_element_id']
 
         entity_type = self.__db_handler.get_entity_type(entity_xml_id)
         properties_added = None
@@ -681,8 +680,34 @@ class RequestHandler:
         body_content = self.__xml_handler.accept_adding_reference_to_entity(body_content, tag_xml_id, properties_added)
         self.__db_handler.set_body_content(body_content)
 
-        if not new_element_id:
-            self.__db_handler.accept_adding_reference_to_entity(entity_xml_id, new_file_version)
+        self.__db_handler.accept_adding_reference_to_entity(entity_xml_id, new_file_version)
+
+    def __accept_modifying_reference(self, operation, new_file_version):
+        tag_xml_id = operation['edited_element_id']
+        new_entity_xml_id = operation['operation_result']
+        old_entity_xml_id = operation['old_element_id']
+
+        old_entity_type = self.__db_handler.get_entity_type(old_entity_xml_id)
+        new_entity_type = self.__db_handler.get_entity_type(new_entity_xml_id)
+        properties_added = None
+        properties_deleted = None
+
+        if old_entity_type not in self.__listable_entities_types:
+            properties_deleted = self.__db_handler.get_entity_properties_values(old_entity_xml_id,
+                                                                                include_unsaved=True)
+
+        if new_entity_type not in self.__listable_entities_types:
+            properties_added = self.__db_handler.get_entity_properties_values(new_entity_xml_id, include_unsaved=True)
+
+        body_content = self.__db_handler.get_body_content()
+        body_content = self.__xml_handler.accept_modifying_reference_to_entity(body_content, tag_xml_id,
+                                                                                properties_added, properties_deleted)
+        self.__db_handler.set_body_content(body_content)
+
+        last_reference = self.__xml_handler.check_if_last_reference(body_content, old_entity_xml_id)
+
+        self.__db_handler.accept_modifying_reference_to_entity(old_entity_xml_id, new_entity_xml_id, new_file_version,
+                                                               last_reference)
 
     def __clean_operation_results(self):
         self.__operations_results = []

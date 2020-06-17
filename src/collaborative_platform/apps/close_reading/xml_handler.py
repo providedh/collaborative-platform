@@ -321,6 +321,28 @@ class XmlHandler:
 
         return text
 
+    def accept_modifying_reference_to_entity(self, text, tag_xml_id, properties_added=None,
+                                             properties_deleted=None):
+        if properties_deleted:
+            properties_deleted = [key for key, value in properties_deleted.items()]
+
+            text = self.__delete_attributes_in_tag(text, tag_xml_id, properties_deleted)
+
+        attributes_to_save = [
+            'ref',
+            'resp',
+            XML_ID_KEY,
+        ]
+
+        if properties_added:
+            properties_added = [key for key, value in properties_added.items()]
+
+            attributes_to_save += properties_added
+
+        text = self.__save_attributes_in_tag(text, tag_xml_id, attributes_to_save)
+
+        return text
+
     @staticmethod
     def check_if_last_reference(text, target_element_id):
         tree = etree.fromstring(text)
@@ -390,6 +412,28 @@ class XmlHandler:
 
             try:
                 element.attrib.pop(f'{attribute}Deleted')
+
+            except KeyError:
+                pass
+
+        text = etree.tounicode(tree, pretty_print=True)
+
+        return text
+
+    def __delete_attributes_in_tag(self, text, tag_xml_id, attributes_to_delete):
+        tree = etree.fromstring(text)
+
+        xpath = f"//*[contains(concat(' ', @xml:id, ' '), ' {tag_xml_id} ')]"
+        element = get_first_xpath_match(tree, xpath, XML_NAMESPACES)
+
+        if element is None:
+            xpath = f"//*[contains(concat(' ', @xml:idAdded, ' '), ' {tag_xml_id} ')]"
+            element = get_first_xpath_match(tree, xpath, XML_NAMESPACES)
+
+        for attribute in attributes_to_delete:
+            try:
+                element.attrib.pop(f'{attribute}Deleted')
+                element.attrib.pop(attribute)
 
             except KeyError:
                 pass

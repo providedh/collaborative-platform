@@ -1,5 +1,6 @@
 from django.db.models import Q
 from django.forms.models import model_to_dict
+from django.utils import timezone
 
 from apps.api_vis.models import Certainty, Entity, EntityProperty, EntityVersion
 from apps.close_reading.enums import ElementTypes
@@ -222,19 +223,32 @@ class DbHandler:
         self.__unmark_certainty_to_delete(certainty)
 
     def accept_adding_reference_to_entity(self, entity_xml_id, new_file_version):
-        entity_version = self.__get_entity_version_from_db(entity_xml_id, unsaved=True)
-        entity_version.file_version = new_file_version
-        entity_version.save()
+        entity = self.__get_entity_from_db(entity_xml_id)
 
-        entity_properties = EntityProperty.objects.filter(
-            entity=entity_version.entity,
-            entity_version__isnull=True,
-        )
+        if entity.created_in_file_version is None:
+            self.__confirm_entity_creation(entity, new_file_version)
 
-        for property in entity_properties:
-            property.created_in_file_version = new_file_version
+            new_entity_version = self.__get_entity_version_from_db(entity_xml_id, new_file_version)
+            self.__confirm_entity_properties_creation(new_entity_version, new_file_version)
 
-        EntityProperty.objects.bulk_update(entity_properties, ['created_in_file_version'])
+    def accept_modifying_reference_to_entity(self, old_entity_xml_id, new_entity_xml_id, new_file_version,
+                                             last_reference):
+        entity = self.__get_entity_from_db(new_entity_xml_id)
+
+        if entity.created_in_file_version is None:
+            self.__confirm_entity_creation(entity, new_file_version)
+
+            new_entity_version = self.__get_entity_version_from_db(new_entity_xml_id, new_file_version)
+            self.__confirm_entity_properties_creation(new_entity_version, new_file_version)
+
+        if last_reference:
+            old_entity = self.__get_entity_from_db(old_entity_xml_id)
+            self.__confirm_entity_delete(old_entity, new_file_version)
+
+            old_entity_version = self.__get_entity_version_from_db(old_entity_xml_id)
+            self.__confirm_entity_properties_delete(old_entity_version, new_file_version)
+
+            self.__confirm_certainties_delete(old_entity_xml_id, new_file_version)
 
     @staticmethod
     def get_file_from_db(file_id):
@@ -347,6 +361,20 @@ class DbHandler:
         entity.deleted_by = None
         entity.save()
 
+    def __confirm_entity_creation(self, entity, new_file_version):
+        entity.created_in_file_version = new_file_version
+        entity.save()
+
+        entity_version = self.__get_entity_version_from_db(entity.xml_id, unsaved=True)
+        entity_version.file_version = new_file_version
+        entity_version.save()
+
+    @staticmethod
+    def __confirm_entity_delete(entity, new_file_version):
+        entity.deleted_in_file_version = new_file_version
+        entity.deleted_on = timezone.now()
+        entity.save()
+
     def __mark_entity_property_to_delete(self, entity_property):
         entity_property.deleted_by = self.__user
         entity_property.save()
@@ -385,6 +413,18 @@ class DbHandler:
 
         Certainty.objects.bulk_update(certainties, ['deleted_by'])
 
+    def __confirm_certainties_delete(self, target_xml_id, new_file_version):
+        file_version = self.__get_file_version()
+
+        certainties = Certainty.objects.filter(
+            file_version=file_version,
+            target_xml_id=target_xml_id
+        )
+
+        for certainty in certainties:
+            certainty.deleted_in_file_version = new_file_version
+
+        Certainty.objects.bulk_update(certainties, ['deleted_in_file_version'])
 
     def __mark_entity_properties_to_delete(self, entity_version, entity_properties_names=None):
         # TODO: Add marking certainties to properties to delete
@@ -425,6 +465,45 @@ class DbHandler:
 
         EntityProperty.objects.bulk_update(entity_properties, ['deleted_by'])
 
+    @staticmethod
+    def __confirm_entity_properties_creation(entity_version, new_file_version, entity_properties_names=None):
+        if entity_properties_names:
+            entity_properties = EntityProperty.objects.filter(
+                entity=entity_version.entity,
+                name__in=entity_properties_names,
+                created_in_file_version__isnull=True
+            )
+
+        else:
+            entity_properties = EntityProperty.objects.filter(
+                entity=entity_version.entity,
+                created_in_file_version__isnull=True
+            )
+
+        for entity_property in entity_properties:
+            entity_property.created_in_file_version = new_file_version
+
+        EntityProperty.objects.bulk_update(entity_properties, ['created_in_file_version'])
+
+    @staticmethod
+    def __confirm_entity_properties_delete(entity_version, new_file_version, entity_properties_names=None):
+        # TODO: Add deleting certainties to properties
+
+        if entity_properties_names:
+            entity_properties = EntityProperty.objects.filter(
+                entity_version=entity_version,
+                name__in=entity_properties_names
+            )
+
+        else:
+            entity_properties = EntityProperty.objects.filter(
+                entity_version=entity_version
+            )
+
+        for entity_property in entity_properties:
+            entity_property.deleted_in_file_version = new_file_version
+
+        EntityProperty.objects.bulk_update(entity_properties, ['deleted_in_file_version'])
 
     def __get_entity_from_db(self, entity_xml_id):
         entity = Entity.objects.get(
@@ -434,24 +513,35 @@ class DbHandler:
 
         return entity
 
-    def __get_entity_version_from_db(self, entity_xml_id, unsaved=False):
-        try:
-            entity_version = EntityVersion.objects.get(
-                entity__xml_id=entity_xml_id,
-                file_version__isnull=True
-            )
-
-        except EntityVersion.DoesNotExist:
-            if unsaved:
-                entity_version = None
-
-            else:
-                file_version = self.__get_file_version()
-
+    def __get_entity_version_from_db(self, entity_xml_id, file_version=None, unsaved=False):
+        if file_version:
+            try:
                 entity_version = EntityVersion.objects.get(
                     entity__xml_id=entity_xml_id,
-                    file_version=file_version
+                    file_version=file_version,
                 )
+
+            except EntityVersion.DoesNotExist:
+                entity_version = None
+
+        else:
+            try:
+                entity_version = EntityVersion.objects.get(
+                    entity__xml_id=entity_xml_id,
+                    file_version__isnull=True
+                )
+
+            except EntityVersion.DoesNotExist:
+                if unsaved:
+                    entity_version = None
+
+                else:
+                    file_version = self.__get_file_version()
+
+                    entity_version = EntityVersion.objects.get(
+                        entity__xml_id=entity_xml_id,
+                        file_version=file_version
+                    )
 
         return entity_version
 
