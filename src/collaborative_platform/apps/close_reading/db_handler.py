@@ -265,6 +265,14 @@ class DbHandler:
         entity_property.created_in_file_version = new_file_version
         entity_property.save()
 
+    def accept_modifying_entity_property(self, entity_xml_id, property_name, new_file_version):
+        entity_property = self.__get_entity_property_from_db(entity_xml_id, property_name)
+        entity_property.created_in_file_version = new_file_version
+        entity_property.save()
+
+        entity_version = self.__get_entity_version_from_db(entity_xml_id)
+        self.__confirm_entity_properties_delete(entity_version, new_file_version, [property_name])
+
     @staticmethod
     def get_file_from_db(file_id):
         file = File.objects.get(id=file_id, deleted=False)
