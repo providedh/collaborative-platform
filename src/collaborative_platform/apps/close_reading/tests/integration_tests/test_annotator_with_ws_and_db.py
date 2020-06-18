@@ -3943,6 +3943,64 @@ class TestAnnotatorWithWsAndDb68:
         await communicator.disconnect()
 
 
+@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
+@pytest.mark.asyncio
+@pytest.mark.django_db()
+@pytest.mark.integration_tests
+class TestAnnotatorWithWsAndDb47:
+    async def test_accept_removing_property_from_entity__entity_unlistable(self):
+        test_name = inspect.currentframe().f_code.co_name
+
+        project_id = 1
+        file_id = 1
+        user_id = 2
+
+        communicator = get_communicator(project_id, file_id, user_id)
+
+        await communicator.connect()
+        await communicator.receive_json_from()
+
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'DELETE',
+                    'element_type': 'entity_property',
+                    'edited_element_id': 'date-0',
+                    'old_element_id': 'when'
+                }
+            ]
+        }
+        request_nr = 0
+
+        await communicator.send_json_to(request)
+        response = await communicator.receive_json_from()
+        verify_response(test_name, response, request_nr)
+
+        entity_property = EntityProperty.objects.filter(
+            entity_version__entity__xml_id='date-0',
+            name='when'
+        ).order_by('-id')[0]
+
+        assert entity_property.deleted_by.id == user_id
+
+        request = {
+            'method': 'save',
+            'payload': [1]
+        }
+        request_nr = 1
+
+        await communicator.send_json_to(request)
+        response = await communicator.receive_json_from()
+        verify_response(test_name, response, request_nr)
+
+        entity_property.refresh_from_db()
+        assert entity_property.deleted_by.id == user_id
+        assert entity_property.deleted_in_file_version.number == 3
+
+        await communicator.disconnect()
+
+
 def get_communicator(project_id, file_id, user_id=None):
     communicator = WebsocketCommunicator(
         application=application,

@@ -774,7 +774,7 @@ class RequestHandler:
         else:
             body_content = self.__db_handler.get_body_content()
             body_content = self.__xml_handler.accept_removing_entity_property(body_content, entity_xml_id,
-                                                                               property_name)
+                                                                              property_name)
             self.__db_handler.set_body_content(body_content)
 
             self.__db_handler.accept_removing_entity_property(entity_xml_id, property_name, new_file_version)

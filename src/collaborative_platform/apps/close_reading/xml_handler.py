@@ -376,18 +376,30 @@ class XmlHandler:
 
         return text
 
-    def accept_modifying_entity_property(self, text, tag_xml_id, property_added):
+    def accept_modifying_entity_property(self, text, tag_xml_id, property_modified):
         attributes_to_save = [
             'resp'
         ]
 
-        if property_added:
-            attributes_to_save.append(property_added)
+        if property_modified:
+            attributes_to_save.append(property_modified)
 
         text = self.__save_attributes_in_tag(text, tag_xml_id, attributes_to_save)
 
         return text
 
+    def accept_removing_entity_property(self, text, tag_xml_id, property_deleted):
+        attributes_to_save = [
+            'resp'
+        ]
+
+        text = self.__save_attributes_in_tag(text, tag_xml_id, attributes_to_save)
+
+        attributes_to_delete = [property_deleted]
+
+        text = self.__delete_attributes_in_tag(text, tag_xml_id, attributes_to_delete)
+
+        return text
 
     @staticmethod
     def check_if_last_reference(text, target_element_id):
