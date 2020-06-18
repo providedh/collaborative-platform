@@ -177,12 +177,12 @@ class ResponseGenerator:
         certainties_saved = Certainty.objects.filter(
             file_version=self.__file.file_versions.order_by('-number')[0],
             created_in_file_version__isnull=False
-        ).order_by('id')
+        ).order_by('xml_id')
 
         certainties_unsaved = Certainty.objects.filter(
             file=self.__file,
             created_in_file_version__isnull=True
-        ).order_by('id')
+        ).order_by('xml_id')
 
         certainties = list(chain(certainties_saved, certainties_unsaved))
 

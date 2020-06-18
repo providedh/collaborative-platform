@@ -779,6 +779,11 @@ class RequestHandler:
 
             self.__db_handler.accept_removing_entity_property(entity_xml_id, property_name, new_file_version)
 
+    def __accept_adding_certainty(self, operation, new_file_version):
+        certainty_xml_id = operation['operation_result']
+
+        self.__db_handler.accept_adding_certainty(certainty_xml_id, new_file_version)
+
     def __clean_operation_results(self):
         self.__operations_results = []
 
