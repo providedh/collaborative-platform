@@ -294,6 +294,11 @@ class DbHandler:
         new_certainty.file_version = new_file_version
         new_certainty.save()
 
+    def accept_removing_certainty(self, certainty_xml_id, new_file_version):
+        certainty = self.__get_certainty_from_db(certainty_xml_id, saved=True)
+        certainty.deleted_in_file_version = new_file_version
+        certainty.save()
+
     @staticmethod
     def get_file_from_db(file_id):
         file = File.objects.get(id=file_id, deleted=False)
