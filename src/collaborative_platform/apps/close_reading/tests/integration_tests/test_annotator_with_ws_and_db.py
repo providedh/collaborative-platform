@@ -9,6 +9,7 @@ from django.contrib.auth.models import User
 from django.test import Client
 
 from apps.api_vis.models import Entity, EntityProperty
+from apps.files_management.models import FileVersion
 
 from collaborative_platform.routing import application
 
@@ -4147,6 +4148,71 @@ class TestAnnotatorWithWsAndDb72:
         verify_response(test_name, response, request_nr)
 
         await communicator.disconnect()
+
+
+@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
+@pytest.mark.asyncio
+@pytest.mark.django_db()
+@pytest.mark.integration_tests
+class TestAnnotatorWithWsAndDb73:
+    async def test_saving_file(self):
+        test_name = inspect.currentframe().f_code.co_name
+
+        project_id = 1
+        file_id = 1
+        user_id = 2
+
+        communicator = get_communicator(project_id, file_id, user_id)
+
+        file_versions = FileVersion.objects.filter(
+            file_id=file_id,
+        )
+
+        assert len(file_versions) == 2
+
+        await communicator.connect()
+        await communicator.receive_json_from()
+
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'POST',
+                    'element_type': 'tag',
+                    'parameters': {
+                        'start_pos': 265,
+                        'end_pos': 271,
+                    }
+                }
+            ]
+        }
+
+        await communicator.send_json_to(request)
+        await communicator.receive_json_from()
+
+        request = {
+            'method': 'save',
+            'payload': [1]
+        }
+
+        await communicator.send_json_to(request)
+        await communicator.receive_json_from()
+
+        await communicator.disconnect()
+
+        file_versions = FileVersion.objects.filter(
+            file_id=file_id,
+        )
+
+        assert len(file_versions) == 3
+
+        expected_file_name = f'{test_name}.xml'
+        expected_file_path = os.path.join(SCRIPT_DIR, 'result_files', expected_file_name)
+
+        expected_xml = read_file(expected_file_path)
+        result_xml = file_versions[0].get_raw_content()
+
+        assert result_xml == expected_xml
 
 
 def get_communicator(project_id, file_id, user_id=None):

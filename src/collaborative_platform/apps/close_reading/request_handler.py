@@ -115,7 +115,7 @@ class RequestHandler:
 
     def save_changes(self, operations_ids):
         operations = self.__db_handler.get_operations_from_db(operations_ids)
-        new_file_version = self.__db_handler.get_new_file_version()
+        new_file_version = self.__start_saving_file()
 
         for operation in operations:
             if operation['element_type'] == 'tag':
@@ -159,7 +159,7 @@ class RequestHandler:
             operation_id = operation['id']
             self.__db_handler.delete_operation(operation_id)
 
-        self.__db_handler.finish_creating_new_file_version(new_file_version)
+        self.__finish_saving_file(new_file_version)
 
     def __add_tag(self, request):
         # TODO: Add verification if this same tag not existing already
@@ -796,6 +796,19 @@ class RequestHandler:
 
     def __clean_operation_results(self):
         self.__operations_results = []
+
+    def __start_saving_file(self):
+        new_file_version = self.__db_handler.get_new_file_version()
+
+        return new_file_version
+
+    def __finish_saving_file(self, new_file_version):
+        old_xml_content = self.__db_handler.get_previous_xml_content()
+        new_body_content = self.__db_handler.get_body_content()
+
+        new_xml_content = self.__xml_handler.switch_body_content(old_xml_content, new_body_content)
+
+        self.__db_handler.finish_creating_new_file_version(new_file_version, new_xml_content)
 
     def __update_target_xml_id(self, target):
         if isinstance(target, int):

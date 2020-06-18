@@ -607,3 +607,20 @@ class XmlHandler:
         text = etree.tounicode(tree, pretty_print=True)
 
         return text
+
+    def switch_body_content(self, old_xml_content, new_body_content):
+        parser = etree.XMLParser(remove_blank_text=True)
+        tree = etree.fromstring(old_xml_content, parser=parser)
+
+        body_xpath = './default:text/default:body'
+        old_body_element = get_first_xpath_match(tree, body_xpath, XML_NAMESPACES)
+
+        body_parent = old_body_element.getparent()
+        body_parent.remove(old_body_element)
+
+        new_body_element = etree.fromstring(new_body_content, parser=parser)
+        body_parent.append(new_body_element)
+
+        new_xml_content = etree.tounicode(tree, pretty_print=True)
+
+        return new_xml_content

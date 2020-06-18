@@ -8,7 +8,9 @@ from apps.close_reading.models import AnnotatingBodyContent, Operation
 from apps.close_reading.response_generator import get_custom_entities_types
 from apps.exceptions import BadParameters
 from apps.files_management.api import clone_db_objects
+from apps.files_management.helpers import create_uploaded_file_object_from_string, hash_file
 from apps.files_management.models import File, FileMaxXmlIds, FileVersion
+from apps.projects.helpers import log_activity
 from apps.projects.models import UncertaintyCategory
 
 from collaborative_platform.settings import CUSTOM_ENTITY, DEFAULT_ENTITIES
@@ -784,7 +786,27 @@ class DbHandler:
 
         return new_file_version
 
-    def finish_creating_new_file_version(self, new_file_version):
-        file = new_file_version.file
+    def get_previous_xml_content(self):
+        file_version = self.__file.file_versions.order_by('-number')[1]
+        xml_content = file_version.get_raw_content()
 
-        clone_db_objects(file)
+        return xml_content
+
+    def finish_creating_new_file_version(self, new_file_version, new_xml_content):
+        uploaded_file = create_uploaded_file_object_from_string(new_xml_content, self.__file.name)
+        hash = hash_file(self.__file, uploaded_file)
+
+        uploaded_file.name = hash
+
+        new_file_version.upload = uploaded_file
+        new_file_version.hash = hash
+        new_file_version.save()
+
+        self.__file.version_number = new_file_version.number
+        self.__file.save()
+
+        clone_db_objects(self.__file)
+
+        log_text = f"created version number {new_file_version.number} of"
+
+        log_activity(self.__file.project, self.__user, log_text, self.__file)
