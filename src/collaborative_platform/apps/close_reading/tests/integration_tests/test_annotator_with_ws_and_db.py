@@ -3824,6 +3824,78 @@ class TestAnnotatorWithWsAndDb66:
         await communicator.disconnect()
 
 
+@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
+@pytest.mark.asyncio
+@pytest.mark.django_db()
+@pytest.mark.integration_tests
+class TestAnnotatorWithWsAndDb67:
+    async def test_accept_modifying_entity_property__entity_unlistable(self):
+        test_name = inspect.currentframe().f_code.co_name
+
+        project_id = 1
+        file_id = 1
+        user_id = 2
+
+        communicator = get_communicator(project_id, file_id, user_id)
+
+        await communicator.connect()
+        await communicator.receive_json_from()
+
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'PUT',
+                    'element_type': 'entity_property',
+                    'edited_element_id': 'date-0',
+                    'old_element_id': 'when',
+                    'parameters': {
+                        'when': '0001-01-01'
+                    }
+                }
+            ]
+        }
+        request_nr = 0
+
+        await communicator.send_json_to(request)
+        response = await communicator.receive_json_from()
+        verify_response(test_name, response, request_nr)
+
+        entity_property_old = EntityProperty.objects.filter(
+            entity_version__entity__xml_id='date-0',
+            name='when'
+        ).order_by('-id')[0]
+
+        assert entity_property_old.deleted_by.id == user_id
+
+        entity_property_new = EntityProperty.objects.filter(
+            entity__xml_id='date-0',
+            entity_version__isnull=True,
+            name='when'
+        ).order_by('-id')[0]
+
+        assert entity_property_new.created_in_file_version is None
+
+        request = {
+            'method': 'save',
+            'payload': [1]
+        }
+        request_nr = 1
+
+        await communicator.send_json_to(request)
+        response = await communicator.receive_json_from()
+        verify_response(test_name, response, request_nr)
+
+        entity_property_old.refresh_from_db()
+        assert entity_property_old.deleted_by.id == user_id
+        assert entity_property_old.deleted_in_file_version.number == 3
+
+        entity_property_new.refresh_from_db()
+        assert entity_property_new.created_in_file_version.number == 3
+
+        await communicator.disconnect()
+
+
 def get_communicator(project_id, file_id, user_id=None):
     communicator = WebsocketCommunicator(
         application=application,

@@ -756,11 +756,11 @@ class RequestHandler:
 
         else:
             body_content = self.__db_handler.get_body_content()
-            body_content = self.__xml_handler.discard_modifying_entity_property(body_content, entity_xml_id,
-                                                                                property_name)
+            body_content = self.__xml_handler.accept_modifying_entity_property(body_content, entity_xml_id,
+                                                                               property_name)
             self.__db_handler.set_body_content(body_content)
 
-            self.__db_handler.discard_modifying_entity_property(entity_xml_id, property_name)
+            self.__db_handler.accept_modifying_entity_property(entity_xml_id, property_name, new_file_version)
 
     def __clean_operation_results(self):
         self.__operations_results = []
