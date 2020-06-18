@@ -273,6 +273,11 @@ class DbHandler:
         entity_version = self.__get_entity_version_from_db(entity_xml_id)
         self.__confirm_entity_properties_delete(entity_version, new_file_version, [property_name])
 
+    def accept_removing_entity_property(self, entity_xml_id, property_name, new_file_version):
+        entity_version = self.__get_entity_version_from_db(entity_xml_id)
+        self.__confirm_entity_properties_delete(entity_version, new_file_version, [property_name])
+
+
     @staticmethod
     def get_file_from_db(file_id):
         file = File.objects.get(id=file_id, deleted=False)

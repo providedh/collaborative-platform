@@ -762,6 +762,23 @@ class RequestHandler:
 
             self.__db_handler.accept_modifying_entity_property(entity_xml_id, property_name, new_file_version)
 
+    def __accept_removing_entity_property(self, operation, new_file_version):
+        entity_xml_id = operation['edited_element_id']
+        property_name = operation['old_element_id']
+
+        entity_type = self.__db_handler.get_entity_type(entity_xml_id)
+
+        if entity_type in self.__listable_entities_types:
+            self.__db_handler.accept_removing_entity_property(entity_xml_id, property_name, new_file_version)
+
+        else:
+            body_content = self.__db_handler.get_body_content()
+            body_content = self.__xml_handler.accept_removing_entity_property(body_content, entity_xml_id,
+                                                                               property_name)
+            self.__db_handler.set_body_content(body_content)
+
+            self.__db_handler.accept_removing_entity_property(entity_xml_id, property_name, new_file_version)
+
     def __clean_operation_results(self):
         self.__operations_results = []
 
