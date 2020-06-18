@@ -99,9 +99,10 @@ class DbHandler:
         return xml_id
 
     def modify_certainty(self, certainty_xml_id, parameter_name, parameters):
-        certainty = self.__get_certainty_from_db(certainty_xml_id)
+        certainty = self.__get_certainty_from_db(certainty_xml_id, saved=False)
 
-        if certainty.file_version is not None:
+        if not certainty:
+            certainty = self.__get_certainty_from_db(certainty_xml_id, saved=True)
             certainty = self.__clone_certainty(certainty)
 
         if parameter_name == 'categories':
@@ -147,7 +148,7 @@ class DbHandler:
             certainty.save()
 
     def delete_certainty(self, certainty_xml_id):
-        certainty = self.__get_certainty_from_db(certainty_xml_id)
+        certainty = self.__get_certainty_from_db(certainty_xml_id, saved=True)
 
         self.__mark_certainty_to_delete(certainty)
 
@@ -208,18 +209,18 @@ class DbHandler:
         self.__unmark_entity_properties_to_delete(entity_version, [property_name])
 
     def discard_adding_certainty(self, certainty_xml_id):
-        certainty = self.__get_certainty_from_db(certainty_xml_id)
+        certainty = self.__get_certainty_from_db(certainty_xml_id, saved=False)
         certainty.delete()
 
     def discard_modifying_certainty(self, certainty_xml_id):
-        certainty = self.__get_certainty_from_db(certainty_xml_id)
-        certainty.delete()
+        new_certainty = self.__get_certainty_from_db(certainty_xml_id, saved=False)
+        new_certainty.delete()
 
-        certainty = self.__get_certainty_from_db(certainty_xml_id)
-        self.__unmark_entity_to_delete(certainty)
+        old_certainty = self.__get_certainty_from_db(certainty_xml_id, saved=True)
+        self.__unmark_entity_to_delete(old_certainty)
 
     def discard_removing_certainty(self, certainty_xml_id):
-        certainty = self.__get_certainty_from_db(certainty_xml_id)
+        certainty = self.__get_certainty_from_db(certainty_xml_id, saved=True)
         self.__unmark_certainty_to_delete(certainty)
 
     def accept_adding_reference_to_entity(self, entity_xml_id, new_file_version):
@@ -278,10 +279,20 @@ class DbHandler:
         self.__confirm_entity_properties_delete(entity_version, new_file_version, [property_name])
 
     def accept_adding_certainty(self, certainty_xml_id, new_file_version):
-        certainty = self.__get_certainty_from_db(certainty_xml_id)
+        certainty = self.__get_certainty_from_db(certainty_xml_id, saved=False)
         certainty.created_in_file_version = new_file_version
         certainty.file_version = new_file_version
         certainty.save()
+
+    def accept_modifying_certainty(self, certainty_xml_id, new_file_version):
+        old_certainty = self.__get_certainty_from_db(certainty_xml_id, saved=True)
+        old_certainty.deleted_in_file_version = new_file_version
+        old_certainty.save()
+
+        new_certainty = self.__get_certainty_from_db(certainty_xml_id, saved=False)
+        new_certainty.created_in_file_version = new_file_version
+        new_certainty.file_version = new_file_version
+        new_certainty.save()
 
     @staticmethod
     def get_file_from_db(file_id):
@@ -596,19 +607,31 @@ class DbHandler:
 
         return entity_property
 
-    def __get_certainty_from_db(self, certainty_xml_id):
-        try:
-            certainty = Certainty.objects.get(
-                xml_id=certainty_xml_id,
-                file_version__isnull=True
-            )
-        except Certainty.DoesNotExist:
-            file_version = self.__get_file_version()
+    def __get_certainty_from_db(self, certainty_xml_id, saved=None):
+        certainty = None
 
-            certainty = Certainty.objects.get(
-                xml_id=certainty_xml_id,
-                file_version=file_version
-            )
+        if saved is True:
+            try:
+                file_version = self.__get_file_version()
+
+                certainty = Certainty.objects.get(
+                    xml_id=certainty_xml_id,
+                    file_version=file_version
+                )
+            except Certainty.DoesNotExist:
+                pass
+
+        elif saved is False:
+            try:
+                certainty = Certainty.objects.get(
+                    xml_id=certainty_xml_id,
+                    file_version__isnull=True
+                )
+            except Certainty.DoesNotExist:
+                pass
+
+        else:
+            raise ValueError("Value for 'saved' argument not provided")
 
         return certainty
 

@@ -784,6 +784,11 @@ class RequestHandler:
 
         self.__db_handler.accept_adding_certainty(certainty_xml_id, new_file_version)
 
+    def __accept_modifying_certainty(self, operation, new_file_version):
+        certainty_xml_id = operation['operation_result']
+
+        self.__db_handler.accept_modifying_certainty(certainty_xml_id, new_file_version)
+
     def __clean_operation_results(self):
         self.__operations_results = []
 

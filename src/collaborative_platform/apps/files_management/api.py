@@ -178,6 +178,7 @@ def __clone_entities_versions(last_file_version, previous_file_version):
 def __clone_certainties(last_file_version, previous_file_version):
     certainties = Certainty.objects.filter(
         file_version=previous_file_version,
+        deleted_in_file_version__isnull=True
     ).order_by('id')
 
     for certainty in certainties:

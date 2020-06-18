@@ -4053,6 +4053,56 @@ class TestAnnotatorWithWsAndDb70:
         await communicator.disconnect()
 
 
+@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
+@pytest.mark.asyncio
+@pytest.mark.django_db()
+@pytest.mark.integration_tests
+class TestAnnotatorWithWsAndDb71:
+    async def test_accept_modifying_certainty_parameter__modify_categories(self):
+        test_name = inspect.currentframe().f_code.co_name
+
+        project_id = 1
+        file_id = 1
+        user_id = 2
+
+        communicator = get_communicator(project_id, file_id, user_id)
+
+        await communicator.connect()
+        await communicator.receive_json_from()
+
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'PUT',
+                    'element_type': 'certainty',
+                    'edited_element_id': 'certainty-1',
+                    'old_element_id': 'categories',
+                    'parameters': {
+                        'categories': ['imprecision', 'credibility']
+                    }
+                }
+            ]
+        }
+        request_nr = 0
+
+        await communicator.send_json_to(request)
+        response = await communicator.receive_json_from()
+        verify_response(test_name, response, request_nr)
+
+        request = {
+            'method': 'save',
+            'payload': [1]
+        }
+        request_nr = 1
+
+        await communicator.send_json_to(request)
+        response = await communicator.receive_json_from()
+        verify_response(test_name, response, request_nr)
+
+        await communicator.disconnect()
+
+
 def get_communicator(project_id, file_id, user_id=None):
     communicator = WebsocketCommunicator(
         application=application,
