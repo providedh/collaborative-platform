@@ -45,7 +45,8 @@ def close_reading(request, project_id, file_id):  # type: (HttpRequest, int, int
         'file': file,
         'project_id': project_id,
         'file_id': file_id,
-        'preferences': json.dumps(preferences)
+        'preferences': json.dumps(preferences),
+        'DEVELOPMENT': True
     }
 
     return render(request, 'close_reading/close_reading.html', context)
