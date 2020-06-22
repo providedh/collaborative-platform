@@ -31,11 +31,16 @@ def close_reading(request, project_id, file_id):  # type: (HttpRequest, int, int
 
     origin = resolve_match.url_name
 
-    preferences = {'taxonomy': {category.name: {
+    categories = {category.name: {
         'color': category.color,
         'desc': category.description
     } for category in
-        file.project.taxonomy.categories.all()}}
+        file.project.taxonomy.categories.all()}
+
+    entities = {entity.name: {
+            'color': entity.color,
+            'icon': entity.icon
+        } for entity in file.project.taxonomy.entities.all()}
 
     context = {
         'origin': origin,
@@ -45,7 +50,7 @@ def close_reading(request, project_id, file_id):  # type: (HttpRequest, int, int
         'file': file,
         'project_id': project_id,
         'file_id': file_id,
-        'preferences': json.dumps(preferences),
+        'preferences': json.dumps({'taxonomy': categories, 'entities': entities}),
         'DEVELOPMENT': False
     }
 
