@@ -29,15 +29,10 @@ export default function AnnotatorWebSocket (projectId, fileId) {
 
     function _createWebSocket()
     {
-        let wsPrefix = (window.location.protocol === 'https:') ? 'wss://' : 'ws://';
-        let port = '';
+        let wsPrefix = (window.location.protocol === 'https:') ? 'wss:' : 'ws:';
+        console.log(window.location.host)
 
-        //if (window.location.hostname === '0.0.0.0' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
-        //{
-        //}
-        port = ':' + window.location.port
-
-        socket = new WebSocket(wsPrefix + window.location.host.split(':')[0] + port + '/ws/close_reading/' + projectId + '_' + fileId + '/');
+        socket = new WebSocket(wsPrefix + window.location.host + '/ws/close_reading/' + projectId + '_' + fileId + '/');
 
         if (socket.readyState === WebSocket.OPEN) {
             socket.onopen();
