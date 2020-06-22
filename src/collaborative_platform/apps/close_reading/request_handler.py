@@ -179,8 +179,8 @@ class RequestHandler:
         # TODO: Add verification if user has rights to edit a tag
         # TODO: Add verification if tag wasn't moved by another user in the meantime
 
-        new_start_pos = request['parameters']['new_start_pos']
-        new_end_pos = request['parameters']['new_end_pos']
+        new_start_pos = request['parameters']['start_pos']
+        new_end_pos = request['parameters']['end_pos']
         tag_xml_id = request['edited_element_id']
 
         body_content = self.__db_handler.get_body_content()
