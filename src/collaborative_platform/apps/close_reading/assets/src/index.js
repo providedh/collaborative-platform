@@ -5,12 +5,12 @@ import { App } from 'components/app'
 import defaultTaxonomy from './default_taxonomy.js'
 
 const app_config = {
-  projectId: '12',
+  projectId: window.project_id,
   user: 'annotator-1',
-  fileId: '11',
-  fileVersion: '12',
+  fileId: window.file_id,
+  fileVersion: window.file_version,
   fileName: 'Historical file',
-  configuration: defaultTaxonomy
+  configuration: window.preferences
 }
 
 render(<App {...app_config}/>, document.getElementById('react-root'))
