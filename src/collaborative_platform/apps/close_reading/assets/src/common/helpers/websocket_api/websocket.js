@@ -57,11 +57,9 @@ export default function AnnotatorWebSocket (projectId, fileId) {
                     first_entry = false;
                     
                     // Run any callbacks if any, with the contents retrieved
-                    for(let callback of callbacks.onload)
-                        callback({
-                            xml_content: content.xml_content, 
-                            certainties: content.certainties_from_db
-                        })
+                    for (let callback of callbacks.onload) {
+                        callback(content)
+                    }
                 }
             }
             else
@@ -70,14 +68,12 @@ export default function AnnotatorWebSocket (projectId, fileId) {
 
                 if (content.status === 200)
                 {
-                    //console.log('annotate - success < ', content);
-
+                    first_entry = false;
+                    
                     // Run any callbacks if any, with the contents retrieved
-                    for(let callback of callbacks.onreload)
-                        callback({
-                            xml_content: content.xml_content, 
-                            certainties: content.certainties_from_db
-                        })
+                    for (let callback of callbacks.reonload) {
+                        callback(content)
+                    }
                 }
                 else
                 {
