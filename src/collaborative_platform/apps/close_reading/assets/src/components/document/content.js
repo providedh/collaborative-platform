@@ -3,7 +3,7 @@ import ColorScheme from './color_transparency.js'
 import styleEntity from './entity_styles.js'
 import styleEntityAnnotations from './certainty_styles.js'
 import xml from './xml.js'
-import { Selection, SelectionType } from '../../common/types/index.js'
+import { Selection, SelectionType } from '../../common/types'
 
 export default function useContentRendering(node, documentContent, callbacks, context) {
   const css = CSSstyles({styleContainerId: 'dynamic-styling'})
@@ -12,17 +12,32 @@ export default function useContentRendering(node, documentContent, callbacks, co
   css.resetStyles()
 
   node.innerHTML = xml.replaceXmlid(documentContent)
+  //return 0
   styleEntities(context.entities, context.configuration, css)
+  styleNames(context.entities, context.configuration, css)
   styleAnnotations(context.entities, context.annotations, context, css)
-  setupHoverInteractions(context.entities, callbacks)
+  setupEntityHoverInteractions(context.entities, callbacks)
+  setupNameHoverInteractions(context.entities, callbacks)
 }
 
 function styleEntities(entities, configuration, css) {
   Object.entries(entities).forEach(([type, entityList]) => {
     entityList.forEach(entity => {
       const styles = configuration.entities[type]
-      const id = xml.replacedId(entity['xml:id'])
+      const id = xml.replacedId(entity.properties['xml:id'])
       styleEntity(id, styles.color, styles.icon, css)
+    })
+  })
+}
+
+function styleNames(entities, configuration, css) {
+  Object.entries(entities).forEach(([type, entityList]) => {
+    entityList.forEach(entity => {
+      const styles = configuration.entities[type]
+
+      Array.from(document.getElementsByTagName("name"))
+        .filter(x => x.attributes?.['ref']?.value === ('#' + entity['xml:id']))
+        .forEach(x => styleEntity(x.id, styles.color, styles.icon, css))
     })
   })
 }
@@ -48,23 +63,39 @@ function styleAnnotations(entities, annotations, context, css) {
   })
 }
 
-function setupHoverInteractions (entities, callbacks) {
-  const {onHover, onHoverOut, onClick, onClickOut} = callbacks
-
+function setupEntityHoverInteractions (entities, callbacks) {
   Object.entries(entities).forEach(([type, entityList]) => {
     entityList.forEach(entity => {
-      const node = document.getElementById(xml.replacedId(entity['xml:id']))
-      node.addEventListener('mouseenter', event => {
-        handleEntityEvent (entity['xml:id'], event, onHover, SelectionType.hover)
-      })
-      node.addEventListener('mouseout', event => {
-        onHoverOut()
-      })
-      node.addEventListener('click', event => {
-        event.preventDefault()
-        handleEntityEvent (entity['xml:id'], event, onClick, SelectionType.click)
-      })
+      const id = xml.replacedId(entity['xml:id'])
+      const node = document.getElementById(id)
+      if (node != undefined && node != null) {
+        setupNodeHoverInteractions(node, entity['xml:id'], callbacks)
+      }
     })
+  })
+}
+
+function setupNameHoverInteractions (entities, callbacks) {
+  Object.entries(entities).forEach(([type, entityList]) => {
+    entityList.forEach(entity => {
+      Array.from(document.getElementsByTagName("name"))
+        .filter(x => x.attributes?.['ref']?.value === ('#' + entity['xml:id']))
+        .forEach(node => setupNodeHoverInteractions(node, entity['xml:id'], callbacks))
+    })
+  })
+}
+
+function setupNodeHoverInteractions (node, entityId, callbacks) {
+  const {onHover, onHoverOut, onClick, onClickOut} = callbacks
+  node.addEventListener('mouseenter', event => {
+    handleEntityEvent (entityId, event, onHover, SelectionType.hover)
+  })
+  node.addEventListener('mouseout', event => {
+    onHoverOut()
+  })
+  node.addEventListener('click', event => {
+    event.preventDefault()
+    handleEntityEvent (entityId, event, onClick, SelectionType.click)
   })
 }
 
