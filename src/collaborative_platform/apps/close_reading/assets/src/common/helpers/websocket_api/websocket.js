@@ -6,6 +6,8 @@
  * produces : onopen, onload, onreload, onsend
  * */
 
+import validate from './response_schema'
+
 export default function AnnotatorWebSocket (projectId, fileId) {
     let loaded = false;
     let content = '';
@@ -47,37 +49,30 @@ export default function AnnotatorWebSocket (projectId, fileId) {
         };
 
         socket.onmessage = function message(event) {
-            if (first_entry)
-            {
-                loaded = true;
-                content = JSON.parse(event.data);
-
-                if (content.status === 200)
-                {
-                    first_entry = false;
-                    
-                    // Run any callbacks if any, with the contents retrieved
-                    for (let callback of callbacks.onload) {
-                        callback(content)
-                    }
-                }
+            content = JSON.parse(event.data);
+            const validation = validate(content)
+            if (validation.valid === false) {
+                validation.errors.forEach(e => console.error(e.toString()))
+                return 1
             }
-            else
-            {
-                content = JSON.parse(event.data);
+            
+            if (content.status !== 200) {
+                console.error('Websocket: ', content)
+                return 1
+            }
 
-                if (content.status === 200)
-                {
-                    first_entry = false;
-                    
-                    // Run any callbacks if any, with the contents retrieved
-                    for (let callback of callbacks.reonload) {
-                        callback(content)
-                    }
+            if (first_entry) {
+                loaded = true;
+                first_entry = false;
+                
+                // Run any callbacks if any, with the contents retrieved
+                for (let callback of callbacks.onload) {
+                    callback(content)
                 }
-                else
-                {
-                    console.log('annotate - failed < ', content);
+            } else {
+                // Run any callbacks if any, with the contents retrieved
+                for (let callback of callbacks.reonload) {
+                    callback(content)
                 }
             }
         };
