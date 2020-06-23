@@ -191,102 +191,81 @@ def reformat_attribute(item, namespaces):
 #         classes[tag].objects.bulk_create(objects)
 
 
-def validate_keys_and_types(request_data, required_name_type_template=None, optional_name_type_template=None,
-                            parent_name=None):  # type: (dict, dict, dict, str) -> None
-    if required_name_type_template:
-        for key in required_name_type_template:
-            if key not in request_data:
-                if not parent_name:
-                    raise BadRequest(f"Missing '{key}' parameter in request data.")
-                else:
-                    raise BadRequest(f"Missing '{key}' parameter in {parent_name} argument in request data.")
-
-            if type(request_data[key]) is not required_name_type_template[key]:
-                raise BadRequest(f"Invalid type of '{key}' parameter. "
-                                 f"Correct type is: '{str(required_name_type_template[key])}'.")
-
-    if optional_name_type_template:
-        for key in optional_name_type_template:
-            if key in request_data and type(request_data[key]) is not optional_name_type_template[key]:
-                raise BadRequest(f"Invalid type of '{key}' parameter. "
-                                 f"Correct type is: '{str(optional_name_type_template[key])}'.")
-
-
-def get_file_id_from_path(project_id, file_path, parent_directory_id=None):  # type: (int, str, int) -> int
-    splitted_path = file_path.split('/')
-
-    if len(splitted_path) == 1:
-        file_name = splitted_path[0]
-
-        try:
-            file = File.objects.get(
-                project_id=project_id,
-                parent_dir_id=parent_directory_id,
-                name=file_name,
-                deleted=False
-            )
-
-            return file.id
-
-        except File.DoesNotExist:
-            raise BadRequest(f"File with name {file_name} doesn't exist in this directory.")
-
-    else:
-        directory_name = splitted_path[0]
-
-        try:
-            directory = Directory.objects.get(project_id=project_id, parent_dir_id=parent_directory_id,
-                                              name=directory_name)
-            rest_of_path = '/'.join(splitted_path[1:])
-
-            return get_file_id_from_path(project_id, rest_of_path, directory.id)
-
-        except Directory.DoesNotExist:
-            raise BadRequest(f"Directory with name {directory_name} does't exist in this directory.")
+# def get_file_id_from_path(project_id, file_path, parent_directory_id=None):  # type: (int, str, int) -> int
+#     splitted_path = file_path.split('/')
+#
+#     if len(splitted_path) == 1:
+#         file_name = splitted_path[0]
+#
+#         try:
+#             file = File.objects.get(
+#                 project_id=project_id,
+#                 parent_dir_id=parent_directory_id,
+#                 name=file_name,
+#                 deleted=False
+#             )
+#
+#             return file.id
+#
+#         except File.DoesNotExist:
+#             raise BadRequest(f"File with name {file_name} doesn't exist in this directory.")
+#
+#     else:
+#         directory_name = splitted_path[0]
+#
+#         try:
+#             directory = Directory.objects.get(project_id=project_id, parent_dir_id=parent_directory_id,
+#                                               name=directory_name)
+#             rest_of_path = '/'.join(splitted_path[1:])
+#
+#             return get_file_id_from_path(project_id, rest_of_path, directory.id)
+#
+#         except Directory.DoesNotExist:
+#             raise BadRequest(f"Directory with name {directory_name} does't exist in this directory.")
 
 
-def get_entity_from_int_or_dict(request_entity, project_id):
-    if type(request_entity) == int:
-        try:
-            entity = Entity.objects.get(
-                id=request_entity,
-                project_id=project_id
-            )
-
-            return entity
-
-        except Entity.DoesNotExist:
-            raise BadRequest(f"Entity with id: {request_entity} doesn't exist in project with id: {project_id}.")
-
-    elif type(request_entity) == dict:
-        required_keys = {
-            'file_path': str,
-            'xml_id': str,
-        }
-
-        validate_keys_and_types(request_entity, required_keys, parent_name="entity")
-
-        file_path = request_entity['file_path']
-        xml_id = request_entity['xml_id']
-
-        file_id = get_file_id_from_path(project_id, file_path)
-
-        try:
-            entity = Entity.objects.get(
-                project_id=project_id,
-                file_id=file_id,
-                xml_id=xml_id,
-                deleted_on__isnull=True
-            )
-
-            return entity
-
-        except Entity.DoesNotExist:
-            file_name = request_entity['file_path'].split('/')[-1]
-            raise BadRequest(f"Entity with xml:id: {xml_id} doesn't exist in file: {file_name}.")
-
-    else:
-        raise BadRequest(f"Invalid type of 'entity' parameter. Allowed types is '{str(int)}' and {str(dict)}.")
+# def get_entity_from_int_or_dict(request_entity, project_id):
+#     if type(request_entity) == int:
+#         try:
+#             entity = Entity.objects.get(
+#                 id=request_entity,
+#                 project_id=project_id
+#             )
+#
+#             return entity
+#
+#         except Entity.DoesNotExist:
+#             raise BadRequest(f"Entity with id: {request_entity} doesn't exist in project with id: {project_id}.")
+#
+#     elif type(request_entity) == dict:
+#         required_keys = {
+#             'file_path': str,
+#             'xml_id': str,
+#         }
+#
+#         validate_keys_and_types(request_entity, required_keys, parent_name="entity")
+#
+#         file_path = request_entity['file_path']
+#         xml_id = request_entity['xml_id']
+#
+#         file_id = get_file_id_from_path(project_id, file_path)
+#
+#         try:
+#             entity = Entity.objects.get(
+#                 project_id=project_id,
+#                 file_id=file_id,
+#                 xml_id=xml_id,
+#                 deleted_on__isnull=True
+#             )
+#
+#             return entity
+#
+#         except Entity.DoesNotExist:
+#             file_name = request_entity['file_path'].split('/')[-1]
+#             raise BadRequest(f"Entity with xml:id: {xml_id} doesn't exist in file: {file_name}.")
+#
+#     else:
+#         raise BadRequest(f"Invalid type of 'entity' parameter. Allowed types is '{str(int)}' and {str(dict)}.")
 
 
 def parse_project_version(project_version):  # type: (str) -> (int, int)
@@ -676,3 +655,23 @@ def common_filter_cliques(query_string, project_id):
 #             })
 #
 #     return clique, unification_statuses
+
+def validate_keys_and_types(request_data, required_name_type_template=None, optional_name_type_template=None,
+                            parent_name=None):  # type: (dict, dict, dict, str) -> None
+    if required_name_type_template:
+        for key in required_name_type_template:
+            if key not in request_data:
+                if not parent_name:
+                    raise BadRequest(f"Missing '{key}' parameter in request data.")
+                else:
+                    raise BadRequest(f"Missing '{key}' parameter in {parent_name} argument in request data.")
+
+            if type(request_data[key]) is not required_name_type_template[key]:
+                raise BadRequest(f"Invalid type of '{key}' parameter. "
+                                 f"Correct type is: '{str(required_name_type_template[key])}'.")
+
+    if optional_name_type_template:
+        for key in optional_name_type_template:
+            if key in request_data and type(request_data[key]) is not optional_name_type_template[key]:
+                raise BadRequest(f"Invalid type of '{key}' parameter. "
+                                 f"Correct type is: '{str(optional_name_type_template[key])}'.")

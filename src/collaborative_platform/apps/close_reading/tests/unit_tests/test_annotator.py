@@ -1,23 +1,23 @@
-import json
-import os
-import pytest
-
-from django.contrib.auth.models import User
-
-from apps.close_reading.annotator import Annotator
-from apps.exceptions import BadRequest, NotModified
-from apps.files_management.helpers import create_certainty_elements_for_file_version, certainty_elements_to_json
-from apps.files_management.models import FileVersion
-
-
-SCRIPT_DIR = os.path.dirname(__file__)
-
-
-def read_file(path):
-    with open(path, 'r') as file:
-        text = file.read()
-
-    return text
+# import json
+# import os
+# import pytest
+#
+# from django.contrib.auth.models import User
+#
+# from apps.close_reading.annotator import Annotator
+# from apps.exceptions import BadRequest, NotModified
+# from apps.files_management.helpers import create_certainty_elements_for_file_version, certainty_elements_to_json
+# from apps.files_management.models import FileVersion
+#
+#
+# SCRIPT_DIR = os.path.dirname(__file__)
+#
+#
+# def read_file(path):
+#     with open(path, 'r') as file:
+#         text = file.read()
+#
+#     return text
 
 
 # @pytest.mark.unit_tests
@@ -838,322 +838,322 @@ def read_file(path):
 #
 #         assert exception.exception.message == "This certainty already exist."
 
-    # @pytest.mark.django_db
-    # def test_add_annotation__add_attribute_to_tag__fragment_without_tag__string(self):
-    #     json = {
-    #         'start_row': 221,
-    #         'start_col': 7,
-    #         'end_row': 221,
-    #         'end_col': 11,
-    #         'categories': ['ignorance'],
-    #         'locus': 'value',
-    #         'certainty': 'high',
-    #         'attribute_name': 'sex',
-    #         'asserted_value': 'female',
-    #         'description': '',
-    #         'tag': 'person',
-    #     }
-    #
-    #     input_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files', 'source_file.xml')
-    #     expected_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'result_files',
-    #                                       'add_attribute_to_tag__fragment_without_tag__result.xml')
-    #
-    #     input_text = read_file(input_file_path)
-    #     expected_text = read_file(expected_file_path)
-    #
-    #     user_id = 2
-    #     file_id = 1
-    #
-    #     annotator = Annotator()
-    #     result = annotator.add_annotation(input_text, file_id, json, user_id)
-    #
-    #     assert result == expected_text
-    #
-    # @pytest.mark.django_db
-    # def test_add_annotation__add_attribute_to_tag__fragment_with_other_tag__string(self):
-    #     json = {
-    #         'start_row': 221,
-    #         'start_col': 106,
-    #         'end_row': 221,
-    #         'end_col': 125,
-    #         'categories': ['ignorance'],
-    #         'locus': 'value',
-    #         'certainty': 'high',
-    #         'attribute_name': 'sex',
-    #         'asserted_value': 'female',
-    #         'description': '',
-    #         'tag': 'person',
-    #     }
-    #
-    #     input_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files', 'source_file.xml')
-    #     expected_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'result_files',
-    #                                       'add_attribute_to_tag__fragment_with_other_tag__result.xml')
-    #
-    #     input_text = read_file(input_file_path)
-    #     expected_text = read_file(expected_file_path)
-    #
-    #     user_id = 2
-    #     file_id = 1
-    #
-    #     annotator = Annotator()
-    #     result = annotator.add_annotation(input_text, file_id, json, user_id)
-    #
-    #     assert result == expected_text
-    #
-    # @pytest.mark.django_db
-    # def test_add_annotation__add_attribute_to_tag__fragment_with_same_tag__string(self):
-    #     json = {
-    #         'start_row': 222,
-    #         'start_col': 504,
-    #         'end_row': 222,
-    #         'end_col': 554,
-    #         'categories': ['ignorance'],
-    #         'locus': 'value',
-    #         'certainty': 'high',
-    #         'attribute_name': 'sex',
-    #         'asserted_value': 'male',
-    #         'description': '',
-    #         'tag': 'person',
-    #     }
-    #
-    #     input_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files', 'source_file.xml')
-    #     expected_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'result_files',
-    #                                       'add_attribute_to_tag__fragment_with_same_tag__result.xml')
-    #
-    #     input_text = read_file(input_file_path)
-    #     expected_text = read_file(expected_file_path)
-    #
-    #     user_id = 2
-    #     file_id = 1
-    #
-    #     annotator = Annotator()
-    #     result = annotator.add_annotation(input_text, file_id, json, user_id)
-    #
-    #     assert result == expected_text
-    #
-    # @pytest.mark.django_db
-    # def test_add_annotation__add_attribute_to_tag__fragment_with_same_tag_and_other_certainty__string(self):
-    #     json = {
-    #         'start_row': 222,
-    #         'start_col': 423,
-    #         'end_row': 222,
-    #         'end_col': 434,
-    #         'categories': ['credibility'],
-    #         'locus': 'value',
-    #         'certainty': 'high',
-    #         'attribute_name': 'sex',
-    #         'asserted_value': 'male',
-    #         'description': '',
-    #         'tag': 'person',
-    #     }
-    #
-    #     input_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files', 'source_file.xml')
-    #     expected_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'result_files',
-    #                                       'add_attribute_to_tag__fragment_with_same_tag_and_other_certainty__result.xml')
-    #
-    #     input_text = read_file(input_file_path)
-    #     expected_text = read_file(expected_file_path)
-    #
-    #     user_id = 2
-    #     file_id = 1
-    #
-    #     annotator = Annotator()
-    #     result = annotator.add_annotation(input_text, file_id, json, user_id)
-    #
-    #     assert result == expected_text
-    #
-    # @pytest.mark.django_db
-    # def test_add_annotation__add_attribute_to_tag__fragment_with_same_tag_and_same_certainty__exception(self):
-    #     json = {
-    #         'start_row': 222,
-    #         'start_col': 423,
-    #         'end_row': 222,
-    #         'end_col': 434,
-    #         'categories': ['ignorance'],
-    #         'locus': 'value',
-    #         'certainty': 'high',
-    #         'attribute_name': 'sex',
-    #         'asserted_value': 'male',
-    #         'description': '',
-    #         'tag': 'person',
-    #     }
-    #
-    #     input_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files', 'source_file.xml')
-    #
-    #     input_text = read_file(input_file_path)
-    #
-    #     user_id = 2
-    #     file_id = 1
-    #
-    #     with pytest.raises(NotModified) as exception:
-    #         annotator = Annotator()
-    #         result = annotator.add_annotation(input_text, file_id, json, user_id)
-    #
-    #     assert str(exception.value) == "This certainty already exist."
-    #
-    # @pytest.mark.django_db
-    # def test_add_annotation__add_certainty_with_tag_to_text__fragment_with_same_tag_separated__string(self):
-    #     json = {
-    #         'start_row': 222,
-    #         'start_col': 504,
-    #         'end_row': 222,
-    #         'end_col': 554,
-    #         'categories': ['ignorance'],
-    #         'locus': 'value',
-    #         'certainty': 'high',
-    #         'asserted_value': '',
-    #         'description': '',
-    #         'tag': 'person',
-    #     }
-    #
-    #     input_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files', 'source_file.xml')
-    #     expected_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'result_files',
-    #                                       'add_certainty_with_tag_to_text__fragment_with_same_tag_separated__result.xml')
-    #
-    #     input_text = read_file(input_file_path)
-    #     expected_text = read_file(expected_file_path)
-    #
-    #     user_id = 2
-    #     file_id = 1
-    #
-    #     annotator = Annotator()
-    #     result = annotator.add_annotation(input_text, file_id, json, user_id)
-    #
-    #     assert result == expected_text
-    #
-    # @pytest.mark.django_db
-    # def test_add_annotation__add_first_annotator_and_certainty__string(self):
-    #     json = {
-    #         'start_row': 57,
-    #         'start_col': 7,
-    #         'end_row': 57,
-    #         'end_col': 11,
-    #         'categories': ['ignorance'],
-    #         'locus': 'value',
-    #         'certainty': 'high',
-    #         'asserted_value': '',
-    #         'description': '',
-    #         'tag': '',
-    #     }
-    #
-    #     input_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files', 'source_file_without_annotators_and_certainties.xml')
-    #     expected_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'result_files',
-    #                                       'add_first_annotator_and_certainty__result.xml')
-    #
-    #     input_text = read_file(input_file_path)
-    #     expected_text = read_file(expected_file_path)
-    #
-    #     user_id = 2
-    #     file_id = 1
-    #
-    #     annotator = Annotator()
-    #     result = annotator.add_annotation(input_text, file_id, json, user_id)
-    #
-    #     assert result == expected_text
-    #
-    # @pytest.mark.django_db
-    # def test_add_annotation__position_in_request_with_adhering_tags__string(self):
-    #     json = {
-    #         'start_row': 231,
-    #         'start_col': 19,
-    #         'end_row': 231,
-    #         'end_col': 68,
-    #         'tag': 'date',
-    #     }
-    #
-    #     input_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files', 'source_file.xml')
-    #     expected_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'result_files',
-    #                                       'position_in_request_with_adhering_tags__result.xml')
-    #
-    #     input_text = read_file(input_file_path)
-    #     expected_text = read_file(expected_file_path)
-    #
-    #     user_id = 2
-    #     file_id = 1
-    #
-    #     annotator = Annotator()
-    #     result = annotator.add_annotation(input_text, file_id, json, user_id)
-    #
-    #     assert result == expected_text
-    #
-    # test_parameters_list = [
-    #     (
-    #         # Empty parameters
-    #         {
-    #             'start_row': 54,
-    #             'start_col': 7,
-    #             'end_row': 54,
-    #             'end_col': 11,
-    #             'category': '',
-    #             'locus': '',
-    #             'certainty': '',
-    #             'asserted_value': '',
-    #             'description': '',
-    #             'tag': '',
-    #         },
-    #         BadRequest,
-    #         "There is no method to modify xml according to given parameters.",
-    #     ),
-    #     (
-    #         # start_pos is greater than end_pos
-    #         {
-    #             'start_pos': 8440,
-    #             'end_pos': 8435,
-    #             'tag': 'test',
-    #         },
-    #         BadRequest,
-    #         "Start position of annotating fragment is greater or equal to end position.",
-    #     ),
-    #     (
-    #         # No position arguments
-    #         {
-    #             'tag': 'test',
-    #         },
-    #         BadRequest,
-    #         "Reference parameters not provided. Provide 'target' parameter for reference to xml element, OR set of "
-    #         "positional parameters for reference to text fragment.",
-    #     ),
-    #     (
-    #         # Position is not a integer
-    #         {
-    #             'start_row': 54.15,
-    #             'start_col': 7,
-    #             'end_row': 54,
-    #             'end_col': 11,
-    #             'tag': 'test',
-    #         },
-    #         BadRequest,
-    #         "Value of 'start_row' is not a integer."
-    #     ),
-    #     (
-    #         # Position is not a positive_number
-    #         {
-    #             'start_row': 54,
-    #             'start_col': -7,
-    #             'end_row': 54,
-    #             'end_col': 11,
-    #             'tag': 'test',
-    #         },
-    #         BadRequest,
-    #         "Value of 'start_col' must be a positive number."
-    #     ),
-    # ]
-    #
-    # test_parameters_names = "json, error_type, error_message"
-    #
-    # @pytest.mark.django_db
-    # @pytest.mark.parametrize(test_parameters_names, test_parameters_list)
-    # def test_add_annotation__wrong_request_parameters__exception(self, json, error_type, error_message):
-    #     input_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files',
-    #                                    'source_file_without_annotators_and_certainties.xml')
-    #
-    #     input_text = read_file(input_file_path)
-    #
-    #     user_id = 2
-    #     file_id = 1
-    #
-    #     with pytest.raises(error_type) as exception:
-    #         annotator = Annotator()
-    #         result = annotator.add_annotation(input_text, file_id, json, user_id)
-    #
-    #     assert str(exception.value) == error_message
+# @pytest.mark.django_db
+# def test_add_annotation__add_attribute_to_tag__fragment_without_tag__string(self):
+#     json = {
+#         'start_row': 221,
+#         'start_col': 7,
+#         'end_row': 221,
+#         'end_col': 11,
+#         'categories': ['ignorance'],
+#         'locus': 'value',
+#         'certainty': 'high',
+#         'attribute_name': 'sex',
+#         'asserted_value': 'female',
+#         'description': '',
+#         'tag': 'person',
+#     }
+#
+#     input_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files', 'source_file.xml')
+#     expected_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'result_files',
+#                                       'add_attribute_to_tag__fragment_without_tag__result.xml')
+#
+#     input_text = read_file(input_file_path)
+#     expected_text = read_file(expected_file_path)
+#
+#     user_id = 2
+#     file_id = 1
+#
+#     annotator = Annotator()
+#     result = annotator.add_annotation(input_text, file_id, json, user_id)
+#
+#     assert result == expected_text
+#
+# @pytest.mark.django_db
+# def test_add_annotation__add_attribute_to_tag__fragment_with_other_tag__string(self):
+#     json = {
+#         'start_row': 221,
+#         'start_col': 106,
+#         'end_row': 221,
+#         'end_col': 125,
+#         'categories': ['ignorance'],
+#         'locus': 'value',
+#         'certainty': 'high',
+#         'attribute_name': 'sex',
+#         'asserted_value': 'female',
+#         'description': '',
+#         'tag': 'person',
+#     }
+#
+#     input_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files', 'source_file.xml')
+#     expected_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'result_files',
+#                                       'add_attribute_to_tag__fragment_with_other_tag__result.xml')
+#
+#     input_text = read_file(input_file_path)
+#     expected_text = read_file(expected_file_path)
+#
+#     user_id = 2
+#     file_id = 1
+#
+#     annotator = Annotator()
+#     result = annotator.add_annotation(input_text, file_id, json, user_id)
+#
+#     assert result == expected_text
+#
+# @pytest.mark.django_db
+# def test_add_annotation__add_attribute_to_tag__fragment_with_same_tag__string(self):
+#     json = {
+#         'start_row': 222,
+#         'start_col': 504,
+#         'end_row': 222,
+#         'end_col': 554,
+#         'categories': ['ignorance'],
+#         'locus': 'value',
+#         'certainty': 'high',
+#         'attribute_name': 'sex',
+#         'asserted_value': 'male',
+#         'description': '',
+#         'tag': 'person',
+#     }
+#
+#     input_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files', 'source_file.xml')
+#     expected_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'result_files',
+#                                       'add_attribute_to_tag__fragment_with_same_tag__result.xml')
+#
+#     input_text = read_file(input_file_path)
+#     expected_text = read_file(expected_file_path)
+#
+#     user_id = 2
+#     file_id = 1
+#
+#     annotator = Annotator()
+#     result = annotator.add_annotation(input_text, file_id, json, user_id)
+#
+#     assert result == expected_text
+#
+# @pytest.mark.django_db
+# def test_add_annotation__add_attribute_to_tag__fragment_with_same_tag_and_other_certainty__string(self):
+#     json = {
+#         'start_row': 222,
+#         'start_col': 423,
+#         'end_row': 222,
+#         'end_col': 434,
+#         'categories': ['credibility'],
+#         'locus': 'value',
+#         'certainty': 'high',
+#         'attribute_name': 'sex',
+#         'asserted_value': 'male',
+#         'description': '',
+#         'tag': 'person',
+#     }
+#
+#     input_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files', 'source_file.xml')
+#     expected_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'result_files',
+#                                       'add_attribute_to_tag__fragment_with_same_tag_and_other_certainty__result.xml')
+#
+#     input_text = read_file(input_file_path)
+#     expected_text = read_file(expected_file_path)
+#
+#     user_id = 2
+#     file_id = 1
+#
+#     annotator = Annotator()
+#     result = annotator.add_annotation(input_text, file_id, json, user_id)
+#
+#     assert result == expected_text
+#
+# @pytest.mark.django_db
+# def test_add_annotation__add_attribute_to_tag__fragment_with_same_tag_and_same_certainty__exception(self):
+#     json = {
+#         'start_row': 222,
+#         'start_col': 423,
+#         'end_row': 222,
+#         'end_col': 434,
+#         'categories': ['ignorance'],
+#         'locus': 'value',
+#         'certainty': 'high',
+#         'attribute_name': 'sex',
+#         'asserted_value': 'male',
+#         'description': '',
+#         'tag': 'person',
+#     }
+#
+#     input_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files', 'source_file.xml')
+#
+#     input_text = read_file(input_file_path)
+#
+#     user_id = 2
+#     file_id = 1
+#
+#     with pytest.raises(NotModified) as exception:
+#         annotator = Annotator()
+#         result = annotator.add_annotation(input_text, file_id, json, user_id)
+#
+#     assert str(exception.value) == "This certainty already exist."
+#
+# @pytest.mark.django_db
+# def test_add_annotation__add_certainty_with_tag_to_text__fragment_with_same_tag_separated__string(self):
+#     json = {
+#         'start_row': 222,
+#         'start_col': 504,
+#         'end_row': 222,
+#         'end_col': 554,
+#         'categories': ['ignorance'],
+#         'locus': 'value',
+#         'certainty': 'high',
+#         'asserted_value': '',
+#         'description': '',
+#         'tag': 'person',
+#     }
+#
+#     input_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files', 'source_file.xml')
+#     expected_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'result_files',
+#                                       'add_certainty_with_tag_to_text__fragment_with_same_tag_separated__result.xml')
+#
+#     input_text = read_file(input_file_path)
+#     expected_text = read_file(expected_file_path)
+#
+#     user_id = 2
+#     file_id = 1
+#
+#     annotator = Annotator()
+#     result = annotator.add_annotation(input_text, file_id, json, user_id)
+#
+#     assert result == expected_text
+#
+# @pytest.mark.django_db
+# def test_add_annotation__add_first_annotator_and_certainty__string(self):
+#     json = {
+#         'start_row': 57,
+#         'start_col': 7,
+#         'end_row': 57,
+#         'end_col': 11,
+#         'categories': ['ignorance'],
+#         'locus': 'value',
+#         'certainty': 'high',
+#         'asserted_value': '',
+#         'description': '',
+#         'tag': '',
+#     }
+#
+#     input_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files', 'source_file_without_annotators_and_certainties.xml')
+#     expected_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'result_files',
+#                                       'add_first_annotator_and_certainty__result.xml')
+#
+#     input_text = read_file(input_file_path)
+#     expected_text = read_file(expected_file_path)
+#
+#     user_id = 2
+#     file_id = 1
+#
+#     annotator = Annotator()
+#     result = annotator.add_annotation(input_text, file_id, json, user_id)
+#
+#     assert result == expected_text
+#
+# @pytest.mark.django_db
+# def test_add_annotation__position_in_request_with_adhering_tags__string(self):
+#     json = {
+#         'start_row': 231,
+#         'start_col': 19,
+#         'end_row': 231,
+#         'end_col': 68,
+#         'tag': 'date',
+#     }
+#
+#     input_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files', 'source_file.xml')
+#     expected_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'result_files',
+#                                       'position_in_request_with_adhering_tags__result.xml')
+#
+#     input_text = read_file(input_file_path)
+#     expected_text = read_file(expected_file_path)
+#
+#     user_id = 2
+#     file_id = 1
+#
+#     annotator = Annotator()
+#     result = annotator.add_annotation(input_text, file_id, json, user_id)
+#
+#     assert result == expected_text
+#
+# test_parameters_list = [
+#     (
+#         # Empty parameters
+#         {
+#             'start_row': 54,
+#             'start_col': 7,
+#             'end_row': 54,
+#             'end_col': 11,
+#             'category': '',
+#             'locus': '',
+#             'certainty': '',
+#             'asserted_value': '',
+#             'description': '',
+#             'tag': '',
+#         },
+#         BadRequest,
+#         "There is no method to modify xml according to given parameters.",
+#     ),
+#     (
+#         # start_pos is greater than end_pos
+#         {
+#             'start_pos': 8440,
+#             'end_pos': 8435,
+#             'tag': 'test',
+#         },
+#         BadRequest,
+#         "Start position of annotating fragment is greater or equal to end position.",
+#     ),
+#     (
+#         # No position arguments
+#         {
+#             'tag': 'test',
+#         },
+#         BadRequest,
+#         "Reference parameters not provided. Provide 'target' parameter for reference to xml element, OR set of "
+#         "positional parameters for reference to text fragment.",
+#     ),
+#     (
+#         # Position is not a integer
+#         {
+#             'start_row': 54.15,
+#             'start_col': 7,
+#             'end_row': 54,
+#             'end_col': 11,
+#             'tag': 'test',
+#         },
+#         BadRequest,
+#         "Value of 'start_row' is not a integer."
+#     ),
+#     (
+#         # Position is not a positive_number
+#         {
+#             'start_row': 54,
+#             'start_col': -7,
+#             'end_row': 54,
+#             'end_col': 11,
+#             'tag': 'test',
+#         },
+#         BadRequest,
+#         "Value of 'start_col' must be a positive number."
+#     ),
+# ]
+#
+# test_parameters_names = "json, error_type, error_message"
+#
+# @pytest.mark.django_db
+# @pytest.mark.parametrize(test_parameters_names, test_parameters_list)
+# def test_add_annotation__wrong_request_parameters__exception(self, json, error_type, error_message):
+#     input_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files',
+#                                    'source_file_without_annotators_and_certainties.xml')
+#
+#     input_text = read_file(input_file_path)
+#
+#     user_id = 2
+#     file_id = 1
+#
+#     with pytest.raises(error_type) as exception:
+#         annotator = Annotator()
+#         result = annotator.add_annotation(input_text, file_id, json, user_id)
+#
+#     assert str(exception.value) == error_message
