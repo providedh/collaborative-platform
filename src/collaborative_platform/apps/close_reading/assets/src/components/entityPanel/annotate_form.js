@@ -1,5 +1,6 @@
 import React, {useState} from 'react'
 
+import {TEIentities} from 'common/types'
 import {WithAppContext} from 'common/context/app'
 
 export default function FormWithContext (props) {
@@ -11,12 +12,15 @@ export default function FormWithContext (props) {
 }
 
 function Form (props) {
-  const conf = props.context.configuration.entities[props.entity.type]
+  //const conf = props.context.configuration.entities[props.entity.type]
+  const entityType = Object.hasOwnProperty(TEIentities, props.entity.type) 
+    ?TEIentities[props.entity.type]
+    :TEIentities['default']
   const categoryOptions = Object.keys(props.context.configuration.taxonomy).map(x => 
     <option key={x} value={x}>{x}</option>)
   const entityOptions = Object.keys(props.context.configuration.entities).map(x => 
     <option key={x} value={x}>{x}</option>)
-  const propertyOptions = conf.properties.map(x => 
+  const propertyOptions = entityType.properties.map(x => 
     <option key={x} value={x}>{x}</option>)
 
   const defState = {
@@ -38,7 +42,7 @@ function Form (props) {
       if (value === 'name') {
         newForm.assertedValue = props.entity.type
       } else if (value === 'attribute') {
-        newForm.attribute = conf.properties[0]
+        newForm.attribute = entityType.properties[0]
       }
     }
 

@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 
+import {TEIentities} from 'common/types'
 import {WithAppContext} from 'common/context/app'
 
 export default function CreateAttributeWithContext (props) {
@@ -13,8 +14,9 @@ export default function CreateAttributeWithContext (props) {
 function CreateAttribute (props) {
   const [visible, show] = useState(false)
 
-  const entityConf = props.context.configuration.entities[props.entity.type]
-  if (! Object.hasOwnProperty.call(entityConf, 'properties')) { return '' }
+  const entityType = Object.hasOwnProperty(TEIentities, props.entity.type) 
+    ?TEIentities[props.entity.type]
+    :TEIentities['default']
 
   const attributeItems = props.entity.properties.map((attribute, i) => 
     <li key={i}>
@@ -24,7 +26,7 @@ function CreateAttribute (props) {
     </li>)
 
   const presentAttributes = new Set(props.entity.properties.map(x => x.name))
-  const freeAttributes = entityConf.properties
+  const freeAttributes = entityType.properties
     .filter(x => !presentAttributes.has(x))
   const attributeOptions = freeAttributes.map(x => <option key={x} value={x}>{x}</option>)
   
