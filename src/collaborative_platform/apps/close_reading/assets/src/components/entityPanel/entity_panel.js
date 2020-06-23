@@ -26,7 +26,7 @@ function EntityPanel (props) {
   const entity = entitiesMap[props.selection.target]
 
   const style = props.context.configuration.entities[entity.type]
-  const icon = '&#x'+style.icon.slice(1)+';'
+  const icon = style.icon
 
   return <div className={styles.entityPanel}>
     <div className="card">
