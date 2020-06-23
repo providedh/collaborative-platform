@@ -1,9 +1,8 @@
-from apps.api_vis.models import Clique, Entity, Unification
+from apps.api_vis.models import Clique, Entity, EntityProperty, Unification
 from apps.api_vis.helpers import parse_project_version, validate_keys_and_types
 from apps.exceptions import BadRequest
 from apps.files_management.models import Directory, File, FileVersion
 from apps.projects.models import ProjectVersion
-
 
 
 class DbHandler:
@@ -18,9 +17,27 @@ class DbHandler:
 
         return clique.id, clique_name
 
-    @staticmethod
-    def __get_clique_name(request_data):
+    def __get_clique_name(self, request_data):
         clique_name = request_data.get('name')
+
+        if not clique_name or clique_name == '':
+            request_entity = request_data.get('entities')[0]
+            entity = self.get_entity_from_int_or_dict(request_entity, self.__project_id)
+
+            project_version_nr = request_data.get('project_version')
+            project_version = self.__get_project_version(project_version_nr)
+
+            file_version = project_version.file_versions.get(
+                file=entity.file
+            )
+
+            entity_name = EntityProperty.objects.get(
+                name='name',
+                entity=entity,
+                entity_version__file_version=file_version
+            )
+
+            clique_name = entity_name.get_value()
 
         return clique_name
 
@@ -57,7 +74,7 @@ class DbHandler:
                 file=entity.file
             )
 
-            unification = Unification.objects.create(
+            Unification.objects.create(
                 project=project_version.project,
                 entity=entity,
                 clique_id=clique_id,
@@ -101,14 +118,14 @@ class DbHandler:
             file_path = request_entity['file_path']
             xml_id = request_entity['xml_id']
 
-            file_id = self.get_file_id_from_path(project_id, file_path)
+            file_id = self.get_file_id_from_path(file_path)
 
             try:
                 entity = Entity.objects.get(
-                    project_id=project_id,
+                    file__project_id=project_id,
                     file_id=file_id,
                     xml_id=xml_id,
-                    deleted_on__isnull=True
+                    # deleted_on__isnull=True
                 )
 
                 return entity
