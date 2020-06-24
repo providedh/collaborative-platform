@@ -3,11 +3,11 @@ import json
 from json.decoder import JSONDecodeError
 
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse, HttpResponseBadRequest
+from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotModified, JsonResponse
 
 from apps.api_vis.helpers import validate_keys_and_types
 from apps.api_vis.db_handler import DbHandler
-from apps.exceptions import BadRequest
+from apps.exceptions import BadRequest, NotModified
 from apps.views_decorators import objects_exists, user_has_access
 
 
@@ -118,6 +118,56 @@ def clique_entities(request, project_id, clique_id):
         else:
             response = {
                 'unification_statuses': unification_statuses,
+            }
+
+            return JsonResponse(response)
+
+
+@login_required
+@objects_exists
+@user_has_access('RW')
+def commits(request, project_id):
+    if request.method == 'POST':
+        try:
+            request_data = json.loads(request.body)
+
+            optional_keys = {
+                'message': str,
+            }
+
+            validate_keys_and_types(request_data, optional_name_type_template=optional_keys)
+
+            message = request_data.get('message')
+
+            db_handler = DbHandler(project_id, request.user)
+            db_handler.commit_changes(message)
+
+        except NotModified as exception:
+            status = HttpResponseNotModified.status_code
+
+            response = {
+                'status': status,
+                'message': str(exception),
+            }
+
+            return JsonResponse(response, status=status)
+
+        except (BadRequest, JSONDecodeError) as exception:
+            status = HttpResponseBadRequest.status_code
+
+            response = {
+                'status': status,
+                'message': str(exception),
+            }
+
+            return JsonResponse(response, status=status)
+
+        else:
+            status = HttpResponse.status_code
+
+            response = {
+                'status': status,
+                'message': 'OK'
             }
 
             return JsonResponse(response)

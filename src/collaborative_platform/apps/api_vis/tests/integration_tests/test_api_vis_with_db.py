@@ -4,7 +4,8 @@ import pytest
 from django.contrib.auth.models import User
 from django.test import Client
 
-from apps.api_vis.models import Clique
+from apps.api_vis.models import Clique, Commit, Unification
+from apps.projects.models import Project
 
 
 @pytest.mark.usefixtures('api_vis_with_db_setup')
@@ -244,3 +245,86 @@ class TestApiVisWithDb:
         }
 
         assert response_content == expected_response
+
+    def test_commit_changes(self):
+        user_id = 2
+        project_id = 1
+
+        client = Client()
+        user = User.objects.get(id=user_id)
+        client.force_login(user)
+
+        cliques = Clique.objects.all()
+        assert cliques.count() == 0
+
+        url = f'/api/vis/projects/{project_id}/cliques/'
+
+        payload = {
+            'name': 'first_clique',
+            'entities': [11, 15],
+            'certainty': 'high',
+            'project_version': 6.0,
+        }
+
+        client.post(url, payload, content_type="application/json")
+
+        commits = Commit.objects.all()
+        assert commits.count() == 0
+
+        project = Project.objects.get(
+            id=project_id
+        )
+
+        last_project_version = project.versions.order_by('-id')[0]
+        assert last_project_version.file_version_counter == 6
+        assert last_project_version.commit_counter == 0
+
+        cliques = Clique.objects.all()
+        assert cliques.count() == 1
+
+        cliques_committed = Clique.objects.filter(
+            created_in_commit__isnull=False
+        )
+
+        assert cliques_committed.count() == 0
+
+        unifications_committed = Clique.objects.filter(
+            created_in_commit__isnull=False
+        )
+
+        assert unifications_committed.count() == 0
+
+        url = f'/api/vis/projects/{project_id}/commits/'
+
+        payload = {
+            'message': 'First commit message'
+        }
+
+        response = client.post(url, payload, content_type="application/json")
+        assert response.status_code == 200
+
+        commits = Commit.objects.all()
+        assert commits.count() == 1
+
+        project = Project.objects.get(
+            id=project_id
+        )
+
+        last_project_version = project.versions.order_by('-id')[0]
+        assert last_project_version.file_version_counter == 6
+        assert last_project_version.commit_counter == 1
+
+        cliques = Clique.objects.all()
+        assert cliques.count() == 1
+
+        cliques_committed = Clique.objects.filter(
+            created_in_commit__isnull=False
+        )
+
+        assert cliques_committed.count() == 1
+
+        unifications_committed = Unification.objects.filter(
+            created_in_commit__isnull=False
+        )
+
+        assert unifications_committed.count() == 2

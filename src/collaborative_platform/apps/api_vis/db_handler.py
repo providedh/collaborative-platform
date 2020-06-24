@@ -1,6 +1,6 @@
-from apps.api_vis.models import Clique, Entity, EntityProperty, Unification
+from apps.api_vis.models import Clique, Commit, Entity, EntityProperty, Unification
 from apps.api_vis.helpers import parse_project_version, validate_keys_and_types
-from apps.exceptions import BadRequest
+from apps.exceptions import BadRequest, NotModified
 from apps.files_management.models import Directory, File, FileVersion
 from apps.projects.models import ProjectVersion
 
@@ -137,7 +137,6 @@ class DbHandler:
         else:
             raise BadRequest(f"Invalid type of 'entity' parameter. Allowed types is '{str(int)}' and {str(dict)}.")
 
-
     def get_file_id_from_path(self, file_path, parent_directory_id=None):
         splitted_path = file_path.split('/')
 
@@ -171,3 +170,58 @@ class DbHandler:
 
             except Directory.DoesNotExist:
                 raise BadRequest(f"Directory with name {directory_name} does't exist in this directory.")
+
+    def commit_changes(self, message):
+        cliques_to_create = Clique.objects.filter(
+            project_id=self.__project_id,
+            created_by=self.__user,
+            created_in_commit__isnull=True,
+        )
+
+        unifications_to_add = Unification.objects.filter(
+            project_id=self.__project_id,
+            created_by=self.__user,
+            created_in_commit__isnull=True
+        )
+
+        cliques_to_delete = Clique.objects.filter(
+            project_id=self.__project_id,
+            deleted_by=self.__user,
+            created_in_commit__isnull=False,
+            deleted_in_commit__isnull=True,
+        )
+
+        unifications_to_delete = Unification.objects.filter(
+            project_id=self.__project_id,
+            deleted_by=self.__user,
+            created_in_commit__isnull=False,
+            deleted_in_commit__isnull=True,
+        )
+
+        if len(cliques_to_create) + len(unifications_to_add) + len(cliques_to_delete) + len(unifications_to_delete) == 0:
+            raise NotModified(f'You dont have any changes to commit in project with id: {self.__project_id}.')
+
+        commit = Commit.objects.create(
+            project_id=self.__project_id,
+            message=message if message else ''
+        )
+
+        for clique in cliques_to_create:
+            clique.created_in_commit = commit
+
+        Clique.objects.bulk_update(cliques_to_create, ['created_in_commit'])
+
+        for clique in cliques_to_delete:
+            clique.deleted_in_commit = commit
+
+        Clique.objects.bulk_update(cliques_to_delete, ['deleted_in_commit'])
+
+        for unification in unifications_to_add:
+            unification.created_in_commit = commit
+
+        Unification.objects.bulk_update(unifications_to_add, ['created_in_commit'])
+
+        for unification in unifications_to_delete:
+            unification.deleted_in_commit = commit
+
+        Unification.objects.bulk_update(unifications_to_delete, ['deleted_in_commit'])
