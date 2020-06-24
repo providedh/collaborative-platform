@@ -9,3 +9,8 @@
    font-weight: 900;
    content: attr(dataicon)
 }
+
+.entityType {
+	color: #6c757d;
+	font-size: .8em;
+}

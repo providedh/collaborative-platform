@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+import { ActionType, ActionTarget, ActionObject, AtomicActionBuilder } from 'common/types'
 import {WithAppContext} from 'common/context/app'
 import styles from './entity_panel.module.css'
 import Annotations from './annotations.js'
@@ -14,8 +15,13 @@ export default function EntityPanelWithContext (props) {
   )
 }
 
+function onDeleteClick (id) {
+  const builder = AtomicActionBuilder(ActionTarget.text, ActionType.delete, ActionObject.tag)
+  const action = builder(id)
+  alert(JSON.stringify(action))
+}
+
 function EntityPanel (props) {
-  
   const entitiesMap = {}
   Object.entries(props.context.entities)
     .forEach(([_, entityList]) => {
@@ -30,11 +36,24 @@ function EntityPanel (props) {
 
   return <div className={styles.entityPanel}>
     <div className="card">
-      <div className="card-header">
-        <span className={styles.icon} style={{color: style.color}} dataicon={icon}>
-          <div dangerouslySetInnerHTML={{__html: icon}} />
+      <div className="card-header d-flex justify-content-between">
+        <div>
+          <span className={styles.icon} style={{ color: style.color }} dataicon={icon}>
+            <div dangerouslySetInnerHTML={{ __html: icon }} />
+          </span>
+          <h5 className="d-inline">
+            {props.selection?.target}
+            <span className={styles.entityType}> ({entity.type})</span>
+          </h5>
+        </div>
+        <span className={entity.saved === false ? 'ml-4 text-danger' : 'd-none'}>
+          (unsaved)
+          <button type="button"
+            onClick={() => onDeleteClick(entity['xml:id'])}
+            className="btn btn-link p-0 mx-1 text-danger">
+            <u> -delete</u>
+          </button>
         </span>
-        <h5 className="d-inline"> {props.selection?.target} ({entity.type})</h5>
       </div>
       <div className="card-body">
         <Attributes entity={entity} />
