@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import {WithAppContext} from 'common/context/app'
+import { WithAppContext } from 'common/context/app'
 import styles from './header.module.css'
 
 export default function HeaderWithContext (props) {
@@ -15,8 +15,7 @@ export default function HeaderWithContext (props) {
 function Header (props) {
   const {
     fileName,
-    fileId,
-    fileVersion,
+    fileVersion
   } = props
 
   return <div className={styles.header}>
@@ -34,4 +33,7 @@ function Header (props) {
   </div>
 }
 
-Header.propTypes = {}
+Header.propTypes = {
+  fileName: PropTypes.string,
+  fileVersion: PropTypes.string
+}
