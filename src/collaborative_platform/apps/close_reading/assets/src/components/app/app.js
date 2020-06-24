@@ -114,5 +114,11 @@ export default class App extends React.Component {
 }
 
 App.propTypes = {
-  savedConf: PropTypes.object
+  savedConf: PropTypes.object,
+  projectId: PropTypes.string,
+  user: PropTypes.string,
+  fileId: PropTypes.string,
+  fileVersion: PropTypes.string,
+  fileName: PropTypes.string,
+  configuration: PropTypes.object
 }
