@@ -49,7 +49,6 @@ def project_cliques(request, project_id):
                 unification_status.update(status_update)
                 unification_statuses.append(unification_status)
 
-
         except (BadRequest, JSONDecodeError) as exception:
             status = HttpResponseBadRequest.status_code
 
@@ -64,6 +63,60 @@ def project_cliques(request, project_id):
             response = {
                 'name': clique_name,
                 'id': clique_id,
+                'unification_statuses': unification_statuses,
+            }
+
+            return JsonResponse(response)
+
+@login_required
+@objects_exists
+@user_has_access('RW')
+def clique_entities(request, project_id, clique_id):
+    if request.method == 'PUT':
+        try:
+            request_data = json.loads(request.body)
+
+            required_keys = {
+                'entities': list,
+                'certainty': str,
+                'project_version': float,
+            }
+            optional_keys = {
+                'name': str
+            }
+
+            validate_keys_and_types(request_data, required_keys, optional_keys)
+
+            db_handler = DbHandler(project_id, request.user)
+
+            entities = request_data['entities']
+            project_version_nr = request_data['project_version']
+            unification_statuses = []
+
+            for entity in entities:
+                unification_status = {}
+
+                if type(entity) is int:
+                    unification_status.update({'id': entity})
+                elif type(entity) is dict:
+                    unification_status.update(entity)
+
+                status_update = db_handler.add_unification(clique_id, entity, project_version_nr)
+                unification_status.update(status_update)
+                unification_statuses.append(unification_status)
+
+        except (BadRequest, JSONDecodeError) as exception:
+            status = HttpResponseBadRequest.status_code
+
+            response = {
+                'status': status,
+                'message': str(exception),
+            }
+
+            return JsonResponse(response, status=status)
+
+        else:
+            response = {
                 'unification_statuses': unification_statuses,
             }
 
