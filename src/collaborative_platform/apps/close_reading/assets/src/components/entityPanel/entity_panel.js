@@ -72,5 +72,12 @@ EntityPanel.propTypes = {
     ]),
     screenX: PropTypes.number,
     screenY: PropTypes.number
+  }),
+  context: PropTypes.shape({
+    user: PropTypes.string,
+    authors: PropTypes.array,
+    annotations: PropTypes.array,
+    entities: PropTypes.object,
+    configuration: PropTypes.object
   })
 }
