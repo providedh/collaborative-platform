@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 import PropTypes from 'prop-types'
 
+import {TEIentities} from 'common/types'
 import {WithAppContext} from 'common/context/app'
 import styles from './entity_creation_panel.module.css'
 
@@ -19,11 +20,17 @@ function capitalized (s) {
 function EntityCreationPanel (props) {
   const entities = props.context.configuration.entities
   const [entity, setEntity] = useState(Object.keys(entities)[0])
-  const [attributes, setAttributes] = useState(Object.fromEntries(entities[entity].properties.map(x => [x, ''])))
+  const entityType = Object.hasOwnProperty.call(TEIentities, entity)
+      ?TEIentities[entity]
+      :TEIentities['default']
+  const [attributes, setAttributes] = useState(Object.fromEntries(entityType.properties.map(x => [x, ''])))
 
   function handleEntityChange(name) {
     setEntity(name)
-    setAttributes(Object.fromEntries(entities[name].properties.map(x => [x, ''])))
+    const entityType = Object.hasOwnProperty.call(TEIentities, name)
+      ?TEIentities[name]
+      :TEIentities['default']
+    setAttributes(Object.fromEntries(entityType.properties.map(x => [x, ''])))
   }
 
   const attributeFields = Object.entries(attributes).map(([name, value]) => <div className="form-group col-4" key={name}>
