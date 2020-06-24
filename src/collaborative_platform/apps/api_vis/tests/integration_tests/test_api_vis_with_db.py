@@ -8,7 +8,7 @@ from apps.api_vis.models import Clique
 
 
 @pytest.mark.usefixtures('api_vis_with_db_setup')
-@pytest.mark.django_db()
+@pytest.mark.django_db(transaction=True, reset_sequences=True)
 @pytest.mark.integration_tests
 class TestApiVisWithDb:
     def test_clique_creation__given_name__given_entities_ids(self):
