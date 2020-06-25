@@ -1,20 +1,20 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 
+import { WithAppContext } from 'common/context/app'
 import styles from './timeline.css'
 
 export default function TimelineWithContext (props) {
-    return (
-      <WithAppContext>
-        <Timeline {...props}/>
-      </WithAppContext>
-    )
-  }
+  return (
+    <WithAppContext>
+      <Timeline {...props}/>
+    </WithAppContext>
+  )
+}
 
 function Timeline (props) {
-    return <div className={styles.timeline}>
+  return <div className={styles.timeline}>
 
-    </div>
+  </div>
 }
 
 Timeline.propTypes = {}
