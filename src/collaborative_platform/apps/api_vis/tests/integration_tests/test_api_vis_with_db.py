@@ -296,3 +296,65 @@ class TestApiVisWithDb:
         )
 
         assert unifications_committed.count() == 8
+
+    def test_delete_clique(self):
+        user_id = 2
+        project_id = 1
+
+        client = Client()
+        user = User.objects.get(id=user_id)
+        client.force_login(user)
+
+        cliques = Clique.objects.filter(
+            deleted_by__isnull=True
+        )
+
+        assert cliques.count() == 3
+
+        unifications = Unification.objects.filter(
+            deleted_by__isnull=True
+        )
+
+        assert unifications.count() == 6
+
+        url = f'/api/vis/projects/{project_id}/cliques/'
+
+        payload = {
+            'cliques': [1, 99],
+            'project_version': 6.3,
+        }
+
+        response = client.delete(url, payload, content_type="application/json")
+
+        assert response.status_code == 200
+
+        cliques = Clique.objects.filter(
+            deleted_by__isnull=True
+        )
+
+        assert cliques.count() == 2
+
+        unifications = Unification.objects.filter(
+            deleted_by__isnull=True
+        )
+
+        assert unifications.count() == 4
+
+        response_content = json.loads(response.content)
+
+        expected_response = {
+            'delete_statuses': [
+                {
+                    'id': 1,
+                    'status': 200,
+                    'message': 'OK',
+                },
+                {
+                    'id': 99,
+                    'status': 400,
+                    'message': "Clique with id: 99 doesn't exist in project with id: 1",
+                },
+            ]
+        }
+
+        assert response_content == expected_response
