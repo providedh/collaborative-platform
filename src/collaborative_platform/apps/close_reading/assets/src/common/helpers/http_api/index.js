@@ -1,1 +1,1 @@
-export {default as HTTP} from './api'
+export { default as HTTP } from './api'
