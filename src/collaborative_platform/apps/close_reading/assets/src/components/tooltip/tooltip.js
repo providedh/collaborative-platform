@@ -1,15 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import {SelectionType} from 'common/types'
+import { SelectionType } from 'common/types'
 import styles from './tooltip.module.css'
-import {EntityPanel} from 'components/entityPanel'
-import {SelectionPanel} from 'components/selectionPanel'
+import { EntityPanel } from 'components/entityPanel'
+import { SelectionPanel } from 'components/selectionPanel'
 
 export default function Tooltip (props) {
-  const {selection} = props
+  const { selection } = props
 
-  if (null == document.getElementById('document')) { return '' }
+  if (document.getElementById('document') == null) { return '' }
   if (selection === null) { return '' }
   const box = document.getElementById('document').getBoundingClientRect()
 
@@ -23,16 +23,16 @@ export default function Tooltip (props) {
   } else if ((selection?.screenX - 120 + 400) > box.right) {
     position.right = `calc(100vw - ${(box.right - innerPadding)}px)`
   } else {
-    position.left = (selection?.screenX - 120) +'px'
+    position.left = (selection?.screenX - 120) + 'px'
   }
 
   const cssClasses = [
     'mt-4',
-    styles.tooltip,
+    styles.tooltip
   ]
 
   return <div className={cssClasses.join(' ')} style={position}>
-      {selection.type === SelectionType.textSelection 
+    {selection.type === SelectionType.textSelection
       ? <SelectionPanel selection={selection}/>
       : <EntityPanel selection={selection}/>}
   </div>
