@@ -4,11 +4,11 @@ export const WebsocketRequestType = {
   save: 'save'
 }
 
-export function WebsocketRequest(type, payload) {
+export function WebsocketRequest (type, payload) {
   const request = {
     method: type,
     payload: payload
   }
-  
-  return alert(JSON.stringify(action))
+
+  return alert(JSON.stringify(request))
 }
