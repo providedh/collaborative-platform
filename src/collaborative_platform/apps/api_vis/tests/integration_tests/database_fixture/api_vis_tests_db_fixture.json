@@ -357,6 +357,24 @@
   }
 },
 {
+  "model": "api_vis.commit",
+  "pk": 2,
+  "fields": {
+    "project": 1,
+    "date": "2020-06-25T06:46:22.656Z",
+    "message": "Second commit from Stark"
+  }
+},
+{
+  "model": "api_vis.commit",
+  "pk": 3,
+  "fields": {
+    "project": 1,
+    "date": "2020-06-25T06:48:58.546Z",
+    "message": "Commit from Pepper"
+  }
+},
+{
   "model": "files_management.directory",
   "pk": 1,
   "fields": {
@@ -831,6 +849,38 @@
   }
 },
 {
+  "model": "projects.projectversion",
+  "pk": 9,
+  "fields": {
+    "project": 1,
+    "file_version_counter": 6,
+    "commit": 2,
+    "commit_counter": 2,
+    "date": "2020-06-25T06:46:22.668Z",
+    "file_versions": [
+      2,
+      4,
+      6
+    ]
+  }
+},
+{
+  "model": "projects.projectversion",
+  "pk": 10,
+  "fields": {
+    "project": 1,
+    "file_version_counter": 6,
+    "commit": 3,
+    "commit_counter": 3,
+    "date": "2020-06-25T06:48:58.556Z",
+    "file_versions": [
+      2,
+      4,
+      6
+    ]
+  }
+},
+{
   "model": "projects.taxonomy",
   "pk": 1,
   "fields": {
@@ -999,7 +1049,7 @@
   "pk": 3,
   "fields": {
     "password": "pbkdf2_sha256$150000$bn9o3vWpLGux$ipb5Kl6ZCbU3tgz0cWVeuC7hv6wbk9xEgkAGDNAFvb4=",
-    "last_login": "2020-05-01T08:15:53.234Z",
+    "last_login": "2020-06-25T06:46:47.869Z",
     "is_superuser": false,
     "username": "pepper_potts",
     "first_name": "Pepper",
@@ -2399,6 +2449,34 @@
   }
 },
 {
+  "model": "api_vis.clique",
+  "pk": 2,
+  "fields": {
+    "project": 1,
+    "asserted_name": "second_clique",
+    "created_by": 2,
+    "created_on": "2020-06-25T06:43:46.827Z",
+    "created_in_commit": 2,
+    "deleted_by": null,
+    "deleted_on": null,
+    "deleted_in_commit": null
+  }
+},
+{
+  "model": "api_vis.clique",
+  "pk": 3,
+  "fields": {
+    "project": 1,
+    "asserted_name": "third_clique",
+    "created_by": 3,
+    "created_on": "2020-06-25T06:48:20.382Z",
+    "created_in_commit": 3,
+    "deleted_by": null,
+    "deleted_on": null,
+    "deleted_in_commit": null
+  }
+},
+{
   "model": "api_vis.unification",
   "pk": 1,
   "fields": {
@@ -2430,6 +2508,90 @@
     "created_on": "2020-06-24T11:21:08.456Z",
     "created_in_file_version": 4,
     "created_in_commit": 1,
+    "deleted_by": null,
+    "deleted_on": null,
+    "deleted_in_file_version": null,
+    "deleted_in_commit": null,
+    "ana": "",
+    "certainty": "",
+    "description": "",
+    "xml_id": ""
+  }
+},
+{
+  "model": "api_vis.unification",
+  "pk": 3,
+  "fields": {
+    "project": 1,
+    "entity": 14,
+    "clique": 2,
+    "created_by": 2,
+    "created_on": "2020-06-25T06:43:46.869Z",
+    "created_in_file_version": 4,
+    "created_in_commit": 2,
+    "deleted_by": null,
+    "deleted_on": null,
+    "deleted_in_file_version": null,
+    "deleted_in_commit": null,
+    "ana": "",
+    "certainty": "",
+    "description": "",
+    "xml_id": ""
+  }
+},
+{
+  "model": "api_vis.unification",
+  "pk": 4,
+  "fields": {
+    "project": 1,
+    "entity": 16,
+    "clique": 2,
+    "created_by": 2,
+    "created_on": "2020-06-25T06:43:46.896Z",
+    "created_in_file_version": 6,
+    "created_in_commit": 2,
+    "deleted_by": null,
+    "deleted_on": null,
+    "deleted_in_file_version": null,
+    "deleted_in_commit": null,
+    "ana": "",
+    "certainty": "",
+    "description": "",
+    "xml_id": ""
+  }
+},
+{
+  "model": "api_vis.unification",
+  "pk": 5,
+  "fields": {
+    "project": 1,
+    "entity": 11,
+    "clique": 3,
+    "created_by": 3,
+    "created_on": "2020-06-25T06:48:20.415Z",
+    "created_in_file_version": 2,
+    "created_in_commit": 3,
+    "deleted_by": null,
+    "deleted_on": null,
+    "deleted_in_file_version": null,
+    "deleted_in_commit": null,
+    "ana": "",
+    "certainty": "",
+    "description": "",
+    "xml_id": ""
+  }
+},
+{
+  "model": "api_vis.unification",
+  "pk": 6,
+  "fields": {
+    "project": 1,
+    "entity": 16,
+    "clique": 3,
+    "created_by": 3,
+    "created_on": "2020-06-25T06:48:20.431Z",
+    "created_in_file_version": 6,
+    "created_in_commit": 3,
     "deleted_by": null,
     "deleted_on": null,
     "deleted_in_file_version": null,

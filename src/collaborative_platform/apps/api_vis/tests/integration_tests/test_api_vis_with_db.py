@@ -21,15 +21,15 @@ class TestApiVisWithDb:
         client.force_login(user)
 
         cliques = Clique.objects.all()
-        assert cliques.count() == 1
+        assert cliques.count() == 3
 
         url = f'/api/vis/projects/{project_id}/cliques/'
 
         payload = {
-            'name': 'second_clique',
+            'name': 'fourth_clique',
             'entities': [12, 15],
             'certainty': 'high',
-            'project_version': 6.1,
+            'project_version': 6.3,
         }
 
         response = client.post(url, payload, content_type="application/json")
@@ -37,17 +37,16 @@ class TestApiVisWithDb:
         assert response.status_code == 200
 
         cliques = Clique.objects.all().order_by('-id')
-        assert cliques.count() == 2
+        assert cliques.count() == 4
 
         clique = cliques[0]
-        assert clique.asserted_name == 'second_clique'
         assert clique.unifications.count() == 2
 
         response_content = json.loads(response.content)
 
         expected_response = {
-            'name': 'second_clique',
-            'id': 2,
+            'name': 'fourth_clique',
+            'id': 4,
             'unification_statuses': [
                 {
                     'id': 12,
@@ -73,7 +72,7 @@ class TestApiVisWithDb:
         client.force_login(user)
 
         cliques = Clique.objects.all()
-        assert cliques.count() == 1
+        assert cliques.count() == 3
 
         url = f'/api/vis/projects/{project_id}/cliques/'
 
@@ -89,7 +88,7 @@ class TestApiVisWithDb:
                 },
             ],
             'certainty': 'high',
-            'project_version': 6.1,
+            'project_version': 6.3,
         }
 
         response = client.post(url, payload, content_type="application/json")
@@ -97,7 +96,7 @@ class TestApiVisWithDb:
         assert response.status_code == 200
 
         cliques = Clique.objects.all().order_by('-id')
-        assert cliques.count() == 2
+        assert cliques.count() == 4
 
         clique = cliques[0]
         assert clique.unifications.count() == 2
@@ -106,7 +105,7 @@ class TestApiVisWithDb:
 
         expected_response = {
             'name': 'Ingwer',
-            'id': 2,
+            'id': 4,
             'unification_statuses': [
                 {
                     'file_path': 'Project_1/group_0_long_annotated_0_modified_xml',
@@ -140,7 +139,7 @@ class TestApiVisWithDb:
         payload = {
             'entities': [16],
             'certainty': 'medium',
-            'project_version': 6.1,
+            'project_version': 6.3,
         }
 
         response = client.put(url, payload, content_type="application/json")
@@ -148,7 +147,7 @@ class TestApiVisWithDb:
         assert response.status_code == 200
 
         cliques = Clique.objects.all()
-        assert cliques.count() == 1
+        assert cliques.count() == 3
 
         clique = cliques[0]
         assert clique.unifications.count() == 3
@@ -187,7 +186,7 @@ class TestApiVisWithDb:
                 },
             ],
             'certainty': 'medium',
-            'project_version': 6.1,
+            'project_version': 6.3,
         }
 
         response = client.put(url, payload, content_type="application/json")
@@ -195,7 +194,7 @@ class TestApiVisWithDb:
         assert response.status_code == 200
 
         cliques = Clique.objects.all()
-        assert cliques.count() == 1
+        assert cliques.count() == 3
 
         clique = cliques[0]
         assert clique.unifications.count() == 3
@@ -224,21 +223,21 @@ class TestApiVisWithDb:
         client.force_login(user)
 
         cliques = Clique.objects.all()
-        assert cliques.count() == 1
+        assert cliques.count() == 3
 
         url = f'/api/vis/projects/{project_id}/cliques/'
 
         payload = {
-            'name': 'first_clique',
+            'name': 'fourth_clique',
             'entities': [12, 15],
             'certainty': 'high',
-            'project_version': 6.1,
+            'project_version': 6.3,
         }
 
         client.post(url, payload, content_type="application/json")
 
         commits = Commit.objects.all()
-        assert commits.count() == 1
+        assert commits.count() == 3
 
         project = Project.objects.get(
             id=project_id
@@ -246,22 +245,22 @@ class TestApiVisWithDb:
 
         last_project_version = project.versions.order_by('-id')[0]
         assert last_project_version.file_version_counter == 6
-        assert last_project_version.commit_counter == 1
+        assert last_project_version.commit_counter == 3
 
         cliques = Clique.objects.all()
-        assert cliques.count() == 2
+        assert cliques.count() == 4
 
         cliques_committed = Clique.objects.filter(
             created_in_commit__isnull=False
         )
 
-        assert cliques_committed.count() == 1
+        assert cliques_committed.count() == 3
 
         unifications_committed = Unification.objects.filter(
             created_in_commit__isnull=False
         )
 
-        assert unifications_committed.count() == 2
+        assert unifications_committed.count() == 6
 
         url = f'/api/vis/projects/{project_id}/commits/'
 
@@ -273,7 +272,7 @@ class TestApiVisWithDb:
         assert response.status_code == 200
 
         commits = Commit.objects.all()
-        assert commits.count() == 2
+        assert commits.count() == 4
 
         project = Project.objects.get(
             id=project_id
@@ -281,19 +280,19 @@ class TestApiVisWithDb:
 
         last_project_version = project.versions.order_by('-id')[0]
         assert last_project_version.file_version_counter == 6
-        assert last_project_version.commit_counter == 2
+        assert last_project_version.commit_counter == 4
 
         cliques = Clique.objects.all()
-        assert cliques.count() == 2
+        assert cliques.count() == 4
 
         cliques_committed = Clique.objects.filter(
             created_in_commit__isnull=False
         )
 
-        assert cliques_committed.count() == 2
+        assert cliques_committed.count() == 4
 
         unifications_committed = Unification.objects.filter(
             created_in_commit__isnull=False
         )
 
-        assert unifications_committed.count() == 4
+        assert unifications_committed.count() == 8
