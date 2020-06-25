@@ -1,100 +1,93 @@
 /* Module: WebSocket
- * Module implementing the websocket functionallity needed for 
+ * Module implementing the websocket functionallity needed for
  * retrieving and annotating TEI files.
  *
- * Callbacks can be added for each of the events that the websocket 
+ * Callbacks can be added for each of the events that the websocket
  * produces : onopen, onload, onreload, onsend
  * */
 
 import validate from './response_schema'
 
 export default function AnnotatorWebSocket (projectId, fileId) {
-    let loaded = false;
-    let content = '';
+  let content = ''
 
-    let socket = null;
-    let first_entry = true;
+  let socket = null
+  let firstEntry = true
 
-    const callbacks = {
-        onopen: [],
-        onload: [],
-        onreload: [],
-        onsend: []
-    };
+  const callbacks = {
+    onopen: [],
+    onload: [],
+    onreload: [],
+    onsend: []
+  }
 
-    function _addCallback(event, callback){
-        if(['onopen', 'onload', 'onreload', 'onsend'].includes(event) &&
-                typeof(callback) == 'function'){
-            callbacks[event].push(callback);
+  function _addCallback (event, callback) {
+    if (['onopen', 'onload', 'onreload', 'onsend'].includes(event) &&
+                typeof (callback) === 'function') {
+      callbacks[event].push(callback)
+    }
+  }
+
+  function _createWebSocket () {
+    const wsPrefix = (window.location.protocol === 'https:') ? 'wss:' : 'ws:'
+    console.log(window.location.host)
+
+    socket = new WebSocket(wsPrefix + window.location.host + '/ws/close_reading/' + projectId + '_' + fileId + '/')
+
+    if (socket.readyState === WebSocket.OPEN) {
+      socket.onopen()
+    }
+
+    socket.onopen = function open () {
+      console.info('WebSockets connection created.')
+
+      // Run any callbacks if any
+      for (const callback of callbacks.onopen) { callback() }
+    }
+
+    socket.onmessage = function message (event) {
+      content = JSON.parse(event.data)
+      const validation = validate(content)
+      if (validation.valid === false) {
+        validation.errors.forEach(e => console.error(e.toString()))
+        return 1
+      }
+
+      if (content.status !== 200) {
+        return 1
+      }
+
+      if (firstEntry) {
+        firstEntry = false
+
+        // Run any callbacks if any, with the contents retrieved
+        for (const callback of callbacks.onload) {
+          callback(content)
         }
-    }
-
-    function _createWebSocket()
-    {
-        let wsPrefix = (window.location.protocol === 'https:') ? 'wss:' : 'ws:';
-        console.log(window.location.host)
-
-        socket = new WebSocket(wsPrefix + window.location.host + '/ws/close_reading/' + projectId + '_' + fileId + '/');
-
-        if (socket.readyState === WebSocket.OPEN) {
-            socket.onopen();
+      } else {
+        // Run any callbacks if any, with the contents retrieved
+        for (const callback of callbacks.reonload) {
+          callback(content)
         }
-
-        socket.onopen = function open() {
-            console.info("WebSockets connection created.");
-
-            // Run any callbacks if any
-            for(let callback of callbacks.onopen)
-                callback();
-        };
-
-        socket.onmessage = function message(event) {
-            content = JSON.parse(event.data);
-            const validation = validate(content)
-            if (validation.valid === false) {
-                validation.errors.forEach(e => console.error(e.toString()))
-                return 1
-            }
-            
-            if (content.status !== 200) {
-                console.error('Websocket: ', content)
-                return 1
-            }
-
-            if (first_entry) {
-                loaded = true;
-                first_entry = false;
-                
-                // Run any callbacks if any, with the contents retrieved
-                for (let callback of callbacks.onload) {
-                    callback(content)
-                }
-            } else {
-                // Run any callbacks if any, with the contents retrieved
-                for (let callback of callbacks.reonload) {
-                    callback(content)
-                }
-            }
-        };
-
-        setInterval(function () {
-        socket.send(JSON.stringify('heartbeat'));
-        }, 30000);
+      }
     }
 
-    function _send(json)
-    {
-        socket.send(json);
+    setInterval(function () {
+      socket.send(JSON.stringify('heartbeat'))
+    }, 30000)
+  }
 
-        // Run any callbacks if any
-        for(let callback of callbacks.onsend)
-            callback();
-    };
+  function _send (json) {
+    socket.send(json)
 
-    return {
-        version: 1,
-        send: _send,
-        addCallback:_addCallback,
-        connect: _createWebSocket
-    }
+    // Run any callbacks if any
+    for (const callback of callbacks.onsend) { callback() }
+  };
+
+  return {
+    version: 1,
+    send: _send,
+    addCallback: _addCallback,
+    connect: _createWebSocket
+  }
 }

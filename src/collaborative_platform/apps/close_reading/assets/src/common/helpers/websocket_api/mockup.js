@@ -1,47 +1,40 @@
 /* Module: WebSocket
- * Module implementing the websocket functionallity needed for 
+ * Module implementing the websocket functionallity needed for
  * retrieving and annotating TEI files.
  *
- * Callbacks can be added for each of the events that the websocket 
+ * Callbacks can be added for each of the events that the websocket
  * produces : onopen, onload, onreload, onsend
  * */
 
 import response from './mockup_data.js'
 
 export default function AnnotatorWebSocket (projectId, fileId) {
-    let loaded = false;
-    let content = '';
+  const callbacks = {
+    onopen: [],
+    onload: [],
+    onreload: [],
+    onsend: []
+  }
 
-    let socket = null;
-    let first_entry = true;
-
-    const callbacks = {
-        onopen: [],
-        onload: [],
-        onreload: [],
-        onsend: []
-    };
-
-    function _addCallback(event, callback){
-        if(['onopen', 'onload', 'onreload', 'onsend'].includes(event) &&
-                typeof(callback) == 'function'){
-            callbacks[event].push(callback);
-        }
+  function _addCallback (event, callback) {
+    if (['onopen', 'onload', 'onreload', 'onsend'].includes(event) &&
+                typeof (callback) === 'function') {
+      callbacks[event].push(callback)
     }
+  }
 
-    function _createWebSocket() {
-        callbacks.onload.forEach(callback => callback(response))
-    }
+  function _createWebSocket () {
+    callbacks.onload.forEach(callback => callback(response))
+  }
 
-    function _send(json)
-    {
-        
-    };
+  function _send (json) {
 
-    return {
-        version: 1,
-        send: _send,
-        addCallback:_addCallback,
-        connect: _createWebSocket
-    }
+  };
+
+  return {
+    version: 1,
+    send: _send,
+    addCallback: _addCallback,
+    connect: _createWebSocket
+  }
 }
