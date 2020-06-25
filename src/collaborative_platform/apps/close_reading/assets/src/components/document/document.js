@@ -1,9 +1,9 @@
-import React, {useState, useRef, useEffect} from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import PropTypes from 'prop-types'
 
-import {Selection, SelectionType} from 'common/types'
-import {processSelection, getSelection} from 'common/helpers/text_selection'
-import {WithAppContext} from 'common/context/app'
+import { Selection, SelectionType } from 'common/types'
+import { processSelection, getSelection } from 'common/helpers/text_selection'
+import { WithAppContext } from 'common/context/app'
 import styles from './document.module.css'
 import useContentRendering from './content'
 import Toolbar from './toolbar.js'
@@ -17,19 +17,20 @@ export default function DocumentWithContext (props) {
 }
 
 function handleSelection (container, selectionEvent, onSelection, onClickOut) {
-  const [domSelection, text] = processSelection(selectionEvent)
+  const processed = processSelection(selectionEvent)
+  const domSelection = processed[0]
 
   if (domSelection == null) {
-      onClickOut()
-      return
+    onClickOut()
+    return
   }
 
   const selection = Selection(
-    SelectionType.textSelection, 
+    SelectionType.textSelection,
     getSelection(container, domSelection),
-    selectionEvent.clientX, 
+    selectionEvent.clientX,
     selectionEvent.clientY)
-  
+
   event.stopPropagation()
   onSelection(selection)
 }
@@ -41,10 +42,10 @@ function useRenderingOptions () {
   const [colorCertainty, setColorCertainty] = useState(true)
 
   return {
-    renderEntities: {value: renderEntities, set: setRenderEntities},
-    colorEntities: {value: colorEntities, set: setColorEntities},
-    renderCertainty: {value: renderCertainty, set: setRenderCertainty},
-    colorCertainty: {value: colorCertainty, set: setColorCertainty}
+    renderEntities: { value: renderEntities, set: setRenderEntities },
+    colorEntities: { value: colorEntities, set: setColorEntities },
+    renderCertainty: { value: renderCertainty, set: setRenderCertainty },
+    colorCertainty: { value: colorCertainty, set: setColorCertainty }
   }
 }
 
@@ -56,7 +57,7 @@ function Document (props) {
     renderCertainty,
     colorCertainty
   } = useRenderingOptions()
-  
+
   const callbacks = {
     onHover: props.onHover,
     onHoverOut: props.onHoverOut,
@@ -69,7 +70,7 @@ function Document (props) {
   }, [props.documentContent])
 
   useEffect(() => {
-    ref.current.addEventListener ('mouseup', e => handleSelection(ref.current, e, props.onSelection, props.onClickOut))
+    ref.current.addEventListener('mouseup', e => handleSelection(ref.current, e, props.onSelection, props.onClickOut))
   }, [])
 
   const cssClasses = [
@@ -88,20 +89,32 @@ function Document (props) {
   if (colorCertainty.value === true) cssClasses.push('colorCertainty')
 
   return <React.Fragment>
-    <Toolbar 
+    <Toolbar
       renderEntities={renderEntities}
       colorEntities={colorEntities}
       renderCertainty={renderCertainty}
       colorCertainty={colorCertainty}/>
-      <div id="document" ref={ref} className={cssClasses.join(' ')}></div>
+    <div id="document" ref={ref} className={cssClasses.join(' ')}></div>
   </React.Fragment>
 }
 
 Document.propTypes = {
-  renderEntities: PropTypes.bool,
-  colorEntities: PropTypes.bool,
-  renderCertainty: PropTypes.bool,
-  colorCertainty: PropTypes.bool,
+  renderEntities: PropTypes.shape({
+    value: PropTypes.bool,
+    set: PropTypes.func
+  }),
+  colorEntities: PropTypes.shape({
+    value: PropTypes.bool,
+    set: PropTypes.func
+  }),
+  renderCertainty: PropTypes.shape({
+    value: PropTypes.bool,
+    set: PropTypes.func
+  }),
+  colorCertainty: PropTypes.shape({
+    value: PropTypes.bool,
+    set: PropTypes.func
+  }),
   onHover: PropTypes.func,
   onHoverOut: PropTypes.func,
   onClick: PropTypes.func,
@@ -109,5 +122,12 @@ Document.propTypes = {
   onSelection: PropTypes.func,
   documentContent: PropTypes.string,
   content: PropTypes.shape({
+  }),
+  context: PropTypes.shape({
+    user: PropTypes.string,
+    authors: PropTypes.array,
+    annotations: PropTypes.array,
+    entities: PropTypes.object,
+    configuration: PropTypes.object
   })
 }

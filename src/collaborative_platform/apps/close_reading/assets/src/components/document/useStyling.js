@@ -1,7 +1,7 @@
-import {useEffect} from 'react'
+import { useEffect } from 'react'
 
 export default function (container, documentResponse, preferences) {
-    useEffect(() => {
-        console.log(container, documentResponse, preferences)
-    }, [container, documentResponse])
+  useEffect(() => {
+    console.log(container, documentResponse, preferences)
+  }, [container, documentResponse])
 }

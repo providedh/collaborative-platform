@@ -1,11 +1,11 @@
-export default function styleEntity(id, color, icon, css){
-    const greyBorder = `
+export default function styleEntity (id, color, icon, css) {
+  const greyBorder = `
         .renderEntity #${id}
         {
             border-color: lightgrey;
         }
     `
-    const renderBefore = `
+  const renderBefore = `
         .renderEntity #${id}::before
         {
             pointer-events: none;
@@ -19,14 +19,14 @@ export default function styleEntity(id, color, icon, css){
             min-width: 5em;
         }
     `
-    const hideBorder = `
+  const hideBorder = `
         #${id}
         {
             cursor: pointer;
             border-color: white;
         }
     `
-    const renderEntity = `
+  const renderEntity = `
         #${id}
         {
             border-bottom: solid 2px white;
@@ -38,19 +38,19 @@ export default function styleEntity(id, color, icon, css){
         }
     `
 
-    const colorBorder = `.renderEntity.colorEntity #${id}{ border-color: ${color};}`;
-    const entityIcon = `.renderEntity #${id}::before{ content: "${icon}";}`
-    const colorEntityIcon = `.renderEntity.colorEntity #${id}::before{ color: ${color};}`
+  const colorBorder = `.renderEntity.colorEntity #${id}{ border-color: ${color};}`
+  const entityIcon = `.renderEntity #${id}::before{ content: "${icon}";}`
+  const colorEntityIcon = `.renderEntity.colorEntity #${id}::before{ color: ${color};}`
 
-    const cssRules = [
-        renderBefore,
-        renderEntity,
-        hideBorder,
-        greyBorder,
-        entityIcon,
-        colorBorder,
-        colorEntityIcon
-    ].join('\n')
+  const cssRules = [
+    renderBefore,
+    renderEntity,
+    hideBorder,
+    greyBorder,
+    entityIcon,
+    colorBorder,
+    colorEntityIcon
+  ].join('\n')
 
-    css.addCode(cssRules)
+  css.addCode(cssRules)
 }

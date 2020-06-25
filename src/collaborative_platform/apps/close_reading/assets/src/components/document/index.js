@@ -1,1 +1,1 @@
-export {default as Document} from './document.js'
+export { default as Document } from './document.js'
