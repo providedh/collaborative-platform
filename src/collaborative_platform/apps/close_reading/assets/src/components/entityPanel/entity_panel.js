@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { ActionType, ActionTarget, ActionObject, AtomicActionBuilder } from 'common/types'
-import {WithAppContext} from 'common/context/app'
+import { WithAppContext } from 'common/context/app'
 import styles from './entity_panel.module.css'
 import Annotations from './annotations.js'
 import Attributes from './attributes.js'

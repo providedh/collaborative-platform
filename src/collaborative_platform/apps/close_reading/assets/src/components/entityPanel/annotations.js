@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
+import PropTypes from 'prop-types'
 
 import { ActionType, ActionTarget, ActionObject, AtomicActionBuilder } from 'common/types'
-import {WithAppContext} from 'common/context/app'
+import { WithAppContext } from 'common/context/app'
 import AnnotateForm from './annotate_form.js'
 
 export default function CreateAnnotationWithContext (props) {
@@ -50,8 +51,8 @@ function onAnnotationModify (id, oldValues, newValues, edit) {
   edit(null)
 }
 
-function authorName(resp, user, authors) {
-  if (resp === user) {return 'I'}
+function authorName (resp, user, authors) {
+  if (resp === user) { return 'I' }
   const author = authors.filter(x => x['xml:id'] === resp)[0]
   return `${author?.forename} ${author?.surname}`
 }
@@ -120,4 +121,29 @@ function CreateAnnotation (props) {
         aria-controls="collapse">Cancel</button>
     }
   </div>
+}
+
+CreateAnnotation.propTypes = {
+  entity: PropTypes.shape({
+    deleted: PropTypes.bool,
+    properties: PropTypes.arrayOf(
+      PropTypes.shape({
+        name: PropTypes.string,
+        value: PropTypes.string,
+        saved: PropTypes.bool,
+        deleted: PropTypes.bool
+      })
+    ),
+    resp: PropTypes.string,
+    saved: PropTypes.bool,
+    type: PropTypes.string,
+    'xml:id': PropTypes.string
+  }),
+  context: PropTypes.shape({
+    user: PropTypes.string,
+    authors: PropTypes.array,
+    annotations: PropTypes.array,
+    entities: PropTypes.object,
+    configuration: PropTypes.object
+  })
 }

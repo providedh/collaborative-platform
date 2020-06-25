@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
+import PropTypes from 'prop-types'
 
-import {TEIentities} from 'common/types'
-import {WithAppContext} from 'common/context/app'
+import { TEIentities } from 'common/types'
+import { WithAppContext } from 'common/context/app'
 
 export default function FormWithContext (props) {
   return (
@@ -12,15 +13,15 @@ export default function FormWithContext (props) {
 }
 
 function Form (props) {
-  //const conf = props.context.configuration.entities[props.entity.type]
-  const entityType = Object.hasOwnProperty.call(TEIentities, props.entity.type) 
-    ?TEIentities[props.entity.type]
-    :TEIentities['default']
-  const categoryOptions = Object.keys(props.context.configuration.taxonomy).map(x => 
+  // const conf = props.context.configuration.entities[props.entity.type]
+  const entityType = Object.hasOwnProperty.call(TEIentities, props.entity.type)
+    ? TEIentities[props.entity.type]
+    : TEIentities.default
+  const categoryOptions = Object.keys(props.context.configuration.taxonomy).map(x =>
     <option key={x} value={x}>{x}</option>)
-  const entityOptions = Object.keys(props.context.configuration.entities).map(x => 
+  const entityOptions = Object.keys(props.context.configuration.entities).map(x =>
     <option key={x} value={x}>{x}</option>)
-  const propertyOptions = entityType.properties.map(x => 
+  const propertyOptions = entityType.properties.map(x =>
     <option key={x} value={x}>{x}</option>)
 
   const defState = Object.assign({}, {
@@ -41,7 +42,6 @@ function Form (props) {
   useEffect(() => {
     update(defState)
   }, [Object.hasOwnProperty.call(props, 'annotation')])
-
 
   function handleUpdate (key, value) {
     const newForm = Object.assign({}, form)
@@ -156,4 +156,39 @@ function Form (props) {
       </div>
     </div>
   </form>
+}
+
+Form.propTypes = {
+  submitText: PropTypes.string,
+  callback: PropTypes.func,
+  entity: PropTypes.shape({
+    deleted: PropTypes.bool,
+    properties: PropTypes.arrayOf(
+      PropTypes.shape({
+        name: PropTypes.string,
+        value: PropTypes.string,
+        saved: PropTypes.bool,
+        deleted: PropTypes.bool
+      })
+    ),
+    resp: PropTypes.string,
+    saved: PropTypes.bool,
+    type: PropTypes.string,
+    'xml:id': PropTypes.string
+  }),
+  annotation: PropTypes.shape({
+    locus: PropTypes.string,
+    cert: PropTypes.string,
+    ana: PropTypes.arrayOf(PropTypes.string),
+    assertedValue: PropTypes.string,
+    match: PropTypes.string,
+    desc: PropTypes.string
+  }),
+  context: PropTypes.shape({
+    user: PropTypes.string,
+    authors: PropTypes.array,
+    annotations: PropTypes.array,
+    entities: PropTypes.object,
+    configuration: PropTypes.object
+  })
 }

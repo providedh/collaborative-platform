@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
-import { ActionType, ActionTarget, ActionObject, AtomicActionBuilder } from 'common/types'
-import {TEIentities} from 'common/types'
-import {WithAppContext} from 'common/context/app'
+import { ActionType, ActionTarget, ActionObject, AtomicActionBuilder, TEIentities } from 'common/types'
+
+import { WithAppContext } from 'common/context/app'
 
 export default function CreateAttributeWithContext (props) {
   return (
@@ -33,9 +33,9 @@ function onAttributeAdd (id, property, value) {
 }
 
 function CreateAttribute (props) {
-  const entityType = Object.hasOwnProperty(TEIentities, props.entity.type) 
-    ?TEIentities[props.entity.type]
-    :TEIentities['default']
+  const entityType = Object.hasOwnProperty.call(TEIentities, props.entity.type)
+    ? TEIentities[props.entity.type]
+    : TEIentities.default
 
   const presentAttributes = new Set(props.entity.properties.map(x => x.name))
   const freeAttributes = entityType.properties

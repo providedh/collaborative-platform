@@ -1,1 +1,1 @@
-export {default as EntityPanel} from './entity_panel.js'
+export { default as EntityPanel } from './entity_panel.js'
