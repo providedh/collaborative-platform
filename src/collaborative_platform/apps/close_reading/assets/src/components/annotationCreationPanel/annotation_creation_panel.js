@@ -1,21 +1,21 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import {WithAppContext} from 'common/context/app'
+import { WithAppContext } from 'common/context/app'
 import styles from './annotation_creation_panel.module.css'
 
 export default function AnnotationCreationPanelWithContext (props) {
-    return (
-      <WithAppContext>
-        <AnnotationCreationPanel {...props}/>
-      </WithAppContext>
-    )
-  }
+  return (
+    <WithAppContext>
+      <AnnotationCreationPanel {...props}/>
+    </WithAppContext>
+  )
+}
 
 function AnnotationCreationPanel (props) {
-    return <div className={styles.annotationCreationPanel}>
+  return <div className={styles.annotationCreationPanel}>
 
-    </div>
+  </div>
 }
 
 AnnotationCreationPanel.propTypes = {
