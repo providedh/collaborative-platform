@@ -8,13 +8,13 @@ import { Tooltip } from 'components/tooltip'
 import { Header } from 'components/header'
 import styles from './app.module.css' // eslint-disable-line no-unused-vars
 import defState from './def_state.js'
-import {SelectionType} from 'common/types'
+import { SelectionType } from 'common/types'
 
 export default class App extends React.Component {
   constructor (props) {
     super(props)
 
-    const {projectId, user, fileId, fileVersion, fileName, configuration} = props
+    const { projectId, user, fileId, fileVersion, fileName, configuration } = props
 
     this.state = defState(fileId, fileName, fileVersion, user, configuration)
 
@@ -26,12 +26,12 @@ export default class App extends React.Component {
     this.handleWebsocketResponse = this.handleWebsocketResponse.bind(this)
 
     this.socket = websocket.socket(projectId, fileId)
-    this.socket.addCallback('onload', this.handleWebsocketResponse);
-    this.socket.addCallback('onreload', this.handleWebsocketResponse);
+    this.socket.addCallback('onload', this.handleWebsocketResponse)
+    this.socket.addCallback('onreload', this.handleWebsocketResponse)
   }
 
   componentDidMount () {
-    this.socket.connect();
+    this.socket.connect()
   }
 
   sendToWebsocket (json) {
@@ -40,7 +40,6 @@ export default class App extends React.Component {
 
   handleWebsocketResponse (response) {
     // validate response
-    console.log(response)
     this.setState(prev => {
       const newState = Object.assign({}, prev)
       newState.documentContent = response.body_content
@@ -53,36 +52,35 @@ export default class App extends React.Component {
   }
 
   onSelection (selection) {
-    //console.log('selection', selection)
-    this.setState({selection})
+    // console.log('selection', selection)
+    this.setState({ selection })
   }
 
   onHover (selection) {
-    //console.log('hover', selection)
-    this.setState({selection})
+    // console.log('hover', selection)
+    this.setState({ selection })
   }
 
   onHoverOut () {
     this.setState(prev => {
-      if(prev.selection == null){ return prev }
-      if(prev.selection.type != SelectionType.hover){ return prev }
-      const newState = Object.assign({}, prev, {selection: null})
+      if (prev.selection === null) { return prev }
+      if (prev.selection.type !== SelectionType.hover) { return prev }
+      const newState = Object.assign({}, prev, { selection: null })
       return newState
     })
   }
 
   onClick (selection) {
-    //console.log('hover', selection)
-    this.setState({selection})
+    // console.log('hover', selection)
+    this.setState({ selection })
   }
 
   onClickOut () {
     this.setState(prev => {
-      console.log(prev.selection)
-      if(prev.selection == null){ return prev }
-      if(prev.selection.type === SelectionType.click || 
-        prev.selection.type === SelectionType.textSelection){ 
-        const newState = Object.assign({}, prev, {selection: null})
+      if (prev.selection === null) { return prev }
+      if (prev.selection.type === SelectionType.click ||
+        prev.selection.type === SelectionType.textSelection) {
+        const newState = Object.assign({}, prev, { selection: null })
         return newState
       }
       return prev
@@ -93,7 +91,7 @@ export default class App extends React.Component {
     return (
       <AppContext.Provider value={this.state.context}>
         <div className={styles.app + ' container-lg px-lg-5'}>
-          <Header 
+          <Header
             fileName={this.state.fileName}
             fileId={this.state.fileId}
             fileVersion={this.state.fileVersion}
@@ -105,7 +103,7 @@ export default class App extends React.Component {
             onClick={this.onClick}
             onClickOut={this.onClickOut}
             onSelection={this.onSelection}
-            />
+          />
         </div>
         <Tooltip selection={this.state.selection}/>
       </AppContext.Provider>
