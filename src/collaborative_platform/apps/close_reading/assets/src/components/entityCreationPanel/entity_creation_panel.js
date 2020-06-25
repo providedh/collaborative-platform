@@ -1,8 +1,8 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
-import {TEIentities} from 'common/types'
-import {WithAppContext} from 'common/context/app'
+import { TEIentities } from 'common/types'
+import { WithAppContext } from 'common/context/app'
 import styles from './entity_creation_panel.module.css'
 
 export default function EntityCreationPanelWithContext (props) {
@@ -21,29 +21,29 @@ function EntityCreationPanel (props) {
   const entities = props.context.configuration.entities
   const [entity, setEntity] = useState(Object.keys(entities)[0])
   const entityType = Object.hasOwnProperty.call(TEIentities, entity)
-      ?TEIentities[entity]
-      :TEIentities['default']
+    ? TEIentities[entity]
+    : TEIentities.default
   const [attributes, setAttributes] = useState(Object.fromEntries(entityType.properties.map(x => [x, ''])))
 
-  function handleEntityChange(name) {
+  function handleEntityChange (name) {
     setEntity(name)
     const entityType = Object.hasOwnProperty.call(TEIentities, name)
-      ?TEIentities[name]
-      :TEIentities['default']
+      ? TEIentities[name]
+      : TEIentities.default
     setAttributes(Object.fromEntries(entityType.properties.map(x => [x, ''])))
   }
 
   const attributeFields = Object.entries(attributes).map(([name, value]) => <div className="form-group col-4" key={name}>
     <label htmlFor={name}>{name}</label>
-    <input type="text" 
-           className="form-control form-control-sm" 
-           id={name} 
-           value={value} 
-           onChange={e => setAttributes(Object.assign({}, attributes, {[name]: e.target.value}))} />
-    </div>)
+    <input type="text"
+      className="form-control form-control-sm"
+      id={name}
+      value={value}
+      onChange={e => setAttributes(Object.assign({}, attributes, { [name]: e.target.value }))} />
+  </div>)
 
-  const entityOptions = Object.keys(entities).map(x => 
-    <option key={x} value={x}>{x}</option>)
+  const entityOptions = Object.keys(entities).map(x =>
+    <option key={x} value={x}>{capitalized(x)}</option>)
 
   return <div className={styles.entityCreationPanel}>
     <form>
@@ -73,4 +73,12 @@ function EntityCreationPanel (props) {
 }
 
 EntityCreationPanel.propTypes = {
+  callback: PropTypes.func,
+  context: PropTypes.shape({
+    user: PropTypes.string,
+    authors: PropTypes.array,
+    annotations: PropTypes.array,
+    entities: PropTypes.object,
+    configuration: PropTypes.object
+  })
 }
