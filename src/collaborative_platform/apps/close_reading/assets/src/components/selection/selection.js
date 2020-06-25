@@ -1,20 +1,19 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-
+import { WithAppContext } from 'common/context/app'
 import styles from './selection.css'
 
 export default function SelectionWithContext (props) {
-    return (
-      <WithAppContext>
-        <Selection {...props}/>
-      </WithAppContext>
-    )
-  }
+  return (
+    <WithAppContext>
+      <Selection {...props}/>
+    </WithAppContext>
+  )
+}
 
 function Selection (props) {
-    return <div className={styles.selection}>
+  return <div className={styles.selection}>
 
-    </div>
+  </div>
 }
 
 Selection.propTypes = {}

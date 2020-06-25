@@ -1,1 +1,1 @@
-export {default as selection} from './selection.js'
+export { default as selection } from './selection.js'
