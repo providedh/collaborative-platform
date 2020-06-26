@@ -20,16 +20,12 @@ function capitalized (s) {
 function EntityCreationPanel (props) {
   const entities = props.context.configuration.entities
   const [entity, setEntity] = useState(Object.keys(entities)[0])
-  const entityType = Object.hasOwnProperty.call(TEIentities, entity)
-    ? TEIentities[entity]
-    : TEIentities.default
+  const entityType = TEIentities[entity]
   const [attributes, setAttributes] = useState(Object.fromEntries(entityType.properties.map(x => [x, ''])))
 
   function handleEntityChange (name) {
     setEntity(name)
-    const entityType = Object.hasOwnProperty.call(TEIentities, name)
-      ? TEIentities[name]
-      : TEIentities.default
+    const entityType = TEIentities[name]
     setAttributes(Object.fromEntries(entityType.properties.map(x => [x, ''])))
   }
 

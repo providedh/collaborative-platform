@@ -33,9 +33,7 @@ function onAttributeAdd (id, property, value) {
 }
 
 function CreateAttribute (props) {
-  const entityType = Object.hasOwnProperty.call(TEIentities, props.entity.type)
-    ? TEIentities[props.entity.type]
-    : TEIentities.default
+  const entityType = TEIentities[props.entity.type]
 
   const presentAttributes = new Set(props.entity.properties.map(x => x.name))
   const freeAttributes = entityType.properties

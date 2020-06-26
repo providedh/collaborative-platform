@@ -14,9 +14,7 @@ export default function FormWithContext (props) {
 
 function Form (props) {
   // const conf = props.context.configuration.entities[props.entity.type]
-  const entityType = Object.hasOwnProperty.call(TEIentities, props.entity.type)
-    ? TEIentities[props.entity.type]
-    : TEIentities.default
+  const entityType = TEIentities[props.entity.type]
   const categoryOptions = Object.keys(props.context.configuration.taxonomy).map(x =>
     <option key={x} value={x}>{x}</option>)
   const entityOptions = Object.keys(props.context.configuration.entities).map(x =>
