@@ -15,8 +15,58 @@ from apps.views_decorators import objects_exists, user_has_access
 @objects_exists
 @user_has_access()
 def close_reading(request, project_id, file_id):  # type: (HttpRequest, int, int) -> HttpResponse
+    origin, origin_url = get_origin(request, project_id)
     file = File.objects.get(project_id=project_id, id=file_id, deleted=False)
+    project = file.project
 
+    preferences = {
+        'taxonomy': get_categories(project),
+        'entities': get_entities(project),
+        'properties_per_entity': get_entity_properties()
+    }
+
+    context = {
+        'origin': origin,
+        'origin_url': origin_url,
+        'project_id': project.id,
+        'file_id': file.id,
+        'file_version': file.version_number,
+        'title': file.name,
+        'preferences': json.dumps(preferences),
+       'DEVELOPMENT': False,
+        'alerts': None,
+    }
+
+    return render(request, 'close_reading/close_reading.html', context)
+
+def get_entity_properties() -> dict:
+    from collaborative_platform.settings import DEFAULT_ENTITIES
+
+    properties_per_entity = {
+        key: {'properties': list(set(entity['properties'].keys()).difference('text'))}
+        for key, entity in DEFAULT_ENTITIES.items()        
+    }
+    
+    return properties_per_entity
+
+def get_categories(project) -> dict:
+    categories = {category.name: {
+        'color': category.color,
+        'desc': category.description
+    } for category in
+        project.taxonomy.categories.all()}
+
+    return categories
+
+def get_entities(project) -> dict:
+    entities = {entity.name: {
+        'color': entity.color,
+        'icon': entity.icon
+    } for entity in project.taxonomy.entities.all()}
+
+    return entities
+
+def get_origin(request: HttpRequest, project_id: str) -> (str, str):
     project_url = reverse('projects:files', args=[project_id])
 
     origin_url = request.META.get('HTTP_REFERER', project_url)
@@ -31,27 +81,4 @@ def close_reading(request, project_id, file_id):  # type: (HttpRequest, int, int
 
     origin = resolve_match.url_name
 
-    categories = {category.name: {
-        'color': category.color,
-        'desc': category.description
-    } for category in
-        file.project.taxonomy.categories.all()}
-
-    entities = {entity.name: {
-            'color': entity.color,
-            'icon': entity.icon
-        } for entity in file.project.taxonomy.entities.all()}
-
-    context = {
-        'origin': origin,
-        'origin_url': origin_url,
-        'title': file.name,
-        'alerts': None,
-        'file': file,
-        'project_id': project_id,
-        'file_id': file_id,
-        'preferences': json.dumps({'taxonomy': categories, 'entities': entities}),
-        'DEVELOPMENT': False
-    }
-
-    return render(request, 'close_reading/close_reading.html', context)
+    return origin, origin_url
