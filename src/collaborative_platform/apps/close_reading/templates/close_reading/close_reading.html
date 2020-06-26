@@ -23,7 +23,7 @@
   <script type="text/javascript">
       window.project_id = "{{ project_id }}";
       window.file_id = "{{ file_id }}";
-      window.file_version = "{{ file.version_number }}";
+      window.file_version = "{{ file_version }}";
       window.preferences = JSON.parse("{{ preferences|escapejs|safe }}");
     </script>
   {% if DEVELOPMENT is True %}
