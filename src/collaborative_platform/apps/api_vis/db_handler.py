@@ -26,15 +26,17 @@ class DbHandler:
             if clique.deleted_in_commit is not None:
                 raise NotModified(f"Clique with id: {clique_id} is already deleted")
 
-            delete_time = timezone.now()
-            project_version = self.__get_project_version_from_db(project_version_nr)
-
-            self.__mark_clique_to_delete(clique, delete_time)
-            self.__mark_unifications_to_delete(clique, project_version, delete_time)
+            self.__mark_clique_to_delete(clique, project_version_nr)
 
             delete_status = {
                 'status': 200,
                 'message': 'OK'
+            }
+
+        except NotModified as exception:
+            delete_status = {
+                'status': 304,
+                'message': str(exception)
             }
 
         except BadRequest as exception:
@@ -44,6 +46,58 @@ class DbHandler:
             }
 
         return delete_status
+
+    def delete_unification(self, clique_id, entity_id, project_version_nr):
+        try:
+            unification = self.__get_unification_from_db(clique_id, entity_id)
+
+            if unification.deleted_in_commit is not None:
+                raise NotModified(f"Entity with id: {entity_id} is already removed from clique with id: {clique_id}")
+
+            self.__mark_unification_to_delete(unification, project_version_nr)
+
+            delete_status = {
+                'status': 200,
+                'message': 'OK'
+            }
+
+        except NotModified as exception:
+            delete_status = {
+                'status': 304,
+                'message': str(exception)
+            }
+
+        except BadRequest as exception:
+            delete_status = {
+                'status': 400,
+                'message': str(exception)
+            }
+
+        return delete_status
+
+    def __mark_unification_to_delete(self, unification, project_version_nr):
+        project_version = self.__get_project_version_from_db(project_version_nr)
+
+        file_version = project_version.file_versions.get(
+            file=unification.entity.file
+        )
+
+        unification.deleted_by = self.__user
+        unification.deleted_on = timezone.now()
+        unification.deleted_in_file_version = file_version
+        unification.save()
+
+    @staticmethod
+    def __get_unification_from_db(clique_id, entity_id):
+        try:
+            unification = Unification.objects.get(
+                clique_id=clique_id,
+                entity_id=entity_id
+            )
+        except Unification.DoesNotExist:
+            raise BadRequest(f"Clique with id: {clique_id} doesn't contain entity with id: {entity_id}")
+
+        return unification
 
     def __get_clique_from_db(self, clique_id):
         try:
@@ -56,15 +110,21 @@ class DbHandler:
 
         return clique
 
-    def __mark_clique_to_delete(self, clique, delete_time):
+    def __mark_clique_to_delete(self, clique, project_version_nr):
+        delete_time = timezone.now()
+
         clique.deleted_by = self.__user
         clique.deleted_on = delete_time
         clique.save()
 
-    def __mark_unifications_to_delete(self, clique, project_version, delete_time):
+        self.__mark_unifications_to_delete(clique, project_version_nr, delete_time)
+
+    def __mark_unifications_to_delete(self, clique, project_version_nr, delete_time):
         unifications = clique.unifications.filter(
             deleted_in_commit__isnull=True
         )
+
+        project_version = self.__get_project_version_from_db(project_version_nr)
 
         for unification in unifications:
             file_version = project_version.file_versions.get(

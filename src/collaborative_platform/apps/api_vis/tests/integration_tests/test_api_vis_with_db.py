@@ -358,3 +358,58 @@ class TestApiVisWithDb:
         }
 
         assert response_content == expected_response
+
+    def test_remove_entity_from_clique(self):
+        user_id = 2
+        project_id = 1
+
+        client = Client()
+        user = User.objects.get(id=user_id)
+        client.force_login(user)
+
+        clique_id = 1
+
+        clique = Clique.objects.get(id=clique_id)
+        unifications = clique.unifications.filter(
+            deleted_by__isnull=True
+        )
+
+        assert unifications.count() == 2
+
+        url = f'/api/vis/projects/{project_id}/cliques/{clique_id}/entities/'
+
+        payload = {
+            'entities': [11, 15],
+            'certainty': 'high',
+            'project_version': 6.3,
+        }
+
+        response = client.delete(url, payload, content_type="application/json")
+
+        assert response.status_code == 200
+
+        clique.refresh_from_db()
+        unifications = clique.unifications.filter(
+            deleted_by__isnull=True
+        )
+
+        assert unifications.count() == 1
+
+        response_content = json.loads(response.content)
+
+        expected_response = {
+            'delete_statuses': [
+                {
+                    'id': 11,
+                    'status': 200,
+                    'message': 'OK',
+                },
+                {
+                    'id': 15,
+                    'status': 400,
+                    'message': "Clique with id: 1 doesn't contain entity with id: 15",
+                },
+            ]
+        }
+
+        assert response_content == expected_response
