@@ -1,6 +1,7 @@
 import React from 'react'
 import { render } from 'react-dom'
 
+import { TEIentities } from 'common/types'
 import { App } from 'components/app'
 
 const appConfig = {
@@ -11,5 +12,7 @@ const appConfig = {
   fileName: 'Historical file',
   configuration: window.preferences
 }
+
+TEIentities.update(appConfig.configuration.properties_per_entity)
 
 render(<App {...appConfig}/>, document.getElementById('react-root'))
