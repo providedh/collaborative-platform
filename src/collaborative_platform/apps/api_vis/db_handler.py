@@ -15,9 +15,31 @@ class DbHandler:
     def create_clique(self, request_data):
         clique_name = self.__get_clique_name(request_data)
 
-        clique = self.__create_clique(clique_name)
+        request_entities = request_data.get('entities')
+        clique_type = self.__get_clique_type(request_entities)
+
+        clique = self.__create_clique(clique_name, clique_type)
 
         return clique.id, clique_name
+
+    def __get_clique_type(self, request_entities):
+        entity_type = None
+
+        for entity in request_entities:
+            try:
+                entity = self.get_entity_from_int_or_dict(entity, self.__project_id)
+
+            except BadRequest:
+                continue
+
+            else:
+                entity_type = entity.type
+
+        if entity_type:
+            return entity_type
+
+        else:
+            raise BadRequest("Can't get entity type from provided entity ids")
 
     def delete_clique(self, clique_id, project_version_nr):
         try:
@@ -161,10 +183,11 @@ class DbHandler:
 
         return clique_name
 
-    def __create_clique(self, clique_name):
+    def __create_clique(self, clique_name, clique_type):
         clique = Clique.objects.create(
             project_id=self.__project_id,
             asserted_name=clique_name,
+            type=clique_type,
             created_by=self.__user,
         )
 

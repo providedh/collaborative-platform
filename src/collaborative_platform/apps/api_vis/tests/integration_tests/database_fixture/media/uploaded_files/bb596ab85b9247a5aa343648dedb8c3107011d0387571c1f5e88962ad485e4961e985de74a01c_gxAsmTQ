@@ -57,6 +57,13 @@
               <email/>
             </persName>
           </person>
+          <person xml:id="second_annotator">
+            <persName>
+              <forename>Tony</forename>
+              <surname>Stark</surname>
+              <email>tony_stark@zmyslonymail.com</email>
+            </persName>
+          </person>
         </listPerson>
       </particDesc>
       <textClass>
@@ -94,7 +101,28 @@
     </profileDesc>
   </teiHeader>
     <text>
-        <body>
+        <body>s
+            <div type="person">
+              <listPerson type="personList">
+                <person sex="M" age="child" resp="#second_annotator" xml:id="person-0">
+                  <persName>
+                    <forename>Snow</forename>
+                    <surname>White</surname>
+                  </persName>
+                  <name>Snow white</name>
+                  <birth when="1812-01-01"/>
+                </person>
+                <person resp="#second_annotator" xml:id="person-1">
+                  <name>Doc</name>
+                </person>
+                <person resp="#second_annotator" xml:id="person-2">
+                  <name>Grumpy</name>
+                </person>
+                <person xml:id="person-3">
+                  <name>Sleepy</name>
+                </person>
+              </listPerson>
+            </div>
             <div type="ingredient">
                 <listObject type="ingredientList">
 					<object type="ingredient" xml:id="jus">Jus</object>
@@ -111,6 +139,7 @@
             </div>
             <div type="recipe">
                 <p>Take a Pound of fine Sugar , <name xml:id="name-0" ref="#sand">and</name> a Pint of Water , or more , as the Quantity you intend to make requires ; set it on the Fire , let it boil , <name xml:id="name-1" ref="#sand">and</name> set a Pan of Water to boil ; when it boils , put in your Plums ; let them <name xml:id="name-2" ref="#jus">just</name> boil , and then take them out with a Ladle , as they flip their Skins off ; take off the Skins , and put the Plums into the Syrup ; do this as fast as you can , that they may not turn : Boil them all to Pieces ; and to a Quart of Plums put a Pint of Apple-Jelly ; boil them well together , and rub it thro ’ a Hair Sieve ; to a Pint of this put a Pound and a half of sifted Sugar ; let the Jelly boil before you shake the Sugar , and let it scald ’ till the Sugar is well melted ; skin it , put it in Pots , and dry it in the Stove .</p>
+                <p><name xml:id="name-3" ref="#person-0">Snow White</name> is a lonely princess living with her stepmother, a vain Queen. <name xml:id="name-4" ref="#person-1">Doc</name> is the leader of the seven dwarfs. <name xml:id="name-5" ref="#person-2">Grumpy</name> has the biggest nose of the dwarfs and is frequently seen with one eye shut. <name xml:id="name-6" ref="#person-3">Sleepy</name> is always tired and appears laconic in most situations.</p>
             </div>
         </body>
     </text>

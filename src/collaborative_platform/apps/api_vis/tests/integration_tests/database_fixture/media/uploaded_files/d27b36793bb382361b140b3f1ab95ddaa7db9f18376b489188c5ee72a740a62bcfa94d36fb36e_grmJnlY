@@ -104,10 +104,10 @@
             <name>Jerry Maguire</name>
             <birth when="2001-02-03"/>
           </person>
-          <person resp="recipe_levenshtein_matching" xml:id="person-1">
+          <person resp="#recipe_levenshtein_matching" xml:id="person-1">
             <name>Ingwer</name>
           </person>
-          <person resp="recipe_levenshtein_matching" xml:id="person-2">
+          <person resp="#recipe_levenshtein_matching" xml:id="person-2">
             <name>Grieben</name>
           </person>
           <person xml:id="person-3">
