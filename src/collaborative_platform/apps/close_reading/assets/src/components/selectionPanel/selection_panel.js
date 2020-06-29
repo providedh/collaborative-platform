@@ -1,10 +1,27 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
-import { ActionType, ActionTarget, ActionObject, AtomicActionBuilder } from 'common/types'
+import {
+  WebsocketRequest,
+  WebsocketRequestType,
+  ActionType,
+  ActionTarget,
+  ActionObject,
+  AtomicActionBuilder
+} from 'common/types'
 import { AnnotationCreationPanel } from 'components/annotationCreationPanel'
 import { EntityCreationPanel } from 'components/entityCreationPanel'
 import styles from './selection_panel.module.css'
+
+import { WithAppContext } from 'common/context/app'
+
+export default function CreateAttributeWithContext (props) {
+  return (
+    <WithAppContext>
+      <SelectionPanel {...props}/>
+    </WithAppContext>
+  )
+}
 
 const CreationOption = { entity: 'Add entity', certainty: 'Annotate uncertainty' }
 
@@ -35,24 +52,28 @@ function Navigation (option, setOption) {
   return navigation
 }
 
-function onTagCreate (selection, entity, attributes) {
+function onTagCreate (selection, entity, attributes, websocket) {
   const tagBuilder = AtomicActionBuilder(ActionTarget.text, ActionType.add, ActionObject.tag)
-  const attributeBuilder = AtomicActionBuilder(ActionTarget.entity, ActionType.add, ActionObject.property)
-
   const tagAction = tagBuilder(...selection.target)
-  const attributeAction = attributeBuilder('TEMP', attributes)
-  const actions = [tagAction, attributeAction]
-  alert(JSON.stringify(actions))
+
+  // const attributeBuilder = AtomicActionBuilder(ActionTarget.entity, ActionType.add, ActionObject.property)
+  // const attributeAction = attributeBuilder('TEMP', attributes)
+  // const actions = [tagAction, attributeAction]
+  const request = WebsocketRequest(WebsocketRequestType.modify, [tagAction])
+  console.log(request)
+  websocket.send(request)
+  // alert(JSON.stringify(actions))
 }
 
-export default function SelectionPanel (props) {
+function SelectionPanel (props) {
   const [option, setOption] = useState(null)
 
   let body = ''
   if (option !== null) {
     body = (option === CreationOption.certainty
       ? <AnnotationCreationPanel />
-      : <EntityCreationPanel callback={(entity, attributes) => onTagCreate(props.selection, entity, attributes)}/>)
+      : <EntityCreationPanel callback={(entity, attributes) =>
+        onTagCreate(props.selection, entity, attributes, props.context.websocket)}/>)
   }
 
   const bodyCssClasses = ['card-body']
@@ -69,5 +90,13 @@ export default function SelectionPanel (props) {
 }
 
 SelectionPanel.propTypes = {
-  selection: PropTypes.object
+  selection: PropTypes.object,
+  context: PropTypes.shape({
+    user: PropTypes.string,
+    authors: PropTypes.array,
+    annotations: PropTypes.array,
+    entities: PropTypes.object,
+    configuration: PropTypes.object,
+    websocket: PropTypes.object
+  })
 }
