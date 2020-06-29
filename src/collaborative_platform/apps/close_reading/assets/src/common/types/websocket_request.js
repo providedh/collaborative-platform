@@ -10,5 +10,5 @@ export function WebsocketRequest (type, payload) {
     payload: payload
   }
 
-  return alert(JSON.stringify(request))
+  return JSON.stringify(request)
 }
