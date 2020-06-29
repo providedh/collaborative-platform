@@ -5,7 +5,7 @@ import logging
 from celery import shared_task
 from datetime import datetime, timezone
 
-from .models import AnnotatingBodyContent, RoomPresence
+from .models import AnnotatingBodyContent, Operation, RoomPresence
 
 
 logger = logging.getLogger('celery')
@@ -39,7 +39,10 @@ def prune_orphaned_annotating_body_contents():
         active_room_symbols.add(presence.room_symbol)
 
     for body_content in annotating_body_contents:
-        if body_content.file_symbol not in active_room_symbols:
+        file_id = body_content.file_symbol.split('_')[-1]
+        operations = Operation.objects.filter(file_id=file_id)
+
+        if body_content.file_symbol not in active_room_symbols and not operations:
             body_content.delete()
 
             logger.info(f"Content of <body> element of file: '{body_content.file_name}' removed from room: "
