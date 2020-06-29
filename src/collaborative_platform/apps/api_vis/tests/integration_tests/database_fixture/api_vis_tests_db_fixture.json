@@ -3003,7 +3003,7 @@
   "pk": 1,
   "fields": {
     "project": 1,
-    "asserted_name": "first_clique",
+    "name": "first_clique",
     "type": "ingredient",
     "created_by": 2,
     "created_on": "2020-06-28T11:05:20.499Z",
@@ -3018,7 +3018,7 @@
   "pk": 2,
   "fields": {
     "project": 1,
-    "asserted_name": "second_clique",
+    "name": "second_clique",
     "type": "ingredient",
     "created_by": 2,
     "created_on": "2020-06-28T11:05:49.220Z",
@@ -3033,7 +3033,7 @@
   "pk": 3,
   "fields": {
     "project": 1,
-    "asserted_name": "third_clique",
+    "name": "third_clique",
     "type": "ingredient",
     "created_by": 3,
     "created_on": "2020-06-28T11:09:05.449Z",
@@ -3048,7 +3048,7 @@
   "pk": 4,
   "fields": {
     "project": 1,
-    "asserted_name": "fourth_clique",
+    "name": "fourth_clique",
     "type": "person",
     "created_by": 2,
     "created_on": "2020-06-28T11:12:57.544Z",
@@ -3063,7 +3063,7 @@
   "pk": 5,
   "fields": {
     "project": 1,
-    "asserted_name": "fifth_clique",
+    "name": "fifth_clique",
     "type": "person",
     "created_by": 2,
     "created_on": "2020-06-28T11:14:22.390Z",
@@ -3078,7 +3078,7 @@
   "pk": 6,
   "fields": {
     "project": 1,
-    "asserted_name": "sixth_clique",
+    "name": "sixth_clique",
     "type": "person",
     "created_by": 3,
     "created_on": "2020-06-28T11:17:15.384Z",

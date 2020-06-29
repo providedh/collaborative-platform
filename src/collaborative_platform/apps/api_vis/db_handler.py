@@ -1,3 +1,4 @@
+from django.forms.models import model_to_dict
 from django.utils import timezone
 
 from apps.api_vis.models import Clique, Commit, Entity, EntityProperty, Unification
@@ -11,6 +12,39 @@ class DbHandler:
     def __init__(self, project_id, user):
         self.__project_id = project_id
         self.__user = user
+
+    def get_all_cliques_in_project(self, qs_parameters):
+        cliques = Clique.objects.filter(
+            project_id=self.__project_id,
+            created_in_commit__isnull=False,
+        )
+
+        cliques = cliques.filter(
+            deleted_in_commit__isnull=True,
+        )
+
+        cliques = cliques.order_by('id')
+
+        serialized_cliques = []
+
+        for clique in cliques:
+            unifications = clique.unifications
+
+            unifications = unifications.filter(
+                deleted_in_commit__isnull=True,
+            )
+
+            unifications = unifications.order_by('id')
+
+            serialized_clique = model_to_dict(clique, fields=['id', 'name', 'type'])
+
+            entities_ids = unifications.values_list('entity_id', flat=True)
+            entities_ids = list(entities_ids)
+
+            serialized_clique.update({'entities': entities_ids})
+            serialized_cliques.append(serialized_clique)
+
+        return serialized_cliques
 
     def create_clique(self, request_data):
         clique_name = self.__get_clique_name(request_data)

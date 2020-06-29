@@ -1,0 +1,34 @@
+{
+  "test_get_all_cliques_in_project_no_filtering": [
+    {
+      "id": 1,
+      "name": "first_clique",
+      "type": "ingredient",
+      "entities": [11]
+    },
+    {
+      "id": 2,
+      "name": "second_clique",
+      "type": "ingredient",
+      "entities": [18, 20]
+    },
+    {
+      "id": 3,
+      "name": "third_clique",
+      "type": "ingredient",
+      "entities": [20, 11]
+    },
+    {
+      "id": 4,
+      "name": "fourth_clique",
+      "type": "person",
+      "entities": [3, 14]
+    },
+    {
+      "id": 6,
+      "name": "sixth_clique",
+      "type": "person",
+      "entities": [4, 15]
+    }
+  ]
+}

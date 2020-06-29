@@ -5,7 +5,7 @@ from json.decoder import JSONDecodeError
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotModified, JsonResponse
 
-from apps.api_vis.helpers import validate_keys_and_types
+from apps.api_vis.helpers import validate_keys_and_types, parse_query_string
 from apps.api_vis.db_handler import DbHandler
 from apps.exceptions import BadRequest, NotModified
 from apps.views_decorators import objects_exists, user_has_access
@@ -67,6 +67,27 @@ def project_cliques(request, project_id):
             }
 
             return JsonResponse(response)
+
+    elif request.method == "GET":
+        try:
+            qs_parameters = parse_query_string(request.GET)
+
+            db_handler = DbHandler(project_id, request.user)
+            response = db_handler.get_all_cliques_in_project(qs_parameters)
+
+        except BadRequest as exception:
+            status = HttpResponseBadRequest.status_code
+
+            response = {
+                'status': status,
+                'message': str(exception),
+            }
+
+            return JsonResponse(response, status=status)
+
+        else:
+
+            return JsonResponse(response, safe=False)
 
     elif request.method == 'DELETE':
         try:

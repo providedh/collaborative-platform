@@ -136,7 +136,7 @@ class Commit(models.Model):
 
 class Clique(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
-    asserted_name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255)
     type = models.CharField(max_length=255)
 
     created_by = models.ForeignKey(User, on_delete=models.SET(get_anonymous_user), related_name='created_cliques')

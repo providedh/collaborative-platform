@@ -1,4 +1,6 @@
+import inspect
 import json
+import os
 import pytest
 
 from django.contrib.auth.models import User
@@ -6,6 +8,9 @@ from django.test import Client
 
 from apps.api_vis.models import Clique, Commit, Unification
 from apps.projects.models import Project
+
+
+SCRIPT_DIR = os.path.dirname(__file__)
 
 
 @pytest.mark.usefixtures('api_vis_with_db_setup')
@@ -413,3 +418,56 @@ class TestApiVisWithDb:
         }
 
         assert response_content == expected_response
+
+    test_parameters_names = "filtering_case, qs_parameters"
+    test_parameters_list = [
+        ('no_filtering', None),
+        # ('types', {'type': 'person'}),
+    ]
+
+    @pytest.mark.parametrize(test_parameters_names, test_parameters_list)
+    def test_get_all_cliques_in_project(self, filtering_case, qs_parameters):
+        test_name = inspect.currentframe().f_code.co_name
+        test_name = f'{test_name}_{filtering_case}'
+
+        user_id = 2
+        project_id = 1
+
+        client = Client()
+        user = User.objects.get(id=user_id)
+        client.force_login(user)
+
+        url = f'/api/vis/projects/{project_id}/cliques/'
+
+        if qs_parameters:
+            url = add_qs_parameters(url, qs_parameters)
+
+        response = client.get(url)
+
+        assert response.status_code == 200
+
+        response_content = json.loads(response.content)
+        verify_response(test_name, response_content)
+
+
+def add_qs_parameters(url, qs_parameters):
+    for parameter, value in qs_parameters.items():
+        url += f'&{parameter}={value}'
+
+    return url
+
+
+def verify_response(test_name, response):
+    test_results_file_path = os.path.join(SCRIPT_DIR, 'tests_results.json')
+    test_results = read_file(test_results_file_path)
+    test_results = json.loads(test_results)
+    expected = test_results[test_name]
+
+    assert response == expected
+
+
+def read_file(path):
+    with open(path, 'r') as file:
+        text = file.read()
+
+    return text
