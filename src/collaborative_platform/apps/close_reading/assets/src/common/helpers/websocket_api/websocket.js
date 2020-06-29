@@ -59,8 +59,8 @@ export default function AnnotatorWebSocket (projectId, fileId) {
 
       if (firstEntry === true) { firstEntry = false }
       // Run any callbacks if any, with the contents retrieved
-      const callbacks = firstEntry === true ? callbacks.onload : callbacks.onreload
-      callbacks.forEach(callback => callback(content))
+      const f = firstEntry === true ? callbacks.onload : callbacks.onreload
+      f.forEach(callback => callback(content))
     }
 
     setInterval(function () {
