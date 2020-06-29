@@ -1,7 +1,15 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
-import { ActionType, ActionTarget, ActionObject, AtomicActionBuilder, TEIentities } from 'common/types'
+import {
+  WebsocketRequest,
+  WebsocketRequestType,
+  ActionType,
+  ActionTarget,
+  ActionObject,
+  AtomicActionBuilder,
+  TEIentities
+} from 'common/types'
 
 import { WithAppContext } from 'common/context/app'
 
@@ -13,26 +21,29 @@ export default function CreateAttributeWithContext (props) {
   )
 }
 
-function onAttributeDelete (id, property) {
+function onAttributeDelete (id, property, websocket) {
   const builder = AtomicActionBuilder(ActionTarget.entity, ActionType.delete, ActionObject.property)
   const action = builder(id, property)
   alert(JSON.stringify(action))
 }
 
-function onAttributeChange (id, property, value, edit) {
+function onAttributeChange (id, property, value, edit, websocket) {
   const builder = AtomicActionBuilder(ActionTarget.entity, ActionType.modify, ActionObject.property)
   const action = builder(id, property, value)
   alert(JSON.stringify(action))
   edit(null)
 }
 
-function onAttributeAdd (id, property, value) {
+function onAttributeAdd (id, property, value, websocket) {
   const builder = AtomicActionBuilder(ActionTarget.entity, ActionType.add, ActionObject.property)
-  const action = builder(id, [{ property, value }])
-  alert(JSON.stringify(action))
+  const action = builder(id, property, value)
+  const request = WebsocketRequest(WebsocketRequestType.modify, [action])
+  console.log(request)
+  websocket.send(request)
 }
 
 function CreateAttribute (props) {
+  console.log(props)
   const entityType = TEIentities[props.entity.type]
 
   const presentAttributes = new Set(props.entity.properties.map(x => x.name))
@@ -49,7 +60,10 @@ function CreateAttribute (props) {
       <span className={attribute.saved === false ? 'text-danger' : 'd-none'}>
         (unsaved)
         <button type="button"
-          onClick={() => onAttributeDelete(props.entity['xml:id'], attribute.name)}
+          onClick={e => {
+            e.preventDefault()
+            onAttributeDelete(props.entity['xml:id'], attribute.name, props.context.websocket)
+          }}
           className="btn btn-sm btn-link p-0 mx-1 text-danger"><u> -delete</u></button>
         <button type="button"
           onClick={() => edit({ ...attribute })}
@@ -93,7 +107,10 @@ function CreateAttribute (props) {
         <div className="row mt-2">
           <div className="col">
             <button type="button btn-sm"
-              onClick={() => onAttributeAdd(props.entity['xml:id'], attributeName, attributeValue)}
+              onClick={e => {
+                e.preventDefault()
+                onAttributeAdd(props.entity['xml:id'], attributeName, attributeValue, props.context.websocket)
+              }}
               className="btn btn-sm btn-outline-primary">Add attribute</button>
           </div>
         </div>
@@ -112,7 +129,16 @@ function CreateAttribute (props) {
       <div className="row mt-2">
         <div className="col">
           <button type="button btn-sm"
-            onClick={() => onAttributeChange(props.entity['xml:id'], editingAttribute.name, editingAttribute.value, edit)}
+            onClick={e => {
+              e.preventDefault()
+              onAttributeChange(
+                props.entity['xml:id'],
+                editingAttribute.name,
+                editingAttribute.value,
+                edit,
+                props.context.websocket
+              )
+            }}
             className="btn btn-sm btn-outline-primary">Modify</button>
         </div>
       </div>
@@ -146,6 +172,7 @@ CreateAttribute.propTypes = {
     authors: PropTypes.array,
     annotations: PropTypes.array,
     entities: PropTypes.object,
-    configuration: PropTypes.object
+    configuration: PropTypes.object,
+    websocket: PropTypes.object
   })
 }
