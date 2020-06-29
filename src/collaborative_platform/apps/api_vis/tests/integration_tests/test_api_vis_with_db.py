@@ -423,6 +423,7 @@ class TestApiVisWithDb:
     test_parameters_list = [
         ('no_filtering', None),
         ('types', {'types': 'person'}),
+        ('users', {'users': '2'})
     ]
 
     @pytest.mark.parametrize(test_parameters_names, test_parameters_list)

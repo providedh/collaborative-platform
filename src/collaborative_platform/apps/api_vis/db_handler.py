@@ -22,6 +22,9 @@ class DbHandler:
         if 'types' in qs_parameters:
             cliques = cliques.filter(type__in=qs_parameters['types'])
 
+        if 'users' in qs_parameters:
+            cliques = cliques.filter(created_by_id__in=qs_parameters['users'])
+
         cliques = cliques.filter(
             deleted_in_commit__isnull=True,
         )
