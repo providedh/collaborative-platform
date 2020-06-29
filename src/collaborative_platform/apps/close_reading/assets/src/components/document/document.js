@@ -16,7 +16,7 @@ export default function DocumentWithContext (props) {
   )
 }
 
-function handleSelection (container, selectionEvent, onSelection, onClickOut) {
+function handleSelection (container, selectionEvent, originalContent, onSelection, onClickOut) {
   const processed = processSelection(selectionEvent)
   const domSelection = processed[0]
 
@@ -24,10 +24,12 @@ function handleSelection (container, selectionEvent, onSelection, onClickOut) {
     onClickOut()
     return
   }
+  const htmlSelection = getSelection(container, domSelection, originalContent)
+  console.log(htmlSelection, { originalContent })
 
   const selection = Selection(
     SelectionType.textSelection,
-    getSelection(container, domSelection),
+    htmlSelection,
     selectionEvent.clientX,
     selectionEvent.clientY)
 
