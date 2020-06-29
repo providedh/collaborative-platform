@@ -1,6 +1,6 @@
 import { aScheme as scheme } from './certainty_schemes.js'
 import colorForUncertainty from './color_transparency.js'
-import xml from './xml.js'
+import xml from 'common/helpers/xml.js'
 
 export default function CertaintyStyler (id, annotations, context, css) {
   const { user, configuration } = context

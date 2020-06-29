@@ -1,4 +1,4 @@
-import xml from './xml.js'
+import xml from 'common/helpers/xml.js'
 
 export const aScheme = {
   colorBefore: (id, annotations, currentUser, css, colorForUncertainty, taxonomy) => {
