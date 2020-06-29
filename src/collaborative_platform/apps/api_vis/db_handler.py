@@ -28,6 +28,9 @@ class DbHandler:
         if 'start_date' in qs_parameters:
             cliques = cliques.filter(unifications__created_on__gte=qs_parameters['start_date'])
 
+        if 'end_date' in qs_parameters:
+            cliques = cliques.filter(unifications__created_on__lte=qs_parameters['end_date'])
+
         cliques = cliques.filter(deleted_in_commit__isnull=True)
 
         cliques = cliques.distinct().order_by('id')
