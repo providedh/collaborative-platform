@@ -1,3 +1,5 @@
+import xml from 'common/helpers/xml.js'
+
 function contentsFromRange (range) {
   const fragment = range.cloneRange().cloneContents()
   const container = document.createElement('div')
@@ -14,26 +16,31 @@ function firstDisconcordance (str1, str2) {
   return maxLength
 }
 
-function getRelativePosition (source, node, offset) {
+function getRelativePosition (source, node, offset, originalContent) {
   const range = document.createRange()
   range.setStart(source, 0)
   range.setEnd(node, offset)
   const content = contentsFromRange(range)
+  const collapsed = xml.extractAndCollapseTags(originalContent)(content)
 
-  return firstDisconcordance(source.innerHTML, content)
+  return firstDisconcordance(originalContent, collapsed)
 }
 
-export function getSelection (container, selection) {
+export function getSelection (container, selection, originalContent) {
+  const xmlidReplaced = xml.replaceXmlid(originalContent)
+
   const anchorOffset = getRelativePosition(
     container,
     selection.anchorNode,
-    selection.anchorOffset
+    selection.anchorOffset,
+    xmlidReplaced
   )
 
   const focusOffset = getRelativePosition(
     container,
     selection.focusNode,
-    selection.focusOffset
+    selection.focusOffset,
+    xmlidReplaced
   )
 
   const [start, end] = (anchorOffset < focusOffset)
