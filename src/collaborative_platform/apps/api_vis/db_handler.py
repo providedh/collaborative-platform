@@ -19,6 +19,9 @@ class DbHandler:
             created_in_commit__isnull=False,
         )
 
+        if 'types' in qs_parameters:
+            cliques = cliques.filter(type__in=qs_parameters['types'])
+
         cliques = cliques.filter(
             deleted_in_commit__isnull=True,
         )
@@ -220,7 +223,7 @@ class DbHandler:
     def __create_clique(self, clique_name, clique_type):
         clique = Clique.objects.create(
             project_id=self.__project_id,
-            asserted_name=clique_name,
+            name=clique_name,
             type=clique_type,
             created_by=self.__user,
         )

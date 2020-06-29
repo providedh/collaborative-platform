@@ -30,5 +30,19 @@
       "type": "person",
       "entities": [4, 15]
     }
+  ],
+  "test_get_all_cliques_in_project_types": [
+    {
+      "id": 4,
+      "name": "fourth_clique",
+      "type": "person",
+      "entities": [3, 14]
+    },
+    {
+      "id": 6,
+      "name": "sixth_clique",
+      "type": "person",
+      "entities": [4, 15]
+    }
   ]
 }
