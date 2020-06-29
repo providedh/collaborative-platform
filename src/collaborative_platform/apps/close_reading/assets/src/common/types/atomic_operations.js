@@ -50,17 +50,23 @@ const actions = {
   entity: {
     add: {
       reference: () => ({}),
-      property: (id, properties) => ({
+      property: (id, property, value) => ({
         element_type: 'entity_property',
         method: 'POST',
         edited_element_id: id,
-        parameters: properties
+        parameters: {[property]: value}
       }),
       unification: () => ({})
     },
     modify: {
       reference: () => ({}),
-      property: () => ({}),
+      property: (id, property, value) => ({
+        element_type: 'entity_property',
+        method: 'PUT',
+        edited_element_id: id,
+        old_element_id: property,
+        parameters: {[property]: value}
+      }),
       unification: () => ({})
     },
     delete: {
