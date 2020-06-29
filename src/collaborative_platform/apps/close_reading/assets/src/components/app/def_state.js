@@ -1,4 +1,4 @@
-export default function defState (fileId, fileName, fileVersion, user, configuration) {
+export default function defState (fileId, fileName, fileVersion, user, configuration, websocket) {
   return {
     fileId,
     fileName,
@@ -9,10 +9,11 @@ export default function defState (fileId, fileName, fileVersion, user, configura
 
     context: {
       user,
+      configuration,
+      websocket,
       authors: [],
       annotations: [],
       entities: {},
-      configuration: configuration
     }
   }
 }

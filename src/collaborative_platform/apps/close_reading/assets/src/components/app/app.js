@@ -16,7 +16,15 @@ export default class App extends React.Component {
 
     const { projectId, user, fileId, fileVersion, fileName, configuration } = props
 
-    this.state = defState(fileId, fileName, fileVersion, user, configuration)
+    this.socket = websocket.socket(projectId, fileId)
+    this.state = defState(
+      fileId,
+      fileName,
+      fileVersion,
+      user,
+      configuration,
+      this.socket
+    )
 
     this.onHover = this.onHover.bind(this)
     this.onHoverOut = this.onHoverOut.bind(this)
@@ -25,7 +33,6 @@ export default class App extends React.Component {
     this.onSelection = this.onSelection.bind(this)
     this.handleWebsocketResponse = this.handleWebsocketResponse.bind(this)
 
-    this.socket = websocket.socket(projectId, fileId)
     this.socket.addCallback('onload', this.handleWebsocketResponse)
     this.socket.addCallback('onreload', this.handleWebsocketResponse)
   }
@@ -40,6 +47,7 @@ export default class App extends React.Component {
 
   handleWebsocketResponse (response) {
     // validate response
+    console.log(response)
     this.setState(prev => {
       const newState = Object.assign({}, prev)
       newState.documentContent = response.body_content
