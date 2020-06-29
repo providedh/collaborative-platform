@@ -60,7 +60,10 @@ function EntityCreationPanel (props) {
       <div className="row">
         <div className="form-group col-4">
           <button className="btn btn-outline-primary btn-sm"
-            onClick={() => props.callback(entity, attributes)}
+            onClick={e => {
+              e.preventDefault()
+              props.callback(entity, attributes)
+            }}
             type="button">Create</button>
         </div>
       </div>
