@@ -1,0 +1,67 @@
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <?xml-model href="https://providedh.ehum.psnc.pl/tei_providedh.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title>To make Spunge-Biscuit</title>
+      </titleStmt>
+      <publicationStmt>
+        <publisher>
+          <orgName>Des Zentrums für Gastrosophie</orgName>
+          <ptr target="http://gastrosophie.sbg.ac.at/"/>
+        </publisher>
+        <date when="">2014-11-13</date>
+      </publicationStmt>
+      <sourceDesc>
+        <biblStruct>
+          <monogr>
+            <title>To make Spunge-Biscuit</title>
+            <title type="alt">Biscuitteig</title>
+            <note/>
+            <author>
+              <persName xml:id="person1">
+                <forename>Brian</forename>
+                <surname>Griffin</surname>
+                <email>brian_griffin@zmyslonymail.com</email>
+              </persName>
+            </author>
+            <author>
+              <persName xml:id="person32">
+                <forename>Chris</forename>
+                <surname>Griffin</surname>
+                <email>cris_griffin@zmyslonymail.com</email>
+              </persName>
+            </author>
+            <textLang mainLang="deu"/>
+            <imprint>
+              <biblScope unit="volume">S. 077</biblScope>
+              <biblScope unit="chapter">S. 077</biblScope>
+              <biblScope unit="entry">S. 077</biblScope>
+            </imprint>
+          </monogr>
+        </biblStruct>
+        <msDesc>
+          <msIdentifier>
+            <repository>Rezeptdatenbank</repository>
+            <idno/>
+          </msIdentifier>
+        </msDesc>
+      </sourceDesc>
+    </fileDesc>
+  </teiHeader>
+  <text>
+    <body>
+      <div type="utensil">
+        <listObject type="utensilList">
+          <object type="utensil" xml:id="stift">Stift</object>
+        </listObject>
+      </div>
+      <div type="dietetic">
+        <listObject type="dieteticList"/>
+      </div>
+      <div type="recipe">
+        <p>Take the Yolks of eighteen Eggs , beat them well , the Whites of nine whip ’ d to a Froth , <name xml:id="name-1" ref="#ingredient-1">and</name> beat them well together ; put to them two Pound and two Ounces of sifted Sugar , and have ready half a Pint of Water , with three Spoonfuls of Rose-Water , boiling hot ; and as you beat the Eggs and Sugar , put in the hot Water , a little at a Time ; then set the Biscuit over the Fire , ( it must be beat in a Brass or Silver Pan ) keeping it beating , ’ till it is so hot that you can ’ t hold your <name xml:id="name-0" ref="#ingredient-0">Finger</name> in it ; then take it off , and beat it ’ till ’ tis almost cold ; then put in a Pound and Half of Flower well dry ’ d , and the Rind of two Lemmons grated . Bake it in little long Pans butter ’ d , and in a quick Oven : Sift Sugar over them before you put them in the Oven .</p>
+      </div>
+    </body>
+  </text>
+</TEI>

@@ -1,0 +1,67 @@
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <?xml-model href="https://providedh.ehum.psnc.pl/tei_providedh.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title>To make White Plum-Paste</title>
+      </titleStmt>
+      <publicationStmt>
+        <publisher>
+          <orgName>Des Zentrums für Gastrosophie</orgName>
+          <ptr target="http://gastrosophie.sbg.ac.at/"/>
+        </publisher>
+        <date when="">2014-11-12</date>
+      </publicationStmt>
+      <sourceDesc>
+        <biblStruct>
+          <monogr>
+            <title>To make White Plum-Paste</title>
+            <title type="alt">Weiße Zwetschkenpaste (Pflaumenpaste)</title>
+            <note/>
+            <author>
+              <persName xml:id="person1">
+                <forename>Meg</forename>
+                <surname>Griffin</surname>
+                <email>meg_griffin@zmyslonymail.com</email>
+              </persName>
+            </author>
+            <author>
+              <persName xml:id="person32">
+                <forename>Stewie</forename>
+                <surname>Griffin</surname>
+                <email>stewie_griffin@zmyslonymail.com</email>
+              </persName>
+            </author>
+            <textLang mainLang="deu"/>
+            <imprint>
+              <biblScope unit="volume">S. 032</biblScope>
+              <biblScope unit="chapter">S. 032</biblScope>
+              <biblScope unit="entry">S. 032</biblScope>
+            </imprint>
+          </monogr>
+        </biblStruct>
+        <msDesc>
+          <msIdentifier>
+            <repository>Rezeptdatenbank</repository>
+            <idno/>
+          </msIdentifier>
+        </msDesc>
+      </sourceDesc>
+    </fileDesc>
+  </teiHeader>
+  <text>
+    <body>
+      <div type="utensil">
+        <listObject type="utensilList">
+          <object type="utensil" xml:id="quart">Quart</object>
+        </listObject>
+      </div>
+      <div type="dietetic">
+        <listObject type="dieteticList"/>
+      </div>
+      <div type="recipe">
+        <p>Take a Pound of fine Sugar , <name xml:id="name-0" ref="#ingredient-1">and</name> a Pint of Water , or more , as the Quantity you intend to make requires ; set it on the Fire , let it boil , <name xml:id="name-1" ref="#ingredient-1">and</name> set a Pan of Water to boil ; when it boils , put in your Plums ; let them <name xml:id="name-2" ref="#ingredient-0">just</name> boil , and then take them out with a Ladle , as they flip their Skins off ; take off the Skins , and put the Plums into the Syrup ; do this as fast as you can , that they may not turn : Boil them all to Pieces ; and to a Quart of Plums put a Pint of Apple-Jelly ; boil them well together , and rub it thro ’ a Hair Sieve ; to a Pint of this put a Pound and a half of sifted Sugar ; let the Jelly boil before you shake the Sugar , and let it scald ’ till the Sugar is well melted ; skin it , put it in Pots , and dry it in the Stove .</p>
+      </div>
+    </body>
+  </text>
+</TEI>

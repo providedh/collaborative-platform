@@ -1,0 +1,156 @@
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <?xml-model href="https://providedh.ehum.psnc.pl/tei_providedh.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title>To make Pease Soop</title>
+      </titleStmt>
+      <publicationStmt>
+        <publisher>
+          <orgName>Des Zentrums für Gastrosophie</orgName>
+          <ptr target="http://gastrosophie.sbg.ac.at/"/>
+        </publisher>
+        <date when="">2015-02-11</date>
+      </publicationStmt>
+      <sourceDesc>
+        <biblStruct>
+          <monogr>
+            <title>To make Pease Soop</title>
+            <title type="alt">Erbsensuppe</title>
+            <note/>
+            <author>
+              <persName xml:id="person1">
+                <forename>Peter</forename>
+                <surname>Griffin</surname>
+                <email>peter_griffin@zmyslonymail.com</email>
+              </persName>
+            </author>
+            <author>
+              <persName xml:id="person32">
+                <forename>Lois</forename>
+                <surname>Griffin</surname>
+                <email>lois_griffin@zmyslonymail.com</email>
+              </persName>
+            </author>
+            <textLang mainLang="deu"/>
+            <imprint>
+              <biblScope unit="volume">Teil 2, S. 058</biblScope>
+              <biblScope unit="chapter">Teil 2, S. 058</biblScope>
+              <biblScope unit="entry">Teil 2, S. 058</biblScope>
+            </imprint>
+          </monogr>
+        </biblStruct>
+        <msDesc>
+          <msIdentifier>
+            <repository>Rezeptdatenbank</repository>
+            <idno/>
+          </msIdentifier>
+        </msDesc>
+        <listPerson type="personList">
+          <person xml:id="person-4">
+            <name>Butter</name>
+          </person>
+          <person xml:id="person-5">
+            <name>Sand</name>
+          </person>
+        </listPerson>
+        <listObject type="ingredientList">
+          <object type="ingredient" xml:id="ingredient-0">Rag</object>
+          <object type="ingredient" xml:id="ingredient-1">Ingwer</object>
+        </listObject>
+      </sourceDesc>
+    </fileDesc>
+    <profileDesc>
+      <particDesc>
+        <listPerson type="PROVIDEDH Annotators">
+          <person xml:id="recipe_levenshtein_matching">
+            <persName>
+              <forename>Algorithm</forename>
+              <surname>Levenshtein distance match</surname>
+              <email/>
+            </persName>
+          </person>
+          <person xml:id="second_annotator">
+            <persName>
+              <forename>Tony</forename>
+              <surname>Stark</surname>
+              <email>tony_stark@zmyslonymail.com</email>
+            </persName>
+          </person>
+        </listPerson>
+      </particDesc>
+      <textClass>
+        <classCode scheme="http://providedh.eu/uncertainty/ns/1.0">
+          <certainty ana="https://providedh-test.ehum.psnc.pl/api/projects/17/taxonomy/#incompleteness https://providedh-test.ehum.psnc.pl/api/projects/17/taxonomy/#credibility" locus="value" degree="0.8571428571428571" cert="high" resp="#recipe_levenshtein_matching" match="@ref" target="#name-4" xml:id="certainty-0" assertedValue="#met"/>
+          <certainty ana="https://providedh-test.ehum.psnc.pl/api/projects/17/taxonomy/#incompleteness" locus="value" cert="high" assertedValue="Balloons" target="#test" resp="#second_annotator" xml:id="certainty22">
+            <desc>Some important decription</desc>
+          </certainty>
+          <certainty ana="https://providedh-test.ehum.psnc.pl/api/projects/17/taxonomy/#incompleteness https://providedh-test.ehum.psnc.pl/api/projects/17/taxonomy/#invalid_category"  locus="value" cert="high" assertedValue="#ingredient-0" target="#name-8" match="@ref" resp="#second_annotator" xml:id="certainty23"/>
+          <certainty ana="https://providedh-test.ehum.psnc.pl/api/projects/17/taxonomy/#incompleteness" locus="value" cert="high" assertedValue="McDuck" target="#person-0" match="name/forename" resp="#second_annotator" xml:id="certainty24"/>
+          <certainty ana="https://providedh-test.ehum.psnc.pl/api/projects/17/taxonomy/#new_awesome_category" locus="value" cert="high" assertedValue="low" target="#certainty-10" match="@cert" resp="#xml_id_autora" xml:id="certainty25"/>
+        </classCode>
+      </textClass>
+    </profileDesc>
+  </teiHeader>
+  <text>
+    <body>
+      <div type="person">
+        <listPerson type="personList">
+          <person sex="M" age="child" resp="#second_annotator" xml:id="person-0">
+            <persName>
+              <forename>Jerry</forename>
+              <surname>Maguire</surname>
+            </persName>
+            <name>Jerry Maguire</name>
+            <birth when="2001-02-03"/>
+          </person>
+          <person resp="recipe_levenshtein_matching" xml:id="person-1">
+            <name>Ingwer</name>
+          </person>
+          <person resp="recipe_levenshtein_matching" xml:id="person-2">
+            <name>Grieben</name>
+          </person>
+          <person xml:id="person-3">
+            <name>Met</name>
+          </person>
+        </listPerson>
+      </div>
+      <div type="event">
+        <listEvent type="eventList">
+          <event xml:id="event-0">Big Bang</event>
+        </listEvent>
+      </div>
+      <div type="place">
+        <listPlace type="placeList">
+          <place xml:id="place-0">
+            <country>Poland</country>
+            <settlement>Poznań</settlement>
+            <location>
+              <geo>52.408333 16.934167</geo>
+            </location>
+            <placeName>
+              <name>PCSS</name>
+            </placeName>
+          </place>
+        </listPlace>
+      </div>
+      <div type="ingredient">
+        <listObject type="ingredientList">
+          <object type="ingredient" xml:id="ingredient-3">Met</object>
+        </listObject>
+      </div>
+      <div type="utensil">
+        <listObject>
+          <object type="utensil" xml:id="form">Form</object>
+        </listObject>
+      </div>
+      <div type="dietetic">
+        <listObject/>
+      </div>
+      <div type="recipe">
+        <p>Put three or four Pounds of <name xml:id="name-4" ref="#person-0">Jerry Maguire's</name> coarse Beef , with <name xml:id="name-17" ref="#event-0">three Pints of Pease</name> , into two <ab xml:id="ab-0">Gallons</ab> of <name xml:id="name-3" ref="#person-0">Hank Moody's</name> Water ; let it boil till the <name xml:id="name-7" ref="#ingredient-3">Meat</name> is all to <name xml:id="name-8" ref="#ingredient-0">Rags</name> ; and Half an Hour before you strain it out , put in two or three <name xml:id="name-0" ref="#place-0">Anchovies</name> ; then strain it from the Meat and Husks , and put in as much as you want <name xml:id="name-15" ref="#form">for</name> the Meal into a Sauce-pan , with an Onion stuck with Cloves , a Race of <name xml:id="name-2" ref="#ingredient-1">Ginger</name> bruis 'd , a little Fagot of Thyme , Savory , Parsley , and a little Pepper . Let it boil near Half an Hour ; stir in a Piece of Butter , and fry some forc 'd Meat Balls , Bacon and French Bread cut in Dice , with Spinage boil 'd green , to put to it in the Dish .</p>
+        <p>Some random date <date xml:id="date-0" ref="#date-0" when="2020-07-04">4th of july 2010</date> for test unlistable entities, and reference to this date <date xml:id="date-1" ref="#date-0">the exact same day</date>. Another important date <date xml:id="date-66" ref="#date-66" when="1791-05-03">3rd of may 1791</date>.</p>
+      </div>
+    </body>
+  </text>
+</TEI>

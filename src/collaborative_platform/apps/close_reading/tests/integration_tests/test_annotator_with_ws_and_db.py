@@ -157,10 +157,8 @@ class TestAnnotatorWithWsAndDb:
                         'element_type': 'tag',
                         'edited_element_id': 'name-3',
                         'parameters': {
-                            'start_pos': 313,
-                            'end_pos': 328,
-                            'new_start_pos': 272,
-                            'new_end_pos': 342,
+                            'start_pos': 272,
+                            'end_pos': 342,
                         }
                     }
                 ]
@@ -1609,10 +1607,8 @@ class TestAnnotatorWithWsAndDb30:
                     'element_type': 'tag',
                     'edited_element_id': 'name-3',
                     'parameters': {
-                        'start_pos': 313,
-                        'end_pos': 328,
-                        'new_start_pos': 272,
-                        'new_end_pos': 342,
+                        'start_pos': 272,
+                        'end_pos': 342,
                     }
                 }
             ]
@@ -2902,10 +2898,8 @@ class TestAnnotatorWithWsAndDb52:
                     'element_type': 'tag',
                     'edited_element_id': 'name-3',
                     'parameters': {
-                        'start_pos': 313,
-                        'end_pos': 328,
-                        'new_start_pos': 272,
-                        'new_end_pos': 342,
+                        'start_pos': 272,
+                        'end_pos': 342,
                     }
                 }
             ]

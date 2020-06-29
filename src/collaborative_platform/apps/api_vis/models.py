@@ -155,17 +155,16 @@ class Unification(models.Model):
     clique = models.ForeignKey(Clique, on_delete=models.CASCADE, related_name='unifications')
 
     created_by = models.ForeignKey(User, on_delete=models.SET(get_anonymous_user), related_name='created_unifications')
+    created_on = models.DateTimeField(auto_now_add=True)
     created_in_file_version = models.ForeignKey(FileVersion, on_delete=models.CASCADE,
                                                 related_name='created_unifications')
-    deleted_by = models.ForeignKey(User, default=None, null=True, on_delete=models.SET(get_anonymous_user),
-                                   related_name='deleted_unifications')
-    deleted_in_file_version = models.ForeignKey(FileVersion, default=None, null=True, on_delete=models.CASCADE,
-                                                related_name='deleted_unifications')
-
-    created_on = models.DateTimeField(auto_now_add=True)
     created_in_commit = models.ForeignKey(Commit, default=None, null=True, blank=True, on_delete=models.CASCADE,
                                           related_name='created_unifications')
+    deleted_by = models.ForeignKey(User, default=None, null=True, on_delete=models.SET(get_anonymous_user),
+                                   related_name='deleted_unifications')
     deleted_on = models.DateTimeField(null=True)
+    deleted_in_file_version = models.ForeignKey(FileVersion, default=None, null=True, on_delete=models.CASCADE,
+                                                related_name='deleted_unifications')
     deleted_in_commit = models.ForeignKey(Commit, default=None, null=True, blank=True, on_delete=models.CASCADE,
                                           related_name='deleted_unifications')
 
