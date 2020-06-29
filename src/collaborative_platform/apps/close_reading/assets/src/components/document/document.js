@@ -69,10 +69,6 @@ function Document (props) {
     useContentRendering(ref.current, props.documentContent, callbacks, props.context)
   }, [props.documentContent])
 
-  useEffect(() => {
-    ref.current.addEventListener('mouseup', e => handleSelection(ref.current, e, props.onSelection, props.onClickOut))
-  }, [])
-
   const cssClasses = [
     styles.document,
     'border',
@@ -94,7 +90,11 @@ function Document (props) {
       colorEntities={colorEntities}
       renderCertainty={renderCertainty}
       colorCertainty={colorCertainty}/>
-    <div id="document" ref={ref} className={cssClasses.join(' ')}></div>
+    <div
+      id="document"
+      ref={ref}
+      onMouseUp = {e => handleSelection(ref.current, e, props.documentContent, props.onSelection, props.onClickOut)}
+      className={cssClasses.join(' ')}></div>
   </React.Fragment>
 }
 
