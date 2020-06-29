@@ -1,15 +1,23 @@
 import CSSstyles from './css.js'
 import styleEntity from './entity_styles.js'
 import styleEntityAnnotations from './certainty_styles.js'
-import xml from './xml.js'
-import { Selection, SelectionType } from '../../common/types'
+import xml from 'common/helpers/xml.js'
+import { Selection, SelectionType } from 'common/types'
 
 export default function useContentRendering (node, documentContent, callbacks, context) {
   const css = CSSstyles({ styleContainerId: 'dynamic-styling' })
 
   css.resetStyles()
 
-  node.innerHTML = xml.replaceXmlid(documentContent)
+  const xmlidReplaced = xml.replaceXmlid(documentContent)
+  const bodyContent = xml.extractAndExpandTags(xmlidReplaced)(xmlidReplaced)
+
+  const parser = new DOMParser()
+  const xmlDoc = parser.parseFromString(bodyContent, 'text/xml')
+  const body = xmlDoc.getElementsByTagName('body')[0]
+
+  node.innerHTML = ''
+  node.appendChild(body)
   // return 0
   styleEntities(context.entities, context.configuration, css)
   styleNames(context.entities, context.configuration, css)
