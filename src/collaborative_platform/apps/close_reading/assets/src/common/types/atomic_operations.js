@@ -54,7 +54,7 @@ const actions = {
         element_type: 'entity_property',
         method: 'POST',
         edited_element_id: id,
-        parameters: {[property]: value}
+        parameters: { [property]: value }
       }),
       unification: () => ({})
     },
@@ -65,7 +65,7 @@ const actions = {
         method: 'PUT',
         edited_element_id: id,
         old_element_id: property,
-        parameters: {[property]: value}
+        parameters: { [property]: value }
       }),
       unification: () => ({})
     },
