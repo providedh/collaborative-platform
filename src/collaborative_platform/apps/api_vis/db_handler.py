@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.forms.models import model_to_dict
 from django.utils import timezone
 
@@ -31,7 +32,14 @@ class DbHandler:
         if 'end_date' in qs_parameters:
             cliques = cliques.filter(unifications__created_on__lte=qs_parameters['end_date'])
 
-        cliques = cliques.filter(deleted_in_commit__isnull=True)
+        if 'date' in qs_parameters:
+            cliques = cliques.filter(
+                Q(unifications__deleted_on__gte=qs_parameters['date']) | Q(unifications__deleted_on__isnull=True),
+                unifications__created_on__lte=qs_parameters['date'],
+            )
+
+        else:
+            cliques = cliques.filter(deleted_in_commit__isnull=True)
 
         cliques = cliques.distinct().order_by('id')
 
@@ -40,7 +48,10 @@ class DbHandler:
         for clique in cliques:
             unifications = clique.unifications
 
-            unifications = unifications.filter(deleted_in_commit__isnull=True)
+            if 'date' in qs_parameters:
+                pass
+            else:
+                unifications = unifications.filter(deleted_in_commit__isnull=True)
 
             unifications = unifications.order_by('id')
 
