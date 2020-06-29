@@ -1,11 +1,13 @@
 import copy
 import re
 
+from dateutil import parser
 from datetime import datetime
 from lxml import etree
 
 from django.http import HttpResponseBadRequest, HttpRequest, JsonResponse
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 import apps.index_and_search.models as es
 
@@ -342,7 +344,7 @@ def parse_string_to_list_of_integers(string):
 
 def parse_string_to_date(string):
     if string:
-        return datetime.strptime(string, '%Y-%m-%d.%H.%M.%S')
+        return parser.parse(string)
 
 
 def parse_string_to_int(string):

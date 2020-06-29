@@ -25,20 +25,19 @@ class DbHandler:
         if 'users' in qs_parameters:
             cliques = cliques.filter(created_by_id__in=qs_parameters['users'])
 
-        cliques = cliques.filter(
-            deleted_in_commit__isnull=True,
-        )
+        if 'start_date' in qs_parameters:
+            cliques = cliques.filter(unifications__created_on__gte=qs_parameters['start_date'])
 
-        cliques = cliques.order_by('id')
+        cliques = cliques.filter(deleted_in_commit__isnull=True)
+
+        cliques = cliques.distinct().order_by('id')
 
         serialized_cliques = []
 
         for clique in cliques:
             unifications = clique.unifications
 
-            unifications = unifications.filter(
-                deleted_in_commit__isnull=True,
-            )
+            unifications = unifications.filter(deleted_in_commit__isnull=True)
 
             unifications = unifications.order_by('id')
 

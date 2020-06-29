@@ -423,7 +423,8 @@ class TestApiVisWithDb:
     test_parameters_list = [
         ('no_filtering', None),
         ('types', {'types': 'person'}),
-        ('users', {'users': '2'})
+        ('users', {'users': '2'}),
+        ('start_date', {'start_date': '2020-06-28T12:05:30+01:00'})
     ]
 
     @pytest.mark.parametrize(test_parameters_names, test_parameters_list)
@@ -455,6 +456,9 @@ def add_qs_parameters(url, qs_parameters):
     url += '?'
 
     for parameter, value in qs_parameters.items():
+        if '+' in value:
+            value = value.replace('+', '%2B')
+
         url += f'{parameter}={value}'
 
     return url
