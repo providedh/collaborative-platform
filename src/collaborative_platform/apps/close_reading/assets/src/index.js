@@ -9,7 +9,7 @@ const appConfig = {
   user: 'annotator-1',
   fileId: window.file_id,
   fileVersion: window.file_version,
-  fileName: 'Historical file',
+  fileName: window.file_name,
   configuration: window.preferences
 }
 
