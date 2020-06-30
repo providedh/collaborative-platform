@@ -47,7 +47,7 @@ class Entity(models.Model):
 
 
 class EntityVersion(models.Model):
-    entity = models.ForeignKey(Entity, on_delete=models.CASCADE)
+    entity = models.ForeignKey(Entity, on_delete=models.CASCADE, related_name='versions')
     file_version = models.ForeignKey(FileVersion, default=None, null=True, on_delete=models.CASCADE)
 
     xml = models.TextField(blank=True, null=True)

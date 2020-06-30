@@ -101,7 +101,7 @@ class DbHandler:
 
             unifications = unifications.order_by('id')
 
-            serialized_clique = model_to_dict(clique, fields=['id', 'name', 'type'])
+            serialized_clique = model_to_dict(clique, ['id', 'name', 'type'])
 
             entities_ids = unifications.values_list('entity_id', flat=True)
             entities_ids = list(entities_ids)
@@ -110,6 +110,32 @@ class DbHandler:
             serialized_cliques.append(serialized_clique)
 
         return serialized_cliques
+
+    def get_all_entities_in_project(self, qs_parameters):
+        entities = Entity.objects.filter(
+            file__project_id=self.__project_id,
+            created_in_file_version__isnull=False,
+        )
+
+        entities = entities.filter(deleted_in_file_version__isnull=True)
+
+        entities = entities.order_by('id')
+
+        serialized_entities = []
+
+        for entity in entities:
+            serialized_entity = model_to_dict(entity, ['id', 'type'])
+
+            try:
+                entity_name = entity.versions.latest('id').properties.get(name='name').get_value()
+
+            except EntityProperty.DoesNotExist:
+                entity_name = None
+
+            serialized_entity.update({'name': entity_name})
+            serialized_entities.append(serialized_entity)
+
+        return serialized_entities
 
     def create_clique(self, request_data):
         clique_name = self.__get_clique_name(request_data)

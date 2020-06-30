@@ -22,5 +22,5 @@ urlpatterns = [
     # path('projects/<int:project_id>/commits/uncommitted_changes/', api.uncommitted_changes),
     path('projects/<int:project_id>/commits/', api.commits),
     # path('projects/<int:project_id>/entities/unbound_entities/', api.project_unbound_entities),
-    # path('projects/<int:project_id>/entities/', api.project_entities),
+    path('projects/<int:project_id>/entities/', api.project_entities),
 ]
