@@ -38,6 +38,23 @@ class DbHandler:
                 unifications__created_on__lte=qs_parameters['date'],
             )
 
+        elif 'project_version' in qs_parameters:
+            project_version_nr = qs_parameters['project_version']
+            file_version_counter, commit_counter = parse_project_version(project_version_nr)
+
+            project_version = ProjectVersion.objects.get(
+                project_id=self.__project_id,
+                commit_counter=commit_counter,
+                commit__isnull=False,
+            )
+
+            commit_date = project_version.commit.date
+
+            cliques = cliques.filter(
+                Q(unifications__deleted_on__gte=commit_date) | Q(unifications__deleted_on__isnull=True),
+                unifications__created_on__lte=commit_date,
+            )
+
         else:
             cliques = cliques.filter(deleted_in_commit__isnull=True)
 
@@ -48,8 +65,27 @@ class DbHandler:
         for clique in cliques:
             unifications = clique.unifications
 
+            if 'users' in qs_parameters:
+                unifications = unifications.filter(created_by_id__in=qs_parameters['users'])
+
+            if 'start_date' in qs_parameters:
+                unifications = unifications.filter(created_on__gte=qs_parameters['start_date'])
+
+            if 'end_date' in qs_parameters:
+                unifications = unifications.filter(created_on__lte=qs_parameters['end_date'])
+
             if 'date' in qs_parameters:
-                pass
+                unifications = unifications.filter(
+                    Q(deleted_on__gte=qs_parameters['date']) | Q(deleted_by__isnull=True),
+                    created_on__lte=qs_parameters['date'],
+                )
+
+            elif 'project_version' in qs_parameters:
+                unifications = unifications.filter(
+                    Q(deleted_on__gte=commit_date) | Q(deleted_by__isnull=True),
+                    created_on__lte=commit_date,
+                )
+
             else:
                 unifications = unifications.filter(deleted_in_commit__isnull=True)
 

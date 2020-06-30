@@ -148,5 +148,37 @@
       "type": "person",
       "entities": [5, 16]
     }
+  ],
+  "test_get_all_cliques_in_project_project_version": [
+    {
+      "id": 1,
+      "name": "first_clique",
+      "type": "ingredient",
+      "entities": [11, 18]
+    },
+    {
+      "id": 2,
+      "name": "second_clique",
+      "type": "ingredient",
+      "entities": [18, 20]
+    },
+    {
+      "id": 3,
+      "name": "third_clique",
+      "type": "ingredient",
+      "entities": [20, 11]
+    },
+    {
+      "id": 4,
+      "name": "fourth_clique",
+      "type": "person",
+      "entities": [3, 14]
+    },
+    {
+      "id": 5,
+      "name": "fifth_clique",
+      "type": "person",
+      "entities": [5, 16]
+    }
   ]
 }
