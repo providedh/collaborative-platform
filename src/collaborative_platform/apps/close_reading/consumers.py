@@ -13,7 +13,7 @@ from apps.exceptions import BadRequest, Forbidden, NotModified
 from apps.files_management.models import File
 from apps.projects.models import Contributor, Project
 
-from .models import RoomPresence
+from .models import Operation, RoomPresence
 
 
 logger = logging.getLogger('annotator')
@@ -112,8 +112,9 @@ class AnnotatorConsumer(WebsocketConsumer):
         self.close()
 
         remain_users = self.__count_remain_users()
+        pending_operations = self.__count_pending_operations()
 
-        if not remain_users and self.__response_generator:
+        if not remain_users and not pending_operations and self.__response_generator:
             self.__response_generator.remove_xml_content()
 
     def __remove_user_from_room_group(self):
@@ -143,6 +144,14 @@ class AnnotatorConsumer(WebsocketConsumer):
         logger.info(f"In room: '{self.__room_name}' left: {len(remain_users)} users")
 
         return len(remain_users)
+
+    def __count_pending_operations(self):
+        operations = Operation.objects.filter(file_id=self.__file_id)
+        operations_number = operations.count()
+
+        logger.info(f"File with id: {self.__file_id} have {operations_number} pending operations")
+
+        return operations_number
 
     def receive(self, text_data=None, bytes_data=None):
         if text_data == '"heartbeat"':
