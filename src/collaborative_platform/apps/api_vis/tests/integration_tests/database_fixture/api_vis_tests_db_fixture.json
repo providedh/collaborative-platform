@@ -428,6 +428,276 @@
   }
 },
 {
+  "model": "api_vis.entityversion",
+  "pk": 43,
+  "fields": {
+    "entity": 22,
+    "file_version": 7,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 44,
+  "fields": {
+    "entity": 1,
+    "file_version": 7,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 45,
+  "fields": {
+    "entity": 2,
+    "file_version": 7,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 46,
+  "fields": {
+    "entity": 3,
+    "file_version": 7,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 47,
+  "fields": {
+    "entity": 4,
+    "file_version": 7,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 48,
+  "fields": {
+    "entity": 5,
+    "file_version": 7,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 49,
+  "fields": {
+    "entity": 6,
+    "file_version": 7,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 50,
+  "fields": {
+    "entity": 7,
+    "file_version": 7,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 51,
+  "fields": {
+    "entity": 8,
+    "file_version": 7,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 52,
+  "fields": {
+    "entity": 9,
+    "file_version": 7,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 53,
+  "fields": {
+    "entity": 10,
+    "file_version": 7,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 54,
+  "fields": {
+    "entity": 11,
+    "file_version": 7,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 55,
+  "fields": {
+    "entity": 12,
+    "file_version": 7,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 56,
+  "fields": {
+    "entity": 13,
+    "file_version": 7,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 57,
+  "fields": {
+    "entity": 22,
+    "file_version": 8,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 58,
+  "fields": {
+    "entity": 1,
+    "file_version": 8,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 59,
+  "fields": {
+    "entity": 2,
+    "file_version": 8,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 60,
+  "fields": {
+    "entity": 3,
+    "file_version": 8,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 61,
+  "fields": {
+    "entity": 4,
+    "file_version": 8,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 62,
+  "fields": {
+    "entity": 5,
+    "file_version": 8,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 63,
+  "fields": {
+    "entity": 6,
+    "file_version": 8,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 64,
+  "fields": {
+    "entity": 7,
+    "file_version": 8,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 65,
+  "fields": {
+    "entity": 8,
+    "file_version": 8,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 66,
+  "fields": {
+    "entity": 9,
+    "file_version": 8,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 67,
+  "fields": {
+    "entity": 10,
+    "file_version": 8,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 68,
+  "fields": {
+    "entity": 11,
+    "file_version": 8,
+    "xml": null,
+    "context": null
+  }
+},
+{
+  "model": "api_vis.entityversion",
+  "pk": 69,
+  "fields": {
+    "entity": 12,
+    "file_version": 8,
+    "xml": null,
+    "context": null
+  }
+},
+{
   "model": "api_vis.commit",
   "pk": 1,
   "fields": {
@@ -491,7 +761,7 @@
     "name": "group_0_long_annotated_0_modified_xml",
     "deleted": false,
     "deleted_on": null,
-    "version_number": 2,
+    "version_number": 4,
     "parent_dir": 1
   }
 },
@@ -534,7 +804,7 @@
   "fields": {
     "file": 1,
     "xml_id_base": "name",
-    "xml_id_number": 8
+    "xml_id_number": 9
   }
 },
 {
@@ -552,7 +822,7 @@
   "fields": {
     "file": 1,
     "xml_id_base": "ab",
-    "xml_id_number": 1
+    "xml_id_number": 3
   }
 },
 {
@@ -597,7 +867,7 @@
   "fields": {
     "file": 1,
     "xml_id_base": "person",
-    "xml_id_number": 6
+    "xml_id_number": 7
   }
 },
 {
@@ -1011,6 +1281,38 @@
   }
 },
 {
+  "model": "projects.projectversion",
+  "pk": 13,
+  "fields": {
+    "project": 1,
+    "file_version_counter": 7,
+    "commit": null,
+    "commit_counter": 5,
+    "date": "2020-06-30T10:28:33.013Z",
+    "file_versions": [
+      2,
+      4,
+      6
+    ]
+  }
+},
+{
+  "model": "projects.projectversion",
+  "pk": 14,
+  "fields": {
+    "project": 1,
+    "file_version_counter": 8,
+    "commit": null,
+    "commit_counter": 5,
+    "date": "2020-06-30T10:29:12.962Z",
+    "file_versions": [
+      4,
+      6,
+      7
+    ]
+  }
+},
+{
   "model": "projects.taxonomy",
   "pk": 1,
   "fields": {
@@ -1161,7 +1463,7 @@
   "pk": 2,
   "fields": {
     "password": "pbkdf2_sha256$150000$ypZrXP1a5q6Q$YgcS5xyWasdPt2q8w8gMm1NY6s3eRft0yK0ik/Y3R5I=",
-    "last_login": "2020-06-28T11:20:08.054Z",
+    "last_login": "2020-06-30T10:27:19.588Z",
     "is_superuser": false,
     "username": "tony_stark",
     "first_name": "Tony",
@@ -1369,9 +1671,9 @@
     "xml_id": "ingredient-2",
     "created_by": 1,
     "created_in_file_version": 1,
-    "deleted_by": null,
-    "deleted_in_file_version": null,
-    "deleted_on": null
+    "deleted_by": 2,
+    "deleted_in_file_version": 8,
+    "deleted_on": "2020-06-30T10:29:12.973Z"
   }
 },
 {
@@ -1481,6 +1783,20 @@
     "xml_id": "ingredient-1",
     "created_by": 1,
     "created_in_file_version": 5,
+    "deleted_by": null,
+    "deleted_in_file_version": null,
+    "deleted_on": null
+  }
+},
+{
+  "model": "api_vis.entity",
+  "pk": 22,
+  "fields": {
+    "file": 1,
+    "type": "person",
+    "xml_id": "person-6",
+    "created_by": 2,
+    "created_in_file_version": 7,
     "deleted_by": null,
     "deleted_in_file_version": null,
     "deleted_on": null
@@ -2999,6 +3315,1014 @@
   }
 },
 {
+  "model": "api_vis.entityproperty",
+  "pk": 73,
+  "fields": {
+    "entity": 22,
+    "entity_version": null,
+    "xpath": "",
+    "name": "forename",
+    "type": "TypeChoice.str",
+    "value_str": "Bugs",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 2,
+    "created_in_file_version": 7,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 74,
+  "fields": {
+    "entity": 22,
+    "entity_version": null,
+    "xpath": "",
+    "name": "surname",
+    "type": "TypeChoice.str",
+    "value_str": "Bunny",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 2,
+    "created_in_file_version": 7,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 75,
+  "fields": {
+    "entity": 22,
+    "entity_version": null,
+    "xpath": "",
+    "name": "sex",
+    "type": "TypeChoice.str",
+    "value_str": "M",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 2,
+    "created_in_file_version": 7,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 76,
+  "fields": {
+    "entity": 1,
+    "entity_version": 44,
+    "xpath": "./country",
+    "name": "country",
+    "type": "TypeChoice.str",
+    "value_str": "Poland",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 77,
+  "fields": {
+    "entity": 1,
+    "entity_version": 44,
+    "xpath": "./settlement",
+    "name": "settlement",
+    "type": "TypeChoice.str",
+    "value_str": "Pozna\u0144",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 78,
+  "fields": {
+    "entity": 1,
+    "entity_version": 44,
+    "xpath": "./location/geo",
+    "name": "geo",
+    "type": "TypeChoice.Point",
+    "value_str": null,
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": "SRID=4326;POINT (52.408333 16.934167)",
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 79,
+  "fields": {
+    "entity": 1,
+    "entity_version": 44,
+    "xpath": "./placeName/name",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "PCSS",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 80,
+  "fields": {
+    "entity": 2,
+    "entity_version": 45,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Big Bang",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 81,
+  "fields": {
+    "entity": 3,
+    "entity_version": 46,
+    "xpath": "./name",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Butter",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 82,
+  "fields": {
+    "entity": 4,
+    "entity_version": 47,
+    "xpath": "./name",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Sand",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 83,
+  "fields": {
+    "entity": 5,
+    "entity_version": 48,
+    "xpath": "@sex",
+    "name": "sex",
+    "type": "TypeChoice.str",
+    "value_str": "M",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 2,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 84,
+  "fields": {
+    "entity": 5,
+    "entity_version": 48,
+    "xpath": "@age",
+    "name": "age",
+    "type": "TypeChoice.str",
+    "value_str": "child",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 2,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 85,
+  "fields": {
+    "entity": 5,
+    "entity_version": 48,
+    "xpath": "./persName/forename",
+    "name": "forename",
+    "type": "TypeChoice.str",
+    "value_str": "Jerry",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 2,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 86,
+  "fields": {
+    "entity": 5,
+    "entity_version": 48,
+    "xpath": "./persName/surname",
+    "name": "surname",
+    "type": "TypeChoice.str",
+    "value_str": "Maguire",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 2,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 87,
+  "fields": {
+    "entity": 5,
+    "entity_version": 48,
+    "xpath": "./birth/@when",
+    "name": "birth",
+    "type": "TypeChoice.date",
+    "value_str": null,
+    "value_int": null,
+    "value_float": null,
+    "value_date": "2001-02-03",
+    "value_time": null,
+    "value_point": null,
+    "created_by": 2,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 88,
+  "fields": {
+    "entity": 5,
+    "entity_version": 48,
+    "xpath": "./name",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Jerry Maguire",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 2,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 89,
+  "fields": {
+    "entity": 6,
+    "entity_version": 49,
+    "xpath": "./name",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Ingwer",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 90,
+  "fields": {
+    "entity": 7,
+    "entity_version": 50,
+    "xpath": "./name",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Grieben",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 91,
+  "fields": {
+    "entity": 8,
+    "entity_version": 51,
+    "xpath": "./name",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Met",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 92,
+  "fields": {
+    "entity": 9,
+    "entity_version": 52,
+    "xpath": "@when",
+    "name": "when",
+    "type": "TypeChoice.date",
+    "value_str": null,
+    "value_int": null,
+    "value_float": null,
+    "value_date": "2020-07-04",
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 93,
+  "fields": {
+    "entity": 9,
+    "entity_version": 52,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "4th of july 2010",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 94,
+  "fields": {
+    "entity": 10,
+    "entity_version": 53,
+    "xpath": "@when",
+    "name": "when",
+    "type": "TypeChoice.date",
+    "value_str": null,
+    "value_int": null,
+    "value_float": null,
+    "value_date": "1791-05-03",
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 95,
+  "fields": {
+    "entity": 10,
+    "entity_version": 53,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "3rd of may 1791",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 96,
+  "fields": {
+    "entity": 11,
+    "entity_version": 54,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Rag",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 97,
+  "fields": {
+    "entity": 12,
+    "entity_version": 55,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Ingwer",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 98,
+  "fields": {
+    "entity": 13,
+    "entity_version": 56,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Met",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": 2,
+    "deleted_in_file_version": 8
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 99,
+  "fields": {
+    "entity": 1,
+    "entity_version": 58,
+    "xpath": "./country",
+    "name": "country",
+    "type": "TypeChoice.str",
+    "value_str": "Poland",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 100,
+  "fields": {
+    "entity": 1,
+    "entity_version": 58,
+    "xpath": "./settlement",
+    "name": "settlement",
+    "type": "TypeChoice.str",
+    "value_str": "Pozna\u0144",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 101,
+  "fields": {
+    "entity": 1,
+    "entity_version": 58,
+    "xpath": "./location/geo",
+    "name": "geo",
+    "type": "TypeChoice.Point",
+    "value_str": null,
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": "SRID=4326;POINT (52.408333 16.934167)",
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 102,
+  "fields": {
+    "entity": 1,
+    "entity_version": 58,
+    "xpath": "./placeName/name",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "PCSS",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 103,
+  "fields": {
+    "entity": 2,
+    "entity_version": 59,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Big Bang",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 104,
+  "fields": {
+    "entity": 3,
+    "entity_version": 60,
+    "xpath": "./name",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Butter",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 105,
+  "fields": {
+    "entity": 4,
+    "entity_version": 61,
+    "xpath": "./name",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Sand",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 106,
+  "fields": {
+    "entity": 5,
+    "entity_version": 62,
+    "xpath": "@sex",
+    "name": "sex",
+    "type": "TypeChoice.str",
+    "value_str": "M",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 2,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 107,
+  "fields": {
+    "entity": 5,
+    "entity_version": 62,
+    "xpath": "@age",
+    "name": "age",
+    "type": "TypeChoice.str",
+    "value_str": "child",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 2,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 108,
+  "fields": {
+    "entity": 5,
+    "entity_version": 62,
+    "xpath": "./persName/forename",
+    "name": "forename",
+    "type": "TypeChoice.str",
+    "value_str": "Jerry",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 2,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 109,
+  "fields": {
+    "entity": 5,
+    "entity_version": 62,
+    "xpath": "./persName/surname",
+    "name": "surname",
+    "type": "TypeChoice.str",
+    "value_str": "Maguire",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 2,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 110,
+  "fields": {
+    "entity": 5,
+    "entity_version": 62,
+    "xpath": "./birth/@when",
+    "name": "birth",
+    "type": "TypeChoice.date",
+    "value_str": null,
+    "value_int": null,
+    "value_float": null,
+    "value_date": "2001-02-03",
+    "value_time": null,
+    "value_point": null,
+    "created_by": 2,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 111,
+  "fields": {
+    "entity": 5,
+    "entity_version": 62,
+    "xpath": "./name",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Jerry Maguire",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 2,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 112,
+  "fields": {
+    "entity": 6,
+    "entity_version": 63,
+    "xpath": "./name",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Ingwer",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 113,
+  "fields": {
+    "entity": 7,
+    "entity_version": 64,
+    "xpath": "./name",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Grieben",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 114,
+  "fields": {
+    "entity": 8,
+    "entity_version": 65,
+    "xpath": "./name",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Met",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 115,
+  "fields": {
+    "entity": 9,
+    "entity_version": 66,
+    "xpath": "@when",
+    "name": "when",
+    "type": "TypeChoice.date",
+    "value_str": null,
+    "value_int": null,
+    "value_float": null,
+    "value_date": "2020-07-04",
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 116,
+  "fields": {
+    "entity": 9,
+    "entity_version": 66,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "4th of july 2010",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 117,
+  "fields": {
+    "entity": 10,
+    "entity_version": 67,
+    "xpath": "@when",
+    "name": "when",
+    "type": "TypeChoice.date",
+    "value_str": null,
+    "value_int": null,
+    "value_float": null,
+    "value_date": "1791-05-03",
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 118,
+  "fields": {
+    "entity": 10,
+    "entity_version": 67,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "3rd of may 1791",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 119,
+  "fields": {
+    "entity": 11,
+    "entity_version": 68,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Rag",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 120,
+  "fields": {
+    "entity": 12,
+    "entity_version": 69,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Ingwer",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
   "model": "api_vis.clique",
   "pk": 1,
   "fields": {
@@ -3803,6 +5127,238 @@
   }
 },
 {
+  "model": "api_vis.certainty",
+  "pk": 21,
+  "fields": {
+    "file": 1,
+    "file_version": 7,
+    "xml_id": "certainty-0",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-3",
+    "target_match": "@ref",
+    "asserted_value": "#met",
+    "description": null,
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null,
+    "categories": [
+      2,
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 22,
+  "fields": {
+    "file": 1,
+    "file_version": 7,
+    "xml_id": "certainty-1",
+    "locus": "value",
+    "cert": "high",
+    "degree": null,
+    "target_xml_id": "test",
+    "target_match": null,
+    "asserted_value": "Balloons",
+    "description": "Some important decription",
+    "created_by": 2,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 23,
+  "fields": {
+    "file": 1,
+    "file_version": 7,
+    "xml_id": "certainty-2",
+    "locus": "value",
+    "cert": "high",
+    "degree": null,
+    "target_xml_id": "name-5",
+    "target_match": "@ref",
+    "asserted_value": "#ingredient-0",
+    "description": null,
+    "created_by": 2,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 24,
+  "fields": {
+    "file": 1,
+    "file_version": 7,
+    "xml_id": "certainty-3",
+    "locus": "value",
+    "cert": "high",
+    "degree": null,
+    "target_xml_id": "person-2",
+    "target_match": "name/forename",
+    "asserted_value": "McDuck",
+    "description": null,
+    "created_by": 2,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 25,
+  "fields": {
+    "file": 1,
+    "file_version": 7,
+    "xml_id": "certainty-4",
+    "locus": "value",
+    "cert": "high",
+    "degree": null,
+    "target_xml_id": "certainty-10",
+    "target_match": "@cert",
+    "asserted_value": "low",
+    "description": null,
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null,
+    "categories": [
+      5
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 26,
+  "fields": {
+    "file": 1,
+    "file_version": 8,
+    "xml_id": "certainty-0",
+    "locus": "value",
+    "cert": "high",
+    "degree": 0.857142857142857,
+    "target_xml_id": "name-3",
+    "target_match": "@ref",
+    "asserted_value": "#met",
+    "description": null,
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null,
+    "categories": [
+      2,
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 27,
+  "fields": {
+    "file": 1,
+    "file_version": 8,
+    "xml_id": "certainty-1",
+    "locus": "value",
+    "cert": "high",
+    "degree": null,
+    "target_xml_id": "test",
+    "target_match": null,
+    "asserted_value": "Balloons",
+    "description": "Some important decription",
+    "created_by": 2,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 28,
+  "fields": {
+    "file": 1,
+    "file_version": 8,
+    "xml_id": "certainty-2",
+    "locus": "value",
+    "cert": "high",
+    "degree": null,
+    "target_xml_id": "name-5",
+    "target_match": "@ref",
+    "asserted_value": "#ingredient-0",
+    "description": null,
+    "created_by": 2,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 29,
+  "fields": {
+    "file": 1,
+    "file_version": 8,
+    "xml_id": "certainty-3",
+    "locus": "value",
+    "cert": "high",
+    "degree": null,
+    "target_xml_id": "person-2",
+    "target_match": "name/forename",
+    "asserted_value": "McDuck",
+    "description": null,
+    "created_by": 2,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null,
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 30,
+  "fields": {
+    "file": 1,
+    "file_version": 8,
+    "xml_id": "certainty-4",
+    "locus": "value",
+    "cert": "high",
+    "degree": null,
+    "target_xml_id": "certainty-10",
+    "target_match": "@cert",
+    "asserted_value": "low",
+    "description": null,
+    "created_by": 1,
+    "created_in_file_version": 1,
+    "deleted_by": null,
+    "deleted_in_file_version": null,
+    "categories": [
+      5
+    ]
+  }
+},
+{
   "model": "core.profile",
   "pk": 1,
   "fields": {
@@ -3918,6 +5474,32 @@
     "file": 3,
     "number": 2,
     "creation_date": "2020-06-26T12:37:19.359Z",
+    "created_by": 2,
+    "message": null
+  }
+},
+{
+  "model": "files_management.fileversion",
+  "pk": 7,
+  "fields": {
+    "upload": "uploaded_files/fac8aea8cbc5b975dc506dcd7ea3e63db4152900b77d8ebcffc7db109d08c954be973604e9a2b_Ni5cPj6",
+    "hash": "fac8aea8cbc5b975dc506dcd7ea3e63db4152900b77d8ebcffc7db109d08c954be973604e9a2b6989c936210e7ec38a4e722623142213c2ed953988b8a5130ca",
+    "file": 1,
+    "number": 3,
+    "creation_date": "2020-06-30T10:28:33.004Z",
+    "created_by": 2,
+    "message": null
+  }
+},
+{
+  "model": "files_management.fileversion",
+  "pk": 8,
+  "fields": {
+    "upload": "uploaded_files/36014bdfac99a08489ed0d47212e8a25b551db69b778c3509a4f73bfb9ce6a849986fb7ac1230_Tc7EgBL",
+    "hash": "36014bdfac99a08489ed0d47212e8a25b551db69b778c3509a4f73bfb9ce6a849986fb7ac12300ab7b9305e2218a95171d0736bfebe47d7011f0667ee02ddc06",
+    "file": 1,
+    "number": 4,
+    "creation_date": "2020-06-30T10:29:12.953Z",
     "created_by": 2,
     "message": null
   }
@@ -4090,6 +5672,36 @@
     "user": 2,
     "user_name": "Tony Stark",
     "action_text": "File migrated: Appended TEI ProvideDH schema. Reformatted xml. Corrected xml:ids for project entities. Moved elements from file to database. "
+  }
+},
+{
+  "model": "projects.activity",
+  "pk": 11,
+  "fields": {
+    "project": 1,
+    "date": "2020-06-30T10:28:33.150Z",
+    "related_file": 1,
+    "related_file_name": "group_0_long_annotated_0_modified_xml",
+    "related_dir": null,
+    "related_dir_name": null,
+    "user": 2,
+    "user_name": "Tony Stark",
+    "action_text": "created version number 3 of"
+  }
+},
+{
+  "model": "projects.activity",
+  "pk": 12,
+  "fields": {
+    "project": 1,
+    "date": "2020-06-30T10:29:13.156Z",
+    "related_file": 1,
+    "related_file_name": "group_0_long_annotated_0_modified_xml",
+    "related_dir": null,
+    "related_dir_name": null,
+    "user": 2,
+    "user_name": "Tony Stark",
+    "action_text": "created version number 4 of"
   }
 }
 ]

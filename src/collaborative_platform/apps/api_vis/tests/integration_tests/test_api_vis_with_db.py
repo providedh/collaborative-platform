@@ -252,7 +252,7 @@ class TestApiVisWithDb:
         )
 
         last_project_version = project.versions.order_by('-id')[0]
-        assert last_project_version.file_version_counter == 6
+        assert last_project_version.file_version_counter == 8
         assert last_project_version.commit_counter == 5
 
         cliques_committed = Clique.objects.filter(
@@ -284,7 +284,7 @@ class TestApiVisWithDb:
         )
 
         last_project_version = project.versions.order_by('-id')[0]
-        assert last_project_version.file_version_counter == 6
+        assert last_project_version.file_version_counter == 8
         assert last_project_version.commit_counter == 6
 
         cliques = Clique.objects.all()

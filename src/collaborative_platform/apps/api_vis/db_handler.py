@@ -33,9 +33,19 @@ class DbHandler:
             cliques = cliques.filter(unifications__created_on__lte=qs_parameters['end_date'])
 
         if 'date' in qs_parameters:
+            date = qs_parameters['date']
+
+            project_version = ProjectVersion.objects.filter(
+                project_id=self.__project_id,
+                date__lte=date,
+                commit__isnull=False,
+            ).latest('id')
+
+            commit = project_version.commit
+
             cliques = cliques.filter(
-                Q(unifications__deleted_on__gte=qs_parameters['date']) | Q(unifications__deleted_on__isnull=True),
-                unifications__created_on__lte=qs_parameters['date'],
+                Q(unifications__deleted_in_commit_id__gte=commit.id) | Q(unifications__deleted_in_commit__isnull=True),
+                unifications__created_in_commit_id__lte=commit.id,
             )
 
         elif 'project_version' in qs_parameters:
@@ -48,11 +58,11 @@ class DbHandler:
                 commit__isnull=False,
             )
 
-            commit_date = project_version.commit.date
+            commit = project_version.commit
 
             cliques = cliques.filter(
-                Q(unifications__deleted_on__gte=commit_date) | Q(unifications__deleted_on__isnull=True),
-                unifications__created_on__lte=commit_date,
+                Q(unifications__deleted_in_commit_id__gte=commit.id) | Q(unifications__deleted_in_commit__isnull=True),
+                unifications__created_in_commit_id__lte=commit.id,
             )
 
         else:
@@ -76,14 +86,14 @@ class DbHandler:
 
             if 'date' in qs_parameters:
                 unifications = unifications.filter(
-                    Q(deleted_on__gte=qs_parameters['date']) | Q(deleted_by__isnull=True),
+                    Q(deleted_on__gte=qs_parameters['date']) | Q(deleted_on__isnull=True),
                     created_on__lte=qs_parameters['date'],
                 )
 
             elif 'project_version' in qs_parameters:
                 unifications = unifications.filter(
-                    Q(deleted_on__gte=commit_date) | Q(deleted_by__isnull=True),
-                    created_on__lte=commit_date,
+                    Q(deleted_in_commit_id__gte=commit.id) | Q(deleted_in_commit_id__isnull=True),
+                    created_in_commit_id__lte=commit.id,
                 )
 
             else:
