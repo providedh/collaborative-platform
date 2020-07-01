@@ -139,6 +139,21 @@ class DbHandler:
                 versions__file_version_id__in=file_versions_ids
             )
 
+        elif 'date' in qs_parameters:
+            date = qs_parameters['date']
+
+            project_version = ProjectVersion.objects.filter(
+                project_id=self.__project_id,
+                date__lte=date,
+                commit__isnull=False,
+            ).latest('id')
+
+            file_versions_ids = project_version.file_versions.values_list('id', flat=True)
+
+            entities = entities.filter(
+                versions__file_version_id__in=file_versions_ids
+            )
+
         else:
             entities = entities.filter(deleted_in_file_version__isnull=True)
 

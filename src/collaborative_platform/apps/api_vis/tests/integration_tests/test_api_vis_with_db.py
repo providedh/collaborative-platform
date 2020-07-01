@@ -459,7 +459,7 @@ class TestApiVisWithDb:
         ('no_filtering', None),
         ('types', {'types': 'person'}),
         ('users', {'users': '2'}),
-        # ('date', {'date': '2020-06-28T12:15:00+01:00'}),
+        ('date', {'date': '2020-06-30T11:29:00+01:00'}),
         ('project_version', {'project_version': '7.5'})
     ]
 
