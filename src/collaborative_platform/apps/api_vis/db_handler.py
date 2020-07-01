@@ -117,6 +117,9 @@ class DbHandler:
             created_in_file_version__isnull=False,
         )
 
+        if 'types' in qs_parameters:
+            entities = entities.filter(type__in=qs_parameters['types'])
+
         entities = entities.filter(deleted_in_file_version__isnull=True)
 
         entities = entities.order_by('id')
