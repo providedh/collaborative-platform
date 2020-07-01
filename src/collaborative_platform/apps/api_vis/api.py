@@ -156,6 +156,7 @@ def project_entities(request, project_id):
         else:
             return JsonResponse(response, safe=False)
 
+
 @login_required
 @objects_exists
 @user_has_access('RW')

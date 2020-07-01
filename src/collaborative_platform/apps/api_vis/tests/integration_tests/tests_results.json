@@ -285,5 +285,14 @@
     {"id": 19, "name": "Sand", "type": "ingredient"},
     {"id": 21, "name": "Sand", "type": "ingredient"},
     {"id": 22, "name": null, "type": "person"}
+  ],
+  "test_get_unbound_entities_in_project_types": [
+    {"id": 5, "name": "Jerry Maguire", "type": "person"},
+    {"id": 6, "name": "Ingwer", "type": "person"},
+    {"id": 7, "name": "Grieben", "type": "person"},
+    {"id": 8, "name": "Met", "type": "person"},
+    {"id": 16, "name": "Grumpy", "type": "person"},
+    {"id": 17, "name": "Sleepy", "type": "person"},
+    {"id": 22, "name": null, "type": "person"}
   ]
 }
