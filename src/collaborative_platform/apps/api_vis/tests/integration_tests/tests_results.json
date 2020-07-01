@@ -223,5 +223,28 @@
     {"id": 15, "name": "Doc", "type": "person"},
     {"id": 16, "name": "Grumpy", "type": "person"},
     {"id": 22, "name": null, "type": "person"}
+  ],
+  "test_get_all_entities_in_project_project_version": [
+    {"id": 1, "name": "PCSS", "type": "place"},
+    {"id": 2, "name": "Big Bang", "type": "event"},
+    {"id": 3, "name": "Butter", "type": "person"},
+    {"id": 4, "name": "Sand", "type": "person"},
+    {"id": 5, "name": "Jerry Maguire", "type": "person"},
+    {"id": 6, "name": "Ingwer", "type": "person"},
+    {"id": 7, "name": "Grieben", "type": "person"},
+    {"id": 8, "name": "Met", "type": "person"},
+    {"id": 9, "name": "4th of july 2010", "type": "date"},
+    {"id": 10, "name": "3rd of may 1791", "type": "date"},
+    {"id": 11, "name": "Rag", "type": "ingredient"},
+    {"id": 12, "name": "Ingwer", "type": "ingredient"},
+    {"id": 13, "name": "Met", "type": "ingredient"},
+    {"id": 14, "name": "Snow white", "type": "person"},
+    {"id": 15, "name": "Doc", "type": "person"},
+    {"id": 16, "name": "Grumpy", "type": "person"},
+    {"id": 17, "name": "Sleepy", "type": "person"},
+    {"id": 18, "name": "Jus", "type": "ingredient"},
+    {"id": 19, "name": "Sand", "type": "ingredient"},
+    {"id": 20, "name": "Ingwer", "type": "ingredient"},
+    {"id": 21, "name": "Sand", "type": "ingredient"}
   ]
 }

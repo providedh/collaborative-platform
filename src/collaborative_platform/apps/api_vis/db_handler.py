@@ -123,7 +123,24 @@ class DbHandler:
         if 'users' in qs_parameters:
             entities = entities.filter(created_by_id__in=qs_parameters['users'])
 
-        entities = entities.filter(deleted_in_file_version__isnull=True)
+        if 'project_version' in qs_parameters:
+            project_version_nr = qs_parameters['project_version']
+            file_version_counter, commit_counter = parse_project_version(project_version_nr)
+
+            project_version = ProjectVersion.objects.get(
+                project_id=self.__project_id,
+                commit_counter=commit_counter,
+                file_version_counter=file_version_counter
+            )
+
+            file_versions_ids = project_version.file_versions.values_list('id', flat=True)
+
+            entities = entities.filter(
+                versions__file_version_id__in=file_versions_ids
+            )
+
+        else:
+            entities = entities.filter(deleted_in_file_version__isnull=True)
 
         entities = entities.order_by('id')
 
