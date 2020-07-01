@@ -512,7 +512,7 @@ class TestAnnotatorWithWsAndDb7:
         assert date_entity_in_db.deleted_by is None
 
         date_entity_properties_in_db = EntityProperty.objects.filter(
-            entity_version=date_entity_in_db.entityversion_set.all().order_by('-id')[0]
+            entity_version=date_entity_in_db.versions.latest('id')
         )
 
         for entity_property in date_entity_properties_in_db:
@@ -570,7 +570,7 @@ class TestAnnotatorWithWsAndDb8:
         assert date_entity_in_db.deleted_by is None
 
         date_entity_properties_in_db = EntityProperty.objects.filter(
-            entity_version=date_entity_in_db.entityversion_set.all().order_by('-id')[0]
+            entity_version=date_entity_in_db.versions.latest('id')
         )
 
         for entity_property in date_entity_properties_in_db:
@@ -2008,7 +2008,7 @@ class TestAnnotatorWithWsAndDb36:
         assert date_entity_in_db.deleted_by.id == user_id
 
         date_entity_properties_in_db = EntityProperty.objects.filter(
-            entity_version=date_entity_in_db.entityversion_set.all().order_by('-id')[0]
+            entity_version=date_entity_in_db.versions.latest('id')
         )
 
         for entity_property in date_entity_properties_in_db:
@@ -2285,7 +2285,7 @@ class TestAnnotatorWithWsAndDb41:
         assert date_entity_in_db.deleted_by.id == user_id
 
         date_entity_properties_in_db = EntityProperty.objects.filter(
-            entity_version=date_entity_in_db.entityversion_set.all().order_by('-id')[0]
+            entity_version=date_entity_in_db.versions.latest('id')
         )
 
         for entity_property in date_entity_properties_in_db:
@@ -3300,7 +3300,7 @@ class TestAnnotatorWithWsAndDb58:
         assert date_entity_in_db.deleted_in_file_version is None
 
         date_entity_properties_in_db = EntityProperty.objects.filter(
-            entity_version=date_entity_in_db.entityversion_set.all().order_by('-id')[0]
+            entity_version=date_entity_in_db.versions.latest('id')
         )
 
         for entity_property in date_entity_properties_in_db:
@@ -3380,7 +3380,7 @@ class TestAnnotatorWithWsAndDb59:
         assert date_entity_in_db.created_in_file_version is None
 
         date_entity_properties_in_db = EntityProperty.objects.filter(
-            entity_version=date_entity_in_db.entityversion_set.all().order_by('-id')[0]
+            entity_version=date_entity_in_db.versions.latest('id')
         )
 
         for entity_property in date_entity_properties_in_db:
@@ -3605,7 +3605,7 @@ class TestAnnotatorWithWsAndDb63:
         assert date_entity_in_db.deleted_in_file_version is None
 
         date_entity_properties_in_db = EntityProperty.objects.filter(
-            entity_version=date_entity_in_db.entityversion_set.all().order_by('-id')[0]
+            entity_version=date_entity_in_db.versions.latest('id')
         )
 
         for entity_property in date_entity_properties_in_db:
