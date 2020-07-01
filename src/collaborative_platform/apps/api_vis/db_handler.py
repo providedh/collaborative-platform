@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 from django.db.models import Q
 from django.forms.models import model_to_dict
 from django.utils import timezone
@@ -52,7 +54,10 @@ class DbHandler:
         return serialized_entities
 
     def get_unbound_entities_in_project(self, qs_parameters):
-        entities = self.__get_filtered_entities(qs_parameters)
+        parameters_for_entities = deepcopy(qs_parameters)
+        parameters_for_entities.pop('users', None)
+
+        entities = self.__get_filtered_entities(parameters_for_entities)
         unifications = self.__get_filtered_unifications(qs_parameters)
 
         bound_entities_ids = []
