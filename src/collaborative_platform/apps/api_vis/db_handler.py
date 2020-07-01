@@ -120,6 +120,9 @@ class DbHandler:
         if 'types' in qs_parameters:
             entities = entities.filter(type__in=qs_parameters['types'])
 
+        if 'users' in qs_parameters:
+            entities = entities.filter(created_by_id__in=qs_parameters['users'])
+
         entities = entities.filter(deleted_in_file_version__isnull=True)
 
         entities = entities.order_by('id')

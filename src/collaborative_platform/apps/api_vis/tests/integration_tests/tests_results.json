@@ -216,5 +216,12 @@
     {"id": 16, "name": "Grumpy", "type": "person"},
     {"id": 17, "name": "Sleepy", "type": "person"},
     {"id": 22, "name": null, "type": "person"}
+  ],
+  "test_get_all_entities_in_project_users": [
+    {"id": 5, "name": "Jerry Maguire", "type": "person"},
+    {"id": 14, "name": "Snow white", "type": "person"},
+    {"id": 15, "name": "Doc", "type": "person"},
+    {"id": 16, "name": "Grumpy", "type": "person"},
+    {"id": 22, "name": null, "type": "person"}
   ]
 }
