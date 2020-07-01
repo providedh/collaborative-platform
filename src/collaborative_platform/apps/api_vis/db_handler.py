@@ -15,6 +15,72 @@ class DbHandler:
         self.__user = user
 
     def get_all_cliques_in_project(self, qs_parameters):
+        cliques = self.__get_filtered_cliques(qs_parameters)
+
+        serialized_cliques = []
+
+        for clique in cliques:
+            unifications = self.__get_filtered_unifications(qs_parameters, clique)
+
+            serialized_clique = model_to_dict(clique, ['id', 'name', 'type'])
+
+            entities_ids = unifications.values_list('entity_id', flat=True)
+            entities_ids = list(entities_ids)
+
+            serialized_clique.update({'entities': entities_ids})
+            serialized_cliques.append(serialized_clique)
+
+        return serialized_cliques
+
+    def get_all_entities_in_project(self, qs_parameters):
+        entities = self.__get_filtered_entities(qs_parameters)
+
+        serialized_entities = []
+
+        for entity in entities:
+            serialized_entity = model_to_dict(entity, ['id', 'type'])
+
+            try:
+                entity_name = entity.versions.latest('id').properties.get(name='name').get_value()
+
+            except EntityProperty.DoesNotExist:
+                entity_name = None
+
+            serialized_entity.update({'name': entity_name})
+            serialized_entities.append(serialized_entity)
+
+        return serialized_entities
+
+    def get_unbound_entities_in_project(self, qs_parameters):
+        entities = self.__get_filtered_entities(qs_parameters)
+        unifications = self.__get_filtered_unifications(qs_parameters)
+
+        bound_entities_ids = []
+
+        for unification in unifications:
+            bound_entities_ids.append(unification.entity.id)
+
+        bound_entities_ids = set(bound_entities_ids)
+
+        entities = entities.exclude(id__in=bound_entities_ids)
+
+        serialized_entities = []
+
+        for entity in entities:
+            serialized_entity = model_to_dict(entity, ['id', 'type'])
+
+            try:
+                entity_name = entity.versions.latest('id').properties.get(name='name').get_value()
+
+            except EntityProperty.DoesNotExist:
+                entity_name = None
+
+            serialized_entity.update({'name': entity_name})
+            serialized_entities.append(serialized_entity)
+
+        return serialized_entities
+
+    def __get_filtered_cliques(self, qs_parameters):
         cliques = Clique.objects.filter(
             project_id=self.__project_id,
             created_in_commit__isnull=False,
@@ -70,48 +136,58 @@ class DbHandler:
 
         cliques = cliques.distinct().order_by('id')
 
-        serialized_cliques = []
+        return cliques
 
-        for clique in cliques:
+    def __get_filtered_unifications(self, qs_parameters, clique=None):
+        if clique:
             unifications = clique.unifications
 
-            if 'users' in qs_parameters:
-                unifications = unifications.filter(created_by_id__in=qs_parameters['users'])
+        else:
+            unifications = Unification.objects.filter(
+                project_id=self.__project_id,
+                created_in_commit__isnull=False,
+            )
 
-            if 'start_date' in qs_parameters:
-                unifications = unifications.filter(created_on__gte=qs_parameters['start_date'])
+        if 'users' in qs_parameters:
+            unifications = unifications.filter(created_by_id__in=qs_parameters['users'])
 
-            if 'end_date' in qs_parameters:
-                unifications = unifications.filter(created_on__lte=qs_parameters['end_date'])
+        if 'start_date' in qs_parameters:
+            unifications = unifications.filter(created_on__gte=qs_parameters['start_date'])
 
-            if 'date' in qs_parameters:
-                unifications = unifications.filter(
-                    Q(deleted_on__gte=qs_parameters['date']) | Q(deleted_on__isnull=True),
-                    created_on__lte=qs_parameters['date'],
-                )
+        if 'end_date' in qs_parameters:
+            unifications = unifications.filter(created_on__lte=qs_parameters['end_date'])
 
-            elif 'project_version' in qs_parameters:
-                unifications = unifications.filter(
-                    Q(deleted_in_commit_id__gte=commit.id) | Q(deleted_in_commit_id__isnull=True),
-                    created_in_commit_id__lte=commit.id,
-                )
+        if 'date' in qs_parameters:
+            unifications = unifications.filter(
+                Q(deleted_on__gte=qs_parameters['date']) | Q(deleted_on__isnull=True),
+                created_on__lte=qs_parameters['date'],
+            )
 
-            else:
-                unifications = unifications.filter(deleted_in_commit__isnull=True)
+        elif 'project_version' in qs_parameters:
+            project_version_nr = qs_parameters['project_version']
+            file_version_counter, commit_counter = parse_project_version(project_version_nr)
 
-            unifications = unifications.order_by('id')
+            project_version = ProjectVersion.objects.get(
+                project_id=self.__project_id,
+                commit_counter=commit_counter,
+                commit__isnull=False,
+            )
 
-            serialized_clique = model_to_dict(clique, ['id', 'name', 'type'])
+            commit = project_version.commit
 
-            entities_ids = unifications.values_list('entity_id', flat=True)
-            entities_ids = list(entities_ids)
+            unifications = unifications.filter(
+                Q(deleted_in_commit_id__gte=commit.id) | Q(deleted_in_commit_id__isnull=True),
+                created_in_commit_id__lte=commit.id,
+            )
 
-            serialized_clique.update({'entities': entities_ids})
-            serialized_cliques.append(serialized_clique)
+        else:
+            unifications = unifications.filter(deleted_in_commit__isnull=True)
 
-        return serialized_cliques
+        unifications = unifications.order_by('id')
 
-    def get_all_entities_in_project(self, qs_parameters):
+        return unifications
+
+    def __get_filtered_entities(self, qs_parameters):
         entities = Entity.objects.filter(
             file__project_id=self.__project_id,
             created_in_file_version__isnull=False,
@@ -159,21 +235,7 @@ class DbHandler:
 
         entities = entities.order_by('id')
 
-        serialized_entities = []
-
-        for entity in entities:
-            serialized_entity = model_to_dict(entity, ['id', 'type'])
-
-            try:
-                entity_name = entity.versions.latest('id').properties.get(name='name').get_value()
-
-            except EntityProperty.DoesNotExist:
-                entity_name = None
-
-            serialized_entity.update({'name': entity_name})
-            serialized_entities.append(serialized_entity)
-
-        return serialized_entities
+        return entities
 
     def create_clique(self, request_data):
         clique_name = self.__get_clique_name(request_data)

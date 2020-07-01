@@ -269,5 +269,21 @@
     {"id": 19, "name": "Sand", "type": "ingredient"},
     {"id": 20, "name": "Ingwer", "type": "ingredient"},
     {"id": 21, "name": "Sand", "type": "ingredient"}
+  ],
+  "test_get_unbound_entities_in_project_no_filtering": [
+    {"id": 1, "name": "PCSS", "type": "place"},
+    {"id": 2, "name": "Big Bang", "type": "event"},
+    {"id": 5, "name": "Jerry Maguire", "type": "person"},
+    {"id": 6, "name": "Ingwer", "type": "person"},
+    {"id": 7, "name": "Grieben", "type": "person"},
+    {"id": 8, "name": "Met", "type": "person"},
+    {"id": 9, "name": "4th of july 2010", "type": "date"},
+    {"id": 10, "name": "3rd of may 1791", "type": "date"},
+    {"id": 12, "name": "Ingwer", "type": "ingredient"},
+    {"id": 16, "name": "Grumpy", "type": "person"},
+    {"id": 17, "name": "Sleepy", "type": "person"},
+    {"id": 19, "name": "Sand", "type": "ingredient"},
+    {"id": 21, "name": "Sand", "type": "ingredient"},
+    {"id": 22, "name": null, "type": "person"}
   ]
 }
