@@ -948,40 +948,40 @@ def commits(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
 #             return JsonResponse(response, safe=False)
 
 
-@login_required
-@objects_exists
-@user_has_access()
-def file_cliques(request, project_id, file_id):  # type: (HttpRequest, int, int) -> HttpResponse
-    if request.method == 'GET':
-        try:
-            query_string = parse_query_string(request.GET)
-
-            cliques = common_filter_cliques(query_string, project_id)
-
-            cliques_to_return = []
-
-            for clique in cliques:
-                for entity_id in clique['entities']:
-                    entity = Entity.objects.get(id=entity_id)
-
-                    if entity.file.id == file_id:
-                        cliques_to_return.append(clique)
-                        break
-
-        except BadRequest as exception:
-            status = HttpResponseBadRequest.status_code
-
-            response = {
-                'status': status,
-                'message': str(exception),
-            }
-
-            return JsonResponse(response, status=status)
-
-        else:
-            response = cliques_to_return
-
-            return JsonResponse(response, safe=False)
+# @login_required
+# @objects_exists
+# @user_has_access()
+# def file_cliques(request, project_id, file_id):  # type: (HttpRequest, int, int) -> HttpResponse
+#     if request.method == 'GET':
+#         try:
+#             query_string = parse_query_string(request.GET)
+#
+#             cliques = common_filter_cliques(query_string, project_id)
+#
+#             cliques_to_return = []
+#
+#             for clique in cliques:
+#                 for entity_id in clique['entities']:
+#                     entity = Entity.objects.get(id=entity_id)
+#
+#                     if entity.file.id == file_id:
+#                         cliques_to_return.append(clique)
+#                         break
+#
+#         except BadRequest as exception:
+#             status = HttpResponseBadRequest.status_code
+#
+#             response = {
+#                 'status': status,
+#                 'message': str(exception),
+#             }
+#
+#             return JsonResponse(response, status=status)
+#
+#         else:
+#             response = cliques_to_return
+#
+#             return JsonResponse(response, safe=False)
 
 
 # @login_required

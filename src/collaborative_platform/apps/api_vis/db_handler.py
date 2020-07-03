@@ -17,7 +17,12 @@ class DbHandler:
         self.__user = user
 
     def get_all_cliques_in_project(self, qs_parameters):
-        cliques = self.__get_filtered_cliques(qs_parameters)
+        serialized_cliques = self.__get_serialized_cliques(qs_parameters)
+
+        return serialized_cliques
+
+    def __get_serialized_cliques(self, qs_parameters, file_id=None):
+        cliques = self.__get_filtered_cliques(qs_parameters, file_id)
 
         serialized_cliques = []
 
@@ -31,6 +36,11 @@ class DbHandler:
 
             serialized_clique.update({'entities': entities_ids})
             serialized_cliques.append(serialized_clique)
+
+        return serialized_cliques
+
+    def get_all_cliques_which_include_entities_from_given_file(self, qs_parameters, file_id):
+        serialized_cliques = self.__get_serialized_cliques(qs_parameters, file_id)
 
         return serialized_cliques
 
@@ -85,11 +95,16 @@ class DbHandler:
 
         return serialized_entities
 
-    def __get_filtered_cliques(self, qs_parameters):
+    def __get_filtered_cliques(self, qs_parameters, file_id=None):
         cliques = Clique.objects.filter(
             project_id=self.__project_id,
             created_in_commit__isnull=False,
         )
+
+        if file_id:
+            cliques = cliques.filter(
+                unifications__entity__file_id=file_id,
+            )
 
         if 'types' in qs_parameters:
             cliques = cliques.filter(type__in=qs_parameters['types'])

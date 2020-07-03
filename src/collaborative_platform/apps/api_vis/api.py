@@ -132,6 +132,32 @@ def project_cliques(request, project_id):
 
             return JsonResponse(response)
 
+
+@login_required
+@objects_exists
+@user_has_access('RW')
+def file_cliques(request, project_id, file_id):
+    if request.method == 'GET':
+        try:
+            qs_parameters = parse_query_string(request.GET)
+
+            db_handler = DbHandler(project_id, request.user)
+            response = db_handler.get_all_cliques_which_include_entities_from_given_file(qs_parameters, file_id)
+
+        except BadRequest as exception:
+            status = HttpResponseBadRequest.status_code
+
+            response = {
+                'status': status,
+                'message': str(exception),
+            }
+
+            return JsonResponse(response, status=status)
+
+        else:
+            return JsonResponse(response, safe=False)
+
+
 @login_required
 @objects_exists
 @user_has_access('RW')
