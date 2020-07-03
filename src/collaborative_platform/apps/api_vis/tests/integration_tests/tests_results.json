@@ -455,5 +455,25 @@
       "type": "person",
       "entities": [4, 15]
     }
+  ],
+  "test_get_all_cliques_which_include_entities_from_given_file_end_date": [
+    {
+      "id": 1,
+      "name": "first_clique",
+      "type": "ingredient",
+      "entities": [11]
+    },
+    {
+      "id": 3,
+      "name": "third_clique",
+      "type": "ingredient",
+      "entities": [20, 11]
+    },
+    {
+      "id": 4,
+      "name": "fourth_clique",
+      "type": "person",
+      "entities": [3, 14]
+    }
   ]
 }
