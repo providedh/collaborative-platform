@@ -45,7 +45,17 @@ class DbHandler:
         return serialized_cliques
 
     def get_all_entities_in_project(self, qs_parameters):
-        entities = self.__get_filtered_entities(qs_parameters)
+        serialized_entities = self.__get_serialezed_entities(qs_parameters)
+
+        return serialized_entities
+
+    def get_all_entities_from_a_file(self, qs_parameters, file_id):
+        serialized_entities = self.__get_serialezed_entities(qs_parameters, file_id)
+
+        return serialized_entities
+
+    def __get_serialezed_entities(self, qs_parameters, file_id=None):
+        entities = self.__get_filtered_entities(qs_parameters, file_id)
 
         serialized_entities = []
 
@@ -62,6 +72,7 @@ class DbHandler:
             serialized_entities.append(serialized_entity)
 
         return serialized_entities
+
 
     def get_unbound_entities_in_project(self, qs_parameters):
         parameters_for_entities = deepcopy(qs_parameters)
@@ -207,11 +218,14 @@ class DbHandler:
 
         return unifications
 
-    def __get_filtered_entities(self, qs_parameters):
+    def __get_filtered_entities(self, qs_parameters, file_id=None):
         entities = Entity.objects.filter(
             file__project_id=self.__project_id,
             created_in_file_version__isnull=False,
         )
+
+        if file_id:
+            entities = entities.filter(file_id=file_id)
 
         if 'types' in qs_parameters:
             entities = entities.filter(type__in=qs_parameters['types'])

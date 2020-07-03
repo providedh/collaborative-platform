@@ -14,7 +14,7 @@ urlpatterns = [
     path('projects/<int:project_id>/files/<int:file_id>/', api_OLD.file),
     path('projects/<int:project_id>/files/<int:file_id>/cliques/', api.file_cliques),
     # path('projects/<int:project_id>/files/<int:file_id>/entities/unbound_entities/', api.file_unbound_entities),
-    # path('projects/<int:project_id>/files/<int:file_id>/entities/', api.file_entities),
+    path('projects/<int:project_id>/files/<int:file_id>/entities/', api.file_entities),
     path('projects/<int:project_id>/files/', api_OLD.project_files),
     path('projects/<int:project_id>/context/<str:text>/', api_OLD.context_search),
     path('projects/<int:project_id>/cliques/<int:clique_id>/entities/', api.clique_entities),
