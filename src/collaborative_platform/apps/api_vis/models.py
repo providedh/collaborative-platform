@@ -183,20 +183,6 @@ class Unification(models.Model):
         self.save()
 
 
-class CliqueToDelete(models.Model):
-    clique = models.ForeignKey(Clique, on_delete=models.CASCADE)
-    deleted_by = models.ForeignKey(User, on_delete=models.CASCADE)
-    deleted_on = models.DateTimeField(auto_now=True)
-    project_version = models.ForeignKey(ProjectVersion, on_delete=models.CASCADE)
-
-
-class UnificationToDelete(models.Model):
-    unification = models.ForeignKey(Unification, on_delete=models.CASCADE)
-    deleted_by = models.ForeignKey(User, on_delete=models.CASCADE)
-    deleted_on = models.DateTimeField(auto_now=True)
-    project_version = models.ForeignKey(ProjectVersion, on_delete=models.CASCADE)
-
-
 class Certainty(models.Model):
     file = models.ForeignKey(File, on_delete=models.CASCADE)
     file_version = models.ForeignKey(FileVersion, default=None, null=True, on_delete=models.CASCADE)
