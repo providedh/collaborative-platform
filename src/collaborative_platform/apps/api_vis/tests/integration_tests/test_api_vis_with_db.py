@@ -526,7 +526,7 @@ class TestApiVisWithDb:
     test_parameters_list = [
         ('no_filtering', None),
         ('types', {'types': 'ingredient'}),
-        # ('users', {'users': '2'}),
+        ('users', {'users': '2'}),
         # ('start_date', {'start_date': '2020-06-28T12:05:30+01:00'}),
         # ('end_date', {'end_date': '2020-06-28T12:13:00+01:00'}),
         # ('date', {'date': '2020-06-28T12:15:00+01:00'}),
