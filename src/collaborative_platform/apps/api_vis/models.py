@@ -31,8 +31,6 @@ class Entity(models.Model):
     deleted_in_file_version = models.ForeignKey(FileVersion, default=None, null=True, on_delete=models.CASCADE,
                                                 related_name='deleted_entities')
 
-    deleted_on = models.DateTimeField(null=True)
-
     class Meta:
         unique_together = ("file", "xml_id")
 

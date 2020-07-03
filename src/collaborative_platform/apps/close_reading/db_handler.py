@@ -423,7 +423,6 @@ class DbHandler:
     @staticmethod
     def __confirm_entity_delete(entity, new_file_version):
         entity.deleted_in_file_version = new_file_version
-        entity.deleted_on = timezone.now()
         entity.save()
 
     def __mark_entity_property_to_delete(self, entity_property):
