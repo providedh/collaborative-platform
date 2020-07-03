@@ -551,5 +551,9 @@
     {"id": 7, "name": "Grieben", "type": "person"},
     {"id": 8, "name": "Met", "type": "person"},
     {"id": 22, "name": null, "type": "person"}
+  ],
+  "test_get_all_entities_from_a_file_users": [
+    {"id": 5, "name": "Jerry Maguire", "type": "person"},
+    {"id": 22, "name": null, "type": "person"}
   ]
 }
