@@ -542,5 +542,14 @@
     {"id": 11, "name": "Rag", "type": "ingredient"},
     {"id": 12, "name": "Ingwer", "type": "ingredient"},
     {"id": 22, "name": null, "type": "person"}
+  ],
+  "test_get_all_entities_from_a_file_types": [
+    {"id": 3, "name": "Butter", "type": "person"},
+    {"id": 4, "name": "Sand", "type": "person"},
+    {"id": 5, "name": "Jerry Maguire", "type": "person"},
+    {"id": 6, "name": "Ingwer", "type": "person"},
+    {"id": 7, "name": "Grieben", "type": "person"},
+    {"id": 8, "name": "Met", "type": "person"},
+    {"id": 22, "name": null, "type": "person"}
   ]
 }

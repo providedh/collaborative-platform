@@ -562,7 +562,7 @@ class TestApiVisWithDb:
     test_parameters_names = "filtering_case, qs_parameters"
     test_parameters_list = [
         ('no_filtering', None),
-        # ('types', {'types': 'person'}),
+        ('types', {'types': 'person'}),
         # ('users', {'users': '2'}),
         # ('date', {'date': '2020-06-30T11:29:00+01:00'}),
         # ('project_version', {'project_version': '7.5'})
