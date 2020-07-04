@@ -45,16 +45,16 @@ class DbHandler:
         return serialized_cliques
 
     def get_all_entities_in_project(self, qs_parameters):
-        serialized_entities = self.__get_serialezed_entities(qs_parameters)
+        serialized_entities = self.__get_serialized_entities(qs_parameters)
 
         return serialized_entities
 
-    def get_all_entities_from_a_file(self, qs_parameters, file_id):
-        serialized_entities = self.__get_serialezed_entities(qs_parameters, file_id)
+    def get_all_entities_in_file(self, qs_parameters, file_id):
+        serialized_entities = self.__get_serialized_entities(qs_parameters, file_id)
 
         return serialized_entities
 
-    def __get_serialezed_entities(self, qs_parameters, file_id=None):
+    def __get_serialized_entities(self, qs_parameters, file_id=None):
         entities = self.__get_filtered_entities(qs_parameters, file_id)
 
         serialized_entities = []
@@ -73,12 +73,21 @@ class DbHandler:
 
         return serialized_entities
 
-
     def get_unbound_entities_in_project(self, qs_parameters):
+        serialized_entities = self.__get_serialized_unbound_entities(qs_parameters)
+
+        return serialized_entities
+
+    def get_unbound_entities_in_file(self, qs_parameters, file_id):
+        serialized_entities = self.__get_serialized_unbound_entities(qs_parameters, file_id)
+
+        return serialized_entities
+
+    def __get_serialized_unbound_entities(self, qs_parameters, file_id=None):
         parameters_for_entities = deepcopy(qs_parameters)
         parameters_for_entities.pop('users', None)
 
-        entities = self.__get_filtered_entities(parameters_for_entities)
+        entities = self.__get_filtered_entities(parameters_for_entities, file_id)
         unifications = self.__get_filtered_unifications(qs_parameters)
 
         bound_entities_ids = []

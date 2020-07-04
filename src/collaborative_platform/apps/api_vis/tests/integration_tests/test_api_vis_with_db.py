@@ -569,7 +569,7 @@ class TestApiVisWithDb:
     ]
 
     @pytest.mark.parametrize(test_parameters_names, test_parameters_list)
-    def test_get_all_entities_from_a_file(self, filtering_case, qs_parameters):
+    def test_get_all_entities_from_given_file(self, filtering_case, qs_parameters):
         test_name = inspect.currentframe().f_code.co_name
         test_name = f'{test_name}_{filtering_case}'
 
@@ -583,6 +583,43 @@ class TestApiVisWithDb:
         file_id = 1
 
         url = f'/api/vis/projects/{project_id}/files/{file_id}/entities/'
+
+        if qs_parameters:
+            url = add_qs_parameters(url, qs_parameters)
+
+        response = client.get(url)
+
+        assert response.status_code == 200
+
+        response_content = json.loads(response.content)
+        verify_response(test_name, response_content)
+
+    test_parameters_names = "filtering_case, qs_parameters"
+    test_parameters_list = [
+        ('no_filtering', None),
+        # ('types', {'types': 'person'}),
+        # ('users', {'users': '2'}),
+        # ('start_date', {'start_date': '2020-06-28T12:10:00+01:00'}),
+        # ('end_date', {'end_date': '2020-06-28T12:13:00+01:00'}),
+        # ('date', {'date': '2020-06-28T12:15:00+01:00'}),
+        # ('project_version', {'project_version': '6.3'})
+    ]
+
+    @pytest.mark.parametrize(test_parameters_names, test_parameters_list)
+    def test_get_unbound_entities_in_file(self, filtering_case, qs_parameters):
+        test_name = inspect.currentframe().f_code.co_name
+        test_name = f'{test_name}_{filtering_case}'
+
+        user_id = 2
+        project_id = 1
+
+        client = Client()
+        user = User.objects.get(id=user_id)
+        client.force_login(user)
+
+        file_id = 1
+
+        url = f'/api/vis/projects/{project_id}/files/{file_id}/entities/unbound_entities/'
 
         if qs_parameters:
             url = add_qs_parameters(url, qs_parameters)
