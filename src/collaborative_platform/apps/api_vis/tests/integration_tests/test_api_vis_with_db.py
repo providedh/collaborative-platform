@@ -602,7 +602,7 @@ class TestApiVisWithDb:
         ('start_date', {'start_date': '2020-06-28T12:10:00+01:00'}),
         ('end_date', {'end_date': '2020-06-28T12:13:00+01:00'}),
         ('date', {'date': '2020-06-28T12:15:00+01:00'}),
-        # ('project_version', {'project_version': '6.3'})
+        ('project_version', {'project_version': '6.3'})
     ]
 
     @pytest.mark.parametrize(test_parameters_names, test_parameters_list)
