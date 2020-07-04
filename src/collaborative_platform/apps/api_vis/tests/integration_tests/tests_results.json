@@ -597,5 +597,12 @@
     {"id": 10, "name": "3rd of may 1791", "type": "date"},
     {"id": 12, "name": "Ingwer", "type": "ingredient"},
     {"id": 22, "name": null, "type": "person"}
+  ],
+  "test_get_unbound_entities_in_file_types": [
+    {"id": 5, "name": "Jerry Maguire", "type": "person"},
+    {"id": 6, "name": "Ingwer", "type": "person"},
+    {"id": 7, "name": "Grieben", "type": "person"},
+    {"id": 8, "name": "Met", "type": "person"},
+    {"id": 22, "name": null, "type": "person"}
   ]
 }
