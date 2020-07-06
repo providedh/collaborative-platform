@@ -13,7 +13,8 @@ export default function defState (fileId, fileName, fileVersion, user, configura
       websocket,
       authors: [],
       annotations: [],
-      entities: {}
+      entities: {},
+      operations: []
     }
   }
 }

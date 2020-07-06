@@ -47,13 +47,13 @@ export default class App extends React.Component {
 
   handleWebsocketResponse (response) {
     // validate response
-    console.log(response)
     this.setState(prev => {
       const newState = Object.assign({}, prev)
       newState.documentContent = response.body_content
       newState.context.authors = response.authors
       newState.context.annotations = response.certainties
       newState.context.entities = response.entities_lists
+      newState.context.operations = response.operations
 
       return newState
     })
