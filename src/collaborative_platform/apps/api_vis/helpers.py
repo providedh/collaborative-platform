@@ -1,11 +1,13 @@
 import copy
 import re
 
+from dateutil import parser
 from datetime import datetime
 from lxml import etree
 
 from django.http import HttpResponseBadRequest, HttpRequest, JsonResponse
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 import apps.index_and_search.models as es
 
@@ -280,32 +282,46 @@ def parse_query_string(query_string):
     parsed_query_string = {}
 
     types = query_string.get('types', None)
-    types = parse_string_to_list_of_strings(types)
-    parsed_query_string.update({'types': types})
+
+    if types:
+        types = parse_string_to_list_of_strings(types)
+        parsed_query_string.update({'types': types})
 
     users = query_string.get('users', None)
-    users = parse_string_to_list_of_integers(users)
-    parsed_query_string.update({'users': users})
+
+    if users:
+        users = parse_string_to_list_of_integers(users)
+        parsed_query_string.update({'users': users})
 
     date = query_string.get('date', None)
-    date = parse_string_to_date(date)
-    parsed_query_string.update({'date': date})
+
+    if date:
+        date = parse_string_to_date(date)
+        parsed_query_string.update({'date': date})
 
     start_date = query_string.get('start_date', None)
-    start_date = parse_string_to_date(start_date)
-    parsed_query_string.update({'start_date': start_date})
+
+    if start_date:
+        start_date = parse_string_to_date(start_date)
+        parsed_query_string.update({'start_date': start_date})
 
     end_date = query_string.get('end_date', None)
-    end_date = parse_string_to_date(end_date)
-    parsed_query_string.update({'end_date': end_date})
+
+    if end_date:
+        end_date = parse_string_to_date(end_date)
+        parsed_query_string.update({'end_date': end_date})
 
     file_version = query_string.get('file_version', None)
-    file_version = parse_string_to_int(file_version)
-    parsed_query_string.update({'file_version': file_version})
+
+    if file_version:
+        file_version = parse_string_to_int(file_version)
+        parsed_query_string.update({'file_version': file_version})
 
     project_version = query_string.get('project_version', None)
-    project_version = parse_string_to_float(project_version)
-    parsed_query_string.update({'project_version': project_version})
+
+    if project_version:
+        project_version = parse_string_to_float(project_version)
+        parsed_query_string.update({'project_version': project_version})
 
     return parsed_query_string
 
@@ -328,7 +344,7 @@ def parse_string_to_list_of_integers(string):
 
 def parse_string_to_date(string):
     if string:
-        return datetime.strptime(string, '%Y-%m-%d.%H.%M.%S')
+        return parser.parse(string)
 
 
 def parse_string_to_int(string):
@@ -496,7 +512,7 @@ def common_filter_cliques(query_string, project_id):
         if unification.clique_id not in cliques:
             clique = {
                 'id': unification.clique_id,
-                'name': unification.clique.asserted_name,
+                'name': unification.clique.name,
                 'type': unification.entity.type,
                 'entities': []
             }

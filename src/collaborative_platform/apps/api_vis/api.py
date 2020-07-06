@@ -5,7 +5,7 @@ from json.decoder import JSONDecodeError
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotModified, JsonResponse
 
-from apps.api_vis.helpers import validate_keys_and_types
+from apps.api_vis.helpers import validate_keys_and_types, parse_query_string
 from apps.api_vis.db_handler import DbHandler
 from apps.exceptions import BadRequest, NotModified
 from apps.views_decorators import objects_exists, user_has_access
@@ -68,6 +68,27 @@ def project_cliques(request, project_id):
 
             return JsonResponse(response)
 
+    elif request.method == "GET":
+        try:
+            qs_parameters = parse_query_string(request.GET)
+
+            db_handler = DbHandler(project_id, request.user)
+            response = db_handler.get_all_cliques_in_project(qs_parameters)
+
+        except BadRequest as exception:
+            status = HttpResponseBadRequest.status_code
+
+            response = {
+                'status': status,
+                'message': str(exception),
+            }
+
+            return JsonResponse(response, status=status)
+
+        else:
+
+            return JsonResponse(response, safe=False)
+
     elif request.method == 'DELETE':
         try:
             request_data = json.loads(request.body)
@@ -110,6 +131,55 @@ def project_cliques(request, project_id):
             }
 
             return JsonResponse(response)
+
+@login_required
+@objects_exists
+@user_has_access('RW')
+def project_entities(request, project_id):
+    if request.method == 'GET':
+        try:
+            qs_parameters = parse_query_string(request.GET)
+
+            db_handler = DbHandler(project_id, request.user)
+            response = db_handler.get_all_entities_in_project(qs_parameters)
+
+        except BadRequest as exception:
+            status = HttpResponseBadRequest.status_code
+
+            response = {
+                'status': status,
+                'message': str(exception),
+            }
+
+            return JsonResponse(response, status=status)
+
+        else:
+            return JsonResponse(response, safe=False)
+
+
+@login_required
+@objects_exists
+@user_has_access('RW')
+def project_unbound_entities(request, project_id):
+    if request.method == 'GET':
+        try:
+            qs_parameters = parse_query_string(request.GET)
+
+            db_handler = DbHandler(project_id, request.user)
+            response = db_handler.get_unbound_entities_in_project(qs_parameters)
+
+        except BadRequest as exception:
+            status = HttpResponseBadRequest.status_code
+
+            response = {
+                'status': status,
+                'message': str(exception),
+            }
+
+            return JsonResponse(response, status=status)
+
+        else:
+            return JsonResponse(response, safe=False)
 
 
 @login_required
@@ -162,6 +232,49 @@ def clique_entities(request, project_id, clique_id):
         else:
             response = {
                 'unification_statuses': unification_statuses,
+            }
+
+            return JsonResponse(response)
+
+    elif request.method == 'DELETE':
+        try:
+            request_data = json.loads(request.body)
+
+            required_keys = {
+                'entities': list,
+                'project_version': float,
+            }
+
+            validate_keys_and_types(request_data, required_keys)
+
+            db_handler = DbHandler(project_id, request.user)
+
+            entities_ids = request_data['entities']
+            project_version_nr = request_data['project_version']
+            delete_statuses = []
+
+            for entity_id in entities_ids:
+                delete_status = {}
+
+                delete_status.update({'id': entity_id})
+
+                status_update = db_handler.delete_unification(clique_id, entity_id, project_version_nr)
+                delete_status.update(status_update)
+                delete_statuses.append(delete_status)
+
+        except (BadRequest, JSONDecodeError) as exception:
+            status = HttpResponseBadRequest.status_code
+
+            response = {
+                'status': status,
+                'message': str(exception),
+            }
+
+            return JsonResponse(response, status=status)
+
+        else:
+            response = {
+                'delete_statuses': delete_statuses,
             }
 
             return JsonResponse(response)

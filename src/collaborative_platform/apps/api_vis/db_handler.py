@@ -1,3 +1,7 @@
+from copy import deepcopy
+
+from django.db.models import Q
+from django.forms.models import model_to_dict
 from django.utils import timezone
 
 from apps.api_vis.models import Clique, Commit, Entity, EntityProperty, Unification
@@ -12,12 +16,260 @@ class DbHandler:
         self.__project_id = project_id
         self.__user = user
 
+    def get_all_cliques_in_project(self, qs_parameters):
+        cliques = self.__get_filtered_cliques(qs_parameters)
+
+        serialized_cliques = []
+
+        for clique in cliques:
+            unifications = self.__get_filtered_unifications(qs_parameters, clique)
+
+            serialized_clique = model_to_dict(clique, ['id', 'name', 'type'])
+
+            entities_ids = unifications.values_list('entity_id', flat=True)
+            entities_ids = list(entities_ids)
+
+            serialized_clique.update({'entities': entities_ids})
+            serialized_cliques.append(serialized_clique)
+
+        return serialized_cliques
+
+    def get_all_entities_in_project(self, qs_parameters):
+        entities = self.__get_filtered_entities(qs_parameters)
+
+        serialized_entities = []
+
+        for entity in entities:
+            serialized_entity = model_to_dict(entity, ['id', 'type'])
+
+            try:
+                entity_name = entity.versions.latest('id').properties.get(name='name').get_value()
+
+            except EntityProperty.DoesNotExist:
+                entity_name = None
+
+            serialized_entity.update({'name': entity_name})
+            serialized_entities.append(serialized_entity)
+
+        return serialized_entities
+
+    def get_unbound_entities_in_project(self, qs_parameters):
+        parameters_for_entities = deepcopy(qs_parameters)
+        parameters_for_entities.pop('users', None)
+
+        entities = self.__get_filtered_entities(parameters_for_entities)
+        unifications = self.__get_filtered_unifications(qs_parameters)
+
+        bound_entities_ids = []
+
+        for unification in unifications:
+            bound_entities_ids.append(unification.entity.id)
+
+        bound_entities_ids = set(bound_entities_ids)
+
+        entities = entities.exclude(id__in=bound_entities_ids)
+
+        serialized_entities = []
+
+        for entity in entities:
+            serialized_entity = model_to_dict(entity, ['id', 'type'])
+
+            try:
+                entity_name = entity.versions.latest('id').properties.get(name='name').get_value()
+
+            except EntityProperty.DoesNotExist:
+                entity_name = None
+
+            serialized_entity.update({'name': entity_name})
+            serialized_entities.append(serialized_entity)
+
+        return serialized_entities
+
+    def __get_filtered_cliques(self, qs_parameters):
+        cliques = Clique.objects.filter(
+            project_id=self.__project_id,
+            created_in_commit__isnull=False,
+        )
+
+        if 'types' in qs_parameters:
+            cliques = cliques.filter(type__in=qs_parameters['types'])
+
+        if 'users' in qs_parameters:
+            cliques = cliques.filter(created_by_id__in=qs_parameters['users'])
+
+        if 'start_date' in qs_parameters:
+            cliques = cliques.filter(unifications__created_on__gte=qs_parameters['start_date'])
+
+        if 'end_date' in qs_parameters:
+            cliques = cliques.filter(unifications__created_on__lte=qs_parameters['end_date'])
+
+        if 'date' in qs_parameters:
+            date = qs_parameters['date']
+
+            project_version = ProjectVersion.objects.filter(
+                project_id=self.__project_id,
+                date__lte=date,
+                commit__isnull=False,
+            ).latest('id')
+
+            commit = project_version.commit
+
+            cliques = cliques.filter(
+                Q(unifications__deleted_in_commit_id__gte=commit.id) | Q(unifications__deleted_in_commit__isnull=True),
+                unifications__created_in_commit_id__lte=commit.id,
+            )
+
+        elif 'project_version' in qs_parameters:
+            project_version_nr = qs_parameters['project_version']
+            file_version_counter, commit_counter = parse_project_version(project_version_nr)
+
+            project_version = ProjectVersion.objects.get(
+                project_id=self.__project_id,
+                commit_counter=commit_counter,
+                commit__isnull=False,
+            )
+
+            commit = project_version.commit
+
+            cliques = cliques.filter(
+                Q(unifications__deleted_in_commit_id__gte=commit.id) | Q(unifications__deleted_in_commit__isnull=True),
+                unifications__created_in_commit_id__lte=commit.id,
+            )
+
+        else:
+            cliques = cliques.filter(deleted_in_commit__isnull=True)
+
+        cliques = cliques.distinct().order_by('id')
+
+        return cliques
+
+    def __get_filtered_unifications(self, qs_parameters, clique=None):
+        if clique:
+            unifications = clique.unifications
+
+        else:
+            unifications = Unification.objects.filter(
+                project_id=self.__project_id,
+                created_in_commit__isnull=False,
+            )
+
+        if 'users' in qs_parameters:
+            unifications = unifications.filter(created_by_id__in=qs_parameters['users'])
+
+        if 'start_date' in qs_parameters:
+            unifications = unifications.filter(created_on__gte=qs_parameters['start_date'])
+
+        if 'end_date' in qs_parameters:
+            unifications = unifications.filter(created_on__lte=qs_parameters['end_date'])
+
+        if 'date' in qs_parameters:
+            unifications = unifications.filter(
+                Q(deleted_on__gte=qs_parameters['date']) | Q(deleted_on__isnull=True),
+                created_on__lte=qs_parameters['date'],
+            )
+
+        elif 'project_version' in qs_parameters:
+            project_version_nr = qs_parameters['project_version']
+            file_version_counter, commit_counter = parse_project_version(project_version_nr)
+
+            project_version = ProjectVersion.objects.get(
+                project_id=self.__project_id,
+                commit_counter=commit_counter,
+                commit__isnull=False,
+            )
+
+            commit = project_version.commit
+
+            unifications = unifications.filter(
+                Q(deleted_in_commit_id__gte=commit.id) | Q(deleted_in_commit_id__isnull=True),
+                created_in_commit_id__lte=commit.id,
+            )
+
+        else:
+            unifications = unifications.filter(deleted_in_commit__isnull=True)
+
+        unifications = unifications.order_by('id')
+
+        return unifications
+
+    def __get_filtered_entities(self, qs_parameters):
+        entities = Entity.objects.filter(
+            file__project_id=self.__project_id,
+            created_in_file_version__isnull=False,
+        )
+
+        if 'types' in qs_parameters:
+            entities = entities.filter(type__in=qs_parameters['types'])
+
+        if 'users' in qs_parameters:
+            entities = entities.filter(created_by_id__in=qs_parameters['users'])
+
+        if 'project_version' in qs_parameters:
+            project_version_nr = qs_parameters['project_version']
+            file_version_counter, commit_counter = parse_project_version(project_version_nr)
+
+            project_version = ProjectVersion.objects.get(
+                project_id=self.__project_id,
+                commit_counter=commit_counter,
+                file_version_counter=file_version_counter
+            )
+
+            file_versions_ids = project_version.file_versions.values_list('id', flat=True)
+
+            entities = entities.filter(
+                versions__file_version_id__in=file_versions_ids
+            )
+
+        elif 'date' in qs_parameters:
+            date = qs_parameters['date']
+
+            project_version = ProjectVersion.objects.filter(
+                project_id=self.__project_id,
+                date__lte=date,
+                commit__isnull=False,
+            ).latest('id')
+
+            file_versions_ids = project_version.file_versions.values_list('id', flat=True)
+
+            entities = entities.filter(
+                versions__file_version_id__in=file_versions_ids
+            )
+
+        else:
+            entities = entities.filter(deleted_in_file_version__isnull=True)
+
+        entities = entities.order_by('id')
+
+        return entities
+
     def create_clique(self, request_data):
         clique_name = self.__get_clique_name(request_data)
 
-        clique = self.__create_clique(clique_name)
+        request_entities = request_data.get('entities')
+        clique_type = self.__get_clique_type(request_entities)
+
+        clique = self.__create_clique(clique_name, clique_type)
 
         return clique.id, clique_name
+
+    def __get_clique_type(self, request_entities):
+        entity_type = None
+
+        for entity in request_entities:
+            try:
+                entity = self.get_entity_from_int_or_dict(entity, self.__project_id)
+
+            except BadRequest:
+                continue
+
+            else:
+                entity_type = entity.type
+
+        if entity_type:
+            return entity_type
+
+        else:
+            raise BadRequest("Can't get entity type from provided entity ids")
 
     def delete_clique(self, clique_id, project_version_nr):
         try:
@@ -26,15 +278,17 @@ class DbHandler:
             if clique.deleted_in_commit is not None:
                 raise NotModified(f"Clique with id: {clique_id} is already deleted")
 
-            delete_time = timezone.now()
-            project_version = self.__get_project_version_from_db(project_version_nr)
-
-            self.__mark_clique_to_delete(clique, delete_time)
-            self.__mark_unifications_to_delete(clique, project_version, delete_time)
+            self.__mark_clique_to_delete(clique, project_version_nr)
 
             delete_status = {
                 'status': 200,
                 'message': 'OK'
+            }
+
+        except NotModified as exception:
+            delete_status = {
+                'status': 304,
+                'message': str(exception)
             }
 
         except BadRequest as exception:
@@ -44,6 +298,58 @@ class DbHandler:
             }
 
         return delete_status
+
+    def delete_unification(self, clique_id, entity_id, project_version_nr):
+        try:
+            unification = self.__get_unification_from_db(clique_id, entity_id)
+
+            if unification.deleted_in_commit is not None:
+                raise NotModified(f"Entity with id: {entity_id} is already removed from clique with id: {clique_id}")
+
+            self.__mark_unification_to_delete(unification, project_version_nr)
+
+            delete_status = {
+                'status': 200,
+                'message': 'OK'
+            }
+
+        except NotModified as exception:
+            delete_status = {
+                'status': 304,
+                'message': str(exception)
+            }
+
+        except BadRequest as exception:
+            delete_status = {
+                'status': 400,
+                'message': str(exception)
+            }
+
+        return delete_status
+
+    def __mark_unification_to_delete(self, unification, project_version_nr):
+        project_version = self.__get_project_version_from_db(project_version_nr)
+
+        file_version = project_version.file_versions.get(
+            file=unification.entity.file
+        )
+
+        unification.deleted_by = self.__user
+        unification.deleted_on = timezone.now()
+        unification.deleted_in_file_version = file_version
+        unification.save()
+
+    @staticmethod
+    def __get_unification_from_db(clique_id, entity_id):
+        try:
+            unification = Unification.objects.get(
+                clique_id=clique_id,
+                entity_id=entity_id
+            )
+        except Unification.DoesNotExist:
+            raise BadRequest(f"Clique with id: {clique_id} doesn't contain entity with id: {entity_id}")
+
+        return unification
 
     def __get_clique_from_db(self, clique_id):
         try:
@@ -56,15 +362,21 @@ class DbHandler:
 
         return clique
 
-    def __mark_clique_to_delete(self, clique, delete_time):
+    def __mark_clique_to_delete(self, clique, project_version_nr):
+        delete_time = timezone.now()
+
         clique.deleted_by = self.__user
         clique.deleted_on = delete_time
         clique.save()
 
-    def __mark_unifications_to_delete(self, clique, project_version, delete_time):
+        self.__mark_unifications_to_delete(clique, project_version_nr, delete_time)
+
+    def __mark_unifications_to_delete(self, clique, project_version_nr, delete_time):
         unifications = clique.unifications.filter(
             deleted_in_commit__isnull=True
         )
+
+        project_version = self.__get_project_version_from_db(project_version_nr)
 
         for unification in unifications:
             file_version = project_version.file_versions.get(
@@ -101,10 +413,11 @@ class DbHandler:
 
         return clique_name
 
-    def __create_clique(self, clique_name):
+    def __create_clique(self, clique_name, clique_type):
         clique = Clique.objects.create(
             project_id=self.__project_id,
-            asserted_name=clique_name,
+            name=clique_name,
+            type=clique_type,
             created_by=self.__user,
         )
 
