@@ -5,6 +5,7 @@ import xml from 'common/helpers/xml.js'
 import { Selection, SelectionType } from 'common/types'
 
 export default function useContentRendering (node, documentContent, callbacks, context) {
+  if (documentContent.length === 0) { return }
   const css = CSSstyles({ styleContainerId: 'dynamic-styling' })
 
   css.resetStyles()
