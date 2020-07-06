@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { PropTypes } from 'prop-types'
 
+import { WebsocketRequest, WebsocketRequestType} from 'common/types'
 import { WithAppContext } from 'common/context/app'
 import styles from './button.module.css'
 
@@ -10,6 +11,22 @@ export default function ButtonWithContext (props) {
       <Button {...props}/>
     </WithAppContext>
   )
+}
+
+function getSaveCallback(websocket, operations) {
+  return () => {
+    const request = WebsocketRequest(WebsocketRequestType.save, operations.map(o => o.id))
+    console.log(request)
+    websocket.send(request)
+  }
+}
+
+function getDiscardCallback(websocket, operations) {
+  return () => {
+    const request = WebsocketRequest(WebsocketRequestType.discard, operations.map(o => o.id))
+    console.log(request)
+    websocket.send(request)
+  }
 }
 
 function Button (props) {
@@ -29,7 +46,10 @@ function Button (props) {
 
   return (
     <div className={styles.saveButton + ' align-items-end d-flex flex-column position-relative'}>
-      <button type="button" className='btn btn-outline-primary'>
+      <button 
+          type="button" 
+          className='btn btn-outline-primary' 
+          onClick={getSaveCallback(props.context.websocket, props.context.operations)}>
         Save <span className="d-inline badge badge-primary badge-pill">{props.context.operations.length}</span>
       </button>
       <span className="text-primary" onClick={() => toggle(!unfoiled)}>
@@ -42,6 +62,7 @@ function Button (props) {
         {operations}
         <button
           type="button"
+          onClick={getDiscardCallback(props.context.websocket, props.context.operations)}
           className="py-1 border-top list-group-item-danger list-group-item list-group-item-action">
           Discard changes
         </button>
