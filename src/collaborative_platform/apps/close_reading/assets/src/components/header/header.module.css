@@ -1,6 +1,6 @@
 .header{}
 .fileName{
-  width: calc(100% - 4em);
+  width: calc(100% - 5.8em);
 }
 .fileName h1{
   display: block;

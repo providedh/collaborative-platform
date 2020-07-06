@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { WithAppContext } from 'common/context/app'
+import { SaveButton } from 'components/saveButton'
 import styles from './header.module.css'
 
 export default function HeaderWithContext (props) {
@@ -13,22 +14,19 @@ export default function HeaderWithContext (props) {
 }
 
 function Header (props) {
-  const {
-    fileName,
-    fileVersion
-  } = props
+  console.log(props)
 
   return <div className={styles.header}>
     <div className={styles.top}>
       <div className={styles.fileName}>
         <h1>
-          {fileName}
+          {props.fileName}
         </h1>
         <h2 className="font-weight-light">
-          Version {fileVersion}
+          Version {props.fileVersion}
         </h2>
       </div>
-      <button type="button" className={styles.saveButton + ' btn btn-outline-primary'}>Save</button>
+      <SaveButton/>
     </div>
   </div>
 }
