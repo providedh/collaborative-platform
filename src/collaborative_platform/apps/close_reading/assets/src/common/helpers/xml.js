@@ -85,7 +85,7 @@ function processEntitiesInDocument (raw, entities, annotations, conf) {
     const details = {}
 
     details.id = tag.attributes['xml:id'].value
-    details.htmlid = replacedId(tag.attributes['xml:id'].value)
+    details.htmlId = replacedId(tag.attributes['xml:id'].value)
     details.target = tag.attributes.ref.value.slice(1)
     details.type = entityMap[details.target].type
     details.saved = !(Object.hasOwnProperty.call(tag.attributes, 'saved') && tag.attributes?.saved?.value === 'false')
@@ -100,7 +100,7 @@ function processEntitiesInDocument (raw, entities, annotations, conf) {
     const details = {}
 
     details.id = tag.attributes['xml:id'].value
-    details.htmlid = replacedId(tag.attributes['xml:id'].value)
+    details.htmlId = replacedId(tag.attributes['xml:id'].value)
     details.target = tag.attributes['xml:id'].value
     details.type = tag.tagName
     details.saved = !(Object.hasOwnProperty.call(tag.attributes, 'saved') && tag.attributes?.saved?.value === 'false')
