@@ -22,16 +22,7 @@ function onDeleteClick (id) {
 }
 
 function EntityPanel (props) {
-  const entitiesMap = {}
-  Object.entries(props.context.entities)
-    .forEach(([_, entityList]) => {
-      entityList.forEach(entity => {
-        entitiesMap[entity['xml:id']] = entity
-      })
-    })
-  const entity = entitiesMap[props.selection.target]
-
-  const style = props.context.configuration.entities[entity.type]
+  const style = props.context.configuration.entities[props.selection.target.type]
   const icon = style.icon
 
   return <div className={styles.entityPanel}>
@@ -42,22 +33,21 @@ function EntityPanel (props) {
             <div dangerouslySetInnerHTML={{ __html: icon }} />
           </span>
           <h5 className="d-inline">
-            {props.selection?.target}
-            <span className={styles.entityType}> ({entity.type})</span>
+            {props.selection?.target?.type}
+            <span className={styles.entityType}> ({props.selection.target.type})</span>
           </h5>
         </div>
-        <span className={entity.saved === false ? 'ml-4 text-danger' : 'd-none'}>
+        <span className={props.selection.target.saved === false ? 'ml-4 text-danger' : 'd-none'}>
           (unsaved)
           <button type="button"
-            onClick={() => onDeleteClick(entity['xml:id'])}
+            onClick={() => onDeleteClick(props.selection.target.id)}
             className="btn btn-link p-0 mx-1 text-danger">
             <u> -delete</u>
           </button>
         </span>
       </div>
       <div className="card-body">
-        <Attributes entity={entity} />
-        <Annotations entity={entity} />
+
       </div>
     </div>
   </div>
@@ -67,7 +57,7 @@ EntityPanel.propTypes = {
   selection: PropTypes.shape({
     type: PropTypes.string,
     target: PropTypes.oneOfType([
-      PropTypes.string,
+      PropTypes.object,
       PropTypes.arrayOf(PropTypes.number)
     ]),
     screenX: PropTypes.number,
