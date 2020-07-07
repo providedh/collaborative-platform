@@ -42,7 +42,7 @@ Tooltip.propTypes = {
   selection: PropTypes.shape({
     type: PropTypes.string,
     target: PropTypes.oneOfType([
-      PropTypes.string,
+      PropTypes.object,
       PropTypes.arrayOf(PropTypes.number)
     ]),
     screenX: PropTypes.number,
