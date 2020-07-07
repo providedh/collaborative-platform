@@ -47,7 +47,7 @@ function EntityPanel (props) {
         </span>
       </div>
       <div className="card-body">
-
+        <Attributes entity={props.selection.target}/>
       </div>
     </div>
   </div>
