@@ -14,8 +14,6 @@ export default function HeaderWithContext (props) {
 }
 
 function Header (props) {
-  console.log(props)
-
   return <div className={styles.header}>
     <div className={styles.top}>
       <div className={styles.fileName}>
