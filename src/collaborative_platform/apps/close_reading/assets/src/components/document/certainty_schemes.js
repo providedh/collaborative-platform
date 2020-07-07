@@ -1,5 +1,3 @@
-import xml from 'common/helpers/xml.js'
-
 export const aScheme = {
   colorBefore: (id, annotations, currentUser, css, colorForUncertainty, taxonomy) => {
     return ''
@@ -58,7 +56,7 @@ export const aScheme = {
     return ''
   },
   greyBefore: (id, annotations, currentUser, css, colorForUncertainty, taxonomy) => {
-    const node = document.getElementById(xml.replacedId(id))
+    const node = document.getElementById(id)
     const numberAnnotations = annotations.length
     const style = window.getComputedStyle(node, '::before')
     const content = style.getPropertyValue('content')
