@@ -62,6 +62,83 @@ function getBodyTagLength (content) {
   return r.exec(content).groups.tag.length
 }
 
+function processEntitiesInDocument (raw, entities, annotations, conf) {
+  const unlistableEntities = Object.keys(conf).filter(k => conf[k].listable === false)
+  const entityMap = Object.fromEntries(entities.map(e => [e['xml:id'], e]))
+
+  // Get DOM elements
+  const parser = new DOMParser()
+  const xmlDoc = parser.parseFromString(raw, 'text/xml')
+  const body = xmlDoc.getElementsByTagName('body')[0]
+
+  const unlistableTags = []
+  unlistableEntities.forEach(e => unlistableTags.push(...body.getElementsByTagName(e)))
+  const nameTags = [...body.getElementsByTagName('name')]
+
+  // Get details
+  const entityDetails = []
+
+  nameTags.forEach(tag => {
+    if (!Object.hasOwnProperty.call(tag.attributes, 'ref') ||
+        !Object.hasOwnProperty.call(entityMap, tag.attributes.ref.value.slice(1))) { return }
+
+    const details = {}
+
+    details.id = tag.attributes['xml:id'].value
+    details.htmlid = replacedId(tag.attributes['xml:id'].value)
+    details.target = tag.attributes.ref.value.slice(1)
+    details.type = entityMap[details.target].type
+    details.saved = !(Object.hasOwnProperty.call(tag.attributes, 'saved') && tag.attributes?.saved?.value === 'false')
+    details.deleted = !(Object.hasOwnProperty.call(tag.attributes, 'deleted') && tag.attributes?.deleted?.value === 'true')
+    details.properties = entityMap[details.target].properties
+    details.annotations = annotations.filter(d => d.target.slice(1) === details.id || d.target.slice(1) === details.target)
+
+    entityDetails.push(details)
+  })
+
+  unlistableTags.forEach(tag => {
+    const details = {}
+
+    details.id = tag.attributes['xml:id'].value
+    details.htmlid = replacedId(tag.attributes['xml:id'].value)
+    details.target = tag.attributes['xml:id'].value
+    details.type = tag.tagName
+    details.saved = !(Object.hasOwnProperty.call(tag.attributes, 'saved') && tag.attributes?.saved?.value === 'false')
+    details.deleted = !(Object.hasOwnProperty.call(tag.attributes, 'deleted') && tag.attributes?.deleted?.value === 'true')
+    details.annotations = annotations.filter(d => d.target.slice(1) === details.id)
+    details.properties = []
+
+    conf[tag.tagName].properties.forEach(property => {
+      if (Object.hasOwnProperty.call(tag.attributes, property) === true) {
+        details.properties.push({
+          name: property,
+          value: tag.attributes[property].value,
+          saved: true,
+          deleted: false
+        })
+      } else if (Object.hasOwnProperty.call(tag.attributes, property + 'Added') === true) {
+        details.properties.push({
+          name: property,
+          value: tag.attributes[property + 'Added'].value,
+          saved: false,
+          deleted: false
+        })
+      } else if (Object.hasOwnProperty.call(tag.attributes, property + 'Deleted') === true) {
+        details.properties.push({
+          name: property,
+          value: tag.attributes[property + 'Deleted'].value,
+          saved: false,
+          deleted: true
+        })
+      }
+    })
+
+    entityDetails.push(details)
+  })
+
+  return entityDetails
+}
+
 export default {
   spacer,
   originalId,
@@ -72,5 +149,6 @@ export default {
   extractAndExpandTags,
   extractAndCollapseTags,
   getBodyContent,
-  getBodyTagLength
+  getBodyTagLength,
+  processEntitiesInDocument
 }
