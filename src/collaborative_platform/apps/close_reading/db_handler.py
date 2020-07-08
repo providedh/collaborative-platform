@@ -1,6 +1,5 @@
 from django.db.models import Q
 from django.forms.models import model_to_dict
-from django.utils import timezone
 
 from apps.api_vis.models import Certainty, Entity, EntityProperty, EntityVersion
 from apps.close_reading.enums import ElementTypes

@@ -1,4 +1,3 @@
-import re
 import json
 from urllib.parse import urlparse
 from django.http import HttpResponse, HttpRequest

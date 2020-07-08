@@ -21,7 +21,6 @@ class AnnotationHistoryHandler:
         self.__file_id = file_id
 
         self.__last_file_version_nr = 0
-        self.__base_file_node = None
 
         self.__history = []
 
