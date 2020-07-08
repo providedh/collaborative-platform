@@ -187,11 +187,10 @@ def get_settings(request, project_id):
 @login_required
 def get_default_properties(request):
     from collaborative_platform.settings import DEFAULT_ENTITIES
-    entites = DEFAULT_ENTITIES
 
-    for key, entity in entites.items():
-        entity['properties'] = list(set(entity['properties'].keys()).difference('text'))
-        entity.pop('list_tag')
-        entity.pop('text_tag')
-
-    return JsonResponse(entites)
+    properties_per_entity = {
+        key: {'properties': list(set(entity['properties'].keys()).difference('text'))}
+        for key, entity in DEFAULT_ENTITIES.items()        
+    }
+    
+    return JsonResponse(properties_per_entity)
