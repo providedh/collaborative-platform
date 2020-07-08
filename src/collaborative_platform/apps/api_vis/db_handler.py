@@ -4,7 +4,7 @@ from django.db.models import Q
 from django.forms.models import model_to_dict
 from django.utils import timezone
 
-from apps.api_vis.models import Clique, Commit, Entity, EntityProperty, Unification
+from apps.api_vis.models import Clique, Commit, Entity, EntityProperty, EntityVersion, Unification
 from apps.api_vis.helpers import parse_project_version, validate_keys_and_types
 from apps.exceptions import BadRequest, NotModified
 from apps.files_management.models import Directory, File, FileVersion
@@ -475,7 +475,7 @@ class DbHandler:
 
         return project_version
 
-    def add_unification(self, clique_id, entity_id, project_version_nr):
+    def add_unification(self, clique_id, entity_id, certainty, project_version_nr):
         try:
             project_version = self.__get_project_version_from_db(project_version_nr)
             entity = self.get_entity_from_int_or_dict(entity_id, self.__project_id)
@@ -489,6 +489,7 @@ class DbHandler:
                 project=project_version.project,
                 entity=entity,
                 clique_id=clique_id,
+                certainty=certainty,
                 created_by=self.__user,
                 created_in_file_version=file_version
             )
@@ -583,31 +584,10 @@ class DbHandler:
                 raise BadRequest(f"Directory with name {directory_name} does't exist in this directory.")
 
     def commit_changes(self, message):
-        cliques_to_create = Clique.objects.filter(
-            project_id=self.__project_id,
-            created_by=self.__user,
-            created_in_commit__isnull=True,
-        )
-
-        unifications_to_add = Unification.objects.filter(
-            project_id=self.__project_id,
-            created_by=self.__user,
-            created_in_commit__isnull=True
-        )
-
-        cliques_to_delete = Clique.objects.filter(
-            project_id=self.__project_id,
-            deleted_by=self.__user,
-            created_in_commit__isnull=False,
-            deleted_in_commit__isnull=True,
-        )
-
-        unifications_to_delete = Unification.objects.filter(
-            project_id=self.__project_id,
-            deleted_by=self.__user,
-            created_in_commit__isnull=False,
-            deleted_in_commit__isnull=True,
-        )
+        cliques_to_create = self.__get_cliques_to_create_from_db()
+        unifications_to_add = self.__get_unifications_to_add_from_db()
+        cliques_to_delete = self.__get_cliques_to_delete_from_db()
+        unifications_to_delete = self.__get_unifications_to_remove_from_db()
 
         if len(cliques_to_create) + len(unifications_to_add) + len(cliques_to_delete) + len(unifications_to_delete) == 0:
             raise NotModified(f'You dont have any changes to commit in project with id: {self.__project_id}.')
@@ -636,3 +616,120 @@ class DbHandler:
             unification.deleted_in_commit = commit
 
         Unification.objects.bulk_update(unifications_to_delete, ['deleted_in_commit'])
+
+    def get_uncommitted_changes(self):
+        cliques_to_create = self.__get_cliques_to_create_from_db()
+        unifications_to_add = self.__get_unifications_to_add_from_db()
+        cliques_to_delete = self.__get_cliques_to_delete_from_db()
+        unifications_to_remove = self.__get_unifications_to_remove_from_db()
+
+        response = {
+            'uncommitted_changes': {
+                'cliques_to_create': [],
+                'cliques_to_delete': [],
+                'unifications_to_add': [],
+                'unifications_to_remove': [],
+            }
+        }
+
+        for clique in cliques_to_create:
+            serialized_clique = {
+                'id': clique.id,
+                'name': clique.name,
+                'created_by_id': clique.created_by.id
+            }
+
+            response['uncommitted_changes']['cliques_to_create'].append(serialized_clique)
+
+        for clique in cliques_to_delete:
+            serialized_clique = {
+                'id': clique.id,
+                'name': clique.name,
+                'created_by_id': clique.created_by.id
+            }
+
+            response['uncommitted_changes']['cliques_to_delete'].append(serialized_clique)
+
+        for unification in unifications_to_add:
+            entity_version = EntityVersion.objects.get(
+                entity=unification.entity,
+                file_version=unification.created_in_file_version,
+            )
+
+            entity_name = entity_version.properties.get(
+                name='name'
+            )
+
+            serialized_unification = {
+                'id': unification.id,
+                'clique_id': unification.clique.id,
+                'clique_name': unification.clique.name,
+                'entity_id': unification.entity.id,
+                'entity_name': entity_name.get_value(),
+                'certainty': unification.certainty,
+                'created_by': unification.created_by.id,
+            }
+
+            response['uncommitted_changes']['unifications_to_add'].append(serialized_unification)
+
+        for unification in unifications_to_remove:
+            entity_version = EntityVersion.objects.get(
+                entity=unification.entity,
+                file_version=unification.created_in_file_version,
+            )
+
+            entity_name = entity_version.properties.get(
+                name='name'
+            )
+
+            serialized_unification = {
+                'id': unification.id,
+                'clique_id': unification.clique.id,
+                'clique_name': unification.clique.name,
+                'entity_id': unification.entity.id,
+                'entity_name': entity_name.get_value(),
+                'certainty': unification.certainty,
+                'created_by': unification.created_by.id,
+            }
+
+            response['uncommitted_changes']['unifications_to_remove'].append(serialized_unification)
+
+        return response
+
+    def __get_cliques_to_create_from_db(self):
+        cliques_to_create = Clique.objects.filter(
+            project_id=self.__project_id,
+            created_by=self.__user,
+            created_in_commit__isnull=True,
+        )
+
+        return cliques_to_create
+
+    def __get_unifications_to_add_from_db(self):
+        unifications_to_add = Unification.objects.filter(
+            project_id=self.__project_id,
+            created_by=self.__user,
+            created_in_commit__isnull=True
+        )
+
+        return unifications_to_add
+
+    def __get_cliques_to_delete_from_db(self):
+        cliques_to_delete = Clique.objects.filter(
+            project_id=self.__project_id,
+            deleted_by=self.__user,
+            created_in_commit__isnull=False,
+            deleted_in_commit__isnull=True,
+        )
+
+        return cliques_to_delete
+
+    def __get_unifications_to_remove_from_db(self):
+        unifications_to_delete = Unification.objects.filter(
+            project_id=self.__project_id,
+            deleted_by=self.__user,
+            created_in_commit__isnull=False,
+            deleted_in_commit__isnull=True,
+        )
+
+        return unifications_to_delete

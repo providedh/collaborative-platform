@@ -4406,7 +4406,7 @@
     "deleted_in_file_version": null,
     "deleted_in_commit": null,
     "ana": "",
-    "certainty": "",
+    "certainty": "high",
     "description": "",
     "xml_id": ""
   }
@@ -4427,7 +4427,7 @@
     "deleted_in_file_version": 4,
     "deleted_in_commit": 5,
     "ana": "",
-    "certainty": "",
+    "certainty": "high",
     "description": "",
     "xml_id": ""
   }
@@ -4448,7 +4448,7 @@
     "deleted_in_file_version": null,
     "deleted_in_commit": null,
     "ana": "",
-    "certainty": "",
+    "certainty": "high",
     "description": "",
     "xml_id": ""
   }
@@ -4469,7 +4469,7 @@
     "deleted_in_file_version": null,
     "deleted_in_commit": null,
     "ana": "",
-    "certainty": "",
+    "certainty": "high",
     "description": "",
     "xml_id": ""
   }
@@ -4490,7 +4490,7 @@
     "deleted_in_file_version": null,
     "deleted_in_commit": null,
     "ana": "",
-    "certainty": "",
+    "certainty": "medium",
     "description": "",
     "xml_id": ""
   }
@@ -4511,7 +4511,7 @@
     "deleted_in_file_version": null,
     "deleted_in_commit": null,
     "ana": "",
-    "certainty": "",
+    "certainty": "medium",
     "description": "",
     "xml_id": ""
   }
@@ -4532,7 +4532,7 @@
     "deleted_in_file_version": null,
     "deleted_in_commit": null,
     "ana": "",
-    "certainty": "",
+    "certainty": "medium",
     "description": "",
     "xml_id": ""
   }
@@ -4553,7 +4553,7 @@
     "deleted_in_file_version": null,
     "deleted_in_commit": null,
     "ana": "",
-    "certainty": "",
+    "certainty": "medium",
     "description": "",
     "xml_id": ""
   }
@@ -4574,7 +4574,7 @@
     "deleted_in_file_version": 2,
     "deleted_in_commit": 5,
     "ana": "",
-    "certainty": "",
+    "certainty": "low",
     "description": "",
     "xml_id": ""
   }
@@ -4595,7 +4595,7 @@
     "deleted_in_file_version": 4,
     "deleted_in_commit": 5,
     "ana": "",
-    "certainty": "",
+    "certainty": "low",
     "description": "",
     "xml_id": ""
   }
@@ -4616,7 +4616,7 @@
     "deleted_in_file_version": null,
     "deleted_in_commit": null,
     "ana": "",
-    "certainty": "",
+    "certainty": "low",
     "description": "",
     "xml_id": ""
   }
@@ -4637,7 +4637,7 @@
     "deleted_in_file_version": null,
     "deleted_in_commit": null,
     "ana": "",
-    "certainty": "",
+    "certainty": "low",
     "description": "",
     "xml_id": ""
   }

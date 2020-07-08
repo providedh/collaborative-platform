@@ -19,7 +19,7 @@ urlpatterns = [
     path('projects/<int:project_id>/context/<str:text>/', api_OLD.context_search),
     path('projects/<int:project_id>/cliques/<int:clique_id>/entities/', api.clique_entities),
     path('projects/<int:project_id>/cliques/', api.project_cliques),
-    # path('projects/<int:project_id>/commits/uncommitted_changes/', api.uncommitted_changes),
+    path('projects/<int:project_id>/commits/uncommitted_changes/', api.uncommitted_changes),
     path('projects/<int:project_id>/commits/', api.commits),
     path('projects/<int:project_id>/entities/unbound_entities/', api.project_unbound_entities),
     path('projects/<int:project_id>/entities/', api.project_entities),

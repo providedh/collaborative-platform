@@ -35,6 +35,7 @@ def project_cliques(request, project_id):
 
             entities = request_data['entities']
             project_version_nr = request_data['project_version']
+            certainty = request_data['certainty']
             unification_statuses = []
 
             for entity in entities:
@@ -45,7 +46,7 @@ def project_cliques(request, project_id):
                 elif type(entity) is dict:
                     unification_status.update(entity)
 
-                status_update = db_handler.add_unification(clique_id, entity, project_version_nr)
+                status_update = db_handler.add_unification(clique_id, entity, certainty, project_version_nr)
                 unification_status.update(status_update)
                 unification_statuses.append(unification_status)
 
@@ -281,6 +282,7 @@ def clique_entities(request, project_id, clique_id):
 
             entities = request_data['entities']
             project_version_nr = request_data['project_version']
+            certainty = request_data['certainty']
             unification_statuses = []
 
             for entity in entities:
@@ -291,7 +293,7 @@ def clique_entities(request, project_id, clique_id):
                 elif type(entity) is dict:
                     unification_status.update(entity)
 
-                status_update = db_handler.add_unification(clique_id, entity, project_version_nr)
+                status_update = db_handler.add_unification(clique_id, entity, certainty, project_version_nr)
                 unification_status.update(status_update)
                 unification_statuses.append(unification_status)
 
@@ -404,3 +406,23 @@ def commits(request, project_id):
             }
 
             return JsonResponse(response)
+
+
+def uncommitted_changes(request, project_id):
+    if request.method == 'GET':
+        try:
+            db_handler = DbHandler(project_id, request.user)
+            response = db_handler.get_uncommitted_changes()
+
+        except BadRequest as exception:
+            status = HttpResponseBadRequest.status_code
+
+            response = {
+                'status': status,
+                'message': str(exception),
+            }
+
+            return JsonResponse(response, status=status)
+
+        else:
+            return JsonResponse(response, safe=False)

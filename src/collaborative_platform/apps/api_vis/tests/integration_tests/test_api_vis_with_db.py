@@ -631,6 +631,164 @@ class TestApiVisWithDb:
         response_content = json.loads(response.content)
         verify_response(test_name, response_content)
 
+    def test_get_uncommitted_changes(self):
+        user_id = 2
+        project_id = 1
+
+        client = Client()
+        user = User.objects.get(id=user_id)
+        client.force_login(user)
+
+        url = f'/api/vis/projects/{project_id}/commits/uncommitted_changes/'
+
+        response = client.get(url)
+        assert response.status_code == 200
+
+        response_content = json.loads(response.content)
+
+        expected_response = {
+            'uncommitted_changes': {
+                'cliques_to_create': [],
+                'cliques_to_delete': [],
+                'unifications_to_add': [],
+                'unifications_to_remove': []
+            },
+        }
+
+        assert response_content == expected_response
+
+        url = f'/api/vis/projects/{project_id}/cliques/'
+
+        payload = {
+            'name': 'seventh_clique',
+            'entities': [12, 19],
+            'certainty': 'high',
+            'project_version': 6.5,
+        }
+
+        response = client.post(url, payload, content_type="application/json")
+        assert response.status_code == 200
+
+        clique_id = 1
+
+        url = f'/api/vis/projects/{project_id}/cliques/{clique_id}/entities/'
+
+        payload = {
+            'entities': [21],
+            'certainty': 'medium',
+            'project_version': 8.5,
+        }
+
+        response = client.put(url, payload, content_type="application/json")
+        assert response.status_code == 200
+
+        url = f'/api/vis/projects/{project_id}/cliques/'
+
+        payload = {
+            'cliques': [2],
+            'project_version': 8.5,
+        }
+
+        response = client.delete(url, payload, content_type="application/json")
+        assert response.status_code == 200
+
+        url = f'/api/vis/projects/{project_id}/cliques/{clique_id}/entities/'
+
+        payload = {
+            'entities': [11],
+            'certainty': 'high',
+            'project_version': 8.5,
+        }
+
+        response = client.delete(url, payload, content_type="application/json")
+        assert response.status_code == 200
+
+        url = f'/api/vis/projects/{project_id}/commits/uncommitted_changes/'
+
+        response = client.get(url)
+        assert response.status_code == 200
+
+        response_content = json.loads(response.content)
+
+        expected_response = {
+            'uncommitted_changes': {
+                'cliques_to_create': [
+                    {
+                        'id': 7,
+                        'name': 'seventh_clique',
+                        'created_by_id': 2
+                     }
+                ],
+                'cliques_to_delete': [
+                    {
+                        'id': 2,
+                        'name': 'second_clique',
+                        'created_by_id': 2
+                    }
+                ],
+                'unifications_to_add': [
+                    {
+                        'id': 15,
+                        'clique_id': 1,
+                        'clique_name': 'first_clique',
+                        'entity_id': 21,
+                        'entity_name': 'Sand',
+                        'certainty': 'medium',
+                        'created_by': 2
+                    },
+                    {
+                        'id': 14,
+                        'clique_id': 7,
+                        'clique_name': 'seventh_clique',
+                        'entity_id': 19,
+                        'entity_name': 'Sand',
+                        'certainty': 'high',
+                        'created_by': 2
+                    },
+                    {
+                        'id': 13,
+                        'clique_id': 7,
+                        'clique_name': 'seventh_clique',
+                        'entity_id': 12,
+                        'entity_name': 'Ingwer',
+                        'certainty': 'high',
+                        'created_by': 2
+                    }
+                ],
+                'unifications_to_remove': [
+                    {
+                        'certainty': 'high',
+                        'clique_id': 1,
+                        'clique_name': 'first_clique',
+                        'created_by': 2,
+                        'entity_id': 11,
+                        'entity_name': 'Rag',
+                        'id': 1
+                    },
+                    {
+                        'certainty': 'high',
+                        'clique_id': 2,
+                        'clique_name': 'second_clique',
+                        'created_by': 2,
+                        'entity_id': 20,
+                        'entity_name': 'Ingwer',
+                        'id': 4
+                    },
+                    {
+                        'certainty': 'high',
+                        'clique_id': 2,
+                        'clique_name': 'second_clique',
+                        'created_by': 2,
+                        'entity_id': 18,
+                        'entity_name': 'Jus',
+                        'id': 3
+                    }
+                ]
+            },
+        }
+
+        assert response_content == expected_response
+
 
 def add_qs_parameters(url, qs_parameters):
     url += '?'
