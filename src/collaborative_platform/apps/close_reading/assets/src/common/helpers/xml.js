@@ -119,19 +119,28 @@ function processEntitiesInDocument (raw, entities, annotations, conf) {
           saved: true,
           deleted: false
         })
-      } else if (Object.hasOwnProperty.call(tag.attributes, property + 'Added') === true) {
-        console.log(tag.attributes, property + 'Added')
+      } else { // lacking, unsaved, modified or deleted
+        const isPresent = Object.hasOwnProperty.call(tag.attributes, property + 'Added')
+        const isDeleted = Object.hasOwnProperty.call(tag.attributes, property + 'Deleted')
         const p = {
           name: property,
-          value: tag.attributes[property + 'Added'].value,
           saved: false,
           deleted: false
         }
 
-        if (Object.hasOwnProperty.call(tag.attributes, property + 'Deleted') === true) {
+        if (isPresent === false && isDeleted === false) { return }
+
+        if (isPresent === true && isDeleted === false) { // unsaved
+          p.value = tag.attributes[property + 'Added'].value
+
+        } else if (isPresent === true && isDeleted === true) { // modified
+          p.value = tag.attributes[property + 'Added'].value
+
+        } else { // deleted
+          p.value = tag.attributes[property + 'Deleted'].value
           p.deleted = true
         }
-
+        
         details.properties.push(p)
       }
     })
