@@ -2,9 +2,8 @@ from lxml import etree
 
 from django.contrib.auth.models import User
 
-from apps.files_management.helpers import append_unifications
 from apps.files_management.file_conversions.xml_tools import add_property_to_element, get_or_create_element_from_xpath
-from apps.api_vis.models import Entity, EntityVersion, EntityProperty, Certainty
+from apps.api_vis.models import EntityVersion, EntityProperty, Certainty
 from apps.projects.models import EntitySchema
 
 from collaborative_platform.settings import XML_NAMESPACES, DEFAULT_ENTITIES, NS_MAP, CUSTOM_ENTITY

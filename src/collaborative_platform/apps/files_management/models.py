@@ -5,7 +5,6 @@ from datetime import datetime
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import QuerySet, Q
-from django.http import HttpResponse
 
 from apps.projects.models import Project, ProjectVersion
 
