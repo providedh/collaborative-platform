@@ -97,14 +97,17 @@ function processEntitiesInDocument (raw, entities, annotations, conf) {
   })
 
   unlistableTags.forEach(tag => {
+    const tagRef = Object.hasOwnProperty.call(tag.attributes, 'refAdded')
+      ? tag.attributes.refAdded.value.slice(1)
+      : tag.attributes.ref.value.slice(1)
     const details = {}
 
     details.id = tag.attributes['xml:id'].value
     details.htmlId = replacedId(tag.attributes['xml:id'].value)
-    details.target = tag.attributes['xml:id'].value
+    details.target = tagRef
     details.type = tag.tagName
-    details.saved = !(Object.hasOwnProperty.call(tag.attributes, 'saved') && tag.attributes?.saved?.value === 'false')
-    details.deleted = !(Object.hasOwnProperty.call(tag.attributes, 'deleted') && tag.attributes?.deleted?.value === 'true')
+    details.saved = !(Object.hasOwnProperty.call(tag.attributes, 'saved') && tag.attributes.saved.value === 'false')
+    details.deleted = (Object.hasOwnProperty.call(tag.attributes, 'deleted') && tag.attributes.deleted.value === 'true')
     details.annotations = annotations.filter(d => d.target.slice(1) === details.id)
     details.properties = []
 
@@ -117,19 +120,19 @@ function processEntitiesInDocument (raw, entities, annotations, conf) {
           deleted: false
         })
       } else if (Object.hasOwnProperty.call(tag.attributes, property + 'Added') === true) {
-        details.properties.push({
+        console.log(tag.attributes, property + 'Added')
+        const p = {
           name: property,
           value: tag.attributes[property + 'Added'].value,
           saved: false,
           deleted: false
-        })
-      } else if (Object.hasOwnProperty.call(tag.attributes, property + 'Deleted') === true) {
-        details.properties.push({
-          name: property,
-          value: tag.attributes[property + 'Deleted'].value,
-          saved: false,
-          deleted: true
-        })
+        }
+
+        if (Object.hasOwnProperty.call(tag.attributes, property + 'Deleted') === true) {
+          p.deleted = true
+        }
+
+        details.properties.push(p)
       }
     })
 
