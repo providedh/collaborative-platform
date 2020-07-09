@@ -66,12 +66,6 @@ class Directory(FileNode):
         log_activity(project=self.project, user=user, related_dir=self,
                      action_text="renamed directory {} to {}".format(old_name, new_name))
 
-    def get_files(self):  # type: (Directory) -> QuerySet
-        return self.files.values()
-
-    def get_subdirectories(self):  # type: (Directory) -> QuerySet
-        return self.subdirs.values()
-
     def get_content(self):  # type: (Directory) -> list
         return list(self.subdirs.order_by('name').values()) + list(self.files.order_by('name').values())
 
