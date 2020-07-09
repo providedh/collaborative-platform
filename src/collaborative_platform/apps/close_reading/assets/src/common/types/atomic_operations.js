@@ -49,7 +49,12 @@ const actions = {
   },
   entity: {
     add: {
-      reference: () => ({}),
+      reference: (id, refPayload) => ({
+        element_type: "reference",
+        method: "POST",
+        edited_element_id: id,
+        ...refPayload
+      }),
       property: (id, property, value) => ({
         element_type: 'entity_property',
         method: 'POST',
@@ -59,7 +64,13 @@ const actions = {
       unification: () => ({})
     },
     modify: {
-      reference: () => ({}),
+      reference: (id, old, refPayload) => ({
+        element_type: "reference",
+        method: "PUT",
+        edited_element_id: id,
+        old_element_id: old,
+        ...refPayload
+      }),
       property: (id, property, value) => ({
         element_type: 'entity_property',
         method: 'PUT',
