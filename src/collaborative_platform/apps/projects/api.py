@@ -1,4 +1,3 @@
-from copy import copy
 from json import loads, JSONDecodeError, dumps
 
 from django.contrib.auth.decorators import login_required

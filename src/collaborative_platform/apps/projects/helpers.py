@@ -115,22 +115,3 @@ def create_new_project_version(project, files_modification=False, commit=None):
         new_project_version.file_versions.set(latest_file_versions)
         new_project_version.save()
     logger.info(f"create_new_project_version took {time.time() - dt} s")
-
-
-def user_is_project_admin(project_id, user):  # type: (int, User) -> bool
-    return Contributor.objects.filter(
-        project_id=project_id,
-        user=user,
-        permissions='AD',
-    ).exists()
-
-
-def get_ana_link(project_id, uncertainty_type):  # type: (int, str) -> str
-    path = reverse('taxonomy', args=(project_id,))
-    domain = get_current_site(None).domain
-
-    return f"https://{domain}{path}#{uncertainty_type}"
-
-
-def ana_link_to_type(link):  # type: (str) -> str
-    return link.split('#')[-1]
