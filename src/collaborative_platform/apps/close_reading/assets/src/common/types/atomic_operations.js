@@ -3,7 +3,7 @@ export const ActionType = { add: 'add', modify: 'modify', delete: 'delete' }
 export const ActionTarget = { text: 'text', entity: 'entity', certainty: 'certainty' }
 export const ActionObject = {
   tag: 'tag',
-  referece: 'reference',
+  reference: 'reference',
   property: 'property',
   unification: 'unification',
   certainty: 'certainty'
