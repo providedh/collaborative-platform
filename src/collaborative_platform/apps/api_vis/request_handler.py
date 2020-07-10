@@ -71,3 +71,17 @@ class RequestHandler:
         response = db_handler.get_all_cliques_which_include_entities_from_given_file(request_data, file_id)
 
         return response
+
+    def get_project_entities(self, project_id, user, request_data):
+        db_handler = DbHandler(project_id, user)
+        response = db_handler.get_all_entities_in_project(request_data)
+
+        return response
+
+    def get_error_response(self, exception, status):
+        response = {
+            'status': status,
+            'message': str(exception),
+        }
+
+        return response

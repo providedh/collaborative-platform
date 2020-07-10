@@ -27,16 +27,14 @@ def project_cliques(request, project_id):
             user = request.user
             request_data = json.loads(request.body)
 
-            request_validator = RequestValidator()
-            request_validator.validate_clique_creation_data(request_data)
+            RequestValidator().validate_clique_creation_data(request_data)
 
-            request_handler = RequestHandler()
-            response = request_handler.create_clique(project_id, user, request_data)
+            response = RequestHandler().create_clique(project_id, user, request_data)
 
             return JsonResponse(response)
 
         except (BadRequest, JSONDecodeError) as exception:
-            response = get_error_response(exception, BAD_REQUEST_STATUS)
+            response = RequestHandler().get_error_response(exception, BAD_REQUEST_STATUS)
 
             return JsonResponse(response, status=BAD_REQUEST_STATUS)
 
@@ -45,13 +43,12 @@ def project_cliques(request, project_id):
             user = request.user
             request_data = parse_query_string(request.GET)
 
-            request_handler = RequestHandler()
-            response = request_handler.get_project_cliques(project_id, user, request_data)
+            response = RequestHandler().get_project_cliques(project_id, user, request_data)
 
             return JsonResponse(response, safe=False)
 
         except BadRequest as exception:
-            response = get_error_response(exception, BAD_REQUEST_STATUS)
+            response = RequestHandler().get_error_response(exception, BAD_REQUEST_STATUS)
 
             return JsonResponse(response, status=BAD_REQUEST_STATUS)
 
@@ -60,16 +57,14 @@ def project_cliques(request, project_id):
             user = request.user
             request_data = json.loads(request.body)
 
-            request_validator = RequestValidator()
-            request_validator.validate_clique_delete_data(request_data)
+            RequestValidator().validate_clique_delete_data(request_data)
 
-            request_handler = RequestHandler()
-            response = request_handler.delete_clique(project_id, user, request_data)
+            response = RequestHandler().delete_clique(project_id, user, request_data)
 
             return JsonResponse(response)
 
         except (BadRequest, JSONDecodeError) as exception:
-            response = get_error_response(exception, BAD_REQUEST_STATUS)
+            response = RequestHandler().get_error_response(exception, BAD_REQUEST_STATUS)
 
             return JsonResponse(response, status=BAD_REQUEST_STATUS)
 
@@ -83,13 +78,12 @@ def file_cliques(request, project_id, file_id):
             user = request.user
             request_data = parse_query_string(request.GET)
 
-            request_handler = RequestHandler()
-            response = request_handler.get_file_cliques(file_id, user, request_data)
+            response = RequestHandler().get_file_cliques(file_id, user, request_data)
 
             return JsonResponse(response, safe=False)
 
         except BadRequest as exception:
-            response = get_error_response(exception, BAD_REQUEST_STATUS)
+            response = RequestHandler().get_error_response(exception, BAD_REQUEST_STATUS)
 
             return JsonResponse(response, status=BAD_REQUEST_STATUS)
 
@@ -100,21 +94,17 @@ def file_cliques(request, project_id, file_id):
 def project_entities(request, project_id):
     if request.method == 'GET':
         try:
-            qs_parameters = parse_query_string(request.GET)
+            user = request.user
+            request_data = parse_query_string(request.GET)
 
-            db_handler = DbHandler(project_id, request.user)
-            response = db_handler.get_all_entities_in_project(qs_parameters)
+            response = RequestHandler().get_project_entities(project_id, user, request_data)
+
+            return JsonResponse(response, safe=False)
 
         except BadRequest as exception:
-            response = {
-                'status': BAD_REQUEST_STATUS,
-                'message': str(exception),
-            }
+            response = RequestHandler().get_error_response(exception, BAD_REQUEST_STATUS)
 
             return JsonResponse(response, status=BAD_REQUEST_STATUS)
-
-        else:
-            return JsonResponse(response, safe=False)
 
 
 @login_required
@@ -344,12 +334,3 @@ def uncommitted_changes(request, project_id):
 
         else:
             return JsonResponse(response, safe=False)
-
-
-def get_error_response(exception, status):
-    response = {
-        'status': status,
-        'message': str(exception),
-    }
-
-    return response
