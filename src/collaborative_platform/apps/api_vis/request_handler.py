@@ -86,6 +86,12 @@ class RequestHandler:
 
         return response
 
+    def get_project_unbound_entities(self, project_id, user, request_data):
+        db_handler = DbHandler(project_id, user)
+        response = db_handler.get_unbound_entities_in_project(request_data)
+
+        return response
+
     def get_error(self, exception, status):
         response = {
             'status': status,

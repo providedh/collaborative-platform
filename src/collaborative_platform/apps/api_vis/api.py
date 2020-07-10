@@ -126,21 +126,16 @@ def file_entities(request, project_id, file_id):
 def project_unbound_entities(request, project_id):
     if request.method == 'GET':
         try:
-            qs_parameters = parse_query_string(request.GET)
+            request_data = parse_query_string(request.GET)
 
-            db_handler = DbHandler(project_id, request.user)
-            response = db_handler.get_unbound_entities_in_project(qs_parameters)
+            response = RequestHandler().get_project_unbound_entities(project_id, request.user, request_data)
+
+            return JsonResponse(response, safe=False)
 
         except BadRequest as exception:
-            response = {
-                'status': BAD_REQUEST_STATUS,
-                'message': str(exception),
-            }
+            response = RequestHandler().get_error(exception, BAD_REQUEST_STATUS)
 
             return JsonResponse(response, status=BAD_REQUEST_STATUS)
-
-        else:
-            return JsonResponse(response, safe=False)
 
 
 @login_required
