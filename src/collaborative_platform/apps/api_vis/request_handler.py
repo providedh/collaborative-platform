@@ -1,5 +1,7 @@
 from apps.api_vis.db_handler import DbHandler
 
+from apps.files_management.models import File
+
 
 class RequestHandler:
     def __init__(self):
@@ -59,5 +61,13 @@ class RequestHandler:
         response = {
             'delete_statuses': delete_statuses,
         }
+
+        return response
+
+    def get_file_cliques(self, file_id, user, request_data):
+        project_id = File.objects.get(id=file_id).project_id
+
+        db_handler = DbHandler(project_id, user)
+        response = db_handler.get_all_cliques_which_include_entities_from_given_file(request_data, file_id)
 
         return response
