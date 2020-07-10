@@ -5,7 +5,8 @@ from django.forms.models import model_to_dict
 from django.utils import timezone
 
 from apps.api_vis.models import Clique, Commit, Entity, EntityProperty, EntityVersion, Unification
-from apps.api_vis.helpers import parse_project_version, validate_keys_and_types
+from apps.api_vis.helpers import parse_project_version
+from apps.api_vis.request_validator import validate_keys_and_types
 from apps.exceptions import BadRequest, NotModified
 from apps.files_management.models import Directory, File, FileVersion
 from apps.projects.models import ProjectVersion

@@ -5,10 +5,17 @@ from json.decoder import JSONDecodeError
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotModified, JsonResponse
 
-from apps.api_vis.helpers import validate_keys_and_types, parse_query_string
+from apps.api_vis.helpers import parse_query_string
 from apps.api_vis.db_handler import DbHandler
+from apps.api_vis.request_handler import RequestHandler
+from apps.api_vis.request_validator import RequestValidator, validate_keys_and_types
 from apps.exceptions import BadRequest, NotModified
 from apps.views_decorators import objects_exists, user_has_access
+
+
+BAD_REQUEST_STATUS = HttpResponseBadRequest.status_code
+NOT_MODIFIED_STATUS = HttpResponseNotModified.status_code
+OK_STATUS = HttpResponse.status_code
 
 
 @login_required
@@ -17,121 +24,54 @@ from apps.views_decorators import objects_exists, user_has_access
 def project_cliques(request, project_id):
     if request.method == 'POST':
         try:
+            user = request.user
             request_data = json.loads(request.body)
 
-            required_keys = {
-                'entities': list,
-                'certainty': str,
-                'project_version': float,
-            }
-            optional_keys = {
-                'name': str
-            }
+            request_validator = RequestValidator()
+            request_validator.validate_clique_creation_data(request_data)
 
-            validate_keys_and_types(request_data, required_keys, optional_keys)
-
-            db_handler = DbHandler(project_id, request.user)
-            clique_id, clique_name = db_handler.create_clique(request_data)
-
-            entities = request_data['entities']
-            project_version_nr = request_data['project_version']
-            certainty = request_data['certainty']
-            unification_statuses = []
-
-            for entity in entities:
-                unification_status = {}
-
-                if type(entity) is int:
-                    unification_status.update({'id': entity})
-                elif type(entity) is dict:
-                    unification_status.update(entity)
-
-                status_update = db_handler.add_unification(clique_id, entity, certainty, project_version_nr)
-                unification_status.update(status_update)
-                unification_statuses.append(unification_status)
-
-        except (BadRequest, JSONDecodeError) as exception:
-            status = HttpResponseBadRequest.status_code
-
-            response = {
-                'status': status,
-                'message': str(exception),
-            }
-
-            return JsonResponse(response, status=status)
-
-        else:
-            response = {
-                'name': clique_name,
-                'id': clique_id,
-                'unification_statuses': unification_statuses,
-            }
+            request_handler = RequestHandler()
+            response = request_handler.create_clique(project_id, user, request_data)
 
             return JsonResponse(response)
+
+        except (BadRequest, JSONDecodeError) as exception:
+            response = get_error_response(exception, BAD_REQUEST_STATUS)
+
+            return JsonResponse(response, status=BAD_REQUEST_STATUS)
 
     elif request.method == "GET":
         try:
-            qs_parameters = parse_query_string(request.GET)
+            user = request.user
+            request_data = parse_query_string(request.GET)
 
-            db_handler = DbHandler(project_id, request.user)
-            response = db_handler.get_all_cliques_in_project(qs_parameters)
-
-        except BadRequest as exception:
-            status = HttpResponseBadRequest.status_code
-
-            response = {
-                'status': status,
-                'message': str(exception),
-            }
-
-            return JsonResponse(response, status=status)
-
-        else:
+            request_handler = RequestHandler()
+            response = request_handler.get_project_cliques(project_id, user, request_data)
 
             return JsonResponse(response, safe=False)
 
+        except BadRequest as exception:
+            response = get_error_response(exception, BAD_REQUEST_STATUS)
+
+            return JsonResponse(response, status=BAD_REQUEST_STATUS)
+
     elif request.method == 'DELETE':
         try:
+            user = request.user
             request_data = json.loads(request.body)
 
-            required_keys = {
-                'cliques': list,
-                'project_version': float,
-            }
+            request_validator = RequestValidator()
+            request_validator.validate_clique_delete_data(request_data)
 
-            validate_keys_and_types(request_data, required_keys)
-
-            db_handler = DbHandler(project_id, request.user)
-
-            cliques = request_data['cliques']
-            project_version_nr = request_data['project_version']
-            delete_statuses = []
-
-            for clique_id in cliques:
-                delete_status = {}
-
-                delete_status.update({'id': clique_id})
-
-                status_update = db_handler.delete_clique(clique_id, project_version_nr)
-                delete_status.update(status_update)
-                delete_statuses.append(delete_status)
-
-        except (BadRequest, JSONDecodeError) as exception:
-            status = HttpResponseBadRequest.status_code
-
-            response = {
-                'status': status,
-                'message': str(exception),
-            }
-
-            return JsonResponse(response, status=status)
-
-        else:
-            response = {
-                'delete_statuses': delete_statuses,
-            }
+            request_handler = RequestHandler()
+            response = request_handler.delete_clique(project_id, user, request_data)
 
             return JsonResponse(response)
+
+        except (BadRequest, JSONDecodeError) as exception:
+            response = get_error_response(exception, BAD_REQUEST_STATUS)
+
+            return JsonResponse(response, status=BAD_REQUEST_STATUS)
 
 
 @login_required
@@ -146,14 +86,12 @@ def file_cliques(request, project_id, file_id):
             response = db_handler.get_all_cliques_which_include_entities_from_given_file(qs_parameters, file_id)
 
         except BadRequest as exception:
-            status = HttpResponseBadRequest.status_code
-
             response = {
-                'status': status,
+                'status': BAD_REQUEST_STATUS,
                 'message': str(exception),
             }
 
-            return JsonResponse(response, status=status)
+            return JsonResponse(response, status=BAD_REQUEST_STATUS)
 
         else:
             return JsonResponse(response, safe=False)
@@ -171,14 +109,12 @@ def project_entities(request, project_id):
             response = db_handler.get_all_entities_in_project(qs_parameters)
 
         except BadRequest as exception:
-            status = HttpResponseBadRequest.status_code
-
             response = {
-                'status': status,
+                'status': BAD_REQUEST_STATUS,
                 'message': str(exception),
             }
 
-            return JsonResponse(response, status=status)
+            return JsonResponse(response, status=BAD_REQUEST_STATUS)
 
         else:
             return JsonResponse(response, safe=False)
@@ -196,14 +132,12 @@ def file_entities(request, project_id, file_id):
             response = db_handler.get_all_entities_in_file(qs_parameters, file_id)
 
         except BadRequest as exception:
-            status = HttpResponseBadRequest.status_code
-
             response = {
-                'status': status,
+                'status': BAD_REQUEST_STATUS,
                 'message': str(exception),
             }
 
-            return JsonResponse(response, status=status)
+            return JsonResponse(response, status=BAD_REQUEST_STATUS)
 
         else:
             return JsonResponse(response, safe=False)
@@ -221,14 +155,12 @@ def project_unbound_entities(request, project_id):
             response = db_handler.get_unbound_entities_in_project(qs_parameters)
 
         except BadRequest as exception:
-            status = HttpResponseBadRequest.status_code
-
             response = {
-                'status': status,
+                'status': BAD_REQUEST_STATUS,
                 'message': str(exception),
             }
 
-            return JsonResponse(response, status=status)
+            return JsonResponse(response, status=BAD_REQUEST_STATUS)
 
         else:
             return JsonResponse(response, safe=False)
@@ -246,14 +178,12 @@ def file_unbound_entities(request, project_id, file_id):
             response = db_handler.get_unbound_entities_in_file(qs_parameters, file_id)
 
         except BadRequest as exception:
-            status = HttpResponseBadRequest.status_code
-
             response = {
-                'status': status,
+                'status': BAD_REQUEST_STATUS,
                 'message': str(exception),
             }
 
-            return JsonResponse(response, status=status)
+            return JsonResponse(response, status=BAD_REQUEST_STATUS)
 
         else:
             return JsonResponse(response, safe=False)
@@ -298,14 +228,12 @@ def clique_entities(request, project_id, clique_id):
                 unification_statuses.append(unification_status)
 
         except (BadRequest, JSONDecodeError) as exception:
-            status = HttpResponseBadRequest.status_code
-
             response = {
-                'status': status,
+                'status': BAD_REQUEST_STATUS,
                 'message': str(exception),
             }
 
-            return JsonResponse(response, status=status)
+            return JsonResponse(response, status=BAD_REQUEST_STATUS)
 
         else:
             response = {
@@ -341,14 +269,12 @@ def clique_entities(request, project_id, clique_id):
                 delete_statuses.append(delete_status)
 
         except (BadRequest, JSONDecodeError) as exception:
-            status = HttpResponseBadRequest.status_code
-
             response = {
-                'status': status,
+                'status': BAD_REQUEST_STATUS,
                 'message': str(exception),
             }
 
-            return JsonResponse(response, status=status)
+            return JsonResponse(response, status=BAD_REQUEST_STATUS)
 
         else:
             response = {
@@ -370,7 +296,7 @@ def commits(request, project_id):
                 'message': str,
             }
 
-            validate_keys_and_types(request_data, optional_name_type_template=optional_keys)
+            validate_keys_and_types(request_data, optional_key_type_pairs=optional_keys)
 
             message = request_data.get('message')
 
@@ -378,36 +304,33 @@ def commits(request, project_id):
             db_handler.commit_changes(message)
 
         except NotModified as exception:
-            status = HttpResponseNotModified.status_code
-
             response = {
-                'status': status,
+                'status': NOT_MODIFIED_STATUS,
                 'message': str(exception),
             }
 
-            return JsonResponse(response, status=status)
+            return JsonResponse(response, status=NOT_MODIFIED_STATUS)
 
         except (BadRequest, JSONDecodeError) as exception:
-            status = HttpResponseBadRequest.status_code
-
             response = {
-                'status': status,
+                'status': BAD_REQUEST_STATUS,
                 'message': str(exception),
             }
 
-            return JsonResponse(response, status=status)
+            return JsonResponse(response, status=BAD_REQUEST_STATUS)
 
         else:
-            status = HttpResponse.status_code
-
             response = {
-                'status': status,
+                'status': OK_STATUS,
                 'message': 'OK'
             }
 
             return JsonResponse(response)
 
 
+@login_required
+@objects_exists
+@user_has_access('RW')
 def uncommitted_changes(request, project_id):
     if request.method == 'GET':
         try:
@@ -415,14 +338,21 @@ def uncommitted_changes(request, project_id):
             response = db_handler.get_uncommitted_changes()
 
         except BadRequest as exception:
-            status = HttpResponseBadRequest.status_code
-
             response = {
-                'status': status,
+                'status': BAD_REQUEST_STATUS,
                 'message': str(exception),
             }
 
-            return JsonResponse(response, status=status)
+            return JsonResponse(response, status=BAD_REQUEST_STATUS)
 
         else:
             return JsonResponse(response, safe=False)
+
+
+def get_error_response(exception, status):
+    response = {
+        'status': status,
+        'message': str(exception),
+    }
+
+    return response

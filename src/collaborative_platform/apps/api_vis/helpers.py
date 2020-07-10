@@ -7,7 +7,6 @@ from django.http import HttpRequest, JsonResponse
 
 import apps.index_and_search.models as es
 
-from apps.exceptions import BadRequest
 from apps.files_management.models import File, FileVersion
 
 
@@ -220,24 +219,3 @@ def parse_string_to_int(string):
 def parse_string_to_float(string):
     if string:
         return float(string)
-
-
-def validate_keys_and_types(request_data, required_name_type_template=None, optional_name_type_template=None,
-                            parent_name=None):  # type: (dict, dict, dict, str) -> None
-    if required_name_type_template:
-        for key in required_name_type_template:
-            if key not in request_data:
-                if not parent_name:
-                    raise BadRequest(f"Missing '{key}' parameter in request data.")
-                else:
-                    raise BadRequest(f"Missing '{key}' parameter in {parent_name} argument in request data.")
-
-            if type(request_data[key]) is not required_name_type_template[key]:
-                raise BadRequest(f"Invalid type of '{key}' parameter. "
-                                 f"Correct type is: '{str(required_name_type_template[key])}'.")
-
-    if optional_name_type_template:
-        for key in optional_name_type_template:
-            if key in request_data and type(request_data[key]) is not optional_name_type_template[key]:
-                raise BadRequest(f"Invalid type of '{key}' parameter. "
-                                 f"Correct type is: '{str(optional_name_type_template[key])}'.")
