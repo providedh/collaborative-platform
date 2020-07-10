@@ -24,47 +24,44 @@ OK_STATUS = HttpResponse.status_code
 def project_cliques(request, project_id):
     if request.method == 'POST':
         try:
-            user = request.user
             request_data = json.loads(request.body)
 
             RequestValidator().validate_clique_creation_data(request_data)
 
-            response = RequestHandler().create_clique(project_id, user, request_data)
+            response = RequestHandler().create_clique(project_id, request.user, request_data)
 
             return JsonResponse(response)
 
         except (BadRequest, JSONDecodeError) as exception:
-            response = RequestHandler().get_error_response(exception, BAD_REQUEST_STATUS)
+            response = RequestHandler().get_error(exception, BAD_REQUEST_STATUS)
 
             return JsonResponse(response, status=BAD_REQUEST_STATUS)
 
     elif request.method == "GET":
         try:
-            user = request.user
             request_data = parse_query_string(request.GET)
 
-            response = RequestHandler().get_project_cliques(project_id, user, request_data)
+            response = RequestHandler().get_project_cliques(project_id, request.user, request_data)
 
             return JsonResponse(response, safe=False)
 
         except BadRequest as exception:
-            response = RequestHandler().get_error_response(exception, BAD_REQUEST_STATUS)
+            response = RequestHandler().get_error(exception, BAD_REQUEST_STATUS)
 
             return JsonResponse(response, status=BAD_REQUEST_STATUS)
 
     elif request.method == 'DELETE':
         try:
-            user = request.user
             request_data = json.loads(request.body)
 
             RequestValidator().validate_clique_delete_data(request_data)
 
-            response = RequestHandler().delete_clique(project_id, user, request_data)
+            response = RequestHandler().delete_clique(project_id, request.user, request_data)
 
             return JsonResponse(response)
 
         except (BadRequest, JSONDecodeError) as exception:
-            response = RequestHandler().get_error_response(exception, BAD_REQUEST_STATUS)
+            response = RequestHandler().get_error(exception, BAD_REQUEST_STATUS)
 
             return JsonResponse(response, status=BAD_REQUEST_STATUS)
 
@@ -75,15 +72,14 @@ def project_cliques(request, project_id):
 def file_cliques(request, project_id, file_id):
     if request.method == 'GET':
         try:
-            user = request.user
             request_data = parse_query_string(request.GET)
 
-            response = RequestHandler().get_file_cliques(file_id, user, request_data)
+            response = RequestHandler().get_file_cliques(file_id, request.user, request_data)
 
             return JsonResponse(response, safe=False)
 
         except BadRequest as exception:
-            response = RequestHandler().get_error_response(exception, BAD_REQUEST_STATUS)
+            response = RequestHandler().get_error(exception, BAD_REQUEST_STATUS)
 
             return JsonResponse(response, status=BAD_REQUEST_STATUS)
 
@@ -94,15 +90,14 @@ def file_cliques(request, project_id, file_id):
 def project_entities(request, project_id):
     if request.method == 'GET':
         try:
-            user = request.user
             request_data = parse_query_string(request.GET)
 
-            response = RequestHandler().get_project_entities(project_id, user, request_data)
+            response = RequestHandler().get_project_entities(project_id, request.user, request_data)
 
             return JsonResponse(response, safe=False)
 
         except BadRequest as exception:
-            response = RequestHandler().get_error_response(exception, BAD_REQUEST_STATUS)
+            response = RequestHandler().get_error(exception, BAD_REQUEST_STATUS)
 
             return JsonResponse(response, status=BAD_REQUEST_STATUS)
 
@@ -113,21 +108,16 @@ def project_entities(request, project_id):
 def file_entities(request, project_id, file_id):
     if request.method == 'GET':
         try:
-            qs_parameters = parse_query_string(request.GET)
+            request_data = parse_query_string(request.GET)
 
-            db_handler = DbHandler(project_id, request.user)
-            response = db_handler.get_all_entities_in_file(qs_parameters, file_id)
+            response = RequestHandler().get_file_entities(file_id, request.user, request_data)
+
+            return JsonResponse(response, safe=False)
 
         except BadRequest as exception:
-            response = {
-                'status': BAD_REQUEST_STATUS,
-                'message': str(exception),
-            }
+            response = RequestHandler().get_error(exception, BAD_REQUEST_STATUS)
 
             return JsonResponse(response, status=BAD_REQUEST_STATUS)
-
-        else:
-            return JsonResponse(response, safe=False)
 
 
 @login_required
