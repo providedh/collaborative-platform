@@ -92,6 +92,14 @@ class RequestHandler:
 
         return response
 
+    def get_file_unbound_entities(self, file_id, user, request_data):
+        project_id = File.objects.get(id=file_id).project_id
+
+        db_handler = DbHandler(project_id, user)
+        response = db_handler.get_unbound_entities_in_file(request_data, file_id)
+
+        return response
+
     def get_error(self, exception, status):
         response = {
             'status': status,
