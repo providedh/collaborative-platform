@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+import xml from 'common/helpers/xml.js'
 import { AppContext } from 'common/context/app'
 import websocket from 'common/helpers/websocket_api'
 import { Document } from 'components/document'
@@ -52,8 +53,19 @@ export default class App extends React.Component {
       newState.documentContent = response.body_content
       newState.context.authors = response.authors
       newState.context.annotations = response.certainties
-      newState.context.entities = response.entities_lists
       newState.context.operations = response.operations
+
+      const entities = Object
+        .values(response.entities_lists)
+        .reduce((ac, dc) => [...ac, ...dc], [])
+
+      newState.context.entities = xml.processEntitiesInDocument(
+        response.body_content,
+        entities,
+        response.certainties,
+        prev.context.configuration.properties_per_entity)
+
+      console.log(newState)
 
       return newState
     })
