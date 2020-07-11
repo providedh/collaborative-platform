@@ -1,8 +1,16 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
-import { TEIentities } from 'common/types'
+import {
+  ActionType,
+  ActionTarget,
+  ActionObject,
+  AtomicActionBuilder,
+  WebsocketRequest,
+  WebsocketRequestType
+} from 'common/types'
 import { WithAppContext } from 'common/context/app'
+import { EntitySelector } from 'components/entitySelector'
 import styles from './entity_creation_panel.module.css'
 
 export default function EntityCreationPanelWithContext (props) {
@@ -13,56 +21,28 @@ export default function EntityCreationPanelWithContext (props) {
   )
 }
 
-function capitalized (s) {
-  return s[0].toUpperCase() + s.slice(1)
+function onTagCreate (selection, entityPayload, websocket) {
+  const tagBuilder = AtomicActionBuilder(ActionTarget.text, ActionType.add, ActionObject.tag)
+  const refBuilder = AtomicActionBuilder(ActionTarget.entity, ActionType.add, ActionObject.reference)
+  const tagAction = tagBuilder(...selection.target)
+  const refAction = refBuilder(0, entityPayload)
+
+  const request = WebsocketRequest(WebsocketRequestType.modify, [tagAction, refAction])
+  websocket.send(request)
 }
 
 function EntityCreationPanel (props) {
-  const entities = props.context.configuration.entities
-  const [entity, setEntity] = useState(Object.keys(entities)[0])
-  const entityType = TEIentities[entity]
-  const [attributes, setAttributes] = useState(Object.fromEntries(entityType.properties.map(x => [x, ''])))
-
-  function handleEntityChange (name) {
-    setEntity(name)
-    const entityType = TEIentities[name]
-    setAttributes(Object.fromEntries(entityType.properties.map(x => [x, ''])))
-  }
-
-  const attributeFields = Object.entries(attributes).map(([name, value]) => <div className="form-group col-4" key={name}>
-    <label htmlFor={name}>{name}</label>
-    <input type="text"
-      className="form-control form-control-sm"
-      id={name}
-      value={value}
-      onChange={e => setAttributes(Object.assign({}, attributes, { [name]: e.target.value }))} />
-  </div>)
-
-  const entityOptions = Object.keys(entities).map(x =>
-    <option key={x} value={x}>{capitalized(x)}</option>)
+  const [payload, setPayload] = useState(null)
 
   return <div className={styles.entityCreationPanel}>
     <form>
-      <div className="form-group">
-        <label htmlFor="entityType">Entity type</label>
-        <select className="form-control form-control-sm" id="entityType" value={entity} onChange={e => handleEntityChange(e.target.value)}>
-          {entityOptions}
-        </select>
-      </div>
-      <div className="row">
-        {attributeFields}
-        <div className="form-group col-4">
-          <button className="btn btn-link btn-sm"
-            type="button"
-            aria-controls="collapse"></button>
-        </div>
-      </div>
-      <div className="row">
+      <EntitySelector onChange={newPayload => setPayload(newPayload)}/>
+      <div className="row mt-2">
         <div className="form-group col-4">
           <button className="btn btn-outline-primary btn-sm"
             onClick={e => {
               e.preventDefault()
-              props.callback(entity, attributes)
+              onTagCreate(props.selection, payload, props.context.websocket)
             }}
             type="button">Create</button>
         </div>
@@ -77,7 +57,9 @@ EntityCreationPanel.propTypes = {
     user: PropTypes.string,
     authors: PropTypes.array,
     annotations: PropTypes.array,
-    entities: PropTypes.object,
-    configuration: PropTypes.object
-  })
+    entities: PropTypes.arrayOf(PropTypes.object),
+    configuration: PropTypes.object,
+    websocket: PropTypes.object
+  }),
+  selection: PropTypes.object
 }
