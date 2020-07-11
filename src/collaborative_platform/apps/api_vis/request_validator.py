@@ -24,6 +24,28 @@ class RequestValidator:
 
         validate_keys_and_types(request_data, required_keys)
 
+    @staticmethod
+    def validate_put_clique_entities_data(request_data):
+        required_keys = {
+            'entities': list,
+            'certainty': str,
+            'project_version': float,
+        }
+        optional_keys = {
+            'name': str
+        }
+
+        validate_keys_and_types(request_data, required_keys, optional_keys)
+
+    @staticmethod
+    def validate_delete_clique_entities_data(request_data):
+        required_keys = {
+            'entities': list,
+            'project_version': float,
+        }
+
+        validate_keys_and_types(request_data, required_keys)
+
 
 def validate_keys_and_types(dictionary, required_key_type_pairs=None, optional_key_type_pairs=None, parent_name=None):
     # type: (dict, dict, dict, str) -> None

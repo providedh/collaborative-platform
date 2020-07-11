@@ -164,91 +164,31 @@ def clique_entities(request, project_id, clique_id):
         try:
             request_data = json.loads(request.body)
 
-            required_keys = {
-                'entities': list,
-                'certainty': str,
-                'project_version': float,
-            }
-            optional_keys = {
-                'name': str
-            }
+            RequestValidator().validate_put_clique_entities_data(request_data)
 
-            validate_keys_and_types(request_data, required_keys, optional_keys)
-
-            db_handler = DbHandler(project_id, request.user)
-
-            entities = request_data['entities']
-            project_version_nr = request_data['project_version']
-            certainty = request_data['certainty']
-            unification_statuses = []
-
-            for entity in entities:
-                unification_status = {}
-
-                if type(entity) is int:
-                    unification_status.update({'id': entity})
-                elif type(entity) is dict:
-                    unification_status.update(entity)
-
-                status_update = db_handler.add_unification(clique_id, entity, certainty, project_version_nr)
-                unification_status.update(status_update)
-                unification_statuses.append(unification_status)
-
-        except (BadRequest, JSONDecodeError) as exception:
-            response = {
-                'status': BAD_REQUEST_STATUS,
-                'message': str(exception),
-            }
-
-            return JsonResponse(response, status=BAD_REQUEST_STATUS)
-
-        else:
-            response = {
-                'unification_statuses': unification_statuses,
-            }
+            response = RequestHandler().put_clique_entities(clique_id, request.user, request_data)
 
             return JsonResponse(response)
+
+        except (BadRequest, JSONDecodeError) as exception:
+            response = RequestHandler().get_error(exception, BAD_REQUEST_STATUS)
+
+            return JsonResponse(response, status=BAD_REQUEST_STATUS)
 
     elif request.method == 'DELETE':
         try:
             request_data = json.loads(request.body)
 
-            required_keys = {
-                'entities': list,
-                'project_version': float,
-            }
+            RequestValidator().validate_delete_clique_entities_data(request_data)
 
-            validate_keys_and_types(request_data, required_keys)
-
-            db_handler = DbHandler(project_id, request.user)
-
-            entities_ids = request_data['entities']
-            project_version_nr = request_data['project_version']
-            delete_statuses = []
-
-            for entity_id in entities_ids:
-                delete_status = {}
-
-                delete_status.update({'id': entity_id})
-
-                status_update = db_handler.delete_unification(clique_id, entity_id, project_version_nr)
-                delete_status.update(status_update)
-                delete_statuses.append(delete_status)
-
-        except (BadRequest, JSONDecodeError) as exception:
-            response = {
-                'status': BAD_REQUEST_STATUS,
-                'message': str(exception),
-            }
-
-            return JsonResponse(response, status=BAD_REQUEST_STATUS)
-
-        else:
-            response = {
-                'delete_statuses': delete_statuses,
-            }
+            response = RequestHandler().delete_clique_entities(clique_id, request.user, request_data)
 
             return JsonResponse(response)
+
+        except (BadRequest, JSONDecodeError) as exception:
+            response = RequestHandler().get_error(exception, BAD_REQUEST_STATUS)
+
+            return JsonResponse(response, status=BAD_REQUEST_STATUS)
 
 
 @login_required
