@@ -50,7 +50,6 @@ function onAttributeAdd (id, property, value, websocket) {
 }
 
 function Attributes (props) {
-  console.log(props)
   const entityType = TEIentities[props.entity.type]
 
   const presentAttributes = new Set(props.entity.properties.map(x => x.name))
