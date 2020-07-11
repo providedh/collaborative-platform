@@ -17,23 +17,12 @@ export default function useContentRendering (node, documentContent, callbacks, c
   const xmlDoc = parser.parseFromString(bodyContent, 'text/xml')
   const body = xmlDoc.getElementsByTagName('body')[0]
 
-  const entities = Object
-    .values(context.entities)
-    .reduce((ac, dc) => [...ac, ...dc], [])
-
-  const processedEntities = xml.processEntitiesInDocument(
-    documentContent,
-    entities,
-    context.annotations,
-    context.configuration.properties_per_entity)
-  console.log(processedEntities)
-
   node.innerHTML = ''
   node.appendChild(body)
   // return 0
-  styleEntities(processedEntities, context.configuration, css)
-  styleAnnotations(processedEntities, context, css)
-  setupEntityInteractions(processedEntities, callbacks)
+  styleEntities(context.entities, context.configuration, css)
+  styleAnnotations(context.entities, context, css)
+  setupEntityInteractions(context.entities, callbacks)
 }
 
 function styleEntities (entities, configuration, css) {
