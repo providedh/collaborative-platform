@@ -166,6 +166,12 @@ class RequestHandler:
 
         return response
 
+    def get_uncommitted_changes(self, project_id, user):
+        db_handler = DbHandler(project_id, user)
+        response = db_handler.get_uncommitted_changes()
+
+        return response
+
     def get_error(self, exception, status):
         response = {
             'status': status,

@@ -6,7 +6,6 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotModified, JsonResponse
 
 from apps.api_vis.helpers import parse_query_string
-from apps.api_vis.db_handler import DbHandler
 from apps.api_vis.request_handler import RequestHandler
 from apps.api_vis.request_validator import RequestValidator
 from apps.exceptions import BadRequest, NotModified
@@ -222,16 +221,11 @@ def commits(request, project_id):
 def uncommitted_changes(request, project_id):
     if request.method == 'GET':
         try:
-            db_handler = DbHandler(project_id, request.user)
-            response = db_handler.get_uncommitted_changes()
+            response = RequestHandler().get_uncommitted_changes(project_id, request.user)
+
+            return JsonResponse(response, safe=False)
 
         except BadRequest as exception:
-            response = {
-                'status': BAD_REQUEST_STATUS,
-                'message': str(exception),
-            }
+            response = RequestHandler().get_error(exception, BAD_REQUEST_STATUS)
 
             return JsonResponse(response, status=BAD_REQUEST_STATUS)
-
-        else:
-            return JsonResponse(response, safe=False)
