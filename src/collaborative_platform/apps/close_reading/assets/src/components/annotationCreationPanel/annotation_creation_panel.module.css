@@ -1,1 +1,23 @@
 .annotationCreationPanel{}
+.step{
+  width: 1.5em;
+  height: 1.5em;
+  text-align: center;
+  color: var(--primary);
+  font-weight: bold;
+  border: 1px solid;
+  border-radius: 50%;
+  font-size: small;
+  background-color: white;
+}
+.current{
+  background-color: var(--primary);
+  color: white;
+}
+.progressbar > div:first-of-type{
+  height: 2px;
+  top: 16px;
+}
+.progressbar > div:nth-of-type(2){
+  z-index: 2;
+}

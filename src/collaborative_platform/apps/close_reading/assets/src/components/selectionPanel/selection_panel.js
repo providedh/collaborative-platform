@@ -50,7 +50,7 @@ function SelectionPanel (props) {
   let body = ''
   if (option !== null) {
     body = (option === CreationOption.certainty
-      ? <AnnotationCreationPanel />
+      ? <AnnotationCreationPanel selection={props.selection}/>
       : <EntityCreationPanel selection={props.selection}/>)
   }
 

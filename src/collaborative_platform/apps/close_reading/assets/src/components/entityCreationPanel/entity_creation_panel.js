@@ -37,8 +37,16 @@ function EntityCreationPanel (props) {
   return <div className={styles.entityCreationPanel}>
     <form>
       <EntitySelector onChange={newPayload => setPayload(newPayload)}/>
-      <div className="row mt-2">
-        <div className="form-group col-4">
+      <div className="row mt-2 flex-column mx-1">
+        <div className="d-flex flex-row justify-content-between">
+          <span className={styles.step}>1</span>
+          <span className={styles.step}>2</span>
+        </div>
+        <div className="progress my-1" style={{height: '2px'}}>
+          <div className="progress-bar" role="progressbar" style={{width: '0%'}} aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+        <div className="d-flex flex-row justify-content-between">
+          <a href="#">Fill entity details</a>
           <button className="btn btn-outline-primary btn-sm"
             onClick={e => {
               e.preventDefault()
