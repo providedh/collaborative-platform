@@ -55,9 +55,9 @@ function AnnotationCreationPanel (props) {
           onChange={annotation => setAnnotation(annotation)}/>
       </div>
       <div className="row mt-2 flex-column mx-1">
-        <div className={styles.progressbar + " position-relative"}>
+        <div className={styles.progressbar + ' position-relative'}>
           <div className="progress my-1 position-relative ">
-            <div className="progress-bar" role="progressbar" style={{width: (step*50) + '%'}} aria-valuenow={50 + step*50} aria-valuemin="0" aria-valuemax="100"></div>
+            <div className="progress-bar" role="progressbar" style={{ width: (step * 50) + '%' }} aria-valuenow={50 + step * 50} aria-valuemin="0" aria-valuemax="100"></div>
           </div>
           <div className="d-flex flex-row justify-content-between position-relative">
             <span className={styles.step + ' ' + (step === 0 ? styles.current : '')}>1</span>

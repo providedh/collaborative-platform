@@ -42,8 +42,8 @@ function EntityCreationPanel (props) {
           <span className={styles.step}>1</span>
           <span className={styles.step}>2</span>
         </div>
-        <div className="progress my-1" style={{height: '2px'}}>
-          <div className="progress-bar" role="progressbar" style={{width: '0%'}} aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+        <div className="progress my-1" style={{ height: '2px' }}>
+          <div className="progress-bar" role="progressbar" style={{ width: '0%' }} aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
         </div>
         <div className="d-flex flex-row justify-content-between">
           <a href="#">Fill entity details</a>

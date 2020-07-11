@@ -22,19 +22,14 @@ function Form (props) {
   const propertyOptions = entityType.properties.map(x =>
     <option key={x} value={x}>{x}</option>)
 
-  const defState = Object.assign({}, {
+  const defState = {
     locus: 'value',
     cert: 'medium',
     ana: [],
     assertedValue: '',
     match: '',
     desc: ''
-  }, props.annotation === undefined ? {} : {
-    ...props.annotation,
-    ana: props.annotation.ana
-      .split(' ')
-      .map(x => x.split('#')[1])
-  })
+  }
 
   const [form, update] = useState(defState)
   useEffect(() => props.onChange(form))
@@ -148,37 +143,16 @@ function Form (props) {
   </React.Fragment>
 }
 
-Form.propTypes = {/*
+Form.propTypes = {
   submitText: PropTypes.string,
   callback: PropTypes.func,
-  entity: PropTypes.shape({
-    deleted: PropTypes.bool,
-    properties: PropTypes.arrayOf(
-      PropTypes.shape({
-        name: PropTypes.string,
-        value: PropTypes.string,
-        saved: PropTypes.bool,
-        deleted: PropTypes.bool
-      })
-    ),
-    resp: PropTypes.string,
-    saved: PropTypes.bool,
-    type: PropTypes.string,
-    'xml:id': PropTypes.string
-  }),
-  annotation: PropTypes.shape({
-    locus: PropTypes.string,
-    cert: PropTypes.string,
-    ana: PropTypes.arrayOf(PropTypes.string),
-    assertedValue: PropTypes.string,
-    match: PropTypes.string,
-    desc: PropTypes.string
-  }),
+  entity: PropTypes.string,
   context: PropTypes.shape({
     user: PropTypes.string,
     authors: PropTypes.array,
     annotations: PropTypes.array,
-    entities: PropTypes.object,
+    entities: PropTypes.arrayOf(PropTypes.object),
     configuration: PropTypes.object
-  })*/
+  }),
+  onChange: PropTypes.func
 }
