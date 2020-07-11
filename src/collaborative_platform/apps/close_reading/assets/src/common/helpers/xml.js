@@ -79,17 +79,21 @@ function processEntitiesInDocument (raw, entities, annotations, conf) {
   const entityDetails = []
 
   nameTags.forEach(tag => {
-    if (!Object.hasOwnProperty.call(tag.attributes, 'ref') ||
-        !Object.hasOwnProperty.call(entityMap, tag.attributes.ref.value.slice(1))) { return }
+    const hasRef = Object.hasOwnProperty.call(tag.attributes, 'ref')
+    const hasRefAdded = Object.hasOwnProperty.call(tag.attributes, 'refAdded')
+    let ref = hasRef === true ? tag.attributes.ref.value.slice(1) : ''
+    ref = hasRefAdded === true ? tag.attributes.refAdded.value.slice(1) : ref
+    if ((!hasRef && !hasRefAdded) ||
+        !Object.hasOwnProperty.call(entityMap, ref)) { return }
 
     const details = {}
 
     details.id = tag.attributes['xml:id'].value
     details.htmlId = replacedId(tag.attributes['xml:id'].value)
-    details.target = tag.attributes.ref.value.slice(1)
+    details.target = ref
     details.type = entityMap[details.target].type
     details.saved = !(Object.hasOwnProperty.call(tag.attributes, 'saved') && tag.attributes?.saved?.value === 'false')
-    details.deleted = !(Object.hasOwnProperty.call(tag.attributes, 'deleted') && tag.attributes?.deleted?.value === 'true')
+    details.deleted = (Object.hasOwnProperty.call(tag.attributes, 'deleted') && tag.attributes?.deleted?.value === 'true')
     details.properties = entityMap[details.target].properties
     details.annotations = annotations.filter(d => d.target.slice(1) === details.id || d.target.slice(1) === details.target)
 
@@ -132,15 +136,18 @@ function processEntitiesInDocument (raw, entities, annotations, conf) {
 
         if (isPresent === true && isDeleted === false) { // unsaved
           p.value = tag.attributes[property + 'Added'].value
-
         } else if (isPresent === true && isDeleted === true) { // modified
           p.value = tag.attributes[property + 'Added'].value
 
+          if (tag.attributes[property + 'Added'].value === tag.attributes[property + 'Deleted'].value) {
+            p.value = tag.attributes[property + 'Deleted'].value
+            p.deleted = true
+          }
         } else { // deleted
           p.value = tag.attributes[property + 'Deleted'].value
           p.deleted = true
         }
-        
+
         details.properties.push(p)
       }
     })
