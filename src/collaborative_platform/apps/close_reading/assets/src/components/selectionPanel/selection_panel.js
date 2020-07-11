@@ -1,14 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
-import {
-  WebsocketRequest,
-  WebsocketRequestType,
-  ActionType,
-  ActionTarget,
-  ActionObject,
-  AtomicActionBuilder
-} from 'common/types'
 import { AnnotationCreationPanel } from 'components/annotationCreationPanel'
 import { EntityCreationPanel } from 'components/entityCreationPanel'
 import styles from './selection_panel.module.css'
@@ -52,19 +44,6 @@ function Navigation (option, setOption) {
   return navigation
 }
 
-function onTagCreate (selection, entity, attributes, websocket) {
-  const tagBuilder = AtomicActionBuilder(ActionTarget.text, ActionType.add, ActionObject.tag)
-  const tagAction = tagBuilder(...selection.target)
-
-  // const attributeBuilder = AtomicActionBuilder(ActionTarget.entity, ActionType.add, ActionObject.property)
-  // const attributeAction = attributeBuilder('TEMP', attributes)
-  // const actions = [tagAction, attributeAction]
-  const request = WebsocketRequest(WebsocketRequestType.modify, [tagAction])
-  console.log(request)
-  websocket.send(request)
-  // alert(JSON.stringify(actions))
-}
-
 function SelectionPanel (props) {
   const [option, setOption] = useState(null)
 
@@ -72,8 +51,7 @@ function SelectionPanel (props) {
   if (option !== null) {
     body = (option === CreationOption.certainty
       ? <AnnotationCreationPanel />
-      : <EntityCreationPanel callback={(entity, attributes) =>
-        onTagCreate(props.selection, entity, attributes, props.context.websocket)}/>)
+      : <EntityCreationPanel selection={props.selection}/>)
   }
 
   const bodyCssClasses = ['card-body']
@@ -95,7 +73,7 @@ SelectionPanel.propTypes = {
     user: PropTypes.string,
     authors: PropTypes.array,
     annotations: PropTypes.array,
-    entities: PropTypes.object,
+    entities: PropTypes.arrayOf(PropTypes.object),
     configuration: PropTypes.object,
     websocket: PropTypes.object
   })
