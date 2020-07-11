@@ -87,9 +87,7 @@ function Attributes (props) {
               x.old_element_id === attribute.name
             ))
 
-            console.log(props.context.operations, props.entity.id, attribute.name, operation)
-
-            if (operation.length != 1) { return }
+            if (operation.length !== 1) { return }
 
             onAttributeRestore(operation[0].id, props.context.websocket)
           }}
@@ -192,14 +190,16 @@ Attributes.propTypes = {
   entity: PropTypes.shape({
     type: PropTypes.string,
     'xml:id': PropTypes.string,
-    properties: PropTypes.array
+    properties: PropTypes.array,
+    id: PropTypes.string,
+    target: PropTypes.string
   }),
   context: PropTypes.shape({
     user: PropTypes.string,
     authors: PropTypes.array,
     annotations: PropTypes.array,
-    entities: PropTypes.object,
     configuration: PropTypes.object,
-    websocket: PropTypes.object
+    websocket: PropTypes.object,
+    operations: PropTypes.arrayOf(PropTypes.object)
   })
 }
