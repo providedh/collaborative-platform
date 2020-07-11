@@ -50,8 +50,8 @@ const actions = {
   entity: {
     add: {
       reference: (id, refPayload) => ({
-        element_type: "reference",
-        method: "POST",
+        element_type: 'reference',
+        method: 'POST',
         edited_element_id: id,
         ...refPayload
       }),
@@ -65,8 +65,8 @@ const actions = {
     },
     modify: {
       reference: (id, old, refPayload) => ({
-        element_type: "reference",
-        method: "PUT",
+        element_type: 'reference',
+        method: 'PUT',
         edited_element_id: id,
         old_element_id: old,
         ...refPayload
