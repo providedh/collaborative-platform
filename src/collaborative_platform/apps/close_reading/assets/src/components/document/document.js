@@ -129,7 +129,7 @@ Document.propTypes = {
     user: PropTypes.string,
     authors: PropTypes.array,
     annotations: PropTypes.array,
-    entities: PropTypes.object,
+    entities: PropTypes.arrayOf(PropTypes.object),
     configuration: PropTypes.object
   })
 }
