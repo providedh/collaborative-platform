@@ -153,6 +153,19 @@ class RequestHandler:
 
         return response
 
+    def create_commit(self, project_id, user, request_data):
+        message = request_data.get('message')
+
+        db_handler = DbHandler(project_id, user)
+        db_handler.commit_changes(message)
+
+        response = {
+            'status': 200,
+            'message': 'OK'
+        }
+
+        return response
+
     def get_error(self, exception, status):
         response = {
             'status': status,

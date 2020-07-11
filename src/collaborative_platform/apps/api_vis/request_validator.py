@@ -46,6 +46,14 @@ class RequestValidator:
 
         validate_keys_and_types(request_data, required_keys)
 
+    @staticmethod
+    def validate_commit_data(request_data):
+        optional_keys = {
+            'message': str,
+        }
+
+        validate_keys_and_types(request_data, optional_key_type_pairs=optional_keys)
+
 
 def validate_keys_and_types(dictionary, required_key_type_pairs=None, optional_key_type_pairs=None, parent_name=None):
     # type: (dict, dict, dict, str) -> None

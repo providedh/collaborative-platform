@@ -8,7 +8,7 @@ from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotMod
 from apps.api_vis.helpers import parse_query_string
 from apps.api_vis.db_handler import DbHandler
 from apps.api_vis.request_handler import RequestHandler
-from apps.api_vis.request_validator import RequestValidator, validate_keys_and_types
+from apps.api_vis.request_validator import RequestValidator
 from apps.exceptions import BadRequest, NotModified
 from apps.views_decorators import objects_exists, user_has_access
 
@@ -199,40 +199,21 @@ def commits(request, project_id):
         try:
             request_data = json.loads(request.body)
 
-            optional_keys = {
-                'message': str,
-            }
+            RequestValidator().validate_commit_data(request_data)
 
-            validate_keys_and_types(request_data, optional_key_type_pairs=optional_keys)
+            response = RequestHandler().create_commit(project_id, request.user, request_data)
 
-            message = request_data.get('message')
-
-            db_handler = DbHandler(project_id, request.user)
-            db_handler.commit_changes(message)
+            return JsonResponse(response)
 
         except NotModified as exception:
-            response = {
-                'status': NOT_MODIFIED_STATUS,
-                'message': str(exception),
-            }
+            response = RequestHandler().get_error(exception, NOT_MODIFIED_STATUS)
 
             return JsonResponse(response, status=NOT_MODIFIED_STATUS)
 
         except (BadRequest, JSONDecodeError) as exception:
-            response = {
-                'status': BAD_REQUEST_STATUS,
-                'message': str(exception),
-            }
+            response = RequestHandler().get_error(exception, BAD_REQUEST_STATUS)
 
             return JsonResponse(response, status=BAD_REQUEST_STATUS)
-
-        else:
-            response = {
-                'status': OK_STATUS,
-                'message': 'OK'
-            }
-
-            return JsonResponse(response)
 
 
 @login_required
