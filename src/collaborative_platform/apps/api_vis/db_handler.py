@@ -532,7 +532,7 @@ class DbHandler:
             except Directory.DoesNotExist:
                 raise BadRequest(f"Directory with name {directory_name} does't exist in this directory.")
 
-    def commit_changes(self, message):
+    def create_commit(self, message):
         cliques_to_create = self.__get_cliques_to_create_from_db()
         unifications_to_add = self.__get_unifications_to_add_from_db()
         cliques_to_delete = self.__get_cliques_to_delete_from_db()
@@ -682,4 +682,3 @@ class DbHandler:
         )
 
         return unifications_to_delete
-

@@ -206,7 +206,7 @@ def commits(request, project_id):
             RequestValidator().validate_commit_data(request_data)
 
             request_handler = RequestHandler(project_id, request.user)
-            response = request_handler.create_commit(project_id, request.user, request_data)
+            response = request_handler.create_commit(request_data)
 
             return JsonResponse(response)
 

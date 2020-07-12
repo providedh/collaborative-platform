@@ -1,7 +1,6 @@
 from apps.api_vis.db_handler import DbHandler
 from apps.exceptions import BadRequest, NotModified
 from apps.files_management.models import File
-from apps.api_vis.models import Clique
 
 
 class RequestHandler:
@@ -114,16 +113,10 @@ class RequestHandler:
 
         return response
 
-    def create_commit(self, project_id, user, request_data):
+    def create_commit(self, request_data):
         message = request_data.get('message')
 
-        db_handler = DbHandler(project_id, user)
-        db_handler.commit_changes(message)
-
-        response = {
-            'status': 200,
-            'message': 'OK'
-        }
+        response = self.__create_commit(message)
 
         return response
 
@@ -267,6 +260,23 @@ class RequestHandler:
             status = {
                 'status': BadRequest.status_code,
                 'message': str(exception)
+            }
+
+        except NotModified as exception:
+            status = {
+                'status': NotModified.status_code,
+                'message': str(exception)
+            }
+
+        return status
+
+    def __create_commit(self, message):
+        try:
+            self.__db_handler.create_commit(message)
+
+            status = {
+                'status': 200,
+                'message': 'OK'
             }
 
         except NotModified as exception:
