@@ -492,34 +492,22 @@ class DbHandler:
 
         return project_version
 
-    def add_unification(self, clique, entity, certainty, project_version):
-        try:
-            file_version = FileVersion.objects.get(
-                projectversion=project_version,
-                file=entity.file
-            )
+    def create_unification(self, clique, entity, certainty, project_version):
+        file_version = FileVersion.objects.get(
+            projectversion=project_version,
+            file=entity.file
+        )
 
-            Unification.objects.create(
-                project=project_version.project,
-                entity=entity,
-                clique=clique,
-                certainty=certainty,
-                created_by=self.__user,
-                created_in_file_version=file_version
-            )
+        unification = Unification.objects.create(
+            project=project_version.project,
+            entity=entity,
+            clique=clique,
+            certainty=certainty,
+            created_by=self.__user,
+            created_in_file_version=file_version
+        )
 
-            unification_status = {
-                'status': 200,
-                'message': 'OK'
-            }
-
-        except BadRequest as exception:
-            unification_status = {
-                'status': 400,
-                'message': str(exception)
-            }
-
-        return unification_status
+        return unification
 
     def get_entity_by_int_or_dict(self, request_entity):
         if type(request_entity) == int:

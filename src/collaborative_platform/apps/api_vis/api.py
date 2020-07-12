@@ -136,7 +136,7 @@ def clique_entities(request, project_id, clique_id):
             RequestValidator().validate_put_clique_entities_data(request_data)
 
             request_handler = RequestHandler(project_id, request.user)
-            response = request_handler.add_entities_to_clique(clique_id, request.user, request_data)
+            response = request_handler.add_entities_to_clique(clique_id, request_data)
 
             return JsonResponse(response)
 
