@@ -305,34 +305,6 @@ class DbHandler:
         else:
             raise BadRequest("Can't get entity type from provided entity ids")
 
-    def delete_clique(self, clique_id, project_version_nr):
-        try:
-            clique = self.get_clique(clique_id)
-
-            if clique.deleted_in_commit is not None:
-                raise NotModified(f"Clique with id: {clique_id} is already deleted")
-
-            self.__mark_clique_to_delete(clique, project_version_nr)
-
-            delete_status = {
-                'status': 200,
-                'message': 'OK'
-            }
-
-        except NotModified as exception:
-            delete_status = {
-                'status': 304,
-                'message': str(exception)
-            }
-
-        except BadRequest as exception:
-            delete_status = {
-                'status': 400,
-                'message': str(exception)
-            }
-
-        return delete_status
-
     def delete_unification(self, clique_id, entity_id, project_version_nr):
         try:
             unification = self.__get_unification_from_db(clique_id, entity_id)
@@ -396,21 +368,19 @@ class DbHandler:
 
         return clique
 
-    def __mark_clique_to_delete(self, clique, project_version_nr):
+    def delete_clique(self, clique, project_version):
         delete_time = timezone.now()
 
         clique.deleted_by = self.__user
         clique.deleted_on = delete_time
         clique.save()
 
-        self.__mark_unifications_to_delete(clique, project_version_nr, delete_time)
+        self.delete_unifications(clique, project_version, delete_time)
 
-    def __mark_unifications_to_delete(self, clique, project_version_nr, delete_time):
+    def delete_unifications(self, clique, project_version, delete_time):
         unifications = clique.unifications.filter(
             deleted_in_commit__isnull=True
         )
-
-        project_version = self.get_project_version(project_version_nr)
 
         for unification in unifications:
             file_version = project_version.file_versions.get(

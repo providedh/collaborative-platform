@@ -3,18 +3,13 @@ import json
 from json.decoder import JSONDecodeError
 
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotModified, JsonResponse
+from django.http import JsonResponse
 
 from apps.api_vis.helpers import parse_query_string
 from apps.api_vis.request_handler import RequestHandler
 from apps.api_vis.request_validator import RequestValidator
 from apps.exceptions import BadRequest, NotModified
 from apps.views_decorators import objects_exists, user_has_access
-
-
-BAD_REQUEST_STATUS = HttpResponseBadRequest.status_code
-NOT_MODIFIED_STATUS = HttpResponseNotModified.status_code
-OK_STATUS = HttpResponse.status_code
 
 
 @login_required
@@ -33,9 +28,9 @@ def project_cliques(request, project_id):
             return JsonResponse(response)
 
         except (BadRequest, JSONDecodeError) as exception:
-            response = get_error(exception, BAD_REQUEST_STATUS)
+            response = get_error(exception, BadRequest.status_code)
 
-            return JsonResponse(response, status=BAD_REQUEST_STATUS)
+            return JsonResponse(response, status=BadRequest.status_code)
 
     elif request.method == "GET":
         try:
@@ -47,9 +42,9 @@ def project_cliques(request, project_id):
             return JsonResponse(response, safe=False)
 
         except BadRequest as exception:
-            response = get_error(exception, BAD_REQUEST_STATUS)
+            response = get_error(exception, BadRequest.status_code)
 
-            return JsonResponse(response, status=BAD_REQUEST_STATUS)
+            return JsonResponse(response, status=BadRequest.status_code)
 
     elif request.method == 'DELETE':
         try:
@@ -58,14 +53,14 @@ def project_cliques(request, project_id):
             RequestValidator().validate_clique_delete_data(request_data)
 
             request_handler = RequestHandler(project_id, request.user)
-            response = request_handler.delete_clique(project_id, request.user, request_data)
+            response = request_handler.delete_cliques(request_data)
 
             return JsonResponse(response)
 
         except (BadRequest, JSONDecodeError) as exception:
-            response = get_error(exception, BAD_REQUEST_STATUS)
+            response = get_error(exception, BadRequest.status_code)
 
-            return JsonResponse(response, status=BAD_REQUEST_STATUS)
+            return JsonResponse(response, status=BadRequest.status_code)
 
 
 @login_required
@@ -82,9 +77,9 @@ def file_cliques(request, project_id, file_id):
             return JsonResponse(response, safe=False)
 
         except BadRequest as exception:
-            response = get_error(exception, BAD_REQUEST_STATUS)
+            response = get_error(exception, BadRequest.status_code)
 
-            return JsonResponse(response, status=BAD_REQUEST_STATUS)
+            return JsonResponse(response, status=BadRequest.status_code)
 
 
 @login_required
@@ -101,9 +96,9 @@ def project_entities(request, project_id):
             return JsonResponse(response, safe=False)
 
         except BadRequest as exception:
-            response = get_error(exception, BAD_REQUEST_STATUS)
+            response = get_error(exception, BadRequest.status_code)
 
-            return JsonResponse(response, status=BAD_REQUEST_STATUS)
+            return JsonResponse(response, status=BadRequest.status_code)
 
 
 @login_required
@@ -120,9 +115,9 @@ def file_entities(request, project_id, file_id):
             return JsonResponse(response, safe=False)
 
         except BadRequest as exception:
-            response = get_error(exception, BAD_REQUEST_STATUS)
+            response = get_error(exception, BadRequest.status_code)
 
-            return JsonResponse(response, status=BAD_REQUEST_STATUS)
+            return JsonResponse(response, status=BadRequest.status_code)
 
 
 @login_required
@@ -141,9 +136,9 @@ def clique_entities(request, project_id, clique_id):
             return JsonResponse(response)
 
         except (BadRequest, JSONDecodeError) as exception:
-            response = get_error(exception, BAD_REQUEST_STATUS)
+            response = get_error(exception, BadRequest.status_code)
 
-            return JsonResponse(response, status=BAD_REQUEST_STATUS)
+            return JsonResponse(response, status=BadRequest.status_code)
 
     elif request.method == 'DELETE':
         try:
@@ -157,9 +152,9 @@ def clique_entities(request, project_id, clique_id):
             return JsonResponse(response)
 
         except (BadRequest, JSONDecodeError) as exception:
-            response = get_error(exception, BAD_REQUEST_STATUS)
+            response = get_error(exception, BadRequest.status_code)
 
-            return JsonResponse(response, status=BAD_REQUEST_STATUS)
+            return JsonResponse(response, status=BadRequest.status_code)
 
 
 @login_required
@@ -176,9 +171,9 @@ def project_unbound_entities(request, project_id):
             return JsonResponse(response, safe=False)
 
         except BadRequest as exception:
-            response = get_error(exception, BAD_REQUEST_STATUS)
+            response = get_error(exception, BadRequest.status_code)
 
-            return JsonResponse(response, status=BAD_REQUEST_STATUS)
+            return JsonResponse(response, status=BadRequest.status_code)
 
 
 @login_required
@@ -195,9 +190,9 @@ def file_unbound_entities(request, project_id, file_id):
             return JsonResponse(response, safe=False)
 
         except BadRequest as exception:
-            response = get_error(exception, BAD_REQUEST_STATUS)
+            response = get_error(exception, BadRequest.status_code)
 
-            return JsonResponse(response, status=BAD_REQUEST_STATUS)
+            return JsonResponse(response, status=BadRequest.status_code)
 
 
 @login_required
@@ -216,14 +211,14 @@ def commits(request, project_id):
             return JsonResponse(response)
 
         except NotModified as exception:
-            response = get_error(exception, NOT_MODIFIED_STATUS)
+            response = get_error(exception, NotModified.status_code)
 
-            return JsonResponse(response, status=NOT_MODIFIED_STATUS)
+            return JsonResponse(response, status=NotModified.status_code)
 
         except (BadRequest, JSONDecodeError) as exception:
-            response = get_error(exception, BAD_REQUEST_STATUS)
+            response = get_error(exception, BadRequest.status_code)
 
-            return JsonResponse(response, status=BAD_REQUEST_STATUS)
+            return JsonResponse(response, status=BadRequest.status_code)
 
 
 @login_required
@@ -238,9 +233,9 @@ def uncommitted_changes(request, project_id):
             return JsonResponse(response, safe=False)
 
         except BadRequest as exception:
-            response = get_error(exception, BAD_REQUEST_STATUS)
+            response = get_error(exception, BadRequest.status_code)
 
-            return JsonResponse(response, status=BAD_REQUEST_STATUS)
+            return JsonResponse(response, status=BadRequest.status_code)
 
 
 def get_error(exception, status):

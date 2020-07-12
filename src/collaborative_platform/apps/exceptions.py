@@ -1,9 +1,12 @@
+from django.http import HttpResponseBadRequest, HttpResponseNotModified
+
+
 class BadRequest(Exception):
-    pass
+    status_code = HttpResponseBadRequest.status_code
 
 
 class NotModified(Exception):
-    pass
+    status_code = HttpResponseNotModified.status_code
 
 
 class Forbidden(Exception):

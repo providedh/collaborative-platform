@@ -1,5 +1,5 @@
 from apps.api_vis.db_handler import DbHandler
-from apps.exceptions import BadRequest
+from apps.exceptions import BadRequest, NotModified
 from apps.files_management.models import File
 from apps.api_vis.models import Clique
 
@@ -43,21 +43,13 @@ class RequestHandler:
 
         return response
 
-    def delete_clique(self, project_id, user, request_data):
-        db_handler = DbHandler(project_id, user)
-
-        cliques = request_data['cliques']
+    def delete_cliques(self, request_data):
+        cliques_ids = request_data['cliques']
         project_version_nr = request_data['project_version']
-        delete_statuses = []
 
-        for clique_id in cliques:
-            delete_status = {}
+        project_version = self.__db_handler.get_project_version(project_version_nr)
 
-            delete_status.update({'id': clique_id})
-
-            status_update = db_handler.delete_clique(clique_id, project_version_nr)
-            delete_status.update(status_update)
-            delete_statuses.append(delete_status)
+        delete_statuses = self.__delete_cliques(cliques_ids, project_version)
 
         response = {
             'delete_statuses': delete_statuses,
@@ -206,6 +198,47 @@ class RequestHandler:
         except BadRequest as exception:
             status = {
                 'status': 400,
+                'message': str(exception)
+            }
+
+        return status
+
+    def __delete_cliques(self, cliques_ids, project_version):
+        delete_statuses = []
+
+        for clique_id in cliques_ids:
+            delete_status = {'id': clique_id}
+
+            status = self.__delete_clique(clique_id, project_version)
+
+            delete_status.update(status)
+            delete_statuses.append(delete_status)
+
+        return delete_statuses
+
+    def __delete_clique(self, clique_id, project_version):
+        try:
+            clique = self.__db_handler.get_clique(clique_id)
+
+            if clique.deleted_in_commit is not None:
+                raise NotModified(f"Clique with id: {clique.id} is already deleted.")
+
+            self.__db_handler.delete_clique(clique, project_version)
+
+            status = {
+                'status': 200,
+                'message': 'OK'
+            }
+
+        except BadRequest as exception:
+            status = {
+                'status': BadRequest.status_code,
+                'message': str(exception)
+            }
+
+        except NotModified as exception:
+            status = {
+                'status': NotModified.status_code,
                 'message': str(exception)
             }
 
