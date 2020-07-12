@@ -281,22 +281,17 @@ class DbHandler:
 
         return entities
 
-    def create_clique(self, request_data):
-        clique_name = self.__get_clique_name(request_data)
-
-        request_entities = request_data.get('entities')
-        clique_type = self.__get_clique_type(request_entities)
-
+    def create_clique(self, clique_name, clique_type):
         clique = self.__create_clique(clique_name, clique_type)
 
-        return clique.id, clique_name
+        return clique
 
     def __get_clique_type(self, request_entities):
         entity_type = None
 
         for entity in request_entities:
             try:
-                entity = self.get_entity_from_int_or_dict(entity, self.__project_id)
+                entity = self.get_entity_by_int_or_dict(entity)
 
             except BadRequest:
                 continue
@@ -312,7 +307,7 @@ class DbHandler:
 
     def delete_clique(self, clique_id, project_version_nr):
         try:
-            clique = self.__get_clique_from_db(clique_id)
+            clique = self.get_clique(clique_id)
 
             if clique.deleted_in_commit is not None:
                 raise NotModified(f"Clique with id: {clique_id} is already deleted")
@@ -367,7 +362,7 @@ class DbHandler:
         return delete_status
 
     def __mark_unification_to_delete(self, unification, project_version_nr):
-        project_version = self.__get_project_version_from_db(project_version_nr)
+        project_version = self.get_project_version(project_version_nr)
 
         file_version = project_version.file_versions.get(
             file=unification.entity.file
@@ -390,7 +385,7 @@ class DbHandler:
 
         return unification
 
-    def __get_clique_from_db(self, clique_id):
+    def get_clique(self, clique_id):
         try:
             clique = Clique.objects.get(
                 id=clique_id,
@@ -415,7 +410,7 @@ class DbHandler:
             deleted_in_commit__isnull=True
         )
 
-        project_version = self.__get_project_version_from_db(project_version_nr)
+        project_version = self.get_project_version(project_version_nr)
 
         for unification in unifications:
             file_version = project_version.file_versions.get(
@@ -433,10 +428,10 @@ class DbHandler:
 
         if not clique_name or clique_name == '':
             request_entity = request_data.get('entities')[0]
-            entity = self.get_entity_from_int_or_dict(request_entity, self.__project_id)
+            entity = self.get_entity_by_int_or_dict(request_entity)
 
             project_version_nr = request_data.get('project_version')
-            project_version = self.__get_project_version_from_db(project_version_nr)
+            project_version = self.get_project_version(project_version_nr)
 
             file_version = project_version.file_versions.get(
                 file=entity.file
@@ -452,6 +447,27 @@ class DbHandler:
 
         return clique_name
 
+    def get_entity_version(self, entity, project_version):
+        file_version = project_version.file_versions.get(
+            file=entity.file
+        )
+
+        entity_version = EntityVersion.objects.get(
+            entity=entity,
+            file_version=file_version
+        )
+
+        return entity_version
+
+    def get_entity_property(self, entity, project_version, property_name):
+        entity_version = self.get_entity_version(entity, project_version)
+
+        property_version = entity_version.properties.get(
+            name=property_name
+        )
+
+        return property_version
+
     def __create_clique(self, clique_name, clique_type):
         clique = Clique.objects.create(
             project_id=self.__project_id,
@@ -462,7 +478,7 @@ class DbHandler:
 
         return clique
 
-    def __get_project_version_from_db(self, project_version_nr):
+    def get_project_version(self, project_version_nr):
         file_version_counter, commit_counter = parse_project_version(project_version_nr)
 
         try:
@@ -476,11 +492,8 @@ class DbHandler:
 
         return project_version
 
-    def add_unification(self, clique_id, entity_id, certainty, project_version_nr):
+    def add_unification(self, clique, entity, certainty, project_version):
         try:
-            project_version = self.__get_project_version_from_db(project_version_nr)
-            entity = self.get_entity_from_int_or_dict(entity_id, self.__project_id)
-
             file_version = FileVersion.objects.get(
                 projectversion=project_version,
                 file=entity.file
@@ -489,7 +502,7 @@ class DbHandler:
             Unification.objects.create(
                 project=project_version.project,
                 entity=entity,
-                clique_id=clique_id,
+                clique=clique,
                 certainty=certainty,
                 created_by=self.__user,
                 created_in_file_version=file_version
@@ -508,7 +521,7 @@ class DbHandler:
 
         return unification_status
 
-    def get_entity_from_int_or_dict(self, request_entity, project_id):
+    def get_entity_by_int_or_dict(self, request_entity):
         if type(request_entity) == int:
             try:
                 entity = Entity.objects.get(
@@ -518,7 +531,8 @@ class DbHandler:
                 return entity
 
             except Entity.DoesNotExist:
-                raise BadRequest(f"Entity with id: {request_entity} doesn't exist in project with id: {project_id}.")
+                raise BadRequest(f"Entity with id: {request_entity} doesn't exist in project with id: "
+                                 f"{self.__project_id}.")
 
         elif type(request_entity) == dict:
             required_keys = {
@@ -535,10 +549,9 @@ class DbHandler:
 
             try:
                 entity = Entity.objects.get(
-                    file__project_id=project_id,
+                    file__project_id=self.__project_id,
                     file_id=file_id,
                     xml_id=xml_id,
-                    # deleted_on__isnull=True
                 )
 
                 return entity
@@ -734,3 +747,4 @@ class DbHandler:
         )
 
         return unifications_to_delete
+
