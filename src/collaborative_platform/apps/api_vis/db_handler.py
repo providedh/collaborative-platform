@@ -17,34 +17,6 @@ class DbHandler:
         self.__project_id = project_id
         self.__user = user
 
-    def get_all_cliques_in_project(self, qs_parameters):
-        serialized_cliques = self.__get_serialized_cliques(qs_parameters)
-
-        return serialized_cliques
-
-    def __get_serialized_cliques(self, qs_parameters, file_id=None):
-        cliques = self.__get_filtered_cliques(qs_parameters, file_id)
-
-        serialized_cliques = []
-
-        for clique in cliques:
-            unifications = self.__get_filtered_unifications(qs_parameters, clique)
-
-            serialized_clique = model_to_dict(clique, ['id', 'name', 'type'])
-
-            entities_ids = unifications.values_list('entity_id', flat=True)
-            entities_ids = list(entities_ids)
-
-            serialized_clique.update({'entities': entities_ids})
-            serialized_cliques.append(serialized_clique)
-
-        return serialized_cliques
-
-    def get_all_cliques_which_include_entities_from_given_file(self, qs_parameters, file_id):
-        serialized_cliques = self.__get_serialized_cliques(qs_parameters, file_id)
-
-        return serialized_cliques
-
     def get_all_entities_in_project(self, qs_parameters):
         serialized_entities = self.__get_serialized_entities(qs_parameters)
 
@@ -89,7 +61,7 @@ class DbHandler:
         parameters_for_entities.pop('users', None)
 
         entities = self.__get_filtered_entities(parameters_for_entities, file_id)
-        unifications = self.__get_filtered_unifications(qs_parameters)
+        unifications = self.get_filtered_unifications(qs_parameters)
 
         bound_entities_ids = []
 
@@ -116,7 +88,7 @@ class DbHandler:
 
         return serialized_entities
 
-    def __get_filtered_cliques(self, qs_parameters, file_id=None):
+    def get_filtered_cliques(self, request_data, file_id=None):
         cliques = Clique.objects.filter(
             project_id=self.__project_id,
             created_in_commit__isnull=False,
@@ -127,20 +99,20 @@ class DbHandler:
                 unifications__entity__file_id=file_id,
             )
 
-        if 'types' in qs_parameters:
-            cliques = cliques.filter(type__in=qs_parameters['types'])
+        if 'types' in request_data:
+            cliques = cliques.filter(type__in=request_data['types'])
 
-        if 'users' in qs_parameters:
-            cliques = cliques.filter(created_by_id__in=qs_parameters['users'])
+        if 'users' in request_data:
+            cliques = cliques.filter(created_by_id__in=request_data['users'])
 
-        if 'start_date' in qs_parameters:
-            cliques = cliques.filter(unifications__created_on__gte=qs_parameters['start_date'])
+        if 'start_date' in request_data:
+            cliques = cliques.filter(unifications__created_on__gte=request_data['start_date'])
 
-        if 'end_date' in qs_parameters:
-            cliques = cliques.filter(unifications__created_on__lte=qs_parameters['end_date'])
+        if 'end_date' in request_data:
+            cliques = cliques.filter(unifications__created_on__lte=request_data['end_date'])
 
-        if 'date' in qs_parameters:
-            date = qs_parameters['date']
+        if 'date' in request_data:
+            date = request_data['date']
 
             project_version = ProjectVersion.objects.filter(
                 project_id=self.__project_id,
@@ -155,8 +127,8 @@ class DbHandler:
                 unifications__created_in_commit_id__lte=commit.id,
             )
 
-        elif 'project_version' in qs_parameters:
-            project_version_nr = qs_parameters['project_version']
+        elif 'project_version' in request_data:
+            project_version_nr = request_data['project_version']
             file_version_counter, commit_counter = parse_project_version(project_version_nr)
 
             project_version = ProjectVersion.objects.get(
@@ -179,7 +151,7 @@ class DbHandler:
 
         return cliques
 
-    def __get_filtered_unifications(self, qs_parameters, clique=None):
+    def get_filtered_unifications(self, qs_parameters, clique=None):
         if clique:
             unifications = clique.unifications
 

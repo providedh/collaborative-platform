@@ -1,4 +1,5 @@
 from apps.api_vis.db_handler import DbHandler
+from apps.api_vis.serializer import Serializer
 from apps.exceptions import BadRequest, NotModified
 from apps.files_management.models import File
 
@@ -71,19 +72,31 @@ class RequestHandler:
 
         return response
 
-    def get_project_cliques(self, project_id, user, request_data):
-        db_handler = DbHandler(project_id, user)
-        response = db_handler.get_all_cliques_in_project(request_data)
+    def get_project_cliques(self, request_data):
+        response = self.__get_cliques(request_data)
 
         return response
 
-    def get_file_cliques(self, file_id, user, request_data):
-        project_id = File.objects.get(id=file_id).project_id
-
-        db_handler = DbHandler(project_id, user)
-        response = db_handler.get_all_cliques_which_include_entities_from_given_file(request_data, file_id)
+    def get_file_cliques(self, request_data, file_id):
+        response = self.__get_cliques(request_data, file_id)
 
         return response
+
+    def __get_cliques(self, request_data, file_id=None):
+        cliques = self.__db_handler.get_filtered_cliques(request_data, file_id)
+
+        serialized_cliques = []
+
+        for clique in cliques:
+            serialized_clique = Serializer().serialize_clique(clique)
+
+            unifications = self.__db_handler.get_filtered_unifications(request_data, clique)
+            entities_ids = Serializer().get_entities_ids(unifications)
+
+            serialized_clique.update({'entities': entities_ids})
+            serialized_cliques.append(serialized_clique)
+
+        return serialized_cliques
 
     def get_project_entities(self, project_id, user, request_data):
         db_handler = DbHandler(project_id, user)

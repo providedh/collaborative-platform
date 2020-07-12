@@ -37,7 +37,7 @@ def project_cliques(request, project_id):
             request_data = parse_query_string(request.GET)
 
             request_handler = RequestHandler(project_id, request.user)
-            response = request_handler.get_project_cliques(project_id, request.user, request_data)
+            response = request_handler.get_project_cliques(request_data)
 
             return JsonResponse(response, safe=False)
 
@@ -72,7 +72,7 @@ def file_cliques(request, project_id, file_id):
             request_data = parse_query_string(request.GET)
 
             request_handler = RequestHandler(project_id, request.user)
-            response = request_handler.get_file_cliques(file_id, request.user, request_data)
+            response = request_handler.get_file_cliques(request_data, file_id)
 
             return JsonResponse(response, safe=False)
 
