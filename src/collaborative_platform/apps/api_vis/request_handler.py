@@ -57,23 +57,14 @@ class RequestHandler:
 
         return response
 
-    def remove_entities_from_clique(self, clique_id, user, request_data):
-        project_id = Clique.objects.get(id=clique_id).project_id
-
-        db_handler = DbHandler(project_id, user)
-
+    def remove_entities_from_clique(self, clique_id, request_data):
         entities_ids = request_data['entities']
         project_version_nr = request_data['project_version']
-        delete_statuses = []
 
-        for entity_id in entities_ids:
-            delete_status = {}
+        project_version = self.__db_handler.get_project_version(project_version_nr)
+        clique = self.__db_handler.get_clique(clique_id)
 
-            delete_status.update({'id': entity_id})
-
-            status_update = db_handler.delete_unification(clique_id, entity_id, project_version_nr)
-            delete_status.update(status_update)
-            delete_statuses.append(delete_status)
+        delete_statuses = self.__delete_unifications(clique, entities_ids, project_version)
 
         response = {
             'delete_statuses': delete_statuses,
@@ -224,6 +215,48 @@ class RequestHandler:
                 raise NotModified(f"Clique with id: {clique.id} is already deleted.")
 
             self.__db_handler.delete_clique(clique, project_version)
+
+            status = {
+                'status': 200,
+                'message': 'OK'
+            }
+
+        except BadRequest as exception:
+            status = {
+                'status': BadRequest.status_code,
+                'message': str(exception)
+            }
+
+        except NotModified as exception:
+            status = {
+                'status': NotModified.status_code,
+                'message': str(exception)
+            }
+
+        return status
+
+    def __delete_unifications(self, clique, entities_ids, project_version):
+        delete_statuses = []
+
+        for entity_id in entities_ids:
+            delete_status = {'id': entity_id}
+
+            status = self.__delete_unification(clique, entity_id, project_version)
+
+            delete_status.update(status)
+            delete_statuses.append(delete_status)
+
+        return delete_statuses
+
+    def __delete_unification(self, clique, entity_id, project_version):
+        try:
+            entity = self.__db_handler.get_entity_by_int_or_dict(entity_id)
+            unification = self.__db_handler.get_unification(clique, entity)
+
+            if unification.deleted_in_commit is not None:
+                raise NotModified(f"Entity with id: {entity.id} is already removed from clique with id: {clique.id}")
+
+            self.__db_handler.delete_unification(unification, project_version, save=True)
 
             status = {
                 'status': 200,

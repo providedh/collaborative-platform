@@ -147,7 +147,7 @@ def clique_entities(request, project_id, clique_id):
             RequestValidator().validate_delete_clique_entities_data(request_data)
 
             request_handler = RequestHandler(project_id, request.user)
-            response = request_handler.remove_entities_from_clique(clique_id, request.user, request_data)
+            response = request_handler.remove_entities_from_clique(clique_id, request_data)
 
             return JsonResponse(response)
 
