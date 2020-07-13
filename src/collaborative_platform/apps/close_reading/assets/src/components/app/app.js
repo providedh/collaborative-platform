@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+import { TEIentities } from 'common/types'
 import xml from 'common/helpers/xml.js'
 import { AppContext } from 'common/context/app'
 import websocket from 'common/helpers/websocket_api'
@@ -17,6 +18,7 @@ export default class App extends React.Component {
 
     const { projectId, user, fileId, fileVersion, fileName, configuration } = props
 
+    TEIentities.update(configuration.properties_per_entity)
     this.socket = websocket.socket(projectId, fileId)
     this.state = defState(
       fileId,
@@ -64,8 +66,6 @@ export default class App extends React.Component {
         entities,
         response.certainties,
         prev.context.configuration.properties_per_entity)
-
-      console.log(newState)
 
       return newState
     })
