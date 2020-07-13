@@ -52,17 +52,22 @@ function onAnnotationModify (id, oldValues, newValues, edit) {
 }
 
 function authorName (resp, user, authors) {
+  console.log(resp, user, authors)
   if (resp === user) { return 'I' }
-  const author = authors.filter(x => x['xml:id'] === resp)[0]
-  return `${author?.forename} ${author?.surname}`
+  const match = authors.filter(x => x['xml:id'] === resp)
+
+  if (match.length === 0) { return resp }
+
+  return `${match[0]?.forename} ${match[0]?.surname}`
 }
 
 function CreateAnnotation (props) {
   const [visible, show] = useState(false)
   const [editingAnnotation, edit] = useState(null)
 
-  const annotations = props.context.annotations.filter(x => x.target.slice(1) === props.entity['xml:id'])
-  const annotationItems = annotations.map((annotation, i) =>
+  console.log(props)
+
+  const annotationItems = props.entity.annotations.map((annotation, i) =>
     <li key={i}>
       <span className={annotation.saved === false ? 'text-danger' : 'd-none'}>
         (unsaved)
@@ -80,10 +85,10 @@ function CreateAnnotation (props) {
       <span className="text-primary">{annotation.cert}</span>
       <span> certainty: that the </span>
       <span className="text-primary">{annotation.locus}</span>
-      <span className={annotation.match.length === 0 ? 'd-none' : ''}> of <span className="text-primary">{annotation.match}</span></span>
+      <span className={annotation?.match?.length > 0 ? '' : 'd-none'}> of <span className="text-primary">{annotation.match}</span></span>
       <span> should be </span>
       <span className="text-primary">{annotation.assertedValue}.</span>
-      <span className={annotation.desc.length === 0 ? 'd-none' : 'text-primary'}>
+      <span className={annotation?.desc?.length > 0 ? 'text-primary' : 'd-none'}>
         <br/><b>&quot;</b><i>{annotation.desc}</i><b>&quot;</b>
       </span>
     </li>)
@@ -143,7 +148,7 @@ CreateAnnotation.propTypes = {
     user: PropTypes.string,
     authors: PropTypes.array,
     annotations: PropTypes.array,
-    entities: PropTypes.object,
+    entities: PropTypes.arrayOf(PropTypes.object),
     configuration: PropTypes.object
   })
 }
