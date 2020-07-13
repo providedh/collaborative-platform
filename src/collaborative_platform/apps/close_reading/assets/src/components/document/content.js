@@ -59,11 +59,11 @@ function setupEntityInteractions (entities, callbacks) {
 
 function handleEntityEvent (target, event, callback, type) {
   const boundingRect = event.target.getBoundingClientRect()
-
+  const parentBoundingRect = event.target.parentElement.getBoundingClientRect()
   // screenX absolute placement is harder to work with
   // const screenX = boundingRect.x + (boundingRect.width / 2)
 
-  const screenY = boundingRect.top + boundingRect.height
+  const screenY = boundingRect.y + window.scrollY + boundingRect.height
   const selection = Selection(type, target, event.clientX, screenY)
   callback(selection)
 }

@@ -14,7 +14,7 @@ export default function Tooltip (props) {
   const box = document.getElementById('document').getBoundingClientRect()
 
   const position = {
-    top: (selection?.screenY - 20) + 'px'
+    top: (selection?.screenY) + 'px'
   }
 
   const innerPadding = 10

@@ -1,5 +1,5 @@
 .tooltip {
-    position: fixed;
+    position: absolute;
     max-width: 640px;
 }
 .tooltip > div {

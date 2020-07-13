@@ -25,13 +25,16 @@ function handleSelection (container, selectionEvent, originalContent, onSelectio
     return
   }
   const htmlSelection = getSelection(container, domSelection, originalContent)
-  console.log(htmlSelection, { originalContent })
+
+  const s = window.getSelection()
+  const oRange = s.getRangeAt(0)
+  const y = oRange.getBoundingClientRect().top
 
   const selection = Selection(
     SelectionType.textSelection,
     htmlSelection,
     selectionEvent.clientX,
-    selectionEvent.clientY)
+    y + window.scrollY)
 
   event.stopPropagation()
   onSelection(selection)
