@@ -177,7 +177,7 @@ Form.propTypes = {
   annotation: PropTypes.shape({
     locus: PropTypes.string,
     cert: PropTypes.string,
-    ana: PropTypes.arrayOf(PropTypes.string),
+    ana: PropTypes.string,
     assertedValue: PropTypes.string,
     match: PropTypes.string,
     desc: PropTypes.string
