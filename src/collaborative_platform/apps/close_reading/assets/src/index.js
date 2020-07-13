@@ -6,7 +6,7 @@ import { App } from 'components/app'
 
 const appConfig = {
   projectId: window.project_id,
-  user: 'annotator-1',
+  user: '#' + window.user_id,
   fileId: window.file_id,
   fileVersion: window.file_version,
   fileName: window.file_name,
