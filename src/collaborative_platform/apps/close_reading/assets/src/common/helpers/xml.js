@@ -112,7 +112,7 @@ function processEntitiesInDocument (raw, entities, annotations, conf) {
     details.type = tag.tagName
     details.saved = !(Object.hasOwnProperty.call(tag.attributes, 'saved') && tag.attributes.saved.value === 'false')
     details.deleted = (Object.hasOwnProperty.call(tag.attributes, 'deleted') && tag.attributes.deleted.value === 'true')
-    details.annotations = annotations.filter(d => d.target.slice(1) === details.id)
+    details.annotations = annotations.filter(d => d.target.slice(1) === details.target)
     details.properties = []
 
     conf[tag.tagName].properties.forEach(property => {
