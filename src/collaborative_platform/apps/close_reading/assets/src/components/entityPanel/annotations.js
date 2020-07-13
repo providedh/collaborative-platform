@@ -1,7 +1,15 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
-import { ActionType, ActionTarget, ActionObject, AtomicActionBuilder } from 'common/types'
+import {
+  WebsocketRequest,
+  WebsocketRequestType,
+  ActionType,
+  ActionTarget,
+  ActionObject,
+  AtomicActionBuilder,
+  TEIentities
+} from 'common/types'
 import { WithAppContext } from 'common/context/app'
 import AnnotateForm from './annotate_form.js'
 
