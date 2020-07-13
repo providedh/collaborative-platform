@@ -98,11 +98,14 @@ def create_new_project_version(project, files_modification=False, commit=None):
     if project_versions.exists():
         latest_project_version = project_versions.latest('id')
 
+        if not commit:
+            commit = latest_project_version.latest_commit
+
         file_version_counter = latest_project_version.file_version_counter + int(files_modification)
         commit_counter = latest_project_version.commit_counter + int(commit is not None)
 
         new_project_version = ProjectVersion(file_version_counter=file_version_counter,
-                                             commit=commit,
+                                             latest_commit=commit,
                                              commit_counter=commit_counter,
                                              project=project)
         new_project_version.save()
@@ -110,7 +113,10 @@ def create_new_project_version(project, files_modification=False, commit=None):
         new_project_version.save()
 
     else:
-        new_project_version = ProjectVersion(file_version_counter=0, commit=commit, commit_counter=0, project=project)
+        new_project_version = ProjectVersion(file_version_counter=0,
+                                             latest_commit=commit,
+                                             commit_counter=0,
+                                             project=project)
         new_project_version.save()
         new_project_version.file_versions.set(latest_file_versions)
         new_project_version.save()

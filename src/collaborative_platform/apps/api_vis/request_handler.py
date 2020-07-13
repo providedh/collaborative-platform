@@ -300,7 +300,7 @@ class RequestHandler:
         date = request_data.get('date')
 
         entities = self.__db_handler.get_filtered_entities(request_data, file_id)
-        project_version = self.__get_project_version(project_version_nr, date)
+        project_version = self.__db_handler.get_project_version(project_version_nr, date)
         serialized_entities = self.__serialize_entities(entities, project_version)
 
         return serialized_entities
@@ -310,7 +310,7 @@ class RequestHandler:
         date = request_data.get('date')
 
         unbound_entities = self.__db_handler.get_filtered_unbound_entities(request_data, file_id)
-        project_version = self.__get_project_version(project_version_nr, date)
+        project_version = self.__db_handler.get_project_version(project_version_nr, date)
         serialized_entities = self.__serialize_entities(unbound_entities, project_version)
 
         return serialized_entities
@@ -348,7 +348,7 @@ class RequestHandler:
         serialized_unifications = []
 
         for unification in unifications:
-            project_version = self.__db_handler.get_project_version()
+            project_version = self.__db_handler.get_project_version_latest()
             entity_name = self.__db_handler.get_entity_property(unification.entity, project_version, 'name')
 
             serialized_unification = {
@@ -378,15 +378,3 @@ class RequestHandler:
             serialized_entities.append(serialized_entity)
 
         return serialized_entities
-
-    def __get_project_version(self, project_version_nr, date):
-        if project_version_nr:
-            project_version = self.__db_handler.get_project_version_by_nr(project_version_nr)
-
-        elif date:
-            project_version = self.__db_handler.get_project_version_by_date(date)
-
-        else:
-            project_version = self.__db_handler.get_project_version()
-
-        return project_version

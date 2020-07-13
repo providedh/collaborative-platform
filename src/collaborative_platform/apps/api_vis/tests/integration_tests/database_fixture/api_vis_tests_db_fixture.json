@@ -1104,7 +1104,7 @@
   "fields": {
     "project": 1,
     "file_version_counter": 0,
-    "commit": null,
+    "latest_commit": null,
     "commit_counter": 0,
     "date": "2020-05-01T08:15:30.060Z",
     "file_versions": []
@@ -1116,7 +1116,7 @@
   "fields": {
     "project": 1,
     "file_version_counter": 1,
-    "commit": null,
+    "latest_commit": null,
     "commit_counter": 0,
     "date": "2020-06-26T12:37:10.908Z",
     "file_versions": [
@@ -1130,7 +1130,7 @@
   "fields": {
     "project": 1,
     "file_version_counter": 2,
-    "commit": null,
+    "latest_commit": null,
     "commit_counter": 0,
     "date": "2020-06-26T12:37:11.144Z",
     "file_versions": [
@@ -1144,7 +1144,7 @@
   "fields": {
     "project": 1,
     "file_version_counter": 3,
-    "commit": null,
+    "latest_commit": null,
     "commit_counter": 0,
     "date": "2020-06-26T12:37:15.130Z",
     "file_versions": [
@@ -1159,7 +1159,7 @@
   "fields": {
     "project": 1,
     "file_version_counter": 4,
-    "commit": null,
+    "latest_commit": null,
     "commit_counter": 0,
     "date": "2020-06-26T12:37:15.304Z",
     "file_versions": [
@@ -1174,7 +1174,7 @@
   "fields": {
     "project": 1,
     "file_version_counter": 5,
-    "commit": null,
+    "latest_commit": null,
     "commit_counter": 0,
     "date": "2020-06-26T12:37:19.284Z",
     "file_versions": [
@@ -1190,7 +1190,7 @@
   "fields": {
     "project": 1,
     "file_version_counter": 6,
-    "commit": null,
+    "latest_commit": null,
     "commit_counter": 0,
     "date": "2020-06-26T12:37:19.363Z",
     "file_versions": [
@@ -1206,7 +1206,7 @@
   "fields": {
     "project": 1,
     "file_version_counter": 6,
-    "commit": 1,
+    "latest_commit": 1,
     "commit_counter": 1,
     "date": "2020-06-28T11:07:29.026Z",
     "file_versions": [
@@ -1222,7 +1222,7 @@
   "fields": {
     "project": 1,
     "file_version_counter": 6,
-    "commit": 2,
+    "latest_commit": 2,
     "commit_counter": 2,
     "date": "2020-06-28T11:09:31.995Z",
     "file_versions": [
@@ -1238,7 +1238,7 @@
   "fields": {
     "project": 1,
     "file_version_counter": 6,
-    "commit": 3,
+    "latest_commit": 3,
     "commit_counter": 3,
     "date": "2020-06-28T11:14:51.252Z",
     "file_versions": [
@@ -1254,7 +1254,7 @@
   "fields": {
     "project": 1,
     "file_version_counter": 6,
-    "commit": 4,
+    "latest_commit": 4,
     "commit_counter": 4,
     "date": "2020-06-28T11:17:51.114Z",
     "file_versions": [
@@ -1270,7 +1270,7 @@
   "fields": {
     "project": 1,
     "file_version_counter": 6,
-    "commit": 5,
+    "latest_commit": 5,
     "commit_counter": 5,
     "date": "2020-06-28T11:23:46.449Z",
     "file_versions": [
@@ -1286,7 +1286,7 @@
   "fields": {
     "project": 1,
     "file_version_counter": 7,
-    "commit": null,
+    "latest_commit": 5,
     "commit_counter": 5,
     "date": "2020-06-30T10:28:33.013Z",
     "file_versions": [
@@ -1302,7 +1302,7 @@
   "fields": {
     "project": 1,
     "file_version_counter": 8,
-    "commit": null,
+    "latest_commit": 5,
     "commit_counter": 5,
     "date": "2020-06-30T10:29:12.962Z",
     "file_versions": [

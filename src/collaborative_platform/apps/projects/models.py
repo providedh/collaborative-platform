@@ -67,7 +67,7 @@ class ProjectVersion(models.Model):
     project = models.ForeignKey(Project, related_name="versions", on_delete=models.CASCADE)
     file_versions = models.ManyToManyField('files_management.FileVersion')
     file_version_counter = models.IntegerField(default=0)
-    commit = models.ForeignKey('api_vis.Commit', on_delete=models.SET_NULL, null=True, blank=True)
+    latest_commit = models.ForeignKey('api_vis.Commit', on_delete=models.SET_NULL, null=True, blank=True)
     commit_counter = models.IntegerField(default=0)
     date = models.DateTimeField(auto_now_add=True)
 
