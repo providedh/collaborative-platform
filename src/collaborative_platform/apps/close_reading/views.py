@@ -9,7 +9,7 @@ from django.urls import resolve
 
 from apps.files_management.models import File
 from apps.views_decorators import objects_exists, user_has_access
-
+from apps.close_reading.db_handler import DbHandler
 
 @login_required
 @objects_exists
@@ -25,7 +25,11 @@ def close_reading(request, project_id, file_id):  # type: (HttpRequest, int, int
         'properties_per_entity': get_entity_properties()
     }
 
+    db_handler = DbHandler(request.user, file.id)
+    annotator_id = db_handler.get_annotator_xml_id()
+
     context = {
+        'user_id': annotator_id,
         'origin': origin,
         'origin_url': origin_url,
         'project_id': project.id,
@@ -33,7 +37,7 @@ def close_reading(request, project_id, file_id):  # type: (HttpRequest, int, int
         'file_version': file.version_number,
         'title': file.name,
         'preferences': json.dumps(preferences),
-       'DEVELOPMENT': False,
+        'DEVELOPMENT': True,
         'alerts': None,
     }
 
@@ -43,7 +47,10 @@ def get_entity_properties() -> dict:
     from collaborative_platform.settings import DEFAULT_ENTITIES
 
     properties_per_entity = {
-        key: {'properties': list(set(entity['properties'].keys()).difference('text'))}
+        key: {
+            'properties': list(set(entity['properties'].keys()).difference('text')),
+            'listable': entity['listable']
+        }
         for key, entity in DEFAULT_ENTITIES.items()        
     }
     
