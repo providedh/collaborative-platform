@@ -21,22 +21,22 @@ export default function CreateAnnotationWithContext (props) {
   )
 }
 
-function onDeleteClick (id) {
+function onDeleteClick (id, websocket) {
   const builder = AtomicActionBuilder(ActionTarget.certainty, ActionType.delete, ActionObject.certainty)
   const action = builder(id)
   const request = WebsocketRequest(WebsocketRequestType.modify, [action])
-  console.log(JSON.stringify(request))
+  websocket.send(request)
 }
 
-function onAnnotationCreate (id, values) {
+function onAnnotationCreate (id, values, websocket) {
   const { locus, ana, cert, assertedValue, desc } = values
   const builder = AtomicActionBuilder(ActionTarget.certainty, ActionType.add, ActionObject.certainty)
   const action = builder(id, locus, ana, cert, assertedValue, desc)
   const request = WebsocketRequest(WebsocketRequestType.modify, [action])
-  console.log(JSON.stringify(request))
+  websocket.send(request)
 }
 
-function onAnnotationModify (id, oldValues, newValues, edit) {
+function onAnnotationModify (id, oldValues, newValues, edit, websocket) {
   const builder = AtomicActionBuilder(ActionTarget.certainty, ActionType.modify, ActionObject.certainty)
   const actions = []
   Object.entries(oldValues).map(([key, value]) => {
@@ -58,6 +58,7 @@ function onAnnotationModify (id, oldValues, newValues, edit) {
   })
   // const action = builder(id, attributeName, attributeValue)
   const request = WebsocketRequest(WebsocketRequestType.modify, [actions])
+  websocket.send(request)
   edit(null)
 }
 
@@ -79,7 +80,7 @@ function CreateAnnotation (props) {
       <span className={annotation.saved === false ? 'text-danger' : 'd-none'}>
         (unsaved)
         <button type="button btn-sm"
-          onClick={() => onDeleteClick(annotation['xml:id'])}
+          onClick={() => onDeleteClick(annotation['xml:id'], props.context.websocket)}
           className="btn btn-link p-0 mx-1 text-danger">
           <u> -delete</u>
         </button>
@@ -109,11 +110,11 @@ function CreateAnnotation (props) {
       {editingAnnotation === null
         ? <AnnotateForm entity={props.entity}
           submitText="Create annotation"
-          callback={form => onAnnotationCreate(props.entity['xml:id'], form)}/>
+          callback={form => onAnnotationCreate(props.entity['xml:id'], form, props.context.websocket)}/>
         : <AnnotateForm entity={props.entity}
           annotation={editingAnnotation}
           submitText="Modify"
-          callback={form => onAnnotationModify(editingAnnotation['xml:id'], editingAnnotation, form, edit)}/>
+          callback={form => onAnnotationModify(editingAnnotation['xml:id'], editingAnnotation, form, edit, props.context.websocket)}/>
       }
     </div>
     {editingAnnotation === null
