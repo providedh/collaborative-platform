@@ -202,7 +202,7 @@
     {"id": 19, "name": "Sand", "type": "ingredient"},
     {"id": 20, "name": "Ingwer", "type": "ingredient"},
     {"id": 21, "name": "Sand", "type": "ingredient"},
-    {"id": 22, "name": null, "type": "person"}
+    {"id": 22, "name": "Bugs Bunny", "type": "person"}
   ],
   "test_get_all_entities_in_project_types": [
     {"id": 3, "name": "Butter", "type": "person"},
@@ -215,14 +215,14 @@
     {"id": 15, "name": "Doc", "type": "person"},
     {"id": 16, "name": "Grumpy", "type": "person"},
     {"id": 17, "name": "Sleepy", "type": "person"},
-    {"id": 22, "name": null, "type": "person"}
+    {"id": 22, "name": "Bugs Bunny", "type": "person"}
   ],
   "test_get_all_entities_in_project_users": [
     {"id": 5, "name": "Jerry Maguire", "type": "person"},
     {"id": 14, "name": "Snow white", "type": "person"},
     {"id": 15, "name": "Doc", "type": "person"},
     {"id": 16, "name": "Grumpy", "type": "person"},
-    {"id": 22, "name": null, "type": "person"}
+    {"id": 22, "name": "Bugs Bunny", "type": "person"}
   ],
   "test_get_all_entities_in_project_project_version": [
     {"id": 1, "name": "PCSS", "type": "place"},
@@ -284,7 +284,7 @@
     {"id": 17, "name": "Sleepy", "type": "person"},
     {"id": 19, "name": "Sand", "type": "ingredient"},
     {"id": 21, "name": "Sand", "type": "ingredient"},
-    {"id": 22, "name": null, "type": "person"}
+    {"id": 22, "name": "Bugs Bunny", "type": "person"}
   ],
   "test_get_unbound_entities_in_project_types": [
     {"id": 5, "name": "Jerry Maguire", "type": "person"},
@@ -293,7 +293,7 @@
     {"id": 8, "name": "Met", "type": "person"},
     {"id": 16, "name": "Grumpy", "type": "person"},
     {"id": 17, "name": "Sleepy", "type": "person"},
-    {"id": 22, "name": null, "type": "person"}
+    {"id": 22, "name": "Bugs Bunny", "type": "person"}
   ],
   "test_get_unbound_entities_in_project_users": [
     {"id": 1, "name": "PCSS", "type": "place"},
@@ -311,7 +311,7 @@
     {"id": 17, "name": "Sleepy", "type": "person"},
     {"id": 19, "name": "Sand", "type": "ingredient"},
     {"id": 21, "name": "Sand", "type": "ingredient"},
-    {"id": 22, "name": null, "type": "person"}
+    {"id": 22, "name": "Bugs Bunny", "type": "person"}
   ],
   "test_get_unbound_entities_in_project_start_date": [
     {"id": 1, "name": "PCSS", "type": "place"},
@@ -330,7 +330,7 @@
     {"id": 19, "name": "Sand", "type": "ingredient"},
     {"id": 20, "name": "Ingwer", "type": "ingredient"},
     {"id": 21, "name": "Sand", "type": "ingredient"},
-    {"id": 22, "name": null, "type": "person"}
+    {"id": 22, "name": "Bugs Bunny", "type": "person"}
   ],
   "test_get_unbound_entities_in_project_end_date": [
     {"id": 1, "name": "PCSS", "type": "place"},
@@ -348,7 +348,7 @@
     {"id": 17, "name": "Sleepy", "type": "person"},
     {"id": 19, "name": "Sand", "type": "ingredient"},
     {"id": 21, "name": "Sand", "type": "ingredient"},
-    {"id": 22, "name": null, "type": "person"}
+    {"id": 22, "name": "Bugs Bunny", "type": "person"}
   ],
   "test_get_unbound_entities_in_project_date": [
     {"id": 1, "name": "PCSS", "type": "place"},
@@ -541,7 +541,7 @@
     {"id": 10, "name": "3rd of may 1791", "type": "date"},
     {"id": 11, "name": "Rag", "type": "ingredient"},
     {"id": 12, "name": "Ingwer", "type": "ingredient"},
-    {"id": 22, "name": null, "type": "person"}
+    {"id": 22, "name": "Bugs Bunny", "type": "person"}
   ],
   "test_get_all_entities_from_given_file_types": [
     {"id": 3, "name": "Butter", "type": "person"},
@@ -550,11 +550,11 @@
     {"id": 6, "name": "Ingwer", "type": "person"},
     {"id": 7, "name": "Grieben", "type": "person"},
     {"id": 8, "name": "Met", "type": "person"},
-    {"id": 22, "name": null, "type": "person"}
+    {"id": 22, "name": "Bugs Bunny", "type": "person"}
   ],
   "test_get_all_entities_from_given_file_users": [
     {"id": 5, "name": "Jerry Maguire", "type": "person"},
-    {"id": 22, "name": null, "type": "person"}
+    {"id": 22, "name": "Bugs Bunny", "type": "person"}
   ],
   "test_get_all_entities_from_given_file_date": [
     {"id": 1, "name": "PCSS", "type": "place"},
@@ -596,14 +596,14 @@
     {"id": 9, "name": "4th of july 2010", "type": "date"},
     {"id": 10, "name": "3rd of may 1791", "type": "date"},
     {"id": 12, "name": "Ingwer", "type": "ingredient"},
-    {"id": 22, "name": null, "type": "person"}
+    {"id": 22, "name": "Bugs Bunny", "type": "person"}
   ],
   "test_get_unbound_entities_in_file_types": [
     {"id": 5, "name": "Jerry Maguire", "type": "person"},
     {"id": 6, "name": "Ingwer", "type": "person"},
     {"id": 7, "name": "Grieben", "type": "person"},
     {"id": 8, "name": "Met", "type": "person"},
-    {"id": 22, "name": null, "type": "person"}
+    {"id": 22, "name": "Bugs Bunny", "type": "person"}
   ],
   "test_get_unbound_entities_in_file_users": [
     {"id": 1, "name": "PCSS", "type": "place"},
@@ -616,7 +616,7 @@
     {"id": 9, "name": "4th of july 2010", "type": "date"},
     {"id": 10, "name": "3rd of may 1791", "type": "date"},
     {"id": 12, "name": "Ingwer", "type": "ingredient"},
-    {"id": 22, "name": null, "type": "person"}
+    {"id": 22, "name": "Bugs Bunny", "type": "person"}
   ],
   "test_get_unbound_entities_in_file_start_date": [
     {"id": 1, "name": "PCSS", "type": "place"},
@@ -629,7 +629,7 @@
     {"id": 10, "name": "3rd of may 1791", "type": "date"},
     {"id": 11, "name": "Rag", "type": "ingredient"},
     {"id": 12, "name": "Ingwer", "type": "ingredient"},
-    {"id": 22, "name": null, "type": "person"}
+    {"id": 22, "name": "Bugs Bunny", "type": "person"}
   ],
   "test_get_unbound_entities_in_file_end_date": [
     {"id": 1, "name": "PCSS", "type": "place"},
@@ -642,7 +642,7 @@
     {"id": 9, "name": "4th of july 2010", "type": "date"},
     {"id": 10, "name": "3rd of may 1791", "type": "date"},
     {"id": 12, "name": "Ingwer", "type": "ingredient"},
-    {"id": 22, "name": null, "type": "person"}
+    {"id": 22, "name": "Bugs Bunny", "type": "person"}
   ],
   "test_get_unbound_entities_in_file_date": [
     {"id": 1, "name": "PCSS", "type": "place"},

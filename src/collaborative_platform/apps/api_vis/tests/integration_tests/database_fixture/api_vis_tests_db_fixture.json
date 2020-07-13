@@ -3297,7 +3297,7 @@
   "pk": 73,
   "fields": {
     "entity": 22,
-    "entity_version": null,
+    "entity_version": 43,
     "xpath": "",
     "name": "forename",
     "type": "TypeChoice.str",
@@ -3318,7 +3318,7 @@
   "pk": 74,
   "fields": {
     "entity": 22,
-    "entity_version": null,
+    "entity_version": 43,
     "xpath": "",
     "name": "surname",
     "type": "TypeChoice.str",
@@ -3339,7 +3339,7 @@
   "pk": 75,
   "fields": {
     "entity": 22,
-    "entity_version": null,
+    "entity_version": 43,
     "xpath": "",
     "name": "sex",
     "type": "TypeChoice.str",
@@ -3358,6 +3358,27 @@
 {
   "model": "api_vis.entityproperty",
   "pk": 76,
+  "fields": {
+    "entity": 22,
+    "entity_version": 43,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Bugs Bunny",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 2,
+    "created_in_file_version": 7,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 77,
   "fields": {
     "entity": 1,
     "entity_version": 44,
@@ -3378,7 +3399,7 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 77,
+  "pk": 78,
   "fields": {
     "entity": 1,
     "entity_version": 44,
@@ -3399,7 +3420,7 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 78,
+  "pk": 79,
   "fields": {
     "entity": 1,
     "entity_version": 44,
@@ -3420,7 +3441,7 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 79,
+  "pk": 80,
   "fields": {
     "entity": 1,
     "entity_version": 44,
@@ -3441,7 +3462,7 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 80,
+  "pk": 81,
   "fields": {
     "entity": 2,
     "entity_version": 45,
@@ -3462,7 +3483,7 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 81,
+  "pk": 82,
   "fields": {
     "entity": 3,
     "entity_version": 46,
@@ -3483,7 +3504,7 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 82,
+  "pk": 83,
   "fields": {
     "entity": 4,
     "entity_version": 47,
@@ -3504,7 +3525,7 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 83,
+  "pk": 84,
   "fields": {
     "entity": 5,
     "entity_version": 48,
@@ -3525,7 +3546,7 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 84,
+  "pk": 85,
   "fields": {
     "entity": 5,
     "entity_version": 48,
@@ -3546,7 +3567,7 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 85,
+  "pk": 86,
   "fields": {
     "entity": 5,
     "entity_version": 48,
@@ -3567,7 +3588,7 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 86,
+  "pk": 87,
   "fields": {
     "entity": 5,
     "entity_version": 48,
@@ -3588,7 +3609,7 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 87,
+  "pk": 88,
   "fields": {
     "entity": 5,
     "entity_version": 48,
@@ -3609,7 +3630,7 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 88,
+  "pk": 89,
   "fields": {
     "entity": 5,
     "entity_version": 48,
@@ -3630,7 +3651,7 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 89,
+  "pk": 90,
   "fields": {
     "entity": 6,
     "entity_version": 49,
@@ -3651,7 +3672,7 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 90,
+  "pk": 91,
   "fields": {
     "entity": 7,
     "entity_version": 50,
@@ -3672,7 +3693,7 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 91,
+  "pk": 92,
   "fields": {
     "entity": 8,
     "entity_version": 51,
@@ -3693,7 +3714,7 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 92,
+  "pk": 93,
   "fields": {
     "entity": 9,
     "entity_version": 52,
@@ -3714,7 +3735,7 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 93,
+  "pk": 94,
   "fields": {
     "entity": 9,
     "entity_version": 52,
@@ -3735,7 +3756,7 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 94,
+  "pk": 95,
   "fields": {
     "entity": 10,
     "entity_version": 53,
@@ -3756,7 +3777,7 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 95,
+  "pk": 96,
   "fields": {
     "entity": 10,
     "entity_version": 53,
@@ -3777,7 +3798,7 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 96,
+  "pk": 97,
   "fields": {
     "entity": 11,
     "entity_version": 54,
@@ -3798,7 +3819,7 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 97,
+  "pk": 98,
   "fields": {
     "entity": 12,
     "entity_version": 55,
@@ -3819,7 +3840,7 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 98,
+  "pk": 99,
   "fields": {
     "entity": 13,
     "entity_version": 56,
@@ -3840,7 +3861,91 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 99,
+  "pk": 100,
+  "fields": {
+    "entity": 22,
+    "entity_version": 57,
+    "xpath": "",
+    "name": "forename",
+    "type": "TypeChoice.str",
+    "value_str": "Bugs",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 2,
+    "created_in_file_version": 7,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 101,
+  "fields": {
+    "entity": 22,
+    "entity_version": 57,
+    "xpath": "",
+    "name": "surname",
+    "type": "TypeChoice.str",
+    "value_str": "Bunny",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 2,
+    "created_in_file_version": 7,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 102,
+  "fields": {
+    "entity": 22,
+    "entity_version": 57,
+    "xpath": "",
+    "name": "sex",
+    "type": "TypeChoice.str",
+    "value_str": "M",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 2,
+    "created_in_file_version": 7,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 103,
+  "fields": {
+    "entity": 22,
+    "entity_version": 57,
+    "xpath": "",
+    "name": "name",
+    "type": "TypeChoice.str",
+    "value_str": "Bugs Bunny",
+    "value_int": null,
+    "value_float": null,
+    "value_date": null,
+    "value_time": null,
+    "value_point": null,
+    "created_by": 2,
+    "created_in_file_version": 7,
+    "deleted_by": null,
+    "deleted_in_file_version": null
+  }
+},
+{
+  "model": "api_vis.entityproperty",
+  "pk": 104,
   "fields": {
     "entity": 1,
     "entity_version": 58,
@@ -3861,7 +3966,7 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 100,
+  "pk": 105,
   "fields": {
     "entity": 1,
     "entity_version": 58,
@@ -3882,7 +3987,7 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 101,
+  "pk": 106,
   "fields": {
     "entity": 1,
     "entity_version": 58,
@@ -3903,7 +4008,7 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 102,
+  "pk": 107,
   "fields": {
     "entity": 1,
     "entity_version": 58,
@@ -3924,7 +4029,7 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 103,
+  "pk": 108,
   "fields": {
     "entity": 2,
     "entity_version": 59,
@@ -3945,7 +4050,7 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 104,
+  "pk": 109,
   "fields": {
     "entity": 3,
     "entity_version": 60,
@@ -3966,7 +4071,7 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 105,
+  "pk": 110,
   "fields": {
     "entity": 4,
     "entity_version": 61,
@@ -3987,7 +4092,7 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 106,
+  "pk": 111,
   "fields": {
     "entity": 5,
     "entity_version": 62,
@@ -4008,7 +4113,7 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 107,
+  "pk": 112,
   "fields": {
     "entity": 5,
     "entity_version": 62,
@@ -4029,7 +4134,7 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 108,
+  "pk": 113,
   "fields": {
     "entity": 5,
     "entity_version": 62,
@@ -4050,7 +4155,7 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 109,
+  "pk": 114,
   "fields": {
     "entity": 5,
     "entity_version": 62,
@@ -4071,7 +4176,7 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 110,
+  "pk": 115,
   "fields": {
     "entity": 5,
     "entity_version": 62,
@@ -4092,7 +4197,7 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 111,
+  "pk": 116,
   "fields": {
     "entity": 5,
     "entity_version": 62,
@@ -4113,7 +4218,7 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 112,
+  "pk": 117,
   "fields": {
     "entity": 6,
     "entity_version": 63,
@@ -4134,7 +4239,7 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 113,
+  "pk": 118,
   "fields": {
     "entity": 7,
     "entity_version": 64,
@@ -4155,7 +4260,7 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 114,
+  "pk": 119,
   "fields": {
     "entity": 8,
     "entity_version": 65,
@@ -4176,7 +4281,7 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 115,
+  "pk": 120,
   "fields": {
     "entity": 9,
     "entity_version": 66,
@@ -4197,7 +4302,7 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 116,
+  "pk": 121,
   "fields": {
     "entity": 9,
     "entity_version": 66,
@@ -4218,7 +4323,7 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 117,
+  "pk": 122,
   "fields": {
     "entity": 10,
     "entity_version": 67,
@@ -4239,7 +4344,7 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 118,
+  "pk": 123,
   "fields": {
     "entity": 10,
     "entity_version": 67,
@@ -4260,7 +4365,7 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 119,
+  "pk": 124,
   "fields": {
     "entity": 11,
     "entity_version": 68,
@@ -4281,7 +4386,7 @@
 },
 {
   "model": "api_vis.entityproperty",
-  "pk": 120,
+  "pk": 125,
   "fields": {
     "entity": 12,
     "entity_version": 69,

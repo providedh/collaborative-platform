@@ -17,35 +17,6 @@ class DbHandler:
         self.__project_id = project_id
         self.__user = user
 
-    def get_all_entities_in_project(self, qs_parameters):
-        serialized_entities = self.__get_serialized_entities(qs_parameters)
-
-        return serialized_entities
-
-    def get_all_entities_in_file(self, qs_parameters, file_id):
-        serialized_entities = self.__get_serialized_entities(qs_parameters, file_id)
-
-        return serialized_entities
-
-    def __get_serialized_entities(self, qs_parameters, file_id=None):
-        entities = self.__get_filtered_entities(qs_parameters, file_id)
-
-        serialized_entities = []
-
-        for entity in entities:
-            serialized_entity = model_to_dict(entity, ['id', 'type'])
-
-            try:
-                entity_name = entity.versions.latest('id').properties.get(name='name').get_value()
-
-            except EntityProperty.DoesNotExist:
-                entity_name = None
-
-            serialized_entity.update({'name': entity_name})
-            serialized_entities.append(serialized_entity)
-
-        return serialized_entities
-
     def get_unbound_entities_in_project(self, qs_parameters):
         serialized_entities = self.__get_serialized_unbound_entities(qs_parameters)
 
@@ -60,7 +31,7 @@ class DbHandler:
         parameters_for_entities = deepcopy(qs_parameters)
         parameters_for_entities.pop('users', None)
 
-        entities = self.__get_filtered_entities(parameters_for_entities, file_id)
+        entities = self.get_filtered_entities(parameters_for_entities, file_id)
         unifications = self.get_filtered_unifications(qs_parameters)
 
         bound_entities_ids = []
@@ -200,7 +171,7 @@ class DbHandler:
 
         return unifications
 
-    def __get_filtered_entities(self, qs_parameters, file_id=None):
+    def get_filtered_entities(self, qs_parameters, file_id=None):
         entities = Entity.objects.filter(
             file__project_id=self.__project_id,
             created_in_file_version__isnull=False,
@@ -278,7 +249,7 @@ class DbHandler:
             raise BadRequest("Can't get entity type from provided entity ids")
 
     def __mark_unification_to_delete(self, unification, project_version_nr):
-        project_version = self.get_project_version(project_version_nr)
+        project_version = self.get_project_version_by_nr(project_version_nr)
 
         file_version = project_version.file_versions.get(
             file=unification.entity.file
@@ -350,7 +321,7 @@ class DbHandler:
             entity = self.get_entity_by_int_or_dict(request_entity)
 
             project_version_nr = request_data.get('project_version')
-            project_version = self.get_project_version(project_version_nr)
+            project_version = self.get_project_version_by_nr(project_version_nr)
 
             file_version = project_version.file_versions.get(
                 file=entity.file
@@ -397,7 +368,7 @@ class DbHandler:
 
         return clique
 
-    def get_project_version(self, project_version_nr):
+    def get_project_version_by_nr(self, project_version_nr):
         file_version_counter, commit_counter = parse_project_version(project_version_nr)
 
         try:
@@ -408,6 +379,26 @@ class DbHandler:
             )
         except ProjectVersion.DoesNotExist:
             raise BadRequest(f"Version: {project_version_nr} of project with id: {self.__project_id} doesn't exist.")
+
+        return project_version
+
+    def get_project_version_by_date(self, date):
+        project_version = ProjectVersion.objects.filter(
+            project_id=self.__project_id,
+            date__lte=date,
+            commit__isnull=False,
+        ).latest('id')
+
+        if not project_version:
+            raise BadRequest(f"There is no version of project with id: {self.__project_id} for date: "
+                             f"{date.isoformat()}")
+
+        return project_version
+
+    def get_project_version(self):
+        project_version = ProjectVersion.objects.filter(
+            project_id=self.__project_id,
+        ).latest('id')
 
         return project_version
 

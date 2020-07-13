@@ -14,3 +14,9 @@ class Serializer:
         entities_ids = list(entities_ids)
 
         return entities_ids
+
+    @staticmethod
+    def serialize_entity(entity):
+        serialized_entity = model_to_dict(entity, ['id', 'type'])
+
+        return serialized_entity

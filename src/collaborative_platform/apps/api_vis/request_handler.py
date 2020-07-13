@@ -14,7 +14,7 @@ class RequestHandler:
         project_version_nr = request_data['project_version']
         certainty = request_data['certainty']
 
-        project_version = self.__db_handler.get_project_version(project_version_nr)
+        project_version = self.__db_handler.get_project_version_by_nr(project_version_nr)
 
         clique = self.__create_clique(clique_name, entities_ids, project_version)
         unification_statuses = self.__create_unifications(clique, entities_ids, certainty, project_version)
@@ -32,7 +32,7 @@ class RequestHandler:
         project_version_nr = request_data['project_version']
         certainty = request_data['certainty']
 
-        project_version = self.__db_handler.get_project_version(project_version_nr)
+        project_version = self.__db_handler.get_project_version_by_nr(project_version_nr)
         clique = self.__db_handler.get_clique(clique_id)
 
         unification_statuses = self.__create_unifications(clique, entities_ids, certainty, project_version)
@@ -47,7 +47,7 @@ class RequestHandler:
         cliques_ids = request_data['cliques']
         project_version_nr = request_data['project_version']
 
-        project_version = self.__db_handler.get_project_version(project_version_nr)
+        project_version = self.__db_handler.get_project_version_by_nr(project_version_nr)
 
         delete_statuses = self.__delete_cliques(cliques_ids, project_version)
 
@@ -61,7 +61,7 @@ class RequestHandler:
         entities_ids = request_data['entities']
         project_version_nr = request_data['project_version']
 
-        project_version = self.__db_handler.get_project_version(project_version_nr)
+        project_version = self.__db_handler.get_project_version_by_nr(project_version_nr)
         clique = self.__db_handler.get_clique(clique_id)
 
         delete_statuses = self.__delete_unifications(clique, entities_ids, project_version)
@@ -98,19 +98,46 @@ class RequestHandler:
 
         return serialized_cliques
 
-    def get_project_entities(self, project_id, user, request_data):
-        db_handler = DbHandler(project_id, user)
-        response = db_handler.get_all_entities_in_project(request_data)
+    def get_project_entities(self, request_data):
+        response = self.__get_entities(request_data)
 
         return response
 
-    def get_file_entities(self, file_id, user, request_data):
-        project_id = File.objects.get(id=file_id).project_id
-
-        db_handler = DbHandler(project_id, user)
-        response = db_handler.get_all_entities_in_file(request_data, file_id)
+    def get_file_entities(self, file_id, request_data):
+        response = self.__get_entities(request_data, file_id)
 
         return response
+
+    def __get_entities(self, request_data, file_id=None):
+        entities = self.__db_handler.get_filtered_entities(request_data, file_id)
+        project_version_nr = request_data.get('project_version')
+        date = request_data.get('date')
+
+        serialized_entities = []
+
+        for entity in entities:
+            serialized_entity = Serializer().serialize_entity(entity)
+            entity_name = self.__get_entity_name(entity, project_version_nr, date)
+
+            serialized_entity.update({'name': entity_name})
+            serialized_entities.append(serialized_entity)
+
+        return serialized_entities
+
+    def __get_entity_name(self, entity, project_version_nr, date):
+        if project_version_nr:
+            project_version = self.__db_handler.get_project_version_by_nr(project_version_nr)
+
+        elif date:
+            project_version = self.__db_handler.get_project_version_by_date(date)
+
+        else:
+            project_version = self.__db_handler.get_project_version()
+
+        entity_name = self.__db_handler.get_entity_property(entity, project_version, 'name')
+        entity_name = entity_name.get_value(as_str=True)
+
+        return entity_name
 
     def get_project_unbound_entities(self, project_id, user, request_data):
         db_handler = DbHandler(project_id, user)
