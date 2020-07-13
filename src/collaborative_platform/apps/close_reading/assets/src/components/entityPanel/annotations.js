@@ -49,12 +49,11 @@ function onAnnotationModify (id, oldValues, newValues, edit) {
     }
   })
   // const action = builder(id, attributeName, attributeValue)
-  alert(JSON.stringify(actions))
+  const request = WebsocketRequest(WebsocketRequestType.modify, [actions])
   edit(null)
 }
 
 function authorName (resp, user, authors) {
-  console.log(resp, user, authors)
   if (resp === user) { return 'I' }
   const match = authors.filter(x => x['xml:id'] === resp)
 
@@ -66,8 +65,6 @@ function authorName (resp, user, authors) {
 function CreateAnnotation (props) {
   const [visible, show] = useState(false)
   const [editingAnnotation, edit] = useState(null)
-
-  console.log(props)
 
   const annotationItems = props.entity.annotations.map((annotation, i) =>
     <li key={i}>
