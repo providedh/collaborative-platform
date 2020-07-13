@@ -57,7 +57,7 @@ function onAnnotationModify (id, oldValues, newValues, edit, websocket) {
     }
   })
   // const action = builder(id, attributeName, attributeValue)
-  const request = WebsocketRequest(WebsocketRequestType.modify, [actions])
+  const request = WebsocketRequest(WebsocketRequestType.modify, actions)
   websocket.send(request)
   edit(null)
 }
@@ -110,7 +110,7 @@ function CreateAnnotation (props) {
       {editingAnnotation === null
         ? <AnnotateForm entity={props.entity}
           submitText="Create annotation"
-          callback={form => onAnnotationCreate(props.entity['xml:id'], form, props.context.websocket)}/>
+          callback={form => onAnnotationCreate(props.entity.target, form, props.context.websocket)}/>
         : <AnnotateForm entity={props.entity}
           annotation={editingAnnotation}
           submitText="Modify"
