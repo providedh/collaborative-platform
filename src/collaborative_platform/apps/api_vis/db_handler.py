@@ -1,7 +1,6 @@
 from copy import deepcopy
 
 from django.db.models import Q
-from django.forms.models import model_to_dict
 from django.utils import timezone
 
 from apps.api_vis.models import Clique, Commit, Entity, EntityProperty, EntityVersion, Unification
@@ -472,10 +471,10 @@ class DbHandler:
                 raise BadRequest(f"Directory with name {directory_name} does't exist in this directory.")
 
     def create_commit(self, message):
-        cliques_to_create = self.__get_cliques_to_create_from_db()
-        unifications_to_add = self.__get_unifications_to_add_from_db()
-        cliques_to_delete = self.__get_cliques_to_delete_from_db()
-        unifications_to_delete = self.__get_unifications_to_remove_from_db()
+        cliques_to_create = self.get_cliques_to_create()
+        unifications_to_add = self.get_unifications_to_create()
+        cliques_to_delete = self.get_cliques_to_delete()
+        unifications_to_delete = self.get_unifications_to_delete()
 
         if len(cliques_to_create) + len(unifications_to_add) + len(cliques_to_delete) + len(unifications_to_delete) == 0:
             raise NotModified(f'You dont have any changes to commit in project with id: {self.__project_id}.')
@@ -506,10 +505,10 @@ class DbHandler:
         Unification.objects.bulk_update(unifications_to_delete, ['deleted_in_commit'])
 
     def get_uncommitted_changes(self):
-        cliques_to_create = self.__get_cliques_to_create_from_db()
-        unifications_to_add = self.__get_unifications_to_add_from_db()
-        cliques_to_delete = self.__get_cliques_to_delete_from_db()
-        unifications_to_remove = self.__get_unifications_to_remove_from_db()
+        cliques_to_create = self.get_cliques_to_create()
+        unifications_to_add = self.get_unifications_to_create()
+        cliques_to_delete = self.get_cliques_to_delete()
+        unifications_to_remove = self.get_unifications_to_delete()
 
         response = {
             'uncommitted_changes': {
@@ -584,7 +583,7 @@ class DbHandler:
 
         return response
 
-    def __get_cliques_to_create_from_db(self):
+    def get_cliques_to_create(self):
         cliques_to_create = Clique.objects.filter(
             project_id=self.__project_id,
             created_by=self.__user,
@@ -593,7 +592,7 @@ class DbHandler:
 
         return cliques_to_create
 
-    def __get_unifications_to_add_from_db(self):
+    def get_unifications_to_create(self):
         unifications_to_add = Unification.objects.filter(
             project_id=self.__project_id,
             created_by=self.__user,
@@ -602,7 +601,7 @@ class DbHandler:
 
         return unifications_to_add
 
-    def __get_cliques_to_delete_from_db(self):
+    def get_cliques_to_delete(self):
         cliques_to_delete = Clique.objects.filter(
             project_id=self.__project_id,
             deleted_by=self.__user,
@@ -612,7 +611,7 @@ class DbHandler:
 
         return cliques_to_delete
 
-    def __get_unifications_to_remove_from_db(self):
+    def get_unifications_to_delete(self):
         unifications_to_delete = Unification.objects.filter(
             project_id=self.__project_id,
             deleted_by=self.__user,

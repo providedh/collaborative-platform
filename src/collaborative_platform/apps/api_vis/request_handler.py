@@ -108,9 +108,28 @@ class RequestHandler:
 
         return response
 
-    def get_uncommitted_changes(self, project_id, user):
-        db_handler = DbHandler(project_id, user)
-        response = db_handler.get_uncommitted_changes()
+    def get_uncommitted_changes(self):
+        uncommitted_changes = {}
+
+        cliques_to_create = self.__db_handler.get_cliques_to_create()
+        serialized_cliques = self.__serialize_uncommitted_cliques(cliques_to_create)
+        uncommitted_changes.update({'cliques_to_create': serialized_cliques})
+
+        cliques_to_delete = self.__db_handler.get_cliques_to_delete()
+        serialized_cliques = self.__serialize_uncommitted_cliques(cliques_to_delete)
+        uncommitted_changes.update({'cliques_to_delete': serialized_cliques})
+
+        unifications_to_create = self.__db_handler.get_unifications_to_create()
+        serialized_unifications = self.__serialize_uncommitted_unifications(unifications_to_create)
+        uncommitted_changes.update({'unifications_to_add': serialized_unifications})
+
+        unifications_to_delete = self.__db_handler.get_unifications_to_delete()
+        serialized_unifications = self.__serialize_uncommitted_unifications(unifications_to_delete)
+        uncommitted_changes.update({'unifications_to_remove': serialized_unifications})
+
+        response = {
+            'uncommitted_changes': uncommitted_changes
+        }
 
         return response
 
@@ -309,6 +328,42 @@ class RequestHandler:
             serialized_cliques.append(serialized_clique)
 
         return serialized_cliques
+
+    @staticmethod
+    def __serialize_uncommitted_cliques(cliques):
+        serialized_cliques = []
+
+        for clique in cliques:
+            serialized_clique = {
+                'id': clique.id,
+                'name': clique.name,
+                'created_by_id': clique.created_by.id
+            }
+
+            serialized_cliques.append(serialized_clique)
+
+        return serialized_cliques
+
+    def __serialize_uncommitted_unifications(self, unifications):
+        serialized_unifications = []
+
+        for unification in unifications:
+            project_version = self.__db_handler.get_project_version()
+            entity_name = self.__db_handler.get_entity_property(unification.entity, project_version, 'name')
+
+            serialized_unification = {
+                'id': unification.id,
+                'clique_id': unification.clique.id,
+                'clique_name': unification.clique.name,
+                'entity_id': unification.entity.id,
+                'entity_name': entity_name.get_value(),
+                'certainty': unification.certainty,
+                'created_by': unification.created_by.id,
+            }
+
+            serialized_unifications.append(serialized_unification)
+
+        return serialized_unifications
 
     def __serialize_entities(self, entities, project_version):
         serialized_entities = []

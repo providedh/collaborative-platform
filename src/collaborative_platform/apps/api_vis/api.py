@@ -228,7 +228,7 @@ def uncommitted_changes(request, project_id):
     if request.method == 'GET':
         try:
             request_handler = RequestHandler(project_id, request.user)
-            response = request_handler.get_uncommitted_changes(project_id, request.user)
+            response = request_handler.get_uncommitted_changes()
 
             return JsonResponse(response, safe=False)
 
