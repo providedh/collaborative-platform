@@ -1,5 +1,5 @@
 function proxied () {
-  const _common = []
+  const _common = ['name']
   let _specific = {}
 
   const isPrivate = (key) => key[0] === '_'
