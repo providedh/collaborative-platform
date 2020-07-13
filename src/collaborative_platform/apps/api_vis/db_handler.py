@@ -17,22 +17,12 @@ class DbHandler:
         self.__project_id = project_id
         self.__user = user
 
-    def get_unbound_entities_in_project(self, qs_parameters):
-        serialized_entities = self.__get_serialized_unbound_entities(qs_parameters)
-
-        return serialized_entities
-
-    def get_unbound_entities_in_file(self, qs_parameters, file_id):
-        serialized_entities = self.__get_serialized_unbound_entities(qs_parameters, file_id)
-
-        return serialized_entities
-
-    def __get_serialized_unbound_entities(self, qs_parameters, file_id=None):
-        parameters_for_entities = deepcopy(qs_parameters)
+    def get_filtered_unbound_entities(self, request_data, file_id=None):
+        parameters_for_entities = deepcopy(request_data)
         parameters_for_entities.pop('users', None)
 
         entities = self.get_filtered_entities(parameters_for_entities, file_id)
-        unifications = self.get_filtered_unifications(qs_parameters)
+        unifications = self.get_filtered_unifications(request_data)
 
         bound_entities_ids = []
 
@@ -43,21 +33,7 @@ class DbHandler:
 
         entities = entities.exclude(id__in=bound_entities_ids)
 
-        serialized_entities = []
-
-        for entity in entities:
-            serialized_entity = model_to_dict(entity, ['id', 'type'])
-
-            try:
-                entity_name = entity.versions.latest('id').properties.get(name='name').get_value()
-
-            except EntityProperty.DoesNotExist:
-                entity_name = None
-
-            serialized_entity.update({'name': entity_name})
-            serialized_entities.append(serialized_entity)
-
-        return serialized_entities
+        return entities
 
     def get_filtered_cliques(self, request_data, file_id=None):
         cliques = Clique.objects.filter(

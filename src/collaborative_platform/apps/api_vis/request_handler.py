@@ -1,7 +1,6 @@
 from apps.api_vis.db_handler import DbHandler
 from apps.api_vis.serializer import Serializer
 from apps.exceptions import BadRequest, NotModified
-from apps.files_management.models import File
 
 
 class RequestHandler:
@@ -103,28 +102,36 @@ class RequestHandler:
 
         return response
 
-    def get_file_entities(self, file_id, request_data):
+    def get_file_entities(self, request_data, file_id):
         response = self.__get_entities(request_data, file_id)
 
         return response
 
     def __get_entities(self, request_data, file_id=None):
-        entities = self.__db_handler.get_filtered_entities(request_data, file_id)
         project_version_nr = request_data.get('project_version')
         date = request_data.get('date')
 
+        entities = self.__db_handler.get_filtered_entities(request_data, file_id)
+        project_version = self.__get_project_version(project_version_nr, date)
+        serialized_entities = self.__serialize_entities(entities, project_version)
+
+        return serialized_entities
+
+    def __serialize_entities(self, entities, project_version):
         serialized_entities = []
 
         for entity in entities:
             serialized_entity = Serializer().serialize_entity(entity)
-            entity_name = self.__get_entity_name(entity, project_version_nr, date)
+
+            entity_name = self.__db_handler.get_entity_property(entity, project_version, 'name')
+            entity_name = entity_name.get_value(as_str=True)
 
             serialized_entity.update({'name': entity_name})
             serialized_entities.append(serialized_entity)
 
         return serialized_entities
 
-    def __get_entity_name(self, entity, project_version_nr, date):
+    def __get_project_version(self, project_version_nr, date):
         if project_version_nr:
             project_version = self.__db_handler.get_project_version_by_nr(project_version_nr)
 
@@ -134,24 +141,27 @@ class RequestHandler:
         else:
             project_version = self.__db_handler.get_project_version()
 
-        entity_name = self.__db_handler.get_entity_property(entity, project_version, 'name')
-        entity_name = entity_name.get_value(as_str=True)
+        return project_version
 
-        return entity_name
-
-    def get_project_unbound_entities(self, project_id, user, request_data):
-        db_handler = DbHandler(project_id, user)
-        response = db_handler.get_unbound_entities_in_project(request_data)
+    def get_project_unbound_entities(self, request_data):
+        response = self.__get_unbound_entities(request_data)
 
         return response
 
-    def get_file_unbound_entities(self, file_id, user, request_data):
-        project_id = File.objects.get(id=file_id).project_id
-
-        db_handler = DbHandler(project_id, user)
-        response = db_handler.get_unbound_entities_in_file(request_data, file_id)
+    def get_file_unbound_entities(self, file_id, request_data):
+        response = self.__get_unbound_entities(request_data, file_id)
 
         return response
+
+    def __get_unbound_entities(self, request_data, file_id=None):
+        project_version_nr = request_data.get('project_version')
+        date = request_data.get('date')
+
+        unbound_entities = self.__db_handler.get_filtered_unbound_entities(request_data, file_id)
+        project_version = self.__get_project_version(project_version_nr, date)
+        serialized_entities = self.__serialize_entities(unbound_entities, project_version)
+
+        return serialized_entities
 
     def create_commit(self, request_data):
         message = request_data.get('message')

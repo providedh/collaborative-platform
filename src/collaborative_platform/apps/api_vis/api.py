@@ -110,7 +110,7 @@ def file_entities(request, project_id, file_id):
             request_data = parse_query_string(request.GET)
 
             request_handler = RequestHandler(project_id, request.user)
-            response = request_handler.get_file_entities(file_id, request_data)
+            response = request_handler.get_file_entities(request_data, file_id)
 
             return JsonResponse(response, safe=False)
 
@@ -166,7 +166,7 @@ def project_unbound_entities(request, project_id):
             request_data = parse_query_string(request.GET)
 
             request_handler = RequestHandler(project_id, request.user)
-            response = request_handler.get_project_unbound_entities(project_id, request.user, request_data)
+            response = request_handler.get_project_unbound_entities(request_data)
 
             return JsonResponse(response, safe=False)
 
@@ -185,7 +185,7 @@ def file_unbound_entities(request, project_id, file_id):
             request_data = parse_query_string(request.GET)
 
             request_handler = RequestHandler(project_id, request.user)
-            response = request_handler.get_file_unbound_entities(file_id, request.user, request_data)
+            response = request_handler.get_file_unbound_entities(file_id, request_data)
 
             return JsonResponse(response, safe=False)
 
