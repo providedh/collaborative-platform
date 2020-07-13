@@ -16,14 +16,16 @@ export default function CreateAnnotationWithContext (props) {
 function onDeleteClick (id) {
   const builder = AtomicActionBuilder(ActionTarget.certainty, ActionType.delete, ActionObject.certainty)
   const action = builder(id)
-  alert(JSON.stringify(action))
+  const request = WebsocketRequest(WebsocketRequestType.modify, [action])
+  console.log(JSON.stringify(request))
 }
 
 function onAnnotationCreate (id, values) {
   const { locus, ana, cert, assertedValue, desc } = values
   const builder = AtomicActionBuilder(ActionTarget.certainty, ActionType.add, ActionObject.certainty)
   const action = builder(id, locus, ana, cert, assertedValue, desc)
-  alert(JSON.stringify(action))
+  const request = WebsocketRequest(WebsocketRequestType.modify, [action])
+  console.log(JSON.stringify(request))
 }
 
 function onAnnotationModify (id, oldValues, newValues, edit) {
