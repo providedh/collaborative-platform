@@ -36,7 +36,7 @@
   "fields": {
     "project": 1,
     "file_version_counter": 0,
-    "commit": null,
+    "latest_commit": null,
     "commit_counter": 0,
     "date": "2020-03-23T13:39:13.906Z",
     "file_versions": []
