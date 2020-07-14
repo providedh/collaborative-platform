@@ -114,9 +114,9 @@
         <listPerson type="PROVIDEDH Annotators">
           <person xml:id="annotator-1">
             <persName>
-              <forename>None</forename>
-              <surname>None</surname>
-              <email>None</email>
+              <forename>none</forename>
+              <surname>none</surname>
+              <email>none</email>
             </persName>
           </person>
           <person xml:id="annotator-2">

@@ -14,7 +14,7 @@ SCRIPT_DIR = os.path.dirname(__file__)
 
 
 @pytest.mark.usefixtures('file_handling_with_hd_and_db__db_setup', 'reset_db_files_directory_after_each_test')
-@pytest.mark.django_db()
+@pytest.mark.django_db(transaction=True, reset_sequences=True)
 @pytest.mark.integration_tests
 class TestFileHandlingWithHdAndDb:
     def test_file_upload_create_file_on_hd_and_entries_in_db(self):
@@ -26,10 +26,10 @@ class TestFileHandlingWithHdAndDb:
         client.force_login(user)
 
         files_in_db = File.objects.all()
-        assert len(files_in_db) == 0
+        assert len(files_in_db) == 3
 
         files_on_hd = os.listdir(os.path.join(settings.MEDIA_ROOT, 'uploaded_files'))
-        assert len(files_on_hd) == 0
+        assert len(files_on_hd) == 8
 
         project = Project.objects.get(id=project_id)
         directory = Directory.objects.get(project=project, name=project.title, parent_dir=None)
@@ -38,10 +38,10 @@ class TestFileHandlingWithHdAndDb:
         upload_file(client, source_file_path, directory.id)
 
         files_in_db = File.objects.all()
-        assert len(files_in_db) == 1
+        assert len(files_in_db) == 4
 
         files_on_hd = os.listdir(os.path.join(settings.MEDIA_ROOT, 'uploaded_files'))
-        assert len(files_on_hd) == 2
+        assert len(files_on_hd) == 10
 
     def test_file_upload_extract_elements_from_file_to_db(self):
         user_id = 2
@@ -52,10 +52,10 @@ class TestFileHandlingWithHdAndDb:
         client.force_login(user)
 
         entities_in_db = Entity.objects.all()
-        assert len(entities_in_db) == 0
+        assert len(entities_in_db) == 22
 
         entities_properties_in_db = EntityProperty.objects.all()
-        assert len(entities_properties_in_db) == 0
+        assert len(entities_properties_in_db) == 125
 
         project = Project.objects.get(id=project_id)
         directory = Directory.objects.get(project=project, name=project.title, parent_dir=None)
@@ -70,7 +70,7 @@ class TestFileHandlingWithHdAndDb:
         second_file_version = file_versions[1]
 
         entities_in_db = Entity.objects.all()
-        assert len(entities_in_db) == 14
+        assert len(entities_in_db) == 36
 
         entities_properties_in_db = EntityProperty.objects.filter(
             entity_version__file_version=first_file_version
@@ -99,10 +99,10 @@ class TestFileHandlingWithHdAndDb:
         client.force_login(user)
 
         entities_in_db = Entity.objects.all()
-        assert len(entities_in_db) == 0
+        assert len(entities_in_db) == 22
 
         entities_properties_in_db = EntityProperty.objects.all()
-        assert len(entities_properties_in_db) == 0
+        assert len(entities_properties_in_db) == 125
 
         project = Project.objects.get(id=project_id)
         directory = Directory.objects.get(project=project, name=project.title, parent_dir=None)

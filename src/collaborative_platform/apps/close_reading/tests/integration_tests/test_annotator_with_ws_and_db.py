@@ -18,7 +18,6 @@ SCRIPT_DIR = os.path.dirname(__file__)
 
 
 # TODO: Extract creating communicators and disconnecting them to pytest fixture
-# TODO: Figure out how to reset database after each test inside class and reduce number of test classes
 
 
 @pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
@@ -201,12 +200,6 @@ class TestAnnotatorWithWsAndDb:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb2:
     async def test_add_reference_to_entity_to_text__entity_doesnt_exist__entity_listable(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -264,12 +257,6 @@ class TestAnnotatorWithWsAndDb2:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb3:
     async def test_add_reference_to_entity_to_text__entity_doesnt_exist__entity_unlistable(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -331,12 +318,6 @@ class TestAnnotatorWithWsAndDb3:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb4:
     async def test_add_reference_to_entity_to_text__entity_exist__entity_listable(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -387,12 +368,6 @@ class TestAnnotatorWithWsAndDb4:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb5:
     async def test_add_reference_to_entity_to_text__entity_exist__entity_unlistable(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -449,12 +424,6 @@ class TestAnnotatorWithWsAndDb5:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb6:
     async def test_remove_reference_to_entity_from_text__entity_listable(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -486,12 +455,6 @@ class TestAnnotatorWithWsAndDb6:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb7:
     async def test_remove_reference_to_entity_from_text__entity_unlistable(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -544,12 +507,6 @@ class TestAnnotatorWithWsAndDb7:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb8:
     async def test_modify_reference_to_entity__entity_doesnt_exist__entity_listable(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -610,12 +567,6 @@ class TestAnnotatorWithWsAndDb8:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb9:
     async def test_modify_reference_to_entity__entity_doesnt_exist__entity_unlistable(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -659,12 +610,6 @@ class TestAnnotatorWithWsAndDb9:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb10:
     async def test_modify_reference_to_entity__entity_exist__entity_listable(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -697,12 +642,6 @@ class TestAnnotatorWithWsAndDb10:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb11:
     async def test_modify_reference_to_entity__entity_exist__entity_unlistable(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -741,12 +680,6 @@ class TestAnnotatorWithWsAndDb11:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb12:
     async def test_add_property_to_entity__entity_listable(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -780,12 +713,6 @@ class TestAnnotatorWithWsAndDb12:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb13:
     async def test_add_property_to_entity__entity_unlistable(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -856,12 +783,6 @@ class TestAnnotatorWithWsAndDb13:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb14:
     async def test_remove_property_from_entity__entity_listable(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -893,12 +814,6 @@ class TestAnnotatorWithWsAndDb14:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb15:
     async def test_remove_property_from_entity__entity_unlistable(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -940,12 +855,6 @@ class TestAnnotatorWithWsAndDb15:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb16:
     async def test_modify_entity_property__entity_listable(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -980,12 +889,6 @@ class TestAnnotatorWithWsAndDb16:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb17:
     async def test_modify_entity_property__entity_unlistable(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -1038,12 +941,6 @@ class TestAnnotatorWithWsAndDb17:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb18:
     async def test_add_certainty__to_text(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -1080,12 +977,6 @@ class TestAnnotatorWithWsAndDb18:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb19:
     async def test_add_certainty__to_reference(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -1122,12 +1013,6 @@ class TestAnnotatorWithWsAndDb19:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb20:
     async def test_add_certainty__to_entity_type__default_entity(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -1164,12 +1049,6 @@ class TestAnnotatorWithWsAndDb20:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb21:
     async def test_add_certainty__to_entity_type__custom_entity(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -1206,12 +1085,6 @@ class TestAnnotatorWithWsAndDb21:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb22:
     async def test_add_certainty__to_entity_property(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -1248,12 +1121,6 @@ class TestAnnotatorWithWsAndDb22:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb23:
     async def test_add_certainty__to_certainty(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -1290,12 +1157,6 @@ class TestAnnotatorWithWsAndDb23:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb24:
     async def test_remove_certainty(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -1326,12 +1187,6 @@ class TestAnnotatorWithWsAndDb24:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb25:
     async def test_modify_certainty_parameter__modify_categories(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -1366,12 +1221,6 @@ class TestAnnotatorWithWsAndDb25:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb26:
     async def test_modify_certainty_parameter__modify_locus(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -1406,12 +1255,6 @@ class TestAnnotatorWithWsAndDb26:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb27:
     async def test_modify_certainty_parameter__modify_reference(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -1447,12 +1290,6 @@ class TestAnnotatorWithWsAndDb27:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb28:
     async def test_complex_operation(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -1532,12 +1369,6 @@ class TestAnnotatorWithWsAndDb28:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb29:
     async def test_discard_adding_tag_to_text(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -1581,12 +1412,6 @@ class TestAnnotatorWithWsAndDb29:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb30:
     async def test_discard_moving_tag_to_new_position(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -1631,12 +1456,6 @@ class TestAnnotatorWithWsAndDb30:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb31:
     async def test_discard_deleting_tag_from_text(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -1677,12 +1496,6 @@ class TestAnnotatorWithWsAndDb31:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb32:
     async def test_discard_adding_reference_to_entity_to_text__entity_doesnt_exist__entity_listable(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -1748,12 +1561,6 @@ class TestAnnotatorWithWsAndDb32:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb33:
     async def test_discard_adding_reference_to_entity_to_text__entity_doesnt_exist__entity_unlistable(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -1823,12 +1630,6 @@ class TestAnnotatorWithWsAndDb33:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb34:
     async def test_discard_adding_reference_to_entity_to_text__entity_exist__entity_listable(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -1887,12 +1688,6 @@ class TestAnnotatorWithWsAndDb34:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb35:
     async def test_discard_adding_reference_to_entity_to_text__entity_exist__entity_unlistable(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -1957,12 +1752,6 @@ class TestAnnotatorWithWsAndDb35:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb36:
     async def test_discard_modifying_reference_to_entity__entity_doesnt_exist__entity_listable(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -2034,12 +1823,6 @@ class TestAnnotatorWithWsAndDb36:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb37:
     async def test_discard_modifying_reference_to_entity__entity_doesnt_exist__entity_unlistable(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -2093,12 +1876,6 @@ class TestAnnotatorWithWsAndDb37:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb38:
     async def test_discard_modifying_reference_to_entity__entity_exist__entity_listable(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -2141,12 +1918,6 @@ class TestAnnotatorWithWsAndDb38:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb39:
     async def test_discard_modifying_reference_to_entity__entity_exist__entity_unlistable(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -2195,12 +1966,6 @@ class TestAnnotatorWithWsAndDb39:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb40:
     async def test_discard_removing_reference_to_entity_from_text__entity_listable(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -2242,12 +2007,6 @@ class TestAnnotatorWithWsAndDb40:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb41:
     async def test_discard_removing_reference_to_entity_from_text__entity_unlistable(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -2310,12 +2069,6 @@ class TestAnnotatorWithWsAndDb41:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb42:
     async def test_discard_adding_property_to_entity__entity_listable(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -2359,12 +2112,6 @@ class TestAnnotatorWithWsAndDb42:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb43:
     async def test_discard_adding_property_to_entity__entity_unlistable(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -2445,12 +2192,6 @@ class TestAnnotatorWithWsAndDb43:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb44:
     async def test_discard_modifying_entity_property__entity_listable(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -2495,12 +2236,6 @@ class TestAnnotatorWithWsAndDb44:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb45:
     async def test_discard_modifying_entity_property__entity_unlistable(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -2571,12 +2306,6 @@ class TestAnnotatorWithWsAndDb45:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb46:
     async def test_discard_removing_property_from_entity__entity_listable(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -2618,12 +2347,6 @@ class TestAnnotatorWithWsAndDb46:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb47:
     async def test_discard_removing_property_from_entity__entity_unlistable(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -2675,12 +2398,6 @@ class TestAnnotatorWithWsAndDb47:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb48:
     async def test_discard_adding_certainty__to_text(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -2727,12 +2444,6 @@ class TestAnnotatorWithWsAndDb48:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb49:
     async def test_discard_modifying_certainty_parameter__modify_categories(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -2777,12 +2488,6 @@ class TestAnnotatorWithWsAndDb49:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb50:
     async def test_discard_removing_certainty(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -2823,12 +2528,6 @@ class TestAnnotatorWithWsAndDb50:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb51:
     async def test_accept_adding_tag_to_text(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -2872,12 +2571,6 @@ class TestAnnotatorWithWsAndDb51:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb52:
     async def test_accept_moving_tag_to_new_position(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -2922,12 +2615,6 @@ class TestAnnotatorWithWsAndDb52:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb53:
     async def test_accept_deleting_tag_from_text(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -2968,12 +2655,6 @@ class TestAnnotatorWithWsAndDb53:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb54:
     async def test_accept_adding_reference_to_entity_to_text__entity_doesnt_exist__entity_listable(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -3039,12 +2720,6 @@ class TestAnnotatorWithWsAndDb54:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb55:
     async def test_accept_adding_reference_to_entity_to_text__entity_doesnt_exist__entity_unlistable(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -3114,12 +2789,6 @@ class TestAnnotatorWithWsAndDb55:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb56:
     async def test_accept_adding_reference_to_entity_to_text__entity_exist__entity_listable(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -3178,12 +2847,6 @@ class TestAnnotatorWithWsAndDb56:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb57:
     async def test_accept_adding_reference_to_entity_to_text__entity_exist__entity_unlistable(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -3248,12 +2911,6 @@ class TestAnnotatorWithWsAndDb57:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb58:
     async def test_accept_modifying_reference_to_entity__entity_doesnt_exist__entity_listable(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -3327,12 +2984,6 @@ class TestAnnotatorWithWsAndDb58:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb59:
     async def test_accept_modifying_reference_to_entity__entity_doesnt_exist__entity_unlistable(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -3412,12 +3063,6 @@ class TestAnnotatorWithWsAndDb59:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb60:
     async def test_accept_modifying_reference_to_entity__entity_exist__entity_listable(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -3460,12 +3105,6 @@ class TestAnnotatorWithWsAndDb60:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb61:
     async def test_accept_modifying_reference_to_entity__entity_exist__entity_unlistable(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -3514,12 +3153,6 @@ class TestAnnotatorWithWsAndDb61:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb62:
     async def test_accept_removing_reference_to_entity_from_text__entity_listable(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -3561,12 +3194,6 @@ class TestAnnotatorWithWsAndDb62:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb63:
     async def test_accept_removing_reference_to_entity_from_text__entity_unlistable(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -3633,12 +3260,6 @@ class TestAnnotatorWithWsAndDb63:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb64:
     async def test_accept_adding_property_to_entity__entity_listable(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -3682,12 +3303,6 @@ class TestAnnotatorWithWsAndDb64:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb65:
     async def test_accept_adding_property_to_entity__entity_unlistable(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -3768,12 +3383,6 @@ class TestAnnotatorWithWsAndDb65:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb66:
     async def test_accept_modifying_entity_property__entity_listable(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -3818,12 +3427,6 @@ class TestAnnotatorWithWsAndDb66:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb67:
     async def test_accept_modifying_entity_property__entity_unlistable(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -3890,12 +3493,6 @@ class TestAnnotatorWithWsAndDb67:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb68:
     async def test_accept_removing_property_from_entity__entity_listable(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -3937,12 +3534,6 @@ class TestAnnotatorWithWsAndDb68:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb69:
     async def test_accept_removing_property_from_entity__entity_unlistable(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -3995,12 +3586,6 @@ class TestAnnotatorWithWsAndDb69:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb70:
     async def test_accept_adding_certainty__to_text(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -4047,12 +3632,6 @@ class TestAnnotatorWithWsAndDb70:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb71:
     async def test_accept_modifying_certainty_parameter__modify_categories(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -4097,12 +3676,6 @@ class TestAnnotatorWithWsAndDb71:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb72:
     async def test_accept_removing_certainty(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -4143,12 +3716,6 @@ class TestAnnotatorWithWsAndDb72:
 
         await communicator.disconnect()
 
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
-class TestAnnotatorWithWsAndDb73:
     async def test_saving_file(self):
         test_name = inspect.currentframe().f_code.co_name
 
