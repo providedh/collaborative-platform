@@ -323,7 +323,7 @@ class ElementsExtractor:
             file=self.__file,
             xml_id=get_first_xpath_match(certainty, '@xml:id', XML_NAMESPACES),
             locus=get_first_xpath_match(certainty, '@locus', XML_NAMESPACES),
-            cert=get_first_xpath_match(certainty, '@cert', XML_NAMESPACES),
+            certainty=get_first_xpath_match(certainty, '@cert', XML_NAMESPACES),
             degree=get_first_xpath_match(certainty, '@degree', XML_NAMESPACES),
             target_xml_id=target_xml_id,
             target_match=target_xpath,

@@ -34,6 +34,7 @@ class TestApiVisWithDb:
             'name': 'seventh_clique',
             'entities': [12, 19],
             'certainty': 'high',
+            'categories': ['ignorance', 'incompleteness'],
             'project_version': 6.5,
         }
 
@@ -46,6 +47,13 @@ class TestApiVisWithDb:
 
         clique = cliques[0]
         assert clique.unifications.count() == 2
+
+        for unification in clique.unifications.all():
+            assert unification.categories.count() == 2
+
+            categories = unification.categories.order_by('id')
+            assert categories[0].name == 'ignorance'
+            assert categories[1].name == 'incompleteness'
 
         response_content = json.loads(response.content)
 
@@ -93,6 +101,7 @@ class TestApiVisWithDb:
                 },
             ],
             'certainty': 'high',
+            'categories': ['ignorance', 'incompleteness'],
             'project_version': 6.5,
         }
 
@@ -105,6 +114,13 @@ class TestApiVisWithDb:
 
         clique = cliques[0]
         assert clique.unifications.count() == 2
+
+        for unification in clique.unifications.all():
+            assert unification.categories.count() == 2
+
+            categories = unification.categories.order_by('id')
+            assert categories[0].name == 'ignorance'
+            assert categories[1].name == 'incompleteness'
 
         response_content = json.loads(response.content)
 
@@ -144,6 +160,7 @@ class TestApiVisWithDb:
         payload = {
             'entities': [21],
             'certainty': 'medium',
+            'categories': ['ignorance', 'incompleteness'],
             'project_version': 6.5,
         }
 
@@ -156,6 +173,13 @@ class TestApiVisWithDb:
 
         clique = cliques[0]
         assert clique.unifications.count() == 3
+
+        last_unification = clique.unifications.latest('id')
+        assert last_unification.categories.count() == 2
+
+        categories = last_unification.categories.order_by('id')
+        assert categories[0].name == 'ignorance'
+        assert categories[1].name == 'incompleteness'
 
         response_content = json.loads(response.content)
 
@@ -191,6 +215,7 @@ class TestApiVisWithDb:
                 },
             ],
             'certainty': 'medium',
+            'categories': ['ignorance', 'incompleteness'],
             'project_version': 6.5,
         }
 
@@ -203,6 +228,13 @@ class TestApiVisWithDb:
 
         clique = cliques[0]
         assert clique.unifications.count() == 3
+
+        last_unification = clique.unifications.latest('id')
+        assert last_unification.categories.count() == 2
+
+        categories = last_unification.categories.order_by('id')
+        assert categories[0].name == 'ignorance'
+        assert categories[1].name == 'incompleteness'
 
         response_content = json.loads(response.content)
 
@@ -236,6 +268,7 @@ class TestApiVisWithDb:
             'name': 'seventh_clique',
             'entities': [12, 19],
             'certainty': 'high',
+            'categories': ['ignorance', 'incompleteness'],
             'project_version': 6.5,
         }
 
@@ -386,6 +419,7 @@ class TestApiVisWithDb:
         payload = {
             'entities': [11, 15],
             'certainty': 'high',
+            'categories': ['ignorance', 'incompleteness'],
             'project_version': 6.3,
         }
 
@@ -663,6 +697,7 @@ class TestApiVisWithDb:
             'name': 'seventh_clique',
             'entities': [12, 19],
             'certainty': 'high',
+            'categories': ['ignorance', 'incompleteness'],
             'project_version': 6.5,
         }
 
@@ -716,14 +751,14 @@ class TestApiVisWithDb:
                     {
                         'id': 7,
                         'name': 'seventh_clique',
-                        'created_by_id': 2
+                        'created_by_id': 2,
                      }
                 ],
                 'cliques_to_delete': [
                     {
                         'id': 2,
                         'name': 'second_clique',
-                        'created_by_id': 2
+                        'created_by_id': 2,
                     }
                 ],
                 'unifications_to_add': [
@@ -734,7 +769,8 @@ class TestApiVisWithDb:
                         'entity_id': 21,
                         'entity_name': 'Sand',
                         'certainty': 'medium',
-                        'created_by': 2
+                        'categories': [],
+                        'created_by': 2,
                     },
                     {
                         'id': 14,
@@ -743,7 +779,8 @@ class TestApiVisWithDb:
                         'entity_id': 19,
                         'entity_name': 'Sand',
                         'certainty': 'high',
-                        'created_by': 2
+                        'categories': ['ignorance', 'incompleteness'],
+                        'created_by': 2,
                     },
                     {
                         'id': 13,
@@ -752,37 +789,41 @@ class TestApiVisWithDb:
                         'entity_id': 12,
                         'entity_name': 'Ingwer',
                         'certainty': 'high',
-                        'created_by': 2
+                        'categories': ['ignorance', 'incompleteness'],
+                        'created_by': 2,
                     }
                 ],
                 'unifications_to_remove': [
                     {
-                        'certainty': 'high',
+                        'id': 1,
                         'clique_id': 1,
                         'clique_name': 'first_clique',
-                        'created_by': 2,
                         'entity_id': 11,
                         'entity_name': 'Rag',
-                        'id': 1
+                        'certainty': 'high',
+                        'categories': [],
+                        'created_by': 2,
                     },
                     {
-                        'certainty': 'high',
+                        'id': 4,
                         'clique_id': 2,
                         'clique_name': 'second_clique',
-                        'created_by': 2,
                         'entity_id': 20,
                         'entity_name': 'Ingwer',
-                        'id': 4
+                        'certainty': 'high',
+                        'categories': ['credibility'],
+                        'created_by': 2,
                     },
                     {
-                        'certainty': 'high',
+                        'id': 3,
                         'clique_id': 2,
                         'clique_name': 'second_clique',
-                        'created_by': 2,
                         'entity_id': 18,
                         'entity_name': 'Jus',
-                        'id': 3
-                    }
+                        'certainty': 'high',
+                        'categories': ['credibility'],
+                        'created_by': 2,
+                    },
                 ]
             },
         }

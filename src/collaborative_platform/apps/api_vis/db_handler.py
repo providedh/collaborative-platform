@@ -8,7 +8,7 @@ from apps.api_vis.helpers import parse_project_version
 from apps.api_vis.request_validator import validate_keys_and_types
 from apps.exceptions import BadRequest, NotModified
 from apps.files_management.models import Directory, File, FileVersion
-from apps.projects.models import ProjectVersion
+from apps.projects.models import ProjectVersion, UncertaintyCategory
 
 
 class DbHandler:
@@ -157,7 +157,7 @@ class DbHandler:
 
         return clique
 
-    def create_unification(self, clique, entity, certainty, project_version):
+    def create_unification(self, clique, entity, certainty, categories, project_version):
         file_version = FileVersion.objects.get(
             projectversion=project_version,
             file=entity.file
@@ -171,6 +171,10 @@ class DbHandler:
             created_by=self.__user,
             created_in_file_version=file_version
         )
+
+        if categories:
+            categories_ids = self.__get_categories_ids_from_db(categories)
+            unification.categories.add(*categories_ids)
 
         return unification
 
@@ -436,6 +440,16 @@ class DbHandler:
 
             except Directory.DoesNotExist:
                 raise BadRequest(f"Directory with name {directory_name} does't exist in this directory.")
+
+    def __get_categories_ids_from_db(self, categories):
+        categories = UncertaintyCategory.objects.filter(
+            taxonomy__project_id=self.__project_id,
+            name__in=categories
+        )
+
+        categories_ids = categories.values_list('id', flat=True)
+
+        return categories_ids
 
     def __delete_unifications(self, unifications, project_version):
         for unification in unifications:

@@ -167,7 +167,7 @@ class Unification(models.Model):
     deleted_in_commit = models.ForeignKey(Commit, default=None, null=True, blank=True, on_delete=models.CASCADE,
                                           related_name='deleted_unifications')
 
-    ana = models.TextField(default='')
+    categories = models.ManyToManyField(UncertaintyCategory)
     certainty = models.CharField(max_length=255)
     description = models.TextField(default='')
     xml_id = models.CharField(max_length=255)
@@ -189,7 +189,7 @@ class Certainty(models.Model):
     xml_id = models.CharField(max_length=255)
     categories = models.ManyToManyField(UncertaintyCategory)
     locus = models.CharField(max_length=255)
-    cert = models.CharField(max_length=255, null=True)
+    certainty = models.CharField(max_length=255, null=True)
     degree = models.FloatField(null=True)
     target_xml_id = models.CharField(max_length=255)
     target_match = models.CharField(max_length=255, null=True)

@@ -1,9 +1,10 @@
 from lxml import etree
 
 from django.contrib.auth.models import User
+from django.db.models import Q
 
 from apps.files_management.file_conversions.xml_tools import add_property_to_element, get_or_create_element_from_xpath
-from apps.api_vis.models import EntityVersion, EntityProperty, Certainty
+from apps.api_vis.models import Certainty, EntityProperty, EntityVersion, Unification
 from apps.projects.models import EntitySchema
 
 from collaborative_platform.settings import XML_NAMESPACES, DEFAULT_ENTITIES, NS_MAP, CUSTOM_ENTITY
@@ -27,17 +28,14 @@ class FileRenderer:
         self.__append_listable_entities()
         self.__append_custom_entities()
         self.__append_certainties()
+        self.__append_unifications()
         self.__append_annotators()
-
 
         # TODO: Fix appending unifications
 
         # TODO: Reorder lists in <body>
 
         # TODO: Move appending line with xml-model here
-
-
-        # xml_content = append_unifications(xml_content, file_version)
 
         xml_content = self.__create_xml_content()
 
@@ -203,7 +201,7 @@ class FileRenderer:
 
         certainty_element.set('ana', certainty.get_categories(as_str=True))
         certainty_element.set('locus', certainty.locus)
-        certainty_element.set('cert', certainty.cert)
+        certainty_element.set('cert', certainty.certainty)
         certainty_element.set('target', f'#{certainty.target_xml_id}')
 
         if certainty.degree:
@@ -222,6 +220,28 @@ class FileRenderer:
             certainty_element.append(description_element)
 
         return certainty_element
+
+    def __append_unifications(self):
+        unifications = self.__get_unifications_from_db().order_by('id')
+        certainties = self.__convert_unifications_to_certainties(unifications)
+
+    def __get_unifications_from_db(self):
+        unifications = Unification.objects.filter(
+            Q(deleted_in_file_version__number__gte=self.__file_version.number)
+            | Q(deleted_in_file_version__isnull=True),
+            created_in_file_version__number__lte=self.__file_version.number,
+            created_in_file_version__file=self.__file_version.file,
+        )
+
+        return unifications
+
+    def __convert_unifications_to_certainties(self, unifications):
+        certainties = []
+
+        for unification in unifications:
+            certainty = Certainty()
+
+        return certainties
 
     def __append_annotators(self):
         users_ids = self.__get_annotators_ids_of_xml_elements()

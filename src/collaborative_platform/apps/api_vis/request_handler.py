@@ -12,11 +12,12 @@ class RequestHandler:
         entities_ids = request_data['entities']
         project_version_nr = request_data['project_version']
         certainty = request_data['certainty']
+        categories = request_data.get('categories')
 
         project_version = self.__db_handler.get_project_version_by_nr(project_version_nr)
 
         clique = self.__create_clique(clique_name, entities_ids, project_version)
-        unification_statuses = self.__create_unifications(clique, entities_ids, certainty, project_version)
+        unification_statuses = self.__create_unifications(clique, entities_ids, certainty, categories, project_version)
 
         response = {
             'name': clique.name,
@@ -30,11 +31,12 @@ class RequestHandler:
         entities_ids = request_data['entities']
         project_version_nr = request_data['project_version']
         certainty = request_data['certainty']
+        categories = request_data.get('categories')
 
         project_version = self.__db_handler.get_project_version_by_nr(project_version_nr)
         clique = self.__db_handler.get_clique(clique_id)
 
-        unification_statuses = self.__create_unifications(clique, entities_ids, certainty, project_version)
+        unification_statuses = self.__create_unifications(clique, entities_ids, certainty, categories, project_version)
 
         response = {
             'unification_statuses': unification_statuses,
@@ -146,7 +148,7 @@ class RequestHandler:
 
         return delete_statuses
 
-    def __create_unifications(self, clique, entities_ids, certainty, project_version):
+    def __create_unifications(self, clique, entities_ids, certainty, categories, project_version):
         unification_statuses = []
 
         for entity_id in entities_ids:
@@ -157,7 +159,7 @@ class RequestHandler:
             elif type(entity_id) is dict:
                 unification_status.update(entity_id)
 
-            status = self.__create_unification(clique, entity_id, certainty, project_version)
+            status = self.__create_unification(clique, entity_id, certainty, categories, project_version)
 
             unification_status.update(status)
             unification_statuses.append(unification_status)
@@ -190,11 +192,11 @@ class RequestHandler:
 
         return clique
 
-    def __create_unification(self, clique, entity_id, certainty, project_version):
+    def __create_unification(self, clique, entity_id, certainty, categories, project_version):
         try:
             entity = self.__db_handler.get_entity_by_int_or_dict(entity_id)
 
-            self.__db_handler.create_unification(clique, entity, certainty, project_version)
+            self.__db_handler.create_unification(clique, entity, certainty, categories, project_version)
 
             status = {
                 'status': 200,
@@ -350,6 +352,9 @@ class RequestHandler:
         for unification in unifications:
             project_version = self.__db_handler.get_project_version_latest()
             entity_name = self.__db_handler.get_entity_property(unification.entity, project_version, 'name')
+            categories = unification.categories.order_by('id')
+            categories = categories.values_list('name', flat=True)
+            categories = list(categories)
 
             serialized_unification = {
                 'id': unification.id,
@@ -358,6 +363,7 @@ class RequestHandler:
                 'entity_id': unification.entity.id,
                 'entity_name': entity_name.get_value(),
                 'certainty': unification.certainty,
+                'categories': categories,
                 'created_by': unification.created_by.id,
             }
 

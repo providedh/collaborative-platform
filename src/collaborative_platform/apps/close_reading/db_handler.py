@@ -84,7 +84,7 @@ class DbHandler:
             file=self.__file,
             xml_id=xml_id,
             locus=parameters.get('locus'),
-            cert=parameters.get('certainty'),
+            certainty=parameters.get('certainty'),
             target_xml_id=target,
             target_match=match,
             asserted_value=parameters.get('asserted_value'),

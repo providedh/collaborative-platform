@@ -197,7 +197,7 @@ class ResponseGenerator:
                 'ana': certainty.get_categories(as_str=True),
                 'locus': certainty.locus,
                 'degree': certainty.degree,
-                'cert': certainty.cert,
+                'cert': certainty.certainty,
                 'resp': f'#{certainty.created_by.profile.get_xml_id()}',
                 'match': certainty.target_match,
                 'target': f'#{certainty.target_xml_id}',

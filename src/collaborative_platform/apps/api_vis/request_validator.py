@@ -10,7 +10,8 @@ class RequestValidator:
             'project_version': float,
         }
         optional_keys = {
-            'name': str
+            'name': str,
+            'categories': list,
         }
 
         validate_keys_and_types(request_data, required_keys, optional_keys)
@@ -32,7 +33,8 @@ class RequestValidator:
             'project_version': float,
         }
         optional_keys = {
-            'name': str
+            'name': str,
+            'categories': list,
         }
 
         validate_keys_and_types(request_data, required_keys, optional_keys)

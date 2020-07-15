@@ -213,13 +213,13 @@ def file(request, *args, **kwargs):
     if request.method == "DELETE":
         return delete(request, *args, **kwargs)
     elif request.method == "GET":
-        return get_file_version(request, *args, **kwargs)
+        return file_version(request, *args, **kwargs)
 
 
 @login_required
 @objects_exists
 @user_has_access()
-def get_file_version(request, file_id, version=None):  # type: (HttpRequest, int, int) -> HttpResponse
+def file_version(request, file_id, version=None):  # type: (HttpRequest, int, int) -> HttpResponse
     file = File.objects.get(id=file_id, deleted=False)
 
     if version is None:
