@@ -37,7 +37,7 @@ def close_reading(request, project_id, file_id):  # type: (HttpRequest, int, int
         'file_version': file.version_number,
         'title': file.name,
         'preferences': json.dumps(preferences),
-        'DEVELOPMENT': True,
+        'DEVELOPMENT': False,
         'alerts': None,
     }
 
