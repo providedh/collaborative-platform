@@ -29,9 +29,14 @@ function onDeleteClick (id, websocket) {
 }
 
 function onAnnotationCreate (id, values, websocket) {
-  const { locus, ana, cert, assertedValue, desc } = values
+  const { locus, ana, cert, assertedValue, desc, match } = values
   const builder = AtomicActionBuilder(ActionTarget.certainty, ActionType.add, ActionObject.certainty)
-  const action = builder(id, locus, ana, cert, assertedValue, desc)
+
+  let action = builder(id, locus, ana, cert, assertedValue, desc)
+  if (locus === 'attribute') { 
+    action = builder(`${id}/${match}`, 'value', ana, cert, assertedValue, desc)
+  }
+
   const request = WebsocketRequest(WebsocketRequestType.modify, [action])
   websocket.send(request)
 }
