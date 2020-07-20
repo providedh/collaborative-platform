@@ -8,7 +8,7 @@ from django.urls import resolve
 
 from apps.files_management.models import File
 from apps.views_decorators import objects_exists, user_has_access
-from apps.close_reading.db_handler import DbHandler
+
 
 @login_required
 @objects_exists
@@ -24,11 +24,8 @@ def close_reading(request, project_id, file_id):  # type: (HttpRequest, int, int
         'properties_per_entity': get_entity_properties()
     }
 
-    db_handler = DbHandler(request.user, file.id)
-    annotator_id = db_handler.get_annotator_xml_id()
-
     context = {
-        'user_id': annotator_id,
+        'user_id': request.user.profile.get_xml_id(),
         'origin': origin,
         'origin_url': origin_url,
         'project_id': project.id,
@@ -41,6 +38,7 @@ def close_reading(request, project_id, file_id):  # type: (HttpRequest, int, int
     }
 
     return render(request, 'close_reading/close_reading.html', context)
+
 
 def get_entity_properties() -> dict:
     from collaborative_platform.settings import DEFAULT_ENTITIES
@@ -55,6 +53,7 @@ def get_entity_properties() -> dict:
     
     return properties_per_entity
 
+
 def get_categories(project) -> dict:
     categories = {category.name: {
         'color': category.color,
@@ -64,6 +63,7 @@ def get_categories(project) -> dict:
 
     return categories
 
+
 def get_entities(project) -> dict:
     entities = {entity.name: {
         'color': entity.color,
@@ -71,6 +71,7 @@ def get_entities(project) -> dict:
     } for entity in project.taxonomy.entities.all()}
 
     return entities
+
 
 def get_origin(request: HttpRequest, project_id: str) -> (str, str):
     project_url = reverse('projects:files', args=[project_id])
