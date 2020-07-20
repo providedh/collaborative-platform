@@ -1,0 +1,8 @@
+#breadcrumb-container {
+	position: absolute;
+}
+@media (max-width: 1600px) {
+	#breadcrumb-container {
+		position: initial;
+	}
+}
