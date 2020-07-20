@@ -28,6 +28,11 @@ function onAttributeDelete (id, property, websocket) {
   websocket.send(request)
 }
 
+function onAttributeDiscard (id, websocket) {
+  const request = WebsocketRequest(WebsocketRequestType.discard, [id])
+  websocket.send(request)
+}
+
 function onAttributeRestore (id, websocket) {
   const request = WebsocketRequest(WebsocketRequestType.discard, [id])
   websocket.send(request)
@@ -63,8 +68,23 @@ function Attributes (props) {
 
   const attributeItems = props.entity.properties.map((attribute, i) =>
     <li key={i} className={(attribute.saved === false && attribute.deleted === true) ? 'text-muted' : ''}>
-      <span className={(attribute.saved === false && attribute.deleted === false) ? 'text-danger' : 'd-none'}>
+      <span className={(attribute.saved === true && attribute.deleted === false) ? 'text-danger' : 'd-none'}>
         (unsaved)
+        <button type="button"
+          onClick={e => {
+            e.preventDefault()
+            const operation = props.context.operations.filter(x => (
+              x.edited_element_id === props.entity.target &&
+              x.element_type === 'entity_property' &&
+              x.method === 'DELETE' &&
+              x.old_element_id === attribute.name
+            ))
+
+            if (operation.length !== 1) { return }
+          }}
+          className="btn btn-sm btn-link p-0 mx-1 text-danger"><u> -discard</u></button>
+      </span>
+      <span className={(attribute.saved === true && attribute.deleted === false) ? 'text-danger' : 'd-none'}>
         <button type="button"
           onClick={e => {
             e.preventDefault()
@@ -75,7 +95,7 @@ function Attributes (props) {
           onClick={() => edit({ ...attribute })}
           className="btn btn-sm btn-link p-0 mx-1 text-info"><u> *edit</u></button>
       </span>
-      <span className={(attribute.saved === false && attribute.deleted === true) ? '' : 'd-none'}>
+      <span className={(attribute.saved === true && attribute.deleted === true) ? '' : 'd-none'}>
         <button type="button"
           onClick={e => {
             e.preventDefault()

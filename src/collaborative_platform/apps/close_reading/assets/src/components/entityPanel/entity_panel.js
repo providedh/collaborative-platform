@@ -29,6 +29,11 @@ function onDeleteClick (id, websocket) {
   websocket.send(request)
 }
 
+function onDiscardClick (id, websocket) {
+  const request = WebsocketRequest(WebsocketRequestType.discard, [id])
+  websocket.send(request)
+}
+
 function onRestoreClick (id, websocket) {
   const request = WebsocketRequest(WebsocketRequestType.discard, [id])
 
@@ -38,9 +43,9 @@ function onRestoreClick (id, websocket) {
 function EntityPanel (props) {
   const style = props.context.configuration.entities[props.selection.target.type]
   const icon = style.icon
-
+console.log(props)
   const deleted = props.selection.target.deleted === true
-  const deletable = deleted === false && props.selection.target.saved === false
+  const deletable = deleted === false && props.selection.target.saved === true
 
   return <div className={styles.entityPanel}>
     <div className="card">
@@ -73,8 +78,26 @@ function EntityPanel (props) {
             <u> restore</u>
           </button>
         </span>
-        <span className={deletable === true ? 'ml-4 text-danger' : 'd-none'}>
+        <span className={props.selection.target.saved === false ? 'ml-4 text-danger' : 'd-none'}>
           (unsaved)
+          <button type="button"
+            onClick={e => {
+              e.preventDefault()
+              const operation = props.context.operations.filter(x => (
+                x.operation_result === props.selection.target.id &&
+                x.element_type === 'tag' &&
+                x.method === 'POST'
+              ))
+
+              if (operation.length !== 1) { return }
+
+              onDiscardClick(operation[0].id, props.context.websocket)
+            }}
+            className="btn btn-link p-0 mx-1 text-danger">
+            <u> -discard</u>
+          </button>
+        </span>
+        <span className={deletable === true ? 'ml-4 text-danger' : 'd-none'}>
           <button type="button"
             onClick={() => onDeleteClick(props.selection.target.id, props.context.websocket)}
             className="btn btn-link p-0 mx-1 text-danger">
