@@ -1,0 +1,10 @@
+.selectionPanel{}
+.navigation{
+    flex-direction: row;
+    flex-wrap: nowrap;
+    display: flex;
+    white-space: nowrap;
+}
+.navigation button:disabled {
+    cursor: default;
+}

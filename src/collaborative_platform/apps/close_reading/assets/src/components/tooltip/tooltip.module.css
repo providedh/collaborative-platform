@@ -1,0 +1,7 @@
+.tooltip {
+    position: absolute;
+    max-width: 640px;
+}
+.tooltip > div {
+    /*left: -50%;*/
+}

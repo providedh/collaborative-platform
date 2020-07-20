@@ -1,0 +1,15 @@
+.entityCreationPanel{}
+.step{
+  width: 1.5em;
+  height: 1.5em;
+  text-align: center;
+  color: var(--primary);
+  font-weight: bold;
+  border: 1px solid;
+  border-radius: 50%;
+  font-size: small;
+}
+.step:first-of-type{
+  background-color: var(--primary);
+  color: white;
+}

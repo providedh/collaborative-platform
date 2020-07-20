@@ -1,0 +1,9 @@
+.document{
+  background-color: white;
+  line-height: 2.3em;
+  min-height: 80vh;
+}
+
+.document *{
+  line-height: 2.3em;
+}

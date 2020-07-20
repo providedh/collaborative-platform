@@ -1,0 +1,16 @@
+.saveButton{}
+.saveButton > span{
+  cursor: pointer;
+  display: block;
+  font-size: small;
+  text-decoration: underline dotted;
+}
+.saveButton > span:hover{
+  text-decoration: underline;
+}
+.operations{
+  position: absolute;
+  top: 100%;
+  width: 24em;
+  z-index: 20;
+}
