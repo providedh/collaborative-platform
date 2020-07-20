@@ -28,6 +28,11 @@ function onDeleteClick (id, websocket) {
   websocket.send(request)
 }
 
+function onAnnotationDiscard (id, websocket) {
+  const request = WebsocketRequest(WebsocketRequestType.discard, [id])
+  websocket.send(request)
+}
+
 function onAnnotationCreate (id, values, websocket) {
   const { locus, ana, cert, assertedValue, desc, match } = values
   const builder = AtomicActionBuilder(ActionTarget.certainty, ActionType.add, ActionObject.certainty)
@@ -84,6 +89,23 @@ function CreateAnnotation (props) {
     <li key={i}>
       <span className={annotation.saved === false ? 'text-danger' : 'd-none'}>
         (unsaved)
+        <button type="button btn-sm"
+          onClick={e => {
+            e.preventDefault()
+            const operation = props.context.operations.filter(x => (
+              x.element_type === 'certainty' &&
+              x.method === 'POST' &&
+              x.operation_result === annotation['xml:id']
+            ))
+            
+            if (operation.length !== 1) { return }
+            onAnnotationDiscard(operation[0].id, props.context.websocket)
+            }}
+          className="btn btn-link p-0 mx-1 text-danger">
+          <u> -discard</u>
+        </button>
+      </span>
+      <span className={annotation.saved === true ? 'text-danger' : 'd-none'}>
         <button type="button btn-sm"
           onClick={() => onDeleteClick(annotation['xml:id'], props.context.websocket)}
           className="btn btn-link p-0 mx-1 text-danger">
