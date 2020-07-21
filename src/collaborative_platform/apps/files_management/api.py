@@ -83,7 +83,7 @@ def __process_file(file, directory, user):
 
         return upload_status
 
-    except BadRequest as exception:
+    except (BadRequest, FileExistsError) as exception:
         if file_object:
             __remove_file(file_object)
         upload_status.update({'uploaded': False, 'migrated': False, 'message': str(exception)})

@@ -59,7 +59,7 @@ def upload_file(uploaded_file, project, user, parent_dir=None):  # type: (Upload
             log_activity(project, user, "created", file=dbfile)
             return dbfile
     else:
-        raise Exception(f"File with name {uploaded_file.name} already exist in this directory")
+        raise FileExistsError(f"File with name {uploaded_file.name} already exist in this directory")
 
 
 def overwrite_file(dbfile, uploaded_file, user):  # type: (File, UploadedFile, User) -> File
