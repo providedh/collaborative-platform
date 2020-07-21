@@ -2,7 +2,7 @@
 Django==2.2.10
 
 # For Postgres database
-psycopg2-binary==2.8.3
+psycopg2-binary~=2.8.3
 
 # For tests
 pytest==5.3.5
@@ -28,11 +28,11 @@ channels-redis==2.4.0
 celery==4.3.0
 
 # For xml processing
-lxml==4.4.0
+lxml~=4.4.0
 xmltodict==0.12.0
 
 # For file conversions
-beautifulsoup4==4.8.0
+beautifulsoup4~=4.8.0
 
 # For Searching and entities indexing
 elasticsearch-dsl>=7.0.0,<8.0.0
