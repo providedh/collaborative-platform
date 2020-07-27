@@ -43,7 +43,6 @@ function onRestoreClick (id, websocket) {
 function EntityPanel (props) {
   const style = props.context.configuration.entities[props.selection.target.type]
   const icon = style.icon
-  console.log(props)
   const deleted = props.selection.target.deleted === true
   const saved = !deleted && props.selection.target.saved === true
 
@@ -55,7 +54,7 @@ function EntityPanel (props) {
             <div dangerouslySetInnerHTML={{ __html: icon }} />
           </span>
           <h5 className="d-inline">
-            {props.selection?.target?.target?.value?.slice(1)}
+            {props.selection?.target?.target?.value}
             <span className={styles.entityType + (deleted === false ? '' : 'text-danger')}> ({props.selection.target.type})</span>
           </h5>
         </div>
