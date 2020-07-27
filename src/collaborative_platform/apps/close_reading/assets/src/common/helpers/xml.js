@@ -153,6 +153,7 @@ function processEntitiesInDocument (raw, entities, annotations, conf) {
   nameTags.forEach(tag => {
     const details = processTag(tag)
     const targetId = details.ref.value
+    if (entityMap?.[targetId] === undefined) {return}
 
     details.target = details.ref
     details.type = entityMap[targetId].type
