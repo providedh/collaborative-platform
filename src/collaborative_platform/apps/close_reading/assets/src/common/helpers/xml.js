@@ -134,6 +134,37 @@ function processTag (domNode) {
   return tag
 }
 
+function processAnnotations (annotations, targets) {
+  const filtered = annotations.filter(x => targets.includes(x.target.slice(1)))
+  const distinctIds = new Set(filtered.map(x => x['xml:id']))
+
+  const processed = [...distinctIds].map(id => {
+    const annotation = filtered.filter(x => id === x['xml:id'])
+
+    if (annotation.length === 1) {
+      if (annotation[0].saved === false) {
+        return { status: OperationStatus.unsaved, ...annotation[0] }
+      } else if (annotation[0].saved === true && annotation[0].deleted === false) {
+        return { status: OperationStatus.saved, ...annotation[0] }
+      } else if (annotation[0].saved === true && annotation[0].deleted === true) {
+        return { status: OperationStatus.deleted, ...annotation[0] }
+      }
+    } else if (annotation.length === 2) {
+      let [current, prev] = annotation
+      if (current.saved === true && current.deleted === true) {
+        [current, prev] = [prev, current]
+      }
+      return {
+        status: OperationStatus.edited,
+        prev,
+        ...current
+      }
+    }
+  })
+
+  return processed
+}
+
 function processEntitiesInDocument (raw, entities, annotations, conf) {
   const unlistableEntities = Object.keys(conf).filter(k => conf[k].listable === false)
   const entityMap = Object.fromEntries(entities.map(e => [e['xml:id'], e]))
@@ -153,7 +184,7 @@ function processEntitiesInDocument (raw, entities, annotations, conf) {
   nameTags.forEach(tag => {
     const details = processTag(tag)
     const targetId = details.ref.value
-    if (entityMap?.[targetId] === undefined) {return}
+    if (entityMap?.[targetId] === undefined) { return }
 
     details.target = details.ref
     details.type = entityMap[targetId].type
@@ -163,8 +194,7 @@ function processEntitiesInDocument (raw, entities, annotations, conf) {
       .map(attr => processListableAttribute(attr, entityMap[targetId].properties))
       .filter(attr => attr.status !== OperationStatus.null)
 
-    details.annotations = annotations.filter(
-      d => d.target.slice(1) === details.id.value || d.target.slice(1) === targetId)
+    details.annotations = processAnnotations(annotations, [details.id.value, targetId])
 
     entityDetails.push(details)
   })
@@ -174,7 +204,7 @@ function processEntitiesInDocument (raw, entities, annotations, conf) {
 
     details.target = details.ref
     details.type = tag.tagName
-    details.annotations = annotations.filter(d => d.target.slice(1) === details.target.value.slice(1))
+    details.annotations = processAnnotations(annotations, [details.target.value.slice(1)])
     details.properties = conf[tag.tagName].properties
       .map(attr => processTagAttribute(attr, tag))
       .filter(attr => attr.status !== OperationStatus.null)
