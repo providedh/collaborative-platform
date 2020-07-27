@@ -88,6 +88,28 @@ function processTagAttribute(attr, domNode) {
   }
 }
 
+function processListableAttribute(attr, attrList) {
+  const filtered = attrList.filter(x => x.name === attr)
+
+  if (filtered.length === 1) {
+    if (filtered[0].saved === false) {
+      return {name: attr, value: filtered[0].value, status: OperationStatus.unsaved}
+    } else if (filtered[0].saved === true && filtered[0].deleted === false) {
+      return {name: attr, value: filtered[0].value, status: OperationStatus.saved}
+    } else if (filtered[0].saved === true && filtered[0].deleted === true) {
+      return {name: attr, value: filtered[0].value, status: OperationStatus.deleted}
+    }
+  } else if (filtered.length === 2) {
+    let [prev, current] = filtered
+    if (prev.saved === false) {
+      [prev, current] = [current, prev]
+    }
+    return {name: attr, value: current.value, prev: prev.value, status: OperationStatus.edited}
+  } else {
+    return {name: attr, value: null, status: OperationStatus.null}
+  }
+}
+
 function processTag(domNode) {
   const commonAttributeNames = ['xml:id', 'ref']
   const commonAttributes = Object.fromEntries(
@@ -132,8 +154,13 @@ function processEntitiesInDocument (raw, entities, annotations, conf) {
 
     details.target = details.ref
     details.type = entityMap[targetId].type
-    details.properties = entityMap[targetId].properties
-    details.annotations = annotations.filter(d => d.target.slice(1) === details.id.value || d.target.slice(1) === targetId)
+
+    const propertyNames = new Set(entityMap[targetId].properties.map(x => x.name))
+    details.properties = [...propertyNames].map(
+      attr => processListableAttribute(attr, entityMap[targetId].properties))
+
+    details.annotations = annotations.filter(
+      d => d.target.slice(1) === details.id.value || d.target.slice(1) === targetId)
 
     entityDetails.push(details)
   })
