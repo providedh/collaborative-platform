@@ -43,7 +43,6 @@ function setupEntityInteractions (entities, callbacks) {
   entities.forEach(entity => {
     const { onHover, onHoverOut, onClick } = callbacks
     const node = document.getElementById(entity.htmlId.value)
-    console.log(entity, node)
 
     node.addEventListener('mouseenter', event => {
       handleEntityEvent(entity, event, onHover, SelectionType.hover)
@@ -60,7 +59,7 @@ function setupEntityInteractions (entities, callbacks) {
 
 function handleEntityEvent (target, event, callback, type) {
   const boundingRect = event.target.getBoundingClientRect()
-  const parentBoundingRect = event.target.parentElement.getBoundingClientRect()
+  // const parentBoundingRect = event.target.parentElement.getBoundingClientRect()
   // screenX absolute placement is harder to work with
   // const screenX = boundingRect.x + (boundingRect.width / 2)
 
