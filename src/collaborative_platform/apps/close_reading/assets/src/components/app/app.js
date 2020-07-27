@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { TEIentities } from 'common/types'
+import { TEIentities, SelectionType } from 'common/types'
 import xml from 'common/helpers/xml.js'
 import { AppContext } from 'common/context/app'
 import websocket from 'common/helpers/websocket_api'
@@ -10,7 +10,6 @@ import { Tooltip } from 'components/tooltip'
 import { Header } from 'components/header'
 import styles from './app.module.css' // eslint-disable-line no-unused-vars
 import defState from './def_state.js'
-import { SelectionType } from 'common/types'
 
 export default class App extends React.Component {
   constructor (props) {
@@ -66,6 +65,8 @@ export default class App extends React.Component {
         entities,
         response.certainties,
         prev.context.configuration.properties_per_entity)
+
+      console.log(newState.context.entities, response)
 
       return newState
     })
