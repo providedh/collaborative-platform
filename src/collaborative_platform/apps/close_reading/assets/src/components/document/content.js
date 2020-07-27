@@ -28,21 +28,22 @@ export default function useContentRendering (node, documentContent, callbacks, c
 function styleEntities (entities, configuration, css) {
   entities.forEach(entity => {
     const styles = configuration.entities[entity.type]
-    styleEntity(entity.htmlId, styles.color, styles.icon, css)
+    styleEntity(entity.htmlId.value, styles.color, styles.icon, css)
   })
 }
 
 function styleAnnotations (entities, context, css) {
   entities.forEach(entity => {
     if (entity.annotations.length === 0) { return }
-    styleEntityAnnotations(entity.htmlId, entity.annotations, context, css)
+    styleEntityAnnotations(entity.htmlId.value, entity.annotations, context, css)
   })
 }
 
 function setupEntityInteractions (entities, callbacks) {
   entities.forEach(entity => {
     const { onHover, onHoverOut, onClick } = callbacks
-    const node = document.getElementById(entity.htmlId)
+    const node = document.getElementById(entity.htmlId.value)
+    console.log(entity, node)
 
     node.addEventListener('mouseenter', event => {
       handleEntityEvent(entity, event, onHover, SelectionType.hover)
