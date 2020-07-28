@@ -99,6 +99,8 @@ function AnnotationOption (props) {
 function CreateAnnotation (props) {
   const [visible, show] = useState(false)
   const [editingAnnotation, edit] = useState(null)
+  const annotationCategories = 
+    x => x.split(' ').map(x => x.split('#')[1]).join(', ')
 
   const annotationItems = props.entity.annotations.map((annotation, i) =>
     <li key={i}>
@@ -183,7 +185,7 @@ function CreateAnnotation (props) {
       {annotation.status !== OperationStatus.edited ? ''
         : <del className="text-muted">
           {authorName(annotation.prev.resp, props.context.user, props.context.authors) + ' '}
-          marked with {annotation.prev.cert} certainty: that the {annotation.prev.locus + ' '}
+          marked with {annotation.prev.cert} {annotationCategories(annotation.prev.ana)} certainty: that the {annotation.prev.locus + ' '}
           <span className={annotation.prev?.match?.length > 0 ? '' : 'd-none'}> of {annotation.prev.match + ' '} </span>
           should be {annotation.prev.assertedValue}.
           <span className={annotation.prev?.desc?.length > 0 ? '' : 'd-none'}>
@@ -194,7 +196,7 @@ function CreateAnnotation (props) {
 
       <span>{authorName(annotation.resp, props.context.user, props.context.authors)}</span>
       <span> marked with </span>
-      <span className="text-primary">{annotation.cert}</span>
+      <span className="text-primary">{annotation.cert} {annotationCategories(annotation.ana)}</span>
       <span> certainty: that the </span>
       <span className="text-primary">{annotation.locus}</span>
       <span className={annotation?.match?.length > 0 ? '' : 'd-none'}> of <span className="text-primary">{annotation.match}</span></span>
