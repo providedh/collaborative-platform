@@ -141,6 +141,15 @@ function processAnnotations (annotations, targets) {
   const processed = [...distinctIds].map(id => {
     const annotation = filtered.filter(x => id === x['xml:id'])
 
+    // process the match property
+    annotation.forEach(x => {
+      if (![null, undefined, ''].includes(x.match) && x.match.startsWith('@')) {
+        x.locus = 'attribute'
+        x.match = x.match.slice(1)
+      }
+    })
+
+    // set the status
     if (annotation.length === 1) {
       if (annotation[0].saved === false) {
         return { status: OperationStatus.unsaved, ...annotation[0] }
