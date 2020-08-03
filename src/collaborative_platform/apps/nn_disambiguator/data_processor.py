@@ -1,7 +1,7 @@
 from typing import List
 
 from apps.api_vis.enums import TypeChoice
-from apps.api_vis.models import Entity, EntityVersion, EntityProperty
+from apps.api_vis.models import EntityVersion, EntityProperty
 from apps.nn_disambiguator import names, time, geography
 from apps.projects.models import EntitySchema
 from collaborative_platform.settings import DEFAULT_ENTITIES
