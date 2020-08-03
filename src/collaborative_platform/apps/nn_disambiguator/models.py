@@ -1,7 +1,10 @@
 from io import BytesIO
 
+from django.contrib.auth.models import User
 from django.core.files.base import ContentFile
-from django.db.models import Model, FileField, ForeignKey, CASCADE
+from django.db.models import Model, FileField, ForeignKey, CASCADE, IntegerField, SET_NULL, CharField, BooleanField
+
+from apps.api_vis.models import Entity
 from apps.projects.models import Project, EntitySchema
 import joblib
 
@@ -38,3 +41,17 @@ class NeuralNetwork(Model):
     def get_scaler(self):
         scaler = joblib.load(self.scaler.path)
         return scaler
+
+
+class UnificationProposal(Model):
+    entitiy1 = ForeignKey(Entity, on_delete=CASCADE, related_name='e1s')
+    entitiy2 = ForeignKey(Entity, on_delete=CASCADE, related_name='e2s')
+    confidence = IntegerField()
+
+    decision_maker = ForeignKey(User, on_delete=SET_NULL, null=True, blank=True)
+    user_confidence = CharField(max_length=9, null=True, blank=True)
+
+    decided = BooleanField(default=False)
+    processed = BooleanField(default=False)
+
+    decision = BooleanField(null=True, blank=True)
