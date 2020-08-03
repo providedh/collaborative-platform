@@ -12,6 +12,9 @@ class NeuralNetwork(Model):
     scaler = FileField(verbose_name="dumped scaler", upload_to="NN_Models", null=True)
     entity_type = ForeignKey(EntitySchema, on_delete=CASCADE)
 
+    class Meta:
+        unique_together = ('project', 'entity_type')
+
     def set_model(self, model):
         bytes_container = BytesIO()
         joblib.dump(model, bytes_container)
