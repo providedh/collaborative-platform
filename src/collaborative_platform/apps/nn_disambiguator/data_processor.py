@@ -45,7 +45,7 @@ class DataProcessor:
 
             for f in self.processing_functions[params['type']]:
                 if p1 is None or p2 is None:
-                    sims.append("-1")
+                    sims.append(-1)
                 else:
                     sims.append(f(p1.get_value(), p2.get_value()))
 
