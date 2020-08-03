@@ -20,6 +20,9 @@ class Classifier(Model):
     class Meta:
         unique_together = ('project', 'entity_schema')
 
+    class Meta:
+        unique_together = ('project', 'entity_type')
+
     def set_model(self, model):
         bytes_container = BytesIO()
         joblib.dump(model, bytes_container)
