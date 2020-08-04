@@ -1,9 +1,11 @@
 from io import BytesIO
 
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 from django.core.files.base import ContentFile
 from django.db.models import Model, FileField, ForeignKey, CASCADE, IntegerField, SET_NULL, CharField, BooleanField
 
+from apps.api_vis.db_handler import DbHandler
 from apps.api_vis.models import Entity, Clique
 from apps.projects.models import Project, EntitySchema
 import joblib
@@ -44,8 +46,8 @@ class Classifier(Model):
 
 
 class UnificationProposal(Model):
-    entitiy = ForeignKey(Entity, on_delete=CASCADE, related_name='e1s')
-    entitiy2 = ForeignKey(Entity, on_delete=CASCADE, related_name='e2s', null=True)
+    entity = ForeignKey(Entity, on_delete=CASCADE, related_name='e1s')
+    entity2 = ForeignKey(Entity, on_delete=CASCADE, related_name='e2s', null=True)
     clique = ForeignKey(Clique, on_delete=CASCADE, related_name='proposals', null=True)
     confidence = IntegerField()
 
@@ -53,6 +55,37 @@ class UnificationProposal(Model):
     user_confidence = CharField(max_length=9, null=True, blank=True)
 
     decided = BooleanField(default=False)
-    processed = BooleanField(default=False)
+    learned = BooleanField(default=False)
 
     decision = BooleanField(null=True, blank=True)
+
+    def accept(self, user, certainty, categories):
+        if self.entity2 is None and self.clique is None:
+            raise ValidationError("Proposal not complete")  # should never happen
+        elif self.entity2 is None:
+            db = DbHandler(self.entity.file.project_id, user)
+            db.create_unification(self.clique, self.entity, certainty, categories,
+                                  self.entity.file.project.versions.latest('id'))
+            self.decision_maker = user
+            self.user_confidence = certainty
+            self.decided = True
+            self.decision = True
+            self.save()
+        elif self.clique is None:
+            db = DbHandler(self.entity.file.project_id, user)
+            clique = db.create_clique(self.entity2.properties.filter(name='name').latest('id'), self.entity.type)
+            db.create_unification(clique, self.entity, certainty, categories,
+                                  self.entity.file.project.versions.latest('id'))
+            # TODO: confirm with Szymon that I can unify to uncommited cliques.
+            self.decision_maker = user
+            self.user_confidence = certainty
+            self.decided = True
+            self.decision = True
+            self.save()
+
+    def reject(self, user, certainty):
+        self.decision_maker = user
+        self.user_confidence = certainty
+        self.decided = True
+        self.decision = False
+        self.save()
