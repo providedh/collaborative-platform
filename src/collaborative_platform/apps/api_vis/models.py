@@ -172,6 +172,8 @@ class Unification(models.Model):
     description = models.TextField(default='')
     xml_id = models.CharField(max_length=255)
 
+    learned = models.BooleanField(default=False)
+
     def delete_fake(self, user, commit):
         file_version = self.entity.file.file_versions.order_by('-number')[0]
 
