@@ -51,6 +51,8 @@ def create(request):  # type: (HttpRequest) -> HttpResponse
 
             create_models(project)
 
+            create_models(project)
+
             log_activity(project, request.user, "created project")
 
             return HttpResponse(dumps({"id": project.id}))
