@@ -107,7 +107,7 @@ class UncertaintyCategory(models.Model):
 
 
 class EntitySchema(models.Model):
-    taxonomy = models.ForeignKey(Taxonomy, related_name="entities", on_delete=models.CASCADE)
+    taxonomy = models.ForeignKey(Taxonomy, related_name="entities_schemas", on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     color = models.CharField(max_length=7)
     icon = models.CharField(max_length=12)
