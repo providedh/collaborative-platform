@@ -1,7 +1,7 @@
 from typing import List
 
 from apps.api_vis.enums import TypeChoice
-from apps.api_vis.models import EntityVersion, EntityProperty
+from apps.api_vis.models import EntityVersion, EntityProperty, Entity
 from apps.nn_disambiguator import names, time, geography
 from apps.projects.models import EntitySchema
 from collaborative_platform.settings import DEFAULT_ENTITIES
@@ -30,7 +30,7 @@ class DataProcessor:
         entity_settings = DEFAULT_ENTITIES.get(entity_type.name, None)
         self.properties = entity_settings['properties'] or {'name': {'type': TypeChoice.str}}
 
-    def __calculate_similarity(self, e1: EntityVersion, e2: EntityVersion) -> List[float]:
+    def calculate_similarity(self, e1: EntityVersion, e2: EntityVersion) -> List[float]:
         sims = []
         for property, params in self.properties.items():
             try:
@@ -50,3 +50,6 @@ class DataProcessor:
                     sims.append(f(p1.get_value(), p2.get_value()))
 
         return sims
+
+    def get_features_vector(self, e1: Entity, e2: Entity) -> List[float]:
+        raise NotImplementedError

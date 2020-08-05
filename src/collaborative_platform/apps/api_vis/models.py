@@ -149,7 +149,7 @@ class Clique(models.Model):
 
 
 class Unification(models.Model):
-    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='unifications')
     entity = models.ForeignKey(Entity, on_delete=models.CASCADE, related_name='unifications')
     clique = models.ForeignKey(Clique, on_delete=models.CASCADE, related_name='unifications')
 

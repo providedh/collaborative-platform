@@ -15,10 +15,10 @@ class Classifier(Model):
     project = ForeignKey(Project, on_delete=CASCADE)
     model = FileField(verbose_name="dumped model", upload_to="NN_Models", null=True)
     scaler = FileField(verbose_name="dumped scaler", upload_to="NN_Models", null=True)
-    entity_type = ForeignKey(EntitySchema, on_delete=CASCADE)
+    entity_schema = ForeignKey(EntitySchema, on_delete=CASCADE)
 
     class Meta:
-        unique_together = ('project', 'entity_type')
+        unique_together = ('project', 'entity_schema')
 
     def set_model(self, model):
         bytes_container = BytesIO()
