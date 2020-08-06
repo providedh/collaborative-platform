@@ -32,7 +32,9 @@ def learn_unprocessed_unifications(project: Project):
     if unlearned_unifications_exists:
         schemas = project.taxonomy.entities_schemas.all()
         for schema in schemas:
-            unifications = project.unifications.filter(learned=False, entitiy__type=schema.name).all()
+            unifications = project.unifications.filter(learned=False,
+                                                       entitiy__type=schema.name,
+                                                       created_in_commit__isnull=False).all()
             if unifications:
                 try:
                     clf = Classifier.objects.get(project_id=project.id, entity_schema=schema)
