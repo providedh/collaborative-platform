@@ -3,7 +3,7 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.preprocessing import StandardScaler
 
 from apps.api_vis.models import Entity
-from apps.nn_disambiguator.data_processor import DataProcessor
+from apps.nn_disambiguator.data_processor import SimilarityCalculator
 from apps.nn_disambiguator.models import Classifier, UnificationProposal
 from apps.projects.models import Project
 
@@ -42,7 +42,7 @@ def learn_unprocessed_unifications(project: Project):
                 model: MLPClassifier = clf.get_model()
                 scaler: StandardScaler = clf.get_scaler()
 
-                data_processor = DataProcessor(schema)
+                data_processor = SimilarityCalculator(schema)
 
                 for unification in unifications:
                     entity1 = unification.entity
@@ -73,7 +73,7 @@ def learn_unprocessed_proposals(project):
                 model: MLPClassifier = clf.get_model()
                 scaler: StandardScaler = clf.get_scaler()
 
-                data_processor = DataProcessor(schema)
+                data_processor = SimilarityCalculator(schema)
 
                 for proposal in proposals:
                     entity1 = proposal.entity
