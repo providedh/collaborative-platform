@@ -6,8 +6,8 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import QuerySet, Q
 
+from apps.index_and_search.content_extractor import ContentExtractor
 from apps.projects.models import Project, ProjectVersion
-
 
 UPLOADED_FILES_PATH = 'uploaded_files/'
 
@@ -46,7 +46,8 @@ class Directory(FileNode):
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=['parent_dir', 'name'], name='unique_undeleted_directory', condition=Q(deleted=False))
+            models.UniqueConstraint(fields=['parent_dir', 'name'], name='unique_undeleted_directory',
+                                    condition=Q(deleted=False))
         ]
 
     def create_subdirectory(self, name, user):  # type: (Directory, str, User) -> Directory
@@ -88,7 +89,8 @@ class File(FileNode):
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=['parent_dir', 'name'], name='unique_undeleted_file', condition=Q(deleted=False))
+            models.UniqueConstraint(fields=['parent_dir', 'name'], name='unique_undeleted_file',
+                                    condition=Q(deleted=False))
         ]
 
     def rename(self, new_name, user):  # type: (File, str, User) -> File
@@ -201,6 +203,8 @@ class FileVersion(models.Model):
                                    blank=True)
     message = models.CharField(max_length=255, null=True)
 
+    body_text = models.TextField(null=True)
+
     class Meta:
         unique_together = ("file", "number")
 
@@ -228,6 +232,9 @@ class FileVersion(models.Model):
         from apps.projects.helpers import create_new_project_version
 
         created = self.pk is None
+        super(FileVersion, self).save(*args, **kwargs)
+
+        self.body_text = ContentExtractor().tei_contents_to_text(self.get_raw_content())
         super(FileVersion, self).save(*args, **kwargs)
 
         if created:

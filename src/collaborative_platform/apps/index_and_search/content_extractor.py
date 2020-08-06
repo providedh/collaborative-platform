@@ -13,5 +13,6 @@ class ContentExtractor:
         tree = et.fromstring(contents)
         body = tree.xpath('//default:text/default:body', namespaces=cls.namespaces)[0]
         text_nodes = body.xpath('.//text()')
-        plain_text = ''.join(text_nodes)
+        text_nodes = (node.strip() for node in text_nodes if node.strip())
+        plain_text = '\n'.join(text_nodes)
         return str(plain_text)
