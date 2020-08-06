@@ -3,7 +3,7 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.preprocessing import StandardScaler
 
 from apps.api_vis.models import Entity
-from apps.nn_disambiguator.data_processor import SimilarityCalculator
+from apps.nn_disambiguator.similarity_calculator import SimilarityCalculator
 from apps.nn_disambiguator.models import Classifier, UnificationProposal
 from apps.projects.models import Project
 
