@@ -18,6 +18,7 @@ from apps.files_management.file_conversions.tei_handler import TeiHandler
 from apps.files_management.helpers import clean_name, create_uploaded_file_object_from_string, \
     delete_directory_with_contents_fake, get_directory_content, include_user, overwrite_file, upload_file
 from apps.files_management.models import Directory, File, FileVersion
+from apps.nn_disambiguator.learning import learn_unprocessed
 from apps.projects.helpers import log_activity, paginate_start_length, page_to_json_response
 from apps.views_decorators import objects_exists, user_has_access
 
@@ -78,6 +79,8 @@ def __process_file(file, directory, user):
             clone_db_objects(file_object)
 
             upload_status.update({'migrated': True, 'message': message})
+
+            learn_unprocessed.delay(file.project_id)
 
             log_activity(directory.project, user, f"File migrated: {message} ", file_object)
 

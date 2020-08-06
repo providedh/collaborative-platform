@@ -8,6 +8,7 @@ from apps.api_vis.helpers import parse_project_version
 from apps.api_vis.request_validator import validate_keys_and_types
 from apps.exceptions import BadRequest, NotModified
 from apps.files_management.models import Directory, File, FileVersion
+from apps.nn_disambiguator.learning import learn_unprocessed
 from apps.projects.models import ProjectVersion, UncertaintyCategory
 
 
@@ -212,6 +213,8 @@ class DbHandler:
             unification.deleted_in_commit = commit
 
         Unification.objects.bulk_update(unifications_to_delete, ['deleted_in_commit'])
+
+        learn_unprocessed.delay(self.__project_id)
 
     def delete_clique(self, clique, project_version):
         clique.deleted_by = self.__user
