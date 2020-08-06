@@ -244,6 +244,9 @@ class FileVersion(models.Model):
         created = self.pk is None
         super(FileVersion, self).save(*args, **kwargs)
 
+        self.body_text = ContentExtractor().tei_contents_to_text(self.get_raw_content())
+        super(FileVersion, self).save(*args, **kwargs)
+
         if created:
             project = self.file.project
             create_new_project_version(project=project, files_modification=True)
