@@ -91,7 +91,7 @@ def learn_unprocessed_proposals(project):
 def learn_entity_pair(entity1, entity2, data_processor, model, scaler, user_confidence, positive):
     positive = int(positive)
     fv = data_processor.get_features_vector(entity1, entity2)
-    scaler.partial_fit(fv)
-    fv = scaler.transform(fv)
+    scaler.partial_fit([fv])
+    fv = scaler.transform([fv])
     for _ in range(passes[user_confidence]):
         model.partial_fit(fv, [positive], classes=[0, 1])
