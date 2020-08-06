@@ -81,10 +81,54 @@ class DataProcessor:
         v += schema.taxonomy.entities_schemas.count() - 1
         return v
 
-    def get_features_vector(self, e1: Entity, e2: Entity) -> List[float]:
+    def __calculate_other_entities_avg_similarity(self, e1v: EntityVersion, e2v: EntityVersion) -> List[float]:
+        schemas = e1v.file_version.file.project.taxonomy.entities_schemas.all()
+        sims = []
+
+        for schema in schemas:
+            try:
+                clf = Classifier.objects.get(entity_schema=schema)
+            except Classifier.DoesNotExist:
+                continue
+
+            model: MLPClassifier = clf.get_model()
+            scaler: StandardScaler = clf.get_scaler()
+
+            try:
+                model.predict([0 for _ in range(self.__calculate_features_vector_length(schema))])
+            except NotFittedError:
+                sims.append(0)
+                continue
+
+            file_1_entities = e1v.file_version.entityversion_set.filter(entity__type=schema.name)
+            file_2_entities = e2v.file_version.entityversion_set.filter(entity__type=schema.name)
+
+            pairs = set(itertools.product(file_1_entities, file_2_entities))
+            pairs.remove((e1v, e2v))
+
+            avg = 0
+            for _e1v, _e2v in pairs:
+                fv = self.get_features_vector(_e1v.entity, _e2v.entity, other_entities=False)
+                fv = scaler.transform([fv])
+                avg += model.predict_proba(fv)[0][1]
+            avg /= len(pairs)
+            sims.append(avg)
+
+        return sims
+
+    def get_features_vector(self, e1: Entity, e2: Entity, other_entities=True) -> List[float]:
         e1lv = e1.versions.latest('id')
         e2lv = e2.versions.latest('id')
 
         sims = self.__calculate_similarity(e1lv, e2lv)
 
         files_sim = self.__calculate_files_text_similarity(e1lv, e2lv)
+        sims.append(files_sim)
+
+        if other_entities:
+            other_entities_sims = self.__calculate_other_entities_avg_similarity(e1lv, e2lv)
+            sims.extend(other_entities_sims)
+        else:  # Dummy other entities similarities to avoid indefinite recursion
+            sims.extend([0.5 for _ in range(e1lv.file_version.file.project.taxonomy.entities_schemas.count())])
+
+        return sims
