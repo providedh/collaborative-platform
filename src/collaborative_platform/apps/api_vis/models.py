@@ -31,6 +31,8 @@ class Entity(models.Model):
     deleted_in_file_version = models.ForeignKey(FileVersion, default=None, null=True, on_delete=models.CASCADE,
                                                 related_name='deleted_entities')
 
+    context = models.TextField(blank=True, null=True)
+
     class Meta:
         unique_together = ("file", "xml_id")
 
@@ -49,7 +51,6 @@ class EntityVersion(models.Model):
     file_version = models.ForeignKey(FileVersion, default=None, null=True, on_delete=models.CASCADE)
 
     xml = models.TextField(blank=True, null=True)
-    context = models.TextField(blank=True, null=True)
 
     class Meta:
         unique_together = ("file_version", "entity")
