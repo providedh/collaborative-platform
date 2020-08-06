@@ -18,7 +18,6 @@ passes = {
 
 @shared_task()
 def learn_unprocessed(project_id: int):
-    # unifications
     try:
         project = Project.objects.get(id=project_id)
     except Project.DoesNotExist:
