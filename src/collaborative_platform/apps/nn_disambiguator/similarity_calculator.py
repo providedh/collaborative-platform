@@ -14,7 +14,7 @@ from collaborative_platform.settings import DEFAULT_ENTITIES
 import spacy
 
 
-class DataProcessor:
+class SimilarityCalculator:
     nlp = spacy.load('en_core_web_lg')
 
     processing_functions: {
