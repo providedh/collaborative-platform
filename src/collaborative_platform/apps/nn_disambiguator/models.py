@@ -23,16 +23,14 @@ class Classifier(Model):
     def set_model(self, model):
         bytes_container = BytesIO()
         joblib.dump(model, bytes_container)
-        bytes_container.seek(0)
-        file = ContentFile(bytes_container, "model.joblib")
+        file = ContentFile(bytes_container.getvalue(), "model.joblib")
         self.model = file
         self.save()
 
     def set_scaler(self, scaler):
         bytes_container = BytesIO()
         joblib.dump(scaler, bytes_container)
-        bytes_container.seek(0)
-        file = ContentFile(bytes_container, "scaler.joblib")
+        file = ContentFile(bytes_container.getvalue(), "scaler.joblib")
         self.scaler = file
         self.save()
 
