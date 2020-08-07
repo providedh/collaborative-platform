@@ -6,6 +6,7 @@ COPY requirements.txt /code/
 RUN apt update
 RUN apt install -y --no-install-recommends binutils libproj-dev gdal-bin
 RUN pip install -r requirements.txt
+RUN python -m spacy download en_core_web_lg
 COPY . /code/
 
 EXPOSE 8000
