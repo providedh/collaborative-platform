@@ -11,7 +11,7 @@ def create_models(project):  # type: (Project) -> None
         model = MLPClassifier(hidden_layer_sizes=(15, 7, 2))
         scaler = StandardScaler()
 
-        dbo = Classifier(project, entity_type=entitiy)
+        dbo = Classifier(project=project, entity_schema=entitiy)
         dbo.save()
         dbo.set_model(model)
         dbo.set_scaler(scaler)
