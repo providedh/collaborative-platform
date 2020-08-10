@@ -80,7 +80,7 @@ def __process_file(file, directory, user):
 
             upload_status.update({'migrated': True, 'message': message})
 
-            learn_unprocessed.delay(file.project_id)
+            learn_unprocessed.delay(file_object.project_id)
 
             log_activity(directory.project, user, f"File migrated: {message} ", file_object)
 
