@@ -4,7 +4,7 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.preprocessing import StandardScaler
 from typing import List, Tuple
 
-from apps.api_vis.models import Entity, Clique, EntityVersion, Unification
+from apps.api_vis.models import Entity, Clique, Unification
 from apps.nn_disambiguator.models import Classifier, UnificationProposal
 from apps.nn_disambiguator.similarity_calculator import SimilarityCalculator
 from apps.projects.models import Project, EntitySchema
