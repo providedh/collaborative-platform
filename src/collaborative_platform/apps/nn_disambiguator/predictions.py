@@ -32,8 +32,7 @@ def generate_entities_pairs(schema: EntitySchema) -> List[Tuple[Entity, Entity]]
 
 
 def generate_entitiy_clique_pairs(schema: EntitySchema) -> List[Tuple[Entity, Clique]]:
-    entities = Entity.objects.filter(type=schema.name, file__project=schema.taxonomy.project).values_list("id",
-                                                                                                          flat=True)
+    entities = Entity.objects.filter(type=schema.name, file__project=schema.taxonomy.project).all()
     cliques = Clique.objects.filter(type=schema.name, project=schema.taxonomy.project).all()
 
     pairs = set(product(entities, cliques))
