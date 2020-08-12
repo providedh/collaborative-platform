@@ -76,6 +76,24 @@ def make_entities_cliques_proposals(data_processor, model, scaler, schema):
     )  # TODO: test
 
 
+def make_entities_proposals(data_processor, model, scaler, schema):
+    pairs = generate_entities_pairs(schema)
+    sim_vecs = [data_processor.get_features_vector(e1, e2) for e1, e2 in pairs]
+    sim_vecs = scaler.transform(sim_vecs)
+    results = [p[1] for p in model.predict_proba(sim_vecs)]
+    proposals = []
+    for i in range(len(pairs)):
+        if results[i] > 0.7:  # TODO: make this threshold configurable?
+            proposals.append((pairs[i], results[i]))
+    UnificationProposal.objects.bulk_create(
+        UnificationProposal(
+            entity=proposal[0][0],
+            entity2=proposal[0][1],
+            confidence=proposal[1]
+        ) for proposal in proposals
+    )  # TODO: test
+
+
 @shared_task()
 def calculate_proposals(project_id: int):
     try:
@@ -97,21 +115,3 @@ def calculate_proposals(project_id: int):
 
         make_entities_proposals(data_processor, model, scaler, schema)
         make_entities_cliques_proposals(data_processor, model, scaler, schema)
-
-
-def make_entities_proposals(data_processor, model, scaler, schema):
-    pairs = generate_entities_pairs(schema)
-    sim_vecs = [data_processor.get_features_vector(e1, e2) for e1, e2 in pairs]
-    sim_vecs = scaler.transform(sim_vecs)
-    results = [p[1] for p in model.predict_proba(sim_vecs)]
-    proposals = []
-    for i in range(len(pairs)):
-        if results[i] > 0.7:  # TODO: make this threshold configurable?
-            proposals.append((pairs[i], results[i]))
-    UnificationProposal.objects.bulk_create(
-        UnificationProposal(
-            entity=proposal[0][0],
-            entity2=proposal[0][1],
-            confidence=proposal[1]
-        ) for proposal in proposals
-    )  # TODO: test
