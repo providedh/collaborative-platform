@@ -15,6 +15,9 @@ def days_apart(d1, d2):
         except:
             return sys.maxsize
 
+    if (type(d1) == list or type(d2) == list) and (not d1 or not d2):
+        return sys.maxsize
+
     if type(d1) == list and type(d2) == list:
         return min(
             abs(d1[0] - d2[0]).days,
