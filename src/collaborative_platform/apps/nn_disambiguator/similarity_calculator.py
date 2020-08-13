@@ -28,7 +28,7 @@ class SimilarityCalculator:
             time.days_apart
         },
         TypeChoice.time: {
-            time.days_apart
+            time.seconds_apart
         },
         TypeChoice.Point: {
             geography.distance
