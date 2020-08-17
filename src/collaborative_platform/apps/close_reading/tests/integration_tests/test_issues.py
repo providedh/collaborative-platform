@@ -192,6 +192,58 @@ class TestIssues:
 
         await communicator.disconnect()
 
+    async def test_forbid_deleting_unsaved_property(self):
+        test_name = inspect.currentframe().f_code.co_name
+
+        project_id = 1
+        file_id = 1
+        user_id = 2
+
+        communicator = get_communicator(project_id, file_id, user_id)
+
+        await communicator.connect()
+        await communicator.receive_json_from()
+
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'POST',
+                    'element_type': 'entity_property',
+                    'edited_element_id': 'person-0',
+                    'parameters': {
+                        'forename': 'Bruce'
+                    }
+                }
+            ]
+        }
+        request_nr = 0
+
+        await communicator.send_json_to(request)
+        response = await communicator.receive_json_from()
+        verify_response(test_name, response, request_nr)
+
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'DELETE',
+                    'element_type': 'entity_property',
+                    'edited_element_id': 'person-0',
+                    'old_element_id': 'forename'
+                }
+            ]
+        }
+
+        await communicator.send_json_to(request)
+        response = await communicator.receive_json_from()
+
+        assert response['status'] == 400
+        assert response['message'] == "Deleting an unsaved element is forbidden. Instead of deleting, discard " \
+                                      "the operation that created it."
+
+        await communicator.disconnect()
+
 
 def verify_response(test_name, response, request_nr):
     test_results_file_path = os.path.join(SCRIPT_DIR, 'tests_results_for_issues.json')

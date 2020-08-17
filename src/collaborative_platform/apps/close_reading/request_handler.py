@@ -468,13 +468,21 @@ class RequestHandler:
         entity_type = self.__db_handler.get_entity_type(entity_xml_id)
 
         if entity_type in self.__listable_entities_types:
-            self.__db_handler.delete_entity_property(entity_xml_id, property_name)
+            try:
+                self.__db_handler.delete_entity_property(entity_xml_id, property_name)
+            except UnsavedElement:
+                raise BadRequest("Deleting an unsaved element is forbidden. Instead of deleting, discard "
+                                 "the operation that created it.")
 
         else:
             property_value = self.__db_handler.get_entity_property_value(entity_xml_id, property_name)
             entity_property = {property_name: property_value}
 
-            self.__db_handler.delete_entity_property(entity_xml_id, property_name)
+            try:
+                self.__db_handler.delete_entity_property(entity_xml_id, property_name)
+            except UnsavedElement:
+                raise BadRequest("Deleting an unsaved element is forbidden. Instead of deleting, discard "
+                                 "the operation that created it.")
 
             body_content = self.__db_handler.get_body_content()
             body_content = self.__xml_handler.delete_entity_properties(body_content, entity_xml_id, entity_property)

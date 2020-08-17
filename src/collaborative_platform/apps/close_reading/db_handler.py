@@ -5,7 +5,7 @@ from apps.api_vis.models import Certainty, Entity, EntityProperty, EntityVersion
 from apps.close_reading.enums import ElementTypes
 from apps.close_reading.models import AnnotatingBodyContent, Operation
 from apps.close_reading.response_generator import get_custom_entities_types
-from apps.exceptions import BadParameters
+from apps.exceptions import BadParameters, UnsavedElement
 from apps.files_management.api import clone_db_objects
 from apps.files_management.helpers import create_uploaded_file_object_from_string, hash_file
 from apps.files_management.models import File, FileMaxXmlIds, FileVersion
@@ -68,6 +68,8 @@ class DbHandler:
         return property_id
 
     def delete_entity_property(self, entity_xml_id, property_name):
+        self.__check_if_entity_property_is_saved(entity_xml_id, property_name)
+
         entity_version = self.__get_entity_version_from_db(entity_xml_id)
 
         self.__mark_entity_properties_to_delete(entity_version, [property_name])
@@ -611,6 +613,12 @@ class DbHandler:
             )
 
         return entity_property
+
+    def __check_if_entity_property_is_saved(self, entity_xml_id, property_name):
+        entity_property = self.__get_entity_property_from_db(entity_xml_id, property_name)
+
+        if not entity_property.entity_version:
+            raise UnsavedElement
 
     def __get_certainty_from_db(self, certainty_xml_id, saved=None):
         certainty = None
