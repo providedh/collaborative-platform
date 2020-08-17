@@ -15,3 +15,7 @@ class Forbidden(Exception):
 
 class BadParameters(Exception):
     pass
+
+
+class UnsavedElement(Exception):
+    pass

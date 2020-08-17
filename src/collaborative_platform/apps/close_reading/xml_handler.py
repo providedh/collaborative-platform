@@ -2,6 +2,7 @@ import re
 
 from lxml import etree
 
+from apps.exceptions import UnsavedElement
 from apps.files_management.file_conversions.xml_tools import get_first_xpath_match
 
 from collaborative_platform.settings import XML_NAMESPACES
@@ -69,6 +70,8 @@ class XmlHandler:
         return text
 
     def delete_tag(self, text, tag_xml_id):
+        self.__check_if_tag_is_saved(text, tag_xml_id)
+
         attributes = {
             'deleted': 'true',
         }
@@ -428,13 +431,7 @@ class XmlHandler:
 
     def __remove_resp_if_needed(self, text, tag_xml_id):
         tree = etree.fromstring(text)
-
-        xpath = f"//*[contains(concat(' ', @xml:id, ' '), ' {tag_xml_id} ')]"
-        element = get_first_xpath_match(tree, xpath, XML_NAMESPACES)
-
-        if element is None:
-            xpath = f"//*[contains(concat(' ', @xml:idAdded, ' '), ' {tag_xml_id} ')]"
-            element = get_first_xpath_match(tree, xpath, XML_NAMESPACES)
+        element = self.get_xml_element(tree, tag_xml_id)
 
         attributes = str(element.attrib)
 
@@ -452,13 +449,7 @@ class XmlHandler:
 
     def __save_attributes_in_tag(self, text, tag_xml_id, attributes_to_save):
         tree = etree.fromstring(text)
-
-        xpath = f"//*[contains(concat(' ', @xml:id, ' '), ' {tag_xml_id} ')]"
-        element = get_first_xpath_match(tree, xpath, XML_NAMESPACES)
-
-        if element is None:
-            xpath = f"//*[contains(concat(' ', @xml:idAdded, ' '), ' {tag_xml_id} ')]"
-            element = get_first_xpath_match(tree, xpath, XML_NAMESPACES)
+        element = self.get_xml_element(tree, tag_xml_id)
 
         for attribute in attributes_to_save:
             try:
@@ -480,13 +471,7 @@ class XmlHandler:
 
     def __delete_attributes_in_tag(self, text, tag_xml_id, attributes_to_delete):
         tree = etree.fromstring(text)
-
-        xpath = f"//*[contains(concat(' ', @xml:id, ' '), ' {tag_xml_id} ')]"
-        element = get_first_xpath_match(tree, xpath, XML_NAMESPACES)
-
-        if element is None:
-            xpath = f"//*[contains(concat(' ', @xml:idAdded, ' '), ' {tag_xml_id} ')]"
-            element = get_first_xpath_match(tree, xpath, XML_NAMESPACES)
+        element = self.get_xml_element(tree, tag_xml_id)
 
         for attribute in attributes_to_delete:
             try:
@@ -500,16 +485,17 @@ class XmlHandler:
 
         return text
 
-    @staticmethod
-    def __check_if_resp_in_tag(text, tag_xml_id):
+    def __check_if_tag_is_saved(self, text, tag_xml_id):
         tree = etree.fromstring(text)
+        element = self.get_xml_element(tree, tag_xml_id)
+        saved = element.attrib.get('saved')
 
-        xpath = f"//*[contains(concat(' ', @xml:id, ' '), ' {tag_xml_id} ')]"
-        element = get_first_xpath_match(tree, xpath, XML_NAMESPACES)
+        if saved == 'false':
+            raise UnsavedElement
 
-        if element is None:
-            xpath = f"//*[contains(concat(' ', @xml:idAdded, ' '), ' {tag_xml_id} ')]"
-            element = get_first_xpath_match(tree, xpath, XML_NAMESPACES)
+    def __check_if_resp_in_tag(self, text, tag_xml_id):
+        tree = etree.fromstring(text)
+        element = self.get_xml_element(tree, tag_xml_id)
 
         resp = element.attrib.get('resp')
         resp_added = element.attrib.get('respAdded')
@@ -519,12 +505,9 @@ class XmlHandler:
         else:
             return False
 
-    @staticmethod
-    def __remove_tag(text, xml_id):
+    def __remove_tag(self, text, tag_xml_id):
         tree = etree.fromstring(text)
-
-        xpath = f"//*[contains(concat(' ', @xml:id, ' '), ' {xml_id} ')]"
-        element = get_first_xpath_match(tree, xpath, XML_NAMESPACES)
+        element = self.get_xml_element(tree, tag_xml_id)
 
         parent = element.getparent()
 
@@ -553,16 +536,9 @@ class XmlHandler:
 
         return text
 
-    @staticmethod
-    def __update_tag(text, tag_xml_id, new_tag=None, attributes_to_set=None, attributes_to_delete=None):
+    def __update_tag(self, text, tag_xml_id, new_tag=None, attributes_to_set=None, attributes_to_delete=None):
         tree = etree.fromstring(text)
-
-        xpath = f"//*[contains(concat(' ', @xml:id, ' '), ' {tag_xml_id} ')]"
-        element = get_first_xpath_match(tree, xpath, XML_NAMESPACES)
-
-        if element is None:
-            xpath = f"//*[contains(concat(' ', @xml:idAdded, ' '), ' {tag_xml_id} ')]"
-            element = get_first_xpath_match(tree, xpath, XML_NAMESPACES)
+        element = self.get_xml_element(tree, tag_xml_id)
 
         if attributes_to_set:
             for attribute, value in sorted(attributes_to_set.items()):
@@ -608,7 +584,19 @@ class XmlHandler:
 
         return text
 
-    def switch_body_content(self, old_xml_content, new_body_content):
+    @staticmethod
+    def get_xml_element(tree, tag_xml_id):
+        xpath = f"//*[contains(concat(' ', @xml:id, ' '), ' {tag_xml_id} ')]"
+        element = get_first_xpath_match(tree, xpath, XML_NAMESPACES)
+
+        if element is None:
+            xpath = f"//*[contains(concat(' ', @xml:idAdded, ' '), ' {tag_xml_id} ')]"
+            element = get_first_xpath_match(tree, xpath, XML_NAMESPACES)
+
+        return element
+
+    @staticmethod
+    def switch_body_content(old_xml_content, new_body_content):
         parser = etree.XMLParser(remove_blank_text=True)
         tree = etree.fromstring(old_xml_content, parser=parser)
 

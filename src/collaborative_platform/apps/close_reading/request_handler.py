@@ -1,7 +1,7 @@
 from apps.close_reading.db_handler import DbHandler
 from apps.close_reading.response_generator import get_listable_entities_types
 from apps.close_reading.xml_handler import XmlHandler
-from apps.exceptions import BadRequest, NotModified
+from apps.exceptions import BadRequest, NotModified, UnsavedElement
 
 
 class RequestHandler:
@@ -195,7 +195,13 @@ class RequestHandler:
         tag_xml_id = request['edited_element_id']
 
         body_content = self.__db_handler.get_body_content()
-        body_content = self.__xml_handler.delete_tag(body_content, tag_xml_id)
+
+        try:
+            body_content = self.__xml_handler.delete_tag(body_content, tag_xml_id)
+        except UnsavedElement:
+            raise BadRequest("Deleting an unsaved element is forbidden. Instead of deleting, discard "
+                             "the operation that created it.")
+
         self.__db_handler.set_body_content(body_content)
 
         self.__operations_results.append(None)
