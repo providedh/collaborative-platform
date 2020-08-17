@@ -65,7 +65,7 @@ class TestIssues:
 
         assert response['status'] == 400
         assert response['message'] == "Deleting an unsaved element is forbidden. Instead of deleting, discard " \
-                                      "the operation that created it."
+                                      "the operation that created this element."
 
         await communicator.disconnect()
 
@@ -118,7 +118,7 @@ class TestIssues:
 
         assert response['status'] == 400
         assert response['message'] == "Deleting an unsaved element is forbidden. Instead of deleting, discard " \
-                                      "the operation that created it."
+                                      "the operation that created this element."
 
         await communicator.disconnect()
 
@@ -187,7 +187,7 @@ class TestIssues:
 
         assert response['status'] == 400
         assert response['message'] == "Deleting an unsaved element is forbidden. Instead of deleting, discard " \
-                                      "the operation that created it."
+                                      "the operation that created this element."
 
         await communicator.disconnect()
 
@@ -239,7 +239,7 @@ class TestIssues:
 
         assert response['status'] == 400
         assert response['message'] == "Deleting an unsaved element is forbidden. Instead of deleting, discard " \
-                                      "the operation that created it."
+                                      "the operation that created this element."
 
         await communicator.disconnect()
 

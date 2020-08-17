@@ -200,7 +200,7 @@ class RequestHandler:
             body_content = self.__xml_handler.delete_tag(body_content, tag_xml_id)
         except UnsavedElement:
             raise BadRequest("Deleting an unsaved element is forbidden. Instead of deleting, discard "
-                             "the operation that created it.")
+                             "the operation that created this element.")
 
         self.__db_handler.set_body_content(body_content)
 
@@ -392,7 +392,7 @@ class RequestHandler:
                                                                              new_tag_xml_id, entity_xml_id)
             except UnsavedElement:
                 raise BadRequest("Deleting an unsaved element is forbidden. Instead of deleting, discard "
-                                 "the operation that created it.")
+                                 "the operation that created this element.")
 
             self.__db_handler.set_body_content(body_content)
 
@@ -410,7 +410,7 @@ class RequestHandler:
                                                                              new_tag_xml_id, entity_xml_id)
             except UnsavedElement:
                 raise BadRequest("Deleting an unsaved element is forbidden. Instead of deleting, discard "
-                                 "the operation that created it.")
+                                 "the operation that created this element.")
 
             body_content = self.__xml_handler.delete_entity_properties(body_content, entity_xml_id,
                                                                        entity_properties_values)
@@ -472,7 +472,7 @@ class RequestHandler:
                 self.__db_handler.delete_entity_property(entity_xml_id, property_name)
             except UnsavedElement:
                 raise BadRequest("Deleting an unsaved element is forbidden. Instead of deleting, discard "
-                                 "the operation that created it.")
+                                 "the operation that created this element.")
 
         else:
             property_value = self.__db_handler.get_entity_property_value(entity_xml_id, property_name)
@@ -482,7 +482,7 @@ class RequestHandler:
                 self.__db_handler.delete_entity_property(entity_xml_id, property_name)
             except UnsavedElement:
                 raise BadRequest("Deleting an unsaved element is forbidden. Instead of deleting, discard "
-                                 "the operation that created it.")
+                                 "the operation that created this element.")
 
             body_content = self.__db_handler.get_body_content()
             body_content = self.__xml_handler.delete_entity_properties(body_content, entity_xml_id, entity_property)
@@ -515,7 +515,7 @@ class RequestHandler:
             self.__db_handler.delete_certainty(certainty_xml_id)
         except UnsavedElement:
             raise BadRequest("Deleting an unsaved element is forbidden. Instead of deleting, discard "
-                             "the operation that created it.")
+                             "the operation that created this element.")
 
         self.__operations_results.append(None)
 
