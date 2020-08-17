@@ -511,7 +511,11 @@ class RequestHandler:
     def __delete_certainty(self, request):
         certainty_xml_id = request['edited_element_id']
 
-        self.__db_handler.delete_certainty(certainty_xml_id)
+        try:
+            self.__db_handler.delete_certainty(certainty_xml_id)
+        except UnsavedElement:
+            raise BadRequest("Deleting an unsaved element is forbidden. Instead of deleting, discard "
+                             "the operation that created it.")
 
         self.__operations_results.append(None)
 

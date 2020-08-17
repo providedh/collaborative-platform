@@ -153,6 +153,9 @@ class DbHandler:
     def delete_certainty(self, certainty_xml_id):
         certainty = self.__get_certainty_from_db(certainty_xml_id, saved=True)
 
+        if not certainty:
+            raise UnsavedElement
+
         self.__mark_certainty_to_delete(certainty)
 
     def discard_adding_reference_to_entity(self, entity_xml_id, last_reference):
