@@ -386,8 +386,14 @@ class RequestHandler:
 
         if entity_type in self.__listable_entities_types:
             body_content = self.__db_handler.get_body_content()
-            body_content = self.__xml_handler.delete_reference_to_entity(body_content, tag_xml_id, new_tag,
-                                                                         new_tag_xml_id, entity_xml_id)
+
+            try:
+                body_content = self.__xml_handler.delete_reference_to_entity(body_content, tag_xml_id, new_tag,
+                                                                             new_tag_xml_id, entity_xml_id)
+            except UnsavedElement:
+                raise BadRequest("Deleting an unsaved element is forbidden. Instead of deleting, discard "
+                                 "the operation that created it.")
+
             self.__db_handler.set_body_content(body_content)
 
             last_reference = self.__xml_handler.check_if_last_reference(body_content, entity_xml_id)
@@ -398,8 +404,14 @@ class RequestHandler:
             entity_properties_values = self.__db_handler.get_entity_properties_values(entity_xml_id)
 
             body_content = self.__db_handler.get_body_content()
-            body_content = self.__xml_handler.delete_reference_to_entity(body_content, tag_xml_id, new_tag,
-                                                                         new_tag_xml_id, entity_xml_id)
+
+            try:
+                body_content = self.__xml_handler.delete_reference_to_entity(body_content, tag_xml_id, new_tag,
+                                                                             new_tag_xml_id, entity_xml_id)
+            except UnsavedElement:
+                raise BadRequest("Deleting an unsaved element is forbidden. Instead of deleting, discard "
+                                 "the operation that created it.")
+
             body_content = self.__xml_handler.delete_entity_properties(body_content, entity_xml_id,
                                                                        entity_properties_values)
             self.__db_handler.set_body_content(body_content)

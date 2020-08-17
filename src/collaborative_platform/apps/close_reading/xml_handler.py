@@ -115,6 +115,8 @@ class XmlHandler:
         return text
 
     def delete_reference_to_entity(self, text, tag_xml_id, new_tag, new_tag_xml_id, entity_xml_id):
+        self.__check_if_reference_is_saved(text, tag_xml_id, entity_xml_id)
+
         attributes = {
             f'{XML_ID_KEY}Added': f'{new_tag_xml_id}',
             f'{XML_ID_KEY}Deleted': f'{tag_xml_id}',
@@ -491,6 +493,14 @@ class XmlHandler:
         saved = element.attrib.get('saved')
 
         if saved == 'false':
+            raise UnsavedElement
+
+    def __check_if_reference_is_saved(self, text, tag_xml_id, entity_xml_id):
+        tree = etree.fromstring(text)
+        element = self.get_xml_element(tree, tag_xml_id)
+        reference_added = element.attrib.get('refAdded')
+
+        if reference_added == f'#{entity_xml_id}':
             raise UnsavedElement
 
     def __check_if_resp_in_tag(self, text, tag_xml_id):
