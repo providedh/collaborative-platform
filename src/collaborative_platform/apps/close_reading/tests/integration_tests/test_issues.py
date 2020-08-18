@@ -3,6 +3,7 @@ import json
 import os
 import pytest
 
+from apps.api_vis.models import EntityProperty
 from apps.close_reading.tests.integration_tests.test_annotator_with_ws_and_db import get_communicator, read_file
 
 
@@ -309,6 +310,133 @@ class TestIssue112:
         verify_response(test_name, response, request_nr)
 
         await communicator.disconnect()
+
+    async def test_modify_unsaved_property(self):
+        test_name = inspect.currentframe().f_code.co_name
+
+        project_id = 1
+        file_id = 1
+        user_id = 2
+
+        communicator = get_communicator(project_id, file_id, user_id)
+
+        await communicator.connect()
+        await communicator.receive_json_from()
+
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'POST',
+                    'element_type': 'tag',
+                    'parameters': {
+                        'start_pos': 265,
+                        'end_pos': 271,
+                    }
+                }
+            ]
+        }
+        request_nr = 0
+
+        await communicator.send_json_to(request)
+        response = await communicator.receive_json_from()
+        verify_response(test_name, response, request_nr)
+
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'POST',
+                    'element_type': 'reference',
+                    'edited_element_id': 'ab-1',
+                    'parameters': {
+                        'entity_type': 'date',
+                        'entity_properties': {
+                            'name': 'new date'
+                        }
+                    }
+                }
+            ]
+        }
+        request_nr = 1
+
+        await communicator.send_json_to(request)
+        response = await communicator.receive_json_from()
+        verify_response(test_name, response, request_nr)
+
+        entity_properties = EntityProperty.objects.filter(
+            entity_version__entity__file_id=file_id,
+            entity_version__entity__xml_id='date-3',
+            name='when'
+        )
+        assert entity_properties.count() == 0
+
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'POST',
+                    'element_type': 'entity_property',
+                    'edited_element_id': 'date-3',
+                    'parameters': {
+                        'when': '2020-02-02'
+                    }
+                }
+            ]
+        }
+        request_nr = 2
+
+        await communicator.send_json_to(request)
+        response = await communicator.receive_json_from()
+        verify_response(test_name, response, request_nr)
+
+        entity_properties = EntityProperty.objects.filter(
+            entity__file_id=file_id,
+            entity__xml_id='date-3',
+            name='when'
+        )
+        assert entity_properties.count() == 1
+
+        entity_property = entity_properties[0]
+        assert entity_property.get_value(as_str=True) == '2020-02-02'
+
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'PUT',
+                    'element_type': 'entity_property',
+                    'edited_element_id': 'date-3',
+                    'old_element_id': 'when',
+                    'parameters': {
+                        'when': '0001-01-01'
+                    }
+                }
+            ]
+        }
+
+        await communicator.send_json_to(request)
+        response = await communicator.receive_json_from()
+        verify_response(test_name, response, request_nr)
+
+        entity_properties = EntityProperty.objects.filter(
+            entity__file_id=file_id,
+            entity__xml_id='date-3',
+            name='when'
+        )
+        assert entity_properties.count() == 1
+
+        entity_property = entity_properties[0]
+        assert entity_property.get_value(as_str=True) == '0001-01-01'
+
+
+
+
+
+
+        await communicator.disconnect()
+
+
 
 
 def verify_response(test_name, response, request_nr):
