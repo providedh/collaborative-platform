@@ -447,21 +447,21 @@ class RequestHandler:
     def __modify_entity_property(self, request):
         entity_xml_id = request['edited_element_id']
         property_name = request['old_element_id']
-        entity_property = request['parameters']
+        property_value = request['parameters']
         entity_type = self.__db_handler.get_entity_type(entity_xml_id)
 
         if entity_type in self.__listable_entities_types:
-            property_id = self.__db_handler.modify_entity_property(entity_xml_id, entity_property, property_name)
+            property_id = self.__db_handler.modify_entity_property(entity_xml_id, property_value, property_name)
 
         else:
-            property_value = self.__db_handler.get_entity_property_value(entity_xml_id, property_name)
-            old_entity_property = {property_name: property_value}
+            old_property_value = self.__db_handler.get_entity_property_value(entity_xml_id, property_name)
+            old_entity_property = {property_name: old_property_value}
 
-            property_id = self.__db_handler.modify_entity_property(entity_xml_id, entity_property, property_name)
+            property_id = self.__db_handler.modify_entity_property(entity_xml_id, property_value, property_name)
 
             body_content = self.__db_handler.get_body_content()
             body_content = self.__xml_handler.modify_entity_properties(body_content, entity_xml_id, old_entity_property,
-                                                                       entity_property)
+                                                                       property_value)
             self.__db_handler.set_body_content(body_content)
 
         self.__operations_results.append(property_id)

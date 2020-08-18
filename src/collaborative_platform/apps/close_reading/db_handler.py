@@ -51,18 +51,20 @@ class DbHandler:
 
         return property_id
 
-    def modify_entity_property(self, entity_xml_id, entity_property, property_name):
-        entity_property_object = self.__get_entity_property_from_db(entity_xml_id, property_name)
+    def modify_entity_property(self, entity_xml_id, property_value, property_name):
+        saved = False
+        entity_property = self.__get_entity_property_from_db(entity_xml_id, property_name, saved)
 
-        if entity_property_object.entity_version is not None:
-            entity_property_object = self.__clone_entity_property(entity_property_object)
+        if not entity_property:
+            saved = True
+            entity_property = self.__get_entity_property_from_db(entity_xml_id, property_name, saved)
+            entity_property = self.__clone_entity_property(entity_property)
 
-        for key, value in entity_property.items():
-            entity_property_object.set_value(value)
+        for key, value in property_value.items():
+            entity_property.set_value(value)
 
-        entity_property_object.save()
+        entity_property.save()
 
-        property_name = list(entity_property.keys())[0]
         property_id = f'{entity_xml_id}/{property_name}'
 
         return property_id
@@ -204,11 +206,11 @@ class DbHandler:
         self.__unmark_certainties_to_delete(old_entity_xml_id)
 
     def discard_adding_entity_property(self, entity_xml_id, property_name):
-        entity_property = self.__get_entity_property_from_db(entity_xml_id, property_name)
+        entity_property = self.__get_entity_property_from_db(entity_xml_id, property_name, saved=False)
         entity_property.delete()
 
     def discard_modifying_entity_property(self, entity_xml_id, property_name):
-        entity_property = self.__get_entity_property_from_db(entity_xml_id, property_name)
+        entity_property = self.__get_entity_property_from_db(entity_xml_id, property_name, saved=False)
         entity_property.delete()
 
         entity_version = self.__get_entity_version_from_db(entity_xml_id)
@@ -272,12 +274,12 @@ class DbHandler:
             self.__confirm_certainties_delete(entity_xml_id, new_file_version)
 
     def accept_adding_entity_property(self, entity_xml_id, property_name, new_file_version):
-        entity_property = self.__get_entity_property_from_db(entity_xml_id, property_name)
+        entity_property = self.__get_entity_property_from_db(entity_xml_id, property_name, saved=False)
         entity_property.created_in_file_version = new_file_version
         entity_property.save()
 
     def accept_modifying_entity_property(self, entity_xml_id, property_name, new_file_version):
-        entity_property = self.__get_entity_property_from_db(entity_xml_id, property_name)
+        entity_property = self.__get_entity_property_from_db(entity_xml_id, property_name, saved=False)
         entity_property.created_in_file_version = new_file_version
         entity_property.save()
 
@@ -338,7 +340,10 @@ class DbHandler:
         return entity_properties
 
     def get_entity_property_value(self, entity_xml_id, property_name):
-        entity_property = self.__get_entity_property_from_db(entity_xml_id, property_name)
+        entity_property = self.__get_entity_property_from_db(entity_xml_id, property_name, saved=False)
+
+        if not entity_property:
+            entity_property = self.__get_entity_property_from_db(entity_xml_id, property_name, saved=True)
 
         entity_property_value = entity_property.get_value(as_str=True)
 
@@ -603,28 +608,40 @@ class DbHandler:
 
         return entity_version
 
-    def __get_entity_property_from_db(self, entity_xml_id, property_name):
-        try:
-            entity_property = EntityProperty.objects.get(
-                entity__xml_id=entity_xml_id,
-                name=property_name,
-                entity_version__isnull=True
-            )
-        except EntityProperty.DoesNotExist:
-            entity_version = self.__get_entity_version_from_db(entity_xml_id)
+    def __get_entity_property_from_db(self, entity_xml_id, property_name, saved=None):
+        entity_property = None
 
-            entity_property = EntityProperty.objects.get(
-                entity__xml_id=entity_xml_id,
-                name=property_name,
-                entity_version=entity_version
-            )
+        if saved is True:
+            try:
+                entity_version = self.__get_entity_version_from_db(entity_xml_id)
+
+                entity_property = EntityProperty.objects.get(
+                    entity__xml_id=entity_xml_id,
+                    name=property_name,
+                    entity_version=entity_version
+                )
+            except EntityProperty.DoesNotExist:
+                pass
+
+        elif saved is False:
+            try:
+                entity_property = EntityProperty.objects.get(
+                    entity__xml_id=entity_xml_id,
+                    name=property_name,
+                    entity_version__isnull=True
+                )
+            except EntityProperty.DoesNotExist:
+                pass
+
+        else:
+            raise ValueError("Value for 'saved' argument not provided")
 
         return entity_property
 
     def __check_if_entity_property_is_saved(self, entity_xml_id, property_name):
-        entity_property = self.__get_entity_property_from_db(entity_xml_id, property_name)
+        entity_property = self.__get_entity_property_from_db(entity_xml_id, property_name, saved=True)
 
-        if not entity_property.entity_version:
+        if not entity_property:
             raise UnsavedElement
 
     def __get_certainty_from_db(self, certainty_xml_id, saved=None):
@@ -748,7 +765,11 @@ class DbHandler:
             target = certainty_target.split('/')[0]
             property_name = certainty_target.split('/')[1]
 
-            entity_property = self.__get_entity_property_from_db(target, property_name)
+            entity_property = self.__get_entity_property_from_db(target, property_name, saved=True)
+
+            if not entity_property:
+                entity_property = self.__get_entity_property_from_db(target, property_name, saved=False)
+
             match = entity_property.xpath
 
         elif target_type == ElementTypes.certainty:
