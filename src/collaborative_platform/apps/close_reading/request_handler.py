@@ -19,6 +19,8 @@ class RequestHandler:
         self.__clean_operation_results()
 
         for operation in operations:
+            element_saved = True
+
             if operation['element_type'] == 'tag':
                 if operation['method'] == 'POST':
                     self.__add_tag(operation)
@@ -56,7 +58,7 @@ class RequestHandler:
                 if operation['method'] == 'POST':
                     self.__add_certainty(operation)
                 elif operation['method'] == 'PUT':
-                    self.__modify_certainty(operation)
+                    element_saved = self.__modify_certainty(operation)
                 elif operation['method'] == 'DELETE':
                     self.__delete_certainty(operation)
                 else:
@@ -66,7 +68,9 @@ class RequestHandler:
                 raise BadRequest(f"There is no operation matching to this request")
 
             operation_result = self.__operations_results[-1]
-            self.__db_handler.add_operation(operation, operation_result)
+
+            if element_saved:
+                self.__db_handler.add_operation(operation, operation_result)
 
     def discard_changes(self, operations_ids):
         operations = self.__db_handler.get_operations_from_db(operations_ids)
@@ -504,9 +508,11 @@ class RequestHandler:
         parameter_name = request['old_element_id']
         new_value = request['parameters']
 
-        self.__db_handler.modify_certainty(certainty_xml_id, parameter_name, new_value)
+        saved = self.__db_handler.modify_certainty(certainty_xml_id, parameter_name, new_value)
 
         self.__operations_results.append(certainty_xml_id)
+
+        return saved
 
     def __delete_certainty(self, request):
         certainty_xml_id = request['edited_element_id']

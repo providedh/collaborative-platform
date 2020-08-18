@@ -102,10 +102,12 @@ class DbHandler:
         return xml_id
 
     def modify_certainty(self, certainty_xml_id, parameter_name, parameters):
-        certainty = self.__get_certainty_from_db(certainty_xml_id, saved=False)
+        saved = False
+        certainty = self.__get_certainty_from_db(certainty_xml_id, saved)
 
         if not certainty:
-            certainty = self.__get_certainty_from_db(certainty_xml_id, saved=True)
+            saved = True
+            certainty = self.__get_certainty_from_db(certainty_xml_id, saved)
             certainty = self.__clone_certainty(certainty)
 
         if parameter_name == 'categories':
@@ -149,6 +151,8 @@ class DbHandler:
             certainty.target_xml_id = target
             certainty.target_match = match
             certainty.save()
+
+        return saved
 
     def delete_certainty(self, certainty_xml_id):
         certainty = self.__get_certainty_from_db(certainty_xml_id, saved=True)
