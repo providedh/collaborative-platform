@@ -48,15 +48,27 @@ class XmlHandler:
         # Add new tag with temp id
         text = self.add_tag(text, start_pos, end_pos, temp_xml_id)
 
-        # Mark old tag to delete
-        attributes = {
-            XML_ID_KEY: f'{tag_xml_id}-old',
-            'deleted': 'true',
-        }
+        try:
+            self.__check_if_tag_is_saved(text, tag_xml_id)
 
-        attributes = self.__add_resp_if_needed(attributes, text, tag_xml_id)
+        except UnsavedElement:
+            # remove old tag
+            saved = False
 
-        text = self.__update_tag(text, tag_xml_id, attributes_to_set=attributes)
+            text = self.__remove_tag(text, tag_xml_id)
+
+        else:
+            # Mark old tag to delete
+            saved = True
+
+            attributes = {
+                XML_ID_KEY: f'{tag_xml_id}-old',
+                'deleted': 'true',
+            }
+
+            attributes = self.__add_resp_if_needed(attributes, text, tag_xml_id)
+
+            text = self.__update_tag(text, tag_xml_id, attributes_to_set=attributes)
 
         # update attributes in new tag
         attributes = {
@@ -67,7 +79,7 @@ class XmlHandler:
 
         text = self.__update_tag(text, temp_xml_id, new_tag=old_tag_name, attributes_to_set=attributes)
 
-        return text
+        return text, saved
 
     def delete_tag(self, text, tag_xml_id):
         self.__check_if_tag_is_saved(text, tag_xml_id)
@@ -521,7 +533,6 @@ class XmlHandler:
 
         if property_value_in_file == property_value:
             raise UnsavedElement
-
 
     def __check_if_resp_in_tag(self, text, tag_xml_id):
         tree = etree.fromstring(text)

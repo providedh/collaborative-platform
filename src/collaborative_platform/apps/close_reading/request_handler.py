@@ -25,7 +25,7 @@ class RequestHandler:
                 if operation['method'] == 'POST':
                     self.__add_tag(operation)
                 elif operation['method'] == 'PUT':
-                    self.__move_tag(operation)
+                    element_saved = self.__move_tag(operation)
                 elif operation['method'] == 'DELETE':
                     self.__delete_tag(operation)
                 else:
@@ -188,10 +188,12 @@ class RequestHandler:
         tag_xml_id = request['edited_element_id']
 
         body_content = self.__db_handler.get_body_content()
-        body_content = self.__xml_handler.move_tag(body_content, new_start_pos, new_end_pos, tag_xml_id)
+        body_content, saved = self.__xml_handler.move_tag(body_content, new_start_pos, new_end_pos, tag_xml_id)
         self.__db_handler.set_body_content(body_content)
 
         self.__operations_results.append(tag_xml_id)
+
+        return saved
 
     def __delete_tag(self, request):
         # TODO: Add verification if user has rights to delete a tag
