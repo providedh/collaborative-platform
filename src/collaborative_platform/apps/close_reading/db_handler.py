@@ -67,7 +67,7 @@ class DbHandler:
 
         property_id = f'{entity_xml_id}/{property_name}'
 
-        return property_id
+        return property_id, saved
 
     def delete_entity_property(self, entity_xml_id, property_name):
         self.__check_if_entity_property_is_saved(entity_xml_id, property_name)

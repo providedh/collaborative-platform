@@ -140,12 +140,19 @@ class XmlHandler:
 
         return text
 
-    def modify_entity_properties(self, text, tag_xml_id, old_entity_properties, new_entity_properties):
-        new_entity_properties.pop('name', '')
-        old_entity_properties.pop('name', '')
+    def modify_entity_property(self, text, tag_xml_id, old_entity_property, new_entity_property):
+        new_entity_property.pop('name', '')
+        old_entity_property.pop('name', '')
 
-        text = self.delete_entity_properties(text, tag_xml_id, old_entity_properties)
-        text = self.add_entity_properties(text, tag_xml_id, new_entity_properties)
+        try:
+            self.__check_if_property_is_saved(text, tag_xml_id, old_entity_property)
+        except UnsavedElement:
+            attributes = {f'{key}Added': value for key, value in new_entity_property.items()}
+
+            text = self.__update_tag(text, tag_xml_id, attributes_to_set=attributes)
+        else:
+            text = self.delete_entity_properties(text, tag_xml_id, old_entity_property)
+            text = self.add_entity_properties(text, tag_xml_id, new_entity_property)
 
         attributes = {}
 
@@ -502,6 +509,19 @@ class XmlHandler:
 
         if reference_added == f'#{entity_xml_id}':
             raise UnsavedElement
+
+    def __check_if_property_is_saved(self, text, tag_xml_id, entity_property):
+        tree = etree.fromstring(text)
+        element = self.get_xml_element(tree, tag_xml_id)
+
+        property_name = list(entity_property.items())[0][0]
+        property_value = list(entity_property.items())[0][1]
+
+        property_value_in_file = element.attrib.get(f'{property_name}Added')
+
+        if property_value_in_file == property_value:
+            raise UnsavedElement
+
 
     def __check_if_resp_in_tag(self, text, tag_xml_id):
         tree = etree.fromstring(text)

@@ -409,11 +409,12 @@ class TestIssue112:
                     'edited_element_id': 'date-3',
                     'old_element_id': 'when',
                     'parameters': {
-                        'when': '0001-01-01'
+                        'when': '1001-01-01'
                     }
                 }
             ]
         }
+        request_nr = 3
 
         await communicator.send_json_to(request)
         response = await communicator.receive_json_from()
@@ -427,7 +428,7 @@ class TestIssue112:
         assert entity_properties.count() == 1
 
         entity_property = entity_properties[0]
-        assert entity_property.get_value(as_str=True) == '0001-01-01'
+        assert entity_property.get_value(as_str=True) == '1001-01-01'
 
 
 
