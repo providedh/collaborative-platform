@@ -109,10 +109,23 @@ class XmlHandler:
 
     def modify_reference_to_entity(self, text, tag_xml_id, new_entity_xml_id, old_entity_xml_id, new_tag=None,
                                    new_tag_xml_id=None):
-        attributes = {
-            'refAdded': f'#{new_entity_xml_id}',
-            'refDeleted': f'#{old_entity_xml_id}',
-        }
+        try:
+            self.__check_if_reference_is_saved(text, tag_xml_id, old_entity_xml_id)
+
+        except UnsavedElement:
+            saved = False
+
+            attributes = {
+                'refAdded': f'#{new_entity_xml_id}',
+            }
+
+        else:
+            saved = True
+
+            attributes = {
+                'refAdded': f'#{new_entity_xml_id}',
+                'refDeleted': f'#{old_entity_xml_id}',
+            }
 
         if new_tag_xml_id:
             attributes.update({
@@ -124,7 +137,7 @@ class XmlHandler:
 
         text = self.__update_tag(text, tag_xml_id, new_tag=new_tag, attributes_to_set=attributes)
 
-        return text
+        return text, saved
 
     def delete_reference_to_entity(self, text, tag_xml_id, new_tag, new_tag_xml_id, entity_xml_id):
         self.__check_if_reference_is_saved(text, tag_xml_id, entity_xml_id)

@@ -34,12 +34,20 @@ class DbHandler:
 
     def delete_entity(self, entity_xml_id):
         entity = self.__get_entity_from_db(entity_xml_id)
-        self.__mark_entity_to_delete(entity)
 
-        entity_version = self.__get_entity_version_from_db(entity_xml_id)
-        self.__mark_entity_properties_to_delete(entity_version)
+        try:
+            self.__check_if_entity_is_saved(entity_xml_id)
 
-        self.__mark_certainties_to_delete(entity_xml_id)
+        except UnsavedElement:
+            self.__clean_up_entity(entity)
+
+        else:
+            self.__mark_entity_to_delete(entity)
+
+            entity_version = self.__get_entity_version_from_db(entity_xml_id)
+            self.__mark_entity_properties_to_delete(entity_version)
+
+            self.__mark_certainties_to_delete(entity_xml_id)
 
     def add_entity_property(self, entity_xml_id, entity_property):
         entity_version = self.__get_entity_version_from_db(entity_xml_id)
@@ -425,6 +433,17 @@ class DbHandler:
         entity.deleted_by = None
         entity.save()
 
+    def __clean_up_entity(self, entity):
+        certainties = Certainty.objects.filter(
+            file=self.__file,
+            target_xml_id=entity.xml_id
+        )
+
+        for certainty in certainties:
+            certainty.delete()
+
+        entity.delete()
+
     def __confirm_entity_creation(self, entity, new_file_version):
         entity.created_in_file_version = new_file_version
         entity.save()
@@ -575,6 +594,12 @@ class DbHandler:
         )
 
         return entity
+
+    def __check_if_entity_is_saved(self, entity_xml_id):
+        entity = self.__get_entity_from_db(entity_xml_id)
+
+        if entity.created_in_file_version is None:
+            raise UnsavedElement
 
     def __get_entity_version_from_db(self, entity_xml_id, file_version=None, unsaved=False):
         if file_version:
@@ -802,6 +827,22 @@ class DbHandler:
             new_element_id=operation.get('new_element_id'),
             operation_result=operation_result,
         )
+
+    def update_operation(self, operation, operation_result):
+        try:
+            operation = Operation.objects.get(
+                user=self.__user,
+                file=self.__file,
+                method='POST',
+                element_type=operation['element_type'],
+                edited_element_id=operation.get('edited_element_id'),
+            )
+
+            operation.operation_result = operation_result
+            operation.save()
+
+        except Operation.DoesNotExist:
+            pass
 
     @staticmethod
     def delete_operation(operation_id):
