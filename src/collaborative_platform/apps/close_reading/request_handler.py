@@ -902,11 +902,6 @@ class RequestHandler:
         edited_element_id_base = tag_xml_id.split('-')[0]
 
         if edited_element_id_base != new_tag:
-            # if new_tag == 'ab':
-            #     new_tag_xml_id = self.__db_handler.get_next_xml_id('ab')
-            # else:
-            #     new_tag_xml_id = self.__db_handler.get_next_xml_id('name')
-
             new_tag_xml_id = self.__db_handler.get_next_xml_id(new_tag)
 
         else:
