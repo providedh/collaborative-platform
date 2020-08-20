@@ -295,12 +295,14 @@ class RequestHandler:
             new_tag_xml_id = self.__get_new_tag_xml_id(tag_xml_id, new_tag)
 
             body_content = self.__db_handler.get_body_content()
+            tag_is_an_entity = self.__xml_handler.check_if_tag_is_an_entity(body_content, tag_xml_id)
             body_content, saved = self.__xml_handler.modify_reference_to_entity(body_content, tag_xml_id,
                                                                                 new_entity_xml_id, old_entity_xml_id,
                                                                                 new_tag, new_tag_xml_id)
 
-            if old_entity_type not in self.__listable_entities_types and tag_xml_id == old_entity_xml_id:
-                old_entity_properties = self.__db_handler.get_entity_properties_values(old_entity_xml_id)
+            if old_entity_type not in self.__listable_entities_types and tag_is_an_entity:
+                old_entity_properties = self.__db_handler.get_entity_properties_values(old_entity_xml_id,
+                                                                                       include_unsaved=True)
 
                 body_content = self.__xml_handler.delete_entity_properties(body_content, new_tag_xml_id,
                                                                            old_entity_properties)
@@ -318,12 +320,14 @@ class RequestHandler:
             new_entity_xml_id = self.__db_handler.add_entity(new_entity_type, new_entity_properties)
 
             body_content = self.__db_handler.get_body_content()
+            tag_is_an_entity = self.__xml_handler.check_if_tag_is_an_entity(body_content, tag_xml_id)
             body_content, saved = self.__xml_handler.modify_reference_to_entity(body_content, tag_xml_id,
                                                                                 new_entity_xml_id, old_entity_xml_id,
                                                                                 new_entity_type, new_entity_xml_id)
 
-            if old_entity_type not in self.__listable_entities_types and tag_xml_id == old_entity_xml_id:
-                old_entity_properties = self.__db_handler.get_entity_properties_values(old_entity_xml_id)
+            if old_entity_type not in self.__listable_entities_types and tag_is_an_entity:
+                old_entity_properties = self.__db_handler.get_entity_properties_values(old_entity_xml_id,
+                                                                                       include_unsaved=True)
 
                 body_content = self.__xml_handler.delete_entity_properties(body_content, new_entity_xml_id,
                                                                            old_entity_properties)
@@ -342,14 +346,16 @@ class RequestHandler:
             new_tag_xml_id = self.__get_new_tag_xml_id(tag_xml_id, new_tag)
 
             body_content = self.__db_handler.get_body_content()
+            tag_is_an_entity = self.__xml_handler.check_if_tag_is_an_entity(body_content, tag_xml_id)
             body_content, saved = self.__xml_handler.modify_reference_to_entity(body_content, tag_xml_id,
                                                                                 new_entity_xml_id, old_entity_xml_id,
                                                                                 new_tag, new_tag_xml_id)
 
-            if old_entity_type not in self.__listable_entities_types and tag_xml_id == old_entity_xml_id:
-                old_entity_properties = self.__db_handler.get_entity_properties_values(old_entity_xml_id)
+            if old_entity_type not in self.__listable_entities_types and tag_is_an_entity:
+                old_entity_properties = self.__db_handler.get_entity_properties_values(old_entity_xml_id,
+                                                                                       include_unsaved=True)
 
-                body_content = self.__xml_handler.delete_entity_properties(body_content, new_entity_xml_id,
+                body_content = self.__xml_handler.delete_entity_properties(body_content, new_tag_xml_id,
                                                                            old_entity_properties)
 
             self.__db_handler.set_body_content(body_content)
@@ -363,14 +369,16 @@ class RequestHandler:
             new_tag_xml_id = self.__get_new_tag_xml_id(tag_xml_id, new_entity_type)
 
             body_content = self.__db_handler.get_body_content()
+            tag_is_an_entity = self.__xml_handler.check_if_tag_is_an_entity(body_content, tag_xml_id)
             body_content, saved = self.__xml_handler.modify_reference_to_entity(body_content, tag_xml_id,
                                                                                 new_entity_xml_id, old_entity_xml_id,
                                                                                 new_entity_type, new_tag_xml_id)
 
-            if old_entity_type not in self.__listable_entities_types and tag_xml_id == old_entity_xml_id:
-                old_entity_properties = self.__db_handler.get_entity_properties_values(old_entity_xml_id)
+            if old_entity_type not in self.__listable_entities_types and tag_is_an_entity:
+                old_entity_properties = self.__db_handler.get_entity_properties_values(old_entity_xml_id,
+                                                                                       include_unsaved=True)
 
-                body_content = self.__xml_handler.delete_entity_properties(body_content, new_entity_xml_id,
+                body_content = self.__xml_handler.delete_entity_properties(body_content, tag_xml_id,
                                                                            old_entity_properties)
 
             self.__db_handler.set_body_content(body_content)

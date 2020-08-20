@@ -190,11 +190,21 @@ class XmlHandler:
     def delete_entity_properties(self, text, tag_xml_id, entity_properties):
         entity_properties.pop('name', '')
 
-        attributes = {f'{key}Deleted': value for key, value in entity_properties.items()}
+        attributes_to_set = {}
+        attributes_to_delete = {}
 
-        attributes = self.__add_resp_if_needed(attributes, text, tag_xml_id)
+        for property, value in entity_properties.items():
+            try:
+                self.__check_if_property_is_saved(text, tag_xml_id, {property: value})
+            except UnsavedElement:
+                attributes_to_delete.update({f'{property}Added': value})
+            else:
+                attributes_to_set.update({f'{property}Deleted': value})
 
-        text = self.__update_tag(text, tag_xml_id, attributes_to_set=attributes)
+        attributes_to_set = self.__add_resp_if_needed(attributes_to_set, text, tag_xml_id)
+
+        text = self.__update_tag(text, tag_xml_id, attributes_to_set=attributes_to_set,
+                                 attributes_to_delete=attributes_to_delete)
 
         return text
 
@@ -546,6 +556,27 @@ class XmlHandler:
 
         if property_value_in_file == property_value:
             raise UnsavedElement
+
+    def check_if_tag_is_an_entity(self, text, tag_xml_id):
+        tree = etree.fromstring(text)
+        element = self.get_xml_element(tree, tag_xml_id)
+
+        xml_id = element.attrib.get(XML_ID_KEY)
+        ref = element.attrib.get('ref')
+        ref = ref.replace('#', '') if ref else ref
+
+        xml_id_added = element.attrib.get(f'{XML_ID_KEY}Added')
+        ref_added = element.attrib.get('refAdded')
+        ref_added = ref_added.replace('#', '') if ref_added else ref_added
+
+        if xml_id == ref:
+            return True
+
+        elif xml_id_added is not None and xml_id_added == ref_added:
+            return True
+
+        else:
+            return False
 
     def __check_if_resp_in_tag(self, text, tag_xml_id):
         tree = etree.fromstring(text)
