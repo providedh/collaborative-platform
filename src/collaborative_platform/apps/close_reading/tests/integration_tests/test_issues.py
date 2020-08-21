@@ -704,6 +704,84 @@ class TestIssue113:
 
         await communicator.disconnect()
 
+    async def test_add_certainty_to_new_event_name_property(self):
+        test_name = inspect.currentframe().f_code.co_name
+
+        project_id = 1
+        file_id = 1
+        user_id = 2
+
+        communicator = get_communicator(project_id, file_id, user_id)
+
+        await communicator.connect()
+        await communicator.receive_json_from()
+
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'POST',
+                    'element_type': 'tag',
+                    'parameters': {
+                        'start_pos': 265,
+                        'end_pos': 271,
+                    }
+                }
+            ]
+        }
+        request_nr = 0
+
+        await communicator.send_json_to(request)
+        response = await communicator.receive_json_from()
+        verify_response(test_name, response, request_nr)
+
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'POST',
+                    'element_type': 'reference',
+                    'edited_element_id': 'ab-1',
+                    'parameters': {
+                        'entity_type': 'event',
+                        'entity_properties': {
+                            'name': 'Greater Poland uprising'
+                        }
+                    }
+                }
+            ]
+        }
+        request_nr = 1
+
+        await communicator.send_json_to(request)
+        response = await communicator.receive_json_from()
+        verify_response(test_name, response, request_nr)
+
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'POST',
+                    'element_type': 'certainty',
+                    'new_element_id': 'event-1/name',
+                    'parameters': {
+                        'categories': ['imprecision'],
+                        'locus': 'value',
+                        'certainty': 'medium',
+                        'asserted_value': 'something',
+                        'description': ''
+                    }
+                }
+            ]
+        }
+        request_nr = 2
+
+        await communicator.send_json_to(request)
+        response = await communicator.receive_json_from()
+        verify_response(test_name, response, request_nr)
+
+        await communicator.disconnect()
+
 
 def verify_response(test_name, response, request_nr):
     test_results_file_path = os.path.join(SCRIPT_DIR, 'tests_results_for_issues.json')

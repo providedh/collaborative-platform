@@ -99,8 +99,8 @@ class DbHandler:
             certainty=parameters.get('certainty'),
             target_xml_id=target,
             target_match=match,
-            asserted_value=parameters.get('asserted_value'),
-            description=parameters.get('description'),
+            asserted_value=parameters.get('asserted_value') if parameters.get('asserted_value') else None,
+            description=parameters.get('description') if parameters.get('description') else None,
             created_by=self.__user
         )
 
@@ -412,7 +412,6 @@ class DbHandler:
         for name, value in entity_properties.items():
             entity_property_object = EntityProperty(
                 entity=entity_version.entity,
-                xpath='',
                 name=name,
                 type=properties[name]['type'],
                 created_by=self.__user,

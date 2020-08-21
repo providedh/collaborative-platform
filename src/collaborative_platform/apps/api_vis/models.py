@@ -59,7 +59,7 @@ class EntityProperty(models.Model):
     entity = models.ForeignKey(Entity, on_delete=models.CASCADE)
     entity_version = models.ForeignKey(EntityVersion, default=None, null=True, on_delete=models.CASCADE,
                                        related_name='properties')
-    xpath = models.CharField(max_length=255)
+    xpath = models.CharField(max_length=255, null=True)
     name = models.CharField(max_length=255)
     type = models.CharField(max_length=255, choices=[(tag, tag.value) for tag in TypeChoice])
 

@@ -1298,7 +1298,7 @@
   "fields": {
     "entity": 2,
     "entity_version": 2,
-    "xpath": "",
+    "xpath": null,
     "name": "name",
     "type": "TypeChoice.str",
     "value_str": "Big Bang",
@@ -1571,7 +1571,7 @@
   "fields": {
     "entity": 9,
     "entity_version": 9,
-    "xpath": "",
+    "xpath": null,
     "name": "name",
     "type": "TypeChoice.str",
     "value_str": "4th of july 2010",
@@ -1613,7 +1613,7 @@
   "fields": {
     "entity": 10,
     "entity_version": 10,
-    "xpath": "",
+    "xpath": null,
     "name": "name",
     "type": "TypeChoice.str",
     "value_str": "3rd of may 1791",
@@ -1634,7 +1634,7 @@
   "fields": {
     "entity": 11,
     "entity_version": 11,
-    "xpath": "",
+    "xpath": null,
     "name": "name",
     "type": "TypeChoice.str",
     "value_str": "Rag",
@@ -1655,7 +1655,7 @@
   "fields": {
     "entity": 12,
     "entity_version": 12,
-    "xpath": "",
+    "xpath": null,
     "name": "name",
     "type": "TypeChoice.str",
     "value_str": "Ingwer",
@@ -1676,7 +1676,7 @@
   "fields": {
     "entity": 13,
     "entity_version": 13,
-    "xpath": "",
+    "xpath": null,
     "name": "name",
     "type": "TypeChoice.str",
     "value_str": "Met",
@@ -1781,7 +1781,7 @@
   "fields": {
     "entity": 2,
     "entity_version": 15,
-    "xpath": "",
+    "xpath": null,
     "name": "name",
     "type": "TypeChoice.str",
     "value_str": "Big Bang",
@@ -2054,7 +2054,7 @@
   "fields": {
     "entity": 9,
     "entity_version": 22,
-    "xpath": "",
+    "xpath": null,
     "name": "name",
     "type": "TypeChoice.str",
     "value_str": "4th of july 2010",
@@ -2096,7 +2096,7 @@
   "fields": {
     "entity": 10,
     "entity_version": 23,
-    "xpath": "",
+    "xpath": null,
     "name": "name",
     "type": "TypeChoice.str",
     "value_str": "3rd of may 1791",
@@ -2117,7 +2117,7 @@
   "fields": {
     "entity": 11,
     "entity_version": 24,
-    "xpath": "",
+    "xpath": null,
     "name": "name",
     "type": "TypeChoice.str",
     "value_str": "Rag",
@@ -2138,7 +2138,7 @@
   "fields": {
     "entity": 12,
     "entity_version": 25,
-    "xpath": "",
+    "xpath": null,
     "name": "name",
     "type": "TypeChoice.str",
     "value_str": "Ingwer",
@@ -2159,7 +2159,7 @@
   "fields": {
     "entity": 13,
     "entity_version": 26,
-    "xpath": "",
+    "xpath": null,
     "name": "name",
     "type": "TypeChoice.str",
     "value_str": "Met",
@@ -2180,7 +2180,7 @@
   "fields": {
     "entity": 14,
     "entity_version": 27,
-    "xpath": "",
+    "xpath": null,
     "name": "name",
     "type": "TypeChoice.str",
     "value_str": "Jus",
@@ -2201,7 +2201,7 @@
   "fields": {
     "entity": 15,
     "entity_version": 28,
-    "xpath": "",
+    "xpath": null,
     "name": "name",
     "type": "TypeChoice.str",
     "value_str": "Sand",
@@ -2222,7 +2222,7 @@
   "fields": {
     "entity": 14,
     "entity_version": 29,
-    "xpath": "",
+    "xpath": null,
     "name": "name",
     "type": "TypeChoice.str",
     "value_str": "Jus",
@@ -2243,7 +2243,7 @@
   "fields": {
     "entity": 15,
     "entity_version": 30,
-    "xpath": "",
+    "xpath": null,
     "name": "name",
     "type": "TypeChoice.str",
     "value_str": "Sand",
@@ -2264,7 +2264,7 @@
   "fields": {
     "entity": 16,
     "entity_version": 31,
-    "xpath": "",
+    "xpath": null,
     "name": "name",
     "type": "TypeChoice.str",
     "value_str": "Ingwer",
@@ -2285,7 +2285,7 @@
   "fields": {
     "entity": 17,
     "entity_version": 32,
-    "xpath": "",
+    "xpath": null,
     "name": "name",
     "type": "TypeChoice.str",
     "value_str": "Sand",
@@ -2306,7 +2306,7 @@
   "fields": {
     "entity": 16,
     "entity_version": 33,
-    "xpath": "",
+    "xpath": null,
     "name": "name",
     "type": "TypeChoice.str",
     "value_str": "Ingwer",
@@ -2327,7 +2327,7 @@
   "fields": {
     "entity": 17,
     "entity_version": 34,
-    "xpath": "",
+    "xpath": null,
     "name": "name",
     "type": "TypeChoice.str",
     "value_str": "Sand",
