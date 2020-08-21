@@ -106,7 +106,7 @@
             <desc>Some important decription</desc>
           </certainty>
           <certainty xml:id="certainty-15" resp="#annotator-2" ana="https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness" locus="value" cert="high" target="#name-8" match="@ref" assertedValue="#ingredient-0"/>
-          <certainty xml:id="certainty-16" resp="#annotator-2" ana="https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness" locus="value" cert="high" target="#person-2" match="name/forename" assertedValue="McDuck"/>
+          <certainty xml:id="certainty-16" resp="#annotator-2" ana="https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness" locus="value" cert="high" target="#person-2" match="./persName/forename" assertedValue="McDuck"/>
           <certainty xml:id="certainty-17" resp="#annotator-1" ana="https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness" locus="value" cert="high" target="#certainty-10" match="@cert" assertedValue="low"/>
         </classCode>
       </textClass>

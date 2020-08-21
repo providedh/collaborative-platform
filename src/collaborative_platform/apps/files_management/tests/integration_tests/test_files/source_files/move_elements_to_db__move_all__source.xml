@@ -100,7 +100,7 @@
             <desc>Some important decription</desc>
           </certainty>
           <certainty ana="https://providedh-test.ehum.psnc.pl/api/projects/17/taxonomy/#incompleteness" locus="value" cert="high" assertedValue="#ingredient-0" target="#name-8" match="@ref" resp="#second_annotator" xml:id="certainty23"/>
-          <certainty ana="https://providedh-test.ehum.psnc.pl/api/projects/17/taxonomy/#incompleteness" locus="value" cert="high" assertedValue="McDuck" target="#person-0" match="name/forename" resp="#second_annotator" xml:id="certainty24"/>
+          <certainty ana="https://providedh-test.ehum.psnc.pl/api/projects/17/taxonomy/#incompleteness" locus="value" cert="high" assertedValue="McDuck" target="#person-0" match="./persName/forename" resp="#second_annotator" xml:id="certainty24"/>
           <certainty ana="https://providedh-test.ehum.psnc.pl/api/projects/17/taxonomy/#incompleteness" locus="value" cert="high" assertedValue="low" target="#certainty-10" match="@cert" resp="#xml_id_autora" xml:id="certainty25"/>
         </classCode>
       </textClass>
