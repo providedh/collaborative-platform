@@ -783,6 +783,94 @@ class TestIssue113:
         await communicator.disconnect()
 
 
+@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
+@pytest.mark.asyncio
+@pytest.mark.django_db(transaction=True, reset_sequences=True)
+@pytest.mark.integration_tests
+class TestIssue114:
+    """Attribute uncertainty annotations are not correctly saved/retrieved"""
+
+    async def test_xpath_for_added_entity_property_is_generated_properly(self):
+        test_name = inspect.currentframe().f_code.co_name
+
+        project_id = 1
+        file_id = 1
+        user_id = 2
+
+        communicator = get_communicator(project_id, file_id, user_id)
+
+        await communicator.connect()
+        await communicator.receive_json_from()
+
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'POST',
+                    'element_type': 'tag',
+                    'parameters': {
+                        'start_pos': 265,
+                        'end_pos': 271,
+                    }
+                }
+            ]
+        }
+        request_nr = 0
+
+        await communicator.send_json_to(request)
+        response = await communicator.receive_json_from()
+        verify_response(test_name, response, request_nr)
+
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'POST',
+                    'element_type': 'reference',
+                    'edited_element_id': 'ab-1',
+                    'parameters': {
+                        'entity_type': 'person',
+                        'entity_properties': {
+                            'forename': 'Bugs',
+                            'surname': 'Bunny',
+                            'age': 'adult'
+                        }
+                    }
+                }
+            ]
+        }
+        request_nr = 1
+
+        await communicator.send_json_to(request)
+        response = await communicator.receive_json_from()
+        verify_response(test_name, response, request_nr)
+
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'POST',
+                    'element_type': 'certainty',
+                    'new_element_id': 'person-6/age',
+                    'parameters': {
+                        'categories': ['credibility'],
+                        'locus': 'value',
+                        'certainty': 'medium',
+                        'asserted_value': '21',
+                        'description': ''
+                    }
+                }
+            ]
+        }
+        request_nr = 2
+
+        await communicator.send_json_to(request)
+        response = await communicator.receive_json_from()
+        verify_response(test_name, response, request_nr)
+
+        await communicator.disconnect()
+
+
 def verify_response(test_name, response, request_nr):
     test_results_file_path = os.path.join(SCRIPT_DIR, 'tests_results_for_issues.json')
     test_results = read_file(test_results_file_path)

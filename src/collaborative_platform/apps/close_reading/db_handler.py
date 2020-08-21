@@ -410,9 +410,13 @@ class DbHandler:
         properties_objects = []
 
         for name, value in entity_properties.items():
+            xpath = properties[name]['xpath']
+            xpath = self.__reformat_xpath(xpath)
+
             entity_property_object = EntityProperty(
                 entity=entity_version.entity,
                 name=name,
+                xpath=xpath,
                 type=properties[name]['type'],
                 created_by=self.__user,
             )
@@ -745,6 +749,16 @@ class DbHandler:
         annotating_body_content = AnnotatingBodyContent.objects.get(file_symbol=room_name)
 
         return annotating_body_content
+
+    @staticmethod
+    def __reformat_xpath(match):
+        match = match.replace('default:', '')
+        match = match.replace('/text()', '')
+
+        if match == '.':
+            match = None
+
+        return match
 
     @staticmethod
     def __get_certainty_target_type(certainty_target, locus):
