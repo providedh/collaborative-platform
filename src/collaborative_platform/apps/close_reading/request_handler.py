@@ -221,6 +221,9 @@ class RequestHandler:
         tag_xml_id = self.__update_target_xml_id(tag_xml_id)
         entity_xml_id = request.get('new_element_id')
 
+        if tag_xml_id != request['edited_element_id']:
+            request['edited_element_id'] = tag_xml_id
+
         try:
             entity_type = request['parameters']['entity_type']
         except KeyError:
@@ -518,6 +521,9 @@ class RequestHandler:
         certainty_target = request['new_element_id']
         certainty_target = self.__update_target_xml_id(certainty_target)
         parameters = request['parameters']
+
+        if certainty_target != request['new_element_id']:
+            request['new_element_id'] = certainty_target
 
         certainty_xml_id = self.__db_handler.add_certainty(certainty_target, parameters)
 

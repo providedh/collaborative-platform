@@ -847,6 +847,13 @@
   ],
     "test_complex_operation": [
     {
+      "operations": [
+        {"edited_element_id": null, "element_type": "tag", "id": 1, "method": "POST", "new_element_id": null, "old_element_id": null, "operation_result": "ab-1"},
+        {"edited_element_id": "ab-1", "element_type": "reference", "id": 2, "method": "POST", "new_element_id": null, "old_element_id": null, "operation_result": "person-6"},
+        {"edited_element_id": null, "element_type": "certainty", "id": 3, "method": "POST", "new_element_id": "ab-1@ref", "old_element_id": null, "operation_result": "certainty-5"},
+        {"edited_element_id": null, "element_type": "certainty", "id": 4, "method": "POST", "new_element_id": "person-6", "old_element_id": null, "operation_result": "certainty-6"},
+        {"edited_element_id": null, "element_type": "certainty", "id": 5, "method": "POST", "new_element_id": "certainty-6", "old_element_id": null, "operation_result": "certainty-7"}
+      ],
       "authors": [
         {"xml:id": "annotator-1", "forename": "none", "surname": "none", "username": "anonymous"},
         {"xml:id": "annotator-2", "forename": "Tony", "surname": "Stark", "username": "tony_stark"}
