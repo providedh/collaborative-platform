@@ -28,21 +28,21 @@ export default function useContentRendering (node, documentContent, callbacks, c
 function styleEntities (entities, configuration, css) {
   entities.forEach(entity => {
     const styles = configuration.entities[entity.type]
-    styleEntity(entity.htmlId, styles.color, styles.icon, css)
+    styleEntity(entity.htmlId.value, styles.color, styles.icon, css)
   })
 }
 
 function styleAnnotations (entities, context, css) {
   entities.forEach(entity => {
     if (entity.annotations.length === 0) { return }
-    styleEntityAnnotations(entity.htmlId, entity.annotations, context, css)
+    styleEntityAnnotations(entity.htmlId.value, entity.annotations, context, css)
   })
 }
 
 function setupEntityInteractions (entities, callbacks) {
   entities.forEach(entity => {
     const { onHover, onHoverOut, onClick } = callbacks
-    const node = document.getElementById(entity.htmlId)
+    const node = document.getElementById(entity.htmlId.value)
 
     node.addEventListener('mouseenter', event => {
       handleEntityEvent(entity, event, onHover, SelectionType.hover)
@@ -59,7 +59,7 @@ function setupEntityInteractions (entities, callbacks) {
 
 function handleEntityEvent (target, event, callback, type) {
   const boundingRect = event.target.getBoundingClientRect()
-  const parentBoundingRect = event.target.parentElement.getBoundingClientRect()
+  // const parentBoundingRect = event.target.parentElement.getBoundingClientRect()
   // screenX absolute placement is harder to work with
   // const screenX = boundingRect.x + (boundingRect.width / 2)
 

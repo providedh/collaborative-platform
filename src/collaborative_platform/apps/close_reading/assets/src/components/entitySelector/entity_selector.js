@@ -47,7 +47,7 @@ function EntitySelector (props) {
 
   const entities = Object.values(
     Object.fromEntries(
-      props.context.entities.map(x => [x.target, x])))
+      props.context.entities.map(x => [x.target.value, x])))
 
   useEffect(() => props.onChange(getPayloadForOptions(selectedEntity, ref, attributes, usingRef)), [])
 
@@ -93,16 +93,16 @@ function EntitySelector (props) {
     .filter(x => x.type === selectedEntity)
     .map(x =>
       <a
-        key={x.target}
+        key={x.target.value}
         href="#"
-        onClick={() => handleRefChange(x.target)}
+        onClick={() => handleRefChange(x.target.value)}
         className={(x.target === ref ? 'bg-light text-body ' : 'text-black-50 ') + 'list-group-item list-group-item-action mb-0'}>
         <div className="d-flex w-100 justify-content-between">
           <h5 className="mb-1">
             <span className={styles.icon} style={{ color: style.color }} dataicon={icon}>
               <div dangerouslySetInnerHTML={{ __html: icon }} />
             </span>
-            {x.target}
+            {x.target.value}
           </h5>
           <small className="text-muted">{x.type}</small>
         </div>

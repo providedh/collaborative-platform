@@ -43,9 +43,8 @@ function onRestoreClick (id, websocket) {
 function EntityPanel (props) {
   const style = props.context.configuration.entities[props.selection.target.type]
   const icon = style.icon
-console.log(props)
   const deleted = props.selection.target.deleted === true
-  const deletable = deleted === false && props.selection.target.saved === true
+  const saved = !deleted && props.selection.target.saved === true
 
   return <div className={styles.entityPanel}>
     <div className="card">
@@ -55,7 +54,7 @@ console.log(props)
             <div dangerouslySetInnerHTML={{ __html: icon }} />
           </span>
           <h5 className="d-inline">
-            {props.selection?.target?.target}
+            {props.selection?.target?.target?.value}
             <span className={styles.entityType + (deleted === false ? '' : 'text-danger')}> ({props.selection.target.type})</span>
           </h5>
         </div>
@@ -65,7 +64,7 @@ console.log(props)
             onClick={e => {
               e.preventDefault()
               const operation = props.context.operations.filter(x => (
-                x.edited_element_id === props.selection.target.id &&
+                x.edited_element_id === props.selection.target.id.value &&
                 x.element_type === 'tag' &&
                 x.method === 'DELETE'
               ))
@@ -84,7 +83,7 @@ console.log(props)
             onClick={e => {
               e.preventDefault()
               const operation = props.context.operations.filter(x => (
-                x.operation_result === props.selection.target.id &&
+                x.operation_result === props.selection.target.id.value &&
                 x.element_type === 'tag' &&
                 x.method === 'POST'
               ))
@@ -97,9 +96,9 @@ console.log(props)
             <u> -discard</u>
           </button>
         </span>
-        <span className={deletable === true ? 'ml-4 text-danger' : 'd-none'}>
+        <span className={saved === true ? 'ml-4 text-danger' : 'd-none'}>
           <button type="button"
-            onClick={() => onDeleteClick(props.selection.target.id, props.context.websocket)}
+            onClick={() => onDeleteClick(props.selection.target.id.value.slice(1), props.context.websocket)}
             className="btn btn-link p-0 mx-1 text-danger">
             <u> -delete</u>
           </button>
