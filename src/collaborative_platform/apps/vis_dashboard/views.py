@@ -20,12 +20,11 @@ def dashboard_create(request, project_id):
         if form.is_valid():
             new_dashboard = Dashboard(
                 name = form.cleaned_data['name'], 
-                description=form.cleaned_data['description'],
-                project=project)
+                description = form.cleaned_data['description'] or '',
+                project = project)
             new_dashboard.save()
-            return redirect('vis_dashboard:list', project_id=project_id)
-        
-        return render(request, '', {form:form})
+
+    return redirect('vis_dashboard:list', project_id=project_id)
 
 @login_required
 @objects_exists
