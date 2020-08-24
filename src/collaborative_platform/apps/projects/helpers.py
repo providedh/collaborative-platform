@@ -13,7 +13,7 @@ from apps.files_management.models import Directory, File, FileVersion
 from apps.projects.models import Activity, Project, ProjectVersion, Contributor
 import logging
 
-logger = logging.getLogger('upload')
+logger = logging.getLogger('projects')
 
 
 def paginate_page_perpage(request, queryset):  # type: (HttpRequest, QuerySet) -> Page

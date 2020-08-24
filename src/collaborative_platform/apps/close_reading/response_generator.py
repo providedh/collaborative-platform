@@ -18,7 +18,7 @@ from apps.projects.models import EntitySchema
 from collaborative_platform.settings import DEFAULT_ENTITIES, XML_NAMESPACES
 
 
-logger = logging.getLogger('annotator')
+logger = logging.getLogger('close_reading')
 
 
 class ResponseGenerator:

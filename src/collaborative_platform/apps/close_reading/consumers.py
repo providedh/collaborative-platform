@@ -16,7 +16,7 @@ from apps.projects.models import Contributor, Project
 from .models import Operation, RoomPresence
 
 
-logger = logging.getLogger('annotator')
+logger = logging.getLogger('close_reading')
 
 
 class AnnotatorConsumer(WebsocketConsumer):

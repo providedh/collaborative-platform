@@ -153,16 +153,16 @@ LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'loggers': {
-        'annotator': {
-            'handlers': ['console', 'annotator_log_file'],
+        'close_reading': {
+            'handlers': ['console', 'close_reading_log_file'],
             'level': 'DEBUG',
         },
-        'celery': {
-            'handlers': ['console', 'annotator_log_file'],
+        'files_management': {
+            'handlers': ['console', 'files_management_log_file'],
             'level': 'DEBUG',
         },
-        'upload': {
-            'handlers': ['console', 'upload_log_file'],
+        'projects': {
+            'handlers': ['console', 'projects_log_file'],
             'level': 'DEBUG',
         },
     },
@@ -172,17 +172,23 @@ LOGGING = {
             'class': 'logging.StreamHandler',
             'formatter': 'long',
         },
-        'annotator_log_file': {
+        'close_reading_log_file': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
-            'filename': os.path.join(LOGS_ROOT, 'annotator.log'),
+            'filename': os.path.join(LOGS_ROOT, 'close_reading.log'),
             'formatter': 'long',
             'filters': ['skip_logs_from_certain_modules'],
         },
-        'upload_log_file': {
+        'files_management_log_file': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
-            'filename': os.path.join(LOGS_ROOT, 'upload.log'),
+            'filename': os.path.join(LOGS_ROOT, 'files_management.log'),
+            'formatter': 'long',
+        },
+        'projects_log_file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(LOGS_ROOT, 'projects.log'),
             'formatter': 'long',
         }
     },

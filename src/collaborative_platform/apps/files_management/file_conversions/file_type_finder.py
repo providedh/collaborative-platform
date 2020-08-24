@@ -6,7 +6,7 @@ from lxml import etree
 
 from .recognized_types import FileType
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('files_management')
 
 
 class FileTypeFinder:

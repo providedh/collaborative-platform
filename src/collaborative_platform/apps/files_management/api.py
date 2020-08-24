@@ -22,7 +22,7 @@ from apps.projects.helpers import log_activity, paginate_start_length, page_to_j
 from apps.views_decorators import objects_exists, user_has_access
 
 
-logger = logging.getLogger('upload')
+logger = logging.getLogger('files_management')
 
 
 @login_required

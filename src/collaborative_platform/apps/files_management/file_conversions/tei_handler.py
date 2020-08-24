@@ -17,7 +17,7 @@ from .recognized_types import FileType, XMLType
 from .white_chars_corrector import WhiteCharsCorrector
 from .xml_formatter import XMLFormatter
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('files_management')
 
 
 class TeiHandler:

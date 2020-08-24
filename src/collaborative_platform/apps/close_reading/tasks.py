@@ -8,7 +8,7 @@ from datetime import datetime, timezone
 from .models import AnnotatingBodyContent, Operation, RoomPresence
 
 
-logger = logging.getLogger('celery')
+logger = logging.getLogger('close_reading')
 
 
 @shared_task(name='close_reading.tasks.prune_presence')

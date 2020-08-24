@@ -8,15 +8,15 @@ LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'loggers': {
-        'annotator': {
+        'close_reading': {
             'handlers': [],
             'level': 'DEBUG',
         },
-        'celery': {
+        'files_management': {
             'handlers': [],
             'level': 'DEBUG',
         },
-        'upload': {
+        'projects': {
             'handlers': [],
             'level': 'DEBUG',
         },

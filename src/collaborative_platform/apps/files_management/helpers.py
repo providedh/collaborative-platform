@@ -21,7 +21,7 @@ from apps.index_and_search.models import Person, Organization, Event, Place, Ing
 from apps.projects.helpers import log_activity
 from apps.projects.models import Project
 
-logger = logging.getLogger('upload')
+logger = logging.getLogger('files_management')
 
 ALL_ES_ENTITIES = (Person, Organization, Event, Place, Ingredient, Utensil, ProductionMethod, es.File)
 
