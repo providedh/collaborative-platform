@@ -4,8 +4,10 @@ import Heatmap from './Heatmap'
 import DocumentView from './DocumentView'
 import Sunburst from './Sunburst'
 import Note from './Note'
+import Timeline from './Timeline'
 
 export default {
+  Timeline,
   Note,
   PixelCorpus,
   Sunburst,
