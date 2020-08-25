@@ -30,7 +30,7 @@ LOGGING = {
     },
     'formatters': {
         'long': {
-            'format': '{asctime} - {levelname} - {module} - {message}',
+            'format': '{asctime} - {levelname} - {message}',
             'style': '{',
         },
     },

@@ -7,9 +7,9 @@ from django.core.paginator import InvalidPage, EmptyPage
 from django.db.models import QuerySet, Q
 from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, HttpResponseNotFound, JsonResponse
 
-from apps.core.models import Profile
 from apps.files_management.helpers import clean_name
 from apps.files_management.models import Directory
+from apps.logging_functions import log_creating_project, log_adding_user_to_project
 from apps.projects.helpers import page_to_json_response, include_contributors, log_activity, paginate_start_length, \
     get_contributors_list
 from apps.views_decorators import objects_exists, user_has_access
@@ -37,16 +37,21 @@ def create(request):  # type: (HttpRequest) -> HttpResponse
 
             create_taxonomy(data, project)
 
-            profile = Profile.objects.get(user=request.user)
+            log_creating_project(project.id, request.user.id, data)
 
-            contributor = Contributor(project=project, user=request.user, permissions="AD", profile=profile)
+            contributor = Contributor(project=project, user=request.user, permissions="AD",
+                                      profile=request.user.profile)
             contributor.save()
 
-            base_dir = Directory(name=project_name, project=project)
-            base_dir.save()
+            log_adding_user_to_project(project.id, request.user.id, "AD")
+
+            project_directory = Directory(name=project_name, project=project)
+            project_directory.save()
 
             log_activity(project, request.user, "created project")
+
             return HttpResponse(dumps({"id": project.id}))
+
         except (ValidationError, KeyError):
             return HttpResponseBadRequest(dumps({"message": "Invalid value"}))
 
