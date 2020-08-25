@@ -8,8 +8,8 @@ import { useRender } from './vis'
 import { DataClient, useCleanup } from '../../../data'
 import useData from './data'
 
-function onEvent (source, event, dataClient, context) {
-  console.log(source, event, dataClient, context)
+function onEvent (event, dataClient, context) {
+  console.log(event, dataClient, context)
   /*
   if (event.action === 'click') {
     if (event?.target === 'unfilter') {
@@ -56,11 +56,15 @@ export default function Timeline ({ layout, dimension, ...rest }) {
   useCleanup(dataClient)
   //const data = useData(dataClient, source, levels)
   const data = null
-  useRender(width, height, data, dimension, context.taxonomy, containerRef, (e) => onEvent(source, e, dataClient, context))
+  useRender(width, height, data, dimension, context.taxonomy, containerRef, e => onEvent(e, dataClient, context))
 
   return (
     <div className={styles.timeline + ' Timeline'} ref={containerRef}>
       <svg>
+        <g className="legend"></g>
+        <g className="entities"></g>
+        <g className="axis"></g>
+        <g className="details"></g>
       </svg>
     </div>
   )

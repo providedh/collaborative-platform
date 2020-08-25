@@ -10,7 +10,7 @@ const defaultConfig = [
   {
     name: 'dimension',
     type: 'selection',
-    value: dimOptions.numAnnotations,
+    value: 'numAnnotations',
     params: {
       options: Object.keys(dimOptions),
       labels: Object.values(dimOptions),
