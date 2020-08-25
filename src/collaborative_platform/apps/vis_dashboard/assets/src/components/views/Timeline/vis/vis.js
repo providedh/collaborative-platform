@@ -1,9 +1,9 @@
 import { useEffect } from 'react'
 
-import Sunburst from './sunburst'
+import Timeline from './timeline'
 
 export default function useRender (width, height, data, dimension, taxonomy, containerRef, callback) {
-  //const sunburst = Sunburst()
+  //const timeline = Timeline()
 
   useEffect(() => {
     if (data !== null && data !== undefined && data.filtered?.count > 0) {
