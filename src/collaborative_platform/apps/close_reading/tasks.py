@@ -18,7 +18,7 @@ def prune_presence():
         if time_delta.total_seconds() > 60:
             presence.delete()
 
-            CloseReadingLogger().log_removing_users_room_presence_table(presence.user.id, presence.room_symbol)
+            CloseReadingLogger().log_removing_user_from_room_presence_table(presence.user.id, inactivity=True)
 
             remain_users = RoomPresence.objects.filter(room_symbol=presence.room_symbol)
 
