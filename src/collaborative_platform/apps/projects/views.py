@@ -11,8 +11,7 @@ from django.utils.decorators import method_decorator
 from apps.core.models import Profile
 from apps.files_management.models import Directory
 from apps.views_decorators import objects_exists, user_has_access
-from apps.logging_functions import log_adding_user_to_project, log_removing_user_from_project, \
-    log_changing_user_permissions
+from apps.loggers import ProjectsLogger
 
 from .forms import ContributorForm, ProjectEditForm
 from .models import Project, Contributor
@@ -130,7 +129,7 @@ def settings(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
                         if len(admins) > 1 and contributor.id is not None:
                             contributor.delete()
 
-                            log_removing_user_from_project(project_id, request.user.id, contributor_id)
+                            ProjectsLogger().log_removing_user_from_project(project_id, request.user.id, contributor_id)
 
                         else:
                             alert = {
@@ -143,7 +142,7 @@ def settings(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
                     elif contributor.id is not None:
                         contributor.delete()
 
-                        log_removing_user_from_project(project_id, request.user.id, contributor_id)
+                        ProjectsLogger().log_removing_user_from_project(project_id, request.user.id, contributor_id)
 
                 elif old_permissions != new_permissions:
                     if old_permissions == 'AD':
@@ -160,20 +159,21 @@ def settings(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
                             contributor.permissions = new_permissions
                             contributor.save()
 
-                            log_changing_user_permissions(project_id, request.user.id, contributor_id, old_permissions,
-                                                          new_permissions)
+                            ProjectsLogger().log_changing_user_permissions(project_id, request.user.id, contributor_id,
+                                                                           old_permissions, new_permissions)
 
                     else:
                         contributor.permissions = new_permissions
                         contributor.save()
 
-                        log_changing_user_permissions(project_id, request.user.id, contributor_id, old_permissions,
-                                                      new_permissions)
+                        ProjectsLogger().log_changing_user_permissions(project_id, request.user.id, contributor_id,
+                                                                       old_permissions, new_permissions)
 
                 elif contributor.id is None:
                     contributor.save()
 
-                    log_adding_user_to_project(project_id, contributor.user.id, new_permissions, request.user.id)
+                    ProjectsLogger().log_adding_user_to_project(project_id, contributor.user.id, new_permissions,
+                                                                request.user.id)
 
             contributor_formset = ContributorFormset(instance=project)
 

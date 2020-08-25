@@ -9,7 +9,7 @@ from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, HttpR
 
 from apps.files_management.helpers import clean_name
 from apps.files_management.models import Directory
-from apps.logging_functions import log_creating_project, log_adding_user_to_project
+from apps.loggers import ProjectsLogger
 from apps.projects.helpers import page_to_json_response, include_contributors, log_activity, paginate_start_length, \
     get_contributors_list
 from apps.views_decorators import objects_exists, user_has_access
@@ -37,13 +37,13 @@ def create(request):  # type: (HttpRequest) -> HttpResponse
 
             create_taxonomy(data, project)
 
-            log_creating_project(project.id, request.user.id, data)
+            ProjectsLogger().log_creating_project(project.id, request.user.id, data)
 
             contributor = Contributor(project=project, user=request.user, permissions="AD",
                                       profile=request.user.profile)
             contributor.save()
 
-            log_adding_user_to_project(project.id, request.user.id, "AD")
+            ProjectsLogger().log_adding_user_to_project(project.id, request.user.id, "AD")
 
             project_directory = Directory(name=project_name, project=project)
             project_directory.save()
