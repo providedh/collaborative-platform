@@ -41,3 +41,17 @@ class FilesManagementLogger:
     def log_deleting_file(self, project_id, user_id, file_id):
         self.__logger.info(f"User with id: {user_id} deleted file with id: {file_id} from "
                            f"project with id: {project_id}")
+
+
+class CloseReadingLogger:
+    def __init__(self):
+        self.__logger = logging.getLogger('close_reading')
+
+    def log_removing_users_room_presence_table(self, user_id, room_symbol):
+        self.__logger.info(f"User with id: '{user_id}' was removed from room: {room_symbol}  due to inactivity")
+
+    def log_number_of_remaining_users_in_room(self, room_symbol, users_number):
+        self.__logger.info(f"In room: '{room_symbol}' left: {users_number} users")
+
+    def log_pruning_body_content(self, file_id, room_symbol):
+        self.__logger.info(f"Content of <body> element of file with id: '{file_id}' removed from room: '{room_symbol}'")

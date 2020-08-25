@@ -744,9 +744,9 @@ class DbHandler:
         return categories_ids
 
     def __get_body_content_from_db(self):
-        room_name = f'{self.__file.project.id}_{self.__file.id}'
+        room_symbol = f'{self.__file.project.id}_{self.__file.id}'
 
-        annotating_body_content = AnnotatingBodyContent.objects.get(file_symbol=room_name)
+        annotating_body_content = AnnotatingBodyContent.objects.get(room_symbol=room_symbol)
 
         return annotating_body_content
 

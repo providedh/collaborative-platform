@@ -33,22 +33,22 @@ class ResponseGenerator:
         self.__file = File.objects.get(id=file_id, deleted=False)
 
     def __load_body_content(self):
-        room_name = f'{self.__file.project.id}_{self.__file.id}'
+        room_symbol = f'{self.__file.project.id}_{self.__file.id}'
 
         try:
-            self.__annotating_body_content = AnnotatingBodyContent.objects.get(file_symbol=room_name)
+            self.__annotating_body_content = AnnotatingBodyContent.objects.get(room_symbol=room_symbol)
 
         except AnnotatingBodyContent.DoesNotExist:
             file_version = self.__file.file_versions.order_by('-number')[0]
             xml_content = file_version.get_raw_content()
             body_content = self.__get_body_content(xml_content)
 
-            self.__annotating_body_content = AnnotatingBodyContent.objects.create(file_symbol=room_name,
-                                                                                  file_name=file_version.file.name,
+            self.__annotating_body_content = AnnotatingBodyContent.objects.create(room_symbol=room_symbol,
+                                                                                  file=file_version.file,
                                                                                   body_content=body_content)
 
             logger.info(f"Load content of file: '{file_version.file.name}' in version: {file_version.number} "
-                        f"to room: '{room_name}'")
+                        f"to room: '{room_symbol}'")
 
     @staticmethod
     def __get_body_content(xml_content):
@@ -273,12 +273,12 @@ class ResponseGenerator:
         return properties
 
     def remove_xml_content(self):
-        room_name = f'{self.__file.project.id}_{self.__file.id}'
+        room_symbol = f'{self.__file.project.id}_{self.__file.id}'
 
         try:
-            AnnotatingBodyContent.objects.get(file_symbol=room_name).delete()
+            AnnotatingBodyContent.objects.get(room_symbol=room_symbol).delete()
 
-            logger.info(f"Remove file content from room: '{room_name}'")
+            logger.info(f"Remove file content from room: '{room_symbol}'")
         except AnnotatingBodyContent.DoesNotExist:
             pass
 
