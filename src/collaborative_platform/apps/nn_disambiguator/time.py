@@ -56,5 +56,5 @@ def seconds_apart(t1, t2):
 
     d = datetime.min
     d1 = d.replace(hour=t1.hour, minute=t1.minute, second=t1.second)
-    d2 = d.replace(hour=t1.hour, minute=t1.minute, second=t1.second)
+    d2 = d.replace(hour=t2.hour, minute=t2.minute, second=t2.second)
     return abs(d1 - d2).seconds
