@@ -12,6 +12,7 @@ import {
 } from 'common/types'
 
 import { WithAppContext } from 'common/context/app'
+import Attribute from './attribute'
 
 export default function AttributesWithContext (props) {
   return (
@@ -19,23 +20,6 @@ export default function AttributesWithContext (props) {
       <Attributes {...props}/>
     </WithAppContext>
   )
-}
-
-function onAttributeDelete (id, property, websocket) {
-  const builder = AtomicActionBuilder(ActionTarget.entity, ActionType.delete, ActionObject.property)
-  const action = builder(id, property)
-  const request = WebsocketRequest(WebsocketRequestType.modify, [action])
-  websocket.send(request)
-}
-
-function onAttributeDiscard (id, websocket) {
-  const request = WebsocketRequest(WebsocketRequestType.discard, [id])
-  websocket.send(request)
-}
-
-function onAttributeRestore (id, websocket) {
-  const request = WebsocketRequest(WebsocketRequestType.discard, [id])
-  websocket.send(request)
 }
 
 function onAttributeChange (id, property, value, edit, websocket) {
@@ -67,56 +51,7 @@ function Attributes (props) {
   const [editingAttribute, edit] = useState(null)
 
   const attributeItems = props.entity.properties.map((attribute, i) =>
-    <li key={i} className={(attribute.saved === false && attribute.deleted === true) ? 'text-muted' : ''}>
-      <span className={(attribute.saved === false && attribute.deleted === false) ? 'text-danger' : 'd-none'}>
-        (unsaved)
-        <button type="button"
-          onClick={e => {
-            e.preventDefault()
-            const operation = props.context.operations.filter(x => (
-              x.edited_element_id === props.entity.target &&
-              x.element_type === 'entity_property' &&
-              x.method === 'POST' &&
-              x.operation_result === `${props.entity.target}/${attribute.name}`
-            ))
-            
-            if (operation.length !== 1) { return }
-            onAttributeDiscard(operation[0].id, props.context.websocket)
-          }}
-          className="btn btn-sm btn-link p-0 mx-1 text-danger"><u> -discard</u></button>
-      </span>
-      <span className={(attribute.saved === true && attribute.deleted === false) ? 'text-danger' : 'd-none'}>
-        <button type="button"
-          onClick={e => {
-            e.preventDefault()
-            onAttributeDelete(props.entity.target, attribute.name, props.context.websocket)
-          }}
-          className="btn btn-sm btn-link p-0 mx-1 text-danger"><u> -delete</u></button>
-        <button type="button"
-          onClick={() => edit({ ...attribute })}
-          className="btn btn-sm btn-link p-0 mx-1 text-info"><u> *edit</u></button>
-      </span>
-      <span className={(attribute.saved === true && attribute.deleted === true) ? '' : 'd-none'}>
-        <button type="button"
-          onClick={e => {
-            e.preventDefault()
-            const operation = props.context.operations.filter(x => (
-              x.edited_element_id === props.entity.target &&
-              x.element_type === 'entity_property' &&
-              x.method === 'DELETE' &&
-              x.old_element_id === attribute.name
-            ))
-
-            if (operation.length !== 1) { return }
-
-            onAttributeRestore(operation[0].id, props.context.websocket)
-          }}
-          className="btn btn-sm btn-link p-0 mx-1"><u> restore</u></button>
-        (deleted)
-      </span>
-      <span>{attribute.name} : </span>
-      <span> {attribute.value}</span>
-    </li>)
+    <Attribute key={i} {...{ attribute, i, entity: props.entity, onEdit: edit }}/>)
 
   const attributeOptions = freeAttributes.map(x => <option key={x} value={x}>{x}</option>)
 
@@ -154,7 +89,7 @@ function Attributes (props) {
             <button type="button btn-sm"
               onClick={e => {
                 e.preventDefault()
-                onAttributeAdd(props.entity.target, attributeName, attributeValue, props.context.websocket)
+                onAttributeAdd(props.entity.target.value, attributeName, attributeValue, props.context.websocket)
               }}
               className="btn btn-sm btn-outline-primary">Add attribute</button>
           </div>
@@ -177,7 +112,7 @@ function Attributes (props) {
             onClick={e => {
               e.preventDefault()
               onAttributeChange(
-                props.entity.target,
+                props.entity.target.value,
                 editingAttribute.name,
                 editingAttribute.value,
                 edit,
@@ -209,10 +144,10 @@ function Attributes (props) {
 Attributes.propTypes = {
   entity: PropTypes.shape({
     type: PropTypes.string,
-    'xml:id': PropTypes.string,
+    'xml:id': PropTypes.object,
     properties: PropTypes.array,
-    id: PropTypes.string,
-    target: PropTypes.string
+    id: PropTypes.object,
+    target: PropTypes.object
   }),
   context: PropTypes.shape({
     user: PropTypes.string,

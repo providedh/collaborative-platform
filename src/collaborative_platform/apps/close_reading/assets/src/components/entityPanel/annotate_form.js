@@ -172,7 +172,7 @@ Form.propTypes = {
     resp: PropTypes.string,
     saved: PropTypes.bool,
     type: PropTypes.string,
-    'xml:id': PropTypes.string
+    'xml:id': PropTypes.object
   }),
   annotation: PropTypes.shape({
     locus: PropTypes.string,

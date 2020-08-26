@@ -1,3 +1,5 @@
+import { OperationStatus } from 'common/types'
+
 const spacer = 'xxxx'
 
 function originalId (id) {
@@ -62,6 +64,116 @@ function getBodyTagLength (content) {
   return r.exec(content).groups.tag.length
 }
 
+function processTagAttribute (attr, domNode) {
+  const attrValue = domNode.attributes?.[attr]?.value
+  const addedValue = domNode.attributes?.[attr + 'Added']?.value
+  const deletedValue = domNode.attributes?.[attr + 'Deleted']?.value
+
+  if (attrValue !== undefined && addedValue === undefined && deletedValue === undefined) {
+    return { name: attr, value: attrValue, status: OperationStatus.saved }
+  } else if (addedValue !== undefined && deletedValue === undefined) {
+    return { name: attr, value: addedValue, status: OperationStatus.unsaved }
+  } else if (addedValue !== undefined && deletedValue !== undefined) {
+    if (addedValue === deletedValue) {
+      return { name: attr, value: addedValue, status: OperationStatus.deleted }
+    } else if (addedValue !== deletedValue) {
+      return {
+        value: addedValue,
+        prev: deletedValue,
+        status: OperationStatus.edited
+      }
+    }
+  } else {
+    return { name: attr, value: null, status: OperationStatus.null }
+  }
+}
+
+function processListableAttribute (attr, attrList) {
+  const filtered = attrList.filter(x => x.name === attr)
+
+  if (filtered.length === 1) {
+    if (filtered[0].saved === false) {
+      return { name: attr, value: filtered[0].value, status: OperationStatus.unsaved }
+    } else if (filtered[0].saved === true && filtered[0].deleted === false) {
+      return { name: attr, value: filtered[0].value, status: OperationStatus.saved }
+    } else if (filtered[0].saved === true && filtered[0].deleted === true) {
+      return { name: attr, value: filtered[0].value, status: OperationStatus.deleted }
+    }
+  } else if (filtered.length === 2) {
+    let [prev, current] = filtered
+    if (prev.saved === false) {
+      [prev, current] = [current, prev]
+    }
+    return { name: attr, value: current.value, prev: prev.value, status: OperationStatus.edited }
+  } else {
+    return { name: attr, value: null, status: OperationStatus.null }
+  }
+}
+
+function processTag (domNode) {
+  const commonAttributeNames = ['xml:id', 'ref']
+  const commonAttributes = Object.fromEntries(
+    commonAttributeNames.map(attr => [attr, processTagAttribute(attr, domNode)])
+  )
+
+  commonAttributes.htmlId = Object.assign({}, commonAttributes['xml:id'])
+  if (commonAttributes.htmlId.status === OperationStatus.edited) {
+    commonAttributes.htmlId.value = replacedId(commonAttributes['xml:id'].prev)
+  } else {
+    commonAttributes.htmlId.value = replacedId(commonAttributes['xml:id'].value)
+  }
+
+  const tag = {
+    id: commonAttributes['xml:id'],
+    htmlId: commonAttributes.htmlId,
+    ref: commonAttributes.ref,
+    saved: !(domNode.attributes?.saved?.value === 'false'),
+    deleted: (domNode.attributes?.deleted?.value === 'true')
+  }
+  tag.ref.value = tag.ref.value.slice(1)
+  return tag
+}
+
+function processAnnotations (annotations, targets) {
+  const filtered = annotations.filter(x => targets.includes(x.target.slice(1)))
+  const distinctIds = new Set(filtered.map(x => x['xml:id']))
+
+  const processed = [...distinctIds].map(id => {
+    const annotation = filtered.filter(x => id === x['xml:id'])
+
+    // process the match property
+    annotation.forEach(x => {
+      if (![null, undefined, ''].includes(x.match) && x.match.startsWith('@')) {
+        x.locus = 'attribute'
+        x.match = x.match.slice(1)
+      }
+    })
+
+    // set the status
+    if (annotation.length === 1) {
+      if (annotation[0].saved === false) {
+        return { status: OperationStatus.unsaved, ...annotation[0] }
+      } else if (annotation[0].saved === true && annotation[0].deleted === false) {
+        return { status: OperationStatus.saved, ...annotation[0] }
+      } else if (annotation[0].saved === true && annotation[0].deleted === true) {
+        return { status: OperationStatus.deleted, ...annotation[0] }
+      }
+    } else if (annotation.length === 2) {
+      let [current, prev] = annotation
+      if (current.saved === true && current.deleted === true) {
+        [current, prev] = [prev, current]
+      }
+      return {
+        status: OperationStatus.edited,
+        prev,
+        ...current
+      }
+    }
+  })
+
+  return processed
+}
+
 function processEntitiesInDocument (raw, entities, annotations, conf) {
   const unlistableEntities = Object.keys(conf).filter(k => conf[k].listable === false)
   const entityMap = Object.fromEntries(entities.map(e => [e['xml:id'], e]))
@@ -79,78 +191,32 @@ function processEntitiesInDocument (raw, entities, annotations, conf) {
   const entityDetails = []
 
   nameTags.forEach(tag => {
-    const hasRef = Object.hasOwnProperty.call(tag.attributes, 'ref')
-    const hasRefAdded = Object.hasOwnProperty.call(tag.attributes, 'refAdded')
-    let ref = hasRef === true ? tag.attributes.ref.value.slice(1) : ''
-    ref = hasRefAdded === true ? tag.attributes.refAdded.value.slice(1) : ref
-    if ((!hasRef && !hasRefAdded) ||
-        !Object.hasOwnProperty.call(entityMap, ref)) { return }
+    const details = processTag(tag)
+    const targetId = details.ref.value
+    if (entityMap?.[targetId] === undefined) { return }
 
-    const details = {}
+    details.target = details.ref
+    details.type = entityMap[targetId].type
 
-    details.id = tag.attributes['xml:id'].value
-    details.htmlId = replacedId(tag.attributes['xml:id'].value)
-    details.target = ref
-    details.type = entityMap[details.target].type
-    details.saved = !(Object.hasOwnProperty.call(tag.attributes, 'saved') && tag.attributes?.saved?.value === 'false')
-    details.deleted = (Object.hasOwnProperty.call(tag.attributes, 'deleted') && tag.attributes?.deleted?.value === 'true')
-    details.properties = entityMap[details.target].properties
-    details.annotations = annotations.filter(d => d.target.slice(1) === details.id || d.target.slice(1) === details.target)
+    const propertyNames = new Set(entityMap[targetId].properties.map(x => x.name))
+    details.properties = [...propertyNames]
+      .map(attr => processListableAttribute(attr, entityMap[targetId].properties))
+      .filter(attr => attr.status !== OperationStatus.null)
+
+    details.annotations = processAnnotations(annotations, [details.id.value, targetId])
 
     entityDetails.push(details)
   })
 
   unlistableTags.forEach(tag => {
-    const tagRef = Object.hasOwnProperty.call(tag.attributes, 'refAdded')
-      ? tag.attributes.refAdded.value.slice(1)
-      : tag.attributes.ref.value.slice(1)
-    const details = {}
+    const details = processTag(tag)
 
-    details.id = tag.attributes['xml:id'].value
-    details.htmlId = replacedId(tag.attributes['xml:id'].value)
-    details.target = tagRef
+    details.target = details.ref
     details.type = tag.tagName
-    details.saved = !(Object.hasOwnProperty.call(tag.attributes, 'saved') && tag.attributes.saved.value === 'false')
-    details.deleted = (Object.hasOwnProperty.call(tag.attributes, 'deleted') && tag.attributes.deleted.value === 'true')
-    details.annotations = annotations.filter(d => d.target.slice(1) === details.target)
-    details.properties = []
-
-    conf[tag.tagName].properties.forEach(property => {
-      if (Object.hasOwnProperty.call(tag.attributes, property) === true) {
-        details.properties.push({
-          name: property,
-          value: tag.attributes[property].value,
-          saved: true,
-          deleted: false
-        })
-      } else { // lacking, unsaved, modified or deleted
-        const isPresent = Object.hasOwnProperty.call(tag.attributes, property + 'Added')
-        const isDeleted = Object.hasOwnProperty.call(tag.attributes, property + 'Deleted')
-        const p = {
-          name: property,
-          saved: false,
-          deleted: false
-        }
-
-        if (isPresent === false && isDeleted === false) { return }
-
-        if (isPresent === true && isDeleted === false) { // unsaved
-          p.value = tag.attributes[property + 'Added'].value
-        } else if (isPresent === true && isDeleted === true) { // modified
-          p.value = tag.attributes[property + 'Added'].value
-
-          if (tag.attributes[property + 'Added'].value === tag.attributes[property + 'Deleted'].value) {
-            p.value = tag.attributes[property + 'Deleted'].value
-            p.deleted = true
-          }
-        } else { // deleted
-          p.value = tag.attributes[property + 'Deleted'].value
-          p.deleted = true
-        }
-
-        details.properties.push(p)
-      }
-    })
+    details.annotations = processAnnotations(annotations, [details.target.value.slice(1)])
+    details.properties = conf[tag.tagName].properties
+      .map(attr => processTagAttribute(attr, tag))
+      .filter(attr => attr.status !== OperationStatus.null)
 
     entityDetails.push(details)
   })
