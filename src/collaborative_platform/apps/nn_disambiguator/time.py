@@ -1,40 +1,39 @@
+import re
 import sys
 from datetime import datetime
+from typing import Optional
+
+import maya
 from timefhuman import timefhuman
 
 
-def days_apart(d1, d2):
-    if type(d1) == str:
+def to_datetime(text: str) -> Optional[datetime]:
+    text = re.sub("([0-9]+)_([0-9]+?)_([0-9]+)", r"\1/\2/\3", text)
+    text = re.sub("([0-9]+)_([0-9]+)", r"\1:\2", text)
+
+    try:
+        dt_maya = maya.parse(text).datetime()
+        return dt_maya
+    except:
         try:
-            d1 = timefhuman(d1)
+            dt_tfh = timefhuman(text)
+            if type(dt_tfh) == list:
+                return dt_tfh[0]
+            else:
+                return dt_tfh
         except:
+            return None
+
+
+def days_apart(d1, d2) -> int:
+    if type(d1) == str:
+        d1 = to_datetime(d1)
+        if d1 is None:
             return sys.maxsize
     if type(d2) == str:
-        try:
-            d2 = timefhuman(d2)
-        except:
+        d2 = to_datetime(d2)
+        if d2 is None:
             return sys.maxsize
-
-    if (type(d1) == list or type(d2) == list) and (not d1 or not d2):
-        return sys.maxsize
-
-    if type(d1) == list and type(d2) == list:
-        return min(
-            abs(d1[0] - d2[0]).days,
-            abs(d1[0] - d2[1]).days,
-            abs(d1[1] - d2[0]).days,
-            abs(d1[1] - d2[1]).days,
-        )
-    elif type(d1) == list:
-        return min(
-            abs(d1[0] - d2).days,
-            abs(d1[1] - d2).days,
-        )
-    elif type(d2) == list:
-        return min(
-            abs(d1 - d2[0]).days,
-            abs(d1 - d2[1]).days,
-        )
 
     try:
         return abs(d1 - d2).days
@@ -42,16 +41,14 @@ def days_apart(d1, d2):
         return sys.maxsize
 
 
-def seconds_apart(t1, t2):
+def seconds_apart(t1, t2) -> int:
     if type(t1) == str:
-        try:
-            t1 = timefhuman(t1)
-        except:
+        t1 = to_datetime(t1)
+        if t1 is None:
             return sys.maxsize
     if type(t2) == str:
-        try:
-            t2 = timefhuman(t2)
-        except:
+        t2 = to_datetime(t2)
+        if t2 is None:
             return sys.maxsize
 
     d = datetime.min
