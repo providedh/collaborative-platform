@@ -1,7 +1,7 @@
 from apps.close_reading.db_handler import DbHandler
 from apps.close_reading.response_generator import get_listable_entities_types
 from apps.close_reading.xml_handler import XmlHandler
-from apps.exceptions import BadRequest, NotModified, UnsavedElement
+from apps.exceptions import BadRequest, UnsavedElement
 
 
 class RequestHandler:
@@ -51,9 +51,6 @@ class RequestHandler:
                 else:
                     raise BadRequest("There is no operation matching to this request")
 
-            elif operation['element_type'] == 'unification':
-                raise NotModified("Method not implemented yet")
-
             elif operation['element_type'] == 'certainty':
                 if operation['method'] == 'POST':
                     self.__add_certainty(operation)
@@ -102,9 +99,6 @@ class RequestHandler:
                 elif operation['method'] == 'DELETE':
                     self.__discard_removing_entity_property(operation)
 
-            elif operation['element_type'] == 'unification':
-                raise NotModified("Method not implemented yet")
-
             elif operation['element_type'] == 'certainty':
                 if operation['method'] == 'POST':
                     self.__discard_adding_certainty(operation)
@@ -147,9 +141,6 @@ class RequestHandler:
                     self.__accept_modifying_entity_property(operation, new_file_version)
                 elif operation['method'] == 'DELETE':
                     self.__accept_removing_entity_property(operation, new_file_version)
-
-            elif operation['element_type'] == 'unification':
-                raise NotModified("Method not implemented yet")
 
             elif operation['element_type'] == 'certainty':
                 if operation['method'] == 'POST':
