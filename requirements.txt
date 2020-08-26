@@ -68,3 +68,5 @@ wheel~=0.34.2
 scikit-learn~=0.23.1
 joblib
 timefhuman
+maya
+
