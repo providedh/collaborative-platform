@@ -1,5 +1,3 @@
-import logging
-
 from json import dumps, loads
 from os import mkdir
 from zipfile import ZipFile
@@ -18,11 +16,9 @@ from apps.files_management.file_conversions.tei_handler import TeiHandler
 from apps.files_management.helpers import clean_name, create_uploaded_file_object_from_string, \
     delete_directory_with_contents_fake, get_directory_content, include_user, overwrite_file, upload_file
 from apps.files_management.models import Directory, File, FileVersion
+from apps.files_management.loggers import FilesManagementLogger
 from apps.projects.helpers import log_activity, paginate_start_length, page_to_json_response
 from apps.views_decorators import objects_exists, user_has_access
-
-
-logger = logging.getLogger('upload')
 
 
 @login_required
@@ -62,6 +58,7 @@ def __get_files_list(request):
 
 
 def __process_file(file, directory, user):
+    old_file_name = file.name
     file.name = clean_name(file.name)
     file_object = None
     upload_status = {'file_name': file.name, 'uploaded': False, 'migrated': False, 'message': None}
@@ -70,9 +67,12 @@ def __process_file(file, directory, user):
         file_object = upload_file(file, directory.project, user, directory.id)
         upload_status.update({'uploaded': True})
 
+        FilesManagementLogger().log_uploading_file(file_object.project.id, user.id, old_file_name, file_object.id)
+
         xml_content, content_updated, message = __update_file_content(file_object)
 
         if content_updated:
+            old_file_id = file_object.id
             file_object = __update_file_object(xml_content, file_object, user)
 
             clone_db_objects(file_object)
@@ -81,12 +81,16 @@ def __process_file(file, directory, user):
 
             log_activity(directory.project, user, f"File migrated: {message} ", file_object)
 
+            FilesManagementLogger().log_migrating_file(old_file_id, file_object.id, message)
+
         return upload_status
 
     except (BadRequest, FileExistsError) as exception:
         if file_object:
             __remove_file(file_object)
         upload_status.update({'uploaded': False, 'migrated': False, 'message': str(exception)})
+
+        FilesManagementLogger.log_uploading_file_error(old_file_name, str(exception))
 
         return upload_status
 
@@ -299,16 +303,22 @@ def create_directory(request, directory_id, name):  # type: (HttpRequest, int, s
 def delete(request, **kwargs):
     if request.method != 'DELETE':
         return HttpResponseBadRequest("Only delete method is allowed here")
+
     if 'directory_id' in kwargs:
         # TODO: create `Directory` object method from `delete_directory_with_contents_fake()` function
 
         delete_directory_with_contents_fake(kwargs['directory_id'], request.user)
+
     elif 'file_id' in kwargs:
         file = File.objects.get(id=kwargs['file_id'], deleted=False)
         log_activity(project=file.project, user=request.user, action_text=f"deleted file {file.name}")
         file.delete_fake(request.user)
+
+        FilesManagementLogger().log_deleting_file(file.project.id, request.user.id, file.id)
+
     else:
         return HttpResponseBadRequest("Invalid arguments")
+
     return HttpResponse("OK")
 
 

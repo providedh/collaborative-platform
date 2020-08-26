@@ -8,7 +8,7 @@ from apps.views_decorators import objects_exists, user_has_access
 from .annotation_history_handler import AnnotationHistoryHandler
 
 
-logger = logging.getLogger('annotator')
+logger = logging.getLogger('close_reading')
 
 
 @login_required

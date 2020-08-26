@@ -7,8 +7,8 @@ from apps.files_management.models import File
 
 
 class AnnotatingBodyContent(models.Model):
-    file_symbol = models.CharField(max_length=255)
-    file_name = models.CharField(max_length=255)
+    room_symbol = models.CharField(max_length=255)
+    file = models.ForeignKey(File, on_delete=models.CASCADE)
     body_content = models.TextField()
 
 

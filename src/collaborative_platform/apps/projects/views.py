@@ -8,9 +8,10 @@ from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
 
-from apps.views_decorators import objects_exists, user_has_access
 from apps.core.models import Profile
 from apps.files_management.models import Directory
+from apps.views_decorators import objects_exists, user_has_access
+from apps.projects.loggers import ProjectsLogger
 
 from .forms import ContributorForm, ProjectEditForm
 from .models import Project, Contributor
@@ -117,12 +118,19 @@ def settings(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
 
                     contributor = Contributor(profile=form['profile'], project_id=project_id, permissions='RO', user=user)
 
+                contributor_id = contributor.user.id
+                old_permissions = contributor.permissions
+                new_permissions = form['permissions']
+
                 if form['DELETE']:
-                    if contributor.permissions == 'AD':
+                    if old_permissions == 'AD':
                         admins = Contributor.objects.filter(project_id=project_id, permissions='AD')
 
                         if len(admins) > 1 and contributor.id is not None:
                             contributor.delete()
+
+                            ProjectsLogger().log_removing_user_from_project(project_id, request.user.id, contributor_id)
+
                         else:
                             alert = {
                                 'type': 'warning',
@@ -134,8 +142,10 @@ def settings(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
                     elif contributor.id is not None:
                         contributor.delete()
 
-                elif contributor.permissions != form['permissions']:
-                    if contributor.permissions == 'AD':
+                        ProjectsLogger().log_removing_user_from_project(project_id, request.user.id, contributor_id)
+
+                elif old_permissions != new_permissions:
+                    if old_permissions == 'AD':
                         admins = Contributor.objects.filter(project_id=project_id, permissions='AD')
 
                         if not len(admins) > 1:
@@ -146,15 +156,24 @@ def settings(request, project_id):  # type: (HttpRequest, int) -> HttpResponse
                             }
                             alerts.append(alert)
                         else:
-                            contributor.permissions = form['permissions']
+                            contributor.permissions = new_permissions
                             contributor.save()
 
+                            ProjectsLogger().log_changing_user_permissions(project_id, request.user.id, contributor_id,
+                                                                           old_permissions, new_permissions)
+
                     else:
-                        contributor.permissions = form['permissions']
+                        contributor.permissions = new_permissions
                         contributor.save()
+
+                        ProjectsLogger().log_changing_user_permissions(project_id, request.user.id, contributor_id,
+                                                                       old_permissions, new_permissions)
 
                 elif contributor.id is None:
                     contributor.save()
+
+                    ProjectsLogger().log_adding_user_to_project(project_id, contributor.user.id, new_permissions,
+                                                                request.user.id)
 
             contributor_formset = ContributorFormset(instance=project)
 

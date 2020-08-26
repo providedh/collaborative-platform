@@ -1,22 +1,16 @@
 import json
-import logging
 
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 from channels.layers import get_channel_layer
 
-from django.contrib.auth.models import User
-
+from apps.close_reading.loggers import CloseReadingLogger
+from apps.close_reading.models import Operation, RoomPresence
 from apps.close_reading.request_handler import RequestHandler
 from apps.close_reading.response_generator import ResponseGenerator
 from apps.exceptions import BadRequest, Forbidden, NotModified
 from apps.files_management.models import File
 from apps.projects.models import Contributor, Project
-
-from .models import Operation, RoomPresence
-
-
-logger = logging.getLogger('annotator')
 
 
 class AnnotatorConsumer(WebsocketConsumer):
@@ -43,7 +37,7 @@ class AnnotatorConsumer(WebsocketConsumer):
             self.__check_if_project_exist()
             self.__get_file_from_db()
             self.__check_if_user_is_contributor()
-            # self.scope['user'] = User.objects.get(id=2)      # For testing
+            # self.scope['user'] = User.objects.get(id=2)      # For manual testing
 
             self.__add_user_to_room_group()
             self.__add_user_to_presence_table()
@@ -81,7 +75,7 @@ class AnnotatorConsumer(WebsocketConsumer):
             raise BadRequest(f"File with id: {self.__file_id} doesn't exist.")
 
     def __check_if_user_is_contributor(self):
-        contributor = Contributor.objects.filter(project_id=self.__project_id, user_id=self.scope['user'].pk)
+        contributor = Contributor.objects.filter(project_id=self.__project_id, user_id=self.scope['user'].id)
 
         if not contributor:
             raise Forbidden(f"You aren't contributor in project with id: {self.__project_id}.")
@@ -92,7 +86,7 @@ class AnnotatorConsumer(WebsocketConsumer):
             self.channel_name
         )
 
-        logger.info(f"User: '{self.scope['user'].username}' join to room group: '{self.__room_group_name}'")
+        CloseReadingLogger().log_adding_user_to_room_group(self.scope['user'].id, self.__room_group_name)
 
     def __add_user_to_presence_table(self):
         room_presence, created = RoomPresence.objects.get_or_create(
@@ -103,7 +97,7 @@ class AnnotatorConsumer(WebsocketConsumer):
 
         room_presence.save()
 
-        logger.info(f"User: '{self.scope['user'].username}' added to 'room_presence' table")
+        CloseReadingLogger().log_adding_user_to_room_presence_table(self.scope['user'].id)
 
     def disconnect(self, code):
         self.__remove_user_from_room_group()
@@ -124,7 +118,7 @@ class AnnotatorConsumer(WebsocketConsumer):
                 self.channel_name
             )
 
-            logger.info(f"User: '{self.scope['user'].username}' left room group: '{self.__room_group_name}'")
+            CloseReadingLogger().log_removing_user_from_room_group(self.scope['user'].id, self.__room_group_name)
 
     def __remove_user_from_presence_table(self):
         if self.scope['user'].pk is not None:
@@ -136,20 +130,21 @@ class AnnotatorConsumer(WebsocketConsumer):
             for presence in room_presences:
                 presence.delete()
 
-            logger.info(f"User: '{self.scope['user'].username}' removed from 'room_presence' table")
+            CloseReadingLogger().log_removing_user_from_room_presence_table(self.scope['user'].id)
 
     def __count_remain_users(self):
         remain_users = RoomPresence.objects.filter(room_symbol=self.__room_name)
+        users_number = remain_users.count()
 
-        logger.info(f"In room: '{self.__room_name}' left: {len(remain_users)} users")
+        CloseReadingLogger().log_number_of_remaining_users_in_room(self.__room_name, users_number)
 
-        return len(remain_users)
+        return users_number
 
     def __count_pending_operations(self):
         operations = Operation.objects.filter(file_id=self.__file_id)
         operations_number = operations.count()
 
-        logger.info(f"File with id: {self.__file_id} have {operations_number} pending operations")
+        CloseReadingLogger().log_number_of_remaining_operations_for_file(self.__file_id, operations_number)
 
         return operations_number
 
@@ -164,7 +159,7 @@ class AnnotatorConsumer(WebsocketConsumer):
             try:
                 # TODO: Add request validator
 
-                logger.info(f"Get request from user: '{self.scope['user'].username}' with content: '{text_data}'")
+                CloseReadingLogger().log_request(self.scope['user'].id, text_data)
 
                 request = self.__parse_text_data(text_data)
 
@@ -195,11 +190,13 @@ class AnnotatorConsumer(WebsocketConsumer):
             except BadRequest as error:
                 self.__send_error(400, error)
 
-            except Exception:
+            except Exception as exception:
+                CloseReadingLogger().log_unhandled_exception(self.scope['user'].id, str(exception))
+
                 self.__send_error(500, "Unhandled exception.")
 
     def __update_users_presence(self):
-        if self.scope['user'].pk is not None:
+        if self.scope['user'].id is not None:
             room_presences = RoomPresence.objects.filter(
                 room_symbol=self.__room_name,
                 user=self.scope['user'],
@@ -228,10 +225,9 @@ class AnnotatorConsumer(WebsocketConsumer):
                 }
             )
 
-        user_names = ', '.join([f"'{presence.user.username}'" for presence in room_presences])
+        users_ids = list(room_presences.values_list('user_id', flat=True))
 
-        logger.info(f"Content of file: '{self.__file.name}' updated with request from user: "
-                    f"'{self.scope['user'].username}' was sent to users: {user_names}")
+        CloseReadingLogger().log_correct_response(self.__file_id, self.scope['user'].id, users_ids)
 
     def __send_error(self, code, message):
         response = {
@@ -243,7 +239,7 @@ class AnnotatorConsumer(WebsocketConsumer):
         response = json.dumps(response)
         self.send(text_data=response)
 
-        logger.exception(f"Send response to user: '{self.scope['user'].username}' with content: '{response}'")
+        CloseReadingLogger().log_error_response(self.scope['user'].id, response)
 
     def xml_modification(self, event):
         message = event['message']

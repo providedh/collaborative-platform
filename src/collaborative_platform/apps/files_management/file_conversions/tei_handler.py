@@ -17,7 +17,7 @@ from .recognized_types import FileType, XMLType
 from .white_chars_corrector import WhiteCharsCorrector
 from .xml_formatter import XMLFormatter
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('files_management')
 
 
 class TeiHandler:
@@ -76,9 +76,7 @@ class TeiHandler:
 
                 self.__text_utf_8 = recognize_results.unicode_markup
 
-            except Exception as ex:
-                logger.info("Text encoding searching: {}".format(ex))
-
+            except Exception:
                 return self.__migration_needed, self.__is_tei_p5_unprefixed
 
         entities_decoder = EntitiesDecoder()
