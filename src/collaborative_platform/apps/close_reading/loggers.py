@@ -52,6 +52,10 @@ class CloseReadingLogger:
         self.__logger.exception(f"Request from user with id: {user_id} caused unhandled "
                                 f"exception: {exception_message}")
 
-    def log_pruning_body_content(self, file_id, room_symbol):
+    def log_loading_body_content(self, file_id, version_nr, room_symbol):
+        self.__logger.info(f"Content of <body> element of file with id: {file_id} in version: {version_nr} "
+                           f"was loaded to room {room_symbol}")
+
+    def log_removing_body_content(self, file_id, room_symbol):
         self.__logger.info(f"Content of <body> element of file with id: '{file_id}' was removed from "
                            f"room: '{room_symbol}'")

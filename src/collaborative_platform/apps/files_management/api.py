@@ -72,6 +72,7 @@ def __process_file(file, directory, user):
         xml_content, content_updated, message = __update_file_content(file_object)
 
         if content_updated:
+            old_file_id = file_object.id
             file_object = __update_file_object(xml_content, file_object, user)
 
             clone_db_objects(file_object)
@@ -80,12 +81,16 @@ def __process_file(file, directory, user):
 
             log_activity(directory.project, user, f"File migrated: {message} ", file_object)
 
+            FilesManagementLogger().log_migrating_file(old_file_id, file_object.id, message)
+
         return upload_status
 
     except (BadRequest, FileExistsError) as exception:
         if file_object:
             __remove_file(file_object)
         upload_status.update({'uploaded': False, 'migrated': False, 'message': str(exception)})
+
+        FilesManagementLogger.log_uploading_file_error(old_file_name, str(exception))
 
         return upload_status
 

@@ -42,4 +42,4 @@ def prune_orphaned_annotating_body_contents():
         if body_content.room_symbol not in active_room_symbols and not operations:
             body_content.delete()
 
-            CloseReadingLogger().log_pruning_body_content(body_content.file.id, body_content.room_symbol)
+            CloseReadingLogger().log_removing_body_content(body_content.file.id, body_content.room_symbol)
