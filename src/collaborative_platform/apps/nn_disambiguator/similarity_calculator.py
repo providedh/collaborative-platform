@@ -1,6 +1,8 @@
 import itertools
-from typing import List
+import sys
+from typing import List, Tuple
 
+from lxml import etree
 from sklearn.exceptions import NotFittedError
 from sklearn.neural_network import MLPClassifier
 from sklearn.preprocessing import StandardScaler
@@ -10,12 +12,14 @@ from apps.api_vis.models import EntityVersion, EntityProperty, Entity
 from apps.nn_disambiguator import names, time, geography
 from apps.nn_disambiguator.models import Classifier
 from apps.projects.models import EntitySchema, Project
+from collaborative_platform import settings
 from collaborative_platform.settings import DEFAULT_ENTITIES
 import spacy
 
 
 class SimilarityCalculator:
     nlp = spacy.load('en_core_web_lg')
+    namespaces = settings.XML_NAMESPACES
 
     processing_functions: {
         TypeChoice.str: {
@@ -119,6 +123,33 @@ class SimilarityCalculator:
 
         return sims
 
+    def __calculate_files_creation_dates_and_places(self, e1v: EntityVersion, e2v: EntityVersion) -> Tuple[int, float]:
+        def get_date_and_place(ev):
+            et = etree.fromstring(ev.file_version.get_raw_content())
+            creation = et.xpath(".//tei:creation", namespaces=self.namespaces)
+            if creation:
+                creation = creation[0]
+            else:
+                return sys.maxsize, sys.maxsize
+
+            place = ' '.join(map(str.strip, creation.itertext())).strip()
+
+            date = creation.xpath("tei:date", namspaces=self.namespaces)
+            if date:
+                date = date[0]
+            else:
+                return sys.maxsize, place
+
+            return date.get("when"), place
+
+        d1, p1 = get_date_and_place(e1v)
+        d2, p2 = get_date_and_place(e2v)
+
+        dt = time.days_apart(d1, d2)
+        distance = geography.names_to_distance(p1, p2) if p1 and p2 else sys.maxsize
+
+        return dt, distance
+
     def get_features_vector(self, e1: Entity, e2: Entity) -> List[float]:
         e1lv = e1.versions.latest('id')
         e2lv = e2.versions.latest('id')
@@ -130,5 +161,8 @@ class SimilarityCalculator:
 
         other_entities_sims = self.__calculate_other_entities_avg_similarity(e1lv, e2lv, files_sim)
         sims.extend(other_entities_sims)
+
+        files_features = self.__calculate_files_creation_dates_and_places(e1lv, e2lv)
+        sims.extend(files_features)
 
         return sims
