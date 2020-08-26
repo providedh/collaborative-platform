@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 from celery import shared_task
 from datetime import datetime, timezone
 
-from apps.loggers import CloseReadingLogger
+from apps.close_reading.loggers import CloseReadingLogger
 
 from .models import AnnotatingBodyContent, Operation, RoomPresence
 

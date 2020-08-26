@@ -4,16 +4,13 @@ from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 from channels.layers import get_channel_layer
 
-from django.contrib.auth.models import User
-
+from apps.close_reading.loggers import CloseReadingLogger
+from apps.close_reading.models import Operation, RoomPresence
 from apps.close_reading.request_handler import RequestHandler
 from apps.close_reading.response_generator import ResponseGenerator
 from apps.exceptions import BadRequest, Forbidden, NotModified
 from apps.files_management.models import File
-from apps.loggers import CloseReadingLogger
 from apps.projects.models import Contributor, Project
-
-from .models import Operation, RoomPresence
 
 
 class AnnotatorConsumer(WebsocketConsumer):

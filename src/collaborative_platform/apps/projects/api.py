@@ -9,7 +9,7 @@ from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, HttpR
 
 from apps.files_management.helpers import clean_name
 from apps.files_management.models import Directory
-from apps.loggers import ProjectsLogger
+from apps.projects.loggers import ProjectsLogger
 from apps.projects.helpers import page_to_json_response, include_contributors, log_activity, paginate_start_length, \
     get_contributors_list
 from apps.views_decorators import objects_exists, user_has_access

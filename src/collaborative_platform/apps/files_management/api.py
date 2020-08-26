@@ -16,7 +16,7 @@ from apps.files_management.file_conversions.tei_handler import TeiHandler
 from apps.files_management.helpers import clean_name, create_uploaded_file_object_from_string, \
     delete_directory_with_contents_fake, get_directory_content, include_user, overwrite_file, upload_file
 from apps.files_management.models import Directory, File, FileVersion
-from apps.loggers import FilesManagementLogger
+from apps.files_management.loggers import FilesManagementLogger
 from apps.projects.helpers import log_activity, paginate_start_length, page_to_json_response
 from apps.views_decorators import objects_exists, user_has_access
 

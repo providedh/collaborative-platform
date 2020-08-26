@@ -11,7 +11,7 @@ from django.utils.decorators import method_decorator
 from apps.core.models import Profile
 from apps.files_management.models import Directory
 from apps.views_decorators import objects_exists, user_has_access
-from apps.loggers import ProjectsLogger
+from apps.projects.loggers import ProjectsLogger
 
 from .forms import ContributorForm, ProjectEditForm
 from .models import Project, Contributor
