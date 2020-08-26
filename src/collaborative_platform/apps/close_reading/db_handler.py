@@ -137,8 +137,8 @@ class DbHandler:
             certainty.save()
 
         elif parameter_name == 'certainty':
-            cert = parameters.get('certainty')
-            certainty.cert = cert
+            certainty_attribute = parameters.get('certainty')
+            certainty.certainty = certainty_attribute
             certainty.save()
 
         elif parameter_name == 'asserted_value':
