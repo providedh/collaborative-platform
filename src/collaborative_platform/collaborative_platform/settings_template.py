@@ -306,6 +306,7 @@ SOCIAL_AUTH_RAISE_EXCEPTIONS = False
 # XML namespaces
 XML_NAMESPACES = {
     'default': 'http://www.tei-c.org/ns/1.0',
+    'tei': 'http://www.tei-c.org/ns/1.0',
     'xml': 'http://www.w3.org/XML/1998/namespace',
     'xi': 'http://www.w3.org/2001/XInclude',
 }
