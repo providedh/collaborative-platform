@@ -30,7 +30,6 @@ def close_reading(request, project_id, file_id):  # type: (HttpRequest, int, int
         'origin_url': origin_url,
         'project_id': project.id,
         'file_id': file.id,
-        'file_version': file.version_number,
         'title': file.name,
         'preferences': json.dumps(preferences),
         'DEVELOPMENT': False,
