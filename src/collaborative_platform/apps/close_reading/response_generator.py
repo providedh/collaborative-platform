@@ -59,6 +59,7 @@ class ResponseGenerator:
         return body_content
 
     def get_response(self, user_id):
+        file_version = self.__get_file_version_nr()
         authors = self.__get_authors()
         operations = self.__get_operations(user_id)
         certainties = self.__get_certainties()
@@ -70,6 +71,7 @@ class ResponseGenerator:
         response = {
             'status': 200,
             'message': 'OK',
+            'file_version': file_version,
             'authors': authors,
             'operations': operations,
             'certainties': certainties,
@@ -80,6 +82,12 @@ class ResponseGenerator:
         response = json.dumps(response)
 
         return response
+
+    def __get_file_version_nr(self):
+        file_version = self.__file.file_versions.order_by('-number')[0]
+        file_version_nr = file_version.number
+
+        return file_version_nr
 
     def __get_authors(self):
         authors = self.__get_authors_from_db()
