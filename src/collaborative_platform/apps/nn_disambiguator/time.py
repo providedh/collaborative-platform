@@ -1,5 +1,4 @@
 import re
-import sys
 from typing import Optional, Union
 from datetime import datetime
 import maya

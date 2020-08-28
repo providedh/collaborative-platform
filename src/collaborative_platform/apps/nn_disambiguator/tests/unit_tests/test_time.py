@@ -1,8 +1,6 @@
 from datetime import timedelta
-
-import pytest
-
 from apps.nn_disambiguator.time import *
+import pytest
 
 
 class TestTime:
