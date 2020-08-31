@@ -1,6 +1,6 @@
 #!/bin/bash
-docker-compose stop
-docker system prune --volumes
+docker-compose stop web elasticsearch redis postgres
+docker system prune --volumes -f
 sudo rm -f src/collaborative_platform/apps/*/migrations/0*.py
 docker-compose build
 docker-compose run web python src/collaborative_platform/manage.py makemigrations
