@@ -36,7 +36,7 @@ class DbHandler:
         entity = self.__get_entity_from_db(entity_xml_id)
 
         try:
-            self.__check_if_entity_is_saved(entity_xml_id)
+            self.check_if_entity_is_saved(entity_xml_id)
 
         except UnsavedElement:
             self.__clean_up_entity(entity)
@@ -598,7 +598,7 @@ class DbHandler:
 
         return entity
 
-    def __check_if_entity_is_saved(self, entity_xml_id):
+    def check_if_entity_is_saved(self, entity_xml_id):
         entity = self.__get_entity_from_db(entity_xml_id)
 
         if entity.created_in_file_version is None:
@@ -829,8 +829,8 @@ class DbHandler:
 
         return operations
 
-    def add_operation(self, operation, operation_result):
-        Operation.objects.get_or_create(
+    def add_operation(self, operation, operation_result, dependencies_ids):
+        operation, created = Operation.objects.get_or_create(
             user=self.__user,
             file=self.__file,
             method=operation['method'],
@@ -841,7 +841,9 @@ class DbHandler:
             operation_result=operation_result,
         )
 
-    def update_operation(self, operation, operation_result):
+        operation.dependencies.add(*dependencies_ids)
+
+    def update_operation(self, operation, operation_result, dependencies_ids):
         try:
             operation = Operation.objects.get(
                 user=self.__user,
@@ -853,6 +855,13 @@ class DbHandler:
 
             operation.operation_result = operation_result
             operation.save()
+
+            dependencies = operation.dependencies.all()
+
+            for dependency in dependencies:
+                operation.dependencies.remove(dependency)
+
+            operation.dependencies.add(*dependencies_ids)
 
         except Operation.DoesNotExist:
             pass
@@ -898,3 +907,21 @@ class DbHandler:
         log_text = f"created version number {new_file_version.number} of"
 
         log_activity(self.__file.project, self.__user, log_text, self.__file)
+
+    def get_operation_id_that_created_tag(self, tag_xml_id):
+        operation = Operation.objects.get(
+            file=self.__file,
+            method='POST',
+            operation_result=tag_xml_id,
+        )
+
+        return operation.id
+
+    def get_operation_id_that_created_entity(self, entity_xml_id):
+        operation = Operation.objects.get(
+            file=self.__file,
+            method='POST',
+            operation_result=entity_xml_id
+        )
+
+        return operation.id

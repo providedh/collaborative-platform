@@ -49,7 +49,7 @@ class XmlHandler:
         text = self.add_tag(text, start_pos, end_pos, temp_xml_id)
 
         try:
-            self.__check_if_tag_is_saved(text, tag_xml_id)
+            self.check_if_tag_is_saved(text, tag_xml_id)
 
         except UnsavedElement:
             # remove old tag
@@ -82,7 +82,7 @@ class XmlHandler:
         return text, saved
 
     def delete_tag(self, text, tag_xml_id):
-        self.__check_if_tag_is_saved(text, tag_xml_id)
+        self.check_if_tag_is_saved(text, tag_xml_id)
 
         attributes = {
             'deleted': 'true',
@@ -529,7 +529,7 @@ class XmlHandler:
 
         return text
 
-    def __check_if_tag_is_saved(self, text, tag_xml_id):
+    def check_if_tag_is_saved(self, text, tag_xml_id):
         tree = etree.fromstring(text)
         element = self.get_xml_element(tree, tag_xml_id)
         saved = element.attrib.get('saved')

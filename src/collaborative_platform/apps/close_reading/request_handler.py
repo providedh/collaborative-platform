@@ -65,11 +65,12 @@ class RequestHandler:
                 raise BadRequest(f"There is no operation matching to this request")
 
             operation_result = self.__operations_results[-1]
+            dependencies_ids = self.__find_dependencies(operation, operation_result)
 
             if element_saved:
-                self.__db_handler.add_operation(operation, operation_result)
+                self.__db_handler.add_operation(operation, operation_result, dependencies_ids)
             else:
-                self.__db_handler.update_operation(operation, operation_result)
+                self.__db_handler.update_operation(operation, operation_result, dependencies_ids)
 
     def discard_changes(self, operations_ids):
         operations = self.__db_handler.get_operations_from_db(operations_ids)
@@ -905,3 +906,28 @@ class RequestHandler:
             new_tag_xml_id = None
 
         return new_tag_xml_id
+
+    def __find_dependencies(self, operation, operation_result):
+        dependencies_ids = []
+
+        if operation['element_type'] == 'reference':
+            tag_xml_id = operation['edited_element_id']
+            entity_xml_id = operation_result
+            body_content = self.__db_handler.get_body_content()
+
+            try:
+                self.__xml_handler.check_if_tag_is_saved(body_content, tag_xml_id)
+
+            except UnsavedElement:
+                operation_id = self.__db_handler.get_operation_id_that_created_tag(tag_xml_id)
+                dependencies_ids.append(operation_id)
+
+            if 'new_element_id' in operation and operation['new_element_id'] is not None:
+                try:
+                    self.__db_handler.check_if_entity_is_saved(entity_xml_id)
+
+                except UnsavedElement:
+                    operation_id = self.__db_handler.get_operation_id_that_created_entity(entity_xml_id)
+                    dependencies_ids.append(operation_id)
+
+        return dependencies_ids

@@ -165,9 +165,18 @@ class ResponseGenerator:
             'operation_result',
         ]
 
-        operations = [model_to_dict(operation, fields=fields) for operation in operations]
+        operations_serialized = []
 
-        return operations
+        for operation in operations:
+            operation_serialized = model_to_dict(operation, fields=fields)
+            dependencies_ids = operation.dependencies.values_list('id', flat=True)
+            dependencies_ids = list(dependencies_ids)
+
+            operation_serialized.update({'dependencies': dependencies_ids})
+
+            operations_serialized.append(operation_serialized)
+
+        return operations_serialized
 
     def __get_certainties(self):
         certainties = self.__get_certainties_from_db()
