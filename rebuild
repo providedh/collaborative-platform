@@ -2,6 +2,8 @@
 docker-compose stop web elasticsearch redis postgres
 docker system prune --volumes -f
 sudo rm -f src/collaborative_platform/apps/*/migrations/0*.py
+sudo rm -f media/uploaded_files/*
+sudo rm -f media/NN_Models/*
 docker-compose build
 docker-compose run web python src/collaborative_platform/manage.py makemigrations
 docker-compose run web python src/collaborative_platform/manage.py makemigrations
