@@ -2,8 +2,28 @@
   background-color: white;
   line-height: 2.3em;
   min-height: 80vh;
+  margin-top: 0 !important;
 }
 
 .document *{
   line-height: 2.3em;
+}
+
+.entityListContainer{
+  width: calc(100% - 1rem);
+  background: var(--light);
+  margin-bottom: 0!important;
+}
+
+.entityListContainer li {
+  list-style: none;
+}
+
+.icon{
+   font-family: "Font Awesome 5 Free";
+   display: inline-block;
+   padding-right: 3px;
+   vertical-align: middle;
+   font-weight: 900;
+   content: attr(dataicon)
 }

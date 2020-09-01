@@ -1,8 +1,8 @@
-export default function defState (fileId, fileName, fileVersion, user, configuration, websocket) {
+export default function defState (fileId, fileName, user, configuration, websocket) {
   return {
     fileId,
     fileName,
-    fileVersion,
+    fileVersion: '',
     documentContent: '',
 
     selection: null,

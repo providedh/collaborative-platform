@@ -208,18 +208,38 @@ function processEntitiesInDocument (raw, entities, annotations, conf) {
     entityDetails.push(details)
   })
 
-  unlistableTags.forEach(tag => {
-    const details = processTag(tag)
+  // Unlistable entities
+  unlistableTags
+    .filter(tag => {const {id, ref} = processTag(tag); return(id.value === ref.value)})
+    .forEach(tag => {
+      const details = processTag(tag)
 
-    details.target = details.ref
-    details.type = tag.tagName
-    details.annotations = processAnnotations(annotations, [details.target.value.slice(1)])
-    details.properties = conf[tag.tagName].properties
-      .map(attr => processTagAttribute(attr, tag))
-      .filter(attr => attr.status !== OperationStatus.null)
+      details.target = details.ref
+      details.type = tag.tagName
+      details.annotations = processAnnotations(annotations, [details.target.value.slice(1)])
+      details.properties = conf[tag.tagName].properties
+        .map(attr => processTagAttribute(attr, tag))
+        .filter(attr => attr.status !== OperationStatus.null)
 
-    entityDetails.push(details)
-  })
+      entityDetails.push(details)
+    })
+
+  // Tags refferring to unlistable entities
+  unlistableTags
+    .filter(tag => {const {id, ref} = processTag(tag); return(id.value !== ref.value)})
+    .forEach(tag => {
+      const details = processTag(tag)
+      const referredList = entityDetails.filter(d => d.id.value === details.ref.value)
+      if (referredList.length === 0) { console.err(tag.id.value+' refers to a non-existent entity'); return }
+
+      const referred = referredList[0]
+      details.target = details.ref
+      details.type = tag.tagName
+      details.annotations = referred.annotations
+      details.properties = referred.properties
+
+      entityDetails.push(details)
+    })
 
   return entityDetails
 }

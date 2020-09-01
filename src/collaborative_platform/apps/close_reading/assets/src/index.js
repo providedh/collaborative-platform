@@ -8,7 +8,6 @@ const appConfig = {
   projectId: window.project_id,
   user: '#' + window.user_id,
   fileId: window.file_id,
-  fileVersion: window.file_version,
   fileName: window.file_name,
   configuration: window.preferences
 }

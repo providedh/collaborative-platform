@@ -7,6 +7,7 @@ import { WithAppContext } from 'common/context/app'
 import styles from './document.module.css'
 import useContentRendering from './content'
 import Toolbar from './toolbar.js'
+import EntityList from './entity_list.js'
 
 export default function DocumentWithContext (props) {
   return (
@@ -89,12 +90,41 @@ function Document (props) {
   if (renderCertainty.value === true) cssClasses.push('renderCertainty')
   if (colorCertainty.value === true) cssClasses.push('colorCertainty')
 
+  const listableEntities = Object.entries(props.context.configuration.entities)
+    .map(([type, conf]) => ({...conf, type}))
+    .filter(e => e.listable === true)
+    .map(({type}) => ({
+      type,
+      key: type,
+      entities: props.context.entities.filter(e => e.type === type),
+      conf: props.context.configuration.entities[type]
+    }))
+
+  const entityLists = listableEntities.map(x => <EntityList {...x}/>)
+  
+  const entityListCss = [
+    styles.entityListContainer,
+    entityLists.length === 0 ? 'd-none' : '',
+    'border',
+    'border-bottom-0',
+    'border-primary',
+    'm-2',
+    'p-2',
+    'rounded'
+  ]
+
   return <React.Fragment>
     <Toolbar
       renderEntities={renderEntities}
       colorEntities={colorEntities}
       renderCertainty={renderCertainty}
       colorCertainty={colorCertainty}/>
+    <div className={entityListCss.join(' ')}>
+      <span className="text-primary">Entities present in this document</span>
+      <span className="text-secondary">
+        {entityLists}
+      </span>
+    </div>
     <div
       id="document"
       ref={ref}

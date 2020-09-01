@@ -66,7 +66,8 @@ def get_categories(project) -> dict:
 def get_entities(project) -> dict:
     entities = {entity.name: {
         'color': entity.color,
-        'icon': entity.icon
+        'icon': entity.icon,
+        'listable': entity.body_list,
     } for entity in project.taxonomy.entities.all()}
 
     return entities
