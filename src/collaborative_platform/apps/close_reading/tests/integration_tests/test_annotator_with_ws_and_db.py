@@ -4118,6 +4118,16 @@ class TestAnnotatorWithWsAndDb:
         response = await communicator.receive_json_from()
         verify_response(test_name, response, request_nr)
 
+        request = {
+            'method': 'save',
+            'payload': [2]
+        }
+        request_nr = 1
+
+        await communicator.send_json_to(request)
+        response = await communicator.receive_json_from()
+        verify_response(test_name, response, request_nr)
+
         await communicator.disconnect()
 
     async def test_discarding_operations_when_dependency_is_discarded(self):
