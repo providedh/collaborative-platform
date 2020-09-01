@@ -5,8 +5,6 @@ from datetime import datetime
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import QuerySet, Q
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 
 from apps.index_and_search.content_extractor import ContentExtractor
 from apps.projects.models import Project, ProjectVersion
@@ -267,6 +265,3 @@ class FileMaxXmlIds(models.Model):
 
         return xml_id_number
 
-# @receiver(post_save, sender=FileVersion)
-# def update_fileversion_text(sender, instance, created, **kwargs):
-#     instance.body_text = ContentExtractor().tei_contents_to_text(self.get_raw_content())
