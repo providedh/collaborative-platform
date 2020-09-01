@@ -1,0 +1,2 @@
+#!/bin/bash
+docker-compose run web python src/collaborative_platform/manage.py loaddata fixtures/$1.json
