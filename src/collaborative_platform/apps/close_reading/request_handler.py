@@ -218,10 +218,15 @@ class RequestHandler:
 
         tag_xml_id = request['edited_element_id']
         tag_xml_id = self.__update_target_xml_id(tag_xml_id)
-        entity_xml_id = request.get('new_element_id')
 
         if tag_xml_id != request['edited_element_id']:
             request['edited_element_id'] = tag_xml_id
+
+        entity_xml_id = request.get('new_element_id')
+        entity_xml_id = self.__update_target_xml_id(entity_xml_id)
+
+        if 'new_element_id' in request and entity_xml_id != request['new_element_id']:
+            request['new_element_id'] = entity_xml_id
 
         try:
             entity_type = request['parameters']['entity_type']
@@ -447,6 +452,11 @@ class RequestHandler:
 
     def __add_entity_property(self, request):
         entity_xml_id = request['edited_element_id']
+        entity_xml_id = self.__update_target_xml_id(entity_xml_id)
+
+        if entity_xml_id != request['edited_element_id']:
+            request['edited_element_id'] = entity_xml_id
+
         entity_property = request['parameters']
         entity_type = self.__db_handler.get_entity_type(entity_xml_id)
 
@@ -872,7 +882,10 @@ class RequestHandler:
         self.__db_handler.finish_creating_new_file_version(new_file_version, new_xml_content)
 
     def __update_target_xml_id(self, target):
-        if isinstance(target, int):
+        if target is None:
+            new_target = target
+
+        elif isinstance(target, int):
             new_target = self.__operations_results[target]
 
         elif '@' in target:
