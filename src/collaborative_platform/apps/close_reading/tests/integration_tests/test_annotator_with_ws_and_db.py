@@ -3775,6 +3775,237 @@ class TestAnnotatorWithWsAndDb:
 
         assert result_xml == expected_xml
 
+    async def test_adding_dependencies_to_operations(self):
+        test_name = inspect.currentframe().f_code.co_name
+
+        project_id = 1
+        file_id = 1
+        user_id = 2
+
+        communicator = get_communicator(project_id, file_id, user_id)
+
+        await communicator.connect()
+        await communicator.receive_json_from()
+
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'POST',
+                    'element_type': 'tag',
+                    'parameters': {
+                        'start_pos': 265,
+                        'end_pos': 271,
+                    }
+                }
+            ]
+        }
+        request_nr = 0
+
+        await communicator.send_json_to(request)
+        response = await communicator.receive_json_from()
+        verify_response(test_name, response, request_nr)
+
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'POST',
+                    'element_type': 'tag',
+                    'parameters': {
+                        'start_pos': 405,
+                        'end_pos': 409,
+                    }
+                }
+            ]
+        }
+        request_nr = 1
+
+        await communicator.send_json_to(request)
+        response = await communicator.receive_json_from()
+        verify_response(test_name, response, request_nr)
+
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'POST',
+                    'element_type': 'reference',
+                    'edited_element_id': 'ab-1',
+                    'parameters': {
+                        'entity_type': 'person',
+                        'entity_properties': {
+                            'forename': 'Bugs',
+                            'surname': 'Bunny',
+                            'sex': 'M'
+                        }
+                    }
+                }
+            ]
+        }
+        request_nr = 2
+
+        await communicator.send_json_to(request)
+        response = await communicator.receive_json_from()
+        verify_response(test_name, response, request_nr)
+
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'POST',
+                    'element_type': 'reference',
+                    'edited_element_id': 'ab-2',
+                    'new_element_id': 'person-6'
+                }
+            ]
+        }
+        request_nr = 3
+
+        await communicator.send_json_to(request)
+        response = await communicator.receive_json_from()
+        verify_response(test_name, response, request_nr)
+
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'POST',
+                    'element_type': 'entity_property',
+                    'edited_element_id': 'person-6',
+                    'parameters': {
+                        'age': 'adult'
+                    }
+                }
+            ]
+        }
+        request_nr = 4
+
+        await communicator.send_json_to(request)
+        response = await communicator.receive_json_from()
+        verify_response(test_name, response, request_nr)
+
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'POST',
+                    'element_type': 'certainty',
+                    'new_element_id': 'ab-2',
+                    'parameters': {
+                        'categories': ['ignorance', 'incompleteness'],
+                        'locus': 'value',
+                        'certainty': 'low',
+                        'description': 'Test'
+                    }
+                }
+            ]
+        }
+        request_nr = 5
+
+        await communicator.send_json_to(request)
+        response = await communicator.receive_json_from()
+        verify_response(test_name, response, request_nr)
+
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'POST',
+                    'element_type': 'certainty',
+                    'new_element_id': 'ab-2@ref',
+                    'parameters': {
+                        'categories': ['ignorance', 'incompleteness'],
+                        'locus': 'value',
+                        'certainty': 'low',
+                        'description': 'Test'
+                    }
+                }
+            ]
+        }
+        request_nr = 6
+
+        await communicator.send_json_to(request)
+        response = await communicator.receive_json_from()
+        verify_response(test_name, response, request_nr)
+
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'POST',
+                    'element_type': 'certainty',
+                    'new_element_id': 'person-6',
+                    'parameters': {
+                        'categories': ['ignorance', 'incompleteness'],
+                        'locus': 'name',
+                        'certainty': 'low',
+                        'description': 'Test'
+                    }
+                }
+            ]
+        }
+        request_nr = 7
+
+        await communicator.send_json_to(request)
+        response = await communicator.receive_json_from()
+        verify_response(test_name, response, request_nr)
+
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'POST',
+                    'element_type': 'certainty',
+                    'new_element_id': 'person-6/age',
+                    'parameters': {
+                        'categories': ['ignorance', 'incompleteness'],
+                        'locus': 'value',
+                        'certainty': 'low',
+                        'description': 'Test'
+                    }
+                }
+            ]
+        }
+        request_nr = 8
+
+        await communicator.send_json_to(request)
+        response = await communicator.receive_json_from()
+        verify_response(test_name, response, request_nr)
+
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'POST',
+                    'element_type': 'certainty',
+                    'new_element_id': 'certainty-5',
+                    'parameters': {
+                        'categories': ['ignorance', 'incompleteness'],
+                        'locus': 'value',
+                        'certainty': 'low',
+                        'description': 'Test'
+                    }
+                }
+            ]
+        }
+        request_nr = 9
+
+        await communicator.send_json_to(request)
+        response = await communicator.receive_json_from()
+        verify_response(test_name, response, request_nr)
+
+        await communicator.disconnect()
+
+    async def test_removing_dependencies_from_operations_after_dependency_is_saved(self):
+        pass
+
+    async def test_discarding_operations_when_dependency_is_discarded(self):
+        pass
+
+    async def test_forbid_accepting_operation_when_dependencies_are_not_saved(self):
+        pass
+
 
 def get_communicator(project_id, file_id, user_id=None):
     communicator = WebsocketCommunicator(

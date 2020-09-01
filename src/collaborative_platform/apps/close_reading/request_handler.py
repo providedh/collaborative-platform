@@ -1,3 +1,4 @@
+from apps.close_reading.enums import ElementTypes
 from apps.close_reading.db_handler import DbHandler
 from apps.close_reading.response_generator import get_listable_entities_types
 from apps.close_reading.xml_handler import XmlHandler
@@ -65,11 +66,17 @@ class RequestHandler:
                 raise BadRequest(f"There is no operation matching to this request")
 
             operation_result = self.__operations_results[-1]
-            dependencies_ids = self.__find_dependencies(operation, operation_result)
+            dependencies_ids = []
 
             if element_saved:
+                if operation['method'] == 'POST':
+                    dependencies_ids = self.__find_dependencies(operation, operation_result)
+
                 self.__db_handler.add_operation(operation, operation_result, dependencies_ids)
             else:
+                if operation['method'] == 'PUT':
+                    dependencies_ids = self.__find_dependencies(operation, operation_result, modification=True)
+
                 self.__db_handler.update_operation(operation, operation_result, dependencies_ids)
 
     def discard_changes(self, operations_ids):
@@ -907,7 +914,7 @@ class RequestHandler:
 
         return new_tag_xml_id
 
-    def __find_dependencies(self, operation, operation_result):
+    def __find_dependencies(self, operation, operation_result, modification=False):
         dependencies_ids = []
 
         if operation['element_type'] == 'reference':
@@ -928,6 +935,77 @@ class RequestHandler:
 
                 except UnsavedElement:
                     operation_id = self.__db_handler.get_operation_id_that_created_entity(entity_xml_id)
+                    dependencies_ids.append(operation_id)
+
+        elif operation['element_type'] == 'entity_property':
+            entity_xml_id = operation['edited_element_id']
+
+            try:
+                self.__db_handler.check_if_entity_is_saved(entity_xml_id)
+
+            except UnsavedElement:
+                operation_id = self.__db_handler.get_operation_id_that_created_entity(entity_xml_id)
+                dependencies_ids.append(operation_id)
+
+        elif operation['element_type'] == 'certainty':
+            if not modification:
+                certainty_target = operation['new_element_id']
+                locus = operation['parameters']['locus']
+
+            else:
+                certainty_target = operation['edited_element_id']
+                locus = self.__db_handler.get_certainty_locus(certainty_target)
+
+            certainty_target = self.__update_target_xml_id(certainty_target)
+
+            target_type = self.__db_handler.get_certainty_target_type(certainty_target, locus)
+            target, match = self.__db_handler.get_certainty_target_and_match(certainty_target, target_type)
+
+            if target_type == ElementTypes.text:
+                body_content = self.__db_handler.get_body_content()
+
+                try:
+                    self.__xml_handler.check_if_tag_is_saved(body_content, target)
+
+                except UnsavedElement:
+                    operation_id = self.__db_handler.get_operation_id_that_created_tag(target)
+                    dependencies_ids.append(operation_id)
+
+            elif target_type == ElementTypes.reference:
+                body_content = self.__db_handler.get_body_content()
+
+                try:
+                    self.__xml_handler.check_if_reference_is_saved(body_content, target)
+
+                except UnsavedElement:
+                    operation_id = self.__db_handler.get_operation_id_that_created_reference(target)
+                    dependencies_ids.append(operation_id)
+
+            elif target_type == ElementTypes.entity_type:
+                try:
+                    self.__db_handler.check_if_entity_is_saved(target)
+
+                except UnsavedElement:
+                    operation_id = self.__db_handler.get_operation_id_that_created_entity(target)
+                    dependencies_ids.append(operation_id)
+
+            elif target_type == ElementTypes.entity_property:
+                property_name = certainty_target.split('/')[-1]
+
+                try:
+                    self.__db_handler.check_if_entity_property_is_saved(target, property_name)
+
+                except UnsavedElement:
+                    operation_id = self.__db_handler.get_operation_id_that_created_entity_property(target,
+                                                                                                   property_name)
+                    dependencies_ids.append(operation_id)
+
+            elif target_type == ElementTypes.certainty:
+                try:
+                    self.__db_handler.check_if_certainty_is_saved(target)
+
+                except UnsavedElement:
+                    operation_id = self.__db_handler.get_operation_id_that_created_certainty(target)
                     dependencies_ids.append(operation_id)
 
         return dependencies_ids

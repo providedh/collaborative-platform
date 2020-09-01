@@ -78,7 +78,7 @@ class DbHandler:
         return property_id, saved
 
     def delete_entity_property(self, entity_xml_id, property_name):
-        self.__check_if_entity_property_is_saved(entity_xml_id, property_name)
+        self.check_if_entity_property_is_saved(entity_xml_id, property_name)
 
         entity_version = self.__get_entity_version_from_db(entity_xml_id)
 
@@ -87,8 +87,8 @@ class DbHandler:
     def add_certainty(self, certainty_target, parameters):
         locus = parameters['locus']
 
-        target_type = self.__get_certainty_target_type(certainty_target, locus)
-        target, match = self.__get_certainty_target_and_match(certainty_target, target_type)
+        target_type = self.get_certainty_target_type(certainty_target, locus)
+        target, match = self.get_certainty_target_and_match(certainty_target, target_type)
 
         xml_id = self.get_next_xml_id('certainty')
 
@@ -155,8 +155,8 @@ class DbHandler:
             certainty_target = parameters['new_element_id']
             locus = parameters['locus']
 
-            target_type = self.__get_certainty_target_type(certainty_target, locus)
-            target, match = self.__get_certainty_target_and_match(certainty_target, target_type)
+            target_type = self.get_certainty_target_type(certainty_target, locus)
+            target, match = self.get_certainty_target_and_match(certainty_target, target_type)
 
             certainty.target_xml_id = target
             certainty.target_match = match
@@ -666,7 +666,7 @@ class DbHandler:
 
         return entity_property
 
-    def __check_if_entity_property_is_saved(self, entity_xml_id, property_name):
+    def check_if_entity_property_is_saved(self, entity_xml_id, property_name):
         entity_property = self.__get_entity_property_from_db(entity_xml_id, property_name, saved=True)
 
         if not entity_property:
@@ -699,6 +699,12 @@ class DbHandler:
             raise ValueError("Value for 'saved' argument not provided")
 
         return certainty
+
+    def check_if_certainty_is_saved(self, certainty_xml_id):
+        certainty = self.__get_certainty_from_db(certainty_xml_id, saved=True)
+
+        if not certainty:
+            raise UnsavedElement
 
     def __get_file_version(self):
         version_number = self.__file.version_number
@@ -761,7 +767,7 @@ class DbHandler:
         return match
 
     @staticmethod
-    def __get_certainty_target_type(certainty_target, locus):
+    def get_certainty_target_type(certainty_target, locus):
         if 'certainty-' in certainty_target:
             target_type = ElementTypes.certainty
         elif '/' in certainty_target:
@@ -777,7 +783,7 @@ class DbHandler:
 
         return target_type
 
-    def __get_certainty_target_and_match(self, certainty_target, target_type):
+    def get_certainty_target_and_match(self, certainty_target, target_type):
         if target_type == ElementTypes.text:
             target = certainty_target
             match = None
@@ -818,6 +824,16 @@ class DbHandler:
             raise BadParameters("There is no 'target' and 'match' matching to given parameters")
 
         return target, match
+
+    def get_certainty_locus(self, certainty_xml_id):
+        saved = False
+        certainty = self.__get_certainty_from_db(certainty_xml_id, saved)
+
+        if not certainty:
+            saved = True
+            certainty = self.__get_certainty_from_db(certainty_xml_id, saved)
+
+        return certainty.locus
 
     def get_operations_from_db(self, operations_ids):
         operations = Operation.objects.filter(
@@ -921,7 +937,47 @@ class DbHandler:
         operation = Operation.objects.get(
             file=self.__file,
             method='POST',
+            new_element_id__isnull=True,
             operation_result=entity_xml_id
+        )
+
+        return operation.id
+
+    def get_operation_id_that_created_reference(self, tag_xml_id):
+        operation = Operation.objects.get(
+            file=self.__file,
+            method='POST',
+            element_type='reference',
+            edited_element_id=tag_xml_id
+        )
+
+        return operation.id
+
+    def get_operation_id_that_created_entity_property(self, entity_xml_id, property_name):
+        try:
+            operation = Operation.objects.get(
+                file=self.__file,
+                method='POST',
+                element_type='entity_property',
+                operation_result=f'{entity_xml_id}/{property_name}'
+            )
+
+        except Operation.DoesNotExist:
+            operation = Operation.objects.get(
+                file=self.__file,
+                method='POST',
+                new_element_id__isnull=True,
+                operation_result=entity_xml_id
+            )
+
+        return operation.id
+
+    def get_operation_id_that_created_certainty(self, certainty_xml_id):
+        operation = Operation.objects.get(
+            file=self.__file,
+            method='POST',
+            element_type='certainty',
+            operation_result=certainty_xml_id
         )
 
         return operation.id
