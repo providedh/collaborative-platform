@@ -107,7 +107,7 @@ function EntitySelector (props) {
           <small className="text-muted">{x.type}</small>
         </div>
         <ul>
-          {x.properties.map(p => <li key={p.name}><b>{p.name}:</b>{p.value}</li>)}
+          {x.properties.map((p, i) => <li key={i}><b>{p.name}:</b>{p.value}</li>)}
         </ul>
       </a>)
 
