@@ -15,14 +15,13 @@ export default class App extends React.Component {
   constructor (props) {
     super(props)
 
-    const { projectId, user, fileId, fileVersion, fileName, configuration } = props
+    const { projectId, user, fileId, fileName, configuration } = props
 
     TEIentities.update(configuration.properties_per_entity)
     this.socket = websocket.socket(projectId, fileId)
     this.state = defState(
       fileId,
       fileName,
-      fileVersion,
       user,
       configuration,
       this.socket
@@ -55,6 +54,7 @@ export default class App extends React.Component {
       newState.context.authors = response.authors
       newState.context.annotations = response.certainties
       newState.context.operations = response.operations
+      newState.fileVersion = '' + response.file_version
 
       const entities = Object
         .values(response.entities_lists)
@@ -137,7 +137,6 @@ App.propTypes = {
   projectId: PropTypes.string,
   user: PropTypes.string,
   fileId: PropTypes.string,
-  fileVersion: PropTypes.string,
   fileName: PropTypes.string,
   configuration: PropTypes.object
 }
