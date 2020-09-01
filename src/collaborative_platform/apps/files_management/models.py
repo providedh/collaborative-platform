@@ -5,6 +5,8 @@ from datetime import datetime
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import QuerySet, Q
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 from apps.index_and_search.content_extractor import ContentExtractor
 from apps.projects.models import Project, ProjectVersion
@@ -209,10 +211,11 @@ class FileVersion(models.Model):
         unique_together = ("file", "number")
 
     def get_raw_content(self):
-        self.upload.open(mode='r')
-        content = self.upload.read()
-        self.upload.close()
-        return content
+        if self.upload:
+            self.upload.open(mode='r')
+            content = self.upload.read()
+            self.upload.close()
+            return content
 
     def get_raw_content_binary(self):
         self.upload.open(mode='rb')
@@ -231,10 +234,16 @@ class FileVersion(models.Model):
     def save(self, *args, **kwargs):
         from apps.projects.helpers import create_new_project_version
 
-        created = self.pk is None
-        super(FileVersion, self).save(*args, **kwargs)
+        try:
+            self.upload.open('r')
+        except ValueError:
+            pass
+        else:
+            self.upload.seek(0)
+            raw_content = self.upload.read()
+            self.body_text = ContentExtractor().tei_contents_to_text(raw_content)
 
-        self.body_text = ContentExtractor().tei_contents_to_text(self.get_raw_content())
+        created = self.pk is None
         super(FileVersion, self).save(*args, **kwargs)
 
         if created:
@@ -254,3 +263,7 @@ class FileMaxXmlIds(models.Model):
         self.save()
 
         return xml_id_number
+
+# @receiver(post_save, sender=FileVersion)
+# def update_fileversion_text(sender, instance, created, **kwargs):
+#     instance.body_text = ContentExtractor().tei_contents_to_text(self.get_raw_content())
