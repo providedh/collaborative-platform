@@ -82,6 +82,7 @@ function EntitySelector (props) {
     <input type="text"
       className="form-control form-control-sm"
       id={name}
+      type={name !== 'when' ? 'text' : 'date'}
       value={value}
       onChange={e => handleAttributeChange(Object.assign({}, attributes, { [name]: e.target.value }))} />
   </div>)

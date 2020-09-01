@@ -102,6 +102,7 @@ function Attributes (props) {
           <label htmlFor="value">{editingAttribute?.name}</label>
           <input type="text"
             className="form-control form-control-sm"
+            type={editingAttribute?.name !== 'when' ? 'text' : 'date'}
             onChange={e => edit({ name: editingAttribute?.name, value: e.target.value })}
             value={editingAttribute === null ? '' : editingAttribute.value}/>
         </div>
