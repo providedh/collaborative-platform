@@ -48,14 +48,23 @@ function onEvent (event, dataClient, context) {
 
 // ...rest has both the levels and the injected context prop
 export default function Map ({ layout, renderedItems, ...rest }) {
-  const [mainMapRef, miniMapRef] = [useRef(), useRef()]
+  const [mainMapRef, miniMapRef, miniMapOverlayRef] = [useRef(), useRef(), useRef()]
   const [width, height] = layout !== undefined ? [layout.w, layout.h] : [4, 4]
   const { context } = rest
 
   const dataClient = useState(DataClient())[0]
   useCleanup(dataClient)
   const data = null //useData(dataClient, renderedItems)
-  useRender(width, height, data, renderedItems, context.taxonomy, mainMapRef, miniMapRef, e => onEvent(e, dataClient, context))
+  useRender(
+    width, 
+    height, 
+    data, 
+    renderedItems, 
+    context.taxonomy, 
+    mainMapRef.current, 
+    miniMapRef.current, 
+    miniMapOverlayRef.current,
+    e => onEvent(e, dataClient, context))
 
   console.info('rendering')
 
@@ -66,6 +75,9 @@ export default function Map ({ layout, renderedItems, ...rest }) {
       </div>
       <div className={styles.minimap + ' mapMinimap'}>
         <canvas ref={miniMapRef}/>
+      </div>
+      <div className={styles.minimap + ' mapMinimap'}>
+        <canvas ref={miniMapOverlayRef}/>
       </div>
       <span>123 place entities could not be positioned: <i>geocoordinates</i> property missing.</span>
     </div>
