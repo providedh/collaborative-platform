@@ -24,7 +24,8 @@
     "prop-types": "^15.7.2",
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
-    "react-grid-layout": "^0.17.1"
+    "react-grid-layout": "^0.17.1",
+    "topojson-client": "^3.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.7.4",

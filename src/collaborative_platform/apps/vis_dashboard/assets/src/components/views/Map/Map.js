@@ -48,18 +48,26 @@ function onEvent (event, dataClient, context) {
 
 // ...rest has both the levels and the injected context prop
 export default function Map ({ layout, renderedItems, ...rest }) {
-  const containerRef = useRef()
+  const [mainMapRef, miniMapRef] = [useRef(), useRef()]
   const [width, height] = layout !== undefined ? [layout.w, layout.h] : [4, 4]
   const { context } = rest
 
   const dataClient = useState(DataClient())[0]
   useCleanup(dataClient)
   const data = null //useData(dataClient, renderedItems)
-  useRender(width, height, data, renderedItems, context.taxonomy, containerRef, e => onEvent(e, dataClient, context))
+  useRender(width, height, data, renderedItems, context.taxonomy, mainMapRef, miniMapRef, e => onEvent(e, dataClient, context))
+
+  console.info('rendering')
 
   return (
-    <div className={styles.map + ' Map'} ref={containerRef}>
-      
+    <div className={styles.map + ' mapVis'}>
+      <div className={styles.mainMap}>
+        <canvas ref={mainMapRef}/>
+      </div>
+      <div className={styles.minimap + ' mapMinimap'}>
+        <canvas ref={miniMapRef}/>
+      </div>
+      <span>123 place entities could not be positioned: <i>geocoordinates</i> property missing.</span>
     </div>
   )
 }
