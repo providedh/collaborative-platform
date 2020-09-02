@@ -1,3 +1,5 @@
+import copy
+
 from django.db.models import Q
 from django.forms.models import model_to_dict
 
@@ -835,15 +837,49 @@ class DbHandler:
 
         return certainty.locus
 
+    def get_operations(self, operations_ids, with_dependent=False, from_latest=False):
+        operations = self.get_operations_from_db(operations_ids)
+
+        if with_dependent:
+            operations = self.add_dependent_operations(operations)
+
+        operations = [model_to_dict(operation) for operation in operations]
+        operations = self.__sort_operations(operations, from_latest=from_latest)
+
+        return operations
+
     def get_operations_from_db(self, operations_ids):
         operations = Operation.objects.filter(
             user=self.__user,
             id__in=operations_ids
         ).order_by('id')
 
-        operations = [model_to_dict(operation) for operation in operations]
-
         return operations
+
+    @staticmethod
+    def add_dependent_operations(operations):
+        old_operations = set()
+        new_operations = set(operations)
+
+        while old_operations != new_operations:
+            old_operations = copy.deepcopy(new_operations)
+            new_operations = set()
+
+            for operation in old_operations:
+                new_operations.add(operation)
+
+                dependent_operations = operation.operation_set.all()
+                new_operations.update(dependent_operations)
+
+        new_operations = list(new_operations)
+
+        return new_operations
+
+    @staticmethod
+    def __sort_operations(operations, from_latest=False):
+        sorted_operations = sorted(operations, key=lambda k: k['id'], reverse=from_latest)
+
+        return sorted_operations
 
     def add_operation(self, operation, operation_result, dependencies_ids):
         operation, created = Operation.objects.get_or_create(

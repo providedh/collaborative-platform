@@ -80,7 +80,7 @@ class RequestHandler:
                 self.__db_handler.update_operation(operation, operation_result, dependencies_ids)
 
     def discard_changes(self, operations_ids):
-        operations = self.__db_handler.get_operations_from_db(operations_ids)
+        operations = self.__db_handler.get_operations(operations_ids, with_dependent=True, from_latest=True)
 
         for operation in operations:
             if operation['element_type'] == 'tag':
@@ -122,7 +122,7 @@ class RequestHandler:
             self.__db_handler.delete_operation(operation_id)
 
     def save_changes(self, operations_ids):
-        operations = self.__db_handler.get_operations_from_db(operations_ids)
+        operations = self.__db_handler.get_operations(operations_ids)
         new_file_version = self.__start_saving_file()
 
         for operation in operations:
