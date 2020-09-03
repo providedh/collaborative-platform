@@ -106,24 +106,30 @@ export default function Map () {
     return c[0] >= w && c[0] <= e ? [[w, s], [e, n]] : [[w, s], [e + 360, n]];
   }
 
-  function renderVisible () {
-    const b = getBounds(self._mainMap.projection);
+  function updateBounds (projection) {
+    const b = getBounds(self._mainMap.projection)
     
     const x0 = Math.min(b[0][0], b[1][0])
     const x1 = Math.max(b[0][0], b[1][0])
     const y0 = Math.max(b[0][1], b[1][1])
     const y1 = Math.min(b[0][1], b[1][1])
 
+    self._bounds = {x0, y0, x1, y1}
+  }
+
+  function renderVisible () {
+    updateBounds(self._mainMap.projection)
+
     const viewportAreaPath = {
       type: "LineString",
       coordinates: [
-        [x0, y0],
-        [(x0 + x1)/2, y0],
-        [x1, y0],
-        [x1, y1],
-        [(x0 + x1)/2, y1],
-        [x0, y1],
-        [x0, y0],
+        [self._bounds.x0, self._bounds.y0],
+        [(self._bounds.x0 + self._bounds.x1)/2, self._bounds.y0],
+        [self._bounds.x1, self._bounds.y0],
+        [self._bounds.x1, self._bounds.y1],
+        [(self._bounds.x0 + self._bounds.x1)/2, self._bounds.y1],
+        [self._bounds.x0, self._bounds.y1],
+        [self._bounds.x0, self._bounds.y0],
       ]
     }
 
@@ -178,8 +184,8 @@ export default function Map () {
     const freeVspace = height - (self._padding * 2)
     const freeHspace = width - (self._padding * 2)
     const freeVisVspace = (freeVspace - (self._legendHeight + self._mapAxisHeight)) / 2
-    const mainMapRadius = Math.min(2*(width/3) - width*.1, height - 30)
-    const miniMapWidth = width / 3
+    const mainMapRadius = Math.min(2*(width/3) - width*.1, height - 30) - 10
+    const miniMapWidth = Math.min(Math.max(220, (width / 3)), 350) - 10
 
     return {height, width, freeVspace, freeHspace, mainMapRadius, miniMapWidth}
   }
@@ -197,7 +203,7 @@ export default function Map () {
       }))
   }
 
-  function render (data, dimension, mainMapRef, miniMapRef, miniMapOverlayRef) {
+  function render (data, dimension, mainMapRef, miniMapRef, miniMapOverlayRef, tableRef) {
     if (mainMapRef === undefined) { return }
     const bboxes = getDimensions(mainMapRef.parentElement.parentElement)
 
@@ -241,15 +247,24 @@ export default function Map () {
       .attr('width', self._mainMap.width)
 
     self._miniMap.selection
+      .style('top', '10px')
+      .style('right', '10px')
       .attr('height', self._miniMap.height)
       .attr('width', self._miniMap.width)
 
     self._miniMapOverlay.selection
+      .style('top', '10px')
+      .style('right', '10px')
       .attr('height', self._miniMapOverlay.height)
       .attr('width', self._miniMapOverlay.width)
 
+    d3.select(tableRef)
+      .style('top', (self._miniMapOverlay.height + 20) + 'px')
+      .style('height', (bboxes.height - self._miniMapOverlay.height - 30) + 'px')
+
     renderMap(self._mainMap, self._assets.highResWorld)
     renderMap(self._miniMap, self._assets.lowResWorld, false)
+    updateBounds(self._mainMap.projection)
     renderVisible()
     setupInteractions()
   }

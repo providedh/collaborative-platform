@@ -48,7 +48,7 @@ function onEvent (event, dataClient, context) {
 
 // ...rest has both the levels and the injected context prop
 export default function Map ({ layout, renderedItems, ...rest }) {
-  const [mainMapRef, miniMapRef, miniMapOverlayRef] = [useRef(), useRef(), useRef()]
+  const [mainMapRef, miniMapRef, miniMapOverlayRef, tableRef] = [useRef(), useRef(), useRef(), useRef()]
   const [width, height] = layout !== undefined ? [layout.w, layout.h] : [4, 4]
   const { context } = rest
 
@@ -64,9 +64,8 @@ export default function Map ({ layout, renderedItems, ...rest }) {
     mainMapRef.current, 
     miniMapRef.current, 
     miniMapOverlayRef.current,
+    tableRef.current,
     e => onEvent(e, dataClient, context))
-
-  console.info('rendering')
 
   return (
     <div className={styles.map + ' mapVis'}>
@@ -75,11 +74,61 @@ export default function Map ({ layout, renderedItems, ...rest }) {
       </div>
       <div className={styles.minimap + ' mapMinimap'}>
         <canvas ref={miniMapRef}/>
+        <div ref={tableRef} className={styles.locationTable}>
+          <table  className="table table-hover table-sm table-bordered">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Long</th>
+                <th scope="col">Lat</th>
+                <th scope="col">Document</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">date-1</th>
+                <td>120ª</td>
+                <td>-43ª</td>
+                <td>dep_0012432</td>
+              </tr>
+              <tr>
+                <th scope="row">date-2</th>
+                <td>120ª</td>
+                <td>-43ª</td>
+                <td>dep_0012432</td>
+              </tr>
+              <tr>
+                <th scope="row">date-3</th>
+                <td>120ª</td>
+                <td>-43ª</td>
+                <td>dep_0012432</td>
+              </tr>
+              <tr>
+                <th scope="row">date-4</th>
+                <td>120ª</td>
+                <td>-43ª</td>
+                <td>dep_0012432</td>
+              </tr>
+              <tr>
+                <th scope="row">date-5</th>
+                <td>120ª</td>
+                <td>-43ª</td>
+                <td>dep_0012432</td>
+              </tr>
+              <tr>
+                <th scope="row">date-6</th>
+                <td>120ª</td>
+                <td>-43ª</td>
+                <td>dep_0012432</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
       <div className={styles.minimap + ' mapMinimap'}>
         <canvas ref={miniMapOverlayRef}/>
       </div>
-      <span>123 place entities could not be positioned: <i>geocoordinates</i> property missing.</span>
+      <span>123 place entities with <i>geocoordinates</i> property missing.</span>
     </div>
   )
 }
