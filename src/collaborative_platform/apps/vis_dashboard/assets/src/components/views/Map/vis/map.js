@@ -5,6 +5,7 @@ import * as topojson from "topojson-client"
 import versor from './jake_low_versor.js'
 import highResWorld from './land-50m.json'
 import lowResWorld from './land-110m.json'
+import zoom from './versor_zooming'
 
 const d3 = Object.assign({}, d3_, d3Legend)
 
@@ -35,7 +36,7 @@ export default function Map () {
     self.setTaxonomy = getParameterSetter('_taxonomy')
 
     // It takes at least 150 ms for the DOM to update and have the elements rendered
-    self.render = (...args) => setTimeout(() => render(...args), 300)
+    self.render = (...args) => setTimeout(() => render(...args), 500)
 
     const canvasConf = {width: null, height: null, projection: null, d3path: null}
     self._mainMap = {...canvasConf}
@@ -112,25 +113,28 @@ export default function Map () {
   }
 
   function setupInteractions () {
-    let v0, q0, r0;
+    function zoomed(args) {
+      const { k, x, y } = currentEvent;
+      const scale = self._mainMap.projection._scale === undefined
+        ? (self._mainMap.projection._scale = self._mainMap.projection.scale())
+        : self._mainMap.projection._scale
 
-    function dragstarted() {
-      v0 = versor.cartesian(self._mainMap.projection.invert(d3.mouse(this)))
-      q0 = versor(r0 = self._mainMap.projection.rotate())
-    }
-
-    function dragged() {
-      const v1 = versor.cartesian(self._mainMap.projection.rotate(r0).invert(d3.mouse(this)));
-      const q1 = versor.multiply(q0, versor.delta(v0, v1));
-      self._mainMap.projection = self._mainMap.projection.rotate(versor.rotation(q1));
-
+      const translate = self._mainMap.projection
+        .translate()
+        .map(d => d / (self._mainMap.projection.scale() / scale))
+      self._mainMap.projection
+        .scale(k)
+        .translate([
+          translate[0] * (k / scale) + x,
+          translate[1] * (k / scale) + y
+        ]);
       renderMap(self._mainMap, self._assets.lowResWorld, false)
     }
 
-    self._mainMap.selection.call(d3.drag()
-      .on("start", dragstarted)
-      .on("drag", dragged)
-      .on("end", () => renderMap(self._mainMap, self._assets.highResWorld)))
+    self._mainMap.selection
+      .call(zoom(self._mainMap.projection)
+        .on("zoom.render", () => renderMap(self._mainMap, self._assets.lowResWorld, false))
+        .on("end.render", () => renderMap(self._mainMap, self._assets.highResWorld)))
   }
 
   function render (data, dimension, mainMapRef, miniMapRef, miniMapOverlayRef) {
