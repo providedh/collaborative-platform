@@ -63,9 +63,82 @@ export default function Map () {
     context.restore()
   }
 
+  function getBounds (projection) {
+    const path = d3.geoPath(projection),
+      sphere = path({ type: "Sphere" })
+        .replace(/^M|Z$/g, "")
+        .split(/L/)
+        .map(d => d.split(",").map(Number));
+    sphere.push(sphere[0]);
+    const coordinates = [];
+    for (const [p, q] of d3.pairs(sphere)) {
+      const D = Math.hypot(p[0], q[0], p[1] - q[1]),
+        pt = d3.interpolateArray(p, q);
+      for (let i = 0; i < D; i += 5) {
+        const r = projection.invert(pt(i / D));
+        coordinates.push([r[0] + 360, r[1]]);
+      }
+    }
+
+    let points = {
+        type: "MultiPoint",
+        coordinates: coordinates.map(d => [
+          ((d[0] + 360 + 180) % 360) - 180,
+          d[1]
+        ])
+      },
+      bb = d3.geoBounds(points),
+      [[w, s], [e, n]] = bb,
+      c = d3.geoCentroid(points);
+
+    // poles
+    if (path({ type: "Point", coordinates: [0, 90] })) {
+      n = 90;
+      e = w = 180;
+      c = 0;
+    }
+    if (path({ type: "Point", coordinates: [0, -90] })) {
+      s = -90;
+      e = w = 180;
+      c = 0;
+    }
+
+    return c[0] >= w && c[0] <= e ? [[w, s], [e, n]] : [[w, s], [e + 360, n]];
+  }
+
+  function renderVisible () {
+    const b = getBounds(self._mainMap.projection);
+    
+    const x0 = Math.min(b[0][0], b[1][0])
+    const x1 = Math.max(b[0][0], b[1][0])
+    const y0 = Math.max(b[0][1], b[1][1])
+    const y1 = Math.min(b[0][1], b[1][1])
+
+    const viewportAreaPath = {
+      type: "LineString",
+      coordinates: [
+        [x0, y0],
+        [(x0 + x1)/2, y0],
+        [x1, y0],
+        [x1, y1],
+        [(x0 + x1)/2, y1],
+        [x0, y1],
+        [x0, y0],
+      ]
+    }
+
+    //console.info(JSON.stringify(viewportAreaPath))
+
+    self._miniMapOverlay.context.clearRect(0, 0, self._miniMapOverlay.width, self._miniMapOverlay.height);
+    drawPathInMap( // 1. Outline
+      self._miniMapOverlay.context,
+      self._miniMapOverlay.d3path,
+      viewportAreaPath,
+      {fill: false, stroke: 'red', clip: true, lineWidth: 2})
+  }
+
   function renderMap (canvasConf, land, graticule = true) {
     canvasConf.context.clearRect(0, 0, canvasConf.width, canvasConf.height);
-      
     drawPathInMap( // 1. Outline
       canvasConf.context,
       canvasConf.d3path,
@@ -95,7 +168,7 @@ export default function Map () {
     const [[x0, y0], [x1, y1]] = d3.geoPath(projection.fitWidth(width, outlineShape)).bounds(outlineShape)
     const dy = Math.ceil(y1 - y0)
     const l = Math.min(Math.ceil(x1 - x0), dy)
-    projection.scale(projection.scale() * (l - 1) / l).precision(0.2)
+    projection.scale(projection.scale() * (l - 1) / l).precision(0.2).clipExtent([[x0, x0], [x1, y1]])
     return [projection, [width, dy]]
   }
 
@@ -107,34 +180,21 @@ export default function Map () {
     const freeVisVspace = (freeVspace - (self._legendHeight + self._mapAxisHeight)) / 2
     const mainMapRadius = Math.min(2*(width/3) - width*.1, height - 30)
     const miniMapWidth = width / 3
-    const miniMapClipExtent = [[0, 0], [width/3, width/3]]
 
-    return {height, width, freeVspace, freeHspace, mainMapRadius, miniMapWidth, miniMapClipExtent}
+    return {height, width, freeVspace, freeHspace, mainMapRadius, miniMapWidth}
   }
 
   function setupInteractions () {
-    function zoomed(args) {
-      const { k, x, y } = currentEvent;
-      const scale = self._mainMap.projection._scale === undefined
-        ? (self._mainMap.projection._scale = self._mainMap.projection.scale())
-        : self._mainMap.projection._scale
-
-      const translate = self._mainMap.projection
-        .translate()
-        .map(d => d / (self._mainMap.projection.scale() / scale))
-      self._mainMap.projection
-        .scale(k)
-        .translate([
-          translate[0] * (k / scale) + x,
-          translate[1] * (k / scale) + y
-        ]);
-      renderMap(self._mainMap, self._assets.lowResWorld, false)
-    }
-
     self._mainMap.selection
       .call(zoom(self._mainMap.projection)
-        .on("zoom.render", () => renderMap(self._mainMap, self._assets.lowResWorld, false))
-        .on("end.render", () => renderMap(self._mainMap, self._assets.highResWorld)))
+        .on("zoom.render", () => {
+          renderMap(self._mainMap, self._assets.lowResWorld, false)
+          renderVisible()
+        })
+        .on("end.render", () => {
+          renderMap(self._mainMap, self._assets.highResWorld)
+          renderVisible()
+      }))
   }
 
   function render (data, dimension, mainMapRef, miniMapRef, miniMapOverlayRef) {
@@ -145,7 +205,9 @@ export default function Map () {
       getProjectionAndDimensions(d3.geoOrthographic(), bboxes.mainMapRadius)
 
     const [miniMapProjection, [miniMapWidth, miniMapHeight]] = 
-      getProjectionAndDimensions(d3.geoEqualEarth().clipExtent(bboxes.miniMapClipExtent), bboxes.miniMapWidth)
+      getProjectionAndDimensions(d3.geoEqualEarth(), bboxes.miniMapWidth)
+
+
 
     self._mainMap = {
       selection: d3.select(mainMapRef),
@@ -188,6 +250,7 @@ export default function Map () {
 
     renderMap(self._mainMap, self._assets.highResWorld)
     renderMap(self._miniMap, self._assets.lowResWorld, false)
+    renderVisible()
     setupInteractions()
   }
 
