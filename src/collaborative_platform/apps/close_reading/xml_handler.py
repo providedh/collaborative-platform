@@ -49,7 +49,7 @@ class XmlHandler:
         text = self.add_tag(text, start_pos, end_pos, temp_xml_id)
 
         try:
-            self.__check_if_tag_is_saved(text, tag_xml_id)
+            self.check_if_tag_is_saved(text, tag_xml_id)
 
         except UnsavedElement:
             # remove old tag
@@ -82,7 +82,7 @@ class XmlHandler:
         return text, saved
 
     def delete_tag(self, text, tag_xml_id):
-        self.__check_if_tag_is_saved(text, tag_xml_id)
+        self.check_if_tag_is_saved(text, tag_xml_id)
 
         attributes = {
             'deleted': 'true',
@@ -110,7 +110,7 @@ class XmlHandler:
     def modify_reference_to_entity(self, text, tag_xml_id, new_entity_xml_id, old_entity_xml_id, new_tag=None,
                                    new_tag_xml_id=None):
         try:
-            self.__check_if_reference_is_saved(text, tag_xml_id, old_entity_xml_id)
+            self.check_if_reference_is_saved(text, tag_xml_id, old_entity_xml_id)
 
         except UnsavedElement:
             saved = False
@@ -140,7 +140,7 @@ class XmlHandler:
         return text, saved
 
     def delete_reference_to_entity(self, text, tag_xml_id, new_tag, new_tag_xml_id, entity_xml_id):
-        self.__check_if_reference_is_saved(text, tag_xml_id, entity_xml_id)
+        self.check_if_reference_is_saved(text, tag_xml_id, entity_xml_id)
 
         attributes = {
             f'{XML_ID_KEY}Added': f'{new_tag_xml_id}',
@@ -529,7 +529,7 @@ class XmlHandler:
 
         return text
 
-    def __check_if_tag_is_saved(self, text, tag_xml_id):
+    def check_if_tag_is_saved(self, text, tag_xml_id):
         tree = etree.fromstring(text)
         element = self.get_xml_element(tree, tag_xml_id)
         saved = element.attrib.get('saved')
@@ -537,13 +537,18 @@ class XmlHandler:
         if saved == 'false':
             raise UnsavedElement
 
-    def __check_if_reference_is_saved(self, text, tag_xml_id, entity_xml_id):
+    def check_if_reference_is_saved(self, text, tag_xml_id, entity_xml_id=None):
         tree = etree.fromstring(text)
         element = self.get_xml_element(tree, tag_xml_id)
-        reference_added = element.attrib.get('refAdded')
+        reference = element.attrib.get('ref')
 
-        if reference_added == f'#{entity_xml_id}':
-            raise UnsavedElement
+        if entity_xml_id:
+            if reference != f'#{entity_xml_id}':
+                raise UnsavedElement
+
+        else:
+            if not reference:
+                raise UnsavedElement
 
     def __check_if_property_is_saved(self, text, tag_xml_id, entity_property):
         tree = etree.fromstring(text)
