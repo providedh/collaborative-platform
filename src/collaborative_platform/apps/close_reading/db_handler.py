@@ -841,7 +841,7 @@ class DbHandler:
         operations = self.get_operations_from_db(operations_ids)
 
         if with_dependent:
-            operations = self.add_dependent_operations(operations)
+            operations = self.__add_dependent_operations(operations)
 
         operations = [model_to_dict(operation) for operation in operations]
         operations = self.__sort_operations(operations, from_latest=from_latest)
@@ -850,6 +850,7 @@ class DbHandler:
 
     def get_operations_from_db(self, operations_ids):
         operations = Operation.objects.filter(
+            file=self.__file,
             user=self.__user,
             id__in=operations_ids
         ).order_by('id')
@@ -857,7 +858,7 @@ class DbHandler:
         return operations
 
     @staticmethod
-    def add_dependent_operations(operations):
+    def __add_dependent_operations(operations):
         old_operations = set()
         new_operations = set(operations)
 
@@ -874,6 +875,17 @@ class DbHandler:
         new_operations = list(new_operations)
 
         return new_operations
+
+    def get_operation_dependencies_ids(self, operation_id):
+        operation = Operation.objects.get(
+            file=self.__file,
+            id=operation_id,
+        )
+        dependencies = operation.dependencies.all()
+        dependencies_ids = dependencies.values_list('id', flat=True)
+        dependencies_ids = list(dependencies_ids)
+
+        return dependencies_ids
 
     @staticmethod
     def __sort_operations(operations, from_latest=False):

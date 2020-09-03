@@ -123,6 +123,7 @@ class RequestHandler:
 
     def save_changes(self, operations_ids):
         operations = self.__db_handler.get_operations(operations_ids)
+        self.__verify_if_dependencies_will_be_saved(operations)
         new_file_version = self.__start_saving_file()
 
         for operation in operations:
@@ -1022,3 +1023,16 @@ class RequestHandler:
                     dependencies_ids.append(operation_id)
 
         return dependencies_ids
+
+    def __verify_if_dependencies_will_be_saved(self, operations):
+        operations_ids = [operation['id'] for operation in operations]
+
+        for operation_id in operations_ids:
+            dependencies_ids = self.__db_handler.get_operation_dependencies_ids(operation_id)
+
+            if dependencies_ids and not any(id in dependencies_ids for id in operations_ids):
+                dependencies_ids = [str(dependency_id) for dependency_id in dependencies_ids]
+                dependencies_ids = ', '.join(dependencies_ids)
+
+                raise BadRequest(f"Operation with id: {operation_id} cannot be saved, because dependent operations "
+                                 f"with ids: {dependencies_ids} have not been saved")
