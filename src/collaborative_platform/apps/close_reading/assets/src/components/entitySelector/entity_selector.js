@@ -93,11 +93,11 @@ function EntitySelector (props) {
   const refList = entities
     .filter(x => x.type === selectedEntity)
     .map(x =>
-      <a
-        key={x.target.value}
-        href="#"
-        onClick={() => handleRefChange(x.target.value)}
-        className={(x.target === ref ? 'bg-light text-body ' : 'text-black-50 ') + 'list-group-item list-group-item-action mb-0'}>
+      <button 
+          key={x.target.value} 
+          onClick={() => handleRefChange(x.target.value)} 
+          type="button" 
+          className={(x.target === ref ? 'bg-light text-body ' : 'text-black-50 ') + 'list-group-item list-group-item-action mb-0'}>
         <div className="d-flex w-100 justify-content-between">
           <h5 className="mb-1">
             <span className={styles.icon} style={{ color: style.color }} dataicon={icon}>
@@ -110,7 +110,7 @@ function EntitySelector (props) {
         <ul>
           {x.properties.map((p, i) => <li key={i}><b>{p.name}:</b>{p.value}</li>)}
         </ul>
-      </a>)
+      </button>)
 
   return <React.Fragment>
     <div className="row">
