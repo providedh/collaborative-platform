@@ -98,7 +98,7 @@ function EntityPanel (props) {
         </span>
         <span className={saved === true ? 'ml-4 text-danger' : 'd-none'}>
           <button type="button"
-            onClick={() => onDeleteClick(props.selection.target.id.value.slice(1), props.context.websocket)}
+            onClick={() => onDeleteClick(props.selection.target.id.value, props.context.websocket)}
             className="btn btn-link p-0 mx-1 text-danger">
             <u> -delete</u>
           </button>
