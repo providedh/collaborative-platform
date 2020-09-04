@@ -377,10 +377,10 @@ class RequestHandler:
         for entity in entities:
             serialized_entity = Serializer().serialize_entity(entity)
 
-            entity_name = self.__db_handler.get_entity_property(entity, project_version, 'name')
-            entity_name = entity_name.get_value(as_str=True)
+            entity_properties = self.__db_handler.get_entity_properties(entity, project_version)
+            serialized_properties = Serializer().serialize_properties(entity_properties)
 
-            serialized_entity.update({'name': entity_name})
+            serialized_entity.update({'properties': serialized_properties})
             serialized_entities.append(serialized_entity)
 
         return serialized_entities

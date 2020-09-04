@@ -311,6 +311,13 @@ class DbHandler:
 
         return property_version
 
+    def get_entity_properties(self, entity, project_version):
+        entity_version = self.__get_entity_version(entity, project_version)
+
+        properties_versions = entity_version.properties.all()
+
+        return properties_versions
+
     def get_project_version(self, project_version_nr, date):
         if project_version_nr:
             project_version = self.get_project_version_by_nr(project_version_nr)
