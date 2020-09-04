@@ -18,7 +18,37 @@
                 <button type="button" class="btn btn-success" data-toggle="modal" data-target="#createNewProject">Create new project</a>
               </div>
             </div>
-            <p><span class="d-md-block">You have no projects yet. Create a project with the button on the top right.</span><span class="d-md-block"> This feature allows you to search and quickly access your projects.</span></p>
+            <p>
+              <span class="d-md-block">Projects allow organizing your work an collaborating on related douments. </span>
+              <span class="d-md-block">Select an existing one or create a new project to start working the platform. </span>
+            </p>
+            <div id="no-projects-hint">
+              <div class="explanation">
+                <div>
+                  <p class="text-right mt-2">
+                    <span class="d-md-block">Looks like you don't have a project yet. </span>
+                    <span class="d-md-block">The platform provides tools for working on organized corpus through</span>
+                    <span class="d-md-block">projects, try creating one clicking on the green right-most button.  </span>
+                  </p>
+                  <hr/>
+                  <p class="d-flex justify-content-between mt-0 mb-0">
+                    <span>New to the platform? <br/> <button type="button" class="btn btn-link pl-0">See how it works.</button></span>
+                    <span>Haven't work with TEI before? <br/> 
+                      <a class="align-items-end btn btn-light d-inline-flex justify-content-between sampleFile" href="#" download>
+                        <img src="{% static 'projects/img/doc_icon.svg' %}">
+                        <span class="ml-3">
+                          Have a sample file <br/>
+                          <span class="text-muted">(Click to download)</span>
+                        </span>
+                      </a>
+                      <br/>
+                      Further read about the <br/> <a href="https://tei-c.org/"  target="blank">TEI initiative</a> and <a href="https://tei-c.org/guidelines/p5/" target="blank">P5 guidelines</a>
+                    </span>
+                  </p>
+                </div>
+              </div>
+              <span class="arrow">⤴</span>
+            </div>
             <div class="projects-table flex-fill p-md-5 pt-md-0">
               <div class="table-responsive projects-table__container">
                 <table js-listProjectsMine data-link-project="{% url 'projects:project_template' %}"  data-link-contributor="{% url 'user_template' %}" class="table m-0 table-hover table-striped">
