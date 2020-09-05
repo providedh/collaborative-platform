@@ -6,8 +6,39 @@
   z-index: 2;
   background: white;
 }
+#project-overlay .tl-arrow{
+  display: inline-block;
+  transform: rotateZ(165deg);
+  margin-top: -32px;
+  margin-left: 6px;
+}
+#project-overlay .tl-low-arrow{
+  display: inline-block;
+  transform: rotateZ(30deg);
+  margin-top: -12px;
+  margin-left: 35px;
+  position: absolute;
+  left: 16em;
+  top: -2em;
+}
+#details-arrow{
+  position: absolute;
+  left: 18em;
+  top: 5.3em;
+}
+#project-overlay .arrow span{
+  font-size: 3.3em;
+  color: var(--info);
+  font-weight: 600;
+}
 </style>
 <div id="project-overlay" class="container project">
+  <div id="links-arrow" class="arrow tl-low-arrow">
+    <span>⟵</span>
+  </div>
+  <div id="details-arrow" class="arrow">
+    <span>⇤</span>
+  </div>
   <div class="d-flex flex-column-reverse flex-md-row project__header">
     <div class=" project__content">
       <h1><i>Project name</i></h1>
@@ -34,6 +65,9 @@
           <h3 class="box__text--title">Files</h3>
         </div>
         <div class="box__content">
+          <div class="arrow tl-arrow">
+            <span>⤵</span>
+          </div>
         </div>
       </div>
     </div>
@@ -43,6 +77,9 @@
           <h3 class="box__text--title">Recent Activity</h3>
         </div>
         <div class="box__content">
+          <div class="arrow tl-arrow">
+            <span>⤵</span>
+          </div>
         </div>
       </div>
     </div>
