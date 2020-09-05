@@ -35,6 +35,16 @@
 #no-projects-hint .sampleFile .text-muted{
  font-size: .8em;
 }
+#no-projects-hint img{
+  width: 200px;
+  height: 200px;
+  display: block;
+}
+#no-projects-hint img.img-thumbnail:nth-of-type(2n) {
+    margin-left: 25%;
+    margin-top: -25%;
+    margin-bottom: 10%;
+}
 </style>
 <div id="no-projects-hint">
   <div class="explanation">
@@ -61,7 +71,7 @@
       </p>
 
       <!-- Modal -->
-      <div class="modal fade" id="platform-summary" tabindex="-1" aria-labelledby="platformLabel" aria-hidden="false">
+      <div class="modal fade show d-block" id="platform-summary" tabindex="-1" aria-labelledby="platformLabel" aria-hidden="false">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
@@ -78,35 +88,45 @@
                 corpus exploration, and <span>3)</span> Machine-learning assisted entity unification accross the
                 corpus.
               </p>
-              <p>
-                <ul>
-                  <li><span>PROJECTS</span> aggregate sets of documents within a shared configuration that
-                    includes:
-                      <ul>
-                        <li>Entity names, icons and color.</li>
-                        <li>The names (taxonomy) and color used to categorize uncertainty.</li>
-                      </ul>
-                  </li>
-                </ul>
-                <ul>
-                  <li><span>DASHBOARDS</span> aggregate sets of documents within a shared configuration that
-                    includes:
-                      <ul>
-                        <li>Entity names, icons and color.</li>
-                        <li>The names (taxonomy) and color used to categorize uncertainty.</li>
-                      </ul>
-                  </li>
-                </ul>
-                <ul>
-                  <li>The <span>DISAMBIGUATOR</span> aggregate sets of documents within a shared configuration that
-                    includes:
-                      <ul>
-                        <li>Entity names, icons and color.</li>
-                        <li>The names (taxonomy) and color used to categorize uncertainty.</li>
-                      </ul>
-                  </li>
-                </ul>
-              </p>
+              <div class="row">
+                <div class="col-8 col-md-7 col-sm-6">
+                  <p>
+                    <ul>
+                      <li><span>PROJECTS</span> aggregate sets of documents within a shared configuration that
+                        includes:
+                          <ul>
+                            <li>Entity names, icons and color.</li>
+                            <li>The names (taxonomy) and color used to categorize uncertainty.</li>
+                          </ul>
+                      </li>
+                    </ul>
+                    <ul>
+                      <li><span>DASHBOARDS</span> aggregate sets of documents within a shared configuration that
+                        includes:
+                          <ul>
+                            <li>Entity names, icons and color.</li>
+                            <li>The names (taxonomy) and color used to categorize uncertainty.</li>
+                          </ul>
+                      </li>
+                    </ul>
+                    <ul>
+                      <li>The <span>DISAMBIGUATOR</span> aggregate sets of documents within a shared configuration that
+                        includes:
+                          <ul>
+                            <li>Entity names, icons and color.</li>
+                            <li>The names (taxonomy) and color used to categorize uncertainty.</li>
+                          </ul>
+                      </li>
+                    </ul>
+                  </p>
+                </div>
+                <div class="col">
+                  <img src="..." width=200 height=200 alt="..." class="img-thumbnail">
+                  <img src="..." width=200 height=200 alt="..." class="img-thumbnail">
+                  <img src="..." width=200 height=200 alt="..." class="img-thumbnail">
+                  <img src="..." width=200 height=200 alt="..." class="img-thumbnail">
+                </div>
+              </div>  
             </div>
           </div>
         </div>
