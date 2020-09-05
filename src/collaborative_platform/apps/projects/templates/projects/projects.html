@@ -22,85 +22,8 @@
               <span class="d-md-block">Projects allow organizing your work an collaborating on related douments. </span>
               <span class="d-md-block">Select an existing one or create a new project to start working the platform. </span>
             </p>
-            <div id="no-projects-hint">
-              <div class="explanation">
-                <div>
-                  <p class="text-right mt-2">
-                    <span class="d-md-block">Looks like you don't have a project yet. </span>
-                    <span class="d-md-block">The platform provides tools for working on organized corpus through</span>
-                    <span class="d-md-block">projects, try creating one clicking on the green right-most button.  </span>
-                  </p>
-                  <hr/>
-                  <p class="d-flex justify-content-between mt-0 mb-0">
-                    <span>New to the platform? <br/> <button type="button" class="btn btn-link pl-0" data-toggle="modal" data-target="#platform-summary">See how it works.</button></span>
-                    <span>Haven't work with TEI before? <br/> 
-                      <a class="align-items-end btn btn-light d-inline-flex justify-content-between sampleFile" href="#" download>
-                        <img src="{% static 'projects/img/doc_icon.svg' %}">
-                        <span class="ml-3">
-                          Have a sample file <br/>
-                          <span class="text-muted">(Click to download)</span>
-                        </span>
-                      </a>
-                      <br/>
-                      Further read about the <br/> <a href="https://tei-c.org/"  target="blank">TEI initiative</a> and <a href="https://tei-c.org/guidelines/p5/" target="blank">P5 guidelines</a>
-                    </span>
-                  </p>
-
-                  <!-- Modal -->
-                  <div class="modal fade" id="platform-summary" tabindex="-1" aria-labelledby="platformLabel" aria-hidden="false">
-                    <div class="modal-dialog">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-title" id="platformLable">PROVIDEDH Collaborative Platform</h5>
-                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                          </button>
-                        </div>
-                        <div class="modal-body">
-                          <p>
-                            Your are using the PROVIDEDH Collaborative Platform.<br/>
-                            The platform provides the tools for working with TEI-formated XML documents, allowing for
-                            <span>1)</span> Collaboratory entity and uncertainty annotation, <span>2)</span> Collaborative
-                            corpus exploration, and <span>3)</span> Machine-learning assisted entity unification accross the
-                            corpus.
-                          </p>
-                          <p>
-                            <ul>
-                              <li><span>PROJECTS</span> aggregate sets of documents within a shared configuration that
-                                includes:
-                                  <ul>
-                                    <li>Entity names, icons and color.</li>
-                                    <li>The names (taxonomy) and color used to categorize uncertainty.</li>
-                                  </ul>
-                              </li>
-                            </ul>
-                            <ul>
-                              <li><span>DASHBOARDS</span> aggregate sets of documents within a shared configuration that
-                                includes:
-                                  <ul>
-                                    <li>Entity names, icons and color.</li>
-                                    <li>The names (taxonomy) and color used to categorize uncertainty.</li>
-                                  </ul>
-                              </li>
-                            </ul>
-                            <ul>
-                              <li>The <span>DISAMBIGUATOR</span> aggregate sets of documents within a shared configuration that
-                                includes:
-                                  <ul>
-                                    <li>Entity names, icons and color.</li>
-                                    <li>The names (taxonomy) and color used to categorize uncertainty.</li>
-                                  </ul>
-                              </li>
-                            </ul>
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <span class="arrow">⤴</span>
-            </div>
+            {% load no_projects_hint %}
+            {% no_projects_hint %}
             <div class="projects-table flex-fill p-md-5 pt-md-0">
               <div class="table-responsive projects-table__container">
                 <table js-listProjectsMine data-link-project="{% url 'projects:project_template' %}"  data-link-contributor="{% url 'user_template' %}" class="table m-0 table-hover table-striped">

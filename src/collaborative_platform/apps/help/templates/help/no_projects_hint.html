@@ -1,0 +1,117 @@
+{% load static %}
+<style type="text/css">
+#no-projects-hint .explanation {
+ display: flex;
+  justify-content: flex-end;
+  padding-right: 13em;
+}
+#no-projects-hint .explanation p{
+  margin-top: 2em;
+  color: var(--info);
+  font-weight: 600;
+}
+#no-projects-hint .arrow{
+  font-size: 6em;
+  position: absolute;
+  right: 1.6em;
+  top: .85em;
+  color: var(--info);
+  font-weight: 600;
+}
+#no-projects-hint .sampleFile{
+ text-align: start;
+ color: var(--info);
+  font-size: 1.05em;
+  background: #c4dae8;
+  border: #c4dae8;
+}
+#no-projects-hint .sampleFile:hover{
+ background: var(--light);
+ border: var(--light);
+}
+#no-projects-hint .sampleFile img{
+ height: 2.5em;
+}
+#no-projects-hint .sampleFile .text-muted{
+ font-size: .8em;
+}
+</style>
+<div id="no-projects-hint">
+  <div class="explanation">
+    <div>
+      <p class="text-right mt-2">
+        <span class="d-md-block">Looks like you don't have a project yet. </span>
+        <span class="d-md-block">The platform provides tools for working on organized corpus through</span>
+        <span class="d-md-block">projects, try creating one clicking on the green right-most button.  </span>
+      </p>
+      <hr/>
+      <p class="d-flex justify-content-between mt-0 mb-0">
+        <span>New to the platform? <br/> <button type="button" class="btn btn-link pl-0" data-toggle="modal" data-target="#platform-summary">See how it works.</button></span>
+        <span>Haven't work with TEI before? <br/> 
+          <a class="align-items-end btn btn-light d-inline-flex justify-content-between sampleFile" href="#" download>
+            <img src="{% static 'projects/img/doc_icon.svg' %}">
+            <span class="ml-3">
+              Have a sample file <br/>
+              <span class="text-muted">(Click to download)</span>
+            </span>
+          </a>
+          <br/>
+          Further read about the <br/> <a href="https://tei-c.org/"  target="blank">TEI initiative</a> and <a href="https://tei-c.org/guidelines/p5/" target="blank">P5 guidelines</a>
+        </span>
+      </p>
+
+      <!-- Modal -->
+      <div class="modal fade" id="platform-summary" tabindex="-1" aria-labelledby="platformLabel" aria-hidden="false">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="platformLable">PROVIDEDH Collaborative Platform</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <p>
+                Your are using the PROVIDEDH Collaborative Platform.<br/>
+                The platform provides the tools for working with TEI-formated XML documents, allowing for
+                <span>1)</span> Collaboratory entity and uncertainty annotation, <span>2)</span> Collaborative
+                corpus exploration, and <span>3)</span> Machine-learning assisted entity unification accross the
+                corpus.
+              </p>
+              <p>
+                <ul>
+                  <li><span>PROJECTS</span> aggregate sets of documents within a shared configuration that
+                    includes:
+                      <ul>
+                        <li>Entity names, icons and color.</li>
+                        <li>The names (taxonomy) and color used to categorize uncertainty.</li>
+                      </ul>
+                  </li>
+                </ul>
+                <ul>
+                  <li><span>DASHBOARDS</span> aggregate sets of documents within a shared configuration that
+                    includes:
+                      <ul>
+                        <li>Entity names, icons and color.</li>
+                        <li>The names (taxonomy) and color used to categorize uncertainty.</li>
+                      </ul>
+                  </li>
+                </ul>
+                <ul>
+                  <li>The <span>DISAMBIGUATOR</span> aggregate sets of documents within a shared configuration that
+                    includes:
+                      <ul>
+                        <li>Entity names, icons and color.</li>
+                        <li>The names (taxonomy) and color used to categorize uncertainty.</li>
+                      </ul>
+                  </li>
+                </ul>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <span class="arrow">⤴</span>
+</div>
