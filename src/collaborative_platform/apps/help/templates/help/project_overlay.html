@@ -1,10 +1,15 @@
 <style type="text/css">
-#project-overlay{
+#project-overlay, #project-overlay-toggle{
   position: absolute;
   top: 1em;
-  left: 0;
   z-index: 2;
   background: white;
+}
+#project-overlay{
+  left: 0;
+}
+#project-overlay-toggle{
+  right: 0;
 }
 #project-overlay .tl-arrow{
   display: inline-block;
@@ -36,8 +41,27 @@
   font-weight: 400;
   color: var(--info);
 }
+#project-overlay-toggle, #project-overlay-toggle .card-body{
+  width: 20rem;
+  align-self: flex-end;
+}
+#project-overlay-toggle{
+  margin: 1px 1px 0 0;
+  background: rgb(255,255,255);
+  background: linear-gradient(200deg, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 66%);
+}
+#project-overlay-toggle:hover{
+  width: 24rem;
+  background-color: white;
+  background: linear-gradient(187deg, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 40%, rgba(255,255,255,0) 100%);
+}
+#project-overlay-toggle .onNotToggled{display: initial;}
+#project-overlay-toggle .onToggled{display: none;}
+#project-overlay-toggle.toggled .onNotToggled{display: none;}
+#project-overlay-toggle.toggled .onToggled{display: initial;}
+#project-overlay-toggle.toggled{border: none;}
 </style>
-<div id="project-overlay" class="container project">
+<div id="project-overlay" class="container project border rounded d-none shadow">
   <div id="links-arrow" class="arrow tl-low-arrow">
     <span>⟵</span>
   </div>
@@ -102,3 +126,25 @@
     </div>
   </div>
 </div>
+<div class="card border-bottom-0 border-left-0" id="project-overlay-toggle">
+  <div class="card-body">
+    <h5 class="card-title">New to the platform?</h5>
+    <h6 class="card-subtitle mb-2 text-muted d-none">A short introduction on using it</h6>
+    <p class="card-text">
+      This front page provides to all the tools. <span class="onNotToggled">Click below for a quick
+      introduction to the layout.</span>
+    </p>
+    <button id="project-overlay-toggle-button" type="button" class="btn btn-info">
+      <span class="onNotToggled">Click to show help overlay</span>
+      <span class="onToggled">Click to hide</span>
+    </button>
+  </div>
+</div>
+<script type="text/javascript">
+  window.onload = () => document
+    .getElementById('project-overlay-toggle-button')
+    .addEventListener('click', () => {
+      document.getElementById('project-overlay').classList.toggle('d-none')
+      document.getElementById('project-overlay-toggle').classList.toggle('toggled')
+    })
+</script>
