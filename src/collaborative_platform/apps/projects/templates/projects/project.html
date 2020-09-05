@@ -47,7 +47,7 @@
     </ul>
   </div>
 </div>
-<div class="container project">
+<div class="container project position-relative">
   <div class="d-flex flex-column-reverse flex-md-row project__header">
     <div class=" project__content">
       <h1>{{ project.title }}</h1>
@@ -76,6 +76,10 @@
       </div>
     </div>
   </div>
+  
+  {% load project_overlay %}
+  {% project_overlay %}
+
   <div class="row">
     <div class="col-lg-6">
 
