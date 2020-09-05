@@ -29,7 +29,7 @@
 #details-arrow{
   position: absolute;
   left: 18em;
-  top: 5.3em;
+  top: 7.3em;
 }
 #project-overlay .arrow span{
   font-size: 3.3em;
@@ -60,21 +60,36 @@
 #project-overlay-toggle.toggled .onNotToggled{display: none;}
 #project-overlay-toggle.toggled .onToggled{display: initial;}
 #project-overlay-toggle.toggled{border: none;}
+#project-overlay-navigation-p{
+  position: absolute;
+  top: .5em;
+  left: 20em;
+  width: 46em;
+}
+#project-overlay-project-p{
+  position: absolute;
+  top: 8em;
+  left: 20em;
+  width: 39em;
+}
 </style>
 <div id="project-overlay" class="container project border rounded d-none shadow">
   <div id="links-arrow" class="arrow tl-low-arrow">
     <span>⟵</span>
   </div>
-  <p class="d-inline ml-4 explanation">
-    asdlmasvñdioxc
+  <p  id="project-overlay-navigation-p" class="d-inline-block ml-4 explanation">
+    The available tools are accessible through the top navigation; from left to right:
+    the <i>(current)</i> overview page; the files management page; a TEI usage analysis tool; 
+    the dashboard visualizations manager; and a project settings page for changing access policies.
   </p>
   <div id="details-arrow" class="arrow">
     <span>⇤</span>
   </div>
-  <p class="d-inline ml-4 explanation">
-    asdlmasvñdioxc
+  <p id="project-overlay-project-p" class="d-inline-block ml-4 explanation">
+    The current project is always displayed here. Projects are where files are uploaded and dashboards are created;
+    thus, it will remain accessible just for you and the project collaborators (unless made public).
   </p>
-  <div class="d-flex flex-column-reverse flex-md-row project__header">
+  <div class="mt-5 d-flex flex-column-reverse flex-md-row project__header">
     <div class=" project__content">
       <h1><i>Project name</i></h1>
       <div class="d-md-flex project__contributors">
@@ -104,7 +119,8 @@
             <span>⤵</span>
           </div>
           <p class="d-inline ml-4 explanation">
-            asdlmasvñdioxc
+            Both in this page and the <a href="{% url 'projects:files' project.id %}" target="blank">Files</a> page
+            list the documents present in the project, and allow uploading new ones by dragging them to the desired folder.
           </p>
         </div>
       </div>
@@ -119,7 +135,8 @@
             <span>⤵</span>
           </div>
           <p class="d-inline ml-4 explanation">
-            asdlmasvñdioxc
+            You and the colaborators, or anybody in the case of public projects, can modify the corpus by uploading new
+            documents, annotating them, or making unifications. Any of these action will get rgistered and listed here.
           </p>
         </div>
       </div>
@@ -131,7 +148,7 @@
     <h5 class="card-title">New to the platform?</h5>
     <h6 class="card-subtitle mb-2 text-muted d-none">A short introduction on using it</h6>
     <p class="card-text">
-      This front page provides to all the tools. <span class="onNotToggled">Click below for a quick
+      This front page provides access to all the tools. <span class="onNotToggled">Click below for a quick
       introduction to the layout.</span>
     </p>
     <button id="project-overlay-toggle-button" type="button" class="btn btn-info">
