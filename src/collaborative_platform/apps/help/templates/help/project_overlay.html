@@ -1,9 +1,10 @@
+{% load static %}
 <style type="text/css">
 #project-overlay, #project-overlay-toggle{
   position: absolute;
   top: 1em;
   z-index: 2;
-  background: white;
+  background: #fafafa;
 }
 #project-overlay{
   left: 0;
@@ -28,8 +29,9 @@
 }
 #details-arrow{
   position: absolute;
-  left: 18em;
+  left: 20em;
   top: 7.3em;
+  transform: rotateZ(30deg);
 }
 #project-overlay .arrow span{
   font-size: 3.3em;
@@ -69,11 +71,24 @@
 #project-overlay-project-p{
   position: absolute;
   top: 8em;
-  left: 20em;
+  left: 22em;
   width: 39em;
 }
+hr.sectionSpacer::after {
+    content: "⥈";
+    font-size: 3em;
+    color: var(--info);
+    position: relative;
+    top: -.8em;
+    left: calc(50% - .5em);
+}
+
+#project-overlay .sectionSpacer {
+    position: relative;
+}
+img#process{width: 30em;}
 </style>
-<div id="project-overlay" class="container project border rounded d-none shadow">
+<div id="project-overlay" class="container project border rounded shadow d-none">
   <div id="links-arrow" class="arrow tl-low-arrow">
     <span>⟵</span>
   </div>
@@ -83,28 +98,37 @@
     the dashboard visualizations manager; and a project settings page for changing access policies.
   </p>
   <div id="details-arrow" class="arrow">
-    <span>⇤</span>
+    <span>⟵</span>
   </div>
   <p id="project-overlay-project-p" class="d-inline-block ml-4 explanation">
     The current project is always displayed here. Projects are where files are uploaded and dashboards are created;
     thus, it will remain accessible just for you and the project collaborators (unless made public).
   </p>
-  <div class="mt-5 d-flex flex-column-reverse flex-md-row project__header">
+  <div class="d-flex flex-column-reverse flex-md-row project__header">
     <div class=" project__content">
-      <h1><i>Project name</i></h1>
+      <h1>{{ project.title }}</h1>
       <div class="d-md-flex project__contributors">
         <a href="#" class="project__text--label project__text--label-contributors">Contributors</a>
+        <ul class="project__contributors--list d-flex flex-wrap">
+          {% for contributor in contributors %}
+          <li class="project__contributors--item"><a href="{% url 'user' contributor.id %}" class="project__link--contributors">{{ contributor.first_name }} {{ contributor.last_name }}</a></li>
+          {% endfor %}
+        </ul>
       </div>
       <div class="project__date">
         <span class="project__text--label">Date created</span>
+        <span class="project__text--date">{{ project.creation_date|date:'Y-m-d, H:i' }}</span>
         <span class="project__text--divider"></span>
         <span class="project__text--label">Last updated</span>
+        <span class="project__text--date">{{ project.modification_date|date:'Y-m-d, H:i' }}</span>
       </div>
       <div class="d-md-flex project__description">
         <span class="project__text--label">Description</span>
+        <p class="project__text--description">{% if project.description %}{{ project.description }}{% else %}<span class="project__text--placeholder">Add a brief description to your project</span>{% endif %}</p>
       </div>
       <div class="d-md-flex project__license">
         <span class="project__text--label">License</span>
+        <p class="project__text--license">{% if project.license %}{{ project.license }}{% else %}<span class="project__text--placeholder">Add a license</span>{% endif %}</p>
       </div>
     </div>
   </div>
@@ -140,6 +164,34 @@
           </p>
         </div>
       </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 my-4">
+      <hr class="sectionSpacer" />
+    </div>
+    <div class="col-lg-6">
+      <h4 class="mb-3">Working in the platform</h4>
+      <p class="d-inline ml-4 explanation">
+        Big part of the work on the platform revolves around an upload-annotate-analize-assess process where:
+        <ul>
+          <li>
+            As entities and their properties get annotated richer visualizations allow for greater insight
+            into the platform.
+          </li>
+          <li>
+            As files are uploaded and other authors annotate, the project grows in size and complexity; a time when
+            uncertainty annotation, TEI statistics and the of dashboards prove usefull for managing it.
+          </li>
+          <li>
+            [TODO]
+          </li>
+        </ul>
+      </p>
+      <p class="d-inline ml-4 explanation">
+        This process can be summarized as below:
+      </p>
+      <img id="process" src="{% static "help/img/work_process.svg" %}" width=200 height=200 alt="..." class="img-thumbnail ml-4 mt-4 border-0 d-block">
     </div>
   </div>
 </div>
