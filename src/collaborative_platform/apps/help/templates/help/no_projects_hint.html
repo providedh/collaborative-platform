@@ -5,10 +5,10 @@
   justify-content: flex-end;
   padding-right: 13em;
 }
-#no-projects-hint .explanation p{
+#no-projects-hint .explanation p, #no-projects-hint p.blue{
   margin-top: 2em;
   color: var(--info);
-  font-weight: 600;
+  font-weight: 400;
 }
 #no-projects-hint .arrow{
   font-size: 6em;
@@ -85,40 +85,48 @@
               <p>
                 Your are using the PROVIDEDH Collaborative Platform.<br/>
                 The platform provides the tools for working with TEI-formated XML documents, allowing for
-                <span>1)</span> Collaboratory entity and uncertainty annotation, <span>2)</span> Collaborative
-                corpus exploration, and <span>3)</span> Machine-learning assisted entity unification accross the
+                <b>1)</b> Collaboratory entity and uncertainty annotation, <b>2)</b> Collaborative
+                corpus exploration, and <b>3)</b> Machine-learning assisted entity unification accross the
                 corpus.
               </p>
               <div class="row">
                 <div class="col-8 col-md-7 col-sm-6">
-                  <p>
-                    <ul>
-                      <li><span>PROJECTS</span> aggregate sets of documents within a shared configuration that
-                        includes:
-                          <ul>
-                            <li>Entity names, icons and color.</li>
-                            <li>The names (taxonomy) and color used to categorize uncertainty.</li>
-                          </ul>
-                      </li>
-                    </ul>
-                    <ul>
-                      <li><span>DASHBOARDS</span> aggregate sets of documents within a shared configuration that
-                        includes:
-                          <ul>
-                            <li>Entity names, icons and color.</li>
-                            <li>The names (taxonomy) and color used to categorize uncertainty.</li>
-                          </ul>
-                      </li>
-                    </ul>
-                    <ul>
-                      <li>The <span>DISAMBIGUATOR</span> aggregate sets of documents within a shared configuration that
-                        includes:
-                          <ul>
-                            <li>Entity names, icons and color.</li>
-                            <li>The names (taxonomy) and color used to categorize uncertainty.</li>
-                          </ul>
-                      </li>
-                    </ul>
+                  <ul>
+                    <li><span>PROJECTS</span> aggregate sets of documents within a shared configuration that
+                      includes:
+                        <ul>
+                          <li>Entity names, icons and color.</li>
+                          <li>The names (taxonomy) and color used to categorize uncertainty.</li>
+                        </ul>
+                    </li>
+                  </ul>
+                  <ul>
+                    <li><span>DASHBOARDS</span> provide visual tools for exploring the corpus. Different charts
+                      can be mixed and matched depending on the necessity, ranging from bar charts, to sunburst
+                      visualizations and maps.
+                    </li>
+                  </ul>
+                  <ul>
+                    <li>The <span>DISAMBIGUATOR</span> provides a machine-learning based analysis of the corpus
+                      for finding possible entity duplicates that can be unified.
+                    </li>
+                  </ul>
+                  <p class="blue mt-0">
+                    Using TEI documents <b>allow for a data-rich corpus</b> by means of entity annotation, which
+                    includes adding properties to add to the completeness of the information. This process can
+                    be done <b>collaboratively</b> using the tools that the platform has.
+                  </p>
+                  <p class="blue mt-0">
+                    You can further read about the <a href="https://tei-c.org/" target="blank">TEI initiative</a>
+                    and <a href="https://tei-c.org/guidelines/p5/" target="blank">P5 guidelines</a>, or have a 
+                    look at a curated sample document we provide here:
+                    <a class="mt-3 align-items-end btn btn-light d-inline-flex justify-content-between sampleFile" href="#" download>
+                      <img src="{% static 'projects/img/doc_icon.svg' %}">
+                      <span class="ml-3">
+                        Have a sample file <br/>
+                        <span class="text-muted">(Click to download)</span>
+                      </span>
+                    </a>
                   </p>
                 </div>
                 <div class="col">
