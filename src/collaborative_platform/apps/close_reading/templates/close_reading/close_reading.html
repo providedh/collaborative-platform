@@ -10,6 +10,45 @@
 {% endblock %}
 
 {% block content %}
+{% load bottom_hint %}
+{% bottom_hint "Need help?" %}
+<h3>Close reading app</h3>
+<h5 class="text-muted">An TEI-specific XML viewer and annotator</h5>
+<p>
+  This tool parses TEI files to allow an easier reading and annotating. This reading
+  and annotation process is synced with the project so that what you see is a <b>live file</b>
+  with the changes that you and the project collaborators have made at the moment.
+</p>
+<p class="mb-2">
+  <b>What am I looking at</b><br/>
+  The app shows entities and annotations using the settings provided at project creation:
+</p>
+  <ul>
+    <li>Entities are shown underlined in the configured color, and along its icon.</li>
+    <li>Annotated entities are shown as highlighted text where:
+      <ul>
+        <li>Each annotation is represented by a group of color rectangles.</li>
+        <li>Each color of the group represents a category.</li>
+        <li>
+          Full height color rectangles represent your annotations, while other's
+          appear as half text highlights.
+        </li>
+      </ul>
+    </li>
+  </ul>
+  <p class="mb-2">
+    <b>How is this used?</b><br/>
+    The app is used via the popup windows that show upon interaction with the text:
+  </p>
+  <ul>
+    <li>Hovering over an entity will show its information along with annotations.</li>
+    <li>Clicking on an entity will keep the popup opened for you to modify it.</li>
+    <li>
+      Selecting text by clicking and dragging in the text will show a popup for
+      annotating that piece of text with just an entity or both an entity and an uncertainty annotation.
+    </li>
+  </ul>
+{% end_bottom_hint %}
   <div id="breadcrumb-container" class="container-lg px-3 px-lg-5">
     <nav aria-label="breadcrumb" id="breadcrumb">
       <ol class="breadcrumb bg-transparent mb-0 px-0">
