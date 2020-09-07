@@ -26,6 +26,41 @@
 {% endblock %}
 
 {% block content %}
+{% load bottom_hint %}
+{% bottom_hint "What are the dashboards?" %}
+<h3>Visualization dashboards</h3>
+<h5 class="text-muted">A manager for the project's visualization panels</h5>
+<p>
+  Dashboards are workspaces where you can arrange different graphs based on you research needs. <br/>
+  <b>This page is where dashboards are organized</b>. Each project can have an arbitrary number of dashboards which can be used <br/>
+  by the owner and the collaborators; each of which has a name and an optional description.
+</p>
+<p class="mb-2">
+  <b>What can I do in a dashboard?</b><br/>
+  Dashboards use your documents to provide a varied set of views that can be used to explore the corpus by the <br/>
+  properties of the entities, arrange annotations, see trends in the work done, and find incongruences and outliers.
+  <br/>
+  The currently included views are the following:
+</p>
+  <ul>
+    <li>A <b>Map</b> view for placing entities and annotations accordingly to the geographical position (given that it is provided).</li>
+    <li>A <b>Notes</b> view that allows taking notes in Markdown 
+      (<a href="https://programminghistorian.org/en/lessons/getting-started-with-markdown">read more about it in programminghistorian.org</a>)
+      that can be seen by anyone with access to the dashboard.
+    </li>
+    <li>A <b>Pixel corpus</b> view that shows an overview of the corpus based on the annotations and entities present in it.</li>
+    <li>A <b>Sunburst</b> view that allows creating hierarchies based on a number of parameters for you to easily explore and focus on specific
+    documents, authors, entities or annotations.</li>
+    <li>A <b>Heatmap</b> view that makes use of annotations and entities to show their distribution in a grid like graph.</li>
+    <li>A <b>Document view</b> that allows reading documents in the corpus without leaving the dashboard.</li>
+    <li>A <b>Bar chart</b> for rendering entities, annotations, and their properties.</li>
+    <li>A <b>Timeline</b> for displaying time-related information.</li>
+  </ul>
+  <p class="mb-2">
+    <b>Can I change dashboards after creation?</b><br/>
+    Dashboards can be changed <b>at any time</b>. Both the name and description can be changed here, whilst the views of 
+    the graphs used are changed while inside the dashboard.
+{% end_bottom_hint %}
 {% csrf_token %}
 <div class="submenu">
   <div class="container">
