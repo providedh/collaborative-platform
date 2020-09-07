@@ -9,8 +9,6 @@ urlpatterns = [
     path('projects/<int:project_id>/files/<int:file_id>/body/', api_old.file_body),
     path('projects/<int:project_id>/files/<int:file_id>/meta/', api_old.file_meta),
     path('projects/<int:project_id>/files/<int:file_id>/names/', api_old.file_names),
-    path('projects/<int:project_id>/files/<int:file_id>/annotations/', api_old.file_annotations),
-    path('projects/<int:project_id>/files/<int:file_id>/people/', api_old.file_people),
     path('projects/<int:project_id>/files/<int:file_id>/', api_old.file),
     path('projects/<int:project_id>/files/<int:file_id>/cliques/', api.file_cliques),
     path('projects/<int:project_id>/files/<int:file_id>/entities/unbound_entities/', api.file_unbound_entities),
