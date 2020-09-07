@@ -13,6 +13,7 @@ import { WithAppContext } from 'common/context/app'
 import styles from './entity_panel.module.css'
 import Annotations from './annotations.js'
 import Attributes from './attributes.js'
+import { saveOperations, discardOperations} from 'common/helpers'
 
 export default function EntityPanelWithContext (props) {
   return (
@@ -29,8 +30,10 @@ function onDeleteClick (id, websocket) {
   websocket.send(request)
 }
 
-function onDiscardClick (id, websocket) {
-  const request = WebsocketRequest(WebsocketRequestType.discard, [id])
+function onDiscardClick (operations, id, websocket) {
+  const relatedOperations = [...discardOperations(operations, id), ...saveOperations(operations, id)]
+  const operationsToDiscard = [...new Set(relatedOperations)]
+  const request = WebsocketRequest(WebsocketRequestType.discard, operationsToDiscard)
   websocket.send(request)
 }
 
@@ -83,14 +86,14 @@ function EntityPanel (props) {
             onClick={e => {
               e.preventDefault()
               const operation = props.context.operations.filter(x => (
-                x.operation_result === props.selection.target.id.value &&
-                x.element_type === 'tag' &&
+                x.operation_result === props.selection.target.target.value &&
+                x.element_type === 'reference' &&
                 x.method === 'POST'
               ))
 
               if (operation.length !== 1) { return }
 
-              onDiscardClick(operation[0].id, props.context.websocket)
+              onDiscardClick(props.context.operations, operation[0].id, props.context.websocket)
             }}
             className="btn btn-link p-0 mx-1 text-danger">
             <u> -discard</u>
