@@ -33,7 +33,6 @@ before_script:
 script: echo "No tests"
 
 deploy:
-  skip_cleanup: true
   provider: script
   script: cd ../.. && ssh -o "StrictHostKeyChecking no" ubuntu@providedh-test.ehum.psnc.pl -i providedh-key "cd collaborative-platform && ./prod_upgrade"
   on:
