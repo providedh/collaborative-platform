@@ -22,12 +22,24 @@ export default function EntityCreationPanelWithContext (props) {
 }
 
 function onTagCreate (selection, entityPayload, websocket) {
+  const operations = []
   const tagBuilder = AtomicActionBuilder(ActionTarget.text, ActionType.add, ActionObject.tag)
   const refBuilder = AtomicActionBuilder(ActionTarget.entity, ActionType.add, ActionObject.reference)
-  const tagAction = tagBuilder(...selection.target)
-  const refAction = refBuilder(0, entityPayload)
+  const propertyBuilder = AtomicActionBuilder(ActionTarget.entity, ActionType.add, ActionObject.property)
 
-  const request = WebsocketRequest(WebsocketRequestType.modify, [tagAction, refAction])
+  operations.push(tagBuilder(...selection.target))
+
+  if (Object.hasOwnProperty.call(entityPayload, 'new_element_id')) {
+    operations.push(refBuilder(0, entityPayload))
+  } else {
+    const {entity_type, entity_properties} = entityPayload.parameters
+    operations.push(refBuilder(0, {parameters: {entity_type, entity_properties: {}}}))
+    for (const [key, value] of Object.entries(entity_properties)) {
+      operations.push(propertyBuilder(1, key, value))
+    }
+  }
+
+  const request = WebsocketRequest(WebsocketRequestType.modify, operations)
   websocket.send(request)
 }
 
