@@ -3,6 +3,7 @@ import { render } from 'react-dom'
 
 import { TEIentities } from 'common/types'
 import { App } from 'components/app'
+import theme from 'common/style/theme.css'
 
 const appConfig = {
   projectId: window.project_id,

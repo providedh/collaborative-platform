@@ -34,3 +34,4 @@ class Operation(models.Model):
     old_element_id = models.CharField(max_length=255, null=True)
     new_element_id = models.CharField(max_length=255, null=True)
     operation_result = models.CharField(max_length=255, null=True)
+    dependencies = models.ManyToManyField('self', symmetrical=False)

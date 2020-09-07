@@ -66,8 +66,8 @@ function AnnotationCreationPanel (props) {
           </div>
         </div>
         <div className="d-flex flex-row justify-content-between">
-          <a href="#" onClick={() => setStep(0)}>Specify entity</a>
-          <a href="#" onClick={() => setStep(1)}>Fill annotation details</a>
+          <button type="button" onClick={() => setStep(0)} className="btn btn-link dotted-link">Specify entity</button>
+          <button type="button" onClick={() => setStep(1)} className="btn btn-link dotted-link">Fill annotation details</button>
           <button className="btn btn-outline-primary btn-sm"
             onClick={e => {
               e.preventDefault()

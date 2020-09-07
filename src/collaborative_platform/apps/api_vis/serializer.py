@@ -20,3 +20,14 @@ class Serializer:
         serialized_entity = model_to_dict(entity, ['id', 'type'])
 
         return serialized_entity
+
+    @staticmethod
+    def serialize_properties(entity_properties):
+        serialized_properties = {}
+
+        for entity_property in entity_properties:
+            serialized_property = {entity_property.name: entity_property.get_value(as_str=True)}
+
+            serialized_properties.update(serialized_property)
+
+        return serialized_properties
