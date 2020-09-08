@@ -493,8 +493,8 @@ class TestApiVisWithDb:
         ('no_filtering', None),
         ('types', {'types': 'person'}),
         ('users', {'users': '2'}),
-        ('date', {'date': '2020-06-30T11:29:00+01:00'}),
-        ('project_version', {'project_version': '7.5'})
+        ('date', {'date': '2020-06-30T10:28:00+01:00'}),
+        ('project_version', {'project_version': '6.5'})
     ]
 
     @pytest.mark.parametrize(test_parameters_names, test_parameters_list)
@@ -598,8 +598,8 @@ class TestApiVisWithDb:
         ('no_filtering', None),
         ('types', {'types': 'person'}),
         ('users', {'users': '2'}),
-        ('date', {'date': '2020-06-30T11:29:00+01:00'}),
-        ('project_version', {'project_version': '7.5'})
+        ('date', {'date': '2020-06-30T10:28:00+01:00'}),
+        ('project_version', {'project_version': '6.5'})
     ]
 
     @pytest.mark.parametrize(test_parameters_names, test_parameters_list)
@@ -617,6 +617,40 @@ class TestApiVisWithDb:
         file_id = 1
 
         url = f'/api/vis/projects/{project_id}/files/{file_id}/entities/'
+
+        if qs_parameters:
+            url = add_qs_parameters(url, qs_parameters)
+
+        response = client.get(url)
+
+        assert response.status_code == 200
+
+        response_content = json.loads(response.content)
+        verify_response(test_name, response_content)
+
+    test_parameters_names = "filtering_case, qs_parameters"
+    test_parameters_list = [
+        ('no_filtering', None),
+        ('users', {'users': '2'}),
+        ('date', {'date': '2020-06-30T10:28:00+01:00'}),
+        ('project_version', {'project_version': '6.5'})
+    ]
+
+    @pytest.mark.parametrize(test_parameters_names, test_parameters_list)
+    def test_get_all_certainties_from_given_file(self, filtering_case, qs_parameters):
+        test_name = inspect.currentframe().f_code.co_name
+        test_name = f'{test_name}_{filtering_case}'
+
+        user_id = 2
+        project_id = 1
+
+        client = Client()
+        user = User.objects.get(id=user_id)
+        client.force_login(user)
+
+        file_id = 1
+
+        url = f'/api/vis/projects/{project_id}/files/{file_id}/certainties/'
 
         if qs_parameters:
             url = add_qs_parameters(url, qs_parameters)
