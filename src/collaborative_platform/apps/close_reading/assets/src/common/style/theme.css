@@ -1,0 +1,6 @@
+.btn.btn-link.dotted-link {
+  text-decoration: underline dotted;
+}
+.btn.btn-link.dotted-link:hover {
+  text-decoration: underline solid;
+}

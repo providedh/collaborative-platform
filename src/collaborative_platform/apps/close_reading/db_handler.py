@@ -1,3 +1,5 @@
+import copy
+
 from django.db.models import Q
 from django.forms.models import model_to_dict
 
@@ -36,7 +38,7 @@ class DbHandler:
         entity = self.__get_entity_from_db(entity_xml_id)
 
         try:
-            self.__check_if_entity_is_saved(entity_xml_id)
+            self.check_if_entity_is_saved(entity_xml_id)
 
         except UnsavedElement:
             self.__clean_up_entity(entity)
@@ -78,7 +80,7 @@ class DbHandler:
         return property_id, saved
 
     def delete_entity_property(self, entity_xml_id, property_name):
-        self.__check_if_entity_property_is_saved(entity_xml_id, property_name)
+        self.check_if_entity_property_is_saved(entity_xml_id, property_name)
 
         entity_version = self.__get_entity_version_from_db(entity_xml_id)
 
@@ -87,8 +89,8 @@ class DbHandler:
     def add_certainty(self, certainty_target, parameters):
         locus = parameters['locus']
 
-        target_type = self.__get_certainty_target_type(certainty_target, locus)
-        target, match = self.__get_certainty_target_and_match(certainty_target, target_type)
+        target_type = self.get_certainty_target_type(certainty_target, locus)
+        target, match = self.get_certainty_target_and_match(certainty_target, target_type)
 
         xml_id = self.get_next_xml_id('certainty')
 
@@ -155,8 +157,8 @@ class DbHandler:
             certainty_target = parameters['new_element_id']
             locus = parameters['locus']
 
-            target_type = self.__get_certainty_target_type(certainty_target, locus)
-            target, match = self.__get_certainty_target_and_match(certainty_target, target_type)
+            target_type = self.get_certainty_target_type(certainty_target, locus)
+            target, match = self.get_certainty_target_and_match(certainty_target, target_type)
 
             certainty.target_xml_id = target
             certainty.target_match = match
@@ -598,7 +600,7 @@ class DbHandler:
 
         return entity
 
-    def __check_if_entity_is_saved(self, entity_xml_id):
+    def check_if_entity_is_saved(self, entity_xml_id):
         entity = self.__get_entity_from_db(entity_xml_id)
 
         if entity.created_in_file_version is None:
@@ -666,7 +668,7 @@ class DbHandler:
 
         return entity_property
 
-    def __check_if_entity_property_is_saved(self, entity_xml_id, property_name):
+    def check_if_entity_property_is_saved(self, entity_xml_id, property_name):
         entity_property = self.__get_entity_property_from_db(entity_xml_id, property_name, saved=True)
 
         if not entity_property:
@@ -699,6 +701,12 @@ class DbHandler:
             raise ValueError("Value for 'saved' argument not provided")
 
         return certainty
+
+    def check_if_certainty_is_saved(self, certainty_xml_id):
+        certainty = self.__get_certainty_from_db(certainty_xml_id, saved=True)
+
+        if not certainty:
+            raise UnsavedElement
 
     def __get_file_version(self):
         version_number = self.__file.version_number
@@ -761,7 +769,7 @@ class DbHandler:
         return match
 
     @staticmethod
-    def __get_certainty_target_type(certainty_target, locus):
+    def get_certainty_target_type(certainty_target, locus):
         if 'certainty-' in certainty_target:
             target_type = ElementTypes.certainty
         elif '/' in certainty_target:
@@ -777,7 +785,7 @@ class DbHandler:
 
         return target_type
 
-    def __get_certainty_target_and_match(self, certainty_target, target_type):
+    def get_certainty_target_and_match(self, certainty_target, target_type):
         if target_type == ElementTypes.text:
             target = certainty_target
             match = None
@@ -819,18 +827,74 @@ class DbHandler:
 
         return target, match
 
+    def get_certainty_locus(self, certainty_xml_id):
+        saved = False
+        certainty = self.__get_certainty_from_db(certainty_xml_id, saved)
+
+        if not certainty:
+            saved = True
+            certainty = self.__get_certainty_from_db(certainty_xml_id, saved)
+
+        return certainty.locus
+
+    def get_operations(self, operations_ids, with_dependent=False, from_latest=False):
+        operations = self.get_operations_from_db(operations_ids)
+
+        if with_dependent:
+            operations = self.__add_dependent_operations(operations)
+
+        operations = [model_to_dict(operation) for operation in operations]
+        operations = self.__sort_operations(operations, from_latest=from_latest)
+
+        return operations
+
     def get_operations_from_db(self, operations_ids):
         operations = Operation.objects.filter(
+            file=self.__file,
             user=self.__user,
             id__in=operations_ids
         ).order_by('id')
 
-        operations = [model_to_dict(operation) for operation in operations]
-
         return operations
 
-    def add_operation(self, operation, operation_result):
-        Operation.objects.get_or_create(
+    @staticmethod
+    def __add_dependent_operations(operations):
+        old_operations = set()
+        new_operations = set(operations)
+
+        while old_operations != new_operations:
+            old_operations = copy.deepcopy(new_operations)
+            new_operations = set()
+
+            for operation in old_operations:
+                new_operations.add(operation)
+
+                dependent_operations = operation.operation_set.all()
+                new_operations.update(dependent_operations)
+
+        new_operations = list(new_operations)
+
+        return new_operations
+
+    def get_operation_dependencies_ids(self, operation_id):
+        operation = Operation.objects.get(
+            file=self.__file,
+            id=operation_id,
+        )
+        dependencies = operation.dependencies.all()
+        dependencies_ids = dependencies.values_list('id', flat=True)
+        dependencies_ids = list(dependencies_ids)
+
+        return dependencies_ids
+
+    @staticmethod
+    def __sort_operations(operations, from_latest=False):
+        sorted_operations = sorted(operations, key=lambda k: k['id'], reverse=from_latest)
+
+        return sorted_operations
+
+    def add_operation(self, operation, operation_result, dependencies_ids):
+        operation, created = Operation.objects.get_or_create(
             user=self.__user,
             file=self.__file,
             method=operation['method'],
@@ -841,7 +905,9 @@ class DbHandler:
             operation_result=operation_result,
         )
 
-    def update_operation(self, operation, operation_result):
+        operation.dependencies.add(*dependencies_ids)
+
+    def update_operation(self, operation, operation_result, dependencies_ids):
         try:
             operation = Operation.objects.get(
                 user=self.__user,
@@ -853,6 +919,13 @@ class DbHandler:
 
             operation.operation_result = operation_result
             operation.save()
+
+            dependencies = operation.dependencies.all()
+
+            for dependency in dependencies:
+                operation.dependencies.remove(dependency)
+
+            operation.dependencies.add(*dependencies_ids)
 
         except Operation.DoesNotExist:
             pass
@@ -898,3 +971,61 @@ class DbHandler:
         log_text = f"created version number {new_file_version.number} of"
 
         log_activity(self.__file.project, self.__user, log_text, self.__file)
+
+    def get_operation_id_that_created_tag(self, tag_xml_id):
+        operation = Operation.objects.get(
+            file=self.__file,
+            method='POST',
+            operation_result=tag_xml_id,
+        )
+
+        return operation.id
+
+    def get_operation_id_that_created_entity(self, entity_xml_id):
+        operation = Operation.objects.get(
+            file=self.__file,
+            method='POST',
+            new_element_id__isnull=True,
+            operation_result=entity_xml_id
+        )
+
+        return operation.id
+
+    def get_operation_id_that_created_reference(self, tag_xml_id):
+        operation = Operation.objects.get(
+            file=self.__file,
+            method='POST',
+            element_type='reference',
+            edited_element_id=tag_xml_id
+        )
+
+        return operation.id
+
+    def get_operation_id_that_created_entity_property(self, entity_xml_id, property_name):
+        try:
+            operation = Operation.objects.get(
+                file=self.__file,
+                method='POST',
+                element_type='entity_property',
+                operation_result=f'{entity_xml_id}/{property_name}'
+            )
+
+        except Operation.DoesNotExist:
+            operation = Operation.objects.get(
+                file=self.__file,
+                method='POST',
+                new_element_id__isnull=True,
+                operation_result=entity_xml_id
+            )
+
+        return operation.id
+
+    def get_operation_id_that_created_certainty(self, certainty_xml_id):
+        operation = Operation.objects.get(
+            file=self.__file,
+            method='POST',
+            element_type='certainty',
+            operation_result=certainty_xml_id
+        )
+
+        return operation.id

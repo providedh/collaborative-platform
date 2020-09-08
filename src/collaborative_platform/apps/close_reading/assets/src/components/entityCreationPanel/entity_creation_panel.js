@@ -46,7 +46,7 @@ function EntityCreationPanel (props) {
           <div className="progress-bar" role="progressbar" style={{ width: '0%' }} aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
         </div>
         <div className="d-flex flex-row justify-content-between">
-          <a href="#">Fill entity details</a>
+          <button type="button" className="btn btn-link dotted-link">Fill entity details</button>
           <button className="btn btn-outline-primary btn-sm"
             onClick={e => {
               e.preventDefault()
