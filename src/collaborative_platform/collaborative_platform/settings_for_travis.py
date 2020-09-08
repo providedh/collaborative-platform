@@ -12,5 +12,13 @@ DATABASES = {
 }
 
 REDIS_HOST = "localhost"
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [(REDIS_HOST, 6379)],
+        }
+    }
+}
 CELERY_BROKER_URL = 'redis://{}:6379'.format(REDIS_HOST)
 CELERY_RESULT_BACKEND = 'redis://{}:6379'.format(REDIS_HOST)
