@@ -3,7 +3,7 @@ python:
   - "3.8"
 
 services:
-  - redis-server
+  - redis
 
 before_install:
   - openssl aes-256-cbc -K $encrypted_1443f6b77812_key -iv $encrypted_1443f6b77812_iv
