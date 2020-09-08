@@ -33,7 +33,6 @@ before_script:
 #  - psql -c "grant all privileges on database ctest to ctest;" -U postgres
 
 script: pytest -c pytest_travis.ini
-#script: echo "No tests" 1
 
 deploy:
   skip_cleanup: true
