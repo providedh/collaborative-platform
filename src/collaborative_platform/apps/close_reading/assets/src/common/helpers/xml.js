@@ -216,7 +216,7 @@ function processEntitiesInDocument (raw, entities, annotations, conf) {
 
       details.target = details.ref
       details.type = tag.tagName
-      details.annotations = processAnnotations(annotations, [details.target.value.slice(1)])
+      details.annotations = processAnnotations(annotations, [details.target.value])
       details.properties = conf[tag.tagName].properties
         .map(attr => processTagAttribute(attr, tag))
         .filter(attr => attr.status !== OperationStatus.null)
