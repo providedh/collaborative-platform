@@ -12,6 +12,7 @@ import {
 } from 'common/types'
 import { WithAppContext } from 'common/context/app'
 import AnnotateForm from './annotate_form.js'
+import { saveOperations, discardOperations} from 'common/helpers'
 
 export default function CreateAnnotationWithContext (props) {
   return (
@@ -28,13 +29,17 @@ function onDeleteClick (id, websocket) {
   websocket.send(request)
 }
 
-function onDiscard (id, websocket) {
-  const request = WebsocketRequest(WebsocketRequestType.discard, [id])
+function onDiscard (operations, id, websocket) {
+  const relatedOperations = [...discardOperations(operations, id), ...saveOperations(operations, id)]
+  const operationsToDiscard = [...new Set(relatedOperations)]
+  const request = WebsocketRequest(WebsocketRequestType.discard, operationsToDiscard)
   websocket.send(request)
+
 }
 
-function onSave (id, websocket) {
-  const request = WebsocketRequest(WebsocketRequestType.save, [id])
+function onSave (operations, id, websocket) {
+  const operationsToSave = [...saveOperations(operations, id)]
+  const request = WebsocketRequest(WebsocketRequestType.save, operationsToSave)
   websocket.send(request)
 }
 
@@ -114,7 +119,7 @@ function CreateAnnotation (props) {
           ))
 
           if (operation.length !== 1) { return }
-          onDiscard(operation[0].id, props.context.websocket)
+          onDiscard(props.context.operations, operation[0].id, props.context.websocket)
         }}/>
         <AnnotationOption classes="text-info" text=" save" onClick={e => {
           const operation = props.context.operations.filter(x => (
@@ -124,7 +129,7 @@ function CreateAnnotation (props) {
           ))
 
           if (operation.length !== 1) { return }
-          onSave(operation[0].id, props.context.websocket)
+          onSave(props.context.operations, operation[0].id, props.context.websocket)
         }}/>
       </span>
       <span className={annotation.status === OperationStatus.deleted ? 'text-danger' : 'd-none'}>
@@ -137,7 +142,7 @@ function CreateAnnotation (props) {
           ))
 
           if (operation.length !== 1) { return }
-          onSave(operation[0].id, props.context.websocket)
+          onSave([operation[0]], operation[0].id, props.context.websocket)
         }}/>
         <AnnotationOption classes="text-info" text=" restore" onClick={e => {
           const operation = props.context.operations.filter(x => (
@@ -147,7 +152,7 @@ function CreateAnnotation (props) {
           ))
 
           if (operation.length !== 1) { return }
-          onDiscard(operation[0].id, props.context.websocket)
+          onDiscard([operation[0]], operation[0].id, props.context.websocket)
         }}/>
       </span>
       <span className={annotation.status === OperationStatus.edited ? 'text-danger' : 'd-none'}>
@@ -160,7 +165,7 @@ function CreateAnnotation (props) {
           ))
 
           if (operation.length !== 1) { return }
-          onDiscard(operation[0].id, props.context.websocket)
+          onDiscard([operation[0]], operation[0].id, props.context.websocket)
         }}/>
         <AnnotationOption classes="text-info" text=" save" onClick={e => {
           const operation = props.context.operations.filter(x => (
@@ -170,7 +175,7 @@ function CreateAnnotation (props) {
           ))
 
           if (operation.length !== 1) { return }
-          onSave(operation[0].id, props.context.websocket)
+          onSave([operation[0]], operation[0].id, props.context.websocket)
         }}/>
       </span>
       <span className={annotation.status === OperationStatus.saved ? '' : 'd-none'}>
