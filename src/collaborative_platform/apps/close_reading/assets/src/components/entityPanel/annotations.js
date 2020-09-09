@@ -63,7 +63,7 @@ function onModify (id, oldValues, newValues, edit, websocket) {
         .join(' ')
 
       if (categories !== newValues.ana.sort().join(' ')) {
-        actions.push(builder(id, 'ana', newValues.ana))
+        actions.push(builder(id, 'categories', newValues.ana))
       }
     } else {
       if (value !== newValues[key]) {
