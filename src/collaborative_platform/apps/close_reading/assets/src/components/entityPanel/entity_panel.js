@@ -37,6 +37,13 @@ function onDiscardClick (operations, id, websocket) {
   websocket.send(request)
 }
 
+function onSaveClick (operations, id, websocket) {
+  const relatedOperations = [...discardOperations(operations, id), ...saveOperations(operations, id)]
+  const operationsToSave = [...new Set(relatedOperations)]
+  const request = WebsocketRequest(WebsocketRequestType.save, operationsToSave)
+  websocket.send(request)
+}
+
 function onRestoreClick (id, websocket) {
   const request = WebsocketRequest(WebsocketRequestType.discard, [id])
 
@@ -82,6 +89,22 @@ function EntityPanel (props) {
         </span>
         <span className={props.selection.target.saved === false ? 'ml-4 text-danger' : 'd-none'}>
           (unsaved)
+          <button type="button"
+            onClick={e => {
+              e.preventDefault()
+              const operation = props.context.operations.filter(x => (
+                x.operation_result === props.selection.target.target.value &&
+                x.element_type === 'reference' &&
+                x.method === 'POST'
+              ))
+
+              if (operation.length !== 1) { return }
+
+              onSaveClick(props.context.operations, operation[0].id, props.context.websocket)
+            }}
+            className="btn btn-link p-0 mx-1 text-primary">
+            <u> +save</u>
+          </button>
           <button type="button"
             onClick={e => {
               e.preventDefault()
