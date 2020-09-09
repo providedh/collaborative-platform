@@ -352,11 +352,6 @@ class TestIssue112:
                     'edited_element_id': 'ab-1',
                     'parameters': {
                         'entity_type': 'person',
-                        'entity_properties': {
-                            'forename': 'Bugs',
-                            'surname': 'Bunny',
-                            'sex': 'M'
-                        }
                     }
                 }
             ]
@@ -371,7 +366,7 @@ class TestIssue112:
             entity__xml_id='person-6',
             entity__file_id=file_id
         )
-        assert added_properties.count() == 3
+        assert added_properties.count() == 0
 
         request = {
             'method': 'modify',
@@ -750,14 +745,30 @@ class TestIssue113:
                     'edited_element_id': 'ab-1',
                     'parameters': {
                         'entity_type': 'event',
-                        'entity_properties': {
-                            'name': 'Greater Poland uprising'
-                        }
                     }
                 }
             ]
         }
         request_nr = 1
+
+        await communicator.send_json_to(request)
+        response = await communicator.receive_json_from()
+        verify_response(test_name, response, request_nr)
+
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'POST',
+                    'element_type': 'entity_property',
+                    'edited_element_id': 'event-1',
+                    'parameters': {
+                        'name': 'Greater Poland uprising'
+                    }
+                }
+            ]
+        }
+        request_nr = 2
 
         await communicator.send_json_to(request)
         response = await communicator.receive_json_from()
@@ -780,7 +791,7 @@ class TestIssue113:
                 }
             ]
         }
-        request_nr = 2
+        request_nr = 3
 
         await communicator.send_json_to(request)
         response = await communicator.receive_json_from()
@@ -836,16 +847,30 @@ class TestIssue114:
                     'edited_element_id': 'ab-1',
                     'parameters': {
                         'entity_type': 'person',
-                        'entity_properties': {
-                            'forename': 'Bugs',
-                            'surname': 'Bunny',
-                            'age': 'adult'
-                        }
                     }
                 }
             ]
         }
         request_nr = 1
+
+        await communicator.send_json_to(request)
+        response = await communicator.receive_json_from()
+        verify_response(test_name, response, request_nr)
+
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'POST',
+                    'element_type': 'entity_property',
+                    'edited_element_id': 'person-6',
+                    'parameters': {
+                        'age': 'adult'
+                    }
+                }
+            ]
+        }
+        request_nr = 2
 
         await communicator.send_json_to(request)
         response = await communicator.receive_json_from()
@@ -868,7 +893,7 @@ class TestIssue114:
                 }
             ]
         }
-        request_nr = 2
+        request_nr = 3
 
         await communicator.send_json_to(request)
         response = await communicator.receive_json_from()
@@ -1040,13 +1065,32 @@ class TestIssueUnnamed01:
                     'edited_element_id': 0,
                     'parameters': {
                         'entity_type': 'person',
-                        'entity_properties': {
-                            'forename': 'Freddy',
-                            'surname': 'Mercury',
-                            'sex': 'M'
-                        }
                     }
                 },
+                {
+                    'method': 'POST',
+                    'element_type': 'entity_property',
+                    'edited_element_id': 'person-0',
+                    'parameters': {
+                        'forename': 'Freddy'
+                    }
+                },
+                {
+                    'method': 'POST',
+                    'element_type': 'entity_property',
+                    'edited_element_id': 'person-0',
+                    'parameters': {
+                        'surname': 'Mercury'
+                    }
+                },
+                {
+                    'method': 'POST',
+                    'element_type': 'entity_property',
+                    'edited_element_id': 'person-0',
+                    'parameters': {
+                        'sex': 'M'
+                    }
+                }
             ]
         }
         request_nr = 1
@@ -1057,7 +1101,7 @@ class TestIssueUnnamed01:
 
         request = {
             'method': 'save',
-            'payload': [1, 2]
+            'payload': [1, 2, 3, 4, 5]
         }
         request_nr = 2
 
