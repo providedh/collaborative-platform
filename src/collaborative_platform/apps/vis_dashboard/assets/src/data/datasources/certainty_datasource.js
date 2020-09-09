@@ -88,10 +88,11 @@ export default function CertaintyDataSource (pubSubService, appContext) {
     _publishData()
   }
   function _processData (data, fileId) {
+    const filename = self._appContext.id2document[fileId].name
     return data.map(d => {
-      const {ana, ...annotation} = d
+      const {ana, target, ...annotation} = d
       const categories = ana.split(' ').map(c => c.split('#')[1])
-      return {categories, fileId, filename: self._appContext.id2document[fileId].name, ...annotation}
+      return {categories, filename, filedId: +fileId, target: target.slice(1), ...annotation}
     })
   }
   /**

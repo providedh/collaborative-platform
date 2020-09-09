@@ -82,6 +82,15 @@ export default function EntityDataSource (pubSubService, appContext) {
     _publishData()
   }
 
+  function _processData (data, fileId) {
+    const filename = self._appContext.id2document[fileId].name
+    return data.map(d => {
+      return Object.assign({},
+        {file_id: +fileId, filename, ...d },
+        {id: `${d.type}${d.id}`})
+    })
+  }
+
   /**
     * Retrieves data from the external source.
     */
@@ -94,7 +103,11 @@ export default function EntityDataSource (pubSubService, appContext) {
     self._data.remove(() => true) // clear previous data
     files.forEach(file => {
       self._source.getFileEntities({ project: self._appContext.project, file }, {}, null).then(response => {
-        if (response.success === false) { console.info('Failed to retrieve entities for file: ' + file) } else { self._data.add(response.content.map(x => ({ file_id: +file, file_name: getName(file), ...x }))) }
+        if (response.success === false) {
+          console.info('Failed to retrieve entities for file: ' + file)
+        } else {
+          self._data.add(_processData(response.content, file))
+        }
         _publishData()
         if (++retrieved === retrieving) {
           self.publish('status', { action: 'fetched' })
