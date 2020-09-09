@@ -33,7 +33,7 @@ function onTagCreate (selection, entityPayload, websocket) {
     operations.push(refBuilder(0, entityPayload))
   } else {
     const {entity_type, entity_properties} = entityPayload.parameters
-    operations.push(refBuilder(0, {parameters: {entity_type, entity_properties: {}}}))
+    operations.push(refBuilder(0, {parameters: {entity_type}}))
     for (const [key, value] of Object.entries(entity_properties)) {
       operations.push(propertyBuilder(1, key, value))
     }
