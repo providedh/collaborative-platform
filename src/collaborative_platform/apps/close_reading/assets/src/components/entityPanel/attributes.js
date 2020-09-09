@@ -76,7 +76,8 @@ function Attributes (props) {
           </div>
           <div className="col">
             <label htmlFor="value">Value</label>
-            <input type="text"
+            <input
+              type={!['when', 'death', 'birth'].includes(attributeName) ? 'text' : (attributeName === 'when' && props.entity.type === 'time' ? 'time' : 'date')}
               value={attributeValue}
               onChange={e => setAttributeValue(e.target.value)}
               className="form-control form-control-sm"
@@ -102,7 +103,7 @@ function Attributes (props) {
           <label htmlFor="value">{editingAttribute?.name}</label>
           <input type="text"
             className="form-control form-control-sm"
-            type={editingAttribute?.name !== 'when' ? 'text' : 'date'}
+            type={!['when', 'death', 'birth'].includes(attributeName) ? 'text' : (attributeName === 'when' && props.entity.type === 'time' ? 'time' : 'date')}
             onChange={e => edit({ name: editingAttribute?.name, value: e.target.value })}
             value={editingAttribute === null ? '' : editingAttribute.value}/>
         </div>

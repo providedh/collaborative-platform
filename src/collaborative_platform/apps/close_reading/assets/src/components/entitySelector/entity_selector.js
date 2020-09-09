@@ -22,6 +22,7 @@ function getPayloadForOptions (entityType, ref, properties, usingRef) {
 
   if (usingRef === true) {
     payload.new_element_id = ref
+    if (ref === '') {return}
   } else {
     const nonEmptyProperties = Object.fromEntries(
       Object.entries(properties).filter(([key, val]) => val.length > 0)
@@ -82,7 +83,7 @@ function EntitySelector (props) {
     <input type="text"
       className="form-control form-control-sm"
       id={name}
-      type={name !== 'when' ? 'text' : 'date'}
+      type={!['when', 'death', 'birth'].includes(name) ? 'text' : (name === 'when' && selectedEntity === 'time' ? 'time' : 'date')}
       value={value}
       onChange={e => handleAttributeChange(Object.assign({}, attributes, { [name]: e.target.value }))} />
   </div>)

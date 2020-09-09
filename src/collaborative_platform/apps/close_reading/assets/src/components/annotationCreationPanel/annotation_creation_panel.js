@@ -45,13 +45,25 @@ function AnnotationCreationPanel (props) {
   const [annotation, setAnnotation] = useState(null)
   const [step, setStep] = useState(0)
 
+  let entityType = Object.keys(props.context.configuration.entities)[0]
+  if (payload != null) {
+    if (payload?.parameters?.entity_type !== undefined) {
+      entityType = payload.parameters.entity_type
+    } else if (payload?.new_element_id !== undefined) {
+      const target = props.context.entities.filter(e => e.target.value === payload.new_element_id)?.[0]
+      if (target !== undefined) {
+        entityType = target.type
+      }
+    }
+  }
+
   return <div className={styles.annotationCreationPanel}>
     <form>
       <div className={step === 0 ? '' : 'd-none'}>
         <EntitySelector onChange={newPayload => setPayload(newPayload)}/>
       </div>
       <div className={step === 1 ? '' : 'd-none'}>
-        <AnnotateForm entity='person'
+        <AnnotateForm entity={entityType}
           onChange={annotation => setAnnotation(annotation)}/>
       </div>
       <div className="row mt-2 flex-column mx-1">
