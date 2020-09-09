@@ -16,10 +16,6 @@ from apps.views_decorators import objects_exists, user_has_access
 from .helpers import search_files_by_person_name, search_files_by_content
 
 
-ANNOTATION_TAGS = ['date', 'event', 'location', 'geolocation', 'name', 'occupation', 'object', 'org', 'person', 'place',
-                   'country', 'time']
-
-
 @login_required
 def projects(request):  # type: (HttpRequest) -> JsonResponse
     if request.method == 'GET':

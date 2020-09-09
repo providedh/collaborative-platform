@@ -3768,7 +3768,7 @@ class TestAnnotatorWithWsAndDb:
         assert len(file_versions) == 3
 
         expected_file_name = f'{test_name}.xml'
-        expected_file_path = os.path.join(SCRIPT_DIR, 'result_files', expected_file_name)
+        expected_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'expected_files', expected_file_name)
 
         expected_xml = read_file(expected_file_path)
         result_xml = file_versions[0].get_raw_content()

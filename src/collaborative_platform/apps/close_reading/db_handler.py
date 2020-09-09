@@ -569,8 +569,9 @@ class DbHandler:
 
         for entity_property in entity_properties:
             entity_property.created_in_file_version = new_file_version
+            entity_property.entity_version = entity_version
 
-        EntityProperty.objects.bulk_update(entity_properties, ['created_in_file_version'])
+        EntityProperty.objects.bulk_update(entity_properties, ['created_in_file_version', 'entity_version'])
 
     @staticmethod
     def __confirm_entity_properties_delete(entity_version, new_file_version, entity_properties_names=None):
