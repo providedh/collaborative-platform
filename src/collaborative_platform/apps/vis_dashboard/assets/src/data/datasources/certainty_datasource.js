@@ -37,9 +37,20 @@ export default function CertaintyDataSource (pubSubService, appContext) {
     self._fetched = false
     self.get = _getData
     pubSubService.register(self)
-    self.subscribe(`filter/entityId`, args=>_filterDimension(self._targetDimension, args.filter));
-    self.subscribe(`filter/fileName`, args=>_filterDimension(self._filenameDimension, args.filter));
-    self.subscribe(`filter/fileId`, args=>_filterDimension(self._fileidDimension, args.filter));
+
+    // common filters
+    self.subscribe(`filter/entityId`, args=>_filterDimension(self._targetDimension, args.filter))
+    self.subscribe(`filter/fileName`, args=>_filterDimension(self._filenameDimension, args.filter))
+    self.subscribe(`filter/fileId`, args=>_filterDimension(self._fileidDimension, args.filter))
+
+    self.subscribe(`filter/categories`, args=>_filterDimension(self._categoriesDimension, args.filter))
+    self.subscribe(`filter/locus`, args=>_filterDimension(self._locusDimension, args.filter))
+    self.subscribe(`filter/match`, args=>_filterDimension(self._matchDimension, args.filter))
+    self.subscribe(`filter/resp`, args=>_filterDimension(self._respDimension, args.filter))
+    self.subscribe(`filter/assertedValue`, args=>_filterDimension(self._assertedValueDimension, args.filter))
+    self.subscribe(`filter/degree`, args=>_filterDimension(self._degreeDimension, args.filter))
+    self.subscribe(`filter/cert`, args=>_filterDimension(self._certDimension, args.filter))
+    self.subscribe(`filter/certId`, args=>_filterDimension(self._idDimension, args.filter))
 
     return self
   }
