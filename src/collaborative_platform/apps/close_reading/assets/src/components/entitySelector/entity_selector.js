@@ -22,6 +22,7 @@ function getPayloadForOptions (entityType, ref, properties, usingRef) {
 
   if (usingRef === true) {
     payload.new_element_id = ref
+    if (ref === '') {return}
   } else {
     const nonEmptyProperties = Object.fromEntries(
       Object.entries(properties).filter(([key, val]) => val.length > 0)
@@ -82,7 +83,7 @@ function EntitySelector (props) {
     <input type="text"
       className="form-control form-control-sm"
       id={name}
-      type={name !== 'when' ? 'text' : 'date'}
+      type={!['when', 'death', 'birth'].includes(name) ? 'text' : (name === 'when' && selectedEntity === 'time' ? 'time' : 'date')}
       value={value}
       onChange={e => handleAttributeChange(Object.assign({}, attributes, { [name]: e.target.value }))} />
   </div>)
@@ -116,12 +117,22 @@ function EntitySelector (props) {
     <div className="row">
       <div className="form-group">
         <label htmlFor="entityType">Entity type</label>
-        <select className="form-control form-control-sm" id="entityType" value={selectedEntity} onChange={e => handleEntityChange(e.target.value)}>
+        <select 
+            className="form-control form-control-sm"
+            id="entityType"
+            value={selectedEntity}
+            onChange={e => {
+              if(['date', 'time'].includes(e.target.value)) {
+                handleUsingRefChange(false)
+                handleEntityChange(e.target.value)
+              } else {
+                handleEntityChange(e.target.value)
+              }}}>
           {entityOptions}
         </select>
       </div>
     </div>
-    <div className="row">
+    <div className={['date', 'time'].includes(selectedEntity) ? "d-none" : "row"}>
       <span className="mr-2">This is a new entity</span>
       <div className="custom-control custom-switch">
         <input
