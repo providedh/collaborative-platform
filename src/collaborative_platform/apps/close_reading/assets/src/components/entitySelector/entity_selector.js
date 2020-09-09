@@ -117,12 +117,22 @@ function EntitySelector (props) {
     <div className="row">
       <div className="form-group">
         <label htmlFor="entityType">Entity type</label>
-        <select className="form-control form-control-sm" id="entityType" value={selectedEntity} onChange={e => handleEntityChange(e.target.value)}>
+        <select 
+            className="form-control form-control-sm"
+            id="entityType"
+            value={selectedEntity}
+            onChange={e => {
+              if(['date', 'time'].includes(e.target.value)) {
+                handleUsingRefChange(false)
+                handleEntityChange(e.target.value)
+              } else {
+                handleEntityChange(e.target.value)
+              }}}>
           {entityOptions}
         </select>
       </div>
     </div>
-    <div className="row">
+    <div className={['date', 'time'].includes(selectedEntity) ? "d-none" : "row"}>
       <span className="mr-2">This is a new entity</span>
       <div className="custom-control custom-switch">
         <input
