@@ -32,7 +32,7 @@ before_script:
 #  - psql -c "create user ctest with encrypted password 'ctest';" -U postgres
 #  - psql -c "grant all privileges on database ctest to ctest;" -U postgres
 
-script: pytest -c pytest_travis.ini --reruns 5 --reruns-delay 5
+script: pytest -c pytest_travis.ini --force-flaky
 
 deploy:
   skip_cleanup: true
