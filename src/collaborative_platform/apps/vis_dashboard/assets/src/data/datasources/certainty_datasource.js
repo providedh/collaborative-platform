@@ -20,7 +20,7 @@ export default function CertaintyDataSource (pubSubService, appContext) {
     self._respDimension = self._data.dimension(x => x.resp)
     self._targetDimension = self._data.dimension(x => x.target)
     self._idDimension = self._data.dimension(x => x['xml:id'])
-    self._fileidDimension = self._data.dimension(x => x.fileId)
+    self._fileidDimension = self._data.dimension(x => x.file_id)
     self._filenameDimension = self._data.dimension(x => x.filename)
 
     self._appContext = appContext
@@ -90,9 +90,16 @@ export default function CertaintyDataSource (pubSubService, appContext) {
   function _processData (data, fileId) {
     const filename = self._appContext.id2document[fileId].name
     return data.map(d => {
-      const {ana, target, ...annotation} = d
-      const categories = ana.split(' ').map(c => c.split('#')[1])
-      return {categories, filename, filedId: +fileId, target: target.slice(1), ...annotation}
+      const {ana, target, locus, ...annotation} = d
+      const categories = ana.length === 0 ? ['no category'] : ana.split(' ').map(c => c.split('#')[1])
+
+      return {
+        categories,
+        filename,
+        file_id: +fileId,
+        target: target.slice(1),
+        locus: d.match !== null ? 'attribute' : locus,
+        ...annotation}
     })
   }
   /**
