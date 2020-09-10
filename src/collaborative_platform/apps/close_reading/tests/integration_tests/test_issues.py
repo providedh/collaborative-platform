@@ -3,8 +3,14 @@ import json
 import os
 import pytest
 
+from django.contrib.auth.models import User
+from django.test import Client
+
 from apps.api_vis.models import Entity, EntityProperty
 from apps.close_reading.tests.integration_tests.test_annotator_with_ws_and_db import get_communicator, read_file
+from apps.files_management.models import Directory, File
+from apps.files_management.tests.integration_tests.test_file_handling_with_hd_and_db import upload_file, download_file
+from apps.projects.models import Project
 
 
 SCRIPT_DIR = os.path.dirname(__file__)
@@ -346,11 +352,6 @@ class TestIssue112:
                     'edited_element_id': 'ab-1',
                     'parameters': {
                         'entity_type': 'person',
-                        'entity_properties': {
-                            'forename': 'Bugs',
-                            'surname': 'Bunny',
-                            'sex': 'M'
-                        }
                     }
                 }
             ]
@@ -365,7 +366,7 @@ class TestIssue112:
             entity__xml_id='person-6',
             entity__file_id=file_id
         )
-        assert added_properties.count() == 3
+        assert added_properties.count() == 0
 
         request = {
             'method': 'modify',
@@ -744,14 +745,30 @@ class TestIssue113:
                     'edited_element_id': 'ab-1',
                     'parameters': {
                         'entity_type': 'event',
-                        'entity_properties': {
-                            'name': 'Greater Poland uprising'
-                        }
                     }
                 }
             ]
         }
         request_nr = 1
+
+        await communicator.send_json_to(request)
+        response = await communicator.receive_json_from()
+        verify_response(test_name, response, request_nr)
+
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'POST',
+                    'element_type': 'entity_property',
+                    'edited_element_id': 'event-1',
+                    'parameters': {
+                        'name': 'Greater Poland uprising'
+                    }
+                }
+            ]
+        }
+        request_nr = 2
 
         await communicator.send_json_to(request)
         response = await communicator.receive_json_from()
@@ -774,7 +791,7 @@ class TestIssue113:
                 }
             ]
         }
-        request_nr = 2
+        request_nr = 3
 
         await communicator.send_json_to(request)
         response = await communicator.receive_json_from()
@@ -830,16 +847,30 @@ class TestIssue114:
                     'edited_element_id': 'ab-1',
                     'parameters': {
                         'entity_type': 'person',
-                        'entity_properties': {
-                            'forename': 'Bugs',
-                            'surname': 'Bunny',
-                            'age': 'adult'
-                        }
                     }
                 }
             ]
         }
         request_nr = 1
+
+        await communicator.send_json_to(request)
+        response = await communicator.receive_json_from()
+        verify_response(test_name, response, request_nr)
+
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'POST',
+                    'element_type': 'entity_property',
+                    'edited_element_id': 'person-6',
+                    'parameters': {
+                        'age': 'adult'
+                    }
+                }
+            ]
+        }
+        request_nr = 2
 
         await communicator.send_json_to(request)
         response = await communicator.receive_json_from()
@@ -862,7 +893,7 @@ class TestIssue114:
                 }
             ]
         }
-        request_nr = 2
+        request_nr = 3
 
         await communicator.send_json_to(request)
         response = await communicator.receive_json_from()
@@ -980,6 +1011,115 @@ class TestIssue124:
         verify_response(test_name, response, request_nr)
 
         await communicator.disconnect()
+
+
+@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
+@pytest.mark.asyncio
+@pytest.mark.django_db(transaction=True, reset_sequences=True)
+@pytest.mark.integration_tests
+class TestIssueUnnamed01:
+    """Entities properties doesn't exists after file download"""
+
+    async def test_added_entities_are_properly_rendered_in_downloaded_file(self):
+        """Case replicated without issue description"""
+
+        test_name = inspect.currentframe().f_code.co_name
+
+        user_id = 2
+        project_id = 1
+
+        client = Client()
+        user = User.objects.get(id=user_id)
+        client.force_login(user)
+
+        project = Project.objects.get(id=project_id)
+        directory = Directory.objects.get(project=project, name=project.title, parent_dir=None)
+        source_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files', 'music_xml_clean.xml')
+
+        upload_file(client, source_file_path, directory.id)
+
+        file_id = 4
+        user_id = 2
+
+        communicator = get_communicator(project_id, file_id, user_id)
+
+        await communicator.connect()
+        response = await communicator.receive_json_from()
+        request_nr = 0
+        verify_response(test_name, response, request_nr)
+
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'POST',
+                    'element_type': 'tag',
+                    'parameters': {
+                        'start_pos': 317,
+                        'end_pos': 331,
+                    }
+                },
+                {
+                    'method': 'POST',
+                    'element_type': 'reference',
+                    'edited_element_id': 0,
+                    'parameters': {
+                        'entity_type': 'person',
+                    }
+                },
+                {
+                    'method': 'POST',
+                    'element_type': 'entity_property',
+                    'edited_element_id': 'person-0',
+                    'parameters': {
+                        'forename': 'Freddy'
+                    }
+                },
+                {
+                    'method': 'POST',
+                    'element_type': 'entity_property',
+                    'edited_element_id': 'person-0',
+                    'parameters': {
+                        'surname': 'Mercury'
+                    }
+                },
+                {
+                    'method': 'POST',
+                    'element_type': 'entity_property',
+                    'edited_element_id': 'person-0',
+                    'parameters': {
+                        'sex': 'M'
+                    }
+                }
+            ]
+        }
+        request_nr = 1
+
+        await communicator.send_json_to(request)
+        response = await communicator.receive_json_from()
+        verify_response(test_name, response, request_nr)
+
+        request = {
+            'method': 'save',
+            'payload': [1, 2, 3, 4, 5]
+        }
+        request_nr = 2
+
+        await communicator.send_json_to(request)
+        response = await communicator.receive_json_from()
+        verify_response(test_name, response, request_nr)
+
+        await communicator.disconnect()
+
+        expected_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'expected_files',
+                                          'music_xml_clean_expected.xml')
+        expected_xml = read_file(expected_file_path)
+
+        file = File.objects.order_by('-id')[0]
+        latest_file_version = file.file_versions.latest('id')
+        result_xml = download_file(client, file_id, latest_file_version.number)
+
+        assert result_xml == expected_xml
 
 
 def verify_response(test_name, response, request_nr):

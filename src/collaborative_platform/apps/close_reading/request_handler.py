@@ -235,9 +235,7 @@ class RequestHandler:
             entity_type = self.__db_handler.get_entity_type(entity_xml_id)
 
         if not entity_xml_id and entity_type in self.__listable_entities_types:
-            entity_properties = request['parameters']['entity_properties']
-
-            entity_xml_id = self.__db_handler.add_entity(entity_type, entity_properties)
+            entity_xml_id = self.__db_handler.add_entity(entity_type)
 
             new_tag = 'name'
             new_tag_xml_id = self.__db_handler.get_next_xml_id(new_tag)
@@ -248,14 +246,11 @@ class RequestHandler:
             self.__db_handler.set_body_content(body_content)
 
         elif not entity_xml_id and entity_type not in self.__listable_entities_types:
-            entity_properties = request['parameters']['entity_properties']
-
-            entity_xml_id = self.__db_handler.add_entity(entity_type, entity_properties)
+            entity_xml_id = self.__db_handler.add_entity(entity_type)
 
             body_content = self.__db_handler.get_body_content()
             body_content = self.__xml_handler.add_reference_to_entity(body_content, tag_xml_id, entity_type,
                                                                       entity_xml_id, entity_xml_id)
-            body_content = self.__xml_handler.add_entity_properties(body_content, entity_xml_id, entity_properties)
             self.__db_handler.set_body_content(body_content)
 
         elif entity_xml_id and entity_type in self.__listable_entities_types:
@@ -295,9 +290,7 @@ class RequestHandler:
         old_entity_type = self.__db_handler.get_entity_type(old_entity_xml_id)
 
         if not new_entity_xml_id and new_entity_type in self.__listable_entities_types:
-            new_entity_properties = request['parameters']['entity_properties']
-
-            new_entity_xml_id = self.__db_handler.add_entity(new_entity_type, new_entity_properties)
+            new_entity_xml_id = self.__db_handler.add_entity(new_entity_type)
 
             new_tag = 'name'
             new_tag_xml_id = self.__get_new_tag_xml_id(tag_xml_id, new_tag)
@@ -323,9 +316,7 @@ class RequestHandler:
                 self.__db_handler.delete_entity(old_entity_xml_id)
 
         elif not new_entity_xml_id and new_entity_type not in self.__listable_entities_types:
-            new_entity_properties = request['parameters']['entity_properties']
-
-            new_entity_xml_id = self.__db_handler.add_entity(new_entity_type, new_entity_properties)
+            new_entity_xml_id = self.__db_handler.add_entity(new_entity_type)
 
             body_content = self.__db_handler.get_body_content()
             tag_is_an_entity = self.__xml_handler.check_if_tag_is_an_entity(body_content, tag_xml_id)
@@ -340,8 +331,6 @@ class RequestHandler:
                 body_content = self.__xml_handler.delete_entity_properties(body_content, new_entity_xml_id,
                                                                            old_entity_properties)
 
-            body_content = self.__xml_handler.add_entity_properties(body_content, new_entity_xml_id,
-                                                                    new_entity_properties)
             self.__db_handler.set_body_content(body_content)
 
             last_reference = self.__xml_handler.check_if_last_reference(body_content, old_entity_xml_id)

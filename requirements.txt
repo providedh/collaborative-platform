@@ -9,6 +9,7 @@ pytest==6.0.1
 pytest-asyncio==0.14.0
 pytest-cov==2.10.1
 pytest-django==3.9.0
+pytest-rerunfailures==9.1
 django-async-test==0.2.2
 
 # Web browser handler
@@ -41,7 +42,7 @@ elasticsearch-dsl>=7.0.0,<8.0.0
 social-auth-app-django==4.0.0
 
 # For SSL on localhost
-# django-extensions==2.2.1
+# django-extensions==3.0.8
 # Werkzeug==0.15.5
 # pyOpenSSL==19.0.0
 # service_identity==18.1.0
@@ -53,7 +54,6 @@ django-autocomplete-light==3.5.1
 django-cleanup==5.0.0
 
 asgiref==3.2.10
-
 
 # For NLP
 pandas

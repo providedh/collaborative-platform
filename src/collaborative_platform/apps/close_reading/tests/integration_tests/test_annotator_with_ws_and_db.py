@@ -240,11 +240,6 @@ class TestAnnotatorWithWsAndDb:
                     'edited_element_id': 'ab-1',
                     'parameters': {
                         'entity_type': 'person',
-                        'entity_properties': {
-                            'forename': 'Bugs',
-                            'surname': 'Bunny',
-                            'sex': 'M'
-                        }
                     }
                 }
             ]
@@ -300,9 +295,6 @@ class TestAnnotatorWithWsAndDb:
                     'edited_element_id': 'ab-1',
                     'parameters': {
                         'entity_type': 'date',
-                        'entity_properties': {
-                            'when': '2000-01-01'
-                        }
                     }
                 }
             ]
@@ -543,11 +535,6 @@ class TestAnnotatorWithWsAndDb:
                     'old_element_id': 'date-2',
                     'parameters': {
                         'entity_type': 'person',
-                        'entity_properties': {
-                            'forename': 'Bugs',
-                            'surname': 'Bunny',
-                            'sex': 'M'
-                        }
                     }
                 }
             ]
@@ -592,9 +579,6 @@ class TestAnnotatorWithWsAndDb:
                     'old_element_id': 'ingredient-2',
                     'parameters': {
                         'entity_type': 'date',
-                        'entity_properties': {
-                            'when': '1410-07-15'
-                        }
                     }
                 }
             ]
@@ -751,9 +735,6 @@ class TestAnnotatorWithWsAndDb:
                     'edited_element_id': 'ab-1',
                     'parameters': {
                         'entity_type': 'date',
-                        'entity_properties': {
-                            'name': 'new date'
-                        }
                     }
                 }
             ]
@@ -1319,11 +1300,6 @@ class TestAnnotatorWithWsAndDb:
                     'edited_element_id': 0,
                     'parameters': {
                         'entity_type': 'person',
-                        'entity_properties': {
-                            'forename': 'Bugs',
-                            'surname': 'Bunny',
-                            'sex': 'M'
-                        }
                     }
                 },
                 {
@@ -1534,11 +1510,6 @@ class TestAnnotatorWithWsAndDb:
                     'edited_element_id': 'ab-1',
                     'parameters': {
                         'entity_type': 'person',
-                        'entity_properties': {
-                            'forename': 'Bugs',
-                            'surname': 'Bunny',
-                            'sex': 'M'
-                        }
                     }
                 }
             ]
@@ -1599,9 +1570,6 @@ class TestAnnotatorWithWsAndDb:
                     'edited_element_id': 'ab-1',
                     'parameters': {
                         'entity_type': 'date',
-                        'entity_properties': {
-                            'when': '2000-01-01'
-                        }
                     }
                 }
             ]
@@ -1774,11 +1742,6 @@ class TestAnnotatorWithWsAndDb:
                     'old_element_id': 'date-2',
                     'parameters': {
                         'entity_type': 'person',
-                        'entity_properties': {
-                            'forename': 'Bugs',
-                            'surname': 'Bunny',
-                            'sex': 'M'
-                        }
                     }
                 }
             ]
@@ -1845,9 +1808,6 @@ class TestAnnotatorWithWsAndDb:
                     'old_element_id': 'ingredient-2',
                     'parameters': {
                         'entity_type': 'date',
-                        'entity_properties': {
-                            'when': '1410-07-15'
-                        }
                     }
                 }
             ]
@@ -2150,9 +2110,6 @@ class TestAnnotatorWithWsAndDb:
                     'edited_element_id': 'ab-1',
                     'parameters': {
                         'entity_type': 'date',
-                        'entity_properties': {
-                            'name': 'new date'
-                        }
                     }
                 }
             ]
@@ -2693,11 +2650,6 @@ class TestAnnotatorWithWsAndDb:
                     'edited_element_id': 'ab-1',
                     'parameters': {
                         'entity_type': 'person',
-                        'entity_properties': {
-                            'forename': 'Bugs',
-                            'surname': 'Bunny',
-                            'sex': 'M'
-                        }
                     }
                 }
             ]
@@ -2758,9 +2710,6 @@ class TestAnnotatorWithWsAndDb:
                     'edited_element_id': 'ab-1',
                     'parameters': {
                         'entity_type': 'date',
-                        'entity_properties': {
-                            'when': '2000-01-01'
-                        }
                     }
                 }
             ]
@@ -2933,11 +2882,6 @@ class TestAnnotatorWithWsAndDb:
                     'old_element_id': 'date-2',
                     'parameters': {
                         'entity_type': 'person',
-                        'entity_properties': {
-                            'forename': 'Bugs',
-                            'surname': 'Bunny',
-                            'sex': 'M'
-                        }
                     }
                 }
             ]
@@ -3006,9 +2950,6 @@ class TestAnnotatorWithWsAndDb:
                     'old_element_id': 'ingredient-2',
                     'parameters': {
                         'entity_type': 'date',
-                        'entity_properties': {
-                            'when': '1410-07-15'
-                        }
                     }
                 }
             ]
@@ -3341,9 +3282,6 @@ class TestAnnotatorWithWsAndDb:
                     'edited_element_id': 'ab-1',
                     'parameters': {
                         'entity_type': 'date',
-                        'entity_properties': {
-                            'name': 'new date'
-                        }
                     }
                 }
             ]
@@ -3768,7 +3706,7 @@ class TestAnnotatorWithWsAndDb:
         assert len(file_versions) == 3
 
         expected_file_name = f'{test_name}.xml'
-        expected_file_path = os.path.join(SCRIPT_DIR, 'result_files', expected_file_name)
+        expected_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'expected_files', expected_file_name)
 
         expected_xml = read_file(expected_file_path)
         result_xml = file_versions[0].get_raw_content()
@@ -3834,11 +3772,6 @@ class TestAnnotatorWithWsAndDb:
                     'edited_element_id': 'ab-1',
                     'parameters': {
                         'entity_type': 'person',
-                        'entity_properties': {
-                            'forename': 'Bugs',
-                            'surname': 'Bunny',
-                            'sex': 'M'
-                        }
                     }
                 }
             ]
@@ -4034,11 +3967,6 @@ class TestAnnotatorWithWsAndDb:
                     'edited_element_id': 0,
                     'parameters': {
                         'entity_type': 'person',
-                        'entity_properties': {
-                            'forename': 'Bugs',
-                            'surname': 'Bunny',
-                            'sex': 'M'
-                        }
                     }
                 },
                 {
@@ -4167,11 +4095,6 @@ class TestAnnotatorWithWsAndDb:
                     'edited_element_id': 0,
                     'parameters': {
                         'entity_type': 'person',
-                        'entity_properties': {
-                            'forename': 'Bugs',
-                            'surname': 'Bunny',
-                            'sex': 'M'
-                        }
                     }
                 },
                 {
@@ -4300,11 +4223,6 @@ class TestAnnotatorWithWsAndDb:
                     'edited_element_id': 0,
                     'parameters': {
                         'entity_type': 'person',
-                        'entity_properties': {
-                            'forename': 'Bugs',
-                            'surname': 'Bunny',
-                            'sex': 'M'
-                        }
                     }
                 },
                 {
