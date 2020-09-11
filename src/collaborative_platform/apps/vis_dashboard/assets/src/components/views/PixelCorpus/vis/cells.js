@@ -10,7 +10,7 @@ export default function renderCells (args) {
     data,
     freeSpace,
     source,
-    _entityColorScale,
+    _colorScale,
     _colorBy,
     _eventCallback,
     _padding,
@@ -40,7 +40,7 @@ export default function renderCells (args) {
 
   renderDocumentLabels(docOrder, rowsByDoc, rootG, cellSide, _maxLabelLength, cellPadding, _titleHeight, _eventCallback)
 
-  renderEntityCells(docOrder, cellsByDoc, rowsByDoc, rootG, cellSide, cellPadding, _titleHeight, _docNameWidth, _maxRowItems, _entityColorScale, _eventCallback, _colorBy)
+  renderEntityCells(docOrder, cellsByDoc, rowsByDoc, rootG, cellSide, cellPadding, _titleHeight, _docNameWidth, _maxRowItems, _colorScale, _eventCallback, _colorBy)
 
   setupInteractions()
 }
@@ -81,10 +81,14 @@ function renderDocumentLabels (docOrder, rowsByDoc, rootG, cellSide, maxLabelWid
 
 function renderEntityCells (docOrder, data, rowsByDoc, rootG, cellSide, cellPadding, titleHeight, docNameWidth, maxRowItems, colorScale, eventCallback, colorBy) {
   const labels = rootG.select('.entityCells')
-    .attr('transform', `translate(${docNameWidth + 10}, ${titleHeight - 22})`)
     .selectAll('g.doc')
     .data(Object.keys(docOrder))
   labels.exit().remove()
+
+  if (Object.keys(docOrder).length > 0) {
+    rootG.select('.entityCells').attr('transform', `translate(${docNameWidth + 10}, ${titleHeight - 22})`)
+  }
+  
   labels.enter().append('svg:g').classed('doc', true)
   rootG.select('.entityCells').selectAll('g.doc')
     .each(function (d) {
@@ -114,8 +118,9 @@ function setupInteractions () {
 }
 
 function getCellsPerDoc (data, accessor) {
+  console.log(data)
   const cellsByDoc = {}
-  data.all.forEach(e => {
+  data.filtered.forEach(e => {
     if (!Object.hasOwnProperty.call(cellsByDoc, accessor(e))) { cellsByDoc[accessor(e)] = [] }
     cellsByDoc[accessor(e)].push(e)
   })
