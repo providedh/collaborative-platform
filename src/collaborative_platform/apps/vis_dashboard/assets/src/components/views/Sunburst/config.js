@@ -2,12 +2,12 @@ import * as d3 from 'd3'
 
 const attributes = {
   entity: {
-    options: ['name', 'type', 'file_name', 'id'],
-    labels: ['text', 'type', 'documentName', 'id']
+    options: ['name', 'type', 'properties', 'filename', 'file_id'],
+    labels: ['text', 'type', 'properties', 'documentName', 'id']
   },
   certainty: {
-    options: ['resp', 'file', 'category', 'match', 'cert', 'degree'],
-    labels: ['author', 'document', 'category', 'attribute', 'certainty', 'degree']
+    options: ['resp', 'locus', 'file_id', 'categories', 'match', 'cert', 'degree'],
+    labels: ['author', 'type', 'document', 'category', 'attribute', 'certainty', 'degree']
   }
 }
 
@@ -29,9 +29,9 @@ const defaultConfig = [
     value: '3',
     params: { options: d3.range(1, attributes.certainty.options.length).map(x => x + '') }
   },
-  { name: 'level1', type: 'selection', value: 'resp', params: attributes.certainty },
-  { name: 'level2', type: 'selection', value: 'file', params: attributes.certainty },
-  { name: 'level3', type: 'selection', value: 'category', params: attributes.certainty }
+  { name: 'level1', type: 'selection', value: 'file_id', params: attributes.certainty },
+  { name: 'level2', type: 'selection', value: 'locus', params: attributes.certainty },
+  { name: 'level3', type: 'selection', value: 'cert', params: attributes.certainty }
 ]
 
 function createLevelsControls (numberOfLevels, prevLevels, source) {
