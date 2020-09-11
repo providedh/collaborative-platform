@@ -8,12 +8,12 @@ import Map from './Map'
 import Timeline from './Timeline'
 
 export default {
+  Heatmap,
   Map,
   Timeline,
   Note,
   PixelCorpus,
   Sunburst,
-  Heatmap,
   DocumentView,
   BarChart
 }

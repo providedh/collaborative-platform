@@ -54,10 +54,10 @@ export default function Heatmap () {
       ctx.stroke()
     })
 
-    setupBrush(legendbrush, x, y, colorWidth, colorHeight,
+    /*setupBrush(legendbrush, x, y, colorWidth, colorHeight,
       ([y0, y1]) => self._eventCallback([
         self._rangeScale.invert(y0 / colorHeight),
-        self._rangeScale.invert(y1 / colorHeight)]))
+        self._rangeScale.invert(y1 / colorHeight)]))*/
 
     ctx.moveTo(0, 0)
     ctx.strokeStyle = 'black'
