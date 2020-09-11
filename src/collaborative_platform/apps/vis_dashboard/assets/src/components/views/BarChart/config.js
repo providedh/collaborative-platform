@@ -32,40 +32,37 @@ const defaultConfig = [
 export { BarChartDimension }
 export { BarChartDirection }
 
-export default function (entities){
-  return function getOptions (form) {
-    if (form == null) { return defaultConfig }
-    const currentValues = {}
-    form.forEach(x => { currentValues[x.name] = x.value })
+export default function getOptions (form, context) {
+  if (form == null) { return defaultConfig }
+  const currentValues = {}
+  form.forEach(x => { currentValues[x.name] = x.value })
 
-    const { barDirection, dimension } = currentValues
+  const { barDirection, dimension } = currentValues
 
-    const configOptions = [
-      {
-        name: 'barDirection',
-        type: 'selection',
-        value: barDirection,
-        params: { options: Object.values(BarChartDirection) }
-      },
-      {
-        name: 'dimension',
-        type: 'selection',
-        value: dimension,
-        params: { options: Object.keys(BarChartDimension), labels: Object.values(BarChartDimension) }
-      }
-    ]
-
-    if (dimension === 'commonAttributeValues') {
-      console.log(currentValues)
-      const entityNames = entities.map(x => x.name)
-      configOptions.push({
-        name: 'entityType',
-        type: 'selection',
-        value: currentValues?.entityType === undefined ? entityNames[0] : currentValues.entityType,
-        params: { options: entityNames, labels: entityNames }
-      })
+  const configOptions = [
+    {
+      name: 'barDirection',
+      type: 'selection',
+      value: barDirection,
+      params: { options: Object.values(BarChartDirection) }
+    },
+    {
+      name: 'dimension',
+      type: 'selection',
+      value: dimension,
+      params: { options: Object.keys(BarChartDimension), labels: Object.values(BarChartDimension) }
     }
+  ]
 
-    return configOptions
+  if (dimension === 'commonAttributeValues') {
+    const entityNames = context.taxonomy.entities.map(x => x.name)
+    configOptions.push({
+      name: 'entityType',
+      type: 'selection',
+      value: currentValues?.entityType === undefined ? entityNames[0] : currentValues.entityType,
+      params: { options: entityNames, labels: entityNames }
+    })
   }
+
+  return configOptions
 }

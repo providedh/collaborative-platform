@@ -16,7 +16,7 @@ export default function EntityDataSource (pubSubService, appContext) {
     self._idDimension = self._data.dimension(x => x.id)
     self._nameDimension = self._data.dimension(x => x.name)
     self._typeDimension = self._data.dimension(x => x.type)
-    self._docNameDimension = self._data.dimension(x => x.file_name)
+    self._docNameDimension = self._data.dimension(x => x.filename)
     self._docIdDimension = self._data.dimension(x => x.file_id)
     self._propertiesDimension = self._data.dimension(x => x.properties)
     self._propertyKeysDimension = self._data.dimension(x => Object.keys(x.properties))

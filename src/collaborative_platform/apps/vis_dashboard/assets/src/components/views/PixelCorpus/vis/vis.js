@@ -3,7 +3,7 @@ import * as d3 from 'd3'
 import docSorting from './docSorting'
 import renderLegend from './legend'
 import renderCells from './cells'
-import { PixelCorpusSource } from '../config'
+import {PixelCorpusSortBy, PixelCorpusColorBy, PixelCorpusSource} from '../config'
 // import renderCertainty from './certainty';
 
 /* Class: Vis
@@ -36,7 +36,7 @@ export default function Vis () {
     self.setColorBy = _setColorBy
     self.setEventCallback = _getParameterSetter('_eventCallback')
     self.setSource = _getParameterSetter('_source')
-    self.render = _render
+    self.render = (...args) => setTimeout(() => _render(...args), 700)
 
     return self
   }
@@ -55,17 +55,47 @@ export default function Vis () {
 
   function _setTaxonomy (taxonomy) {
     self._taxonomy = taxonomy
-    self._entityColorScale = d3.scaleOrdinal()
-      .domain(taxonomy.entities.map(x => x.name))
-      .range(taxonomy.entities.map(x => x.color))
-
-    self._certaintyColorScale = d3.scaleOrdinal()
-      .domain(taxonomy.taxonomy.map(x => x.name))
-      .range(taxonomy.taxonomy.map(x => x.color))
   }
 
   function _setColorBy (colorBy) {
     self._colorBy = colorBy
+
+    self._entityColorScale = d3.scaleOrdinal()
+        .domain(self._taxonomy.entities.map(x => x.name))
+        .range(self._taxonomy.entities.map(x => x.color))
+
+    if (self._colorBy === 'author') {
+      self._certaintyColorScale = d3.scaleOrdinal()
+          .range(d3.schemeTableau10)
+    }
+
+    switch (self._colorBy) {
+      case PixelCorpusColorBy.type:
+        self._certaintyColorScale = d3.scaleOrdinal()
+          .range(d3.schemeTableau10)
+      break
+      case PixelCorpusColorBy.category:
+        self._certaintyColorScale = d3.scaleOrdinal()
+          .range(d3.schemeTableau10)
+      break
+      case PixelCorpusColorBy.certaintyLevel:
+        self._certaintyColorScale = d3.scaleOrdinal()
+          .domain(self._taxonomy.taxonomy.map(x => x.name))
+          .range(self._taxonomy.taxonomy.map(x => x.color))
+      break
+      case PixelCorpusColorBy.authorship:
+        self._certaintyColorScale = d3.scaleOrdinal()
+          .range(d3.schemeTableau10)
+      break
+      case PixelCorpusColorBy.entity:
+        self._certaintyColorScale = d3.scaleOrdinal()
+          .range(d3.schemeTableau10)
+      break
+      case PixelCorpusColorBy.locus:
+        self._certaintyColorScale = d3.scaleOrdinal()
+          .range(d3.schemeTableau10)
+      break
+    }
   }
 
   function _render (container, svg, data, source) {
@@ -74,9 +104,7 @@ export default function Vis () {
     svg.setAttribute('width', container.clientWidth)
     svg.setAttribute('height', container.clientHeight)
 
-    const fileAccessor = source === PixelCorpusSource.certainty
-      ? x => x.file
-      : x => x.file_name
+    const fileAccessor = x => x.filename
     const docOrder = self._docSorting(data.filtered, fileAccessor)
     self._docNameWidth = Math.min(self._maxLabelLength, Math.max(...Object.keys(docOrder).map(x => x.length))) * self._fontWidth
     const freeSpace = container.clientWidth - (self._padding * 4 + self._legendWidth + self._docNameWidth)
@@ -84,9 +112,8 @@ export default function Vis () {
     // if(source===PixelCorpusSource.certainty)
     // console.log(data.filtered, docOrder, source)
 
-    if (data.filtered.length > 0) {
-      renderCells(Object.assign({}, self, { svg, source, docOrder, freeSpace, data, fileAccessor }))
-    }
+    const _colorScale = source === PixelCorpusSource.certainty ? self._certaintyColorScale : self._entityColorScale
+    renderCells(Object.assign({}, self, { svg, source, docOrder, freeSpace, data, fileAccessor, _colorScale}))
 
     // console.log(self._certaintyColorScale)
 
