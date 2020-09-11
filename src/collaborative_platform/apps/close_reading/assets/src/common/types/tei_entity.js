@@ -13,7 +13,12 @@ function proxied () {
       if (!Object.hasOwnProperty.call(_specific, key)) {
         return { properties: _common }
       } else {
-        const properties = new Set([..._common, ..._specific[key].properties])
+        let properties
+        if (['date', 'time'].includes(key)) {
+          properties = new Set(_specific[key].properties)
+        } else {
+          properties = new Set([..._common, ..._specific[key].properties])
+        }
         return { properties: [...properties] }
       }
     },

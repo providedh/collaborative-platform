@@ -13,11 +13,7 @@ from apps.files_management.models import File, FileVersion
 from apps.projects.models import Contributor
 from apps.views_decorators import objects_exists, user_has_access
 
-from .helpers import search_files_by_person_name, search_files_by_content, get_annotations_from_file_version_body
-
-
-ANNOTATION_TAGS = ['date', 'event', 'location', 'geolocation', 'name', 'occupation', 'object', 'org', 'person', 'place',
-                   'country', 'time']
+from .helpers import search_files_by_person_name, search_files_by_content
 
 
 @login_required
@@ -142,34 +138,6 @@ def file_names(request, project_id, file_id):  # type: (HttpRequest, int, int) -
         }
 
         return JsonResponse(response, status=HttpResponse.status_code)
-
-
-@login_required
-@objects_exists
-@user_has_access()
-def file_annotations(request, project_id, file_id):  # type: (HttpRequest, int, int) -> JsonResponse
-    if request.method == 'GET':
-        file = File.objects.get(id=file_id, deleted=False)
-        file_version = FileVersion.objects.get(file=file, number=file.version_number)
-
-        annotations = get_annotations_from_file_version_body(file_version, XML_NAMESPACES, ANNOTATION_TAGS)
-
-        return JsonResponse(annotations, status=HttpResponse.status_code, safe=False)
-
-
-@login_required
-@objects_exists
-@user_has_access()
-def file_people(request, project_id, file_id):  # type: (HttpRequest, int, int) -> JsonResponse
-    if request.method == 'GET':
-        file = File.objects.get(id=file_id, deleted=False)
-        file_version = FileVersion.objects.get(file=file, number=file.version_number)
-
-        annotation_tags = ['persName', 'person', 'name']
-
-        annotations = get_annotations_from_file_version_body(file_version, XML_NAMESPACES, annotation_tags)
-
-        return JsonResponse(annotations, status=HttpResponse.status_code, safe=False)
 
 
 @login_required

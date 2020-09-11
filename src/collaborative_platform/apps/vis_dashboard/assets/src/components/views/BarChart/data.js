@@ -1,15 +1,15 @@
 import { useState, useEffect } from 'react'
 import * as d3Array from 'd3-array'
 
-export default function useData (dataClient, option) {
+export default function useData (dataClient, option, entityType ) {
   const [data, setData] = useState(null)
 
   if (!Object.hasOwnProperty.call(dataOptions, option)) { return }
 
   useEffect(() => {
-    dataOptions[option](dataClient, setData)
+    dataOptions[option](dataClient, setData, entityType)
     return dataClient.clearFiltersAndSubscriptions
-  }, [option])
+  }, [option, entityType])
 
   return data
 }
@@ -22,11 +22,13 @@ const dataOptions = {
   annotationsPerCategory,
   annotationsPerAuthor,
   commonAttributeValues,
-  annotationAttributes
+  annotationAttributes,
+  annotationLocus
 }
 
 function entitiesPerDoc (dataClient, setData) {
   dataClient.subscribe('entity', ({ all, filtered }) => {
+    //console.log('docs', all, filtered)
     setData({
       dimension: 'file_id',
       filterDimension: 'fileId',
@@ -38,6 +40,7 @@ function entitiesPerDoc (dataClient, setData) {
 
 function entitiesPerType (dataClient, setData) {
   dataClient.subscribe('entity', ({ all, filtered }) => {
+    //console.log(all)
     setData({
       dimension: 'type',
       filterDimension: 'entityType',
@@ -48,16 +51,15 @@ function entitiesPerType (dataClient, setData) {
 }
 
 function commonEntities (dataClient, setData) {
-  return 0
-  // dataClient.subscribe('certainty', ({ all, filtered }) => {
-  // alert('The entity type of the annotated piece is not yet exposed')
-  // setData({
-  // dimension: 'type',
-  // filterDimension: 'fileId',
-  // all: d3Array.group(all, x=>x.file),
-  // filtered: d3Array.group(filtered, x=>x.file)
-  // });
-  // })
+  dataClient.subscribe('certainty', ({ all, filtered }) => {
+  alert('The entity type of the annotated piece is not yet exposed')
+  setData({
+    dimension: 'type',
+    filterDimension: 'fileId',
+    all: d3Array.group(all, x=>x.file),
+    filtered: d3Array.group(filtered, x=>x.file)
+  });
+  })
 }
 
 function annotationsPerDoc (dataClient, setData) {
@@ -65,8 +67,8 @@ function annotationsPerDoc (dataClient, setData) {
     setData({
       dimension: 'file id',
       filterDimension: 'fileId',
-      all: d3Array.group(all, x => x.file),
-      filtered: d3Array.group(filtered, x => x.file)
+      all: d3Array.group(all, x => x.file_id),
+      filtered: d3Array.group(filtered, x => x.file_id)
     })
   })
 }
@@ -74,10 +76,10 @@ function annotationsPerDoc (dataClient, setData) {
 function annotationsPerCategory (dataClient, setData) {
   dataClient.subscribe('certainty', ({ all, filtered }) => {
     setData({
-      dimension: 'category',
-      filterDimension: 'certaintyCategory',
-      all: d3Array.group(all, x => x.category.sort().join()),
-      filtered: d3Array.group(filtered, x => x.category.sort().join())
+      dimension: 'certaintyCategory',
+      filterDimension: 'categories',
+      all: groupByArrayKeys(all, x => x.categories),
+      filtered: groupByArrayKeys(filtered, x => x.categories)
     })
   })
 }
@@ -93,20 +95,44 @@ function annotationsPerAuthor (dataClient, setData) {
   })
 }
 
-function commonAttributeValues (dataClient, setData) {
-  dataClient.subscribe('entity', ({ all, filtered }) => {
+function groupByArrayKeys(data, accessor) {
+  const joinStr = '[temp]'
+  const grouped = d3Array.group(data, d => accessor(d).join(joinStr))
+  const remapped = new Map(
+    [...(grouped)].map(([strKey, val]) => [strKey.split(joinStr), val])
+  )
+  return remapped  
+}
 
+function commonAttributeValues (dataClient, setData, entity) {
+  dataClient.subscribe('entity', ({ all, filtered }) => {
+    setData({
+      dimension: 'entityAttribute',
+      filterDimension: 'entityPropertyKeys',
+      all: groupByArrayKeys(all.filter(x => x.type === entity), x => Object.keys(x.properties)),
+      filtered: groupByArrayKeys(filtered.filter(x => x.type === entity), x => Object.keys(x.properties))
+    })
   })
 }
 
 function annotationAttributes (dataClient, setData) {
   dataClient.subscribe('certainty', ({ all, filtered }) => {
-    console.log(all, filtered)
     setData({
       dimension: 'attribute',
-      filterDimension: 'certaintyMatch',
-      all: d3Array.group(all, x => x.match),
-      filtered: d3Array.group(filtered, x => x.match)
+      filterDimension: 'match',
+      all: d3Array.group(all.filter(d => d.match !== null), x => x.match),
+      filtered: d3Array.group(filtered.filter(d => d.match !== null), x => x.match)
+    })
+  })
+}
+
+function annotationLocus (dataClient, setData) {
+  dataClient.subscribe('certainty', ({ all, filtered }) => {
+    setData({
+      dimension: 'locus',
+      filterDimension: 'locus',
+      all: d3Array.group(all, x => x.locus),
+      filtered: d3Array.group(filtered, x => x.locus)
     })
   })
 }

@@ -59,7 +59,7 @@ function Form (props) {
   let assertedValueInput = <div className="col">
     <label htmlFor="assertedValue">Value</label>
     <input className="form-control form-control-sm"
-      type="text"
+      type={!['when', 'death', 'birth'].includes(form.match) ? 'text' : (form.match === 'when' && props.entity.type === 'time' ? 'time' : 'date')}
       value={form.assertedValue}
       onChange={e => handleUpdate('assertedValue', e.target.value)}
       id="assertedValue"/>

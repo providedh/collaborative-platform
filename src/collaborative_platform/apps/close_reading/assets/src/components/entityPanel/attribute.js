@@ -12,6 +12,7 @@ import {
 } from 'common/types'
 
 import { WithAppContext } from 'common/context/app'
+import { saveOperations} from 'common/helpers'
 
 export default function AttributeWithContext (props) {
   return (
@@ -33,8 +34,9 @@ function onDiscard (id, websocket) {
   websocket.send(request)
 }
 
-function onSave (id, websocket) {
-  const request = WebsocketRequest(WebsocketRequestType.save, [id])
+function onSave (operations, id, websocket) {
+  const operationsToSave = [...saveOperations(operations, id)]
+  const request = WebsocketRequest(WebsocketRequestType.save, operationsToSave)
   websocket.send(request)
 }
 
@@ -74,7 +76,7 @@ function Attribute (props) {
         ))
 
         if (operation.length !== 1) { return }
-        onSave(operation[0].id, props.context.websocket)
+        onSave(props.context.operations, operation[0].id, props.context.websocket)
       }}/>
     </span>
     <span className={attribute.status === OperationStatus.saved ? 'text-danger' : 'd-none'}>
@@ -97,7 +99,7 @@ function Attribute (props) {
 
         if (operation.length !== 1) { return }
 
-        onSave(operation[0].id, props.context.websocket)
+        onSave(props.context.operations, operation[0].id, props.context.websocket)
       }}/>
       <AttributeOption classes="text-info" text=" restore" onClick={e => {
         const operation = props.context.operations.filter(x => (
@@ -124,7 +126,7 @@ function Attribute (props) {
 
         if (operation.length !== 1) { return }
 
-        onSave(operation[0].id, props.context.websocket)
+        onSave(props.context.operations, operation[0].id, props.context.websocket)
       }}/>
       <AttributeOption classes="text-info" text=" restore" onClick={e => {
         const operation = props.context.operations.filter(x => (

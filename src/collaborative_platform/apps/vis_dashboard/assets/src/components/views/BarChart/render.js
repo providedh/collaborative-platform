@@ -134,7 +134,7 @@ function renderBars (data, context, xScale, yScale, padding, createBarBox) {
     const box = createBarBox(label, items, xScale, yScale, padding)
     context.fillRect(...box)
 
-    return { box, data: [label, items.length] }
+    return { box, data: [label, items] }
   })
 
   context.fillStyle = '#007bff';
@@ -197,7 +197,7 @@ function setupInteractions (renderedData, overlayCanvas, onEvent) {
 
   function updateTooltip ([x, y], node) {
     if (node != null) {
-      const label = `${node.data[0]}  (${node.data[1]})`
+      const label = `${node.data[0]}  (${node.data[1].length})`
       context.save()
       context.fillStyle = '#f8f9fa'
       context.strokeStyle = '#00b3b0'
@@ -213,8 +213,8 @@ function setupInteractions (renderedData, overlayCanvas, onEvent) {
     }
   }
 
-  function handleHover () {
-    const eventPosition = d3.mouse(this)
+  function handleHover (event, d) {
+    const eventPosition = d3.pointer(event)
     const { node } = getEventTarget(eventPosition)
     context.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height)
 
@@ -224,8 +224,8 @@ function setupInteractions (renderedData, overlayCanvas, onEvent) {
     }
   }
 
-  function handleClick () {
-    const eventPosition = d3.mouse(this)
+  function handleClick (event, d) {
+    const eventPosition = d3.pointer(event)
     const { node } = getEventTarget(eventPosition)
 
     if (node != null) {
@@ -239,8 +239,9 @@ function setupInteractions (renderedData, overlayCanvas, onEvent) {
 }
 
 export default function render (container, canvas, overlayCanvas, data, barDirection, onEvent) {
-  // console.log(container, canvas, data, data?.filtered?.size)
-  if (container === null || canvas === null || data === null || data.filtered.size === 0) { return }
+  //console.log(container, canvas, data, data?.filtered?.size)
+  //console.log(data)
+  if (container === null || canvas === null || data === null || data.all.size === 0) { return }
 
   canvas.width = container.clientWidth
   canvas.height = container.clientHeight

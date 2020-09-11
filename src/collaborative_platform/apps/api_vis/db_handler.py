@@ -3,7 +3,7 @@ from copy import deepcopy
 from django.db.models import Q
 from django.utils import timezone
 
-from apps.api_vis.models import Clique, Commit, Entity, EntityVersion, Unification
+from apps.api_vis.models import Certainty, Clique, Commit, Entity, EntityVersion, Unification
 from apps.api_vis.helpers import parse_project_version
 from apps.api_vis.request_validator import validate_keys_and_types
 from apps.exceptions import BadRequest, NotModified
@@ -128,6 +128,41 @@ class DbHandler:
         entities = entities.order_by('id')
 
         return entities
+
+    def get_filtered_certainties(self, request_data, file_id=None):
+        certainties = Certainty.objects.filter(
+            file__project_id=self.__project_id,
+            created_in_file_version__isnull=False,
+        )
+
+        if file_id:
+            certainties = certainties.filter(file_id=file_id)
+
+        if 'users' in request_data:
+            certainties = certainties.filter(created_by_id__in=request_data['users'])
+
+        if 'project_version' in request_data or 'date' in request_data:
+            project_version_nr = request_data.get('project_version')
+            date = request_data.get('date')
+
+            project_version = self.get_project_version(project_version_nr, date)
+            file_versions_ids = project_version.file_versions.values_list('id', flat=True)
+
+            certainties = certainties.filter(
+                file_version_id__in=file_versions_ids
+            )
+
+        else:
+            project_version = self.get_project_version()
+            file_versions_ids = project_version.file_versions.values_list('id', flat=True)
+
+            certainties = certainties.filter(
+                file_version_id__in=file_versions_ids,
+            )
+
+        certainties = certainties.order_by('id')
+
+        return certainties
 
     def get_filtered_unbound_entities(self, request_data, file_id=None):
         parameters_for_entities = deepcopy(request_data)
@@ -321,7 +356,7 @@ class DbHandler:
 
         return properties_versions
 
-    def get_project_version(self, project_version_nr, date):
+    def get_project_version(self, project_version_nr=None, date=None):
         if project_version_nr:
             project_version = self.get_project_version_by_nr(project_version_nr)
 

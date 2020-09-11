@@ -5,9 +5,11 @@ import DocumentView from './DocumentView'
 import Sunburst from './Sunburst'
 import Note from './Note'
 import Map from './Map'
+import Timeline from './Timeline'
 
 export default {
   Map,
+  Timeline,
   Note,
   PixelCorpus,
   Sunburst,

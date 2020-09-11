@@ -586,6 +586,33 @@
     {"id": 12, "properties": {"name": "Ingwer"}, "type": "ingredient"},
     {"id": 13, "properties": {"name": "Met"}, "type": "ingredient"}
   ],
+  "test_get_all_certainties_from_given_file_no_filtering": [
+    {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#credibility https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness", "assertedValue": "#met", "cert": "high", "degree": 0.857142857142857, "desc": null, "locus": "value", "match": "@ref", "resp": 1, "target": "#name-3", "xml:id": "certainty-0"},
+    {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness", "assertedValue": "Balloons", "cert": "high", "degree": null, "desc": "Some important decription", "locus": "value", "match": null, "resp": 2, "target": "#test", "xml:id": "certainty-1"},
+    {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness", "assertedValue": "#ingredient-0", "cert": "high", "degree": null, "desc": null, "locus": "value", "match": "@ref", "resp": 2, "target": "#name-5", "xml:id": "certainty-2"},
+    {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness", "assertedValue": "McDuck", "cert": "high", "degree": null, "desc": null, "locus": "value", "match": "name/forename", "resp": 2, "target": "#person-2", "xml:id": "certainty-3"},
+    {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#new_awesome_category", "assertedValue": "low", "cert": "high", "degree": null, "desc": null, "locus": "value", "match": "@cert", "resp": 2, "target": "#certainty-10", "xml:id": "certainty-5"}
+  ],
+  "test_get_all_certainties_from_given_file_users": [
+    {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness", "assertedValue": "Balloons", "cert": "high", "degree": null, "desc": "Some important decription", "locus": "value", "match": null, "resp": 2, "target": "#test", "xml:id": "certainty-1"},
+    {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness", "assertedValue": "#ingredient-0", "cert": "high", "degree": null, "desc": null, "locus": "value", "match": "@ref", "resp": 2, "target": "#name-5", "xml:id": "certainty-2"},
+    {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness", "assertedValue": "McDuck", "cert": "high", "degree": null, "desc": null, "locus": "value", "match": "name/forename", "resp": 2, "target": "#person-2", "xml:id": "certainty-3"},
+    {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#new_awesome_category", "assertedValue": "low", "cert": "high", "degree": null, "desc": null, "locus": "value", "match": "@cert", "resp": 2, "target": "#certainty-10", "xml:id": "certainty-5"}
+  ],
+  "test_get_all_certainties_from_given_file_date": [
+    {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#credibility https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness", "assertedValue": "#met", "cert": "high", "degree": 0.857142857142857, "desc": null, "locus": "value", "match": "@ref", "resp": 1, "target": "#name-3", "xml:id": "certainty-0"},
+    {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness", "assertedValue": "Balloons", "cert": "high", "degree": null, "desc": "Some important decription", "locus": "value", "match": null, "resp": 2, "target": "#test", "xml:id": "certainty-1"},
+    {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness", "assertedValue": "#ingredient-0", "cert": "high", "degree": null, "desc": null, "locus": "value", "match": "@ref", "resp": 2, "target": "#name-5", "xml:id": "certainty-2"},
+    {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness", "assertedValue": "McDuck", "cert": "high", "degree": null, "desc": null, "locus": "value", "match": "name/forename", "resp": 2, "target": "#person-2", "xml:id": "certainty-3"},
+    {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#new_awesome_category", "assertedValue": "low", "cert": "high", "degree": null, "desc": null, "locus": "value", "match": "@cert", "resp": 1, "target": "#certainty-10", "xml:id": "certainty-4"}
+  ],
+  "test_get_all_certainties_from_given_file_project_version": [
+    {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#credibility https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness", "assertedValue": "#met", "cert": "high", "degree": 0.857142857142857, "desc": null, "locus": "value", "match": "@ref", "resp": 1, "target": "#name-3", "xml:id": "certainty-0"},
+    {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness", "assertedValue": "Balloons", "cert": "high", "degree": null, "desc": "Some important decription", "locus": "value", "match": null, "resp": 2, "target": "#test", "xml:id": "certainty-1"},
+    {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness", "assertedValue": "#ingredient-0", "cert": "high", "degree": null, "desc": null, "locus": "value", "match": "@ref", "resp": 2, "target": "#name-5", "xml:id": "certainty-2"},
+    {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness", "assertedValue": "McDuck", "cert": "high", "degree": null, "desc": null, "locus": "value", "match": "name/forename", "resp": 2, "target": "#person-2", "xml:id": "certainty-3"},
+    {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#new_awesome_category", "assertedValue": "low", "cert": "high", "degree": null, "desc": null, "locus": "value", "match": "@cert", "resp": 1, "target": "#certainty-10", "xml:id": "certainty-4"}
+  ],
   "test_get_unbound_entities_in_file_no_filtering": [
     {"id": 1, "properties": {"country": "Poland", "geo": "52.408333 16.934167", "name": "PCSS", "settlement": "Poznań"}, "type": "place"},
     {"id": 2, "properties": {"name": "Big Bang"}, "type": "event"},

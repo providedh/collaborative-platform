@@ -25,7 +25,6 @@ class TeiHandler:
 
     def __init__(self):
         self.__encoding = None
-        self.text = ''
 
         self.__text_binary = None
         self.__text_utf_8 = ''
@@ -57,9 +56,7 @@ class TeiHandler:
         if self.__migration_needed:
             self.__migrate()
 
-        xml_content = self.text or self.__text_utf_8
-
-        return xml_content, self.__migrated, self.__message
+        return self.__text_utf_8, self.__migrated, self.__message
 
     def __recognize(self):
         if self.__is_default_encoded_xml(self.__text_binary):
@@ -204,7 +201,7 @@ class TeiHandler:
         if self.__need_reformat:
             migrated_text = xml_formatter.reformat_xml(migrated_text)
 
-        self.text = migrated_text
+        self.__text_utf_8 = migrated_text
         self.__prepare_message()
         self.__migrated = True
 

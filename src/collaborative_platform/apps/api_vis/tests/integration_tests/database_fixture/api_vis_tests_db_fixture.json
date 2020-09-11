@@ -1221,9 +1221,9 @@
     "commit_counter": 5,
     "date": "2020-06-30T10:28:33.013Z",
     "file_versions": [
-      2,
       4,
-      6
+      6,
+      7
     ]
   }
 },
@@ -1239,7 +1239,7 @@
     "file_versions": [
       4,
       6,
-      7
+      8
     ]
   }
 },
@@ -5271,6 +5271,29 @@
     "description": null,
     "created_by": 1,
     "created_in_file_version": 1,
+    "deleted_by": 2,
+    "deleted_in_file_version": 8,
+    "categories": [
+      5
+    ]
+  }
+},
+{
+  "model": "api_vis.certainty",
+  "pk": 26,
+  "fields": {
+    "file": 1,
+    "file_version": 7,
+    "xml_id": "certainty-5",
+    "locus": "value",
+    "certainty": "high",
+    "degree": null,
+    "target_xml_id": "certainty-10",
+    "target_match": "@cert",
+    "asserted_value": "low",
+    "description": null,
+    "created_by": 2,
+    "created_in_file_version": 7,
     "deleted_by": null,
     "deleted_in_file_version": null,
     "categories": [
@@ -5280,7 +5303,7 @@
 },
 {
   "model": "api_vis.certainty",
-  "pk": 26,
+  "pk": 27,
   "fields": {
     "file": 1,
     "file_version": 8,
@@ -5304,7 +5327,7 @@
 },
 {
   "model": "api_vis.certainty",
-  "pk": 27,
+  "pk": 28,
   "fields": {
     "file": 1,
     "file_version": 8,
@@ -5327,7 +5350,7 @@
 },
 {
   "model": "api_vis.certainty",
-  "pk": 28,
+  "pk": 29,
   "fields": {
     "file": 1,
     "file_version": 8,
@@ -5350,7 +5373,7 @@
 },
 {
   "model": "api_vis.certainty",
-  "pk": 29,
+  "pk": 30,
   "fields": {
     "file": 1,
     "file_version": 8,
@@ -5373,11 +5396,11 @@
 },
 {
   "model": "api_vis.certainty",
-  "pk": 30,
+  "pk": 31,
   "fields": {
     "file": 1,
     "file_version": 8,
-    "xml_id": "certainty-4",
+    "xml_id": "certainty-5",
     "locus": "value",
     "certainty": "high",
     "degree": null,
@@ -5385,8 +5408,8 @@
     "target_match": "@cert",
     "asserted_value": "low",
     "description": null,
-    "created_by": 1,
-    "created_in_file_version": 1,
+    "created_by": 2,
+    "created_in_file_version": 7,
     "deleted_by": null,
     "deleted_in_file_version": null,
     "categories": [

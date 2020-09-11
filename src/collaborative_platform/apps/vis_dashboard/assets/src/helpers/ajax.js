@@ -39,7 +39,7 @@ var AjaxCalls = function (args) {
   const visFiles = ({ project }) => ['/api', 'vis', 'projects', project, 'files'].join('/')
   const visFile = ({ project, file }) => ['/api', 'vis', 'projects', project, 'files', file].join('/')
   const visFileMeta = ({ project, file }) => ['/api', 'vis', 'projects', project, 'files', file, 'meta'].join('/')
-  const visAnnotations = ({ project, file }) => ['/api', 'vis', 'projects', project, 'files', file, 'annotations'].join('/')
+  const visAnnotations = ({ project, file }) => ['/api', 'vis', 'projects', project, 'files', file, 'certainties'].join('/')
   const visContext = ({ project, query }) => ['/api', 'vis', 'projects', project, 'context', query].join('/')
 
   function _init (args) {

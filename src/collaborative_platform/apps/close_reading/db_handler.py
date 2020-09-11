@@ -24,13 +24,11 @@ class DbHandler:
         self.__custom_entities_types = get_custom_entities_types(self.__file.project)
         self.__annotating_body_content = self.__get_body_content_from_db()
 
-    def add_entity(self, entity_type, entity_properties):
+    def add_entity(self, entity_type):
         entity_xml_id = self.get_next_xml_id(entity_type)
 
         entity = self.__create_entity_object(entity_type, entity_xml_id)
-        entity_version = self.__create_entity_version_object(entity)
-
-        self.__create_entity_properties_objects(entity_version, entity_properties)
+        self.__create_entity_version_object(entity)
 
         return entity_xml_id
 
@@ -251,9 +249,6 @@ class DbHandler:
         if entity.created_in_file_version is None:
             self.__confirm_entity_creation(entity, new_file_version)
 
-            new_entity_version = self.__get_entity_version_from_db(entity_xml_id, new_file_version)
-            self.__confirm_entity_properties_creation(new_entity_version, new_file_version)
-
     def accept_modifying_reference_to_entity(self, old_entity_xml_id, new_entity_xml_id, new_file_version,
                                              last_reference):
         entity = self.__get_entity_from_db(new_entity_xml_id)
@@ -284,8 +279,11 @@ class DbHandler:
             self.__confirm_certainties_delete(entity_xml_id, new_file_version)
 
     def accept_adding_entity_property(self, entity_xml_id, property_name, new_file_version):
+        entity_version = self.__get_entity_version_from_db(entity_xml_id, new_file_version)
+
         entity_property = self.__get_entity_property_from_db(entity_xml_id, property_name, saved=False)
         entity_property.created_in_file_version = new_file_version
+        entity_property.entity_version = entity_version
         entity_property.save()
 
     def accept_modifying_entity_property(self, entity_xml_id, property_name, new_file_version):
@@ -569,8 +567,9 @@ class DbHandler:
 
         for entity_property in entity_properties:
             entity_property.created_in_file_version = new_file_version
+            entity_property.entity_version = entity_version
 
-        EntityProperty.objects.bulk_update(entity_properties, ['created_in_file_version'])
+        EntityProperty.objects.bulk_update(entity_properties, ['created_in_file_version', 'entity_version'])
 
     @staticmethod
     def __confirm_entity_properties_delete(entity_version, new_file_version, entity_properties_names=None):

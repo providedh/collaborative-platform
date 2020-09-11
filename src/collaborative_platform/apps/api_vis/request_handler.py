@@ -100,6 +100,11 @@ class RequestHandler:
 
         return response
 
+    def get_file_certainties(self, request_data, file_id):
+        response = self.__get_certainties(request_data, file_id)
+
+        return response
+
     def get_project_unbound_entities(self, request_data):
         response = self.__get_unbound_entities(request_data)
 
@@ -307,6 +312,14 @@ class RequestHandler:
 
         return serialized_entities
 
+    def __get_certainties(self, request_data, file_id=None):
+        certainties = self.__db_handler.get_filtered_certainties(request_data, file_id)
+        serialized_certainties = self.__serialize_certainties(certainties)
+
+        # TODO: Append certainties created from unifications
+
+        return serialized_certainties
+
     def __get_unbound_entities(self, request_data, file_id=None):
         project_version_nr = request_data.get('project_version')
         date = request_data.get('date')
@@ -384,3 +397,24 @@ class RequestHandler:
             serialized_entities.append(serialized_entity)
 
         return serialized_entities
+
+    def __serialize_certainties(self, certainties):
+        certainties_serialized = []
+
+        for certainty in certainties:
+            certainty_serialized = {
+                'ana': certainty.get_categories(as_str=True),
+                'locus': certainty.locus,
+                'degree': certainty.degree,
+                'cert': certainty.certainty,
+                'resp': certainty.created_by.id,
+                'match': certainty.target_match,
+                'target': f'#{certainty.target_xml_id}',
+                'xml:id': certainty.xml_id,
+                'assertedValue': certainty.asserted_value,
+                'desc': certainty.description,
+            }
+
+            certainties_serialized.append(certainty_serialized)
+
+        return certainties_serialized

@@ -18,6 +18,8 @@ export default function EntityDataSource (pubSubService, appContext) {
     self._typeDimension = self._data.dimension(x => x.type)
     self._docNameDimension = self._data.dimension(x => x.file_name)
     self._docIdDimension = self._data.dimension(x => x.file_id)
+    self._propertiesDimension = self._data.dimension(x => x.properties)
+    self._propertyKeysDimension = self._data.dimension(x => Object.keys(x.properties))
 
     self._appContext = appContext
 
@@ -40,6 +42,8 @@ export default function EntityDataSource (pubSubService, appContext) {
     pubSubService.register(self)
 
     self.subscribe('filter/entityId', args => _filterDimension(self._idDimension, args.filter))
+    self.subscribe('filter/entityProperties', args => _filterDimension(self._propertyDimension, args.filter))
+    self.subscribe('filter/entityPropertyKeys', args => _filterDimension(self._propertyKeysDimension, args.filter))
     self.subscribe('filter/entityName', args => _filterDimension(self._nameDimension, args.filter))
     self.subscribe('filter/entityType', args => _filterDimension(self._typeDimension, args.filter))
     self.subscribe('filter/fileName', args => _filterDimension(self._docNameDimension, args.filter))
@@ -82,6 +86,16 @@ export default function EntityDataSource (pubSubService, appContext) {
     _publishData()
   }
 
+  function _processData (data, fileId) {
+    const filename = self._appContext.id2document[fileId].name
+    return data.map(d => {
+      return Object.assign({},
+        {file_id: +fileId, filename, ...d },
+        {properties: Object.keys(d.properties).length === 0 ? {'no properties': 'no properties'} : d.properties},
+        {id: `${d.type}-${d.id}`})
+    })
+  }
+
   /**
     * Retrieves data from the external source.
     */
@@ -94,7 +108,11 @@ export default function EntityDataSource (pubSubService, appContext) {
     self._data.remove(() => true) // clear previous data
     files.forEach(file => {
       self._source.getFileEntities({ project: self._appContext.project, file }, {}, null).then(response => {
-        if (response.success === false) { console.info('Failed to retrieve entities for file: ' + file) } else { self._data.add(response.content.map(x => ({ file_id: +file, file_name: getName(file), ...x }))) }
+        if (response.success === false) {
+          console.info('Failed to retrieve entities for file: ' + file)
+        } else {
+          self._data.add(_processData(response.content, file))
+        }
         _publishData()
         if (++retrieved === retrieving) {
           self.publish('status', { action: 'fetched' })
