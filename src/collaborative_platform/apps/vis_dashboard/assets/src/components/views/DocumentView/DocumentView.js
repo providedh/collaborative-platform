@@ -47,6 +47,41 @@ function useData (dataClient, syncWithViews, documentId, id2Document) {
   return data
 }
 
+function useRawData (dataClient, syncWithViews, documentId, id2Document) {
+  const [data, setData] = useState({ id: '', name: '', html: '' })
+
+  useEffect(() => {
+    if (syncWithViews === true) {
+      if (dataClient.getSubscriptions().includes('document')) { dataClient.unsubscribe('document') }
+
+      dataClient.subscribe('document', ({ id, html }) => {
+        if (id === null || html === null) { return }
+
+        if (id !== '') {
+          setData({ id, html: html, doc: html, name: id2Document[id].name })
+        } else {
+          setData({ id: '', html: 'Hover over documents in other views to see its contents here.', doc: null, name: '' })
+        }
+      })
+    } else {
+      if (dataClient.getSubscriptions().includes('document')) { dataClient.unsubscribe('document') }
+
+      ajax.getFile({ project: window.project, file: documentId }, {}, null).then(response => {
+        if (response.success === true) {
+          setData({
+            id: documentId,
+            name: id2Document[documentId].name,
+            doc: response.content,
+            html: response.content
+          })
+        }
+      })
+    }
+  }, [syncWithViews, documentId])
+
+  return data
+}
+
 function useDocumentRendering (data, container, taxonomy) {
   useEffect(() => {
     if (container === undefined) { return }
@@ -57,12 +92,20 @@ function useDocumentRendering (data, container, taxonomy) {
   }, [data.id])
 }
 
+function useRawDocumentRendering (data, container, taxonomy) {
+  useEffect(() => {
+    if (container === undefined) { return }
+
+    container.innerHTML = data.html
+  }, [data.id])
+}
+
 export default function DocumentView ({ layout, syncWithViews, documentId, showEntities, showCertainty, context }) {
   const viewRef = useRef()
 
   const dataClient = useState(DataClient())[0]
-  const data = useData(dataClient, syncWithViews, documentId, context.id2document)
-  useDocumentRendering(data, viewRef.current, context.taxonomy)
+  const data = useRawData(dataClient, syncWithViews, documentId, context.id2document)
+  useRawDocumentRendering(data, viewRef.current, context.taxonomy)
   useCleanup(dataClient)
 
   return (

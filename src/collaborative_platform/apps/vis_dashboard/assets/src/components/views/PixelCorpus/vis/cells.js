@@ -118,7 +118,6 @@ function setupInteractions () {
 }
 
 function getCellsPerDoc (data, accessor) {
-  console.log(data)
   const cellsByDoc = {}
   data.filtered.forEach(e => {
     if (!Object.hasOwnProperty.call(cellsByDoc, accessor(e))) { cellsByDoc[accessor(e)] = [] }
