@@ -62,7 +62,7 @@ export default function getOptions (form) {
 
   if (source === PixelCorpusSource.entities) {
     configOptions.push(
-      { name: 'colorBy', type: 'selection', value: colorBy, params: { options: ['type'] } }
+      { name: 'colorBy', type: 'selection', value: 'type', params: { options: ['type'] } }
     )
   } else {
     const color = ['type', 'author'].includes(colorBy)  ? PixelCorpusColorBy.locus : colorBy
