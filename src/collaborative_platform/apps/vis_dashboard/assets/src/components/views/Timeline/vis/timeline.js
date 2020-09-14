@@ -101,6 +101,7 @@ export default function Timeline () {
             .tickSizeOuter(0)
           
           d3.select(container).select('g.axis g').call(axis)
+            .selectAll('.tick line').attr('y1', -bbox.height)
           onRescale()
       })
 
@@ -109,13 +110,16 @@ export default function Timeline () {
       .append("g")
         .attr('transform', `translate(${bbox.x}, ${bbox.y + bbox.height - spacing})`)
         .call(xAxis)
+          .selectAll('.tick line').attr('y1', -bbox.height)
     d3.select(container).select('g.axis')
       .append('rect')
       .attr('x', bbox.x)
-      .attr('y', bbox.y + bbox.height - spacing)
+      .attr('y', bbox.y - spacing)
       .attr('height', bbox.height - spacing)
       .attr('width', bbox.width)
       .attr('fill', 'transparent')
+      .call(zoom)
+    d3.select(container).select('svg.entities')
       .call(zoom)
   }
 
@@ -139,7 +143,6 @@ export default function Timeline () {
         const translate =
           `translate(${self._xScale(extent[0])}, ${i * self._docHeight + self._docPadding})`
         g.attr('transform', translate)
-        console.log(extent)
         g.selectAll('text').data([filename]).join('text')
           .text(d => d)
           .attr('y', self._docHeight - self._docBarHeight)
@@ -197,9 +200,9 @@ export default function Timeline () {
     }
     const timelineBox = {
       x: self._padding,
-      y: entitiesBox.y + entitiesBox.height,
+      y: legendBox.y + legendBox.height,
       width: freeHspace,
-      height: self._timelineAxisHeight
+      height: freeVspace - legendBox.height
     }
 
     return {legendBox, entitiesBox, timelineBox} 
@@ -220,10 +223,10 @@ export default function Timeline () {
 
   function _renderTimeline (data, container) {
     if(data.entities.all.length === 0) {return}
-    const sectionBoundingBoxes = _getDimensions(container)
     d3.select(container).selectAll('svg')
       .attr('width', container.clientWidth)
       .attr('height', container.clientHeight) 
+    const sectionBoundingBoxes = _getDimensions(container)
 
     _getDataAndScale(data, sectionBoundingBoxes.timelineBox.width)
     _renderLegend(sectionBoundingBoxes.legendBox, container)
