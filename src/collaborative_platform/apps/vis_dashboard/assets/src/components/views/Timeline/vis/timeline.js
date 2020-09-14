@@ -104,6 +104,7 @@ export default function Timeline () {
 
   function _renderTimelineEntities(bbox, container) {    
     const entitiesByDoc = d3.group(self._dates, d => d.filename)
+    const filteredByDoc = d3.group(self._datesFiltered, d => d.filename)
 
     const svg = d3.select(container).select('svg.entities')
     svg.style('left', bbox.x+'px')
@@ -157,6 +158,15 @@ export default function Timeline () {
           .attr('y', self._docHeight - self._docBarHeight + self._docPadding)
           .attr('width', self._entityRadius / 2)
           .attr('height', self._entityRadius)
+          .attr('fill', 'lightgrey')
+        g.selectAll('rect.filtered').data(filteredByDoc.get(filename) || []).join('rect')
+          .attr('class', 'filtered')
+          .attr('x', d => new Date(d.properties.when) - new Date(extent[1]) !== 0
+              ? self._xScale(new Date(d.properties.when)) - self._xScale(new Date(extent[0]))
+              : docWidth - self._entityRadius / 2)
+          .attr('y', self._docHeight - self._docBarHeight + self._docPadding)
+          .attr('width', self._entityRadius / 2)
+          .attr('height', self._entityRadius)
           .attr('fill', 'var(--blue)')
       })
 
@@ -200,17 +210,20 @@ export default function Timeline () {
     return {entitiesBox, timelineBox} 
   }
 
-  function _getDataAndScale(data, axisWidth) {
-    self._dates = data.entities.all.filter(d => Object.hasOwnProperty.call(d.properties, 'when') && d?.properties?.when !== '')
-    self._datesFiltered = data.entities.filtered.filter(d => Object.hasOwnProperty.call(d.properties, 'when') && d?.propreties?.when !== '')
-    self._datesUnknown = data.entities.filtered.length - self._datesFiltered.length
-
+  function _setScales(axisWidth) {
     self._xScale = d3.scaleUtc()
       .domain(d3.extent(self._dates.map(d => new Date(d.properties.when))))
       .range([0, axisWidth])
     self._originalXscale = d3.scaleUtc()
       .domain(d3.extent(self._dates.map(d => new Date(d.properties.when))))
       .range([0, axisWidth])
+  }
+
+  function _getData(data) {
+    self._retrieved = data.entities.all.length
+    self._dates = data.entities.all.filter(d => Object.hasOwnProperty.call(d.properties, 'when') && d?.properties?.when !== '')
+    self._datesFiltered = data.entities.filtered.filter(d => Object.hasOwnProperty.call(d.properties, 'when') && d?.propreties?.when !== '')
+    self._datesUnknown = data.entities.all.length - self._dates.length
   }
 
   function _renderTimeline (data, container) {
@@ -222,18 +235,20 @@ export default function Timeline () {
       .attr('width', container.clientWidth)
     const sectionBoundingBoxes = _getDimensions(container)
 
-    if (self?._xScale?.range?.()?.[1] !== sectionBoundingBoxes.timelineBox.width) {
-      _getDataAndScale(data, sectionBoundingBoxes.timelineBox.width)
-    }
-    _renderCoverageInfo(sectionBoundingBoxes.legendBox, container)
-    _renderTimelineEntities(sectionBoundingBoxes.entitiesBox, container)
-
     const onRescale = () => _renderTimelineEntities(sectionBoundingBoxes.entitiesBox, container)
     const onRescaleEnd = () => self._eventCallback({
       type: 'zoom',
       filtered: self._shownIds.length === self._dates.length ? null : self._shownIds})
 
-    _renderTimelineAxis(sectionBoundingBoxes.timelineBox, container, onRescale, onRescaleEnd)
+    _getData(data)
+
+    if (self?._xScale?.range?.()?.[1] !== sectionBoundingBoxes.timelineBox.width || self?._retrieved !== data.entities.all.length) {
+      _setScales(sectionBoundingBoxes.timelineBox.width)
+      _renderTimelineAxis(sectionBoundingBoxes.timelineBox, container, onRescale, onRescaleEnd)
+    }
+
+    _renderCoverageInfo(sectionBoundingBoxes.legendBox, container)
+    _renderTimelineEntities(sectionBoundingBoxes.entitiesBox, container)
   }
 
   function _render (data, container) {
