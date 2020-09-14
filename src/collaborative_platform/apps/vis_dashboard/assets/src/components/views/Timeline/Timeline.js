@@ -7,47 +7,23 @@ import getConfig from './config'
 import { useRender } from './vis'
 import { DataClient, useCleanup } from '../../../data'
 import useData from './data'
+import TimelineVis from './vis/timeline'
 
 function onEvent (event, dataClient, context) {
-  console.log(event, dataClient, context)
-  /*
-  if (event.action === 'click') {
-    if (event?.target === 'unfilter') {
+  if (event.type === 'zoom') {
+    if (event.filtered === null) {
       dataClient.clearFilters()
-    } else if (levels['level' + event.depth] === 'file') {
-      dataClient.filter('fileId', x => x === (+event.data.name))
-    } else if (levels['level' + event.depth] === 'file_name') {
-      if (Object.hasOwnProperty.call(context.name2document, event.data.name)) { dataClient.filter('fileId', x => x === context.name2document[event.data.name].id) }
     } else {
-      if (source === 'certainty') {
-        const option2dimension = {
-          category: 'certaintyCategory',
-          degree: 'certaintyDegree',
-          cert: 'certaintyCert',
-          match: 'certaintyMatch',
-          resp: 'certaintyAuthor'
-        }
-        const dimension = option2dimension[levels['level' + event.depth]]
-
-        if (dimension === 'certaintyCategory') {
-          dataClient.filter(dimension, x => x.includes(event.data.name))
-        } else {
-          dataClient.filter(dimension, x => x === event.data.name)
-        }
-      }
+      dataClient.filter('entityId', d => event.filtered.includes(d))
     }
-  } else {
-    if (levels['level' + event.depth] === 'file') {
-      dataClient.focusDocument(event.data.name)
-    } else if (levels['level' + event.depth] === 'file_name') {
-      dataClient.focusDocument(context.name2document[event.data.name].id)
-    }
+  } else if (event.type === 'hover') {
+    dataClient.focusDocument(event.target)
   }
-  */
 }
 
 // ...rest has both the levels and the injected context prop
-export default function Timeline ({ layout, ...rest }) {
+export default function Timeline (props) {
+  const { layout, ...rest } = props
   const containerRef = useRef()
   const [width, height] = layout !== undefined ? [layout.w, layout.h] : [4, 4]
   const { context } = rest
@@ -55,8 +31,11 @@ export default function Timeline ({ layout, ...rest }) {
   const dataClient = useState(DataClient())[0]
   useCleanup(dataClient)
   const data = useData(dataClient)
+  const timeline = useState(TimelineVis())[0]
+  timeline.setTaxonomy(rest.context.taxonomy)
+  timeline.setEventCallback(e => onEvent(e, dataClient, rest.context))
   
-  useRender(width, height, data, context.taxonomy, containerRef, e => onEvent(e, dataClient, context))
+  useRender(width, height, data, timeline, containerRef)
 
   return (
     <div className={styles.timeline + ' Timeline'} ref={containerRef}>
@@ -64,7 +43,6 @@ export default function Timeline ({ layout, ...rest }) {
         
       </div>
       <svg>
-        <g className="legend"></g>
         <g className="axis"></g>
       </svg>
       <svg className="entities">

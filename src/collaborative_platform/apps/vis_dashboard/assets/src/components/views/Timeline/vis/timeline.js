@@ -12,13 +12,13 @@ export default function Timeline () {
   const self = {
     _eventCallback: null,
     _padding: 10,
-    _legendHeight: 120,
     _timelineAxisHeight: 120,
     _docHeight: 40,
     _docBarHeight: 9,
     _docBarWidth: 20,
     _docPadding: 5,
-    _entityRadius: 16
+    _entityRadius: 16,
+    _topSpacing: 35,
     //_extraVspacing: 50,
   }
 
@@ -41,28 +41,6 @@ export default function Timeline () {
       .range(value.taxonomy.map(x => x.color))
   }
 
-  function _renderLegend (bbox, container) {
-    const legend = d3.select(container).select('g.legend')
-    const legendNode = legend.node()
-    const labels = self._categoryColorScale.domain().map(x => _shorttenedLabel(x + ''))
-    const maxLabelLength = labels.reduce((max, x) => max > x.length ? max : x.length, 0)
-    const shapeWidth = Math.max(10, maxLabelLength * 6)
-
-    const legendOrdinal = d3.legendColor()
-      .orient('horizontal')
-      .shape('path', d3.symbol().type('rect'))
-      .shapeWidth(shapeWidth)
-      .shapePadding(10)
-      .labelAlign('middle')
-      .cellFilter(function (d) { return d.label !== 'e' })
-      .labels(labels)
-      .scale(self._categoryColorScale)
-
-    legend.call(legendOrdinal)
-    d3.select(container).select('g.legend')
-      .attr('transform', `translate(${bbox.x}, ${bbox.y})`)
-  }
-
   function _shorttenedLabel (label, maxLabelLength = 16) {
     if (label.length <= maxLabelLength) { return label }
 
@@ -81,7 +59,7 @@ export default function Timeline () {
 
   }
 
-  function _renderTimelineAxis(bbox, container, onRescale) {
+  function _renderTimelineAxis(bbox, container, onRescale, onRescaleEnd) {
     const spacing = 10
     const xAxis = d3.axisBottom(self._xScale)
       .ticks(bbox.width / 80)
@@ -104,6 +82,7 @@ export default function Timeline () {
             .selectAll('.tick line').attr('y1', -bbox.height)
           onRescale()
       })
+      .on('end', onRescaleEnd)
 
     d3.select(container).select('g.axis').selectAll('*').remove()
     d3.select(container).select('g.axis')
@@ -131,11 +110,12 @@ export default function Timeline () {
       .attr('height', bbox.height)
       
     const entitiesByDoc = d3.group(self._dates, d => d.filename)
-    let leftHidden = 0, rightHidden = 0
+    let leftHidden = 0, rightHidden = 0, shownIds = []
     self._dates.forEach(x => {
       const [t0, t1] = self._xScale.domain()
       if (new Date(x.properties.when) - t0 < 0) {leftHidden ++}
       else if (t1 - new Date(x.properties.when) < 0) {rightHidden ++}
+      else {shownIds.push(x.id)}  
     })
 
     svg.selectAll('g.doc').data(entitiesByDoc)
@@ -179,12 +159,14 @@ export default function Timeline () {
           .attr('fill', 'var(--blue)')
       })
 
-  d3.select(container).select('div.header')
-    .style('top', (bbox.y - 30)+'px')
-    .selectAll('span')
-    .data(['↤ '+leftHidden, self._datesUnknown+' dates could not be placed (when property missing)', rightHidden+' ↦'])
-    .join('span')
-    .text(d => d)
+    d3.select(container).select('div.header')
+      .style('top', (bbox.y - 30)+'px')
+      .selectAll('span')
+      .data(['↤ '+leftHidden, self._datesUnknown+' dates could not be placed (when property missing)', rightHidden+' ↦'])
+      .join('span')
+      .text(d => d)
+
+    self._shownIds = shownIds
   }
 
   function _getDetailRender(dimension) {
@@ -200,28 +182,21 @@ export default function Timeline () {
     const width = container.clientWidth
     const freeVspace = height - (self._padding * 2)
     const freeHspace = width - (self._padding * 2)
-    const freeVisVspace = (freeVspace - (self._legendHeight + self._timelineAxisHeight)) / 2
 
-    const legendBox = {
-      x: self._padding,
-      y: self._padding,
-      width: freeHspace,
-      height: self._legendHeight
-    }
     const entitiesBox = {
       x: self._padding,
-      y: legendBox.y + legendBox.height,
+      y: self._topSpacing,
       width: freeHspace,
-      height: freeVisVspace * 2
+      height: freeVspace - self._topSpacing
     }
     const timelineBox = {
       x: self._padding,
-      y: legendBox.y + legendBox.height,
+      y: self._topSpacing,
       width: freeHspace,
-      height: freeVspace - legendBox.height
+      height: freeVspace - self._topSpacing
     }
 
-    return {legendBox, entitiesBox, timelineBox} 
+    return {entitiesBox, timelineBox} 
   }
 
   function _getDataAndScale(data, axisWidth) {
@@ -244,15 +219,18 @@ export default function Timeline () {
       .attr('height', container.clientHeight) 
     const sectionBoundingBoxes = _getDimensions(container)
 
-    _getDataAndScale(data, sectionBoundingBoxes.timelineBox.width)
-    _renderLegend(sectionBoundingBoxes.legendBox, container)
+    if (self?._xScale?.range?.()?.[1] !== sectionBoundingBoxes.timelineBox.width) {
+      _getDataAndScale(data, sectionBoundingBoxes.timelineBox.width)
+    }
     _renderCoverageInfo(sectionBoundingBoxes.legendBox, container)
     _renderTimelineEntities(sectionBoundingBoxes.entitiesBox, container)
 
     const onRescale = () => _renderTimelineEntities(sectionBoundingBoxes.entitiesBox, container)
+    const onRescaleEnd = () => self._eventCallback({
+      type: 'zoom',
+      filtered: self._shownIds.length === self._dates.length ? null : self._shownIds})
 
-    _renderTimelineAxis(sectionBoundingBoxes.timelineBox, container, onRescale)
-    //_getDetailRender('numAnnotations')(sectionBoundingBoxes.detailsBox, container)
+    _renderTimelineAxis(sectionBoundingBoxes.timelineBox, container, onRescale, onRescaleEnd)
   }
 
   function _render (data, container) {
