@@ -313,18 +313,24 @@ class ElementsExtractor:
 
         author_xml_id = get_first_xpath_match(certainty, '@resp', XML_NAMESPACES)
         author_xml_id = author_xml_id.replace('#', '')
+        author = self.__get_author(author_xml_id)
+
         target_xml_id = get_first_xpath_match(certainty, '@target', XML_NAMESPACES)
         target_xml_id = target_xml_id.replace('#', '')
         target_xpath = get_first_xpath_match(certainty, '@match', XML_NAMESPACES)
 
-        author = self.__get_author(author_xml_id)
+        degree = get_first_xpath_match(certainty, '@degree', XML_NAMESPACES)
+
+        if degree:
+            degree = float(degree)
+            degree = round(degree, 2)
 
         certainty_object = Certainty.objects.create(
             file=self.__file,
             xml_id=get_first_xpath_match(certainty, '@xml:id', XML_NAMESPACES),
             locus=get_first_xpath_match(certainty, '@locus', XML_NAMESPACES),
             certainty=get_first_xpath_match(certainty, '@cert', XML_NAMESPACES),
-            degree=get_first_xpath_match(certainty, '@degree', XML_NAMESPACES),
+            degree=degree,
             target_xml_id=target_xml_id,
             target_match=target_xpath,
             asserted_value=get_first_xpath_match(certainty, '@assertedValue', XML_NAMESPACES),
