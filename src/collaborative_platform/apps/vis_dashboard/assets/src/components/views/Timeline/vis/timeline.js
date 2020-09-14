@@ -15,8 +15,10 @@ export default function Timeline () {
     _legendHeight: 120,
     _timelineAxisHeight: 120,
     _docHeight: 40,
-    _docBarHeight: 20,
-    _docPadding: 5
+    _docBarHeight: 9,
+    _docBarWidth: 20,
+    _docPadding: 5,
+    _entityRadius: 16
     //_extraVspacing: 50,
   }
 
@@ -132,6 +134,7 @@ export default function Timeline () {
       .each(function([filename, entities], i){
         const g = d3.select(this)
         const extent = d3.extent(entities.map(d => new Date(d.properties.when)))
+        const docWidth = Math.max(self._docBarWidth, self._xScale(extent[1]) - self._xScale(extent[0]))
 
         const translate =
           `translate(${self._xScale(extent[0])}, ${i * self._docHeight + self._docPadding})`
@@ -143,9 +146,24 @@ export default function Timeline () {
         g.selectAll('rect').data([filename]).join('rect')
           .attr('x', 0)
           .attr('y', self._docHeight - self._docBarHeight + self._docPadding)
-          .attr('width', self._xScale(extent[1]) - self._xScale(extent[0]))
+          .attr('width', docWidth)
           .attr('height', self._docBarHeight)
-          .style('fill', 'var(--primary)')
+          .style('fill', 'lightgrey')
+        g.selectAll('rect.entity').data(entities).join('rect')
+          .attr('class', 'entity')
+          .attr('x', d => new Date(d.properties.when) - new Date(extent[1]) !== 0
+              ? self._xScale(new Date(d.properties.when)) - self._xScale(new Date(extent[0]))
+              : docWidth - self._entityRadius / 2)
+          .attr('y', self._docHeight - self._docBarHeight + self._docPadding)
+          .attr('width', self._entityRadius / 2)
+          .attr('height', self._entityRadius)
+          .attr('fill', 'var(--blue)')
+        //g.selectAll('circle').data(entities).join('circle')
+        //  .attr('cx', d => self._xScale(new Date(d.properties.when)) - self._xScale(extent[0]))
+        //  .attr('cy', self._docHeight - (self._docBarHeight*3)/4 + self._docPadding)
+        //  .attr('r', self._entityRadius)
+        //  .attr('fill', 'var(--blue)')
+
       })
 
   }
