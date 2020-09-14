@@ -82,18 +82,20 @@ export default function Timeline () {
       .ticks(bbox.width / 80)
       .tickSizeOuter(0)
 
-    const extent = [[0,0], [bbox.width, 0]],
-      scaleExtent = [.9, 1.2],
-      translateExtent = [[0,0], [bbox.width, 0]];
-    
+    const years = self._xScale.domain().map(d => new Date(d).getFullYear())
+    const diff = (years[1] - years[0]) * 12
+
     const zoom = d3.zoom()
       .extent([[0, 0], [bbox.width, bbox.height]])
       .translateExtent([[0, -Infinity], [bbox.width, Infinity]])
-      .scaleExtent(scaleExtent)
+      .scaleExtent([.9, diff])
       .on('zoom', args => {
-          console.log(args)
-          self._xScale = args.transform.rescaleX(self._xScale)
-          _repositionTimeline(d3.select(container).select('g.axis g'), bbox.width)
+          self._xScale = args.transform.rescaleX(self._originalXscale)
+          const axis = d3.axisBottom(self._xScale)
+            .ticks(bbox.width / 80)
+            .tickSizeOuter(0)
+          
+          d3.select(container).select('g.axis g').call(axis)
       })
 
     d3.select(container).select('g.axis').selectAll('*').remove()
@@ -217,8 +219,10 @@ export default function Timeline () {
     
     self._xScale = d3.scaleUtc()
       .domain(d3.extent(self._dates.map(d => new Date(d.properties.when))))
-
-    self._xScale.range([0, axisWidth])//Math.max(axisWidth, 40 * monthDiff)])
+      .range([0, axisWidth])
+    self._originalXscale = d3.scaleUtc()
+      .domain(d3.extent(self._dates.map(d => new Date(d.properties.when))))
+      .range([0, axisWidth])
   }
 
   function _renderTimeline (data, container) {
