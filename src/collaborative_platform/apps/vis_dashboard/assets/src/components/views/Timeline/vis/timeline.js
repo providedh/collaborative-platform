@@ -140,12 +140,19 @@ export default function Timeline () {
         const extent = d3.extent(entities.map(d => new Date(d.properties.when)))
         const docWidth = Math.max(self._docBarWidth, self._xScale(extent[1]) - self._xScale(extent[0]))
 
+        const withinDomain = x => x >= self._xScale.domain()[0] && x <= self._xScale.domain()[1] 
+        let visible = withinDomain(extent[0]) || withinDomain(extent[1])
+        visible = visible || (extent[0] < self._xScale.domain()[0] && extent[1] > self._xScale.domain()[1])
+        const leftX = self._xScale(self._xScale.domain()[0])
+        const textPadding = leftX > self._xScale(extent[0]) ? leftX - self._xScale(extent[0]) : 0
+
         const translate =
           `translate(${self._xScale(extent[0])}, ${i * self._docHeight + self._docPadding})`
         g.attr('transform', translate)
         g.selectAll('text').data([filename]).join('text')
           .text(d => d)
           .attr('y', self._docHeight - self._docBarHeight)
+          .attr('x', d => visible === true ? textPadding : 0)
         g.selectAll('rect').data([filename]).join('rect')
           .attr('x', 0)
           .attr('y', self._docHeight - self._docBarHeight + self._docPadding)

@@ -56,7 +56,6 @@ export default function Timeline ({ layout, ...rest }) {
   useCleanup(dataClient)
   const data = useData(dataClient)
   
-  console.log(data)
   useRender(width, height, data, context.taxonomy, containerRef, e => onEvent(e, dataClient, context))
 
   return (
