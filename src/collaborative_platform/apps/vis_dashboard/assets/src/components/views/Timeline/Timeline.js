@@ -47,16 +47,17 @@ function onEvent (event, dataClient, context) {
 }
 
 // ...rest has both the levels and the injected context prop
-export default function Timeline ({ layout, dimension, ...rest }) {
+export default function Timeline ({ layout, ...rest }) {
   const containerRef = useRef()
   const [width, height] = layout !== undefined ? [layout.w, layout.h] : [4, 4]
   const { context } = rest
 
   const dataClient = useState(DataClient())[0]
   useCleanup(dataClient)
-  //const data = useData(dataClient, source, levels)
-  const data = null
-  useRender(width, height, data, dimension, context.taxonomy, containerRef, e => onEvent(e, dataClient, context))
+  const data = useData(dataClient)
+  
+  console.log(data)
+  useRender(width, height, data, context.taxonomy, containerRef, e => onEvent(e, dataClient, context))
 
   return (
     <div className={styles.timeline + ' Timeline'} ref={containerRef}>

@@ -77,15 +77,46 @@ export default function Timeline () {
   }
 
   function _renderTimelineAxis(bbox, container) {
+    const spacing = 10
+    const xAxis = d3.axisBottom(self._xScale)
+      .ticks(bbox.width / 80)
+      .tickSizeOuter(0)
+
+    const extent = [[0,0], [bbox.width, 0]],
+      scaleExtent = [.9, 1.2],
+      translateExtent = [[0,0], [bbox.width, 0]];
+    
+    const zoom = d3.zoom()
+      .extent([[0, 0], [bbox.width, bbox.height]])
+      .translateExtent([[0, -Infinity], [bbox.width, Infinity]])
+      .scaleExtent(scaleExtent)
+      .on('zoom', args => {
+          console.log(args)
+          self._xScale = args.transform.rescaleX(self._xScale)
+          _repositionTimeline(d3.select(container).select('g.axis g'), bbox.width)
+      })
+
     d3.select(container).select('g.axis').selectAll('*').remove()
+    d3.select(container).select('g.axis')
+      .append("g")
+        .attr('transform', `translate(${bbox.x}, ${bbox.y + bbox.height - spacing})`)
+        .call(xAxis)
     d3.select(container).select('g.axis')
       .append('rect')
       .attr('x', bbox.x)
-      .attr('y', bbox.y)
+      .attr('y', bbox.y + bbox.height - spacing)
+      .attr('height', bbox.height - spacing)
       .attr('width', bbox.width)
-      .attr('height', bbox.height)
-      .attr('fill', '#F58ECC')
-      .attr('stroke', '#9B5DE5')
+      .attr('fill', 'transparent')
+      .call(zoom)
+  }
+
+  function _repositionTimeline(node, width){
+    const xAxis = d3.axisBottom(self._xScale)
+      .ticks(width / 80)
+      .tickSizeOuter(0)
+    node.selectAll('*').remove()
+    node.call(xAxis)
   }
 
   function _renderTimelineEntities(bbox, container) {
@@ -144,7 +175,7 @@ export default function Timeline () {
     }[dimension]
   }
 
-  function _getDimensions(dimension, container) {
+  function _getDimensions(container) {
     const height = container.clientHeight
     const width = container.clientWidth
     const freeVspace = height - (self._padding * 2)
@@ -161,7 +192,7 @@ export default function Timeline () {
       x: self._padding,
       y: legendBox.y + legendBox.height,
       width: freeHspace,
-      height: freeVisVspace
+      height: freeVisVspace * 2
     }
     const timelineBox = {
       x: self._padding,
@@ -179,23 +210,36 @@ export default function Timeline () {
     return {legendBox, entitiesBox, timelineBox, detailsBox} 
   }
 
-  function _renderTimeline (data, dimension, container) {
-    const sectionBoundingBoxes = _getDimensions(dimension, container)
+  function _getDataAndScale(data, axisWidth) {
+    self._dates = data.entities.all.filter(d => Object.hasOwnProperty.call(d.properties, 'when') && d?.properties?.when !== '')
+    self._datesFiltered = data.entities.filtered.filter(d => Object.hasOwnProperty.call(d.properties, 'when') && d?.propreties?.when !== '')
+    self._datesUnknown = data.entities.filtered.length - self._datesFiltered.length
+    
+    self._xScale = d3.scaleUtc()
+      .domain(d3.extent(self._dates.map(d => new Date(d.properties.when))))
+
+    self._xScale.range([0, axisWidth])//Math.max(axisWidth, 40 * monthDiff)])
+  }
+
+  function _renderTimeline (data, container) {
+    if(data.entities.all.length === 0) {return}
+    const sectionBoundingBoxes = _getDimensions(container)
     d3.select(container).select('svg')
       .attr('width', container.clientWidth)
       .attr('height', container.clientHeight) 
 
+    _getDataAndScale(data, sectionBoundingBoxes.timelineBox.width)
     _renderLegend(sectionBoundingBoxes.legendBox, container)
     _renderCoverageInfo(sectionBoundingBoxes.legendBox, container)
     _renderTimelineEntities(sectionBoundingBoxes.entitiesBox, container)
     _renderTimelineAxis(sectionBoundingBoxes.timelineBox, container)
-    _getDetailRender(dimension)(sectionBoundingBoxes.detailsBox, container)
+    //_getDetailRender('numAnnotations')(sectionBoundingBoxes.detailsBox, container)
   }
 
-  function _render (data, dimension, container) {
+  function _render (data, container) {
     // It takes at least 150 ms for the DOM to update and have the elements rendered
     setTimeout(() => {
-      _renderTimeline(data, dimension, container)
+      _renderTimeline(data, container)
     }, 300)
   }
 
