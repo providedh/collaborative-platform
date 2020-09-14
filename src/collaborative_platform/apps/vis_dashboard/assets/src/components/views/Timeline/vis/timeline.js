@@ -13,7 +13,10 @@ export default function Timeline () {
     _eventCallback: null,
     _padding: 10,
     _legendHeight: 120,
-    _timelineAxisHeight: 120
+    _timelineAxisHeight: 120,
+    _docHeight: 40,
+    _docBarHeight: 20,
+    _docPadding: 5
     //_extraVspacing: 50,
   }
 
@@ -76,7 +79,7 @@ export default function Timeline () {
 
   }
 
-  function _renderTimelineAxis(bbox, container) {
+  function _renderTimelineAxis(bbox, container, onRescale) {
     const spacing = 10
     const xAxis = d3.axisBottom(self._xScale)
       .ticks(bbox.width / 80)
@@ -96,6 +99,7 @@ export default function Timeline () {
             .tickSizeOuter(0)
           
           d3.select(container).select('g.axis g').call(axis)
+          onRescale()
       })
 
     d3.select(container).select('g.axis').selectAll('*').remove()
@@ -113,60 +117,37 @@ export default function Timeline () {
       .call(zoom)
   }
 
-  function _repositionTimeline(node, width){
-    const xAxis = d3.axisBottom(self._xScale)
-      .ticks(width / 80)
-      .tickSizeOuter(0)
-    node.selectAll('*').remove()
-    node.call(xAxis)
-  }
-
   function _renderTimelineEntities(bbox, container) {
-    d3.select(container).select('g.entities').selectAll('*').remove()
-    d3.select(container).select('g.entities')
-      .append('rect')
-      .attr('x', bbox.x)
-      .attr('y', bbox.y)
+    const svg = d3.select(container).select('svg.entities')
+    svg.style('left', bbox.x+'px')
+      .style('top', bbox.y+'px')
       .attr('width', bbox.width)
       .attr('height', bbox.height)
-      .attr('fill', '#FEEB71')
-      .attr('stroke', '#F66C28')
-  }
+      
+    //console.log(self._dates.entities)
+    const entitiesByDoc = d3.group(self._dates, d => d.filename)
 
-  function _renderAnnotationCount(bbox, container) {
-    d3.select(container).select('g.details').selectAll('*').remove()
-    d3.select(container).select('g.details')
-      .append('rect')
-      .attr('x', bbox.x)
-      .attr('y', bbox.y)
-      .attr('width', bbox.width)
-      .attr('height', bbox.height)
-      .attr('fill', '#B5E2FA')
-      .attr('stroke', '#E59500')
-  }
+    svg.selectAll('g.doc').data(entitiesByDoc)
+      .join('g').attr('class', 'doc')
+      .each(function([filename, entities], i){
+        const g = d3.select(this)
+        const extent = d3.extent(entities.map(d => new Date(d.properties.when)))
 
-  function _renderUncertaintyLevel(bbox, container) {
-    d3.select(container).select('g.details').selectAll('*').remove()
-    d3.select(container).select('g.details')
-      .append('rect')
-      .attr('x', bbox.x)
-      .attr('y', bbox.y)
-      .attr('width', bbox.width)
-      .attr('height', bbox.height)
-      .attr('fill', '#B5E2FA')
-      .attr('stroke', '#840032')
-  }
+        const translate =
+          `translate(${self._xScale(extent[0])}, ${i * self._docHeight + self._docPadding})`
+        g.attr('transform', translate)
+        console.log(extent)
+        g.selectAll('text').data([filename]).join('text')
+          .text(d => d)
+          .attr('y', self._docHeight - self._docBarHeight)
+        g.selectAll('rect').data([filename]).join('rect')
+          .attr('x', 0)
+          .attr('y', self._docHeight - self._docBarHeight + self._docPadding)
+          .attr('width', self._xScale(extent[1]) - self._xScale(extent[0]))
+          .attr('height', self._docBarHeight)
+          .style('fill', 'var(--primary)')
+      })
 
-  function _renderDocumentCount(bbox, container) {
-    d3.select(container).select('g.details').selectAll('*').remove()
-    d3.select(container).select('g.details')
-      .append('rect')
-      .attr('x', bbox.x)
-      .attr('y', bbox.y)
-      .attr('width', bbox.width)
-      .attr('height', bbox.height)
-      .attr('fill', '#B5E2FA')
-      .attr('stroke', '#002642')
   }
 
   function _getDetailRender(dimension) {
@@ -202,14 +183,8 @@ export default function Timeline () {
       width: freeHspace,
       height: self._timelineAxisHeight
     }
-    const detailsBox = {
-      x: self._padding,
-      y: timelineBox.y + timelineBox.height,
-      width: freeHspace,
-      height: freeVisVspace
-    }
 
-    return {legendBox, entitiesBox, timelineBox, detailsBox} 
+    return {legendBox, entitiesBox, timelineBox} 
   }
 
   function _getDataAndScale(data, axisWidth) {
@@ -228,7 +203,7 @@ export default function Timeline () {
   function _renderTimeline (data, container) {
     if(data.entities.all.length === 0) {return}
     const sectionBoundingBoxes = _getDimensions(container)
-    d3.select(container).select('svg')
+    d3.select(container).selectAll('svg')
       .attr('width', container.clientWidth)
       .attr('height', container.clientHeight) 
 
@@ -236,7 +211,10 @@ export default function Timeline () {
     _renderLegend(sectionBoundingBoxes.legendBox, container)
     _renderCoverageInfo(sectionBoundingBoxes.legendBox, container)
     _renderTimelineEntities(sectionBoundingBoxes.entitiesBox, container)
-    _renderTimelineAxis(sectionBoundingBoxes.timelineBox, container)
+
+    const onRescale = () => _renderTimelineEntities(sectionBoundingBoxes.entitiesBox, container)
+
+    _renderTimelineAxis(sectionBoundingBoxes.timelineBox, container, onRescale)
     //_getDetailRender('numAnnotations')(sectionBoundingBoxes.detailsBox, container)
   }
 

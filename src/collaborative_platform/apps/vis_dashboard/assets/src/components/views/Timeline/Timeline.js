@@ -63,9 +63,9 @@ export default function Timeline ({ layout, ...rest }) {
     <div className={styles.timeline + ' Timeline'} ref={containerRef}>
       <svg>
         <g className="legend"></g>
-        <g className="entities"></g>
         <g className="axis"></g>
-        <g className="details"></g>
+      </svg>
+      <svg className="entities">
       </svg>
     </div>
   )
