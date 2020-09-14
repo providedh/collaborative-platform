@@ -405,6 +405,8 @@ class DbHandler:
             created_in_commit__isnull=True,
         )
 
+        cliques_to_create = cliques_to_create.order_by('id')
+
         return cliques_to_create
 
     def get_unifications_to_create(self):
@@ -413,6 +415,8 @@ class DbHandler:
             created_by=self.__user,
             created_in_commit__isnull=True
         )
+
+        unifications_to_add = unifications_to_add.order_by('id')
 
         return unifications_to_add
 
@@ -424,6 +428,8 @@ class DbHandler:
             deleted_in_commit__isnull=True,
         )
 
+        cliques_to_delete = cliques_to_delete.order_by('id')
+
         return cliques_to_delete
 
     def get_unifications_to_delete(self):
@@ -433,6 +439,8 @@ class DbHandler:
             created_in_commit__isnull=False,
             deleted_in_commit__isnull=True,
         )
+
+        unifications_to_delete = unifications_to_delete.order_by('id')
 
         return unifications_to_delete
 
