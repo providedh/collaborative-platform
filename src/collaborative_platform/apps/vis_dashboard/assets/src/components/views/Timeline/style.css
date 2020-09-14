@@ -12,3 +12,7 @@
   font-weight: 400;
   padding: 0 15px;
 }
+
+.Timeline .doc:hover .timelineDocName{
+  font-weight: bold;
+}

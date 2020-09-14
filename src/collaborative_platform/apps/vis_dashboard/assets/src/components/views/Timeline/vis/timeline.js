@@ -140,7 +140,8 @@ export default function Timeline () {
         const translate =
           `translate(${self._xScale(extent[0])}, ${i * self._docHeight + self._docPadding})`
         g.attr('transform', translate)
-        g.selectAll('text').data([filename]).join('text')
+        g.selectAll('text.timelineDocName').data([filename]).join('text')
+          .attr('class', 'timelineDocName')
           .text(d => d)
           .attr('y', self._docHeight - self._docBarHeight)
           .attr('x', d => visible === true ? textPadding : 0)
@@ -168,6 +169,10 @@ export default function Timeline () {
           .attr('width', self._entityRadius / 2)
           .attr('height', self._entityRadius)
           .attr('fill', 'var(--blue)')
+
+        g.on('mouseenter', () => self._eventCallback({
+          type: 'hover',
+          target: entities[0].file_id}))
       })
 
     d3.select(container).select('div.header')
