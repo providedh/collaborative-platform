@@ -102,14 +102,15 @@ export default function Timeline () {
       .call(zoom)
   }
 
-  function _renderTimelineEntities(bbox, container) {
+  function _renderTimelineEntities(bbox, container) {    
+    const entitiesByDoc = d3.group(self._dates, d => d.filename)
+
     const svg = d3.select(container).select('svg.entities')
     svg.style('left', bbox.x+'px')
       .style('top', bbox.y+'px')
       .attr('width', bbox.width)
-      .attr('height', bbox.height)
-      
-    const entitiesByDoc = d3.group(self._dates, d => d.filename)
+      .attr('height', entitiesByDoc.size * (self._docHeight + self._docPadding) + self._docBarHeight)
+
     let leftHidden = 0, rightHidden = 0, shownIds = []
     self._dates.forEach(x => {
       const [t0, t1] = self._xScale.domain()
@@ -203,7 +204,7 @@ export default function Timeline () {
     self._dates = data.entities.all.filter(d => Object.hasOwnProperty.call(d.properties, 'when') && d?.properties?.when !== '')
     self._datesFiltered = data.entities.filtered.filter(d => Object.hasOwnProperty.call(d.properties, 'when') && d?.propreties?.when !== '')
     self._datesUnknown = data.entities.filtered.length - self._datesFiltered.length
-    
+
     self._xScale = d3.scaleUtc()
       .domain(d3.extent(self._dates.map(d => new Date(d.properties.when))))
       .range([0, axisWidth])
@@ -214,9 +215,11 @@ export default function Timeline () {
 
   function _renderTimeline (data, container) {
     if(data.entities.all.length === 0) {return}
-    d3.select(container).selectAll('svg')
+    d3.select(container).select('svg.back')
       .attr('width', container.clientWidth)
       .attr('height', container.clientHeight) 
+    d3.select(container).select('svg.entities')
+      .attr('width', container.clientWidth)
     const sectionBoundingBoxes = _getDimensions(container)
 
     if (self?._xScale?.range?.()?.[1] !== sectionBoundingBoxes.timelineBox.width) {

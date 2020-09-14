@@ -42,11 +42,12 @@ export default function Timeline (props) {
       <div className='header'>
         
       </div>
-      <svg>
+      <svg className="back">
         <g className="axis"></g>
       </svg>
-      <svg className="entities">
-      </svg>
+      <div className={styles.entityContainer}>
+        <svg className="entities"></svg>
+      </div>
     </div>
   )
 }

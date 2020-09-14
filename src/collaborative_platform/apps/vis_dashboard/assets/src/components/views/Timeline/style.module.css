@@ -4,7 +4,14 @@
   height: 100%;
 }
 .timeline svg:nth-of-type(2n){
+}
+.entityContainer{
   position: absolute;
-  top: 0;
+  top: 35px;
   left: 0;
+  max-height: calc(100% - 80px);
+  overflow-y: auto;
+}
+.entityContainer svg{
+  overflow: visible;
 }
