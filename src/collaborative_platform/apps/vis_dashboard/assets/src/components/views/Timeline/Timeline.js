@@ -60,6 +60,9 @@ export default function Timeline ({ layout, ...rest }) {
 
   return (
     <div className={styles.timeline + ' Timeline'} ref={containerRef}>
+      <div className='header'>
+        
+      </div>
       <svg>
         <g className="legend"></g>
         <g className="axis"></g>

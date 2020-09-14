@@ -130,8 +130,13 @@ export default function Timeline () {
       .attr('width', bbox.width)
       .attr('height', bbox.height)
       
-    //console.log(self._dates.entities)
     const entitiesByDoc = d3.group(self._dates, d => d.filename)
+    let leftHidden = 0, rightHidden = 0
+    self._dates.forEach(x => {
+      const [t0, t1] = self._xScale.domain()
+      if (new Date(x.properties.when) - t0 < 0) {leftHidden ++}
+      else if (t1 - new Date(x.properties.when) < 0) {rightHidden ++}
+    })
 
     svg.selectAll('g.doc').data(entitiesByDoc)
       .join('g').attr('class', 'doc')
@@ -140,9 +145,13 @@ export default function Timeline () {
         const extent = d3.extent(entities.map(d => new Date(d.properties.when)))
         const docWidth = Math.max(self._docBarWidth, self._xScale(extent[1]) - self._xScale(extent[0]))
 
-        const withinDomain = x => x >= self._xScale.domain()[0] && x <= self._xScale.domain()[1] 
-        let visible = withinDomain(extent[0]) || withinDomain(extent[1])
-        visible = visible || (extent[0] < self._xScale.domain()[0] && extent[1] > self._xScale.domain()[1])
+        let visible = true
+        if (extent[1] < self._xScale.domain()[0]) {
+          visible = false;
+        } else if (extent[0] > self._xScale.domain()[0]) {
+          visible = false;
+        }
+
         const leftX = self._xScale(self._xScale.domain()[0])
         const textPadding = leftX > self._xScale(extent[0]) ? leftX - self._xScale(extent[0]) : 0
 
@@ -168,14 +177,14 @@ export default function Timeline () {
           .attr('width', self._entityRadius / 2)
           .attr('height', self._entityRadius)
           .attr('fill', 'var(--blue)')
-        //g.selectAll('circle').data(entities).join('circle')
-        //  .attr('cx', d => self._xScale(new Date(d.properties.when)) - self._xScale(extent[0]))
-        //  .attr('cy', self._docHeight - (self._docBarHeight*3)/4 + self._docPadding)
-        //  .attr('r', self._entityRadius)
-        //  .attr('fill', 'var(--blue)')
-
       })
 
+  d3.select(container).select('div.header')
+    .style('top', (bbox.y - 30)+'px')
+    .selectAll('span')
+    .data(['↤ '+leftHidden, self._datesUnknown+' dates could not be placed (when property missing)', rightHidden+' ↦'])
+    .join('span')
+    .text(d => d)
   }
 
   function _getDetailRender(dimension) {
