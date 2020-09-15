@@ -203,6 +203,10 @@ export default function Map () {
       }))
   }
 
+  function processData (data, dimension) {
+    console.log(data, dimension)
+  }
+
   function render (data, dimension, mainMapRef, miniMapRef, miniMapOverlayRef, tableRef) {
     if (mainMapRef === undefined) { return }
     const bboxes = getDimensions(mainMapRef.parentElement.parentElement)

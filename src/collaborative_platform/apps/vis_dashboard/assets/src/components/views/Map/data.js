@@ -10,8 +10,8 @@ export default function useData (dataClient) {
     dataClient.subscribe('entity', d => {
       if (d != null) {
         const newData = {
-          all: d.all.filter(e => e.type === 'date'),
-          filtered: d.filtered.filter(e => e.type === 'date'),
+          all: d.all.filter(e => e.type === 'place'),
+          filtered: d.filtered.filter(e => e.type === 'place'),
         }
         setEntities(newData)
       }

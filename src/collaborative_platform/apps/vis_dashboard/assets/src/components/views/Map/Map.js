@@ -41,6 +41,15 @@ export default function Map ({ layout, renderedItems, ...rest }) {
     tableRef.current,
     e => onEvent(e, dataClient, context))
 
+  const places = data.entities.filtered
+    .filter(d => d.properties?.geo !== undefined && d.properties.geo.split(' ').length === 2)
+    .map(({id, properties, filename}) => <tr key={id}>
+      <th class="text-nowrap" scope="row">{id}</th>
+      <td>{properties.geo.split(' ')[0]}ª</td>
+      <td>{properties.geo.split(' ')[1]}ª</td>
+      <td className="text-break">{filename}</td>
+    </tr>)
+
   return (
     <div className={styles.map + ' mapVis'}>
       <div className={styles.mainMap}>
@@ -59,42 +68,7 @@ export default function Map ({ layout, renderedItems, ...rest }) {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <th scope="row">date-1</th>
-                <td>120ª</td>
-                <td>-43ª</td>
-                <td>dep_0012432</td>
-              </tr>
-              <tr>
-                <th scope="row">date-2</th>
-                <td>120ª</td>
-                <td>-43ª</td>
-                <td>dep_0012432</td>
-              </tr>
-              <tr>
-                <th scope="row">date-3</th>
-                <td>120ª</td>
-                <td>-43ª</td>
-                <td>dep_0012432</td>
-              </tr>
-              <tr>
-                <th scope="row">date-4</th>
-                <td>120ª</td>
-                <td>-43ª</td>
-                <td>dep_0012432</td>
-              </tr>
-              <tr>
-                <th scope="row">date-5</th>
-                <td>120ª</td>
-                <td>-43ª</td>
-                <td>dep_0012432</td>
-              </tr>
-              <tr>
-                <th scope="row">date-6</th>
-                <td>120ª</td>
-                <td>-43ª</td>
-                <td>dep_0012432</td>
-              </tr>
+              {places}
             </tbody>
           </table>
         </div>
