@@ -1,6 +1,6 @@
 const attributes = {
-  entity: ['id', 'text', 'type', 'documentName'],
-  certainty: ['id', 'type', 'tag', 'text']
+  entity: ['id', 'type', 'documentName'],
+  certainty: ['id', 'locus', 'match', 'resp']
 }
 
 const defaultConfig = [

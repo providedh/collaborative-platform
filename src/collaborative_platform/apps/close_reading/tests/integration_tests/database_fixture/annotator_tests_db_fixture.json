@@ -12,306 +12,272 @@
   "pk": 1,
   "fields": {
     "entity": 1,
-    "file_version": 1,
-    "xml": null
-}
+    "file_version": 1
+  }
 },
 {
   "model": "api_vis.entityversion",
   "pk": 2,
   "fields": {
     "entity": 2,
-    "file_version": 1,
-    "xml": null
-}
+    "file_version": 1
+  }
 },
 {
   "model": "api_vis.entityversion",
   "pk": 3,
   "fields": {
     "entity": 3,
-    "file_version": 1,
-    "xml": null
-}
+    "file_version": 1
+  }
 },
 {
   "model": "api_vis.entityversion",
   "pk": 4,
   "fields": {
     "entity": 4,
-    "file_version": 1,
-    "xml": null
-}
+    "file_version": 1
+  }
 },
-  {
+{
   "model": "api_vis.entityversion",
   "pk": 5,
   "fields": {
     "entity": 5,
-    "file_version": 1,
-    "xml": null
-}
+    "file_version": 1
+  }
 },
-  {
+{
   "model": "api_vis.entityversion",
   "pk": 6,
   "fields": {
     "entity": 6,
-    "file_version": 1,
-    "xml": null
-}
+    "file_version": 1
+  }
 },
 {
   "model": "api_vis.entityversion",
   "pk": 7,
   "fields": {
     "entity": 7,
-    "file_version": 1,
-    "xml": null
-}
+    "file_version": 1
+  }
 },
 {
   "model": "api_vis.entityversion",
   "pk": 8,
   "fields": {
     "entity": 8,
-    "file_version": 1,
-    "xml": null
-}
+    "file_version": 1
+  }
 },
 {
   "model": "api_vis.entityversion",
   "pk": 9,
   "fields": {
     "entity": 9,
-    "file_version": 1,
-    "xml": null
-}
+    "file_version": 1
+  }
 },
 {
   "model": "api_vis.entityversion",
   "pk": 10,
   "fields": {
     "entity": 10,
-    "file_version": 1,
-    "xml": null
-}
+    "file_version": 1
+  }
 },
 {
   "model": "api_vis.entityversion",
   "pk": 11,
   "fields": {
     "entity": 11,
-    "file_version": 1,
-    "xml": null
-}
+    "file_version": 1
+  }
 },
 {
   "model": "api_vis.entityversion",
   "pk": 12,
   "fields": {
     "entity": 12,
-    "file_version": 1,
-    "xml": null
-}
+    "file_version": 1
+  }
 },
 {
   "model": "api_vis.entityversion",
   "pk": 13,
   "fields": {
     "entity": 13,
-    "file_version": 1,
-    "xml": null
-}
+    "file_version": 1
+  }
 },
 {
   "model": "api_vis.entityversion",
   "pk": 14,
   "fields": {
     "entity": 1,
-    "file_version": 2,
-    "xml": null
-}
+    "file_version": 2
+  }
 },
 {
   "model": "api_vis.entityversion",
   "pk": 15,
   "fields": {
     "entity": 2,
-    "file_version": 2,
-    "xml": null
-}
+    "file_version": 2
+  }
 },
 {
   "model": "api_vis.entityversion",
   "pk": 16,
   "fields": {
     "entity": 3,
-    "file_version": 2,
-    "xml": null
-}
+    "file_version": 2
+  }
 },
 {
   "model": "api_vis.entityversion",
   "pk": 17,
   "fields": {
     "entity": 4,
-    "file_version": 2,
-    "xml": null
-}
+    "file_version": 2
+  }
 },
 {
   "model": "api_vis.entityversion",
   "pk": 18,
   "fields": {
     "entity": 5,
-    "file_version": 2,
-    "xml": null
-}
+    "file_version": 2
+  }
 },
 {
   "model": "api_vis.entityversion",
   "pk": 19,
   "fields": {
     "entity": 6,
-    "file_version": 2,
-    "xml": null
-}
+    "file_version": 2
+  }
 },
 {
   "model": "api_vis.entityversion",
   "pk": 20,
   "fields": {
     "entity": 7,
-    "file_version": 2,
-    "xml": null
-}
+    "file_version": 2
+  }
 },
 {
   "model": "api_vis.entityversion",
   "pk": 21,
   "fields": {
     "entity": 8,
-    "file_version": 2,
-    "xml": null
-}
+    "file_version": 2
+  }
 },
 {
   "model": "api_vis.entityversion",
   "pk": 22,
   "fields": {
     "entity": 9,
-    "file_version": 2,
-    "xml": null
-}
+    "file_version": 2
+  }
 },
 {
   "model": "api_vis.entityversion",
   "pk": 23,
   "fields": {
     "entity": 10,
-    "file_version": 2,
-    "xml": null
-}
+    "file_version": 2
+  }
 },
 {
   "model": "api_vis.entityversion",
   "pk": 24,
   "fields": {
     "entity": 11,
-    "file_version": 2,
-    "xml": null
-}
+    "file_version": 2
+  }
 },
 {
   "model": "api_vis.entityversion",
   "pk": 25,
   "fields": {
     "entity": 12,
-    "file_version": 2,
-    "xml": null
-}
+    "file_version": 2
+  }
 },
 {
   "model": "api_vis.entityversion",
   "pk": 26,
   "fields": {
     "entity": 13,
-    "file_version": 2,
-    "xml": null
-}
+    "file_version": 2
+  }
 },
 {
   "model": "api_vis.entityversion",
   "pk": 27,
   "fields": {
     "entity": 14,
-    "file_version": 3,
-    "xml": null
-}
+    "file_version": 3
+  }
 },
 {
   "model": "api_vis.entityversion",
   "pk": 28,
   "fields": {
     "entity": 15,
-    "file_version": 3,
-    "xml": null
-}
+    "file_version": 3
+  }
 },
 {
   "model": "api_vis.entityversion",
   "pk": 29,
   "fields": {
     "entity": 14,
-    "file_version": 4,
-    "xml": null
-}
+    "file_version": 4
+  }
 },
 {
   "model": "api_vis.entityversion",
   "pk": 30,
   "fields": {
     "entity": 15,
-    "file_version": 4,
-    "xml": null
-}
+    "file_version": 4
+  }
 },
 {
   "model": "api_vis.entityversion",
   "pk": 31,
   "fields": {
     "entity": 16,
-    "file_version": 5,
-    "xml": null
-}
+    "file_version": 5
+  }
 },
 {
   "model": "api_vis.entityversion",
   "pk": 32,
   "fields": {
     "entity": 17,
-    "file_version": 5,
-    "xml": null
-}
+    "file_version": 5
+  }
 },
 {
   "model": "api_vis.entityversion",
   "pk": 33,
   "fields": {
     "entity": 16,
-    "file_version": 6,
-    "xml": null
-}
+    "file_version": 6
+  }
 },
 {
   "model": "api_vis.entityversion",
   "pk": 34,
   "fields": {
     "entity": 17,
-    "file_version": 6,
-    "xml": null
-}
+    "file_version": 6
+  }
 },
 {
   "model": "files_management.directory",
@@ -2316,7 +2282,7 @@
     "xml_id": "certainty-0",
     "locus": "value",
     "certainty": "high",
-    "degree": 0.857142857142857,
+    "degree": 0.86,
     "target_xml_id": "name-3",
     "target_match": "@ref",
     "asserted_value": "#met",
@@ -2432,7 +2398,7 @@
     "xml_id": "certainty-0",
     "locus": "value",
     "certainty": "high",
-    "degree": 0.857142857142857,
+    "degree": 0.86,
     "target_xml_id": "name-3",
     "target_match": "@ref",
     "asserted_value": "#met",
@@ -2548,7 +2514,7 @@
     "xml_id": "certainty-0",
     "locus": "value",
     "certainty": "high",
-    "degree": 0.857142857142857,
+    "degree": 0.86,
     "target_xml_id": "name-0",
     "target_match": "@ref",
     "asserted_value": "#sand",
@@ -2571,7 +2537,7 @@
     "xml_id": "certainty-1",
     "locus": "value",
     "certainty": "high",
-    "degree": 0.857142857142857,
+    "degree": 0.86,
     "target_xml_id": "name-1",
     "target_match": "@ref",
     "asserted_value": "#sand",
@@ -2594,7 +2560,7 @@
     "xml_id": "certainty-2",
     "locus": "value",
     "certainty": "high",
-    "degree": 0.857142857142857,
+    "degree": 0.86,
     "target_xml_id": "name-2",
     "target_match": "@ref",
     "asserted_value": "#jus",
@@ -2617,7 +2583,7 @@
     "xml_id": "certainty-0",
     "locus": "value",
     "certainty": "high",
-    "degree": 0.857142857142857,
+    "degree": 0.86,
     "target_xml_id": "name-0",
     "target_match": "@ref",
     "asserted_value": "#sand",
@@ -2640,7 +2606,7 @@
     "xml_id": "certainty-1",
     "locus": "value",
     "certainty": "high",
-    "degree": 0.857142857142857,
+    "degree": 0.86,
     "target_xml_id": "name-1",
     "target_match": "@ref",
     "asserted_value": "#sand",
@@ -2663,7 +2629,7 @@
     "xml_id": "certainty-2",
     "locus": "value",
     "certainty": "high",
-    "degree": 0.857142857142857,
+    "degree": 0.86,
     "target_xml_id": "name-2",
     "target_match": "@ref",
     "asserted_value": "#jus",
@@ -2686,7 +2652,7 @@
     "xml_id": "certainty-0",
     "locus": "value",
     "certainty": "high",
-    "degree": 0.857142857142857,
+    "degree": 0.86,
     "target_xml_id": "name-1",
     "target_match": "@ref",
     "asserted_value": "#sand",
@@ -2709,7 +2675,7 @@
     "xml_id": "certainty-1",
     "locus": "value",
     "certainty": "high",
-    "degree": 0.833333333333333,
+    "degree": 0.83,
     "target_xml_id": "name-0",
     "target_match": "@ref",
     "asserted_value": "#ingwer",
@@ -2732,7 +2698,7 @@
     "xml_id": "certainty-0",
     "locus": "value",
     "certainty": "high",
-    "degree": 0.857142857142857,
+    "degree": 0.86,
     "target_xml_id": "name-1",
     "target_match": "@ref",
     "asserted_value": "#sand",
@@ -2755,7 +2721,7 @@
     "xml_id": "certainty-1",
     "locus": "value",
     "certainty": "high",
-    "degree": 0.833333333333333,
+    "degree": 0.83,
     "target_xml_id": "name-0",
     "target_match": "@ref",
     "asserted_value": "#ingwer",

@@ -85,7 +85,7 @@ def project_files(request, project_id):  # type: (HttpRequest, int) -> JsonRespo
 @user_has_access()
 def file(request, project_id, file_id):  # type: (HttpRequest, int, int) -> HttpResponse
     if request.method == 'GET':
-        response = files_management__download_file(request, file_id)
+        response = files_management__download_file(request, file_id=file_id)
 
         return response
 

@@ -24,9 +24,9 @@ function useVis (source, sortDocumentsBy, colorBy, callback, taxonomy) {
   const vis = useState(Vis())[0]
 
   useEffect(() => { // Initialize vis component
-    vis.setTaxonomy(taxonomy)
-    vis.setEventCallback(callback)
   }, [])
+  vis.setTaxonomy(taxonomy)
+  vis.setEventCallback(callback)
 
   vis.setSource(source)
   vis.setDocSortingCriteria(sortDocumentsBy)
@@ -58,12 +58,24 @@ export default function PixelCorpus ({ sortDocumentsBy, colorBy, source, layout,
   const data = useData(dataClient, source)
   const vis = useVis(data?.source, sortDocumentsBy, colorBy, handleEvent, context.taxonomy)
 
-  useEffect(() => vis.render(containerRef.current, svgRef.current, data, data?.source), // Render
+  useEffect(() => {vis.render(containerRef.current, svgRef.current, data, data?.source)}, // Render
     [width, height, sortDocumentsBy, colorBy, data]) // Conditions
+
+  const noData = data.all.length === 0 ? 'd-initial' : 'd-none'
+  const allFiltered = (data.all.length > 0 && data.filtered.length === 0) ? 'd-initial' : 'd-none'
+  const showCells = (data.all.length > 0 && data.filtered.length > 0) ? 'd-initial' : 'd-none'
 
   return (
     <div className={styles.container} ref={containerRef}>
-      <svg ref={svgRef}>
+      <span className={noData + " text-primary"}>
+        <h4>No {source} elements match the current filters.</h4>
+        <p>Remove filters to show {source} elements.</p>
+      </span>
+      <span className={allFiltered + " text-primary"}>
+        <h4>There are no {source} elements in the project.</h4>
+        <p>Upload new files or use the close reading app from the file manager to add {source} annotations.</p>
+      </span>
+      <svg ref={svgRef} className={showCells}>
         <g className="legend"></g>
         <g className="vis">
           <text className="title"></text>

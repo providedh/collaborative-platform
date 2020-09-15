@@ -5,24 +5,37 @@ export default function useData (dataClient, source, levels) {
   const [fetched, setFetched] = useState(null)
   const [data, setData] = useState({ data: null, count: 0 })
 
+
   useEffect(() => {
     dataClient.clearSubscriptions()
 
     dataClient.subscribe(source, d => {
-      if (d != null) {
+      let processed = null
+
+      if (d !== null) {
+        processed = source === 'certainty' ? {
+          all: d.all.map(({categories, ...rest}) => ({categories: categories.join(','), ...rest})),
+          filtered: d.filtered.map(({categories, ...rest}) => ({categories: categories.join(','), ...rest}))
+        } : {
+          all: d.all.map(({properties, ...rest}) => ({properties: Object.keys(properties).join(','), ...rest})),
+          filtered: d.filtered.map(({properties, ...rest}) => ({properties: Object.keys(properties).join(','), ...rest}))
+        }
+      }
+
+      if (processed != null) {
         const newData = {
           filters: dataClient.getFilters(),
           all: {
-            tree: createTree(d.all, levelKeys),
-            count: d.all.length
+            tree: createTree(processed.all, levelKeys),
+            count: processed.all.length
           },
           filtered: {
-            tree: createTree(d.filtered, levelKeys),
-            count: d.filtered.length
+            tree: createTree(processed.filtered, levelKeys),
+            count: processed.filtered.length
           }
         }
 
-        setFetched(d)
+        setFetched(processed)
         setData(newData)
       }
     })

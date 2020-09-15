@@ -8,13 +8,11 @@ const PixelCorpusSortBy = {
 }
 
 const PixelCorpusColorBy = {
-  type: 'type',
-  category: 'category',
-  certaintyLevel: 'certaintyLevel',
-  categoryAndCertaintyLevel: 'categoryAndCertaintyLevel',
-  authorship: 'authorship',
-  entity: 'entity',
-  locus: 'locus'
+  locus: 'locus',
+  authorship: 'resp',
+  category: 'categories',
+  certaintyLevel: 'cert',
+  entity: 'target',
 }
 
 const PixelCorpusSource = { entities: 'entity', certainty: 'certainty' }
@@ -40,9 +38,9 @@ const defaultConfig = [
   {
     name: 'colorBy',
     type: 'selection',
-    value: Object.values(PixelCorpusColorBy)[0],
+    value: 'type',
     params: {
-      options: Object.values(PixelCorpusColorBy).slice(0, 1)
+      options: ['type']
     }
   }
 ]
@@ -64,14 +62,13 @@ export default function getOptions (form) {
 
   if (source === PixelCorpusSource.entities) {
     configOptions.push(
-      { name: 'colorBy', type: 'selection', value: Object.values(PixelCorpusColorBy)[0], params: { options: Object.values(PixelCorpusColorBy).slice(0, 1) } }
+      { name: 'colorBy', type: 'selection', value: 'type', params: { options: ['type'] } }
     )
   } else {
-    const color = colorBy === PixelCorpusColorBy.type ? PixelCorpusColorBy.category : colorBy
+    const color = ['type', 'author'].includes(colorBy)  ? PixelCorpusColorBy.locus : colorBy
     configOptions.push(
-      { name: 'colorBy', type: 'selection', value: color, params: { options: Object.values(PixelCorpusColorBy).slice(1) } }
+      { name: 'colorBy', type: 'selection', value: color, params: { labels: Object.keys(PixelCorpusColorBy), options: Object.values(PixelCorpusColorBy) } }
     )
   }
-
   return configOptions
 }

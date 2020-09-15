@@ -4,13 +4,12 @@ import PropTypes from 'prop-types'
 import styles from './style.module.css'
 import css from './style.css' // eslint-disable-line no-unused-vars
 import render from './render'
-import createConfigGetter from './config'
+import getConfig from './config'
 import useData from './data'
 import { DataClient, useCleanup } from '../../../data'
 import getOnEventCallback from './event'
 
 export default function BarChart ({ layout, dimension, barDirection, entityType=null, context}) {
-  BarChart.prototype.getConfigOptions = createConfigGetter(context.taxonomy.entities)
   const [refContainer, refCanvas, refOverlayCanvas] = [useRef(), useRef(), useRef()]
   const [width, height] = layout !== undefined ? [layout.w, layout.h] : [4, 4]
 
@@ -36,6 +35,7 @@ export default function BarChart ({ layout, dimension, barDirection, entityType=
   )
 }
 
+BarChart.prototype.getConfigOptions = getConfig
 BarChart.prototype.description = 'Encode frequencies using horizontal or vertical bars.'
 
 BarChart.propTypes = {

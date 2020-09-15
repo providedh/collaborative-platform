@@ -124,7 +124,7 @@ export default function Sunburst () {
 
   function _partition (data, radius) {
     return d3.partition().size([2 * Math.PI, radius])(
-      d3.hierarchy(data, d => d.children).sum(d => 1)
+      d3.hierarchy(data, d => d.children).sum(d => d.hasOwnProperty.call(d, 'children') ? 0 : 1)
     )
   }
 
