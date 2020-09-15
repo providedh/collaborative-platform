@@ -1,40 +1,42 @@
 import { useEffect, useState } from 'react'
 
-export default function useData (dataClient, renderedItems) {
-  const [data, setData] = useState({ all: [], filtered: [] })
+export default function useData (dataClient) {
+  const [entities, setEntities] = useState({all: [], filtered: []})
+  const [uncertainty, setUncertainty] = useState({all: [], filtered: []})
 
   useEffect(() => {
     dataClient.clearSubscriptions()
 
-    dataClient.subscribe(renderedItems, d => {
+    dataClient.subscribe('entity', d => {
+      if (d != null) {
+        const newData = {
+          all: d.all.filter(e => e.type === 'date'),
+          filtered: d.filtered.filter(e => e.type === 'date'),
+        }
+        setEntities(newData)
+      }
+    })
+    
+    dataClient.subscribe('certainty', d => {
       if (d != null) {
         const newData = {
           all: d.all,
-          filtered: d.filtered
+          filtered: d.filtered,
         }
-
-        setData(newData)
+        setUncertainty(newData)
       }
     })
-  }, [renderedItems])
+  }, [])
 
-  /*useEffect(() => {
-    if (fetched != null) {
-      const newData = {
-        filters: dataClient.getFilters(),
-        all: {
-          tree: createTree(fetched.all, levelKeys),
-          count: fetched.all.length
-        },
-        filtered: {
-          tree: createTree(fetched.filtered, levelKeys),
-          count: fetched.filtered.length
-        }
-      }
+  const entityIds = {
+    all: entities.all.map(d => d.id),
+    filtered: entities.filtered.map(d => d.id)
+  }
 
-      setData(newData)
-    }
-  }, [])*/
+  const annotations = {
+    all: uncertainty.all.filter(d => entityIds.all.includes(d.target)),
+    filtered: uncertainty.filtered.filter(d => entityIds.filtered.includes(d.target)),
+  }
 
-  return data
+  return {entities, annotations}
 }
