@@ -42,7 +42,6 @@ export default function Map ({ layout, renderedItems, ...rest }) {
     e => onEvent(e, dataClient, context))
 
   const places = data.entities.filtered
-    .filter(d => d.properties?.geo !== undefined && d.properties.geo.split(' ').length === 2)
     .map(({id, properties, filename, file_id}) => 
       <tr key={id} onMouseEnter={() => onEvent({type: 'hover', target: file_id}, dataClient, context)}>
         <th className="text-nowrap" scope="row">{id}</th>
@@ -77,7 +76,7 @@ export default function Map ({ layout, renderedItems, ...rest }) {
       <div className={styles.minimap + ' mapMinimap'}>
         <canvas ref={miniMapOverlayRef}/>
       </div>
-      <span>123 place entities with <i>geocoordinates</i> property missing.</span>
+      <span className={data.allNonValid > 0 ? '' : 'd-none'}>{data.allNonValid} place entities with <i>geo</i> property missing.</span>
     </div>
   )
 }
