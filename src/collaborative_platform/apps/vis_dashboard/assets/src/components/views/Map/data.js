@@ -1,18 +1,24 @@
 import { useEffect, useState } from 'react'
 
 export default function useData (dataClient) {
-  const [entities, setEntities] = useState({all: [], filtered: []})
+  const [entities, setEntities] = useState({all: [], filtered: [], allNonValid: 0, filteredNonValid: 0})
   const [uncertainty, setUncertainty] = useState({all: [], filtered: []})
+
+  const isPlace = d => d.type === 'place'
+  const isValidPlace = d => (
+    d.properties?.geo !== undefined &&
+    d.properties.geo.split(' ').length === 2)
 
   useEffect(() => {
     dataClient.clearSubscriptions()
 
     dataClient.subscribe('entity', d => {
       if (d != null) {
-        const newData = {
-          all: d.all.filter(e => e.type === 'place'),
-          filtered: d.filtered.filter(e => e.type === 'place'),
-        }
+        const all = d.all.filter(isPlace)
+        const filtered = d.filtered.filter(isPlace)
+        const newData = {all: all.filter(isValidPlace), filtered: filtered.filter(isValidPlace)}
+        newData.allNonValid = all.length - newData.all.length
+        newData.filteredNonValid = filtered.length - newData.filtered.length
         setEntities(newData)
       }
     })
