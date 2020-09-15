@@ -9,41 +9,15 @@ import { DataClient, useCleanup } from '../../../data'
 import useData from './data'
 
 function onEvent (event, dataClient, context) {
-  console.log(event, dataClient, context)
-  /*
-  if (event.action === 'click') {
-    if (event?.target === 'unfilter') {
+  if (event.type === 'zoom') {
+    if (event.filtered === null) {
       dataClient.clearFilters()
-    } else if (levels['level' + event.depth] === 'file') {
-      dataClient.filter('fileId', x => x === (+event.data.name))
-    } else if (levels['level' + event.depth] === 'file_name') {
-      if (Object.hasOwnProperty.call(context.name2document, event.data.name)) { dataClient.filter('fileId', x => x === context.name2document[event.data.name].id) }
     } else {
-      if (source === 'certainty') {
-        const option2dimension = {
-          category: 'certaintyCategory',
-          degree: 'certaintyDegree',
-          cert: 'certaintyCert',
-          match: 'certaintyMatch',
-          resp: 'certaintyAuthor'
-        }
-        const dimension = option2dimension[levels['level' + event.depth]]
-
-        if (dimension === 'certaintyCategory') {
-          dataClient.filter(dimension, x => x.includes(event.data.name))
-        } else {
-          dataClient.filter(dimension, x => x === event.data.name)
-        }
-      }
+      dataClient.filter('entityId', d => event.filtered.includes(d))
     }
-  } else {
-    if (levels['level' + event.depth] === 'file') {
-      dataClient.focusDocument(event.data.name)
-    } else if (levels['level' + event.depth] === 'file_name') {
-      dataClient.focusDocument(context.name2document[event.data.name].id)
-    }
+  } else if (event.type === 'hover') {
+    dataClient.focusDocument(event.target)
   }
-  */
 }
 
 // ...rest has both the levels and the injected context prop
@@ -54,7 +28,7 @@ export default function Map ({ layout, renderedItems, ...rest }) {
 
   const dataClient = useState(DataClient())[0]
   useCleanup(dataClient)
-  const data = null //useData(dataClient, renderedItems)
+  const data = useData(dataClient)
   useRender(
     width, 
     height, 
