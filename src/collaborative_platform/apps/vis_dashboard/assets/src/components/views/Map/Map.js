@@ -43,12 +43,13 @@ export default function Map ({ layout, renderedItems, ...rest }) {
 
   const places = data.entities.filtered
     .filter(d => d.properties?.geo !== undefined && d.properties.geo.split(' ').length === 2)
-    .map(({id, properties, filename}) => <tr key={id}>
-      <th class="text-nowrap" scope="row">{id}</th>
-      <td>{properties.geo.split(' ')[0]}ª</td>
-      <td>{properties.geo.split(' ')[1]}ª</td>
-      <td className="text-break">{filename}</td>
-    </tr>)
+    .map(({id, properties, filename, file_id}) => 
+      <tr key={id} onMouseEnter={() => onEvent({type: 'hover', target: file_id}, dataClient, context)}>
+        <th class="text-nowrap" scope="row">{id}</th>
+        <td>{properties.geo.split(' ')[0]}ª</td>
+        <td>{properties.geo.split(' ')[1]}ª</td>
+        <td className="text-break">{filename}</td>
+      </tr>)
 
   return (
     <div className={styles.map + ' mapVis'}>
