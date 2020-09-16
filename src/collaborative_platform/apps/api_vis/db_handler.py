@@ -250,6 +250,8 @@ class DbHandler:
 
         from apps.nn_disambiguator.learning import learn_unprocessed
         learn_unprocessed.delay(self.__project_id)
+        from apps.nn_disambiguator.predictions import calculate_proposals
+        calculate_proposals.delay(self.__project_id)
 
     def delete_clique(self, clique, project_version):
         clique.deleted_by = self.__user

@@ -18,6 +18,7 @@ from apps.files_management.helpers import clean_name, create_uploaded_file_objec
 from apps.files_management.models import Directory, File, FileVersion
 from apps.files_management.loggers import FilesManagementLogger
 from apps.nn_disambiguator.learning import learn_unprocessed
+from apps.nn_disambiguator.predictions import calculate_proposals
 from apps.projects.helpers import log_activity, paginate_start_length, page_to_json_response
 from apps.views_decorators import objects_exists, user_has_access
 
@@ -81,6 +82,7 @@ def __process_file(file, directory, user):
             upload_status.update({'migrated': True, 'message': message})
 
             learn_unprocessed.delay(file_object.project_id)
+            calculate_proposals.delay(file_object.project_id)
 
             log_activity(directory.project, user, f"File migrated: {message} ", file_object)
 
