@@ -21,7 +21,7 @@ class SimilarityCalculator:
     nlp = spacy.load('en_core_web_lg')
     namespaces = settings.XML_NAMESPACES
 
-    processing_functions: {
+    processing_functions = {
         TypeChoice.str: {
             names.nlp_sim,
             names.levenshtein_distance,
