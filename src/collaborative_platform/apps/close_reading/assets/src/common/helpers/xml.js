@@ -130,6 +130,9 @@ function processTag (domNode) {
     saved: !(domNode.attributes?.saved?.value === 'false'),
     deleted: (domNode.attributes?.deleted?.value === 'true')
   }
+
+  if (Object.values(commonAttributes).filter(x => x.value === null).length > 0) {return null}
+
   tag.ref.value = tag.ref.value.slice(1)
   return tag
 }
@@ -190,30 +193,31 @@ function processEntitiesInDocument (raw, entities, annotations, conf) {
   // Get details
   const entityDetails = []
 
-  nameTags.forEach(tag => {
-    const details = processTag(tag)
-    const targetId = details.ref.value
-    if (entityMap?.[targetId] === undefined) { return }
+  nameTags
+    .map(tag => [tag, processTag(tag)])
+    .filter(([tag, details]) => details !== null)
+    .forEach(([tag, details]) => {
+      const targetId = details.ref.value
+      if (entityMap?.[targetId] === undefined) { return }
 
-    details.target = details.ref
-    details.type = entityMap[targetId].type
+      details.target = details.ref
+      details.type = entityMap[targetId].type
 
-    const propertyNames = new Set(entityMap[targetId].properties.map(x => x.name))
-    details.properties = [...propertyNames]
-      .map(attr => processListableAttribute(attr, entityMap[targetId].properties))
-      .filter(attr => attr.status !== OperationStatus.null)
+      const propertyNames = new Set(entityMap[targetId].properties.map(x => x.name))
+      details.properties = [...propertyNames]
+        .map(attr => processListableAttribute(attr, entityMap[targetId].properties))
+        .filter(attr => attr.status !== OperationStatus.null)
 
-    details.annotations = processAnnotations(annotations, [details.id.value, targetId])
+      details.annotations = processAnnotations(annotations, [details.id.value, targetId])
 
     entityDetails.push(details)
   })
 
   // Unlistable entities
   unlistableTags
-    .filter(tag => {const {id, ref} = processTag(tag); return(id.value === ref.value)})
-    .forEach(tag => {
-      const details = processTag(tag)
-
+    .map(tag => [tag, processTag(tag)])
+    .filter(([tag, details]) => details !== null && details.id.value === details.ref.value)
+    .forEach(([tag, details]) => {
       details.target = details.ref
       details.type = tag.tagName
       details.annotations = processAnnotations(annotations, [details.target.value])
@@ -226,9 +230,9 @@ function processEntitiesInDocument (raw, entities, annotations, conf) {
 
   // Tags refferring to unlistable entities
   unlistableTags
-    .filter(tag => {const {id, ref} = processTag(tag); return(id.value !== ref.value)})
-    .forEach(tag => {
-      const details = processTag(tag)
+    .map(tag => [tag, processTag(tag)])
+    .filter(([tag, details]) => details !== null && details.id.value === details.ref.value)
+    .forEach(([tag, details]) => {
       const referredList = entityDetails.filter(d => d.id.value === details.ref.value)
       if (referredList.length === 0) { console.err(tag.id.value+' refers to a non-existent entity'); return }
 
