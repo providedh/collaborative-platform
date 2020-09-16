@@ -76,7 +76,7 @@ class SimilarityCalculator:
         v = 1  # 1 for files text similarity
         entity = DEFAULT_ENTITIES.get(schema.name)
         if entity is not None:
-            for property, values in entity["properties"]:
+            for property, values in entity["properties"].items():
                 v += len(self.processing_functions[values["type"]])
         else:
             v += len(self.processing_functions[TypeChoice.str])  # only name
@@ -134,7 +134,7 @@ class SimilarityCalculator:
 
             place = ' '.join(map(str.strip, creation.itertext())).strip()
 
-            date = creation.xpath("tei:date", namspaces=self.namespaces)
+            date = creation.xpath("tei:date", namespaces=self.namespaces)
             if date:
                 date = date[0]
             else:
