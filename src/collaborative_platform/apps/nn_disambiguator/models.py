@@ -16,6 +16,7 @@ class Classifier(Model):
     model = FileField(verbose_name="dumped model", upload_to="NN_Models", null=True)
     scaler = FileField(verbose_name="dumped scaler", upload_to="NN_Models", null=True)
     entity_schema = ForeignKey(EntitySchema, on_delete=CASCADE)
+    version = IntegerField(default=0)
 
     class Meta:
         unique_together = ('project', 'entity_schema')
@@ -24,6 +25,7 @@ class Classifier(Model):
         bytes_container = BytesIO()
         joblib.dump(model, bytes_container)
         file = ContentFile(bytes_container.getvalue(), "model.joblib")
+        self.version += 1
         self.model = file
         self.save()
 
