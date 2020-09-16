@@ -26,6 +26,21 @@
 {% endblock %}
 
 {% block content %}
+
+{% load bottom_hint %}
+{% bottom_hint "What is this page?" %}
+<h3>Project TEI statistics</h3>
+<h5 class="text-muted">An overview of the XML contents</h5>
+<p>
+  You are looking at the TEI usage summary of the document present in the <i>{{ dashboard.name }}</i> project. <br/>
+  The documents change as files are added and changes are made to them. Here you can see what different tags are used <br/>
+  and how are they used accross the corpus. <br/>
+  <b>What can I get from this data?</b> Clicking on each tag will reveal further information regarding what different
+  properties the <br/>tags have and how the values are distributed; including whether a entity's proprety value distribution 
+  is too skewed to be <br/>used because it would introduce biases
+</p>
+{% end_bottom_hint %}
+
 {% csrf_token %}
 <div class="submenu">
   <div class="container">

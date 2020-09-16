@@ -50,6 +50,30 @@
   </div>
 </div>
 
+{% load bottom_hint %}
+{% bottom_hint "Don't know where to start?" %}
+<h3>Visualization dashboard</h3>
+<h5 class="text-muted">A workspace for arranging graphs</h5>
+<p>
+  You are now working on the dashboard named <i>{{ dashboard.name }}</i>. It has a workspace and
+  a side menu that can be used as follows:
+</p>
+<ol>
+  <li>Graphs (from now on called views) <b>selected in the side menu</b> are placed in the workspace on the left.</li>
+  <li>You can hide the side panel using the <i>&gt;&gt;</i> button in the top-left corner of the side panel.</li>
+  <li>Views on the workspace can be moved around by dragging them and resized by clicking on the bottom-left corner
+  and stretching it to the desired size.</li>
+  <li>Clicking on the gear icon in the top-right corner of a view will allow <b>configuring it in the right panel</b>.
+  Click on it again to deselect it.</li>
+  <li>Whatever changes are done to the dashboard, <b>except for interactive filters</b>, can be saved by clicking on
+    the top right <i>Save last changes</i> button.</li>
+</ol>
+<p>
+  For more in-detail information about each view, click the top <i>Help</i> button.
+</p>
+{% end_bottom_hint %}
+{% csrf_token %}
+
 <nav aria-label="breadcrumb" id="breadcrumb">
   <ol class="breadcrumb bg-transparent">
     <a href="{% url 'vis_dashboard:list' project_id %}" class="breadcrumb-item">Dashboards</a>
