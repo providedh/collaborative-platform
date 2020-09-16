@@ -90,6 +90,7 @@ class TestFileHandlingWithHdAndDb:
 
         assert result_xml == expected_xml
 
+    @pytest.mark.skipif(settings.TEST_ENV == 'travis')
     def test_file_download_render_file_from_hd_and_db(self):
         user_id = 2
         project_id = 1
