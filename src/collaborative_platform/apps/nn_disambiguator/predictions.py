@@ -94,6 +94,15 @@ def make_entities_proposals(data_processor, model, scaler, schema):
     )  # TODO: test
 
 
+def reset_undecided_proposals(project_id: int):
+    try:
+        proposals = UnificationProposal.objects.filter(entity__file__project_id=project_id, decided=False)
+    except UnificationProposal.DoesNotExist:
+        return
+
+    proposals.delete()
+
+
 @shared_task()
 def calculate_proposals(project_id: int):
     try:
