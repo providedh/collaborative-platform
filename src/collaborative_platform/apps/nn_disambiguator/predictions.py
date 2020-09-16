@@ -1,7 +1,9 @@
 from celery import shared_task
 from numpy import average
+from sklearn.exceptions import NotFittedError
 from sklearn.neural_network import MLPClassifier
 from sklearn.preprocessing import StandardScaler
+from sklearn.utils.validation import check_is_fitted
 from typing import List, Tuple
 
 from apps.api_vis.models import Entity, Clique, Unification
@@ -121,6 +123,12 @@ def calculate_proposals(project_id: int):
 
         model: MLPClassifier = clf.get_model()
         scaler: StandardScaler = clf.get_scaler()
+
+        try:
+            check_is_fitted(model)
+            check_is_fitted(scaler)
+        except NotFittedError:
+            continue
 
         data_processor = SimilarityCalculator(schema)
 
