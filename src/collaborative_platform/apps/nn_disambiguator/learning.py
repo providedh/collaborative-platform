@@ -57,7 +57,7 @@ def learn_unprocessed_unifications(project: Project):
                 clf.set_scaler(scaler)
 
 
-def learn_unprocessed_proposals(project):
+def learn_unprocessed_proposals(project: Project):
     unlearned_decided_proposals_exists = UnificationProposal.objects.filter(entity__file__project=project, decided=True,
                                                                             learned=False).exists()
     if unlearned_decided_proposals_exists:
@@ -90,7 +90,9 @@ def learn_unprocessed_proposals(project):
                                           proposal.user_confidence, proposal.decision)
 
 
-def learn_entity_pair(entity1, entity2, data_processor, model, scaler, user_confidence, positive):
+def learn_entity_pair(entity1: Entity, entity2: Entity, data_processor: SimilarityCalculator,
+                      model: MLPClassifier, scaler: StandardScaler,
+                      user_confidence: str, positive: bool):
     positive = int(positive)
     fv = data_processor.get_features_vector(entity1, entity2)
     scaler.partial_fit([fv])
