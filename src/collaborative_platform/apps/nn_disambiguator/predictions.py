@@ -105,8 +105,8 @@ def reset_undecided_proposals(project_id: int):
     proposals.delete()
 
 
-@shared_task()
-def calculate_proposals(project_id: int):
+@shared_task(bind=True)
+def calculate_proposals(self, project_id: int):
     try:
         project = Project.objects.get(id=project_id)
     except Project.DoesNotExist:

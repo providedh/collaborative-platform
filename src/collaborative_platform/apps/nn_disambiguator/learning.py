@@ -16,8 +16,8 @@ passes = {
 }
 
 
-@shared_task()
-def learn_unprocessed(project_id: int):
+@shared_task(bind=True)
+def learn_unprocessed(self, project_id: int):
     try:
         project = Project.objects.get(id=project_id)
     except Project.DoesNotExist:
@@ -51,7 +51,7 @@ def learn_unprocessed_unifications(project: Project):
                     _ids = list(unification.clique.unifications.values_list("entity_id", flat=True))
                     _ids.remove(entity1.id)
                     for entity2 in Entity.objects.filter(id__in=_ids).all():
-                        learn_entity_pair(entity1, entity2, data_processor, model, scaler, unification.certainty, 1)
+                        learn_entity_pair(entity1, entity2, data_processor, model, scaler, unification.certainty, True)
 
                 clf.set_model(model)
                 clf.set_scaler(scaler)
@@ -88,6 +88,9 @@ def learn_unprocessed_proposals(project: Project):
                     elif proposal.entity2 is not None:
                         learn_entity_pair(entity1, proposal.entity2, data_processor, model, scaler,
                                           proposal.user_confidence, proposal.decision)
+
+                clf.set_model(model)
+                clf.set_scaler(scaler)
 
 
 def learn_entity_pair(entity1: Entity, entity2: Entity, data_processor: SimilarityCalculator,
