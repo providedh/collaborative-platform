@@ -1,8 +1,9 @@
 from .settings import *
 
+TEST_ENV = 'default'
+
 # File storage
 MEDIA_ROOT = os.path.join(BASE_DIR, '..', '..', 'media_for_tests')
-
 
 LOGGING = {
     'version': 1,
