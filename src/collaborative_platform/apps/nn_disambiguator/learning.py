@@ -4,7 +4,7 @@ from sklearn.preprocessing import StandardScaler
 
 from apps.api_vis.models import Entity
 from apps.nn_disambiguator.similarity_calculator import SimilarityCalculator
-from apps.nn_disambiguator.models import Classifier, UnificationProposal
+from apps.nn_disambiguator.models import Classifier, UnificationProposal, CeleryTask
 from apps.projects.models import Project
 
 passes = {
@@ -16,15 +16,22 @@ passes = {
 }
 
 
-@shared_task(bind=True)
+@shared_task(bind=True, name='nn_disambiguator.learn')
 def learn_unprocessed(self, project_id: int):
+    task = CeleryTask.objects.get(project_id=project_id, task_id=self.request.id, status="Q")
+    task.status = "R"
+    task.save()
+
     try:
         project = Project.objects.get(id=project_id)
+        learn_unprocessed_unifications(project)
+        learn_unprocessed_proposals(project)
     except Project.DoesNotExist:
-        return
+        task.status = "X"
+        task.save()
 
-    learn_unprocessed_unifications(project)
-    learn_unprocessed_proposals(project)
+    task.status = "F"
+    task.save()
 
 
 def learn_unprocessed_unifications(project: Project):

@@ -247,6 +247,10 @@ CELERY_BEAT_SCHEDULE = {
         'task': 'close_reading.tasks.prune_orphaned_annotating_body_contents',
         'schedule': timedelta(seconds=120),
     },
+    'run_queued_nn_disambiguation_tasks': {
+        'task': 'nn_disambiguator.run_queued_tasks',
+        'schedule': timedelta(seconds=5)
+    }
 }
 
 

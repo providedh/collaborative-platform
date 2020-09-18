@@ -1,8 +1,11 @@
+from celery import shared_task
 from django.core.exceptions import MultipleObjectsReturned
 from sklearn.neural_network import MLPClassifier
 from sklearn.preprocessing import StandardScaler
 
+from apps.nn_disambiguator.learning import learn_unprocessed
 from apps.nn_disambiguator.models import Classifier, CeleryTask
+from apps.nn_disambiguator.predictions import calculate_proposals
 from apps.nn_disambiguator.similarity_calculator import SimilarityCalculator
 from apps.projects.models import Project
 
@@ -34,3 +37,19 @@ def queue_task(project_id: int, type: str):
         )
     except MultipleObjectsReturned:
         pass
+
+
+@shared_task(name='nn_disambiguator.run_queued_tasks')
+def run_queued_tasks():
+    tasks = {
+        "L": learn_unprocessed,
+        "P": calculate_proposals
+    }
+
+    queued_tasks = CeleryTask.objects.filter(status="Q").all()
+
+    for task in queued_tasks:
+        celery_task = tasks[task.type].delay(task.project_id)
+        task.task_id = celery_task.task_id
+        task.status = "S"
+        task.save()

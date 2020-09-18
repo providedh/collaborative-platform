@@ -7,7 +7,7 @@ from sklearn.utils.validation import check_is_fitted
 from typing import List, Tuple
 
 from apps.api_vis.models import Entity, Clique, Unification
-from apps.nn_disambiguator.models import Classifier, UnificationProposal
+from apps.nn_disambiguator.models import Classifier, UnificationProposal, CeleryTask
 from apps.nn_disambiguator.similarity_calculator import SimilarityCalculator
 from apps.projects.models import Project, EntitySchema
 from itertools import combinations, permutations, product
@@ -105,12 +105,17 @@ def reset_undecided_proposals(project_id: int):
     proposals.delete()
 
 
-@shared_task(bind=True)
+@shared_task(bind=True, name='nn_disambiguator.predict')
 def calculate_proposals(self, project_id: int):
+    task = CeleryTask.objects.get(project_id=project_id, task_id=self.request.id, status="Q")
+    task.status = "R"
+    task.save()
+
     try:
         project = Project.objects.get(id=project_id)
     except Project.DoesNotExist:
-        return
+        task.status = "X"
+        task.save()
 
     reset_undecided_proposals(project_id)
 
@@ -134,3 +139,6 @@ def calculate_proposals(self, project_id: int):
 
         make_entities_proposals(data_processor, model, scaler, schema)
         make_entities_cliques_proposals(data_processor, model, scaler, schema)
+
+    task.status = "F"
+    task.save()
