@@ -72,7 +72,7 @@ class SimilarityCalculator:
             nlp_file2 = self.nlp(e2lv.file_version.body_text)
             return nlp_file1.similarity(nlp_file2)
 
-    def __calculate_features_vector_length(self, schema: EntitySchema) -> int:
+    def calculate_features_vector_length(self, schema: EntitySchema) -> int:
         v = 1  # 1 for files text similarity
         entity = DEFAULT_ENTITIES.get(schema.name)
         if entity is not None:
@@ -103,7 +103,7 @@ class SimilarityCalculator:
             scaler: StandardScaler = clf.get_scaler()
 
             try:
-                model.predict([0 for _ in range(self.__calculate_features_vector_length(schema))])
+                model.predict([0 for _ in range(self.calculate_features_vector_length(schema))])
             except NotFittedError:
                 sims.append(0)
                 continue
