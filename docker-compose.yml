@@ -54,6 +54,7 @@ services:
       - postgres
       - elasticsearch
       - redis
+      - celery
     stdin_open: true
 
 volumes:
