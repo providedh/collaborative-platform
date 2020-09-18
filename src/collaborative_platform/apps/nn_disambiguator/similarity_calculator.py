@@ -11,7 +11,7 @@ from apps.api_vis.enums import TypeChoice
 from apps.api_vis.models import EntityVersion, EntityProperty, Entity
 from apps.nn_disambiguator import names, time, geography
 from apps.nn_disambiguator.models import Classifier
-from apps.projects.models import EntitySchema, Project
+from apps.projects.models import EntitySchema
 from collaborative_platform import settings
 from collaborative_platform.settings import DEFAULT_ENTITIES
 import spacy
@@ -83,6 +83,9 @@ class SimilarityCalculator:
 
         # 1 number for avg similarity between files of each of the other types of entities
         v += schema.taxonomy.entities_schemas.count() - 1
+
+        # Files creation dates and places
+        v += 2
         return v
 
     def __calculate_other_entities_avg_similarity(self, e1v: EntityVersion, e2v: EntityVersion, files_sim: float) -> \
