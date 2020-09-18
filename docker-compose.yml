@@ -31,6 +31,18 @@ services:
   redis:
     image: redis
 
+  celery:
+    build:
+      context: "."
+    working_dir: /code/src/collaborative_platform
+    command: celery -A collaborative_platform worker -B -l DEBUG -E
+    volumes:
+      - .:/code
+    depends_on:
+      - "redis"
+    restart: "${DOCKER_RESTART_POLICY:-unless-stopped}"
+    stop_grace_period: "${DOCKER_STOP_GRACE_PERIOD:-3s}"
+
   web:
     build: .
     command: python src/collaborative_platform/manage.py runserver 0.0.0.0:8000
