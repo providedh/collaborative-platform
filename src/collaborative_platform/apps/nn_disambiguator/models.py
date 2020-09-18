@@ -89,3 +89,23 @@ class UnificationProposal(Model):
         self.decided = True
         self.decision = False
         self.save()
+
+
+class CeleryTask(Model):
+    statuses = [
+        ("Q", "Queued"),
+        ("S", "Started"),
+        ("R", "Running"),
+        ("F", "Finished"),
+        ("A", "Aborted"),
+        ("X", "Failed")
+    ]
+    types = [
+        ("L", "Learn"),
+        ("P", "Predict"),
+    ]
+
+    project = ForeignKey(Project, on_delete=CASCADE, related_name="tasks")
+    status = CharField(max_length=8, default="Q")
+    type = CharField(max_length=7, choices=types)
+    task_id = IntegerField()

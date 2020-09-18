@@ -1,7 +1,8 @@
+from django.core.exceptions import MultipleObjectsReturned
 from sklearn.neural_network import MLPClassifier
 from sklearn.preprocessing import StandardScaler
 
-from apps.nn_disambiguator.models import Classifier
+from apps.nn_disambiguator.models import Classifier, CeleryTask
 from apps.nn_disambiguator.similarity_calculator import SimilarityCalculator
 from apps.projects.models import Project
 
@@ -22,3 +23,14 @@ def create_models(project):  # type: (Project) -> None
         dbo.save()
         dbo.set_model(model)
         dbo.set_scaler(scaler)
+
+
+def queue_task(project_id: int, type: str):
+    try:
+        CeleryTask.objects.get_or_create(
+            project_id=project_id,
+            type=type,
+            status="Q"
+        )
+    except MultipleObjectsReturned:
+        pass
