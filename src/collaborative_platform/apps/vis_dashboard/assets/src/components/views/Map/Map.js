@@ -61,6 +61,7 @@ export default function Map ({ layout, renderedItems, ...rest }) {
         <canvas ref={miniMapRef}/>
         <div ref={tableRef} className={styles.locationTable}>
           <table  className="table table-hover table-sm table-bordered">
+            <caption>{data.entities.filtered.length} visible and unfiltered places out of {data.entities.all.length}</caption>
             <thead>
               <tr>
                 <th scope="col">#</th>
