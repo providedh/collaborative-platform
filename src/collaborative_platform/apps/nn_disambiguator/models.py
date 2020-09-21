@@ -3,7 +3,8 @@ from io import BytesIO
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.core.files.base import ContentFile
-from django.db.models import Model, FileField, ForeignKey, CASCADE, IntegerField, SET_NULL, CharField, BooleanField
+from django.db.models import Model, FileField, ForeignKey, CASCADE, IntegerField, SET_NULL, CharField, BooleanField, \
+    DateTimeField
 
 from apps.api_vis.db_handler import DbHandler
 from apps.api_vis.models import Entity, Clique
@@ -109,3 +110,4 @@ class CeleryTask(Model):
     status = CharField(max_length=8, default="Q")
     type = CharField(max_length=7, choices=types)
     task_id = IntegerField()
+    created = DateTimeField(auto_now=True)
