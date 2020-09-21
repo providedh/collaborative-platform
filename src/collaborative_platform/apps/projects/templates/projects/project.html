@@ -47,7 +47,8 @@
     </ul>
   </div>
 </div>
-<div class="container project">
+
+<div class="container project position-relative">
   <div class="d-flex flex-column-reverse flex-md-row project__header">
     <div class=" project__content">
       <h1>{{ project.title }}</h1>
@@ -76,12 +77,16 @@
       </div>
     </div>
   </div>
+
+  {% load project_overlay %}
+  {% project_overlay %}
+
   <div class="row">
     <div class="col-lg-6">
 
       <div class="box">
         <div class="box__header">
-          <h3 class="box__text--title">Files</h3>
+          <h3 class="box__text--title">Files <span class="text-info ml-2">(Drag files below to upload)</span></h3>
         </div>
         <div class="box__content">
           <div id="files" data-project-id="{{ project.id }}">

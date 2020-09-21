@@ -1,87 +1,42 @@
 import { useEffect, useState } from 'react'
 
-export default function useData (dataClient, source, levels) {
-  const levelKeys = Object.entries(levels).sort((x, y) => x[0] - y[0]).map(x => x[1])
-  const [fetched, setFetched] = useState(null)
-  const [data, setData] = useState({ data: null, count: 0 })
+export default function useData (dataClient) {
+  const [entities, setEntities] = useState({all: [], filtered: []})
+  const [uncertainty, setUncertainty] = useState({all: [], filtered: []})
 
   useEffect(() => {
     dataClient.clearSubscriptions()
 
-    dataClient.subscribe(source, d => {
+    dataClient.subscribe('entity', d => {
       if (d != null) {
         const newData = {
-          filters: dataClient.getFilters(),
-          all: {
-            tree: createTree(d.all, levelKeys),
-            count: d.all.length
-          },
-          filtered: {
-            tree: createTree(d.filtered, levelKeys),
-            count: d.filtered.length
-          }
+          all: d.all.filter(e => e.type === 'date'),
+          filtered: d.filtered.filter(e => e.type === 'date'),
         }
-
-        setFetched(d)
-        setData(newData)
+        setEntities(newData)
       }
     })
-  }, [source])
-
-  useEffect(() => {
-    if (fetched != null) {
-      const newData = {
-        filters: dataClient.getFilters(),
-        all: {
-          tree: createTree(fetched.all, levelKeys),
-          count: fetched.all.length
-        },
-        filtered: {
-          tree: createTree(fetched.filtered, levelKeys),
-          count: fetched.filtered.length
+    
+    dataClient.subscribe('certainty', d => {
+      if (d != null) {
+        const newData = {
+          all: d.all,
+          filtered: d.filtered,
         }
+        setUncertainty(newData)
       }
+    })
+  }, [])
 
-      setData(newData)
-    }
-  }, [levelKeys.join('_')])
-
-  return data
-}
-
-function getAttrAccessor (key) {
-  if (key !== 'category') return entry => entry[key]
-  else return entry => entry[key].join(', ')
-}
-
-function createTree (data, levelKeys) {
-  const accessors = levelKeys.map(key => getAttrAccessor(key))
-  const tree = { name: 'root', children: group(data, accessors) } // hierarchy
-
-  return tree
-}
-
-function group (data, keys) {
-  function regroup (values, i) {
-    if (i >= keys.length) return values
-    const groupsMap = new Map()
-    const keyof = keys[i++]
-
-    for (const value of values) {
-      const key = keyof(value) + '' // the attribute's value
-      const group = groupsMap.get(key)
-
-      if (group) group.children.push(value)
-      else groupsMap.set(key, { name: group, children: [value] })
-    }
-
-    for (const [name, group] of groupsMap) {
-      groupsMap.set(name, { name, children: regroup(group.children, i) })
-    }
-
-    const groups = [...groupsMap.values()] // [{name, children}]
-    return groups
+  const entityIds = {
+    all: entities.all.map(d => d.id),
+    filtered: entities.filtered.map(d => d.id)
   }
 
-  return regroup(data, 0)
+  const annotations = {
+    all: uncertainty.all.filter(d => entityIds.all.includes(d.target)),
+    filtered: uncertainty.filtered.filter(d => entityIds.filtered.includes(d.target)),
+  }
+
+  return {entities, annotations}
 }

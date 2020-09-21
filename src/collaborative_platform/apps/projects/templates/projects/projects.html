@@ -18,7 +18,12 @@
                 <button type="button" class="btn btn-success" data-toggle="modal" data-target="#createNewProject">Create new project</a>
               </div>
             </div>
-            <p><span class="d-md-block">You have no projects yet. Create a project with the button on the top right.</span><span class="d-md-block"> This feature allows you to search and quickly access your projects.</span></p>
+            <p>
+              <span class="d-md-block">Projects allow organizing your work an collaborating on related douments. </span>
+              <span class="d-md-block">Select an existing one or create a new project to start working the platform. </span>
+            </p>
+            {% load no_projects_hint %}
+            {% no_projects_hint %}
             <div class="projects-table flex-fill p-md-5 pt-md-0">
               <div class="table-responsive projects-table__container">
                 <table js-listProjectsMine data-link-project="{% url 'projects:project_template' %}"  data-link-contributor="{% url 'user_template' %}" class="table m-0 table-hover table-striped">
