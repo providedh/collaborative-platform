@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import styles from './style.module.css'
 import css from './style.css' // eslint-disable-line no-unused-vars
 import getConfig from './config'
-import { useRender } from './vis'
+import { useRender, MapRenderer } from './vis'
 import { DataClient, useCleanup } from '../../../data'
 import useData from './data'
 
@@ -29,7 +29,9 @@ export default function Map ({ layout, renderedItems, ...rest }) {
   const dataClient = useState(DataClient())[0]
   useCleanup(dataClient)
   const data = useData(dataClient)
+  const map = useState(MapRenderer())[0]
   useRender(
+    map,
     width, 
     height, 
     data, 
@@ -62,8 +64,8 @@ export default function Map ({ layout, renderedItems, ...rest }) {
             <thead>
               <tr>
                 <th scope="col">#</th>
-                <th scope="col">Long</th>
                 <th scope="col">Lat</th>
+                <th scope="col">Long</th>
                 <th scope="col">Document</th>
               </tr>
             </thead>
