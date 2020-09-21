@@ -111,8 +111,10 @@ export default function Map () {
     
     const x0 = Math.min(b[0][0], b[1][0])
     const x1 = Math.max(b[0][0], b[1][0])
-    const y0 = Math.max(b[0][1], b[1][1])
-    const y1 = Math.min(b[0][1], b[1][1])
+    const y0 = Math.min(b[0][1], b[1][1])
+    const y1 = Math.max(b[0][1], b[1][1])
+
+    //const [x0, y0, x1, y1] = [...b[0], ...b[1]]
 
     self._bounds = {x0, y0, x1, y1}
   }
