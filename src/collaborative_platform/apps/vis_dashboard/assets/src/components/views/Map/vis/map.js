@@ -111,8 +111,10 @@ export default function Map () {
     
     const x0 = Math.min(b[0][0], b[1][0])
     const x1 = Math.max(b[0][0], b[1][0])
-    const y0 = Math.max(b[0][1], b[1][1])
-    const y1 = Math.min(b[0][1], b[1][1])
+    const y0 = Math.min(b[0][1], b[1][1])
+    const y1 = Math.max(b[0][1], b[1][1])
+
+    //const [x0, y0, x1, y1] = [...b[0], ...b[1]]
 
     self._bounds = {x0, y0, x1, y1}
   }
@@ -133,14 +135,57 @@ export default function Map () {
       ]
     }
 
-    //console.info(JSON.stringify(viewportAreaPath))
-
     self._miniMapOverlay.context.clearRect(0, 0, self._miniMapOverlay.width, self._miniMapOverlay.height);
     drawPathInMap( // 1. Outline
       self._miniMapOverlay.context,
       self._miniMapOverlay.d3path,
       viewportAreaPath,
       {fill: false, stroke: 'red', clip: true, lineWidth: 2})
+  }
+
+  function renderData () {
+    if (self._points.filtered.length === 0) {return}
+    self._points.filtered.forEach(point => {
+      const marker = {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [point.geo.long, point.geo.lat]
+        },
+        "properties": {
+          "name": point.id
+        }
+      }
+      drawPathInMap( // 1. Outline
+        self._mainMap.context,
+        self._mainMap.d3path,
+        marker,
+        {fill: false, stroke: 'white', fill: '#337ab7', clip: true, lineWidth: 2})
+    })
+  }
+
+  function filterVisible () {
+    const withinBounds = ({lat, long}) => (
+      long >= self._bounds.x0 && long <= self._bounds.x1 &&
+      lat >= self._bounds.y0 && lat <= self._bounds.y1)
+    const entitiesWithinBounds = self._points.all.filter(e => withinBounds(e.geo))
+    //console.log(self._bounds, self._points.all[0].geo, entitiesWithinBounds)
+    if (self._bounds.x0%360 === self._bounds.x1%360){ // no zoom
+      self._eventCallback({
+        type: 'zoom',
+        filtered: null
+      })
+    } else if(entitiesWithinBounds.length !== self._points.all.length) { //filter
+      self._eventCallback({
+        type: 'zoom',
+        filtered: entitiesWithinBounds.map(d => d.entityId)
+      })
+    } else { // unfilter
+      self._eventCallback({
+        type: 'zoom',
+        filtered: null
+      })
+    }
   }
 
   function renderMap (canvasConf, land, graticule = true) {
@@ -161,7 +206,7 @@ export default function Map () {
       canvasConf.context, 
       canvasConf.d3path, 
       land, 
-      {fill: '#c6ac8f', stroke: '#5e503f'})
+      {fill: '#d0d1e6', stroke: '#5e503f'})
     drawPathInMap( // 4. Outline
       canvasConf.context,
       canvasConf.d3path,
@@ -198,74 +243,107 @@ export default function Map () {
           renderVisible()
         })
         .on("end.render", () => {
-          renderMap(self._mainMap, self._assets.highResWorld)
-          renderVisible()
+          redraw()
+          filterVisible()
       }))
   }
 
-  function render (data, dimension, mainMapRef, miniMapRef, miniMapOverlayRef, tableRef) {
-    if (mainMapRef === undefined) { return }
-    const bboxes = getDimensions(mainMapRef.parentElement.parentElement)
-
-    const [mainMapProjection, [mainMapWidth, mainMapHeight]] = 
-      getProjectionAndDimensions(d3.geoOrthographic(), bboxes.mainMapRadius)
-
-    const [miniMapProjection, [miniMapWidth, miniMapHeight]] = 
-      getProjectionAndDimensions(d3.geoEqualEarth(), bboxes.miniMapWidth)
-
-
-
-    self._mainMap = {
-      selection: d3.select(mainMapRef),
-      context: mainMapRef.getContext('2d'),
-      width: mainMapWidth,
-      height: mainMapHeight,
-      projection: mainMapProjection,
-      d3path: d3.geoPath(mainMapProjection, mainMapRef.getContext('2d'))
-    }
-
-    self._miniMap = {
-      selection: d3.select(miniMapRef),
-      context: miniMapRef.getContext('2d'),
-      width: miniMapWidth,
-      height: miniMapHeight,
-      projection: miniMapProjection,
-      d3path: d3.geoPath(miniMapProjection, miniMapRef.getContext('2d'))
-    }
-
-    self._miniMapOverlay = {
-      selection: d3.select(miniMapOverlayRef),
-      context: miniMapOverlayRef.getContext('2d'),
-      width: miniMapWidth,
-      height: miniMapHeight,
-      projection: miniMapProjection,
-      d3path: d3.geoPath(miniMapProjection, miniMapOverlayRef.getContext('2d'))
-    }
-
-    self._mainMap.selection
-      .attr('height', self._mainMap.height)
-      .attr('width', self._mainMap.width)
-
-    self._miniMap.selection
-      .style('top', '10px')
-      .style('right', '10px')
-      .attr('height', self._miniMap.height)
-      .attr('width', self._miniMap.width)
-
-    self._miniMapOverlay.selection
-      .style('top', '10px')
-      .style('right', '10px')
-      .attr('height', self._miniMapOverlay.height)
-      .attr('width', self._miniMapOverlay.width)
-
-    d3.select(tableRef)
-      .style('top', (self._miniMapOverlay.height + 20) + 'px')
-      .style('height', (bboxes.height - self._miniMapOverlay.height - 30) + 'px')
-
+  function draw () {
     renderMap(self._mainMap, self._assets.highResWorld)
     renderMap(self._miniMap, self._assets.lowResWorld, false)
-    updateBounds(self._mainMap.projection)
     renderVisible()
+    renderData()
+  }
+
+  function redraw () {
+    renderMap(self._mainMap, self._assets.highResWorld)
+    renderVisible()
+    renderData()
+  }
+
+  function processData(data, dimension) {
+    const coordinates = e => e.properties.geo.split(' ').map(x => +x)
+    function pointFromEntity(e, annotations) {
+      const point = {entityId: e.id}
+      const [lat, long] = coordinates(e)
+      point.geo = {lat, long}
+      point.annotations = annotations.filter(x => x.target === e.id)
+      return point
+    }
+    const points = {
+      all: data.entities.all.map(d => pointFromEntity(d, data.annotations.all)),
+      filtered: data.entities.filtered.map(d => pointFromEntity(d, data.annotations.filtered))
+    }
+    return points
+  }
+
+  function render (data, dimension, mainMapRef, miniMapRef, miniMapOverlayRef, tableRef) {
+    if (mainMapRef === undefined || data === undefined) { return }
+    const bboxes = getDimensions(mainMapRef.parentElement.parentElement)
+
+    if (self?._width !== bboxes.width || self?._height !== bboxes.height) {
+      //console.log(self?._width, bboxes.width, self?._height, bboxes.height)
+      self._width = bboxes.width
+      self._height = bboxes.height
+      const [mainMapProjection, [mainMapWidth, mainMapHeight]] = 
+      getProjectionAndDimensions(d3.geoOrthographic(), bboxes.mainMapRadius)
+
+      const [miniMapProjection, [miniMapWidth, miniMapHeight]] = 
+        getProjectionAndDimensions(d3.geoEqualEarth(), bboxes.miniMapWidth)
+
+      self._mainMap = {
+        selection: d3.select(mainMapRef),
+        context: mainMapRef.getContext('2d'),
+        width: mainMapWidth,
+        height: mainMapHeight,
+        projection: mainMapProjection,
+        d3path: d3.geoPath(mainMapProjection, mainMapRef.getContext('2d'))
+      }
+
+      self._miniMap = {
+        selection: d3.select(miniMapRef),
+        context: miniMapRef.getContext('2d'),
+        width: miniMapWidth,
+        height: miniMapHeight,
+        projection: miniMapProjection,
+        d3path: d3.geoPath(miniMapProjection, miniMapRef.getContext('2d'))
+      }
+
+      self._miniMapOverlay = {
+        selection: d3.select(miniMapOverlayRef),
+        context: miniMapOverlayRef.getContext('2d'),
+        width: miniMapWidth,
+        height: miniMapHeight,
+        projection: miniMapProjection,
+        d3path: d3.geoPath(miniMapProjection, miniMapOverlayRef.getContext('2d'))
+      }
+
+      self._mainMap.selection
+        .attr('height', self._mainMap.height)
+        .attr('width', self._mainMap.width)
+
+      self._miniMap.selection
+        .style('top', '10px')
+        .style('right', '10px')
+        .attr('height', self._miniMap.height)
+        .attr('width', self._miniMap.width)
+
+      self._miniMapOverlay.selection
+        .style('top', '10px')
+        .style('right', '10px')
+        .attr('height', self._miniMapOverlay.height)
+        .attr('width', self._miniMapOverlay.width)
+
+      d3.select(tableRef)
+        .style('top', (self._miniMapOverlay.height + 20) + 'px')
+        .style('height', (bboxes.height - self._miniMapOverlay.height - 30) + 'px')
+      updateBounds(self._mainMap.projection)
+    }
+
+    self._points = processData(data, dimension)
+    self._data = data;
+
+    draw()
     setupInteractions()
   }
 

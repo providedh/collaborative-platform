@@ -2,8 +2,7 @@ import { useEffect } from 'react'
 
 import Map from './map'
 
-export default function useRender (width, height, data, dimension, taxonomy, mainMapRef, miniMapRef, miniMapOverlayRef, tableRef, callback) {
-  const map = Map()
+export default function useRender (map, width, height, data, dimension, taxonomy, mainMapRef, miniMapRef, miniMapOverlayRef, tableRef, callback) {
   map.setTaxonomy(taxonomy)
   map.setEventCallback(callback)
 
