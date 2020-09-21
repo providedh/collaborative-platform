@@ -19,8 +19,8 @@ def create_models(project):  # type: (Project) -> None
         vector = [0] * SimilarityCalculator(entity).calculate_features_vector_length(entity)
         scaler.partial_fit([vector])
 
-        model.partial_fit([vector], [0])
-        model.partial_fit([vector], [1])
+        model.partial_fit([vector], [0], classes=[0, 1])
+        model.partial_fit([vector], [1], classes=[0, 1])
 
         dbo = Classifier(project=project, entity_schema=entity)
         dbo.save()
@@ -53,3 +53,6 @@ def run_queued_tasks():
         task.task_id = celery_task.task_id
         task.status = "S"
         task.save()
+
+# @shared_task(name="clean_unfinished_tasks")
+# def clean_unfinished_tasks():
