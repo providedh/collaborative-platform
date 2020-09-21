@@ -3,6 +3,7 @@ import re
 from lxml import etree
 
 from apps.exceptions import UnsavedElement
+from apps.close_reading.text_splitter import TextSplitter
 from apps.files_management.file_conversions.xml_tools import get_first_xpath_match
 
 from collaborative_platform.settings import XML_NAMESPACES
@@ -16,11 +17,7 @@ class XmlHandler:
         self.__annotator_xml_id = annotator_xml_id
 
     def add_tag(self, text, start_pos, end_pos, tag_xml_id):
-        text_before = text[:start_pos]
-        text_inside = text[start_pos:end_pos]
-        text_after = text[end_pos:]
-
-        text = f'{text_before}<ab xml:id="{tag_xml_id}">{text_inside}</ab>{text_after}'
+        text = self.__add_tag(text, start_pos, end_pos, tag_xml_id)
 
         attributes = {
             'respAdded': f'#{self.__annotator_xml_id}',
@@ -595,6 +592,43 @@ class XmlHandler:
         else:
             return False
 
+    @staticmethod
+    def __add_tag(text, start_pos, end_pos, tag_xml_id):
+        text_before = text[:start_pos]
+        text_inside = text[start_pos:end_pos]
+        text_after = text[end_pos:]
+
+        text_in_parts = TextSplitter().split_text_to_autonomic_parts(text_inside)
+        parts_to_tag_nr = TextSplitter().count_parts_to_tag(text_in_parts)
+
+        tagged_parts = []
+        index = 0
+
+        for part in text_in_parts:
+            tag_regex = r'<.*?>'
+            whitespace_regex = r'\s'
+
+            cleaned_tags = re.sub(tag_regex, '', part)
+            cleaned_whitespaces = re.sub(whitespace_regex, '', cleaned_tags)
+
+            if cleaned_whitespaces:
+                if parts_to_tag_nr > 1:
+                    tagged_part = f'<ab xml:id="{tag_xml_id}.{index}">{part}</ab>'
+                else:
+                    tagged_part = f'<ab xml:id="{tag_xml_id}">{part}</ab>'
+
+                tagged_parts.append(tagged_part)
+                index += 1
+
+            else:
+                tagged_parts.append(part)
+
+        joined_parts = ''.join(tagged_parts)
+
+        text = text_before + joined_parts + text_after
+
+        return text
+
     def __remove_tag(self, text, tag_xml_id):
         tree = etree.fromstring(text)
         element = self.get_xml_element(tree, tag_xml_id)
@@ -628,47 +662,48 @@ class XmlHandler:
 
     def __update_tag(self, text, tag_xml_id, new_tag=None, attributes_to_set=None, attributes_to_delete=None):
         tree = etree.fromstring(text)
-        element = self.get_xml_element(tree, tag_xml_id)
+        elements = self.get_xml_elements(tree, tag_xml_id)
 
-        if attributes_to_set:
-            for attribute, value in sorted(attributes_to_set.items()):
-                element.set(attribute, value)
+        for element in elements:
+            if attributes_to_set:
+                for attribute, value in sorted(attributes_to_set.items()):
+                    element.set(attribute, value)
 
-        if attributes_to_delete:
-            for attribute in attributes_to_delete:
-                element.attrib.pop(attribute, '')
+            if attributes_to_delete:
+                for attribute in attributes_to_delete:
+                    element.attrib.pop(attribute, '')
 
-        references = element.attrib.get('ref')
+            references = element.attrib.get('ref')
 
-        if references:
-            references = set(references.split(' '))
-        else:
-            references = set()
+            if references:
+                references = set(references.split(' '))
+            else:
+                references = set()
 
-        references_added = element.attrib.get('refAdded')
+            references_added = element.attrib.get('refAdded')
 
-        if references_added:
-            references_added = set(references_added.split(' '))
-        else:
-            references_added = set()
+            if references_added:
+                references_added = set(references_added.split(' '))
+            else:
+                references_added = set()
 
-        references_deleted = element.attrib.get('refDeleted')
+            references_deleted = element.attrib.get('refDeleted')
 
-        if references_deleted:
-            references_deleted = set(references_deleted.split(' '))
-        else:
-            references_deleted = set()
+            if references_deleted:
+                references_deleted = set(references_deleted.split(' '))
+            else:
+                references_deleted = set()
 
-        remaining_references = (references | references_added) - references_deleted
-        if not remaining_references:
-            prefix = "{%s}" % XML_NAMESPACES['default']
-            tag = prefix + 'ab'
-            element.tag = tag
+            remaining_references = (references | references_added) - references_deleted
+            if not remaining_references:
+                prefix = "{%s}" % XML_NAMESPACES['default']
+                tag = prefix + 'ab'
+                element.tag = tag
 
-        if new_tag:
-            prefix = "{%s}" % XML_NAMESPACES['default']
-            tag = prefix + new_tag
-            element.tag = tag
+            if new_tag:
+                prefix = "{%s}" % XML_NAMESPACES['default']
+                tag = prefix + new_tag
+                element.tag = tag
 
         text = etree.tounicode(tree, pretty_print=True)
 
@@ -684,6 +719,25 @@ class XmlHandler:
             element = get_first_xpath_match(tree, xpath, XML_NAMESPACES)
 
         return element
+
+    @staticmethod
+    def get_xml_elements(tree, tag_xml_id):
+        xpath = f"//*[contains(concat(' ', @xml:id, ' '), ' {tag_xml_id}.')]"
+        elements = tree.xpath(xpath, namespaces=XML_NAMESPACES)
+
+        if not elements:
+            xpath = f"//*[contains(concat(' ', @xml:idAdded, ' '), ' {tag_xml_id}.')]"
+            elements = tree.xpath(xpath, namespaces=XML_NAMESPACES)
+
+        if not elements:
+            xpath = f"//*[contains(concat(' ', @xml:id, ' '), ' {tag_xml_id} ')]"
+            elements = tree.xpath(xpath, namespaces=XML_NAMESPACES)
+
+        if not elements:
+            xpath = f"//*[contains(concat(' ', @xml:idAdded, ' '), ' {tag_xml_id} ')]"
+            elements = tree.xpath(xpath, namespaces=XML_NAMESPACES)
+
+        return elements
 
     @staticmethod
     def switch_body_content(old_xml_content, new_body_content):
