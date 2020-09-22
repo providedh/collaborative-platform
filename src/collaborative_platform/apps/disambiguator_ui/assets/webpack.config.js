@@ -1,6 +1,6 @@
 const path = require('path');
 
-const outputDirectory = '../static/close_reading/js'
+const outputDirectory = '../static/disambiguator_ui/js'
 
 
 module.exports = {
