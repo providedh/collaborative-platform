@@ -17,7 +17,7 @@ export default (function (args) {
     return obj
   }
 
-  function _createUrl (resource, options, params) {
+  function _createUrl (resource, options, params={}) {
     const paramsString = Object.entries(params).map(([key, value]) => `?${key}=${value}`).join('')
     const url = baseUrl + resource(options) + paramsString
     return url
@@ -57,18 +57,19 @@ export default (function (args) {
       referrer: 'no-referrer' // no-referrer, *client
     }
 
-    if (method === 'POST') {
+    if (method === 'POST' || method === 'PUT') {
       fetchBody.body = JSON.stringify(data) // body data type must match "Content-Type" header
     }
 
     return new Promise((resolve, reject) => {
       fetch(url, fetchBody)
-        .then((response) => {
+        .then(response => {
+          if (response.ok === false){ throw {status: response.status} }
           response.json()
-            .then((json) => resolve(json))
-            .catch((err) => { reject(err) })
+            .then(json => { resolve(json) })
+            .catch(err => { throw {err} })
         })
-        .catch((err) => { reject(err) })
+        .catch(err => { reject(err) })
     })
   }
 
