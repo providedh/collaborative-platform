@@ -524,7 +524,10 @@ class RequestHandler:
         if certainty_target != request['new_element_id']:
             request['new_element_id'] = certainty_target
 
-        certainty_xml_id = self.__db_handler.add_certainty(certainty_target, parameters)
+        body_content = self.__db_handler.get_body_content()
+        target_xml_ids = self.__xml_handler.get_connected_xml_ids(body_content, certainty_target)
+
+        certainty_xml_id = self.__db_handler.add_certainty(certainty_target, parameters, target_xml_ids)
 
         self.__operations_results.append(certainty_xml_id)
 

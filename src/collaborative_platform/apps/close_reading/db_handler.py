@@ -84,11 +84,17 @@ class DbHandler:
 
         self.__mark_entity_properties_to_delete(entity_version, [property_name])
 
-    def add_certainty(self, certainty_target, parameters):
+    def add_certainty(self, certainty_target, parameters, target_xml_ids):
         locus = parameters['locus']
 
         target_type = self.get_certainty_target_type(certainty_target, locus)
         target, match = self.get_certainty_target_and_match(certainty_target, target_type)
+
+        # TODO: Keep `target` attribute in database in form `#<xml:id-X.0> #<xml:id-X.1>` from the beginning
+        # TODO: to avoid appending `#` on every request
+
+        if len(target_xml_ids) > 1:
+            target = ' '.join(target_xml_ids)
 
         xml_id = self.get_next_xml_id('certainty')
 

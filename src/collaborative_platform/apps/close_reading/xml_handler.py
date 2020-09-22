@@ -711,8 +711,16 @@ class XmlHandler:
 
     @staticmethod
     def get_xml_element(tree, tag_xml_id):
-        xpath = f"//*[contains(concat(' ', @xml:id, ' '), ' {tag_xml_id} ')]"
+        xpath = f"//*[contains(concat(' ', @xml:id, ' '), ' {tag_xml_id}.')]"
         element = get_first_xpath_match(tree, xpath, XML_NAMESPACES)
+
+        if element is None:
+            xpath = f"//*[contains(concat(' ', @xml:idAdded, ' '), ' {tag_xml_id}.')]"
+            element = get_first_xpath_match(tree, xpath, XML_NAMESPACES)
+
+        if element is None:
+            xpath = f"//*[contains(concat(' ', @xml:id, ' '), ' {tag_xml_id} ')]"
+            element = get_first_xpath_match(tree, xpath, XML_NAMESPACES)
 
         if element is None:
             xpath = f"//*[contains(concat(' ', @xml:idAdded, ' '), ' {tag_xml_id} ')]"
@@ -738,6 +746,20 @@ class XmlHandler:
             elements = tree.xpath(xpath, namespaces=XML_NAMESPACES)
 
         return elements
+
+    def get_connected_xml_ids(self, text, target):
+        tree = etree.fromstring(text)
+        tag_xml_id = target.split('/')[0]
+
+        elements = self.get_xml_elements(tree, tag_xml_id)
+
+        xml_ids = []
+
+        for element in elements:
+            xml_id = element.attrib.get(XML_ID_KEY)
+            xml_ids.append(xml_id)
+
+        return xml_ids
 
     @staticmethod
     def switch_body_content(old_xml_content, new_body_content):

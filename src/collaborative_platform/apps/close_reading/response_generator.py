@@ -206,6 +206,13 @@ class ResponseGenerator:
         certainties_serialized = []
 
         for certainty in certainties:
+            # TODO: Keep `target` attribute in database in form `#<xml:id-X.0> #<xml:id-X.1>` from the beginning
+            # TODO: to avoid appending `#` on every request
+
+            targets = certainty.target_xml_id.split(' ')
+            targets = [f'#{xml_id}' for xml_id in targets]
+            target = ' '.join(targets)
+
             certainty_serialized = {
                 'ana': certainty.get_categories(as_str=True),
                 'locus': certainty.locus,
@@ -213,7 +220,7 @@ class ResponseGenerator:
                 'cert': certainty.certainty,
                 'resp': f'#{certainty.created_by.profile.get_xml_id()}',
                 'match': certainty.target_match,
-                'target': f'#{certainty.target_xml_id}',
+                'target': target,
                 'xml:id': certainty.xml_id,
                 'assertedValue': certainty.asserted_value,
                 'desc': certainty.description,
