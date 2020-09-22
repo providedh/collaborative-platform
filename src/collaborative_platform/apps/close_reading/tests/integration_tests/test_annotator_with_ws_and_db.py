@@ -4422,6 +4422,12 @@ class TestAnnotatorWithWsAndDb:
 
         await communicator.disconnect()
 
+    async def test_update_certainty_target_after_tag_divide(self):
+        pass
+
+    async def test_add_reference_to_divided_tag(self):
+        pass
+
 
 def get_communicator(project_id, file_id, user_id=None):
     communicator = WebsocketCommunicator(
