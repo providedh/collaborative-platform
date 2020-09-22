@@ -45,7 +45,7 @@ export default function Navigation ({currentIndex, setIndex, unifications, ...re
         <p className="d-inline m-0 p-0">Next unification</p> <span>⟶</span>
       </button>
     </div>
-    <hr className="mt-0 mx-4" style={{backgroundColor: 'var(--blue)'}}/>
+    <hr className="my-0 mx-4" style={{backgroundColor: 'var(--blue)'}}/>
   </React.Fragment>)
 }
 
