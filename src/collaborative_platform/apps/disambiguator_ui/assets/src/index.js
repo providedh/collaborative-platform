@@ -6,6 +6,7 @@ import { App } from 'components/app'
 const appConfig = {
   projectId: window.project_id,
   projectName: window.project_name,
+  projectVersion: window.project_version,
   user: window.user_id,
   configuration: window.preferences
 }
