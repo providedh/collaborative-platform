@@ -1,5 +1,6 @@
 from celery import shared_task
 from django.core.exceptions import MultipleObjectsReturned
+from django.http import JsonResponse, HttpResponse
 from sklearn.neural_network import MLPClassifier
 from sklearn.preprocessing import StandardScaler
 
@@ -37,6 +38,21 @@ def queue_task(project_id: int, type: str):
         )
     except MultipleObjectsReturned:
         pass
+
+    return HttpResponse()
+
+
+def abort_pending(project_id: int, type: str):
+    try:
+        CeleryTask.objects.filter(
+            project_id=project_id,
+            type=type,
+            status="Q"
+        ).delete()
+    except CeleryTask.DoesNotExist:
+        return JsonResponse({"message": "No  pending jobs to delete"}, status=304)
+    else:
+        return JsonResponse({"message": "Jobs successfully aborted."})
 
 
 @shared_task(name='nn_disambiguator.run_queued_tasks')
