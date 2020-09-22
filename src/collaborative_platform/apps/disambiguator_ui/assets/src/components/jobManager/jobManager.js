@@ -9,7 +9,7 @@ const fetchPeriod = 1000 * 60 * 1
 function useJobFetch(projectId, setJobs) {
   API.getDisambiguatorStatus(projectId)
     .then((a,b) => console.log(a. b))
-    .catch(err => console.err('Failed to retrieve jobs for project ' + projectId))
+    .catch(err => console.error('Failed to retrieve jobs for project ' + projectId))
   setTimeout(() => useJobFetch(projectId, setJobs), fetchPeriod)
 }
 
