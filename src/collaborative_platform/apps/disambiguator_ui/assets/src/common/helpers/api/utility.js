@@ -17,7 +17,7 @@ export default (function (args) {
     return obj
   }
 
-  function _createUrl (resource, options, params) {
+  function _createUrl (resource, options, params={}) {
     const paramsString = Object.entries(params).map(([key, value]) => `?${key}=${value}`).join('')
     const url = baseUrl + resource(options) + paramsString
     return url
@@ -57,7 +57,7 @@ export default (function (args) {
       referrer: 'no-referrer' // no-referrer, *client
     }
 
-    if (method === 'POST') {
+    if (method === 'POST' || method === 'PUT') {
       fetchBody.body = JSON.stringify(data) // body data type must match "Content-Type" header
     }
 
