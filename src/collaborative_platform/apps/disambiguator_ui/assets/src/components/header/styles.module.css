@@ -1,1 +1,4 @@
 .header{}
+.header h1 span{
+  font-size: .5em;
+}
