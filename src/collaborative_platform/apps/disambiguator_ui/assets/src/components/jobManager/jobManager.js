@@ -4,12 +4,22 @@ import PropTypes from 'prop-types'
 import {API} from 'common/helpers'
 import styles from './styles.module.css' // eslint-disable-line no-unused-vars
 
-export default function Jobs ({currentIndex, unifications, ...restProps}) {
-  window.API = API
+const fetchPeriod = 1000 * 60 * 1
+
+function useJobFetch(projectId, setJobs) {
+  API.getDisambiguatorStatus(projectId)
+    .then((a,b) => console.log(a. b))
+    .catch(err => console.err('Failed to retrieve jobs for project ' + projectId))
+  setTimeout(() => useJobFetch(projectId, setJobs), fetchPeriod)
+}
+
+export default function Jobs ({projectId, ...restProps}) {
+  const [jobs, setJobs] = useState([])
+  useJobFetch(projectId, setJobs)
+
   return (<div className={styles.jobs}></div>)
 }
 
 Jobs.propTypes = {
-  currentIndex: PropTypes.number,
-  unifications: PropTypes.arrayOf(PropTypes.object),
+  projectId: PropTypes.string,
 }
