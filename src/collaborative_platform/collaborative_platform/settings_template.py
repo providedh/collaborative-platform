@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     'apps.dataset_stats',
     'apps.vis_dashboard',
     'apps.help',
+    'apps.disambiguator_ui',
     'social_django',
     'django_cleanup',
     # 'django_extensions',  # for SSL on localhost
