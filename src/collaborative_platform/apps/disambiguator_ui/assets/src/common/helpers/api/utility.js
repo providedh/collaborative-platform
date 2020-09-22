@@ -63,12 +63,13 @@ export default (function (args) {
 
     return new Promise((resolve, reject) => {
       fetch(url, fetchBody)
-        .then((response) => {
+        .then(response => {
+          if (response.ok === false){ throw {status: response.status} }
           response.json()
-            .then((json) => resolve(json))
-            .catch((err) => { reject(err) })
+            .then(json => { resolve(json) })
+            .catch(err => { throw {err} })
         })
-        .catch((err) => { reject(err) })
+        .catch(err => { reject(err) })
     })
   }
 
