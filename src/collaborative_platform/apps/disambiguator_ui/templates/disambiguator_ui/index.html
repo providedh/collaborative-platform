@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{%  load static %}
+
+{% block head %}
+  <link rel="icon" href={% static "disambiguator_ui/img/favicon.ico" %}>
+	<link rel="stylesheet" type="text/css" href={% static "disambiguator_ui/vendor/font-awesome.css" %}>
+	<link rel="stylesheet" type="text/css" href={% static "disambiguator_ui/vendor/bootstrap.min.css" %}>
+	<link rel="stylesheet" type="text/css" href={% static "disambiguator_ui/vendor/bootstrap.min.css.map" %}>
+{% endblock %}
+
+{% block submenu %}
+<ul class="submenu__list">
+  <li class="submenu__item">
+    <a href="{% url 'projects:project' project_id %}" class="submenu__link">{{ project_title }}</a>
+  </li>
+  <li class="submenu__item">
+    <a href="{% url 'projects:files' project_id %}" class="submenu__link">Files</a>
+  </li>
+  <li class="submenu__item">
+    <a href="{% url 'dataset_stats:main' project_id %}" class="submenu__link">Stats</a>
+  </li>
+  <li class="submenu__item">
+    <a href="{% url 'vis_dashboard:list' project_id %}" class="submenu__link">Dashboard</a>
+  </li>
+  <li class="submenu__item submenu__item--active">
+    <a href="{% url 'disambiguator_ui' project_id %}" class="submenu__link">Disambiguator</a>
+  </li>
+  <li class="submenu__item">
+    <a href="{% url 'projects:project_settings' project_id %}" class="submenu__link">Settings</a>
+  </li>
+</ul>
+{% endblock %}
+
+{% block content %}
+{% load bottom_hint %}
+{% bottom_hint "What are unifications?" %}
+<h3>Entity disambiguation</h3>
+<h5 class="text-muted">Machine-learning assisted corpus analysis</h5>
+<p>
+  [TODO: explain unification]
+</p>
+
+{% end_bottom_hint %}
+<div class="submenu">
+  <div class="container">
+    <ul class="submenu__list d-flex">
+      <li class="submenu__item">
+        <a href="{% url 'projects:project' project_id %}" class="submenu__link">{{ project_title }}</a>
+      </li>
+      <li class="submenu__item">
+        <a href="{% url 'projects:files' project_id %}" class="submenu__link">Files</a>
+      </li>
+      <li class="submenu__item">
+        <a href="{% url 'dataset_stats:main' project_id %}" class="submenu__link">Stats</a>
+      </li>
+      <li class="submenu__item">
+        <a href="{% url 'vis_dashboard:list' project_id %}" class="submenu__link">Dashboard</a>
+      </li>
+      <li class="submenu__item submenu__item--active">
+        <a href="{% url 'disambiguator_ui' project_id %}" class="submenu__link">Disambiguator</a>
+      </li>
+      <li class="submenu__item">
+        <a href="{% url 'projects:project_settings' project_id %}" class="submenu__link">Settings</a>
+      </li>
+    </ul>
+  </div>
+</div>
+  <div id="react-root"></div>
+
+  <script type="text/javascript">
+      window.project_id = "{{ project_id }}";
+      window.project_name = "{{ project_name }}";
+      window.user_id = "{{ user_id }}";
+      window.preferences = JSON.parse("{{ preferences|escapejs|safe }}");
+    </script>
+  {% if DEVELOPMENT is True %}
+  <script type="text/javascript" src="http://localhost:3000/main.js"></script>
+{% else %}
+  <script type="text/javascript" src="{% static 'disambiguator_ui/js/main.js' %}"></script>
+  <script type="text/javascript" src="{% static 'disambiguator_ui/js/main.js.map' %}"></script>
+{% endif %}
+{% endblock %}
