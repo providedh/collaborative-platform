@@ -4,14 +4,12 @@
 {% block head %}
   <link rel="icon" href={% static "disambiguator_ui/img/favicon.ico" %}>
 	<link rel="stylesheet" type="text/css" href={% static "disambiguator_ui/vendor/font-awesome.css" %}>
-	<link rel="stylesheet" type="text/css" href={% static "disambiguator_ui/vendor/bootstrap.min.css" %}>
-	<link rel="stylesheet" type="text/css" href={% static "disambiguator_ui/vendor/bootstrap.min.css.map" %}>
 {% endblock %}
 
 {% block submenu %}
 <ul class="submenu__list">
   <li class="submenu__item">
-    <a href="{% url 'projects:project' project_id %}" class="submenu__link">{{ project_title }}</a>
+    <a href="{% url 'projects:project' project_id %}" class="submenu__link">{{ project_name }}</a>
   </li>
   <li class="submenu__item">
     <a href="{% url 'projects:files' project_id %}" class="submenu__link">Files</a>
@@ -45,7 +43,7 @@
   <div class="container">
     <ul class="submenu__list d-flex">
       <li class="submenu__item">
-        <a href="{% url 'projects:project' project_id %}" class="submenu__link">{{ project_title }}</a>
+        <a href="{% url 'projects:project' project_id %}" class="submenu__link">{{ project_name }}</a>
       </li>
       <li class="submenu__item">
         <a href="{% url 'projects:files' project_id %}" class="submenu__link">Files</a>
@@ -70,6 +68,7 @@
   <script type="text/javascript">
       window.project_id = "{{ project_id }}";
       window.project_name = "{{ project_name }}";
+      window.project_version = "{{ project_version }}";
       window.user_id = "{{ user_id }}";
       window.preferences = JSON.parse("{{ preferences|escapejs|safe }}");
     </script>
