@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 
 import { Header } from 'components/header'
 import { Navigation } from 'components/navigation'
+import { Body } from 'components/body'
 import styles from './app.module.css' // eslint-disable-line no-unused-vars
 import defState from './def_state.js'
 
@@ -19,6 +20,7 @@ export default function App ({projectName, projectId, projectVersion, ...restPro
     <div className={appCssClasses}>
       <Header {...{projectName, projectId, projectVersion}}/>
       <Navigation {...{unifications, currentIndex, setIndex}}/>
+      <Body {...{unifications, currentIndex}}/>
     </div>
   )
 }
