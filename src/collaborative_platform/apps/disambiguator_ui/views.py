@@ -26,7 +26,7 @@ def disambiguator_ui(request, project_id):  # type: (HttpRequest, int, int) -> H
         'project_name': project.title,
         'preferences': json.dumps(preferences),
         'project_version': str(project.versions.all().order_by('-id')[0]),
-        'DEVELOPMENT': True,
+        'DEVELOPMENT': False,
         'alerts': None,
     }
 
