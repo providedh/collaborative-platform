@@ -70,9 +70,11 @@ def proposals(request: HttpRequest, project_id: int):
             return HttpResponseNotFound("No proposal with this ID.")
 
         if up.decided:
-            return HttpResponse("Proposal has been already decided on.", status=304)
+            return JsonResponse({"message": "Proposal has been already decided on."}, status=304)
 
         if args["decision"]:
             up.accept(request.user, args["certainty"], args["categories"])
+            return JsonResponse({"message": "Unified successfully"})
         else:
             up.reject(request.user, args["certainty"])
+            return JsonResponse({"message": "Rejected successfully"})
