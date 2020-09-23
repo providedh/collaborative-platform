@@ -1,8 +1,9 @@
+import json
+
 from django.contrib.auth.decorators import login_required
-from django.http import HttpRequest, HttpResponseBadRequest, JsonResponse
+from django.http import HttpRequest, HttpResponseBadRequest, JsonResponse, HttpResponseNotFound, HttpResponse
 
 from apps.api_vis.request_handler import RequestHandler
-from apps.api_vis.serializer import Serializer
 from apps.nn_disambiguator.helpers import queue_task, abort_pending
 from apps.nn_disambiguator.models import CeleryTask, UnificationProposal
 from apps.projects.models import ProjectVersion
@@ -44,9 +45,9 @@ def proposals(request: HttpRequest, project_id: int):
 
         result = []
         for up in ups:
-            res = {"id": up.id, "degree": up.confidence, "entity": rh.__serialize_entities([up.entity], pv)[0]}
+            res = {"id": up.id, "degree": up.confidence, "entity": rh.serialize_entities([up.entity], pv)[0]}
             if up.entity2 is not None:
-                res["target_entity"] = rh.__serialize_entities([up.entity2], pv)[0]
+                res["target_entity"] = rh.serialize_entities([up.entity2], pv)[0]
             elif up.clique is not None:
                 clq = up.clique
                 res["target_clique"] = {
@@ -61,4 +62,17 @@ def proposals(request: HttpRequest, project_id: int):
 
         return JsonResponse(result, safe=False)
 
-    # TODO: PUT
+    if request.method == "PUT":
+        args = json.loads(request.body)
+        try:
+            up = UnificationProposal.objects.get(id=args["id"])
+        except UnificationProposal.DoesNotExist:
+            return HttpResponseNotFound("No proposal with this ID.")
+
+        if up.decided:
+            return HttpResponse("Proposal has been already decided on.", status=304)
+
+        if args["decision"]:
+            up.accept(request.user, args["certainty"], args["categories"])
+        else:
+            up.reject(request.user, args["certainty"])

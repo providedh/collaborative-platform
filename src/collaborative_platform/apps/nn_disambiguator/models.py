@@ -77,7 +77,8 @@ class UnificationProposal(Model):
             clique = db.create_clique(self.entity2.properties.filter(name='name').latest('id'), self.entity.type)
             db.create_unification(clique, self.entity, certainty, categories,
                                   self.entity.file.project.versions.latest('id'))
-            # TODO: confirm with Szymon that I can unify to uncommited cliques.
+            db.create_unification(clique, self.entity2, certainty, categories,
+                                  self.entity.file.project.versions.latest('id'))
             self.decision_maker = user
             self.user_confidence = certainty
             self.decided = True
