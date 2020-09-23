@@ -4422,10 +4422,44 @@ class TestAnnotatorWithWsAndDb:
 
         await communicator.disconnect()
 
-    async def test_update_certainty_target_after_tag_divide(self):
-        pass
+    async def test_update_tag_attributes_after_tag_divide_during_tag_move(self):
+        test_name = inspect.currentframe().f_code.co_name
+
+        project_id = 1
+        file_id = 1
+        user_id = 2
+
+        communicator = get_communicator(project_id, file_id, user_id)
+
+        await communicator.connect()
+        await communicator.receive_json_from()
+
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'PUT',
+                    'element_type': 'tag',
+                    'edited_element_id': 'ab-0',
+                    'parameters': {
+                        'start_pos': 508,
+                        'end_pos': 528,
+                    }
+                }
+            ]
+        }
+        request_nr = 0
+
+        await communicator.send_json_to(request)
+        response = await communicator.receive_json_from()
+        verify_response(test_name, response, request_nr)
+
+        await communicator.disconnect()
 
     async def test_add_reference_to_divided_tag(self):
+        pass
+
+    async def test_accept_adding_reference_to_divided_tag(self):
         pass
 
 

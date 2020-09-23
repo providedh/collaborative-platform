@@ -1,3 +1,4 @@
+import copy
 import re
 
 from lxml import etree
@@ -34,8 +35,8 @@ class XmlHandler:
         # Get tag name
         tree = etree.fromstring(text)
 
-        xpath = f"//*[contains(concat(' ', @xml:id, ' '), ' {tag_xml_id} ')]"
-        old_tag_element = get_first_xpath_match(tree, xpath, XML_NAMESPACES)
+        old_tag_elements = self.get_xml_elements(tree, tag_xml_id)
+        old_tag_element = old_tag_elements[0]
 
         old_tag_name = old_tag_element.tag
         old_tag_name = re.sub(r'{.*?}', '', old_tag_name)
@@ -528,7 +529,7 @@ class XmlHandler:
 
     def check_if_tag_is_saved(self, text, tag_xml_id):
         tree = etree.fromstring(text)
-        element = self.get_xml_element(tree, tag_xml_id)
+        element = self.get_xml_elements(tree, tag_xml_id)[0]
         saved = element.attrib.get('saved')
 
         if saved == 'false':
@@ -582,7 +583,7 @@ class XmlHandler:
 
     def __check_if_resp_in_tag(self, text, tag_xml_id):
         tree = etree.fromstring(text)
-        element = self.get_xml_element(tree, tag_xml_id)
+        element = self.get_xml_elements(tree, tag_xml_id)[0]
 
         resp = element.attrib.get('resp')
         resp_added = element.attrib.get('respAdded')
@@ -612,10 +613,16 @@ class XmlHandler:
             cleaned_whitespaces = re.sub(whitespace_regex, '', cleaned_tags)
 
             if cleaned_whitespaces:
+                new_tag_xml_id = tag_xml_id
+
                 if parts_to_tag_nr > 1:
-                    tagged_part = f'<ab xml:id="{tag_xml_id}.{index}">{part}</ab>'
-                else:
-                    tagged_part = f'<ab xml:id="{tag_xml_id}">{part}</ab>'
+                    if new_tag_xml_id.endswith('-new'):
+                        new_tag_xml_id = new_tag_xml_id.replace('-new', '')
+                        new_tag_xml_id = f'{new_tag_xml_id}.{index}-new'
+                    else:
+                        new_tag_xml_id = f'{new_tag_xml_id}.{index}'
+
+                tagged_part = f'<ab xml:id="{new_tag_xml_id}">{part}</ab>'
 
                 tagged_parts.append(tagged_part)
                 index += 1
@@ -666,7 +673,37 @@ class XmlHandler:
 
         for element in elements:
             if attributes_to_set:
-                for attribute, value in sorted(attributes_to_set.items()):
+                updated_attributes = copy.deepcopy(attributes_to_set)
+
+                if XML_ID_KEY in updated_attributes:
+                    new_tag_xml_id = updated_attributes[XML_ID_KEY]
+                    new_tag_xml_id_split = new_tag_xml_id.split('-')
+                    new_tag_xml_id_core = '-'.join(new_tag_xml_id_split[:2])
+
+                    if len(new_tag_xml_id_split) == 2:
+                        new_tag_xml_id_suffix = ''
+                    else:
+                        new_tag_xml_id_suffix = new_tag_xml_id_split[2]
+
+                    old_tag_xml_id = element.attrib.get(XML_ID_KEY)
+                    old_tag_xml_id_split = old_tag_xml_id.split('-')
+
+                    if '.' in old_tag_xml_id_split[1]:
+                        old_tag_xml_id_index = old_tag_xml_id_split[1].split('.')[1]
+                    else:
+                        old_tag_xml_id_index = ''
+
+                    updated_xml_id = new_tag_xml_id_core
+
+                    if old_tag_xml_id_index:
+                        updated_xml_id = f'{updated_xml_id}.{old_tag_xml_id_index}'
+
+                    if new_tag_xml_id_suffix:
+                        updated_xml_id = f'{updated_xml_id}-{new_tag_xml_id_suffix}'
+
+                    updated_attributes[XML_ID_KEY] = updated_xml_id
+
+                for attribute, value in sorted(updated_attributes.items()):
                     element.set(attribute, value)
 
             if attributes_to_delete:
@@ -730,28 +767,46 @@ class XmlHandler:
 
     @staticmethod
     def get_xml_elements(tree, tag_xml_id):
-        xpath = f"//*[contains(concat(' ', @xml:id, ' '), ' {tag_xml_id}.')]"
-        elements = tree.xpath(xpath, namespaces=XML_NAMESPACES)
+        # TODO: Try to update xpath to get proper xml elements without additional filtering in Python
 
-        if not elements:
-            xpath = f"//*[contains(concat(' ', @xml:idAdded, ' '), ' {tag_xml_id}.')]"
-            elements = tree.xpath(xpath, namespaces=XML_NAMESPACES)
+        if tag_xml_id.endswith('-old') or tag_xml_id.endswith('-new'):
+            split_tag = tag_xml_id.split('-')
+            tag_core = '-'.join(split_tag[:-1])
+            suffix = split_tag[-1]
+        else:
+            tag_core = tag_xml_id
+            suffix = ''
 
-        if not elements:
-            xpath = f"//*[contains(concat(' ', @xml:id, ' '), ' {tag_xml_id} ')]"
-            elements = tree.xpath(xpath, namespaces=XML_NAMESPACES)
+        xpaths = [
+            f"//*[contains(concat(' ', @xml:id, ' '), ' {tag_core}.')]",
+            f"//*[contains(concat(' ', @xml:idAdded, ' '), ' {tag_core}.')]",
+            f"//*[contains(concat(' ', @xml:id, ' '), ' {tag_core}-')]",
+            f"//*[contains(concat(' ', @xml:idAdded, ' '), ' {tag_core}-')]",
+            f"//*[contains(concat(' ', @xml:id, ' '), ' {tag_core} ')]",
+            f"//*[contains(concat(' ', @xml:idAdded, ' '), ' {tag_core} ')]",
+        ]
 
-        if not elements:
-            xpath = f"//*[contains(concat(' ', @xml:idAdded, ' '), ' {tag_xml_id} ')]"
+        all_elements = []
+
+        for xpath in xpaths:
             elements = tree.xpath(xpath, namespaces=XML_NAMESPACES)
+            all_elements += elements
+
+        elements = set(all_elements)
+
+        if suffix:
+            elements = [element for element in elements if element.attrib[XML_ID_KEY].endswith(f'-{suffix}')]
+        else:
+            elements = [element for element in elements if not
+                        (element.attrib[XML_ID_KEY].endswith('-old') or element.attrib[XML_ID_KEY].endswith('-new'))]
 
         return elements
 
-    def get_connected_xml_ids(self, text, target):
+    def get_connected_xml_ids(self, text, tag_xml_id):
         tree = etree.fromstring(text)
-        tag_xml_id = target.split('/')[0]
+        tag_xml_ids = tag_xml_id.split('/')[0]
 
-        elements = self.get_xml_elements(tree, tag_xml_id)
+        elements = self.get_xml_elements(tree, tag_xml_ids)
 
         xml_ids = []
 
