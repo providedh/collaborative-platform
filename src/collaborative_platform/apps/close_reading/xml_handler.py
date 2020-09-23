@@ -674,34 +674,14 @@ class XmlHandler:
         for element in elements:
             if attributes_to_set:
                 updated_attributes = copy.deepcopy(attributes_to_set)
+                attributes_with_xml_id = [XML_ID_KEY, f'{XML_ID_KEY}Added', f'{XML_ID_KEY}Deleted']
 
-                if XML_ID_KEY in updated_attributes:
-                    new_tag_xml_id = updated_attributes[XML_ID_KEY]
-                    new_tag_xml_id_split = new_tag_xml_id.split('-')
-                    new_tag_xml_id_core = '-'.join(new_tag_xml_id_split[:2])
+                for attribute_name in attributes_with_xml_id:
+                    if attribute_name in updated_attributes:
+                        attribute_value = updated_attributes[attribute_name]
+                        updated_attribute_value = self.__update_xml_id_attribute(element, attribute_value)
 
-                    if len(new_tag_xml_id_split) == 2:
-                        new_tag_xml_id_suffix = ''
-                    else:
-                        new_tag_xml_id_suffix = new_tag_xml_id_split[2]
-
-                    old_tag_xml_id = element.attrib.get(XML_ID_KEY)
-                    old_tag_xml_id_split = old_tag_xml_id.split('-')
-
-                    if '.' in old_tag_xml_id_split[1]:
-                        old_tag_xml_id_index = old_tag_xml_id_split[1].split('.')[1]
-                    else:
-                        old_tag_xml_id_index = ''
-
-                    updated_xml_id = new_tag_xml_id_core
-
-                    if old_tag_xml_id_index:
-                        updated_xml_id = f'{updated_xml_id}.{old_tag_xml_id_index}'
-
-                    if new_tag_xml_id_suffix:
-                        updated_xml_id = f'{updated_xml_id}-{new_tag_xml_id_suffix}'
-
-                    updated_attributes[XML_ID_KEY] = updated_xml_id
+                        updated_attributes[attribute_name] = updated_attribute_value
 
                 for attribute, value in sorted(updated_attributes.items()):
                     element.set(attribute, value)
@@ -745,6 +725,35 @@ class XmlHandler:
         text = etree.tounicode(tree, pretty_print=True)
 
         return text
+
+    @staticmethod
+    def __update_xml_id_attribute(element, xml_id_value):
+        new_xml_id_split = xml_id_value.split('-')
+        new_xml_id_core = '-'.join(new_xml_id_split[:2])
+
+        if len(new_xml_id_split) == 2:
+            new_xml_id_suffix = ''
+        else:
+            new_xml_id_suffix = new_xml_id_split[2]
+
+        old_xml_id = element.attrib.get(XML_ID_KEY)
+
+        old_xml_id_split = old_xml_id.split('-')
+
+        if '.' in old_xml_id_split[1]:
+            old_xml_id_index = old_xml_id_split[1].split('.')[1]
+        else:
+            old_xml_id_index = ''
+
+        updated_xml_id = new_xml_id_core
+
+        if old_xml_id_index:
+            updated_xml_id = f'{updated_xml_id}.{old_xml_id_index}'
+
+        if new_xml_id_suffix:
+            updated_xml_id = f'{updated_xml_id}-{new_xml_id_suffix}'
+
+        return updated_xml_id
 
     @staticmethod
     def get_xml_element(tree, tag_xml_id):
