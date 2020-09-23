@@ -1,0 +1,24 @@
+.navigation{}
+.navButton{
+	color: var(--blue);
+}
+.navButton span, .listToggle span{
+	font-size: 2em;
+	font-family: SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+}
+.navButton:hover, .navButton span, .listToggle span{
+	text-decoration: none !important;
+}
+.navButton:hover p{
+	text-decoration: underline;
+}
+.pageIndicator, .listToggle{
+	display: flex;
+    align-items: center;
+}
+.listToggle span{
+	transform: rotateZ(90deg);
+    font-weight: bold;
+    display: block;
+    margin-left: -12px;
+}
