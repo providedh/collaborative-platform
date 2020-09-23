@@ -1,12 +1,10 @@
 import json
 
 from django.contrib.auth.decorators import login_required
-from django.http import HttpRequest, HttpResponseBadRequest, JsonResponse, HttpResponseNotFound, HttpResponse
+from django.http import HttpRequest, HttpResponseBadRequest, JsonResponse, HttpResponseNotFound
 
-from apps.api_vis.request_handler import RequestHandler
-from apps.nn_disambiguator.helpers import queue_task, abort_pending
+from apps.nn_disambiguator.helpers import queue_task, abort_pending, serialize_unification_proposals
 from apps.nn_disambiguator.models import CeleryTask, UnificationProposal
-from apps.projects.models import ProjectVersion
 from apps.views_decorators import objects_exists, user_has_access
 
 
@@ -39,26 +37,7 @@ def proposals(request: HttpRequest, project_id: int):
         except UnificationProposal.DoesNotExist:
             return JsonResponse({"message": "There are no proposals to show."})
 
-        rh = RequestHandler(project_id, request.user)
-
-        pv = ProjectVersion.objects.filter(project_id=project_id).latest("id")
-
-        result = []
-        for up in ups:
-            res = {"id": up.id, "degree": up.confidence, "entity": rh.serialize_entities([up.entity], pv)[0]}
-            if up.entity2 is not None:
-                res["target_entity"] = rh.serialize_entities([up.entity2], pv)[0]
-            elif up.clique is not None:
-                clq = up.clique
-                res["target_clique"] = {
-                    "id": clq.id,
-                    "name": clq.name,
-                    "type": clq.type,
-                    "entities": clq.unifications.values_list("entity_id", flat=True)
-                }
-            else:
-                raise KeyError("Unification proposal has no target")
-            result.append(res)
+        result = serialize_unification_proposals(project_id, ups, request.user)
 
         return JsonResponse(result, safe=False)
 
@@ -78,3 +57,20 @@ def proposals(request: HttpRequest, project_id: int):
         else:
             up.reject(request.user, args["certainty"])
             return JsonResponse({"message": "Rejected successfully"})
+
+
+@login_required
+@objects_exists
+@user_has_access('RW')
+def file_proposals(request: HttpRequest, project_id: int, file_id: int):
+    if request.method == "GET":
+        try:
+            ups = UnificationProposal.objects.filter(project_id=project_id,
+                                                     decided=False,
+                                                     entity__file_id=file_id).all()
+        except UnificationProposal.DoesNotExist:
+            return JsonResponse({"message": "There are no proposals to show."})
+
+        result = serialize_unification_proposals(project_id, ups, request.user)
+
+        return JsonResponse(result, safe=False)
