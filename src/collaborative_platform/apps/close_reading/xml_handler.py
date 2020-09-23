@@ -491,21 +491,22 @@ class XmlHandler:
 
     def __save_attributes_in_tag(self, text, tag_xml_id, attributes_to_save):
         tree = etree.fromstring(text)
-        element = self.get_xml_element(tree, tag_xml_id)
+        elements = self.get_xml_elements(tree, tag_xml_id)
 
-        for attribute in attributes_to_save:
-            try:
-                attribute_value = element.attrib.pop(f'{attribute}Added')
-                element.set(attribute, attribute_value)
+        for element in elements:
+            for attribute in attributes_to_save:
+                try:
+                    attribute_value = element.attrib.pop(f'{attribute}Added')
+                    element.set(attribute, attribute_value)
 
-            except KeyError:
-                pass
+                except KeyError:
+                    pass
 
-            try:
-                element.attrib.pop(f'{attribute}Deleted')
+                try:
+                    element.attrib.pop(f'{attribute}Deleted')
 
-            except KeyError:
-                pass
+                except KeyError:
+                    pass
 
         text = etree.tounicode(tree, pretty_print=True)
 
