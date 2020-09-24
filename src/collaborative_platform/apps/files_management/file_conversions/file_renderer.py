@@ -202,7 +202,15 @@ class FileRenderer:
         certainty_element.set('ana', certainty.get_categories(as_str=True))
         certainty_element.set('locus', certainty.locus)
         certainty_element.set('cert', certainty.certainty)
-        certainty_element.set('target', f'#{certainty.target_xml_id}')
+
+        # TODO: Keep `target` attribute in database in form `#<xml:id-X.0> #<xml:id-X.1>` from the beginning
+        # TODO: to avoid appending `#` on every request
+
+        target = certainty.target_xml_id
+        targets = target.split(' ')
+        targets = [f'#{xml_id}' for xml_id in targets]
+        target = ' '.join(targets)
+        certainty_element.set('target', target)
 
         if certainty.degree:
             certainty_element.set('degree', str(certainty.degree))
