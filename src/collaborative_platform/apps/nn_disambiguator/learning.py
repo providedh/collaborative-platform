@@ -58,7 +58,10 @@ def learn_unprocessed_unifications(project: Project):
                     _ids = list(unification.clique.unifications.values_list("entity_id", flat=True))
                     _ids.remove(entity1.id)
                     for entity2 in Entity.objects.filter(id__in=_ids).all():
-                        learn_entity_pair(entity1, entity2, data_processor, model, scaler, unification.certainty, True)
+                        positive = unification.deleted_by_id is None and \
+                                   unification.clique.unifications.get(entity2=entity2).deleted_by_id is None
+                        learn_entity_pair(entity1, entity2, data_processor, model, scaler, unification.certainty,
+                                          positive)
 
                 clf.set_model(model)
                 clf.set_scaler(scaler)

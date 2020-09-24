@@ -248,8 +248,6 @@ class DbHandler:
 
         Unification.objects.bulk_update(unifications_to_delete, ['deleted_in_commit'])
 
-        from apps.nn_disambiguator.learning import learn_unprocessed
-        learn_unprocessed.delay(self.__project_id)
 
     def delete_clique(self, clique, project_version):
         clique.deleted_by = self.__user

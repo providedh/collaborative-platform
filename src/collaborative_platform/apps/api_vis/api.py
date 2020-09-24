@@ -227,6 +227,9 @@ def commits(request, project_id):
             request_handler = RequestHandler(project_id, request.user)
             response = request_handler.create_commit(request_data)
 
+            from apps.nn_disambiguator.learning import learn_unprocessed
+            learn_unprocessed.delay(project_id)
+
             return JsonResponse(response)
 
         except NotModified as exception:

@@ -17,8 +17,6 @@ from apps.files_management.helpers import clean_name, create_uploaded_file_objec
     delete_directory_with_contents_fake, get_directory_content, include_user, overwrite_file, upload_file
 from apps.files_management.models import Directory, File, FileVersion
 from apps.files_management.loggers import FilesManagementLogger
-from apps.nn_disambiguator.learning import learn_unprocessed
-from apps.nn_disambiguator.predictions import calculate_proposals
 from apps.projects.helpers import log_activity, paginate_start_length, page_to_json_response
 from apps.views_decorators import objects_exists, user_has_access
 

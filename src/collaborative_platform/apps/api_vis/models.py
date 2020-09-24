@@ -178,6 +178,7 @@ class Unification(models.Model):
         self.deleted_by = user
         self.deleted_in_commit = commit
         self.deleted_in_file_version = file_version
+        self.learned = False
 
         self.save()
 
