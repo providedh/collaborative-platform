@@ -44,7 +44,7 @@ class XmlHandler:
         old_tag_attributes = old_tag_element.attrib
 
         # Add new tag with temp id
-        text = self.add_tag(text, start_pos, end_pos, temp_xml_id)
+        text = self.__add_tag(text, start_pos, end_pos, temp_xml_id)
 
         try:
             self.check_if_tag_is_saved(text, tag_xml_id)
@@ -71,9 +71,13 @@ class XmlHandler:
         # update attributes in new tag
         attributes = {
             XML_ID_KEY: tag_xml_id,
+            'saved': 'false',
         }
 
         attributes = {**old_tag_attributes, **attributes}
+
+        if 'resp' not in attributes and 'respAdded' not in attributes:
+            attributes.update({'respAdded': f'#{self.__annotator_xml_id}'})
 
         text = self.__update_tag(text, temp_xml_id, new_tag=old_tag_name, attributes_to_set=attributes)
 
