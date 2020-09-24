@@ -639,30 +639,38 @@ class XmlHandler:
 
     def __remove_tag(self, text, tag_xml_id):
         tree = etree.fromstring(text)
-        element = self.get_xml_element(tree, tag_xml_id)
+        elements = self.get_xml_elements(tree, tag_xml_id)
 
-        parent = element.getparent()
+        for element in elements:
+            parent = element.getparent()
 
-        if element.text != '':
-            previous_sibling = element.getprevious()
+            if element.text:
+                previous_sibling = element.getprevious()
 
-            if previous_sibling is not None:
-                previous_sibling.tail += element.text
-            else:
-                parent.text += element.text
+                if previous_sibling is not None:
+                    if previous_sibling.tail:
+                        previous_sibling.tail += element.text
+                    else:
+                        previous_sibling.tail = element.text
 
-        for child in element.iterchildren():
-            element.addprevious(child)
+                else:
+                    if parent.text:
+                        parent.text += element.text
+                    else:
+                        parent.text = element.text
 
-        if element.tail != '':
-            previous_sibling = element.getprevious()
+            for child in element.iterchildren():
+                element.addprevious(child)
 
-            if previous_sibling is not None:
-                previous_sibling.tail += element.tail
-            else:
-                parent.text += element.tail
+            if element.tail:
+                previous_sibling = element.getprevious()
 
-        parent.remove(element)
+                if previous_sibling is not None:
+                    previous_sibling.tail = str(previous_sibling.tail) + element.tail
+                else:
+                    parent.text = str(parent.text) + element.tail
+
+            parent.remove(element)
 
         text = etree.tounicode(tree, pretty_print=True)
 
