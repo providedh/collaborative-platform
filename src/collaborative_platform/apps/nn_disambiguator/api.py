@@ -17,6 +17,7 @@ def calculations(request: HttpRequest, project_id: int):
             return queue_task(project_id, "P")
         elif request.POST["action"] == "abort":
             return abort_pending(project_id, "P")
+
     elif request.method == "GET":
         try:
             hist = CeleryTask.objects.filter(project_id=project_id, type="P").all()
