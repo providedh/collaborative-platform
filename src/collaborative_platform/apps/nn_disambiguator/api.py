@@ -34,13 +34,12 @@ def calculations(request: HttpRequest, project_id: int):
 def proposals(request: HttpRequest, project_id: int):
     if request.method == "GET":
         try:
-            ups = UnificationProposal.objects.filter(project_id=project_id, decided=False).all()
+            ups = UnificationProposal.objects.filter(project_id=project_id, decided=False).order_by(
+                "-confidence").all().values_list("id", flat=True)
         except UnificationProposal.DoesNotExist:
             return JsonResponse({"message": "There are no proposals to show."})
 
-        result = serialize_unification_proposals(project_id, ups, request.user)
-
-        return JsonResponse(result, safe=False)
+        return JsonResponse(ups, safe=False)
 
     if request.method == "PUT":
         args = json.loads(request.body)

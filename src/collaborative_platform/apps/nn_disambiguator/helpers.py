@@ -71,8 +71,7 @@ def run_queued_tasks():
         task.status = "S"
         task.save()
 
-# @shared_task(name="clean_unfinished_tasks")
-# def clean_unfinished_tasks():
+
 def serialize_unification_proposals(project_id: int, ups, user):
     rh = RequestHandler(project_id, user)
     pv = ProjectVersion.objects.filter(project_id=project_id).latest("id")
