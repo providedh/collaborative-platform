@@ -41,7 +41,8 @@ class SimilarityCalculator:
 
     def __init__(self, entity_type: EntitySchema):
         entity_settings = DEFAULT_ENTITIES.get(entity_type.name, None)
-        self.properties = entity_settings['properties'] or {'name': {'type': TypeChoice.str}}
+        self.properties = entity_settings['properties'] if entity_settings is not None else {
+            'name': {'type': TypeChoice.str}}
 
     def __calculate_similarity(self, e1: EntityVersion, e2: EntityVersion) -> List[float]:
         sims = []
