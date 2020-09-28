@@ -2,6 +2,7 @@ import json
 
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, HttpResponseBadRequest, JsonResponse, HttpResponseNotFound
+from django.views.decorators.csrf import csrf_exempt
 
 from apps.nn_disambiguator.helpers import queue_task, abort_pending, serialize_unification_proposals
 from apps.nn_disambiguator.models import CeleryTask, UnificationProposal
@@ -28,6 +29,7 @@ def calculations(request: HttpRequest, project_id: int):
         return HttpResponseBadRequest()
 
 
+@csrf_exempt
 @login_required
 @objects_exists
 @user_has_access('RW')

@@ -74,7 +74,8 @@ class UnificationProposal(Model):
             self.save()
         elif self.clique is None:
             db = DbHandler(self.entity.file.project_id, user)
-            clique = db.create_clique(self.entity2.properties.filter(name='name').latest('id'), self.entity.type)
+            clique = db.create_clique(self.entity2.properties.filter(name='name').latest('id').get_value(),
+                                      self.entity.type)
             db.create_unification(clique, self.entity, certainty, categories,
                                   self.entity.file.project.versions.latest('id'))
             db.create_unification(clique, self.entity2, certainty, categories,
