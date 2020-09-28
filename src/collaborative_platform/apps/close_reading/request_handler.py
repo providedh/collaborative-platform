@@ -2,7 +2,7 @@ from apps.close_reading.enums import ElementTypes
 from apps.close_reading.db_handler import DbHandler
 from apps.close_reading.response_generator import get_listable_entities_types
 from apps.close_reading.xml_handler import XmlHandler
-from apps.exceptions import BadRequest, UnsavedElement
+from apps.exceptions import BadRequest, Forbidden, UnsavedElement
 
 
 class RequestHandler:
@@ -182,15 +182,19 @@ class RequestHandler:
         self.__operations_results.append(tag_xml_id)
 
     def __move_tag(self, request):
-        # TODO: Add verification if user has rights to edit a tag
-        # TODO: Add verification if tag wasn't moved by another user in the meantime
-
         new_start_pos = request['parameters']['start_pos']
         new_end_pos = request['parameters']['end_pos']
         tag_xml_id = request['edited_element_id']
 
         body_content = self.__db_handler.get_body_content()
-        body_content, saved = self.__xml_handler.move_tag(body_content, new_start_pos, new_end_pos, tag_xml_id)
+
+        try:
+            self.__xml_handler.check_permissions(body_content, tag_xml_id)
+            body_content, saved = self.__xml_handler.move_tag(body_content, new_start_pos, new_end_pos, tag_xml_id)
+
+        except Forbidden:
+            raise BadRequest("Modification of an element created by another user is forbidden.")
+
         self.__db_handler.set_body_content(body_content)
 
         self.__operations_results.append(tag_xml_id)
@@ -206,6 +210,7 @@ class RequestHandler:
 
         try:
             body_content = self.__xml_handler.delete_tag(body_content, tag_xml_id)
+
         except UnsavedElement:
             raise BadRequest("Deleting an unsaved element is forbidden. Instead of deleting, discard "
                              "the operation that created this element.")

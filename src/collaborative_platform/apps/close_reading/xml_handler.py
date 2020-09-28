@@ -3,7 +3,7 @@ import re
 
 from lxml import etree
 
-from apps.exceptions import UnsavedElement
+from apps.exceptions import Forbidden, UnsavedElement
 from apps.close_reading.text_splitter import TextSplitter
 from apps.files_management.file_conversions.xml_tools import get_first_xpath_match
 
@@ -449,6 +449,20 @@ class XmlHandler:
         text = self.__delete_attributes_in_tag(text, tag_xml_id, attributes_to_delete)
 
         return text
+
+    def check_permissions(self, text,  tag_xml_id):
+        tree = etree.fromstring(text)
+        element = self.get_xml_elements(tree, tag_xml_id)[0]
+
+        resp = element.attrib.get('resp')
+        resp_added = element.attrib.get('respAdded')
+
+        if resp_added:
+            if resp_added != f'#{self.__annotator_xml_id}':
+                raise Forbidden
+        elif resp:
+            if resp != f'#{self.__annotator_xml_id}':
+                raise Forbidden
 
     @staticmethod
     def check_if_last_reference(text, target_element_id):
