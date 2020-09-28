@@ -4696,7 +4696,95 @@ class TestAnnotatorWithWsAndDb:
 
         await communicator.disconnect()
 
-    async def test_add_tag_with_multiple_parts(self):
+    async def test_users_see_changes_made_by_another_users(self):
+        test_name = inspect.currentframe().f_code.co_name
+
+        project_id = 1
+        file_id = 1
+        first_user_id = 2
+        second_user_id = 3
+
+        first_communicator = get_communicator(project_id, file_id, first_user_id)
+        second_communicator = get_communicator(project_id, file_id, second_user_id)
+
+        await first_communicator.connect()
+        await first_communicator.receive_json_from()
+
+        await second_communicator.connect()
+        await second_communicator.receive_json_from()
+
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'POST',
+                    'element_type': 'tag',
+                    'parameters': {
+                        'start_pos': 265,
+                        'end_pos': 271,
+                    }
+                }
+            ]
+        }
+        request_nr = 0
+
+        await first_communicator.send_json_to(request)
+        first_response = await first_communicator.receive_json_from()
+        verify_response(test_name, first_response, request_nr, first_user_id)
+
+        second_response = await second_communicator.receive_json_from()
+        verify_response(test_name, second_response, request_nr, second_user_id)
+
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'POST',
+                    'element_type': 'tag',
+                    'parameters': {
+                        'start_pos': 405,
+                        'end_pos': 409,
+                    }
+                }
+            ]
+        }
+        request_nr = 1
+
+        await second_communicator.send_json_to(request)
+        first_response = await first_communicator.receive_json_from()
+        verify_response(test_name, first_response, request_nr, first_user_id)
+
+        second_response = await second_communicator.receive_json_from()
+        verify_response(test_name, second_response, request_nr, second_user_id)
+
+        await first_communicator.disconnect()
+        await second_communicator.disconnect()
+
+    async def test_user_cant_edit_another_users_tag(self):
+        pass
+
+    async def test_user_cant_delete_another_users_tag(self):
+        pass
+
+    async def test_user_cant_edit_another_users_entity(self):
+        pass
+
+    async def test_user_cant_delete_another_users_entity(self):
+        pass
+
+    async def test_user_cant_edit_another_users_entity_property(self):
+        pass
+
+    async def test_user_cant_delete_another_users_entity_property(self):
+        pass
+
+    async def test_user_cant_add_property_to_another_users_entity(self):
+        pass
+
+    async def test_user_cant_edit_another_users_certainty(self):
+        pass
+
+    async def test_user_cant_delete_another_users_certainty(self):
         pass
 
 
@@ -4716,11 +4804,16 @@ def get_communicator(project_id, file_id, user_id=None):
     return communicator
 
 
-def verify_response(test_name, response, request_nr):
+def verify_response(test_name, response, request_nr, user_id=None):
     test_results_file_path = os.path.join(SCRIPT_DIR, 'tests_results.json')
     test_results = read_file(test_results_file_path)
     test_results = json.loads(test_results)
-    expected = test_results[test_name][request_nr]
+
+    if user_id:
+        user_id = str(user_id)
+        expected = test_results[test_name][request_nr][user_id]
+    else:
+        expected = test_results[test_name][request_nr]
 
     for field in expected.keys():
         assert response[field] == expected[field]

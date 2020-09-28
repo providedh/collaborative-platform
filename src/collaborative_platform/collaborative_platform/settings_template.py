@@ -212,12 +212,12 @@ LOGGING = {
 # ReCaptcha keys
 # Comment this settings for local testing
 # https://pypi.org/project/django-recaptcha/#installation
-# RECAPTCHA_PUBLIC_KEY = 'put_public_key_here'
-# RECAPTCHA_PRIVATE_KEY = 'put_private_key_here'
+RECAPTCHA_PUBLIC_KEY = 'put_public_key_here'
+RECAPTCHA_PRIVATE_KEY = 'put_private_key_here'
 
 # Uncomment this setting for local testing
 # https://pypi.org/project/django-recaptcha/#local-development-and-functional-testing
-SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
+# SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
 
 
 # For WebSockets
