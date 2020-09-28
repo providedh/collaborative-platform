@@ -444,38 +444,51 @@ class RequestHandler:
             body_content = self.__db_handler.get_body_content()
 
             try:
+                self.__xml_handler.check_permissions(body_content, tag_xml_id)
+
                 body_content = self.__xml_handler.delete_reference_to_entity(body_content, tag_xml_id, new_tag,
                                                                              new_tag_xml_id, entity_xml_id)
+
+                self.__db_handler.set_body_content(body_content)
+
+                last_reference = self.__xml_handler.check_if_last_reference(body_content, entity_xml_id)
+
+                if last_reference:
+                    self.__db_handler.delete_entity(entity_xml_id)
+
+            except Forbidden:
+                raise BadRequest("Removal of an element created by another user is forbidden.")
+
             except UnsavedElement:
                 raise BadRequest("Deleting an unsaved element is forbidden. Instead of deleting, discard "
                                  "the operation that created this element.")
 
-            self.__db_handler.set_body_content(body_content)
-
-            last_reference = self.__xml_handler.check_if_last_reference(body_content, entity_xml_id)
-
-            if last_reference:
-                self.__db_handler.delete_entity(entity_xml_id)
         else:
-            entity_properties_values = self.__db_handler.get_entity_properties_values(entity_xml_id)
-
             body_content = self.__db_handler.get_body_content()
 
+            entity_properties_values = self.__db_handler.get_entity_properties_values(entity_xml_id)
+
             try:
+                self.__xml_handler.check_permissions(body_content, tag_xml_id)
+
                 body_content = self.__xml_handler.delete_reference_to_entity(body_content, tag_xml_id, new_tag,
                                                                              new_tag_xml_id, entity_xml_id)
+
+                body_content = self.__xml_handler.delete_entity_properties(body_content, entity_xml_id,
+                                                                           entity_properties_values)
+                self.__db_handler.set_body_content(body_content)
+
+                last_reference = self.__xml_handler.check_if_last_reference(body_content, entity_xml_id)
+
+                if last_reference:
+                    self.__db_handler.delete_entity(entity_xml_id)
+
+            except Forbidden:
+                raise BadRequest("Removal of an element created by another user is forbidden.")
+
             except UnsavedElement:
                 raise BadRequest("Deleting an unsaved element is forbidden. Instead of deleting, discard "
                                  "the operation that created this element.")
-
-            body_content = self.__xml_handler.delete_entity_properties(body_content, entity_xml_id,
-                                                                       entity_properties_values)
-            self.__db_handler.set_body_content(body_content)
-
-            last_reference = self.__xml_handler.check_if_last_reference(body_content, entity_xml_id)
-
-            if last_reference:
-                self.__db_handler.delete_entity(entity_xml_id)
 
         self.__operations_results.append(None)
 
