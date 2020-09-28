@@ -209,7 +209,11 @@ class RequestHandler:
         body_content = self.__db_handler.get_body_content()
 
         try:
+            self.__xml_handler.check_permissions(body_content, tag_xml_id)
             body_content = self.__xml_handler.delete_tag(body_content, tag_xml_id)
+
+        except Forbidden:
+            raise BadRequest("Removal of an element created by another user is forbidden.")
 
         except UnsavedElement:
             raise BadRequest("Deleting an unsaved element is forbidden. Instead of deleting, discard "
