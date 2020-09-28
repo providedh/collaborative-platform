@@ -34,12 +34,12 @@ def calculations(request: HttpRequest, project_id: int):
 def proposals(request: HttpRequest, project_id: int):
     if request.method == "GET":
         try:
-            ups = UnificationProposal.objects.filter(project_id=project_id, decided=False).order_by(
-                "-confidence").all().values_list("id", flat=True)
+            ups = UnificationProposal.objects.filter(entity__file__project=project_id, decided=False).order_by(
+                "-confidence").values_list("id", flat=True)
         except UnificationProposal.DoesNotExist:
             return JsonResponse({"message": "There are no proposals to show."})
 
-        return JsonResponse(ups, safe=False)
+        return JsonResponse(list(ups), safe=False)
 
     if request.method == "PUT":
         args = json.loads(request.body)
@@ -68,14 +68,14 @@ def proposals(request: HttpRequest, project_id: int):
 def file_proposals(request: HttpRequest, project_id: int, file_id: int):
     if request.method == "GET":
         try:
-            ups = UnificationProposal.objects.filter(project_id=project_id,
+            ups = UnificationProposal.objects.filter(entity__file__project_id=project_id,
                                                      decided=False,
                                                      entity__file_id=file_id).order_by("-confidence"
                                                                                        ).values_list("id", flat=True)
         except UnificationProposal.DoesNotExist:
             return JsonResponse({"message": "There are no proposals to show."})
 
-        return JsonResponse(ups, safe=False)
+        return JsonResponse(list(ups), safe=False)
 
 
 @login_required
@@ -85,6 +85,7 @@ def proposals_details(request: HttpRequest, project_id: int):
     if request.method == "GET":
         ids = request.GET.getlist("ids")
         if ids is not None:
+            ids = list(ids)
             try:
                 ups = UnificationProposal.objects.filter(id__in=ids).all()
             except UnificationProposal.DoesNotExist:
