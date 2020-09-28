@@ -58,6 +58,9 @@ def proposals(request: HttpRequest, project_id: int):
             up.reject(request.user, args["certainty"])
             return JsonResponse({"message": "Rejected successfully"})
 
+    else:
+        return HttpResponseBadRequest()
+
 
 @login_required
 @objects_exists
@@ -67,10 +70,30 @@ def file_proposals(request: HttpRequest, project_id: int, file_id: int):
         try:
             ups = UnificationProposal.objects.filter(project_id=project_id,
                                                      decided=False,
-                                                     entity__file_id=file_id).all()
+                                                     entity__file_id=file_id).order_by("-confidence"
+                                                                                       ).values_list("id", flat=True)
         except UnificationProposal.DoesNotExist:
             return JsonResponse({"message": "There are no proposals to show."})
 
-        result = serialize_unification_proposals(project_id, ups, request.user)
+        return JsonResponse(ups, safe=False)
 
-        return JsonResponse(result, safe=False)
+
+@login_required
+@objects_exists
+@user_has_access('RW')
+def proposals_details(request: HttpRequest, project_id: int):
+    if request.method == "GET":
+        ids = request.GET.getlist("ids")
+        if ids is not None:
+            try:
+                ups = UnificationProposal.objects.filter(id__in=ids).all()
+            except UnificationProposal.DoesNotExist:
+                return HttpResponseNotFound()
+
+            result = serialize_unification_proposals(project_id, ups, request.user)
+            return JsonResponse(result, safe=False)
+        else:
+            return HttpResponseBadRequest()
+
+    else:
+        return HttpResponseBadRequest()
