@@ -73,7 +73,7 @@ def make_entities_cliques_proposals(data_processor, model, scaler, schema):
         UnificationProposal(
             entity=proposal[0][0],
             clique=proposal[0][1],
-            confidence=proposal[1]
+            confidence=proposal[1] * 100
         ) for proposal in proposals
     )  # TODO: test
 
@@ -91,7 +91,7 @@ def make_entities_proposals(data_processor, model, scaler, schema):
         UnificationProposal(
             entity=proposal[0][0],
             entity2=proposal[0][1],
-            confidence=proposal[1]
+            confidence=proposal[1] * 100
         ) for proposal in proposals
     )  # TODO: test
 
