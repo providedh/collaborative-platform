@@ -4880,10 +4880,89 @@ class TestAnnotatorWithWsAndDb:
         await first_communicator.disconnect()
         await second_communicator.disconnect()
 
-    async def test_user_cant_edit_another_users_entity(self):
-        pass
+    async def test_user_cant_edit_another_users_reference(self):
+        test_name = inspect.currentframe().f_code.co_name
 
-    async def test_user_cant_delete_another_users_entity(self):
+        project_id = 1
+        file_id = 1
+        first_user_id = 2
+        second_user_id = 3
+
+        first_communicator = get_communicator(project_id, file_id, first_user_id)
+        second_communicator = get_communicator(project_id, file_id, second_user_id)
+
+        await first_communicator.connect()
+        await first_communicator.receive_json_from()
+
+        await second_communicator.connect()
+        await second_communicator.receive_json_from()
+
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'POST',
+                    'element_type': 'tag',
+                    'parameters': {
+                        'start_pos': 265,
+                        'end_pos': 271,
+                    }
+                }
+            ]
+        }
+        request_nr = 0
+
+        await first_communicator.send_json_to(request)
+        first_response = await first_communicator.receive_json_from()
+        verify_response(test_name, first_response, request_nr, first_user_id)
+
+        second_response = await second_communicator.receive_json_from()
+        verify_response(test_name, second_response, request_nr, second_user_id)
+
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'POST',
+                    'element_type': 'reference',
+                    'edited_element_id': 'ab-1',
+                    'parameters': {
+                        'entity_type': 'person',
+                    }
+                }
+            ]
+        }
+        request_nr = 1
+
+        await first_communicator.send_json_to(request)
+        first_response = await first_communicator.receive_json_from()
+        verify_response(test_name, first_response, request_nr, first_user_id)
+
+        second_response = await second_communicator.receive_json_from()
+        verify_response(test_name, second_response, request_nr, second_user_id)
+
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'PUT',
+                    'element_type': 'reference',
+                    'edited_element_id': 'ab-1',
+                    'old_element_id': 'person-6',
+                    'new_element_id': 'ingredient-0'
+                }
+            ]
+        }
+        request_nr = 2
+
+        await second_communicator.send_json_to(request)
+        second_response = await second_communicator.receive_json_from()
+        verify_response(test_name, second_response, request_nr, second_user_id)
+
+        await first_communicator.disconnect()
+        await second_communicator.disconnect()
+
+    async def test_user_cant_delete_another_users_reference(self):
         pass
 
     async def test_user_cant_edit_another_users_entity_property(self):
