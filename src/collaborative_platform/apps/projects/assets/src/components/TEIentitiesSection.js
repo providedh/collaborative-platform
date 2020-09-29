@@ -86,29 +86,32 @@ class TEIentitiesSection extends React.PureComponent {
           </button>
         )}
         {this.entityProperties(e[0])}
-        <div className="small d-block px-5">
-          <span className="d-block">List existing {e[0]}s in the documents?</span>
-          <div className="form-check form-check-inline">
-            <input className="form-check-input" 
-              checked={e[1].body_list == "true"} 
-              type="radio" 
-              name={e[0]+'list'+i} 
-              id={e[0]+'showList'+i} 
-              onChange={event=>this.handleBodyListChange(i, event.target.value)}
-              value="true"/>
-            <label className="form-check-label" htmlFor={e[0]+'showList'+i}>yes</label>
-          </div>
-          <div className="form-check form-check-inline">
-            <input className="form-check-input" 
-              checked={e[1].body_list == "false"} 
-              type="radio" 
-              name={e[0]+'list'+i} 
-              id={e[0]+'hideList'+i} 
-              onChange={event=>this.handleBodyListChange(i, event.target.value)}
-              value="false"/>
-              <label className="form-check-label" htmlFor={e[0]+'hideList'+i}>no</label>
-          </div>
-        </div>
+        {
+          ['date', 'time'].includes(e[0]) ? '' :
+            <div className="small d-block px-5">
+              <span className="d-block">List existing {e[0]}s in the documents?</span>
+              <div className="form-check form-check-inline">
+                <input className="form-check-input" 
+                  checked={e[1].body_list == "true"} 
+                  type="radio" 
+                  name={e[0]+'list'+i} 
+                  id={e[0]+'showList'+i} 
+                  onChange={event=>this.handleBodyListChange(i, event.target.value)}
+                  value="true"/>
+                <label className="form-check-label" htmlFor={e[0]+'showList'+i}>yes</label>
+              </div>
+              <div className="form-check form-check-inline">
+                <input className="form-check-input" 
+                  checked={e[1].body_list == "false"} 
+                  type="radio" 
+                  name={e[0]+'list'+i} 
+                  id={e[0]+'hideList'+i} 
+                  onChange={event=>this.handleBodyListChange(i, event.target.value)}
+                  value="false"/>
+                  <label className="form-check-label" htmlFor={e[0]+'hideList'+i}>no</label>
+              </div>
+            </div>
+        }
         <hr />
       </li>
     )});
