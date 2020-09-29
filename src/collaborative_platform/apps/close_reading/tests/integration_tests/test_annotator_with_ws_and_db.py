@@ -854,10 +854,10 @@ class TestAnnotatorWithWsAndDb:
                 {
                     'method': 'PUT',
                     'element_type': 'entity_property',
-                    'edited_element_id': 'person-0',
-                    'old_element_id': 'name',
+                    'edited_element_id': 'person-2',
+                    'old_element_id': 'forename',
                     'parameters': {
-                        'name': 'Bruce'
+                        'forename': 'Bruce'
                     }
                 }
             ]
@@ -2167,10 +2167,10 @@ class TestAnnotatorWithWsAndDb:
                 {
                     'method': 'PUT',
                     'element_type': 'entity_property',
-                    'edited_element_id': 'person-0',
-                    'old_element_id': 'name',
+                    'edited_element_id': 'person-2',
+                    'old_element_id': 'forename',
                     'parameters': {
-                        'name': 'Bruce'
+                        'forename': 'Bruce'
                     }
                 }
             ]
@@ -3339,10 +3339,10 @@ class TestAnnotatorWithWsAndDb:
                 {
                     'method': 'PUT',
                     'element_type': 'entity_property',
-                    'edited_element_id': 'person-0',
-                    'old_element_id': 'name',
+                    'edited_element_id': 'person-2',
+                    'old_element_id': 'forename',
                     'parameters': {
-                        'name': 'Bruce'
+                        'forename': 'Bruce'
                     }
                 }
             ]
@@ -3701,7 +3701,7 @@ class TestAnnotatorWithWsAndDb:
 
         file_versions = FileVersion.objects.filter(
             file_id=file_id,
-        )
+        ).order_by('-id')
 
         assert len(file_versions) == 3
 
@@ -3709,7 +3709,7 @@ class TestAnnotatorWithWsAndDb:
         expected_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'expected_files', expected_file_name)
 
         expected_xml = read_file(expected_file_path)
-        result_xml = file_versions[0].get_raw_content()
+        result_xml = file_versions[0].get_rendered_content()
 
         assert result_xml == expected_xml
 
@@ -5044,7 +5044,110 @@ class TestAnnotatorWithWsAndDb:
         await second_communicator.disconnect()
 
     async def test_user_cant_edit_another_users_entity_property(self):
-        pass
+        test_name = inspect.currentframe().f_code.co_name
+
+        project_id = 1
+        file_id = 1
+        first_user_id = 2
+        second_user_id = 3
+
+        first_communicator = get_communicator(project_id, file_id, first_user_id)
+        second_communicator = get_communicator(project_id, file_id, second_user_id)
+
+        await first_communicator.connect()
+        await first_communicator.receive_json_from()
+
+        await second_communicator.connect()
+        await second_communicator.receive_json_from()
+
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'POST',
+                    'element_type': 'tag',
+                    'parameters': {
+                        'start_pos': 265,
+                        'end_pos': 271,
+                    }
+                }
+            ]
+        }
+        request_nr = 0
+
+        await first_communicator.send_json_to(request)
+        first_response = await first_communicator.receive_json_from()
+        verify_response(test_name, first_response, request_nr, first_user_id)
+
+        second_response = await second_communicator.receive_json_from()
+        verify_response(test_name, second_response, request_nr, second_user_id)
+
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'POST',
+                    'element_type': 'reference',
+                    'edited_element_id': 'ab-1',
+                    'parameters': {
+                        'entity_type': 'person',
+                    }
+                }
+            ]
+        }
+        request_nr = 1
+
+        await first_communicator.send_json_to(request)
+        first_response = await first_communicator.receive_json_from()
+        verify_response(test_name, first_response, request_nr, first_user_id)
+
+        second_response = await second_communicator.receive_json_from()
+        verify_response(test_name, second_response, request_nr, second_user_id)
+
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'POST',
+                    'element_type': 'entity_property',
+                    'edited_element_id': 'person-6',
+                    'parameters': {
+                        'forename': 'Bruce'
+                    }
+                }
+            ]
+        }
+        request_nr = 2
+
+        await first_communicator.send_json_to(request)
+        first_response = await first_communicator.receive_json_from()
+        verify_response(test_name, first_response, request_nr, first_user_id)
+
+        second_response = await second_communicator.receive_json_from()
+        verify_response(test_name, second_response, request_nr, second_user_id)
+
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'PUT',
+                    'element_type': 'entity_property',
+                    'edited_element_id': 'person-0',
+                    'old_element_id': 'name',
+                    'parameters': {
+                        'forename': 'Peter'
+                    }
+                }
+            ]
+        }
+        request_nr = 3
+
+        await second_communicator.send_json_to(request)
+        second_response = await second_communicator.receive_json_from()
+        verify_response(test_name, second_response, request_nr, second_user_id)
+
+        await first_communicator.disconnect()
+        await second_communicator.disconnect()
 
     async def test_user_cant_delete_another_users_entity_property(self):
         pass

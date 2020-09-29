@@ -521,20 +521,32 @@ class RequestHandler:
         entity_type = self.__db_handler.get_entity_type(entity_xml_id)
 
         if entity_type in self.__listable_entities_types:
-            property_id, saved = self.__db_handler.modify_entity_property(entity_xml_id, new_entity_property,
-                                                                          property_name)
+            try:
+                self.__db_handler.check_entity_permissions(entity_xml_id)
+
+                property_id, saved = self.__db_handler.modify_entity_property(entity_xml_id, new_entity_property,
+                                                                              property_name)
+
+            except Forbidden:
+                raise BadRequest("Modification of an element created by another user is forbidden.")
 
         else:
-            old_property_value = self.__db_handler.get_entity_property_value(entity_xml_id, property_name)
-            old_entity_property = {property_name: old_property_value}
+            try:
+                self.__db_handler.check_entity_permissions(entity_xml_id)
 
-            property_id, saved = self.__db_handler.modify_entity_property(entity_xml_id, new_entity_property,
-                                                                          property_name)
+                old_property_value = self.__db_handler.get_entity_property_value(entity_xml_id, property_name)
+                old_entity_property = {property_name: old_property_value}
 
-            body_content = self.__db_handler.get_body_content()
-            body_content = self.__xml_handler.modify_entity_property(body_content, entity_xml_id, old_entity_property,
-                                                                     new_entity_property)
-            self.__db_handler.set_body_content(body_content)
+                property_id, saved = self.__db_handler.modify_entity_property(entity_xml_id, new_entity_property,
+                                                                              property_name)
+
+                body_content = self.__db_handler.get_body_content()
+                body_content = self.__xml_handler.modify_entity_property(body_content, entity_xml_id, old_entity_property,
+                                                                         new_entity_property)
+                self.__db_handler.set_body_content(body_content)
+
+            except Forbidden:
+                raise BadRequest("Modification of an element created by another user is forbidden.")
 
         self.__operations_results.append(property_id)
 
