@@ -122,8 +122,8 @@ class TestAnnotatorWithWsAndDb:
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 405,
-                        'end_pos': 409,
+                        'start_pos': 425,
+                        'end_pos': 429,
                     }
                 }
             ]
@@ -157,7 +157,7 @@ class TestAnnotatorWithWsAndDb:
                         'edited_element_id': 'name-3',
                         'parameters': {
                             'start_pos': 272,
-                            'end_pos': 342,
+                            'end_pos': 362,
                         }
                     }
                 ]
@@ -1409,7 +1409,7 @@ class TestAnnotatorWithWsAndDb:
                     'edited_element_id': 'name-3',
                     'parameters': {
                         'start_pos': 272,
-                        'end_pos': 342,
+                        'end_pos': 362,
                     }
                 }
             ]
@@ -2549,7 +2549,7 @@ class TestAnnotatorWithWsAndDb:
                     'edited_element_id': 'name-3',
                     'parameters': {
                         'start_pos': 272,
-                        'end_pos': 342,
+                        'end_pos': 362,
                     }
                 }
             ]
@@ -3751,8 +3751,8 @@ class TestAnnotatorWithWsAndDb:
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 405,
-                        'end_pos': 409,
+                        'start_pos': 425,
+                        'end_pos': 429,
                     }
                 }
             ]
@@ -3957,8 +3957,8 @@ class TestAnnotatorWithWsAndDb:
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 405,
-                        'end_pos': 409,
+                        'start_pos': 425,
+                        'end_pos': 429,
                     }
                 },
                 {
@@ -4085,8 +4085,8 @@ class TestAnnotatorWithWsAndDb:
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 405,
-                        'end_pos': 409,
+                        'start_pos': 425,
+                        'end_pos': 429,
                     }
                 },
                 {
@@ -4213,8 +4213,8 @@ class TestAnnotatorWithWsAndDb:
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 405,
-                        'end_pos': 409,
+                        'start_pos': 425,
+                        'end_pos': 429,
                     }
                 },
                 {
@@ -4354,7 +4354,7 @@ class TestAnnotatorWithWsAndDb:
                     'element_type': 'tag',
                     'parameters': {
                         'start_pos': 265,
-                        'end_pos': 318,
+                        'end_pos': 338,
                     }
                 }
             ]
@@ -4387,7 +4387,7 @@ class TestAnnotatorWithWsAndDb:
                     'element_type': 'tag',
                     'parameters': {
                         'start_pos': 265,
-                        'end_pos': 318,
+                        'end_pos': 338,
                     }
                 }
             ]
@@ -4442,8 +4442,8 @@ class TestAnnotatorWithWsAndDb:
                     'element_type': 'tag',
                     'edited_element_id': 'ab-0',
                     'parameters': {
-                        'start_pos': 508,
-                        'end_pos': 528,
+                        'start_pos': 528,
+                        'end_pos': 548,
                     }
                 }
             ]
@@ -4476,7 +4476,7 @@ class TestAnnotatorWithWsAndDb:
                     'element_type': 'tag',
                     'parameters': {
                         'start_pos': 265,
-                        'end_pos': 318,
+                        'end_pos': 338,
                     }
                 }
             ]
@@ -4528,7 +4528,7 @@ class TestAnnotatorWithWsAndDb:
                     'element_type': 'tag',
                     'parameters': {
                         'start_pos': 265,
-                        'end_pos': 318,
+                        'end_pos': 338,
                     }
                 }
             ]
@@ -4590,8 +4590,8 @@ class TestAnnotatorWithWsAndDb:
                     'element_type': 'tag',
                     'edited_element_id': 'ab-0',
                     'parameters': {
-                        'start_pos': 508,
-                        'end_pos': 528,
+                        'start_pos': 528,
+                        'end_pos': 548,
                     }
                 }
             ]
@@ -4634,7 +4634,7 @@ class TestAnnotatorWithWsAndDb:
                     'element_type': 'tag',
                     'parameters': {
                         'start_pos': 265,
-                        'end_pos': 318,
+                        'end_pos': 338,
                     }
                 }
             ]
@@ -4742,8 +4742,8 @@ class TestAnnotatorWithWsAndDb:
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 405,
-                        'end_pos': 409,
+                        'start_pos': 425,
+                        'end_pos': 429,
                     }
                 }
             ]
@@ -4829,14 +4829,9 @@ class TestAnnotatorWithWsAndDb:
 
         project_id = 1
         file_id = 1
-        first_user_id = 2
         second_user_id = 3
 
-        first_communicator = get_communicator(project_id, file_id, first_user_id)
         second_communicator = get_communicator(project_id, file_id, second_user_id)
-
-        await first_communicator.connect()
-        await first_communicator.receive_json_from()
 
         await second_communicator.connect()
         await second_communicator.receive_json_from()
@@ -4845,65 +4840,20 @@ class TestAnnotatorWithWsAndDb:
             'method': 'modify',
             'payload': [
                 {
-                    'method': 'POST',
-                    'element_type': 'tag',
-                    'parameters': {
-                        'start_pos': 265,
-                        'end_pos': 271,
-                    }
+                    'method': 'PUT',
+                    'element_type': 'reference',
+                    'edited_element_id': 'name-3',
+                    'old_element_id': 'person-2',
+                    'new_element_id': 'ingredient-0'
                 }
             ]
         }
         request_nr = 0
 
-        await first_communicator.send_json_to(request)
-        first_response = await first_communicator.receive_json_from()
-        verify_response(test_name, first_response, request_nr, first_user_id)
-
-        second_response = await second_communicator.receive_json_from()
-        verify_response(test_name, second_response, request_nr, second_user_id)
-
-        request = {
-            'method': 'modify',
-            'payload': [
-                {
-                    'method': 'POST',
-                    'element_type': 'reference',
-                    'edited_element_id': 'ab-1',
-                    'parameters': {
-                        'entity_type': 'person',
-                    }
-                }
-            ]
-        }
-        request_nr = 1
-
-        await first_communicator.send_json_to(request)
-        first_response = await first_communicator.receive_json_from()
-        verify_response(test_name, first_response, request_nr, first_user_id)
-
-        second_response = await second_communicator.receive_json_from()
-        verify_response(test_name, second_response, request_nr, second_user_id)
-
-        request = {
-            'method': 'modify',
-            'payload': [
-                {
-                    'method': 'PUT',
-                    'element_type': 'reference',
-                    'edited_element_id': 'ab-1',
-                    'old_element_id': 'person-6',
-                    'new_element_id': 'ingredient-0'
-                }
-            ]
-        }
-        request_nr = 2
-
         await second_communicator.send_json_to(request)
         second_response = await second_communicator.receive_json_from()
-        verify_response(test_name, second_response, request_nr, second_user_id)
+        verify_response(test_name, second_response, request_nr)
 
-        await first_communicator.disconnect()
         await second_communicator.disconnect()
 
     async def test_user_cant_delete_another_users_reference(self):
