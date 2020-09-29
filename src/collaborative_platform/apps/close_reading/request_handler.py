@@ -503,14 +503,26 @@ class RequestHandler:
         entity_type = self.__db_handler.get_entity_type(entity_xml_id)
 
         if entity_type in self.__listable_entities_types:
-            property_id = self.__db_handler.add_entity_property(entity_xml_id, entity_property)
+            try:
+                self.__db_handler.check_entity_permissions(entity_xml_id)
+
+                property_id = self.__db_handler.add_entity_property(entity_xml_id, entity_property)
+
+            except Forbidden:
+                raise BadRequest("Addition of an element to an element created by another user is forbidden.")
 
         else:
-            property_id = self.__db_handler.add_entity_property(entity_xml_id, entity_property)
+            try:
+                self.__db_handler.check_entity_permissions(entity_xml_id)
 
-            body_content = self.__db_handler.get_body_content()
-            body_content = self.__xml_handler.add_entity_properties(body_content, entity_xml_id, entity_property)
-            self.__db_handler.set_body_content(body_content)
+                property_id = self.__db_handler.add_entity_property(entity_xml_id, entity_property)
+
+                body_content = self.__db_handler.get_body_content()
+                body_content = self.__xml_handler.add_entity_properties(body_content, entity_xml_id, entity_property)
+                self.__db_handler.set_body_content(body_content)
+
+            except Forbidden:
+                raise BadRequest("Addition of an element to an element created by another user is forbidden.")
 
         self.__operations_results.append(property_id)
 

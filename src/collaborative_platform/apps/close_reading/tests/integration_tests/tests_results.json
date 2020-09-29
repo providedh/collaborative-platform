@@ -375,9 +375,9 @@
           {"type": "event", "xml:id": "event-0", "resp": "#annotator-1", "properties": [{"name": "name", "value": "Big Bang", "saved": true, "deleted": false}], "saved": true, "deleted": false}
         ],
         "person": [
-          {"type": "person", "xml:id": "person-0", "resp": "#annotator-1", "saved": true, "deleted": false, "properties": [{"name":  "forename", "value":  "Bruce", "saved":  false, "deleted": false}, {"name": "name", "value": "Butter", "saved": true, "deleted": false}]},
+          {"type": "person", "xml:id": "person-0", "resp": "#annotator-1", "saved": true, "deleted": false, "properties": [{"name": "name", "value": "Butter", "saved": true, "deleted": false}]},
           {"type": "person", "xml:id": "person-1", "resp": "#annotator-1", "saved": true, "deleted": false, "properties": [{"name": "name", "value": "Sand", "saved": true, "deleted": false}]},
-          {"type": "person", "xml:id": "person-2", "resp": "#annotator-2", "saved": true, "deleted": false, "properties": [{"name": "age", "value": "child", "saved": true, "deleted": false}, {"name": "birth", "value": "2001-02-03", "saved": true, "deleted": false}, {"name": "forename", "value": "Jerry", "saved": true, "deleted": false}, {"name": "name", "value": "Jerry Maguire", "saved": true, "deleted": false}, {"name": "sex", "value": "M", "saved": true, "deleted": false}, {"name": "surname", "value": "Maguire", "saved": true, "deleted": false}]},
+          {"type": "person", "xml:id": "person-2", "resp": "#annotator-2", "saved": true, "deleted": false, "properties": [{"name": "age", "value": "child", "saved": true, "deleted": false}, {"name": "birth", "value": "2001-02-03", "saved": true, "deleted": false}, {"name": "forename", "value": "Jerry", "saved": true, "deleted": false}, {"name": "name", "value": "Jerry Maguire", "saved": true, "deleted": false}, {"name":  "occupation", "value":  "agent", "saved":  false, "deleted": false}, {"name": "sex", "value": "M", "saved": true, "deleted": false}, {"name": "surname", "value": "Maguire", "saved": true, "deleted": false}]},
           {"type": "person", "xml:id": "person-3", "resp": "#annotator-1", "saved": true, "deleted": false, "properties": [{"name": "name", "value": "Ingwer", "saved": true, "deleted": false}]},
           {"type": "person", "xml:id": "person-4", "resp": "#annotator-1", "saved": true, "deleted": false, "properties": [{"name": "name", "value": "Grieben", "saved": true, "deleted": false}]},
           {"type": "person", "xml:id": "person-5", "resp": "#annotator-1", "saved": true, "deleted": false, "properties": [{"name": "name", "value": "Met", "saved": true, "deleted": false}]}
@@ -1535,7 +1535,7 @@
     {
       "file_version": 2,
       "operations": [
-        {"dependencies": [], "edited_element_id": "person-0", "element_type": "entity_property", "id": 1, "method": "POST", "new_element_id": null, "old_element_id": null, "operation_result": "person-0/forename"}
+        {"dependencies": [], "edited_element_id": "person-2", "element_type": "entity_property", "id": 1, "method": "POST", "new_element_id": null, "old_element_id": null, "operation_result": "person-2/occupation"}
       ],
       "certainties": [
         {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#credibility https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness", "locus": "value", "degree": 0.86, "cert": "high", "resp": "#annotator-1", "match": "@ref", "target": "#name-3", "xml:id": "certainty-0", "assertedValue": "#met", "desc": null, "saved": true, "deleted": false},
@@ -1557,9 +1557,9 @@
           {"type": "event", "xml:id": "event-0", "resp": "#annotator-1", "properties": [{"name": "name", "value": "Big Bang", "saved": true, "deleted": false}], "saved": true, "deleted": false}
         ],
         "person": [
-          {"type": "person", "xml:id": "person-0", "resp": "#annotator-1", "saved": true, "deleted": false, "properties": [{"name":  "forename", "value":  "Bruce", "saved":  false, "deleted": false}, {"name": "name", "value": "Butter", "saved": true, "deleted": false}]},
+          {"type": "person", "xml:id": "person-0", "resp": "#annotator-1", "saved": true, "deleted": false, "properties": [{"name": "name", "value": "Butter", "saved": true, "deleted": false}]},
           {"type": "person", "xml:id": "person-1", "resp": "#annotator-1", "saved": true, "deleted": false, "properties": [{"name": "name", "value": "Sand", "saved": true, "deleted": false}]},
-          {"type": "person", "xml:id": "person-2", "resp": "#annotator-2", "saved": true, "deleted": false, "properties": [{"name": "age", "value": "child", "saved": true, "deleted": false}, {"name": "birth", "value": "2001-02-03", "saved": true, "deleted": false}, {"name": "forename", "value": "Jerry", "saved": true, "deleted": false}, {"name": "name", "value": "Jerry Maguire", "saved": true, "deleted": false}, {"name": "sex", "value": "M", "saved": true, "deleted": false}, {"name": "surname", "value": "Maguire", "saved": true, "deleted": false}]},
+          {"type": "person", "xml:id": "person-2", "resp": "#annotator-2", "saved": true, "deleted": false, "properties": [{"name": "age", "value": "child", "saved": true, "deleted": false}, {"name": "birth", "value": "2001-02-03", "saved": true, "deleted": false}, {"name": "forename", "value": "Jerry", "saved": true, "deleted": false}, {"name": "name", "value": "Jerry Maguire", "saved": true, "deleted": false}, {"name":  "occupation", "value":  "agent", "saved":  false, "deleted": false}, {"name": "sex", "value": "M", "saved": true, "deleted": false}, {"name": "surname", "value": "Maguire", "saved": true, "deleted": false}]},
           {"type": "person", "xml:id": "person-3", "resp": "#annotator-1", "saved": true, "deleted": false, "properties": [{"name": "name", "value": "Ingwer", "saved": true, "deleted": false}]},
           {"type": "person", "xml:id": "person-4", "resp": "#annotator-1", "saved": true, "deleted": false, "properties": [{"name": "name", "value": "Grieben", "saved": true, "deleted": false}]},
           {"type": "person", "xml:id": "person-5", "resp": "#annotator-1", "saved": true, "deleted": false, "properties": [{"name": "name", "value": "Met", "saved": true, "deleted": false}]}
@@ -2648,7 +2648,7 @@
     {
       "file_version": 2,
       "operations": [
-        {"dependencies": [], "edited_element_id": "person-0", "element_type": "entity_property", "id": 1, "method": "POST", "new_element_id": null, "old_element_id": null, "operation_result": "person-0/forename"}
+        {"dependencies": [], "edited_element_id": "person-2", "element_type": "entity_property", "id": 1, "method": "POST", "new_element_id": null, "old_element_id": null, "operation_result": "person-2/occupation"}
       ],
       "certainties": [
         {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#credibility https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness", "locus": "value", "degree": 0.86, "cert": "high", "resp": "#annotator-1", "match": "@ref", "target": "#name-3", "xml:id": "certainty-0", "assertedValue": "#met", "desc": null, "saved": true, "deleted": false},
@@ -2670,9 +2670,9 @@
           {"type": "event", "xml:id": "event-0", "resp": "#annotator-1", "properties": [{"name": "name", "value": "Big Bang", "saved": true, "deleted": false}], "saved": true, "deleted": false}
         ],
         "person": [
-          {"type": "person", "xml:id": "person-0", "resp": "#annotator-1", "saved": true, "deleted": false, "properties": [{"name":  "forename", "value":  "Bruce", "saved":  false, "deleted": false}, {"name": "name", "value": "Butter", "saved": true, "deleted": false}]},
+          {"type": "person", "xml:id": "person-0", "resp": "#annotator-1", "saved": true, "deleted": false, "properties": [{"name": "name", "value": "Butter", "saved": true, "deleted": false}]},
           {"type": "person", "xml:id": "person-1", "resp": "#annotator-1", "saved": true, "deleted": false, "properties": [{"name": "name", "value": "Sand", "saved": true, "deleted": false}]},
-          {"type": "person", "xml:id": "person-2", "resp": "#annotator-2", "saved": true, "deleted": false, "properties": [{"name": "age", "value": "child", "saved": true, "deleted": false}, {"name": "birth", "value": "2001-02-03", "saved": true, "deleted": false}, {"name": "forename", "value": "Jerry", "saved": true, "deleted": false}, {"name": "name", "value": "Jerry Maguire", "saved": true, "deleted": false}, {"name": "sex", "value": "M", "saved": true, "deleted": false}, {"name": "surname", "value": "Maguire", "saved": true, "deleted": false}]},
+          {"type": "person", "xml:id": "person-2", "resp": "#annotator-2", "saved": true, "deleted": false, "properties": [{"name": "age", "value": "child", "saved": true, "deleted": false}, {"name": "birth", "value": "2001-02-03", "saved": true, "deleted": false}, {"name": "forename", "value": "Jerry", "saved": true, "deleted": false}, {"name": "name", "value": "Jerry Maguire", "saved": true, "deleted": false}, {"name":  "occupation", "value":  "agent", "saved":  false, "deleted": false}, {"name": "sex", "value": "M", "saved": true, "deleted": false}, {"name": "surname", "value": "Maguire", "saved": true, "deleted": false}]},
           {"type": "person", "xml:id": "person-3", "resp": "#annotator-1", "saved": true, "deleted": false, "properties": [{"name": "name", "value": "Ingwer", "saved": true, "deleted": false}]},
           {"type": "person", "xml:id": "person-4", "resp": "#annotator-1", "saved": true, "deleted": false, "properties": [{"name": "name", "value": "Grieben", "saved": true, "deleted": false}]},
           {"type": "person", "xml:id": "person-5", "resp": "#annotator-1", "saved": true, "deleted": false, "properties": [{"name": "name", "value": "Met", "saved": true, "deleted": false}]}
@@ -2703,9 +2703,9 @@
           {"type": "event", "xml:id": "event-0", "resp": "#annotator-1", "properties": [{"name": "name", "value": "Big Bang", "saved": true, "deleted": false}], "saved": true, "deleted": false}
         ],
         "person": [
-          {"type": "person", "xml:id": "person-0", "resp": "#annotator-1", "saved": true, "deleted": false, "properties": [{"name":  "forename", "value":  "Bruce", "saved":  true, "deleted": false}, {"name": "name", "value": "Butter", "saved": true, "deleted": false}]},
+          {"type": "person", "xml:id": "person-0", "resp": "#annotator-1", "saved": true, "deleted": false, "properties": [{"name": "name", "value": "Butter", "saved": true, "deleted": false}]},
           {"type": "person", "xml:id": "person-1", "resp": "#annotator-1", "saved": true, "deleted": false, "properties": [{"name": "name", "value": "Sand", "saved": true, "deleted": false}]},
-          {"type": "person", "xml:id": "person-2", "resp": "#annotator-2", "saved": true, "deleted": false, "properties": [{"name": "age", "value": "child", "saved": true, "deleted": false}, {"name": "birth", "value": "2001-02-03", "saved": true, "deleted": false}, {"name": "forename", "value": "Jerry", "saved": true, "deleted": false}, {"name": "name", "value": "Jerry Maguire", "saved": true, "deleted": false}, {"name": "sex", "value": "M", "saved": true, "deleted": false}, {"name": "surname", "value": "Maguire", "saved": true, "deleted": false}]},
+          {"type": "person", "xml:id": "person-2", "resp": "#annotator-2", "saved": true, "deleted": false, "properties": [{"name": "age", "value": "child", "saved": true, "deleted": false}, {"name": "birth", "value": "2001-02-03", "saved": true, "deleted": false}, {"name": "forename", "value": "Jerry", "saved": true, "deleted": false}, {"name": "name", "value": "Jerry Maguire", "saved": true, "deleted": false}, {"name":  "occupation", "value":  "agent", "saved":  true, "deleted": false}, {"name": "sex", "value": "M", "saved": true, "deleted": false}, {"name": "surname", "value": "Maguire", "saved": true, "deleted": false}]},
           {"type": "person", "xml:id": "person-3", "resp": "#annotator-1", "saved": true, "deleted": false, "properties": [{"name": "name", "value": "Ingwer", "saved": true, "deleted": false}]},
           {"type": "person", "xml:id": "person-4", "resp": "#annotator-1", "saved": true, "deleted": false, "properties": [{"name": "name", "value": "Grieben", "saved": true, "deleted": false}]},
           {"type": "person", "xml:id": "person-5", "resp": "#annotator-1", "saved": true, "deleted": false, "properties": [{"name": "name", "value": "Met", "saved": true, "deleted": false}]}
@@ -4610,6 +4610,12 @@
         "status": 400,
         "message": "Removal of an element created by another user is forbidden."
       }
+    }
+  ],
+"test_user_cant_add_property_to_another_users_entity": [
+    {
+      "status": 400,
+      "message": "Addition of an element to an element created by another user is forbidden."
     }
   ]
 }

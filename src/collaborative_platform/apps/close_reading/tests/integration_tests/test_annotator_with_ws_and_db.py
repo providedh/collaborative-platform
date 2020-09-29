@@ -682,9 +682,9 @@ class TestAnnotatorWithWsAndDb:
                 {
                     'method': 'POST',
                     'element_type': 'entity_property',
-                    'edited_element_id': 'person-0',
+                    'edited_element_id': 'person-2',
                     'parameters': {
-                        'forename': 'Bruce'
+                        'occupation': 'agent'
                     }
                 }
             ]
@@ -2047,9 +2047,9 @@ class TestAnnotatorWithWsAndDb:
                 {
                     'method': 'POST',
                     'element_type': 'entity_property',
-                    'edited_element_id': 'person-0',
+                    'edited_element_id': 'person-2',
                     'parameters': {
-                        'forename': 'Bruce'
+                        'occupation': 'agent'
                     }
                 }
             ]
@@ -3219,9 +3219,9 @@ class TestAnnotatorWithWsAndDb:
                 {
                     'method': 'POST',
                     'element_type': 'entity_property',
-                    'edited_element_id': 'person-0',
+                    'edited_element_id': 'person-2',
                     'parameters': {
-                        'forename': 'Bruce'
+                        'occupation': 'agent'
                     }
                 }
             ]
@@ -5253,7 +5253,37 @@ class TestAnnotatorWithWsAndDb:
         await second_communicator.disconnect()
 
     async def test_user_cant_add_property_to_another_users_entity(self):
-        pass
+        test_name = inspect.currentframe().f_code.co_name
+
+        project_id = 1
+        file_id = 1
+        user_id = 2
+
+        communicator = get_communicator(project_id, file_id, user_id)
+
+        await communicator.connect()
+        await communicator.receive_json_from()
+
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'POST',
+                    'element_type': 'entity_property',
+                    'edited_element_id': 'person-0',
+                    'parameters': {
+                        'forename': 'Bruce'
+                    }
+                }
+            ]
+        }
+        request_nr = 0
+
+        await communicator.send_json_to(request)
+        response = await communicator.receive_json_from()
+        verify_response(test_name, response, request_nr)
+
+        await communicator.disconnect()
 
     async def test_user_cant_edit_another_users_certainty(self):
         pass
