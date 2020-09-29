@@ -63,6 +63,14 @@ export const aScheme = {
 
     return `content: ${content.slice(0, -1)} ${'' + numberAnnotations} \\f591" !important;`
   },
+  noEntityBefore: (id, annotations, currentUser, css, colorForUncertainty, taxonomy) => {
+    const node = document.getElementById(id)
+    const numberAnnotations = annotations.length
+    const style = window.getComputedStyle(node, '::before')
+    const content = style.getPropertyValue('content')
+
+    return `content: "${'' + numberAnnotations} \\f591";`
+  },
   greyContent: (id, annotations, currentUser, css, colorForUncertainty, taxonomy) => {
     const annotationsFlattened = []
     annotations.forEach(annotation => {
