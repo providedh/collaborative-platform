@@ -4612,10 +4612,16 @@
       }
     }
   ],
-"test_user_cant_add_property_to_another_users_entity": [
+  "test_user_cant_add_property_to_another_users_entity": [
     {
       "status": 400,
       "message": "Addition of an element to an element created by another user is forbidden."
+    }
+  ],
+  "test_user_cant_edit_another_users_certainty": [
+    {
+      "status": 400,
+      "message": "Modification of an element created by another user is forbidden."
     }
   ]
 }

@@ -621,7 +621,13 @@ class RequestHandler:
         parameter_name = request['old_element_id']
         new_value = request['parameters']
 
-        saved = self.__db_handler.modify_certainty(certainty_xml_id, parameter_name, new_value)
+        try:
+            self.__db_handler.check_certainty_permissions(certainty_xml_id)
+
+            saved = self.__db_handler.modify_certainty(certainty_xml_id, parameter_name, new_value)
+
+        except Forbidden:
+            raise BadRequest("Modification of an element created by another user is forbidden.")
 
         self.__operations_results.append(certainty_xml_id)
 

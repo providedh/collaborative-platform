@@ -326,7 +326,10 @@ class DbHandler:
             raise Forbidden
 
     def check_certainty_permissions(self, certainty_xml_id):
-        certainty = self.__get_certainty_from_db(certainty_xml_id)
+        certainty = self.__get_certainty_from_db(certainty_xml_id, saved=True)
+
+        if not certainty:
+            certainty = self.__get_certainty_from_db(certainty_xml_id, saved=False)
 
         if certainty.created_by != self.__user:
             raise Forbidden
