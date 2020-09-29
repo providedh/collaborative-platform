@@ -4799,39 +4799,12 @@ class TestAnnotatorWithWsAndDb:
 
         project_id = 1
         file_id = 1
-        first_user_id = 2
-        second_user_id = 3
+        user_id = 3
 
-        first_communicator = get_communicator(project_id, file_id, first_user_id)
-        second_communicator = get_communicator(project_id, file_id, second_user_id)
+        communicator = get_communicator(project_id, file_id, user_id)
 
-        await first_communicator.connect()
-        await first_communicator.receive_json_from()
-
-        await second_communicator.connect()
-        await second_communicator.receive_json_from()
-
-        request = {
-            'method': 'modify',
-            'payload': [
-                {
-                    'method': 'POST',
-                    'element_type': 'tag',
-                    'parameters': {
-                        'start_pos': 265,
-                        'end_pos': 271,
-                    }
-                }
-            ]
-        }
-        request_nr = 0
-
-        await first_communicator.send_json_to(request)
-        first_response = await first_communicator.receive_json_from()
-        verify_response(test_name, first_response, request_nr, first_user_id)
-
-        second_response = await second_communicator.receive_json_from()
-        verify_response(test_name, second_response, request_nr, second_user_id)
+        await communicator.connect()
+        await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -4839,18 +4812,17 @@ class TestAnnotatorWithWsAndDb:
                 {
                     'method': 'DELETE',
                     'element_type': 'tag',
-                    'edited_element_id': 'ab-1'
+                    'edited_element_id': 'date-0'
                 }
             ]
         }
-        request_nr = 1
+        request_nr = 0
 
-        await second_communicator.send_json_to(request)
-        second_response = await second_communicator.receive_json_from()
-        verify_response(test_name, second_response, request_nr, second_user_id)
+        await communicator.send_json_to(request)
+        response = await communicator.receive_json_from()
+        verify_response(test_name, response, request_nr)
 
-        await first_communicator.disconnect()
-        await second_communicator.disconnect()
+        await communicator.disconnect()
 
     async def test_user_cant_edit_another_users_reference(self):
         test_name = inspect.currentframe().f_code.co_name
