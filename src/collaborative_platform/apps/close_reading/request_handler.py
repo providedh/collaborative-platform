@@ -559,7 +559,13 @@ class RequestHandler:
 
         if entity_type in self.__listable_entities_types:
             try:
+                self.__db_handler.check_entity_permissions(entity_xml_id)
+
                 self.__db_handler.delete_entity_property(entity_xml_id, property_name)
+
+            except Forbidden:
+                raise BadRequest("Removal of an element created by another user is forbidden.")
+
             except UnsavedElement:
                 raise BadRequest("Deleting an unsaved element is forbidden. Instead of deleting, discard "
                                  "the operation that created this element.")
@@ -569,7 +575,13 @@ class RequestHandler:
             entity_property = {property_name: property_value}
 
             try:
+                self.__db_handler.check_entity_permissions(entity_xml_id)
+
                 self.__db_handler.delete_entity_property(entity_xml_id, property_name)
+
+            except Forbidden:
+                raise BadRequest("Removal of an element created by another user is forbidden.")
+
             except UnsavedElement:
                 raise BadRequest("Deleting an unsaved element is forbidden. Instead of deleting, discard "
                                  "the operation that created this element.")

@@ -161,9 +161,9 @@ class TestIssue111:
                 {
                     'method': 'POST',
                     'element_type': 'entity_property',
-                    'edited_element_id': 'person-0',
+                    'edited_element_id': 'person-2',
                     'parameters': {
-                        'forename': 'Bruce'
+                        'occupation': 'agent'
                     }
                 }
             ]
@@ -180,8 +180,8 @@ class TestIssue111:
                 {
                     'method': 'DELETE',
                     'element_type': 'entity_property',
-                    'edited_element_id': 'person-0',
-                    'old_element_id': 'forename'
+                    'edited_element_id': 'person-2',
+                    'old_element_id': 'occupation'
                 }
             ]
         }
