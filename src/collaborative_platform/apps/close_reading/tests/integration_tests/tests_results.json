@@ -4623,5 +4623,11 @@
       "status": 400,
       "message": "Modification of an element created by another user is forbidden."
     }
+  ],
+  "test_user_cant_delete_another_users_certainty": [
+    {
+      "status": 400,
+      "message": "Removal of an element created by another user is forbidden."
+    }
   ]
 }

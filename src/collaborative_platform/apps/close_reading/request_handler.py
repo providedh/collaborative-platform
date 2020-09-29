@@ -637,7 +637,13 @@ class RequestHandler:
         certainty_xml_id = request['edited_element_id']
 
         try:
+            self.__db_handler.check_certainty_permissions(certainty_xml_id)
+
             self.__db_handler.delete_certainty(certainty_xml_id)
+
+        except Forbidden:
+            raise BadRequest("Removal of an element created by another user is forbidden.")
+
         except UnsavedElement:
             raise BadRequest("Deleting an unsaved element is forbidden. Instead of deleting, discard "
                              "the operation that created this element.")

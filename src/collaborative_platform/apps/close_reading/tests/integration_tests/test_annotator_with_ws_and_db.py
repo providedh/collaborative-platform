@@ -5320,7 +5320,34 @@ class TestAnnotatorWithWsAndDb:
         await communicator.disconnect()
 
     async def test_user_cant_delete_another_users_certainty(self):
-        pass
+        test_name = inspect.currentframe().f_code.co_name
+
+        project_id = 1
+        file_id = 1
+        user_id = 2
+
+        communicator = get_communicator(project_id, file_id, user_id)
+
+        await communicator.connect()
+        await communicator.receive_json_from()
+
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'DELETE',
+                    'element_type': 'certainty',
+                    'edited_element_id': 'certainty-0'
+                }
+            ]
+        }
+        request_nr = 0
+
+        await communicator.send_json_to(request)
+        response = await communicator.receive_json_from()
+        verify_response(test_name, response, request_nr)
+
+        await communicator.disconnect()
 
 
 def get_communicator(project_id, file_id, user_id=None):
