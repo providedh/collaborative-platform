@@ -254,7 +254,9 @@ img#process{width: 30em;}
     <div class="col-lg-6">
       <h4 class="mb-3">Working in the platform</h4>
       <p class="d-inline ml-4 explanation">
-        Big part of the work on the platform revolves around an upload-annotate-analize-assess process where:
+        Big part of the work on the platform revolves around a process of uploading new files, annotating entities
+        and uncertainty, analyzing the current state of the corpus and assessing how other's work and the
+        platform's proposals affect the project. In this work cycle:
         <ul>
           <li>
             As entities and their properties get annotated richer visualizations allow for greater insight
@@ -265,13 +267,14 @@ img#process{width: 30em;}
             uncertainty annotation, TEI statistics and the of dashboards prove usefull for managing it.
           </li>
           <li>
-            [TODO]
+            As the corpus increases in size and possibly, the same entity gets annotated separately accross files,
+            the disambiguator will help finding these; thus reducing the amount of entities to handle, and helping to
+            link documents referring to the same thing.
           </li>
         </ul>
       </p>
-      <p class="d-inline ml-4 explanation">
-        This process can be summarized as below:
-      </p>
+    </div>
+    <div class="col-lg-6 d-flex justify-content-center">
       <img id="process" src="{% static "help/img/work_process.svg" %}" width=200 height=200 alt="..." class="img-thumbnail ml-4 mt-4 border-0 d-block">
     </div>
   </div>
