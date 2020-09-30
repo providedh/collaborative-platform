@@ -5,10 +5,14 @@ export default function CertaintyStyler (id, annotations, context, css) {
   const { user, configuration } = context
 
   const colorSelector = `.renderCertainty.colorCertainty #${id}`
+  const withEntitySelector = `.renderEntity.renderCertainty #${id}`
   const greySelector = `.renderCertainty #${id}`
 
   const greyBeforeRule = scheme.greyBefore(id, annotations, user, css, colorForUncertainty, configuration.taxonomy)
-  css.addBeforeRule(greySelector, greyBeforeRule)
+  css.addBeforeRule(withEntitySelector, greyBeforeRule)
+
+  const noEntityBeforeRule = scheme.noEntityBefore(id, annotations, user, css, colorForUncertainty, configuration.taxonomy)
+  css.addBeforeRule(greySelector, noEntityBeforeRule)
 
   const greyContentRule = scheme.greyContent(id, annotations, user, css, colorForUncertainty, configuration.taxonomy)
   css.addRule(greySelector, greyContentRule)
