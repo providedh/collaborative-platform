@@ -51,7 +51,7 @@ def proposals(request: HttpRequest, project_id: int):
             ups = UnificationProposal.objects.filter(entity__file__project=project_id, decided=False).order_by(
                 "-confidence").values_list("id", flat=True)
         except UnificationProposal.DoesNotExist:
-            return JsonResponse({"message": "There are no proposals to show."})
+            ups = []
 
         return JsonResponse(list(ups), safe=False)
 

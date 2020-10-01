@@ -47,11 +47,14 @@ def queue_task(project_id: int, type: str):
 
 def abort_pending(project_id: int, type: str):
     try:
-        CeleryTask.objects.filter(
+        tasks = CeleryTask.objects.filter(
             project_id=project_id,
             type=type,
             status="Q"
-        ).delete()
+        ).all()
+        for task in tasks:
+            task.status = "A"
+        CeleryTask.objects.bulk_update(tasks)
     except CeleryTask.DoesNotExist:
         return JsonResponse({"message": "No  pending jobs to delete"}, status=304)
     else:
