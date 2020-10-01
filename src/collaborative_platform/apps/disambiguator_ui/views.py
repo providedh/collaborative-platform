@@ -62,6 +62,6 @@ def get_entities(project) -> dict:
         'color': entity.color,
         'icon': entity.icon,
         'listable': entity.body_list,
-    } for entity in project.taxonomy.entities.all()}
+    } for entity in project.taxonomy.entities_schemas.all()}
 
     return entities
