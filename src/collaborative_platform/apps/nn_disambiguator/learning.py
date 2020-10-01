@@ -1,4 +1,5 @@
 import traceback
+from time import sleep
 
 from celery import shared_task
 from sklearn.neural_network import MLPClassifier
@@ -20,6 +21,7 @@ passes = {
 
 @shared_task(bind=True, name='nn_disambiguator.learn')
 def learn_unprocessed(self, project_id: int):
+    sleep(5)
     try:
         task = CeleryTask.objects.get(project_id=project_id, task_id=self.request.id, status="S")
         task.status = "R"

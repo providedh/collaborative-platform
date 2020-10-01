@@ -78,8 +78,7 @@ def run_queued_tasks():
             celery_task = tasks[task.type].delay(task.project_id)
             task.task_id = celery_task.task_id
             task.status = "S"
-
-        CeleryTask.objects.bulk_update(queued_tasks)
+            task.save()
 
     except Exception as e:
         traceback.print_exc()
