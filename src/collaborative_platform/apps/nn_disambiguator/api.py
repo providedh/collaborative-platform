@@ -15,10 +15,13 @@ from apps.views_decorators import objects_exists, user_has_access
 @user_has_access('RW')
 def calculations(request: HttpRequest, project_id: int):
     if request.method == "POST":
-        if request.POST["action"] == "start":
+        data = json.loads(request.body)
+        if data.get("action") == "start":
             return queue_task(project_id, "P")
-        elif request.POST["action"] == "abort":
+        elif data.get("action") == "abort":
             return abort_pending(project_id, "P")
+        else:
+            return HttpResponseBadRequest("No action parameter!")
 
     elif request.method == "GET":
         try:
@@ -30,7 +33,7 @@ def calculations(request: HttpRequest, project_id: int):
         return HttpResponseBadRequest()
 
 
-@csrf_exempt
+@csrf_exempt  # TODO: REMOVE
 @login_required
 @objects_exists
 @user_has_access('RW')
