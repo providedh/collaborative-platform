@@ -8,23 +8,34 @@ const fetchPeriod = 1000 * 60 * 10
 
 function useJobFetch(projectId, setJobs) {
   useEffect(() => {
-    API.getDisambiguatorStatus(projectId)
-      .then((a,b) => console.log(a, b))
-      .catch(err => console.error('Failed to retrieve jobs for project ' + projectId))
+    fetchJobs(projectId, setJobs)
     setTimeout(() => useJobFetch(projectId, setJobs), fetchPeriod)
   }, [])
 }
 
-function startAnalysis(projectId) {
-  API.updateDisambiguatorStatus(projectId, {}, {action: 'start'})
-    .then((a,b) => console.log(a, b))
-    .catch(err => console.error('Failed to start analysis job for project ' + projectId))
+function fetchJobs(projectId, setJobs) {
+  API.getDisambiguatorStatus(projectId)
+    .then((jobs) => {
+      setJobs(jobs);
+    })
+    .catch(err => console.error('Failed to retrieve jobs for project ' + projectId))
 }
 
-function abortAnalysis(projectId) {
+function startAnalysis(projectId, setJobs) {
+  API.updateDisambiguatorStatus(projectId, {}, {action: 'start'})
+    .then(() => {
+      console.log('hi')
+      setTimeout(() => fetchJobs(projectId, setJobs), 500)
+    })
+    .catch(err => console.error('Failed to start analysis job for project ' + projectId, err))
+}
+
+function abortAnalysis(projectId, setJobs) {
   API.updateDisambiguatorStatus(projectId, {}, {action: 'abort'})
-    .then((a,b) => console.log(a, b))
-    .catch(err => console.error('Failed to abort analysis job for project ' + projectId))
+    .then(() => {
+      fetchJobs(projectId, setJobs)
+    })
+    .catch(err => console.error('Failed to abort analysis job for project ' + projectId, err))
 }
 
 function JobStatus({job}) {
@@ -50,13 +61,13 @@ function JobStatus({job}) {
   </div>
 }
 
-function JobAction({job, projectId}) {
+function JobAction({job, setJobs, projectId}) {
   let action = ''
   if (['Queued', '_Started', '_Running'].includes(job?.status)) {
     action = (
       <button
           type="button"
-          onClick={() => abortAnalysis(projectId)}
+          onClick={() => abortAnalysis(projectId, setJobs)}
           className="btn ml-3 btn-outline-danger">
         Abort analysis
       </button>
@@ -65,7 +76,7 @@ function JobAction({job, projectId}) {
     action = (
       <button
           type="button"
-          onClick={() => startAnalysis(projectId)}
+          onClick={() => startAnalysis(projectId, setJobs)}
           className="btn ml-3 btn-outline-primary">
         Run new analysis
       </button>
@@ -87,7 +98,7 @@ export default function Jobs ({projectId, ...restProps}) {
   return (<div className={styles.jobs}>
     <div className="d-flex">
       <JobStatus job={jobs.length === 0 ? null : jobs[jobs.length-1]}/>
-      <JobAction projectId={projectId} job={jobs.length === 0 ? null : jobs[jobs.length-1]}/>
+      <JobAction projectId={projectId} setJobs={setJobs} job={jobs.length === 0 ? null : jobs[jobs.length-1]}/>
     </div>
     <button
       type="button"
