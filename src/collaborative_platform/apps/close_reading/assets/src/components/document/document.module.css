@@ -27,3 +27,18 @@
    font-weight: 900;
    content: attr(dataicon)
 }
+
+.document br {
+    display: block;
+}
+
+.document p {
+    display: block;
+}
+.document list item {
+    display: list-item;
+}
+.document list {
+    display: block;
+    margin: 0 2em;
+}
