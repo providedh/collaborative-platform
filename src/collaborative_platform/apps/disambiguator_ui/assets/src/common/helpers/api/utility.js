@@ -52,6 +52,7 @@ export default (function (args) {
       headers: {
         'Content-Type': 'application/json',
         'X-CSRF-TOKEN': csrfToken,
+        'X-CSRFToken': csrfToken,
       },
       redirect: 'follow',
       referrer: 'no-referrer' // no-referrer, *client
@@ -67,7 +68,7 @@ export default (function (args) {
           if (response.ok === false){ throw {status: response.status} }
           response.json()
             .then(json => { resolve(json) })
-            .catch(err => { throw {err} })
+            .catch(err => { resolve(response) })
         })
         .catch(err => { reject(err) })
     })

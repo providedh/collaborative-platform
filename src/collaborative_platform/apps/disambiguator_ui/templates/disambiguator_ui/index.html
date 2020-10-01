@@ -29,6 +29,8 @@
 </ul>
 {% endblock %}
 
+{% csrf_token %}
+
 {% block content %}
 {% load bottom_hint %}
 {% bottom_hint "What are unifications?" %}
