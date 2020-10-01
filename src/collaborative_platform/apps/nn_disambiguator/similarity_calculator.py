@@ -190,10 +190,4 @@ class SimilarityCalculator:
         files_features = self.__calculate_files_creation_dates_and_places(e1lv, e2lv)
         sims.extend(files_features)
 
-        expected_length = self.calculate_features_vector_length(
-            EntitySchema.objects.get(name=e1.type, taxonomy__project=e1.file.project))
-        print(f"Expected: {expected_length} — actual: {len(sims)}")
-        if len(sims) != expected_length:
-            print("Oi! I got yourgh modafokin ass!")
-
         return sims
