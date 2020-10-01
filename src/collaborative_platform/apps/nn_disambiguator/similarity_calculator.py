@@ -1,5 +1,6 @@
 import itertools
 import sys
+from pprint import pprint
 from typing import List, Tuple
 
 from lxml import etree
@@ -89,7 +90,8 @@ class SimilarityCalculator:
         v += 2
         return v
 
-    def __calculate_other_entities_avg_similarity(self, e1v: EntityVersion, e2v: EntityVersion, files_sim: float) -> \
+    def __calculate_other_entities_avg_similarity(self, e1v: EntityVersion, e2v: EntityVersion,
+                                                  files_text_sim: float) -> \
             List[float]:
         schemas = e1v.file_version.file.project.taxonomy.entities_schemas.all()
         sims = []
@@ -103,24 +105,31 @@ class SimilarityCalculator:
             model: MLPClassifier = clf.get_model()
             scaler: StandardScaler = clf.get_scaler()
 
-            try:
-                model.predict([0 for _ in range(self.calculate_features_vector_length(schema))])
-            except NotFittedError:
-                sims.append(0)
-                continue
-
             file_1_entities = e1v.file_version.entityversion_set.filter(entity__type=schema.name)
             file_2_entities = e2v.file_version.entityversion_set.filter(entity__type=schema.name)
 
             pairs = set(itertools.product(file_1_entities, file_2_entities))
-            pairs.remove((e1v, e2v))
+
+            try:
+                pairs.remove((e1v, e2v))
+            except KeyError:
+                pass
+
+            if len(pairs) == 0:
+                sims.append(0)
+                continue
 
             avg = 0
             for _e1v, _e2v in pairs:
                 fv = self.__calculate_similarity(_e1v, _e2v)
-                fv.append(files_sim)
-                fv.extend([0 for _ in range(_e1v.file_version.file.project.taxonomy.entities_schemas.count())])
-                fv = scaler.transform([fv])
+                fv.append(files_text_sim)
+                fv.extend([0 for _ in range(_e1v.file_version.file.project.taxonomy.entities_schemas.count() - 1)])
+                fv.extend(self.__calculate_files_creation_dates_and_places(_e1v, _e2v))
+                try:
+                    fv = scaler.transform([fv])
+                except ValueError:
+                    print(schema)
+                    raise ValueError()
                 avg += model.predict_proba(fv)[0][1]
             avg /= len(pairs)
             sims.append(avg)

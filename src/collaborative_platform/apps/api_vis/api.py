@@ -4,6 +4,7 @@ from json.decoder import JSONDecodeError
 
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 
 from apps.api_vis.helpers import parse_query_string
 from apps.api_vis.request_handler import RequestHandler
@@ -12,6 +13,7 @@ from apps.exceptions import BadRequest, NotModified
 from apps.views_decorators import objects_exists, user_has_access
 
 
+@csrf_exempt
 @login_required
 @objects_exists
 @user_has_access('RW')
@@ -214,6 +216,7 @@ def file_unbound_entities(request, project_id, file_id):
             return JsonResponse(response, status=BadRequest.status_code)
 
 
+@csrf_exempt
 @login_required
 @objects_exists
 @user_has_access('RW')
@@ -227,8 +230,8 @@ def commits(request, project_id):
             request_handler = RequestHandler(project_id, request.user)
             response = request_handler.create_commit(request_data)
 
-            from apps.nn_disambiguator.learning import learn_unprocessed
-            learn_unprocessed.delay(project_id)
+            from apps.nn_disambiguator.helpers import queue_task
+            queue_task(project_id, type="L")
 
             return JsonResponse(response)
 

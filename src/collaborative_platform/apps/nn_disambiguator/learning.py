@@ -1,3 +1,5 @@
+import traceback
+
 from celery import shared_task
 from sklearn.neural_network import MLPClassifier
 from sklearn.preprocessing import StandardScaler
@@ -18,20 +20,25 @@ passes = {
 
 @shared_task(bind=True, name='nn_disambiguator.learn')
 def learn_unprocessed(self, project_id: int):
-    task = CeleryTask.objects.get(project_id=project_id, task_id=self.request.id, status="Q")
-    task.status = "R"
-    task.save()
-
     try:
-        project = Project.objects.get(id=project_id)
-        learn_unprocessed_unifications(project)
-        learn_unprocessed_proposals(project)
-    except Project.DoesNotExist:
-        task.status = "X"
+        task = CeleryTask.objects.get(project_id=project_id, task_id=self.request.id, status="S")
+        task.status = "R"
         task.save()
 
-    task.status = "F"
-    task.save()
+        try:
+            project = Project.objects.get(id=project_id)
+            learn_unprocessed_unifications(project)
+            learn_unprocessed_proposals(project)
+        except Exception:
+            traceback.print_exc()
+            task.status = "X"
+            task.save()
+
+        task.status = "F"
+        task.save()
+
+    except Exception:
+        traceback.print_exc()
 
 
 def learn_unprocessed_unifications(project: Project):
@@ -40,7 +47,7 @@ def learn_unprocessed_unifications(project: Project):
         schemas = project.taxonomy.entities_schemas.all()
         for schema in schemas:
             unifications = project.unifications.filter(learned=False,
-                                                       entitiy__type=schema.name,
+                                                       entity__type=schema.name,
                                                        created_in_commit__isnull=False).all()
             if unifications:
                 try:
@@ -59,9 +66,11 @@ def learn_unprocessed_unifications(project: Project):
                     _ids.remove(entity1.id)
                     for entity2 in Entity.objects.filter(id__in=_ids).all():
                         positive = unification.deleted_by_id is None and \
-                                   unification.clique.unifications.get(entity2=entity2).deleted_by_id is None
+                                   unification.clique.unifications.get(entity=entity2).deleted_by_id is None
                         learn_entity_pair(entity1, entity2, data_processor, model, scaler, unification.certainty,
                                           positive)
+                    unification.learned = True
+                    unification.save()
 
                 clf.set_model(model)
                 clf.set_scaler(scaler)
@@ -98,6 +107,8 @@ def learn_unprocessed_proposals(project: Project):
                     elif proposal.entity2 is not None:
                         learn_entity_pair(entity1, proposal.entity2, data_processor, model, scaler,
                                           proposal.user_confidence, proposal.decision)
+                    proposal.learned = True
+                    proposal.save()
 
                 clf.set_model(model)
                 clf.set_scaler(scaler)

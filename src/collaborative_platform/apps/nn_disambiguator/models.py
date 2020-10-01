@@ -111,5 +111,5 @@ class CeleryTask(Model):
     project = ForeignKey(Project, on_delete=CASCADE, related_name="tasks")
     status = CharField(max_length=8, default="Q")
     type = CharField(max_length=7, choices=types)
-    task_id = IntegerField()
+    task_id = CharField(max_length=36, null=True)
     created = DateTimeField(auto_now=True)

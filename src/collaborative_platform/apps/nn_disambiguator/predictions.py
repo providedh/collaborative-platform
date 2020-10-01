@@ -33,21 +33,21 @@ def generate_entities_pairs(schema: EntitySchema) -> List[Tuple[Entity, Entity]]
     return pairs_obj
 
 
-def generate_entitiy_clique_pairs(schema: EntitySchema) -> List[Tuple[Entity, Clique]]:
+def generate_entity_clique_pairs(schema: EntitySchema) -> List[Tuple[Entity, Clique]]:
     entities = Entity.objects.filter(type=schema.name, file__project=schema.taxonomy.project).all()
     cliques = Clique.objects.filter(type=schema.name, project=schema.taxonomy.project).all()
 
     pairs = set(product(entities, cliques))
 
     existing_unifications = Unification.objects.filter(project=schema.taxonomy.project, clique__type=schema.name)
-    existing_unifications_pairs = [(u.entitiy, u.clique) for u in existing_unifications]
+    existing_unifications_pairs = [(u.entity, u.clique) for u in existing_unifications]
 
     pairs.difference_update(existing_unifications_pairs)
 
     return list(pairs)
 
 
-def calculate_entitiy_clique_sim_vector(entity: Entity, clique: Clique, data_processor: SimilarityCalculator) -> List[
+def calculate_entity_clique_sim_vector(entity: Entity, clique: Clique, data_processor: SimilarityCalculator) -> List[
     float]:
     if entity.id in clique.unifications.values_list("entity_id", flat=True):
         raise ValueError("Calculating similarity of entity with clique containing it.")
@@ -61,13 +61,13 @@ def calculate_entitiy_clique_sim_vector(entity: Entity, clique: Clique, data_pro
 
 
 def make_entities_cliques_proposals(data_processor, model, scaler, schema):
-    pairs = generate_entitiy_clique_pairs(schema)
-    sim_vecs = [calculate_entitiy_clique_sim_vector(e, c, data_processor) for e, c in pairs]
+    pairs = generate_entity_clique_pairs(schema)
+    sim_vecs = [calculate_entity_clique_sim_vector(e, c, data_processor) for e, c in pairs]
     sim_vecs = scaler.transform(sim_vecs)
     results = [p[1] for p in model.predict_proba(sim_vecs)]
     proposals = []
     for i in range(len(pairs)):
-        if results[i] > 0.7:  # TODO: make this threshold configurable?
+        if results[i] > 0.0:  # TODO: make this threshold configurable?
             proposals.append((pairs[i], results[i]))
     UnificationProposal.objects.bulk_create(
         UnificationProposal(
@@ -85,7 +85,7 @@ def make_entities_proposals(data_processor, model, scaler, schema):
     results = [p[1] for p in model.predict_proba(sim_vecs)]
     proposals = []
     for i in range(len(pairs)):
-        if results[i] > 0.7:  # TODO: make this threshold configurable?
+        if results[i] > 0.0:  # TODO: make this threshold configurable?
             proposals.append((pairs[i], results[i]))
     UnificationProposal.objects.bulk_create(
         UnificationProposal(
@@ -107,7 +107,7 @@ def reset_undecided_proposals(project_id: int):
 
 @shared_task(bind=True, name='nn_disambiguator.predict')
 def calculate_proposals(self, project_id: int):
-    task = CeleryTask.objects.get(project_id=project_id, task_id=self.request.id, status="Q")
+    task = CeleryTask.objects.get(project_id=project_id, task_id=self.request.id, status="S")
     task.status = "R"
     task.save()
 
