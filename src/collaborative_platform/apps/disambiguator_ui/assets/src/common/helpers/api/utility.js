@@ -24,26 +24,25 @@ export default (function (args) {
   }
 
   function _createCall (method, url, data = {}) {
-    /* To use when injecting CSRF coockie for DJango login
+    // To use when injecting CSRF coockie for DJango login
 
-      function getCookie (name) {
-        let cookieValue = null
-        if (document.cookie && document.cookie !== '') {
-          const cookies = document.cookie.split(';')
-          for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim()
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-              cookieValue = decodeURIComponent(cookie.substring(name.length + 1))
-              break
-            }
+    function getCookie (name) {
+      let cookieValue = null
+      if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';')
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim()
+          // Does this cookie string begin with the name we want?
+          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1))
+            break
           }
         }
-        return cookieValue
       }
+      return cookieValue
+    }
 
-      const csrftoken = getCookie('csrftoken');
-    */
+    const csrfToken = getCookie('csrftoken');
 
     const fetchBody = {
       method: method,
@@ -51,7 +50,8 @@ export default (function (args) {
       cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
       credentials: 'same-origin', // include, *same-origin, omit
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': csrfToken,
       },
       redirect: 'follow',
       referrer: 'no-referrer' // no-referrer, *client
