@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from django.test import Client
 
 from apps.api_vis.models import Clique, Commit, Unification
+from apps.files_management.tests.integration_tests.test_file_handling_with_hd_and_db import download_file
 from apps.projects.models import Project
 
 
@@ -863,6 +864,21 @@ class TestApiVisWithDb:
         }
 
         assert response_content == expected_response
+
+    def test_certainties_generated_from_unifications_are_properly_appended(self):
+        user_id = 2
+        file_id = 1
+
+        client = Client()
+        user = User.objects.get(id=user_id)
+        client.force_login(user)
+
+        expected_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'expected_files',
+                                          'certainties_generated_from_unifications_are_properly_appended__expected.xml')
+        expected_xml = read_file(expected_file_path)
+        result_xml = download_file(client, file_id)
+
+        assert result_xml == expected_xml
 
 
 def add_qs_parameters(url, qs_parameters):

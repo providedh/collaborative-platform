@@ -702,7 +702,7 @@
   "fields": {
     "file": 1,
     "xml_id_base": "certainty",
-    "xml_id_number": 5
+    "xml_id_number": 10
   }
 },
 {
@@ -801,7 +801,7 @@
   "fields": {
     "file": 2,
     "xml_id_base": "certainty",
-    "xml_id_number": 3
+    "xml_id_number": 8
   }
 },
 {
@@ -900,7 +900,7 @@
   "fields": {
     "file": 3,
     "xml_id_base": "certainty",
-    "xml_id_number": 2
+    "xml_id_number": 4
   }
 },
 {
@@ -4374,7 +4374,7 @@
     "deleted_in_commit": null,
     "certainty": "high",
     "description": "",
-    "xml_id": "",
+    "xml_id": "certainty-5",
     "categories": []
   }
 },
@@ -4395,7 +4395,7 @@
     "deleted_in_commit": 5,
     "certainty": "high",
     "description": "",
-    "xml_id": "",
+    "xml_id": "certainty-3",
     "categories": [
       2
     ]
@@ -4418,7 +4418,7 @@
     "deleted_in_commit": null,
     "certainty": "high",
     "description": "",
-    "xml_id": "",
+    "xml_id": "certainty-4",
     "categories": [
       2
     ]
@@ -4441,7 +4441,7 @@
     "deleted_in_commit": null,
     "certainty": "high",
     "description": "",
-    "xml_id": "",
+    "xml_id": "certainty-2",
     "categories": [
       2
     ]
@@ -4464,7 +4464,7 @@
     "deleted_in_commit": null,
     "certainty": "medium",
     "description": "",
-    "xml_id": "",
+    "xml_id": "certainty-3",
     "categories": [
       2
     ]
@@ -4487,7 +4487,7 @@
     "deleted_in_commit": null,
     "certainty": "medium",
     "description": "",
-    "xml_id": "",
+    "xml_id": "certainty-6",
     "categories": [
       2
     ]
@@ -4510,7 +4510,7 @@
     "deleted_in_commit": null,
     "certainty": "medium",
     "description": "",
-    "xml_id": "",
+    "xml_id": "certainty-7",
     "categories": [
       2
     ]
@@ -4533,7 +4533,7 @@
     "deleted_in_commit": null,
     "certainty": "medium",
     "description": "",
-    "xml_id": "",
+    "xml_id": "certainty-5",
     "categories": [
       2
     ]
@@ -4556,7 +4556,7 @@
     "deleted_in_commit": 5,
     "certainty": "low",
     "description": "",
-    "xml_id": "",
+    "xml_id": "certainty-8",
     "categories": [
       2
     ]
@@ -4579,7 +4579,7 @@
     "deleted_in_commit": 5,
     "certainty": "low",
     "description": "",
-    "xml_id": "",
+    "xml_id": "certainty-6",
     "categories": [
       2
     ]
@@ -4602,7 +4602,7 @@
     "deleted_in_commit": null,
     "certainty": "low",
     "description": "",
-    "xml_id": "",
+    "xml_id": "certainty-9",
     "categories": [
       2
     ]
@@ -4625,7 +4625,7 @@
     "deleted_in_commit": null,
     "certainty": "low",
     "description": "",
-    "xml_id": "",
+    "xml_id": "certainty-7",
     "categories": [
       2
     ]

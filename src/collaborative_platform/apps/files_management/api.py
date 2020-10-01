@@ -90,7 +90,7 @@ def __process_file(file, directory, user):
             __remove_file(file_object)
         upload_status.update({'uploaded': False, 'migrated': False, 'message': str(exception)})
 
-        FilesManagementLogger.log_uploading_file_error(old_file_name, str(exception))
+        FilesManagementLogger().log_uploading_file_error(old_file_name, str(exception))
 
         return upload_status
 

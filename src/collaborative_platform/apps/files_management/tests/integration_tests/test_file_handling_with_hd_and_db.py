@@ -144,8 +144,13 @@ def upload_file(client, path, directory_id):
         client.post(url, payload)
 
 
-def download_file(client, file_id, version):
-    url = f'/api/files/{file_id}/version/{version}/download/'
+def download_file(client, file_id, version=None):
+    if version:
+        url = f'/api/files/{file_id}/version/{version}/download/'
+
+    else:
+        url = f'/api/files/{file_id}/download'
+
     response = client.get(url)
     file = response.content.decode('utf-8')
 

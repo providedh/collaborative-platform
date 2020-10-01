@@ -7,7 +7,7 @@ from apps.api_vis.models import Certainty, Clique, Commit, Entity, EntityVersion
 from apps.api_vis.helpers import parse_project_version
 from apps.api_vis.request_validator import validate_keys_and_types
 from apps.exceptions import BadRequest, NotModified
-from apps.files_management.models import Directory, File, FileVersion
+from apps.files_management.models import Directory, File, FileMaxXmlIds, FileVersion
 from apps.projects.models import ProjectVersion, UncertaintyCategory
 
 
@@ -198,13 +198,16 @@ class DbHandler:
             file=entity.file
         )
 
+        xml_id = self.get_next_xml_id(entity.file, 'certainty')
+
         unification = Unification.objects.create(
             project=project_version.project,
             entity=entity,
             clique=clique,
             certainty=certainty,
             created_by=self.__user,
-            created_in_file_version=file_version
+            created_in_file_version=file_version,
+            xml_id=xml_id,
         )
 
         if categories:
@@ -443,6 +446,18 @@ class DbHandler:
         unifications_to_delete = unifications_to_delete.order_by('id')
 
         return unifications_to_delete
+
+    @staticmethod
+    def get_next_xml_id(file, entity_type):
+        entity_max_xml_id = FileMaxXmlIds.objects.get(
+            file=file,
+            xml_id_base=entity_type,
+        )
+
+        xml_id_nr = entity_max_xml_id.get_next_number()
+        xml_id = f'{entity_type}-{xml_id_nr}'
+
+        return xml_id
 
     @staticmethod
     def __get_entity_version(entity, project_version):
