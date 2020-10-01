@@ -68,7 +68,7 @@ export default (function (args) {
           if (response.ok === false){ throw {status: response.status} }
           response.json()
             .then(json => { resolve(json) })
-            .catch(err => { throw {err} })
+            .catch(err => { resolve(response) })
         })
         .catch(err => { reject(err) })
     })
