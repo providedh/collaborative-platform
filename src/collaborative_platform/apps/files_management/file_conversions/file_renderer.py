@@ -103,6 +103,8 @@ class FileRenderer:
             entity__type=entity_type,
         )
 
+        entities_versions = entities_versions.order_by('id')
+
         return entities_versions
 
     def __create_entities_elements(self, entities_versions, custom=False):
@@ -162,7 +164,7 @@ class FileRenderer:
         return xml_content
 
     def __append_certainties(self):
-        certainties = self.__get_certainties_from_db().order_by('id')
+        certainties = self.__get_certainties_from_db()
 
         if certainties:
             elements = self.__create_certainties_elements(certainties)
@@ -176,6 +178,8 @@ class FileRenderer:
         certainties = Certainty.objects.filter(
             file_version=self.__file_version
         )
+
+        certainties = certainties.order_by('id')
 
         return certainties
 
@@ -230,7 +234,7 @@ class FileRenderer:
         return certainty_element
 
     def __append_unifications(self):
-        unifications = self.__get_unifications_from_db().order_by('id')
+        unifications = self.__get_unifications_from_db()
         certainties = self.__convert_unifications_to_certainties(unifications)
 
     def __get_unifications_from_db(self):
@@ -240,6 +244,8 @@ class FileRenderer:
             created_in_file_version__number__lte=self.__file_version.number,
             created_in_file_version__file=self.__file_version.file,
         )
+
+        unifications = unifications.order_by('id')
 
         return unifications
 
@@ -275,6 +281,7 @@ class FileRenderer:
     @staticmethod
     def __get_users_from_db(users_ids):
         users = User.objects.filter(id__in=users_ids)
+        users = users.order_by('id')
 
         return users
 

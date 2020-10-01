@@ -7,7 +7,7 @@ from apps.api_vis.models import Certainty, Entity, EntityProperty, EntityVersion
 from apps.close_reading.enums import ElementTypes
 from apps.close_reading.models import AnnotatingBodyContent, Operation
 from apps.close_reading.response_generator import get_custom_entities_types
-from apps.exceptions import BadParameters, UnsavedElement
+from apps.exceptions import BadParameters, Forbidden, UnsavedElement
 from apps.files_management.api import clone_db_objects
 from apps.files_management.helpers import create_uploaded_file_object_from_string, hash_file
 from apps.files_management.models import File, FileMaxXmlIds, FileVersion
@@ -318,6 +318,21 @@ class DbHandler:
         certainty = self.__get_certainty_from_db(certainty_xml_id, saved=True)
         certainty.deleted_in_file_version = new_file_version
         certainty.save()
+
+    def check_entity_permissions(self, entity_xml_id):
+        entity = self.__get_entity_from_db(entity_xml_id)
+
+        if entity.created_by != self.__user:
+            raise Forbidden
+
+    def check_certainty_permissions(self, certainty_xml_id):
+        certainty = self.__get_certainty_from_db(certainty_xml_id, saved=True)
+
+        if not certainty:
+            certainty = self.__get_certainty_from_db(certainty_xml_id, saved=False)
+
+        if certainty.created_by != self.__user:
+            raise Forbidden
 
     @staticmethod
     def get_file_from_db(file_id):

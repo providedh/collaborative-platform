@@ -1,6 +1,6 @@
 .document{
   background-color: white;
-  line-height: 2.3em;
+  line-height: 2.5em;
   min-height: 80vh;
   margin-top: 0 !important;
 }
@@ -26,4 +26,19 @@
    vertical-align: middle;
    font-weight: 900;
    content: attr(dataicon)
+}
+
+.document br {
+    display: block;
+}
+
+.document p {
+    display: block;
+}
+.document list item {
+    display: list-item;
+}
+.document list {
+    display: block;
+    margin: 0 2em;
 }

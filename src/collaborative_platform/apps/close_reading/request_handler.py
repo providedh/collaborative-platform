@@ -2,7 +2,7 @@ from apps.close_reading.enums import ElementTypes
 from apps.close_reading.db_handler import DbHandler
 from apps.close_reading.response_generator import get_listable_entities_types
 from apps.close_reading.xml_handler import XmlHandler
-from apps.exceptions import BadRequest, UnsavedElement
+from apps.exceptions import BadRequest, Forbidden, UnsavedElement
 
 
 class RequestHandler:
@@ -182,15 +182,19 @@ class RequestHandler:
         self.__operations_results.append(tag_xml_id)
 
     def __move_tag(self, request):
-        # TODO: Add verification if user has rights to edit a tag
-        # TODO: Add verification if tag wasn't moved by another user in the meantime
-
         new_start_pos = request['parameters']['start_pos']
         new_end_pos = request['parameters']['end_pos']
         tag_xml_id = request['edited_element_id']
 
         body_content = self.__db_handler.get_body_content()
-        body_content, saved = self.__xml_handler.move_tag(body_content, new_start_pos, new_end_pos, tag_xml_id)
+
+        try:
+            self.__xml_handler.check_permissions(body_content, tag_xml_id)
+            body_content, saved = self.__xml_handler.move_tag(body_content, new_start_pos, new_end_pos, tag_xml_id)
+
+        except Forbidden:
+            raise BadRequest("Modification of an element created by another user is forbidden.")
+
         self.__db_handler.set_body_content(body_content)
 
         self.__operations_results.append(tag_xml_id)
@@ -198,14 +202,17 @@ class RequestHandler:
         return saved
 
     def __delete_tag(self, request):
-        # TODO: Add verification if user has rights to delete a tag
-
         tag_xml_id = request['edited_element_id']
 
         body_content = self.__db_handler.get_body_content()
 
         try:
+            self.__xml_handler.check_permissions(body_content, tag_xml_id)
             body_content = self.__xml_handler.delete_tag(body_content, tag_xml_id)
+
+        except Forbidden:
+            raise BadRequest("Removal of an element created by another user is forbidden.")
+
         except UnsavedElement:
             raise BadRequest("Deleting an unsaved element is forbidden. Instead of deleting, discard "
                              "the operation that created this element.")
@@ -290,100 +297,132 @@ class RequestHandler:
         old_entity_type = self.__db_handler.get_entity_type(old_entity_xml_id)
 
         if not new_entity_xml_id and new_entity_type in self.__listable_entities_types:
-            new_entity_xml_id = self.__db_handler.add_entity(new_entity_type)
-
-            new_tag = 'name'
-            new_tag_xml_id = self.__get_new_tag_xml_id(tag_xml_id, new_tag)
-
             body_content = self.__db_handler.get_body_content()
-            tag_is_an_entity = self.__xml_handler.check_if_tag_is_an_entity(body_content, tag_xml_id)
-            body_content, saved = self.__xml_handler.modify_reference_to_entity(body_content, tag_xml_id,
-                                                                                new_entity_xml_id, old_entity_xml_id,
-                                                                                new_tag, new_tag_xml_id)
 
-            if old_entity_type not in self.__listable_entities_types and tag_is_an_entity:
-                old_entity_properties = self.__db_handler.get_entity_properties_values(old_entity_xml_id,
-                                                                                       include_unsaved=True)
+            try:
+                self.__xml_handler.check_permissions(body_content, tag_xml_id)
 
-                body_content = self.__xml_handler.delete_entity_properties(body_content, new_tag_xml_id,
-                                                                           old_entity_properties)
+                new_entity_xml_id = self.__db_handler.add_entity(new_entity_type)
 
-            self.__db_handler.set_body_content(body_content)
+                new_tag = 'name'
+                new_tag_xml_id = self.__get_new_tag_xml_id(tag_xml_id, new_tag)
 
-            last_reference = self.__xml_handler.check_if_last_reference(body_content, old_entity_xml_id)
+                tag_is_an_entity = self.__xml_handler.check_if_tag_is_an_entity(body_content, tag_xml_id)
+                body_content, saved = self.__xml_handler.modify_reference_to_entity(body_content, tag_xml_id,
+                                                                                    new_entity_xml_id,
+                                                                                    old_entity_xml_id,
+                                                                                    new_tag, new_tag_xml_id)
 
-            if last_reference:
-                self.__db_handler.delete_entity(old_entity_xml_id)
+                if old_entity_type not in self.__listable_entities_types and tag_is_an_entity:
+                    old_entity_properties = self.__db_handler.get_entity_properties_values(old_entity_xml_id,
+                                                                                           include_unsaved=True)
+
+                    body_content = self.__xml_handler.delete_entity_properties(body_content, new_tag_xml_id,
+                                                                               old_entity_properties)
+
+                self.__db_handler.set_body_content(body_content)
+
+                last_reference = self.__xml_handler.check_if_last_reference(body_content, old_entity_xml_id)
+
+                if last_reference:
+                    self.__db_handler.delete_entity(old_entity_xml_id)
+
+            except Forbidden:
+                raise BadRequest("Modification of an element created by another user is forbidden.")
 
         elif not new_entity_xml_id and new_entity_type not in self.__listable_entities_types:
-            new_entity_xml_id = self.__db_handler.add_entity(new_entity_type)
-
             body_content = self.__db_handler.get_body_content()
-            tag_is_an_entity = self.__xml_handler.check_if_tag_is_an_entity(body_content, tag_xml_id)
-            body_content, saved = self.__xml_handler.modify_reference_to_entity(body_content, tag_xml_id,
-                                                                                new_entity_xml_id, old_entity_xml_id,
-                                                                                new_entity_type, new_entity_xml_id)
 
-            if old_entity_type not in self.__listable_entities_types and tag_is_an_entity:
-                old_entity_properties = self.__db_handler.get_entity_properties_values(old_entity_xml_id,
-                                                                                       include_unsaved=True)
+            try:
+                self.__xml_handler.check_permissions(body_content, tag_xml_id)
 
-                body_content = self.__xml_handler.delete_entity_properties(body_content, new_entity_xml_id,
-                                                                           old_entity_properties)
+                new_entity_xml_id = self.__db_handler.add_entity(new_entity_type)
 
-            self.__db_handler.set_body_content(body_content)
+                tag_is_an_entity = self.__xml_handler.check_if_tag_is_an_entity(body_content, tag_xml_id)
+                body_content, saved = self.__xml_handler.modify_reference_to_entity(body_content, tag_xml_id,
+                                                                                    new_entity_xml_id,
+                                                                                    old_entity_xml_id,
+                                                                                    new_entity_type, new_entity_xml_id)
 
-            last_reference = self.__xml_handler.check_if_last_reference(body_content, old_entity_xml_id)
+                if old_entity_type not in self.__listable_entities_types and tag_is_an_entity:
+                    old_entity_properties = self.__db_handler.get_entity_properties_values(old_entity_xml_id,
+                                                                                           include_unsaved=True)
 
-            if last_reference:
-                self.__db_handler.delete_entity(old_entity_xml_id)
+                    body_content = self.__xml_handler.delete_entity_properties(body_content, new_entity_xml_id,
+                                                                               old_entity_properties)
+
+                self.__db_handler.set_body_content(body_content)
+
+                last_reference = self.__xml_handler.check_if_last_reference(body_content, old_entity_xml_id)
+
+                if last_reference:
+                    self.__db_handler.delete_entity(old_entity_xml_id)
+
+            except Forbidden:
+                raise BadRequest("Modification of an element created by another user is forbidden.")
 
         elif new_entity_xml_id and new_entity_type in self.__listable_entities_types:
-            new_tag = 'name'
-            new_tag_xml_id = self.__get_new_tag_xml_id(tag_xml_id, new_tag)
-
             body_content = self.__db_handler.get_body_content()
-            tag_is_an_entity = self.__xml_handler.check_if_tag_is_an_entity(body_content, tag_xml_id)
-            body_content, saved = self.__xml_handler.modify_reference_to_entity(body_content, tag_xml_id,
-                                                                                new_entity_xml_id, old_entity_xml_id,
-                                                                                new_tag, new_tag_xml_id)
 
-            if old_entity_type not in self.__listable_entities_types and tag_is_an_entity:
-                old_entity_properties = self.__db_handler.get_entity_properties_values(old_entity_xml_id,
-                                                                                       include_unsaved=True)
+            try:
+                self.__xml_handler.check_permissions(body_content, tag_xml_id)
 
-                body_content = self.__xml_handler.delete_entity_properties(body_content, new_tag_xml_id,
-                                                                           old_entity_properties)
+                new_tag = 'name'
+                new_tag_xml_id = self.__get_new_tag_xml_id(tag_xml_id, new_tag)
 
-            self.__db_handler.set_body_content(body_content)
+                tag_is_an_entity = self.__xml_handler.check_if_tag_is_an_entity(body_content, tag_xml_id)
+                body_content, saved = self.__xml_handler.modify_reference_to_entity(body_content, tag_xml_id,
+                                                                                    new_entity_xml_id,
+                                                                                    old_entity_xml_id,
+                                                                                    new_tag, new_tag_xml_id)
 
-            last_reference = self.__xml_handler.check_if_last_reference(body_content, old_entity_xml_id)
+                if old_entity_type not in self.__listable_entities_types and tag_is_an_entity:
+                    old_entity_properties = self.__db_handler.get_entity_properties_values(old_entity_xml_id,
+                                                                                           include_unsaved=True)
 
-            if last_reference:
-                self.__db_handler.delete_entity(old_entity_xml_id)
+                    body_content = self.__xml_handler.delete_entity_properties(body_content, new_tag_xml_id,
+                                                                               old_entity_properties)
+
+                self.__db_handler.set_body_content(body_content)
+
+                last_reference = self.__xml_handler.check_if_last_reference(body_content, old_entity_xml_id)
+
+                if last_reference:
+                    self.__db_handler.delete_entity(old_entity_xml_id)
+
+            except Forbidden:
+                raise BadRequest("Modification of an element created by another user is forbidden.")
 
         elif new_entity_xml_id and new_entity_type not in self.__listable_entities_types:
-            new_tag_xml_id = self.__get_new_tag_xml_id(tag_xml_id, new_entity_type)
-
             body_content = self.__db_handler.get_body_content()
-            tag_is_an_entity = self.__xml_handler.check_if_tag_is_an_entity(body_content, tag_xml_id)
-            body_content, saved = self.__xml_handler.modify_reference_to_entity(body_content, tag_xml_id,
-                                                                                new_entity_xml_id, old_entity_xml_id,
-                                                                                new_entity_type, new_tag_xml_id)
 
-            if old_entity_type not in self.__listable_entities_types and tag_is_an_entity:
-                old_entity_properties = self.__db_handler.get_entity_properties_values(old_entity_xml_id,
-                                                                                       include_unsaved=True)
+            try:
+                self.__xml_handler.check_permissions(body_content, tag_xml_id)
 
-                body_content = self.__xml_handler.delete_entity_properties(body_content, tag_xml_id,
-                                                                           old_entity_properties)
+                new_tag_xml_id = self.__get_new_tag_xml_id(tag_xml_id, new_entity_type)
 
-            self.__db_handler.set_body_content(body_content)
+                tag_is_an_entity = self.__xml_handler.check_if_tag_is_an_entity(body_content, tag_xml_id)
+                body_content, saved = self.__xml_handler.modify_reference_to_entity(body_content, tag_xml_id,
+                                                                                    new_entity_xml_id,
+                                                                                    old_entity_xml_id,
+                                                                                    new_entity_type, new_tag_xml_id)
 
-            last_reference = self.__xml_handler.check_if_last_reference(body_content, old_entity_xml_id)
+                if old_entity_type not in self.__listable_entities_types and tag_is_an_entity:
+                    old_entity_properties = self.__db_handler.get_entity_properties_values(old_entity_xml_id,
+                                                                                           include_unsaved=True)
 
-            if last_reference:
-                self.__db_handler.delete_entity(old_entity_xml_id)
+                    body_content = self.__xml_handler.delete_entity_properties(body_content, tag_xml_id,
+                                                                               old_entity_properties)
+
+                self.__db_handler.set_body_content(body_content)
+
+                last_reference = self.__xml_handler.check_if_last_reference(body_content, old_entity_xml_id)
+
+                if last_reference:
+                    self.__db_handler.delete_entity(old_entity_xml_id)
+
+            except Forbidden:
+                raise BadRequest("Modification of an element created by another user is forbidden.")
 
         else:
             raise BadRequest("There is no operation matching to this request")
@@ -405,38 +444,51 @@ class RequestHandler:
             body_content = self.__db_handler.get_body_content()
 
             try:
+                self.__xml_handler.check_permissions(body_content, tag_xml_id)
+
                 body_content = self.__xml_handler.delete_reference_to_entity(body_content, tag_xml_id, new_tag,
                                                                              new_tag_xml_id, entity_xml_id)
+
+                self.__db_handler.set_body_content(body_content)
+
+                last_reference = self.__xml_handler.check_if_last_reference(body_content, entity_xml_id)
+
+                if last_reference:
+                    self.__db_handler.delete_entity(entity_xml_id)
+
+            except Forbidden:
+                raise BadRequest("Removal of an element created by another user is forbidden.")
+
             except UnsavedElement:
                 raise BadRequest("Deleting an unsaved element is forbidden. Instead of deleting, discard "
                                  "the operation that created this element.")
 
-            self.__db_handler.set_body_content(body_content)
-
-            last_reference = self.__xml_handler.check_if_last_reference(body_content, entity_xml_id)
-
-            if last_reference:
-                self.__db_handler.delete_entity(entity_xml_id)
         else:
-            entity_properties_values = self.__db_handler.get_entity_properties_values(entity_xml_id)
-
             body_content = self.__db_handler.get_body_content()
 
+            entity_properties_values = self.__db_handler.get_entity_properties_values(entity_xml_id)
+
             try:
+                self.__xml_handler.check_permissions(body_content, tag_xml_id)
+
                 body_content = self.__xml_handler.delete_reference_to_entity(body_content, tag_xml_id, new_tag,
                                                                              new_tag_xml_id, entity_xml_id)
+
+                body_content = self.__xml_handler.delete_entity_properties(body_content, entity_xml_id,
+                                                                           entity_properties_values)
+                self.__db_handler.set_body_content(body_content)
+
+                last_reference = self.__xml_handler.check_if_last_reference(body_content, entity_xml_id)
+
+                if last_reference:
+                    self.__db_handler.delete_entity(entity_xml_id)
+
+            except Forbidden:
+                raise BadRequest("Removal of an element created by another user is forbidden.")
+
             except UnsavedElement:
                 raise BadRequest("Deleting an unsaved element is forbidden. Instead of deleting, discard "
                                  "the operation that created this element.")
-
-            body_content = self.__xml_handler.delete_entity_properties(body_content, entity_xml_id,
-                                                                       entity_properties_values)
-            self.__db_handler.set_body_content(body_content)
-
-            last_reference = self.__xml_handler.check_if_last_reference(body_content, entity_xml_id)
-
-            if last_reference:
-                self.__db_handler.delete_entity(entity_xml_id)
 
         self.__operations_results.append(None)
 
@@ -451,14 +503,26 @@ class RequestHandler:
         entity_type = self.__db_handler.get_entity_type(entity_xml_id)
 
         if entity_type in self.__listable_entities_types:
-            property_id = self.__db_handler.add_entity_property(entity_xml_id, entity_property)
+            try:
+                self.__db_handler.check_entity_permissions(entity_xml_id)
+
+                property_id = self.__db_handler.add_entity_property(entity_xml_id, entity_property)
+
+            except Forbidden:
+                raise BadRequest("Addition of an element to an element created by another user is forbidden.")
 
         else:
-            property_id = self.__db_handler.add_entity_property(entity_xml_id, entity_property)
+            try:
+                self.__db_handler.check_entity_permissions(entity_xml_id)
 
-            body_content = self.__db_handler.get_body_content()
-            body_content = self.__xml_handler.add_entity_properties(body_content, entity_xml_id, entity_property)
-            self.__db_handler.set_body_content(body_content)
+                property_id = self.__db_handler.add_entity_property(entity_xml_id, entity_property)
+
+                body_content = self.__db_handler.get_body_content()
+                body_content = self.__xml_handler.add_entity_properties(body_content, entity_xml_id, entity_property)
+                self.__db_handler.set_body_content(body_content)
+
+            except Forbidden:
+                raise BadRequest("Addition of an element to an element created by another user is forbidden.")
 
         self.__operations_results.append(property_id)
 
@@ -469,20 +533,32 @@ class RequestHandler:
         entity_type = self.__db_handler.get_entity_type(entity_xml_id)
 
         if entity_type in self.__listable_entities_types:
-            property_id, saved = self.__db_handler.modify_entity_property(entity_xml_id, new_entity_property,
-                                                                          property_name)
+            try:
+                self.__db_handler.check_entity_permissions(entity_xml_id)
+
+                property_id, saved = self.__db_handler.modify_entity_property(entity_xml_id, new_entity_property,
+                                                                              property_name)
+
+            except Forbidden:
+                raise BadRequest("Modification of an element created by another user is forbidden.")
 
         else:
-            old_property_value = self.__db_handler.get_entity_property_value(entity_xml_id, property_name)
-            old_entity_property = {property_name: old_property_value}
+            try:
+                self.__db_handler.check_entity_permissions(entity_xml_id)
 
-            property_id, saved = self.__db_handler.modify_entity_property(entity_xml_id, new_entity_property,
-                                                                          property_name)
+                old_property_value = self.__db_handler.get_entity_property_value(entity_xml_id, property_name)
+                old_entity_property = {property_name: old_property_value}
 
-            body_content = self.__db_handler.get_body_content()
-            body_content = self.__xml_handler.modify_entity_property(body_content, entity_xml_id, old_entity_property,
-                                                                     new_entity_property)
-            self.__db_handler.set_body_content(body_content)
+                property_id, saved = self.__db_handler.modify_entity_property(entity_xml_id, new_entity_property,
+                                                                              property_name)
+
+                body_content = self.__db_handler.get_body_content()
+                body_content = self.__xml_handler.modify_entity_property(body_content, entity_xml_id, old_entity_property,
+                                                                         new_entity_property)
+                self.__db_handler.set_body_content(body_content)
+
+            except Forbidden:
+                raise BadRequest("Modification of an element created by another user is forbidden.")
 
         self.__operations_results.append(property_id)
 
@@ -495,7 +571,13 @@ class RequestHandler:
 
         if entity_type in self.__listable_entities_types:
             try:
+                self.__db_handler.check_entity_permissions(entity_xml_id)
+
                 self.__db_handler.delete_entity_property(entity_xml_id, property_name)
+
+            except Forbidden:
+                raise BadRequest("Removal of an element created by another user is forbidden.")
+
             except UnsavedElement:
                 raise BadRequest("Deleting an unsaved element is forbidden. Instead of deleting, discard "
                                  "the operation that created this element.")
@@ -505,7 +587,13 @@ class RequestHandler:
             entity_property = {property_name: property_value}
 
             try:
+                self.__db_handler.check_entity_permissions(entity_xml_id)
+
                 self.__db_handler.delete_entity_property(entity_xml_id, property_name)
+
+            except Forbidden:
+                raise BadRequest("Removal of an element created by another user is forbidden.")
+
             except UnsavedElement:
                 raise BadRequest("Deleting an unsaved element is forbidden. Instead of deleting, discard "
                                  "the operation that created this element.")
@@ -533,7 +621,13 @@ class RequestHandler:
         parameter_name = request['old_element_id']
         new_value = request['parameters']
 
-        saved = self.__db_handler.modify_certainty(certainty_xml_id, parameter_name, new_value)
+        try:
+            self.__db_handler.check_certainty_permissions(certainty_xml_id)
+
+            saved = self.__db_handler.modify_certainty(certainty_xml_id, parameter_name, new_value)
+
+        except Forbidden:
+            raise BadRequest("Modification of an element created by another user is forbidden.")
 
         self.__operations_results.append(certainty_xml_id)
 
@@ -543,7 +637,13 @@ class RequestHandler:
         certainty_xml_id = request['edited_element_id']
 
         try:
+            self.__db_handler.check_certainty_permissions(certainty_xml_id)
+
             self.__db_handler.delete_certainty(certainty_xml_id)
+
+        except Forbidden:
+            raise BadRequest("Removal of an element created by another user is forbidden.")
+
         except UnsavedElement:
             raise BadRequest("Deleting an unsaved element is forbidden. Instead of deleting, discard "
                              "the operation that created this element.")

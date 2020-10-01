@@ -6,7 +6,7 @@ export default function styleEntity (id, color, icon, css) {
         }
     `
   const renderBefore = `
-        .renderEntity #${id}::before
+        #${id}::before
         {
             pointer-events: none;
             content:"";

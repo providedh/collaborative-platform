@@ -81,7 +81,7 @@ def files_for_project_version(project: int, version: float)->Iterable[FileVersio
         commit_counter=commit_counter)
 
     clean_xml = lambda xml: xml[len('<?xml version="1.0"?>'):] if xml.startswith('<?xml version="1.0"?>') else xml
-    get_content = lambda fv: clean_xml(fv.get_content())
+    get_content = lambda fv: clean_xml(fv.get_rendered_content())
 
     file_contents = tuple((get_content(fv), fv.file.name) for fv in project_version.file_versions.all())
 
