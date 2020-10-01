@@ -5,6 +5,7 @@ from django.http import HttpRequest, HttpResponseBadRequest, JsonResponse, HttpR
 from django.views.decorators.csrf import csrf_exempt
 
 from apps.nn_disambiguator.helpers import queue_task, abort_pending, serialize_unification_proposals
+from apps.nn_disambiguator.learning import learn_unprocessed
 from apps.nn_disambiguator.models import CeleryTask, UnificationProposal
 from apps.views_decorators import objects_exists, user_has_access
 
@@ -24,7 +25,7 @@ def calculations(request: HttpRequest, project_id: int):
             hist = CeleryTask.objects.filter(project_id=project_id, type="P").all()
         except CeleryTask.DoesNotExist:
             hist = []
-        return JsonResponse(hist, safe=False)
+        return JsonResponse(list(hist), safe=False)
     else:
         return HttpResponseBadRequest()
 

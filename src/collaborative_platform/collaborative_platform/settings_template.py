@@ -367,6 +367,7 @@ DEFAULT_ENTITIES = {
         'list_tag': 'listPerson',
         'color': '#ff7f00',
         'icon': r'\f007',
+        'unifiable': True,
     },
     'event': {
         'properties': {
@@ -380,6 +381,7 @@ DEFAULT_ENTITIES = {
         'list_tag': 'listEvent',
         'color': '#cecece',
         'icon': r'\f274',
+        'unifiable': True,
     },
     'org': {
         'properties': {
@@ -393,6 +395,7 @@ DEFAULT_ENTITIES = {
         'list_tag': 'listOrg',
         'color': '#b4edfc',
         'icon': r'\f1ad',
+        'unifiable': True,
     },
     'object': {
         'properties': {
@@ -406,6 +409,7 @@ DEFAULT_ENTITIES = {
         'list_tag': 'listObject',
         'color': '#b4d38d',
         'icon': r'\f466',
+        'unifiable': True,
     },
     'place': {
         'properties': {
@@ -431,6 +435,7 @@ DEFAULT_ENTITIES = {
         'list_tag': 'listPlace',
         'color': '#204191',
         'icon': r'\f279',
+        'unifiable': True,
     },
     'date': {
         'properties': {
@@ -448,6 +453,7 @@ DEFAULT_ENTITIES = {
         'list_tag': None,
         'color': '#868788',
         'icon': r'\f073',
+        'unifiable': False,
     },
     'time': {
         'properties': {
@@ -465,6 +471,7 @@ DEFAULT_ENTITIES = {
         'list_tag': None,
         'color': '#eab9e4',
         'icon': r'\f017',
+        'unifiable': False,
     },
 }
 
