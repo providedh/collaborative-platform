@@ -12,7 +12,7 @@ from apps.api_vis.enums import TypeChoice
 from apps.api_vis.models import EntityVersion, EntityProperty, Entity
 from apps.nn_disambiguator import names, time, geography
 from apps.nn_disambiguator.models import Classifier
-from apps.projects.models import EntitySchema
+from apps.projects.models import EntitySchema, Taxonomy
 from collaborative_platform import settings
 from collaborative_platform.settings import DEFAULT_ENTITIES, CUSTOM_ENTITY
 import spacy
@@ -40,13 +40,13 @@ class SimilarityCalculator:
         }
     }
 
-    def __init__(self, entity_type: EntitySchema):
-        entity_settings = DEFAULT_ENTITIES.get(entity_type.name, None)
-        self.properties = entity_settings['properties'] if entity_settings is not None else CUSTOM_ENTITY['properties']
-
     def __calculate_similarity(self, e1: EntityVersion, e2: EntityVersion) -> List[float]:
         sims = []
-        for property, params in self.properties.items():
+
+        entity_settings = DEFAULT_ENTITIES.get(e1.entity.type, None)
+        properties = entity_settings['properties'] if entity_settings is not None else CUSTOM_ENTITY['properties']
+
+        for property, params in properties.items():
             try:
                 p1 = e1.properties.get(name=property)
             except EntityProperty.DoesNotExist:
@@ -73,31 +73,16 @@ class SimilarityCalculator:
             nlp_file2 = self.nlp(e2lv.file_version.body_text)
             return nlp_file1.similarity(nlp_file2)
 
-    def calculate_features_vector_length(self, schema: EntitySchema) -> int:
-        v = 1  # 1 for files text similarity
-        entity = DEFAULT_ENTITIES.get(schema.name) or CUSTOM_ENTITY
-
-        for _, values in entity["properties"].items():
-            v += len(self.processing_functions[values["type"]])
-
-        # 1 number for avg similarity between files of each of the other types of entities
-        for other_schema in schema.taxonomy.entities_schemas.all():
-            # TODO do not count schemas with unifiable: False in all code.
-            schema_settings = DEFAULT_ENTITIES.get(other_schema.name, None)
-            if schema_settings is not None:
-                v += int(schema_settings["unifiable"])
-
-        # Files creation dates and places
-        v += 2
-        return v
-
     def __calculate_other_entities_avg_similarity(self, e1v: EntityVersion, e2v: EntityVersion,
                                                   files_text_sim: float) -> \
             List[float]:
         schemas = e1v.file_version.file.project.taxonomy.entities_schemas.all()
         sims = []
 
+        unifiable_schemas = self.count_unifiable_schemas(e1v.file_version.file.project.taxonomy)
+
         for schema in schemas:
+            self.calculate_features_vector_length(schema)
             schema_settings = DEFAULT_ENTITIES.get(schema.name, None)
             if schema_settings is None or not schema_settings["unifiable"]:
                 continue
@@ -128,12 +113,11 @@ class SimilarityCalculator:
             for _e1v, _e2v in pairs:
                 fv = self.__calculate_similarity(_e1v, _e2v)
                 fv.append(files_text_sim)
-                fv.extend([0 for _ in range(_e1v.file_version.file.project.taxonomy.entities_schemas.count() - 1)])
+                fv.extend([0 for _ in range(unifiable_schemas)])
                 fv.extend(self.__calculate_files_creation_dates_and_places(_e1v, _e2v))
-                if schema.id == 6:
-                    print("Madafakin date")
 
                 fv = scaler.transform([fv])
+
 
                 avg += model.predict_proba(fv)[0][1]
             avg /= len(pairs)
@@ -168,6 +152,29 @@ class SimilarityCalculator:
 
         return dt, distance
 
+    def calculate_features_vector_length(self, schema: EntitySchema) -> int:
+        v = 1  # 1 for files text similarity
+        entity = DEFAULT_ENTITIES.get(schema.name) or CUSTOM_ENTITY
+
+        for _, values in entity["properties"].items():
+            v += len(self.processing_functions[values["type"]])
+
+        # 1 number for avg similarity between files of each of the other types of entities
+        v += self.count_unifiable_schemas(schema.taxonomy)
+
+        # Files creation dates and places
+        v += 2
+        return v
+
+    @staticmethod
+    def count_unifiable_schemas(taxonomy: Taxonomy) -> int:
+        v = 0
+        for schema in taxonomy.entities_schemas.all():
+            schema_settings = DEFAULT_ENTITIES.get(schema.name, None)
+            if schema_settings is not None and schema_settings["unifiable"]:
+                v += 1
+        return v
+
     def get_features_vector(self, e1: Entity, e2: Entity) -> List[float]:
         e1lv = e1.versions.latest('id')
         e2lv = e2.versions.latest('id')
@@ -182,5 +189,11 @@ class SimilarityCalculator:
 
         files_features = self.__calculate_files_creation_dates_and_places(e1lv, e2lv)
         sims.extend(files_features)
+
+        expected_length = self.calculate_features_vector_length(
+            EntitySchema.objects.get(name=e1.type, taxonomy__project=e1.file.project))
+        print(f"Expected: {expected_length} — actual: {len(sims)}")
+        if len(sims) != expected_length:
+            print("Oi! I got yourgh modafokin ass!")
 
         return sims

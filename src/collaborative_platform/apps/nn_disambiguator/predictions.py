@@ -75,7 +75,7 @@ def make_entities_cliques_proposals(data_processor, model, scaler, schema):
             clique=proposal[0][1],
             confidence=proposal[1] * 100
         ) for proposal in proposals
-    )  # TODO: test
+    )
 
 
 def make_entities_proposals(data_processor, model, scaler, schema):
@@ -93,7 +93,7 @@ def make_entities_proposals(data_processor, model, scaler, schema):
             entity2=proposal[0][1],
             confidence=proposal[1] * 100
         ) for proposal in proposals
-    )  # TODO: test
+    )
 
 
 def reset_undecided_proposals(project_id: int):
@@ -135,7 +135,7 @@ def calculate_proposals(self, project_id: int):
         except NotFittedError:
             continue
 
-        data_processor = SimilarityCalculator(schema)
+        data_processor = SimilarityCalculator()
 
         make_entities_proposals(data_processor, model, scaler, schema)
         make_entities_cliques_proposals(data_processor, model, scaler, schema)

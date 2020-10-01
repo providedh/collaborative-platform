@@ -4,7 +4,6 @@ from json.decoder import JSONDecodeError
 
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt  # TODO: remove this
 
 from apps.api_vis.helpers import parse_query_string
 from apps.api_vis.request_handler import RequestHandler
@@ -13,7 +12,6 @@ from apps.exceptions import BadRequest, NotModified
 from apps.views_decorators import objects_exists, user_has_access
 
 
-@csrf_exempt
 @login_required
 @objects_exists
 @user_has_access('RW')
@@ -216,7 +214,6 @@ def file_unbound_entities(request, project_id, file_id):
             return JsonResponse(response, status=BadRequest.status_code)
 
 
-@csrf_exempt
 @login_required
 @objects_exists
 @user_has_access('RW')

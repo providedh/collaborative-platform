@@ -20,25 +20,25 @@ passes = {
 
 @shared_task(bind=True, name='nn_disambiguator.learn')
 def learn_unprocessed(self, project_id: int):
-    # try:
-    # task = CeleryTask.objects.get(project_id=project_id, task_id=self.request.id, status="S")
-    # task.status = "R"
-    # task.save()
+    try:
+        task = CeleryTask.objects.get(project_id=project_id, task_id=self.request.id, status="S")
+        task.status = "R"
+        task.save()
 
-    # try:
-    project = Project.objects.get(id=project_id)
-    learn_unprocessed_unifications(project)
-    learn_unprocessed_proposals(project)
-    # except Exception:
-    #     traceback.print_exc()
-    # task.status = "X"
-    # task.save()
+        try:
+            project = Project.objects.get(id=project_id)
+            learn_unprocessed_unifications(project)
+            learn_unprocessed_proposals(project)
+        except Exception:
+            traceback.print_exc()
+            task.status = "X"
+            task.save()
+        else:
+            task.status = "F"
+            task.save()
 
-    # task.status = "F"
-    # task.save()
-
-    # except Exception:
-    #     traceback.print_exc()
+    except Exception:
+        traceback.print_exc()
 
 
 def learn_unprocessed_unifications(project: Project):
@@ -58,7 +58,7 @@ def learn_unprocessed_unifications(project: Project):
                 model: MLPClassifier = clf.get_model()
                 scaler: StandardScaler = clf.get_scaler()
 
-                data_processor = SimilarityCalculator(schema)
+                data_processor = SimilarityCalculator()
 
                 for unification in unifications:
                     entity1 = unification.entity
@@ -94,7 +94,7 @@ def learn_unprocessed_proposals(project: Project):
                 model: MLPClassifier = clf.get_model()
                 scaler: StandardScaler = clf.get_scaler()
 
-                data_processor = SimilarityCalculator(schema)
+                data_processor = SimilarityCalculator()
 
                 for proposal in proposals:
                     entity1 = proposal.entity
@@ -119,6 +119,7 @@ def learn_entity_pair(entity1: Entity, entity2: Entity, data_processor: Similari
                       user_confidence: str, positive: bool):
     positive = int(positive)
     fv = data_processor.get_features_vector(entity1, entity2)
+    print(f"Schema: {entity1.type}\tvector length:\t{len(fv)}")
     scaler.partial_fit([fv])
     fv = scaler.transform([fv])
     for _ in range(passes[user_confidence]):

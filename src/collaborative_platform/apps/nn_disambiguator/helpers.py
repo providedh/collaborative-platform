@@ -20,7 +20,7 @@ def create_models(project):  # type: (Project) -> None
         model = MLPClassifier(hidden_layer_sizes=(15, 7, 2))
         scaler = StandardScaler()
 
-        vector = [0] * SimilarityCalculator(schema).calculate_features_vector_length(schema)
+        vector = [0] * SimilarityCalculator().calculate_features_vector_length(schema)
         scaler.partial_fit([vector])
 
         model.partial_fit([vector], [0], classes=[0, 1])
@@ -72,6 +72,9 @@ def run_queued_tasks():
         queued_tasks = CeleryTask.objects.filter(status="Q").all()
 
         for task in queued_tasks:
+            if CeleryTask.objects.filter(project=task.project, type=task.type, status__in=("S", "R")).exists():
+                continue
+
             celery_task = tasks[task.type].delay(task.project_id)
             task.task_id = celery_task.task_id
             task.status = "S"

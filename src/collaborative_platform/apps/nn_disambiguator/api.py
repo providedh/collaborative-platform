@@ -1,12 +1,9 @@
 import json
 
 from django.contrib.auth.decorators import login_required
-from django.forms import model_to_dict
 from django.http import HttpRequest, HttpResponseBadRequest, JsonResponse, HttpResponseNotFound
-from django.views.decorators.csrf import csrf_exempt
 
 from apps.nn_disambiguator.helpers import queue_task, abort_pending, serialize_unification_proposals
-from apps.nn_disambiguator.learning import learn_unprocessed
 from apps.nn_disambiguator.models import CeleryTask, UnificationProposal
 from apps.views_decorators import objects_exists, user_has_access
 
@@ -41,7 +38,6 @@ def calculations(request: HttpRequest, project_id: int):
         return HttpResponseBadRequest()
 
 
-@csrf_exempt  # TODO: REMOVE
 @login_required
 @objects_exists
 @user_has_access('RW')
@@ -112,8 +108,3 @@ def proposals_details(request: HttpRequest, project_id: int):
 
     else:
         return HttpResponseBadRequest()
-
-
-def learn(request, project_id):
-    learn_unprocessed(project_id)
-    return JsonResponse({"message": "OK?"})
