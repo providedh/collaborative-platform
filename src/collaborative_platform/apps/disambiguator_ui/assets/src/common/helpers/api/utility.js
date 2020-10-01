@@ -52,6 +52,7 @@ export default (function (args) {
       headers: {
         'Content-Type': 'application/json',
         'X-CSRF-TOKEN': csrfToken,
+        'X-CSRFToken': csrfToken,
       },
       redirect: 'follow',
       referrer: 'no-referrer' // no-referrer, *client
