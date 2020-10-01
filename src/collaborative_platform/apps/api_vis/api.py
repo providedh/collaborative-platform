@@ -4,7 +4,7 @@ from json.decoder import JSONDecodeError
 
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt  # TODO: remove this
 
 from apps.api_vis.helpers import parse_query_string
 from apps.api_vis.request_handler import RequestHandler

@@ -20,25 +20,25 @@ passes = {
 
 @shared_task(bind=True, name='nn_disambiguator.learn')
 def learn_unprocessed(self, project_id: int):
-    try:
-        task = CeleryTask.objects.get(project_id=project_id, task_id=self.request.id, status="S")
-        task.status = "R"
-        task.save()
+    # try:
+    # task = CeleryTask.objects.get(project_id=project_id, task_id=self.request.id, status="S")
+    # task.status = "R"
+    # task.save()
 
-        try:
-            project = Project.objects.get(id=project_id)
-            learn_unprocessed_unifications(project)
-            learn_unprocessed_proposals(project)
-        except Exception:
-            traceback.print_exc()
-            task.status = "X"
-            task.save()
+    # try:
+    project = Project.objects.get(id=project_id)
+    learn_unprocessed_unifications(project)
+    learn_unprocessed_proposals(project)
+    # except Exception:
+    #     traceback.print_exc()
+    # task.status = "X"
+    # task.save()
 
-        task.status = "F"
-        task.save()
+    # task.status = "F"
+    # task.save()
 
-    except Exception:
-        traceback.print_exc()
+    # except Exception:
+    #     traceback.print_exc()
 
 
 def learn_unprocessed_unifications(project: Project):

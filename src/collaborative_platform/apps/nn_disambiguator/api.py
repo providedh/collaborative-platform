@@ -104,3 +104,8 @@ def proposals_details(request: HttpRequest, project_id: int):
 
     else:
         return HttpResponseBadRequest()
+
+
+def learn(request, project_id):
+    learn_unprocessed(project_id)
+    return JsonResponse({"message": "OK?"})
