@@ -1,6 +1,7 @@
 import json
 
 from django.contrib.auth.decorators import login_required
+from django.forms import model_to_dict
 from django.http import HttpRequest, HttpResponseBadRequest, JsonResponse, HttpResponseNotFound
 from django.views.decorators.csrf import csrf_exempt
 
@@ -26,9 +27,16 @@ def calculations(request: HttpRequest, project_id: int):
     elif request.method == "GET":
         try:
             hist = CeleryTask.objects.filter(project_id=project_id, type="P").all()
+            hist = [{
+                "id": task.id,
+                "status": dict(task.statuses)[task.status],
+                "type": dict(task.types)[task.type],
+                "task_id": task.task_id,
+                "created": task.created
+            } for task in hist]
         except CeleryTask.DoesNotExist:
             hist = []
-        return JsonResponse(list(hist), safe=False)
+        return JsonResponse(hist, safe=False)
     else:
         return HttpResponseBadRequest()
 
