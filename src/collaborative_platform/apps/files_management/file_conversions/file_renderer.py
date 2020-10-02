@@ -1,14 +1,13 @@
 from lxml import etree
 
 from django.contrib.auth.models import User
-from django.contrib.sites.models import Site
 from django.db.models import Q
 
 from apps.files_management.file_conversions.xml_tools import add_property_to_element, get_or_create_element_from_xpath
 from apps.api_vis.models import Certainty, EntityProperty, EntityVersion, Unification
 from apps.projects.models import EntitySchema, ProjectVersion
 
-from collaborative_platform.settings import XML_NAMESPACES, DEFAULT_ENTITIES, NS_MAP, CUSTOM_ENTITY, SITE_ID
+from collaborative_platform.settings import XML_NAMESPACES, DEFAULT_ENTITIES, NS_MAP, CUSTOM_ENTITY
 
 
 class FileRenderer:
@@ -202,7 +201,7 @@ class FileRenderer:
         certainty_element = etree.Element(default_prefix + 'certainty', nsmap=NS_MAP)
 
         certainty_element.set(xml_prefix + 'id', certainty.xml_id)
-        certainty_element.set('resp', f'#annotator-{certainty.created_by_id}')
+        certainty_element.set('resp', f'#{certainty.created_by.profile.get_xml_id()}')
 
         certainty_element.set('ana', certainty.get_categories(as_str=True))
         certainty_element.set('locus', certainty.locus)
@@ -289,18 +288,15 @@ class FileRenderer:
         certainty_element = etree.Element(default_prefix + 'certainty', nsmap=NS_MAP)
 
         first_index = unification.xml_id.split('-')[-1]
-        second_index = matching_unification.xml_id.split('-')[-1]
-        xml_id = f'certainty-{first_index}.{second_index}'
+        second_index = matching_unification.entity.file.id
+        third_index = matching_unification.xml_id.split('-')[-1]
+        xml_id = f'certainty-{first_index}.{second_index}.{third_index}'
         certainty_element.set(xml_prefix + 'id', xml_id)
-        certainty_element.set('resp', f'#{unification.created_by.profile.get_xml_id()}')
 
-        domain = Site.objects.get(id=SITE_ID).domain
-        project_id = self.__file_version.file.project.id
-        link = f'https://{domain}/api/projects/{project_id}/taxonomy/#imprecision'
-        certainty_element.set('ana', link)
+        certainty_element.set('resp', f'#{unification.created_by.profile.get_xml_id()}')
+        certainty_element.set('ana', unification.get_categories(as_str=True))
         certainty_element.set('locus', 'value')
         certainty_element.set('cert', unification.certainty)
-
         certainty_element.set('target', f'#{unification.entity.xml_id}')
         certainty_element.set('match', '@sameAs')
 

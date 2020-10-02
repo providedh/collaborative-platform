@@ -179,6 +179,20 @@ class Unification(models.Model):
 
         self.save()
 
+    def get_categories(self, as_str=False):
+        if as_str:
+            categories = self.categories.all()
+
+            categories_links = [category.get_link() for category in categories]
+            categories = ' '.join(categories_links)
+
+            return categories
+
+        else:
+            categories = self.categories.all()
+
+            return categories
+
 
 class Certainty(models.Model):
     file = models.ForeignKey(File, on_delete=models.CASCADE)
