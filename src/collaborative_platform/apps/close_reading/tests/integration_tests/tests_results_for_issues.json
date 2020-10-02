@@ -48,7 +48,7 @@
         {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness", "locus": "value", "degree": null, "cert": "high", "resp": "#annotator-2", "match": "@ref", "target": "#name-5", "xml:id": "certainty-2", "assertedValue": "#ingredient-0", "desc": null, "saved": true, "deleted": false},
         {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness", "locus": "value", "degree": null, "cert": "high", "resp": "#annotator-2", "match": "./persName/forename", "target": "#person-2", "xml:id": "certainty-3", "assertedValue": "McDuck", "desc": null, "saved": true, "deleted": false},
         {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#new_awesome_category", "locus": "value", "degree": null, "cert": "high", "resp": "#annotator-1", "match": "@cert", "target": "#certainty-10", "xml:id": "certainty-4", "assertedValue": "low", "desc": null, "saved": true, "deleted": false},
-        {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#imprecision", "locus": "value", "degree": null, "cert": "medium", "resp": "#annotator-2", "match": null, "target": "#ab-0", "xml:id": "certainty-5", "assertedValue": "oven", "desc": null, "saved": false, "deleted": false}
+        {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#imprecision", "locus": "value", "degree": null, "cert": "medium", "resp": "#annotator-2", "match": null, "target": "#ab-0", "xml:id": "certainty-7", "assertedValue": "oven", "desc": null, "saved": false, "deleted": false}
       ],
       "entities_lists": {
         "ingredient": [
@@ -114,7 +114,7 @@
   "test_modify_unsaved_certainty": [
     {
       "operations": [
-        {"dependencies": [], "edited_element_id": null, "element_type": "certainty", "id": 1, "method": "POST", "new_element_id": "ab-0", "old_element_id": null, "operation_result": "certainty-5"}
+        {"dependencies": [], "edited_element_id": null, "element_type": "certainty", "id": 1, "method": "POST", "new_element_id": "ab-0", "old_element_id": null, "operation_result": "certainty-7"}
       ],
       "authors": [
         {"xml:id": "annotator-1", "forename": "none", "surname": "none", "username": "anonymous"},
@@ -126,7 +126,7 @@
         {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness", "locus": "value", "degree": null, "cert": "high", "resp": "#annotator-2", "match": "@ref", "target": "#name-5", "xml:id": "certainty-2", "assertedValue": "#ingredient-0", "desc": null, "saved": true, "deleted": false},
         {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness", "locus": "value", "degree": null, "cert": "high", "resp": "#annotator-2", "match": "./persName/forename", "target": "#person-2", "xml:id": "certainty-3", "assertedValue": "McDuck", "desc": null, "saved": true, "deleted": false},
         {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#new_awesome_category", "locus": "value", "degree": null, "cert": "high", "resp": "#annotator-1", "match": "@cert", "target": "#certainty-10", "xml:id": "certainty-4", "assertedValue": "low", "desc": null, "saved": true, "deleted": false},
-        {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#imprecision", "locus": "value", "degree": null, "cert": "medium", "resp": "#annotator-2", "match": null, "target": "#ab-0", "xml:id": "certainty-5", "assertedValue": "oven", "desc": null, "saved": false, "deleted": false}
+        {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#imprecision", "locus": "value", "degree": null, "cert": "medium", "resp": "#annotator-2", "match": null, "target": "#ab-0", "xml:id": "certainty-7", "assertedValue": "oven", "desc": null, "saved": false, "deleted": false}
       ],
       "entities_lists": {
         "ingredient": [
@@ -153,7 +153,7 @@
     },
     {
       "operations": [
-        {"dependencies": [], "edited_element_id": null, "element_type": "certainty", "id": 1, "method": "POST", "new_element_id": "ab-0", "old_element_id": null, "operation_result": "certainty-5"}
+        {"dependencies": [], "edited_element_id": null, "element_type": "certainty", "id": 1, "method": "POST", "new_element_id": "ab-0", "old_element_id": null, "operation_result": "certainty-7"}
       ],
       "authors": [
         {"xml:id": "annotator-1", "forename": "none", "surname": "none", "username": "anonymous"},
@@ -165,7 +165,7 @@
         {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness", "locus": "value", "degree": null, "cert": "high", "resp": "#annotator-2", "match": "@ref", "target": "#name-5", "xml:id": "certainty-2", "assertedValue": "#ingredient-0", "desc": null, "saved": true, "deleted": false},
         {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness", "locus": "value", "degree": null, "cert": "high", "resp": "#annotator-2", "match": "./persName/forename", "target": "#person-2", "xml:id": "certainty-3", "assertedValue": "McDuck", "desc": null, "saved": true, "deleted": false},
         {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#new_awesome_category", "locus": "value", "degree": null, "cert": "high", "resp": "#annotator-1", "match": "@cert", "target": "#certainty-10", "xml:id": "certainty-4", "assertedValue": "low", "desc": null, "saved": true, "deleted": false},
-        {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#imprecision", "locus": "value", "degree": null, "cert": "medium", "resp": "#annotator-2", "match": null, "target": "#ab-0", "xml:id": "certainty-5", "assertedValue": "electric oven", "desc": null, "saved": false, "deleted": false}
+        {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#imprecision", "locus": "value", "degree": null, "cert": "medium", "resp": "#annotator-2", "match": null, "target": "#ab-0", "xml:id": "certainty-7", "assertedValue": "electric oven", "desc": null, "saved": false, "deleted": false}
       ],
       "entities_lists": {
         "ingredient": [
@@ -367,7 +367,7 @@
   "test_add_certainty_to_event_name_property": [
     {
       "operations": [
-        {"dependencies": [], "edited_element_id": null, "element_type": "certainty", "id": 1, "method": "POST", "new_element_id": "event-0/name", "old_element_id": null, "operation_result": "certainty-5"}
+        {"dependencies": [], "edited_element_id": null, "element_type": "certainty", "id": 1, "method": "POST", "new_element_id": "event-0/name", "old_element_id": null, "operation_result": "certainty-7"}
       ],
       "authors": [
         {"xml:id": "annotator-1", "forename": "none", "surname": "none", "username": "anonymous"},
@@ -379,7 +379,7 @@
         {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness", "locus": "value", "degree": null, "cert": "high", "resp": "#annotator-2", "match": "@ref", "target": "#name-5", "xml:id": "certainty-2", "assertedValue": "#ingredient-0", "desc": null, "saved": true, "deleted": false},
         {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness", "locus": "value", "degree": null, "cert": "high", "resp": "#annotator-2", "match": "./persName/forename", "target": "#person-2", "xml:id": "certainty-3", "assertedValue": "McDuck", "desc": null, "saved": true, "deleted": false},
         {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#new_awesome_category", "locus": "value", "degree": null, "cert": "high", "resp": "#annotator-1", "match": "@cert", "target": "#certainty-10", "xml:id": "certainty-4", "assertedValue": "low", "desc": null, "saved": true, "deleted": false},
-        {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#imprecision", "locus": "value", "degree": null, "cert": "medium", "resp": "#annotator-2", "match": null, "target": "#event-0", "xml:id": "certainty-5", "assertedValue": "something", "desc": null, "saved": false, "deleted": false}
+        {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#imprecision", "locus": "value", "degree": null, "cert": "medium", "resp": "#annotator-2", "match": null, "target": "#event-0", "xml:id": "certainty-7", "assertedValue": "something", "desc": null, "saved": false, "deleted": false}
       ],
       "entities_lists": {
         "ingredient": [
@@ -518,7 +518,7 @@
         {"dependencies": [], "edited_element_id": null, "element_type": "tag", "id": 1, "method": "POST", "new_element_id": null, "old_element_id": null, "operation_result": "ab-1"},
         {"dependencies": [1], "edited_element_id": "ab-1", "element_type": "reference", "id": 2, "method": "POST", "new_element_id": null, "old_element_id": null, "operation_result": "event-1"},
         {"dependencies": [2], "edited_element_id": "event-1", "element_type": "entity_property", "id": 3, "method": "POST", "new_element_id": null, "old_element_id": null, "operation_result": "event-1/name"},
-        {"dependencies": [3], "edited_element_id": null, "element_type": "certainty", "id": 4, "method": "POST", "new_element_id": "event-1/name", "old_element_id": null, "operation_result": "certainty-5"}
+        {"dependencies": [3], "edited_element_id": null, "element_type": "certainty", "id": 4, "method": "POST", "new_element_id": "event-1/name", "old_element_id": null, "operation_result": "certainty-7"}
       ],
       "certainties": [
         {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#credibility https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness", "locus": "value", "degree": 0.86, "cert": "high", "resp": "#annotator-1", "match": "@ref", "target": "#name-3", "xml:id": "certainty-0", "assertedValue": "#met", "desc": null, "saved": true, "deleted": false},
@@ -526,7 +526,7 @@
         {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness", "locus": "value", "degree": null, "cert": "high", "resp": "#annotator-2", "match": "@ref", "target": "#name-5", "xml:id": "certainty-2", "assertedValue": "#ingredient-0", "desc": null, "saved": true, "deleted": false},
         {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness", "locus": "value", "degree": null, "cert": "high", "resp": "#annotator-2", "match": "./persName/forename", "target": "#person-2", "xml:id": "certainty-3", "assertedValue": "McDuck", "desc": null, "saved": true, "deleted": false},
         {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#new_awesome_category", "locus": "value", "degree": null, "cert": "high", "resp": "#annotator-1", "match": "@cert", "target": "#certainty-10", "xml:id": "certainty-4", "assertedValue": "low", "desc": null, "saved": true, "deleted": false},
-        {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#imprecision", "assertedValue": "something", "cert": "medium", "degree": null, "deleted": false, "desc": null, "locus": "value", "match": null, "resp": "#annotator-2", "saved": false, "target": "#event-1", "xml:id": "certainty-5"}
+        {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#imprecision", "assertedValue": "something", "cert": "medium", "degree": null, "deleted": false, "desc": null, "locus": "value", "match": null, "resp": "#annotator-2", "saved": false, "target": "#event-1", "xml:id": "certainty-7"}
       ],
       "entities_lists": {
         "ingredient": [
@@ -666,7 +666,7 @@
         {"dependencies": [], "edited_element_id": null, "element_type": "tag", "id": 1, "method": "POST", "new_element_id": null, "old_element_id": null, "operation_result": "ab-1"},
         {"dependencies": [1], "edited_element_id": "ab-1", "element_type": "reference", "id": 2, "method": "POST", "new_element_id": null, "old_element_id": null, "operation_result": "person-6"},
         {"dependencies": [2], "edited_element_id": "person-6", "element_type": "entity_property", "id": 3, "method": "POST", "new_element_id": null, "old_element_id": null, "operation_result": "person-6/age"},
-        {"dependencies": [3], "edited_element_id": null, "element_type": "certainty", "id": 4, "method": "POST", "new_element_id": "person-6/age", "old_element_id": null, "operation_result": "certainty-5"}
+        {"dependencies": [3], "edited_element_id": null, "element_type": "certainty", "id": 4, "method": "POST", "new_element_id": "person-6/age", "old_element_id": null, "operation_result": "certainty-7"}
       ],
       "certainties": [
         {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#credibility https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness", "locus": "value", "degree": 0.86, "cert": "high", "resp": "#annotator-1", "match": "@ref", "target": "#name-3", "xml:id": "certainty-0", "assertedValue": "#met", "desc": null, "saved": true, "deleted": false},
@@ -674,7 +674,7 @@
         {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness", "locus": "value", "degree": null, "cert": "high", "resp": "#annotator-2", "match": "@ref", "target": "#name-5", "xml:id": "certainty-2", "assertedValue": "#ingredient-0", "desc": null, "saved": true, "deleted": false},
         {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness", "locus": "value", "degree": null, "cert": "high", "resp": "#annotator-2", "match": "./persName/forename", "target": "#person-2", "xml:id": "certainty-3", "assertedValue": "McDuck", "desc": null, "saved": true, "deleted": false},
         {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#new_awesome_category", "locus": "value", "degree": null, "cert": "high", "resp": "#annotator-1", "match": "@cert", "target": "#certainty-10", "xml:id": "certainty-4", "assertedValue": "low", "desc": null, "saved": true, "deleted": false},
-        {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#credibility", "assertedValue": "21", "cert": "medium", "degree": null, "deleted": false, "desc": null, "locus": "value", "match": "@age", "resp": "#annotator-2", "saved": false, "target": "#person-6", "xml:id": "certainty-5"}
+        {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#credibility", "assertedValue": "21", "cert": "medium", "degree": null, "deleted": false, "desc": null, "locus": "value", "match": "@age", "resp": "#annotator-2", "saved": false, "target": "#person-6", "xml:id": "certainty-7"}
       ],
       "entities_lists": {
         "ingredient": [

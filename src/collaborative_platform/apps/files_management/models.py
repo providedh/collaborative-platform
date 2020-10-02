@@ -224,13 +224,13 @@ class FileVersion(models.Model):
 
         return content
 
-    def save(self, *args, **kwargs):
+    def save(self, create_new_project_version=True, *args, **kwargs):
         from apps.projects.helpers import create_new_project_version
 
         created = self.pk is None
         super(FileVersion, self).save(*args, **kwargs)
 
-        if created:
+        if created and create_new_project_version:
             project = self.file.project
             create_new_project_version(project=project, files_modification=True)
 

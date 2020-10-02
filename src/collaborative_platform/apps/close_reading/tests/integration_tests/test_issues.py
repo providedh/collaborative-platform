@@ -237,7 +237,7 @@ class TestIssue111:
                 {
                     'method': 'DELETE',
                     'element_type': 'certainty',
-                    'edited_element_id': 'certainty-5',
+                    'edited_element_id': 'certainty-7',
                 }
             ]
         }
@@ -642,7 +642,7 @@ class TestIssue112:
                 {
                     "method": "PUT",
                     "element_type": "certainty",
-                    "edited_element_id": "certainty-5",
+                    "edited_element_id": "certainty-7",
                     "old_element_id": "asserted_value",
                     'parameters': {
                         "asserted_value": "electric oven"

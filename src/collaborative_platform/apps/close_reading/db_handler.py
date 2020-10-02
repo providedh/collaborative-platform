@@ -11,7 +11,7 @@ from apps.exceptions import BadParameters, Forbidden, UnsavedElement
 from apps.files_management.api import clone_db_objects
 from apps.files_management.helpers import create_uploaded_file_object_from_string, hash_file
 from apps.files_management.models import File, FileMaxXmlIds, FileVersion
-from apps.projects.helpers import log_activity
+from apps.projects.helpers import log_activity, create_new_project_version
 from apps.projects.models import UncertaintyCategory
 
 from collaborative_platform.settings import CUSTOM_ENTITY, DEFAULT_ENTITIES
@@ -953,11 +953,13 @@ class DbHandler:
         operation.delete()
 
     def get_new_file_version(self):
-        new_file_version = FileVersion.objects.create(
+        new_file_version = FileVersion(
             file=self.__file,
             number=self.__file.version_number + 1,
             created_by=self.__user,
         )
+
+        new_file_version.save(create_new_project_version=False)
 
         return new_file_version
 
@@ -981,6 +983,9 @@ class DbHandler:
         self.__file.save()
 
         clone_db_objects(self.__file)
+
+        project = self.__file.project
+        create_new_project_version(project=project, files_modification=True)
 
         log_text = f"created version number {new_file_version.number} of"
 

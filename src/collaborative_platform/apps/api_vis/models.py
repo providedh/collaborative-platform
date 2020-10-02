@@ -181,7 +181,7 @@ class Unification(models.Model):
 
     def get_categories(self, as_str=False):
         if as_str:
-            categories = self.categories.all()
+            categories = self.categories.all().order_by('id')
 
             categories_links = [category.get_link() for category in categories]
             categories = ' '.join(categories_links)
@@ -217,7 +217,7 @@ class Certainty(models.Model):
 
     def get_categories(self, as_str=False):
         if as_str:
-            categories = self.categories.all()
+            categories = self.categories.all().order_by('id')
 
             categories_links = [category.get_link() for category in categories]
             categories = ' '.join(categories_links)
