@@ -9,6 +9,7 @@ from apps.api_vis.models import Entity
 from apps.nn_disambiguator.similarity_calculator import SimilarityCalculator
 from apps.nn_disambiguator.models import Classifier, UnificationProposal, CeleryTask
 from apps.projects.models import Project
+from collaborative_platform.settings import DEFAULT_ENTITIES
 
 passes = {
     "very low": 20,
@@ -39,7 +40,7 @@ def learn_unprocessed(self, project_id: int):
             task.status = "F"
             task.save()
 
-    except Exception:
+    except:
         traceback.print_exc()
 
 
@@ -48,6 +49,10 @@ def learn_unprocessed_unifications(project: Project):
     if unlearned_unifications_exists:
         schemas = project.taxonomy.entities_schemas.all()
         for schema in schemas:
+            schema_settings = DEFAULT_ENTITIES.get(schema.name, None)
+            if schema_settings is not None and not schema_settings["unifiable"]:
+                continue
+
             unifications = project.unifications.filter(learned=False,
                                                        entity__type=schema.name,
                                                        created_in_commit__isnull=False).all()
@@ -84,6 +89,10 @@ def learn_unprocessed_proposals(project: Project):
     if unlearned_decided_proposals_exists:
         schemas = project.taxonomy.entities_schemas.all()
         for schema in schemas:
+            schema_settings = DEFAULT_ENTITIES.get(schema.name, None)
+            if schema_settings is not None and not schema_settings["unifiable"]:
+                continue
+
             proposals = UnificationProposal.objects.filter(entity__file__project=project, decided=True, learned=False,
                                                            entity__type=schema.name).all()
 

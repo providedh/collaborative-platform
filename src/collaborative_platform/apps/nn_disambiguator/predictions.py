@@ -1,3 +1,6 @@
+import traceback
+from time import sleep
+
 from celery import shared_task
 from numpy import average
 from sklearn.exceptions import NotFittedError
@@ -11,6 +14,8 @@ from apps.nn_disambiguator.models import Classifier, UnificationProposal, Celery
 from apps.nn_disambiguator.similarity_calculator import SimilarityCalculator
 from apps.projects.models import Project, EntitySchema
 from itertools import combinations, permutations, product
+
+from collaborative_platform.settings import DEFAULT_ENTITIES
 
 
 def generate_entities_pairs(schema: EntitySchema) -> List[Tuple[Entity, Entity]]:
@@ -107,38 +112,48 @@ def reset_undecided_proposals(project_id: int):
 
 @shared_task(bind=True, name='nn_disambiguator.predict')
 def calculate_proposals(self, project_id: int):
-    task = CeleryTask.objects.get(project_id=project_id, task_id=self.request.id, status="S")
-    task.status = "R"
-    task.save()
-
+    sleep(5)
     try:
-        project = Project.objects.get(id=project_id)
-    except Project.DoesNotExist:
-        task.status = "X"
+        task = CeleryTask.objects.get(project_id=project_id, task_id=self.request.id, status="S")
+        task.status = "R"
         task.save()
 
-    reset_undecided_proposals(project_id)
-
-    schemas = project.taxonomy.entities_schemas.all()
-    for schema in schemas:
         try:
-            clf = Classifier.objects.get(project_id=project.id, entity_schema=schema)
-        except Classifier.DoesNotExist:
-            continue
+            project = Project.objects.get(id=project_id)
+        except Project.DoesNotExist:
+            task.status = "X"
+            task.save()
+            return
 
-        model: MLPClassifier = clf.get_model()
-        scaler: StandardScaler = clf.get_scaler()
+        reset_undecided_proposals(project_id)
 
-        try:
-            check_is_fitted(model)
-            check_is_fitted(scaler)
-        except NotFittedError:
-            continue
+        schemas = project.taxonomy.entities_schemas.all()
+        for schema in schemas:
+            schema_settings = DEFAULT_ENTITIES.get(schema.name, None)
+            if schema_settings is not None and not schema_settings["unifiable"]:
+                continue
 
-        data_processor = SimilarityCalculator()
+            try:
+                clf = Classifier.objects.get(project_id=project.id, entity_schema=schema)
+            except Classifier.DoesNotExist:
+                continue
 
-        make_entities_proposals(data_processor, model, scaler, schema)
-        make_entities_cliques_proposals(data_processor, model, scaler, schema)
+            model: MLPClassifier = clf.get_model()
+            scaler: StandardScaler = clf.get_scaler()
 
-    task.status = "F"
-    task.save()
+            try:
+                check_is_fitted(model)
+                check_is_fitted(scaler)
+            except NotFittedError:
+                continue
+
+            data_processor = SimilarityCalculator()
+
+            make_entities_proposals(data_processor, model, scaler, schema)
+            make_entities_cliques_proposals(data_processor, model, scaler, schema)
+
+        task.status = "F"
+        task.save()
+
+    except:
+        traceback.print_exc()

@@ -82,9 +82,8 @@ class SimilarityCalculator:
         unifiable_schemas = self.count_unifiable_schemas(e1v.file_version.file.project.taxonomy)
 
         for schema in schemas:
-            self.calculate_features_vector_length(schema)
             schema_settings = DEFAULT_ENTITIES.get(schema.name, None)
-            if schema_settings is None or not schema_settings["unifiable"]:
+            if schema_settings is not None and not schema_settings["unifiable"]:
                 continue
 
             try:
@@ -171,7 +170,7 @@ class SimilarityCalculator:
         v = 0
         for schema in taxonomy.entities_schemas.all():
             schema_settings = DEFAULT_ENTITIES.get(schema.name, None)
-            if schema_settings is not None and schema_settings["unifiable"]:
+            if schema_settings is None or schema_settings["unifiable"]:
                 v += 1
         return v
 
