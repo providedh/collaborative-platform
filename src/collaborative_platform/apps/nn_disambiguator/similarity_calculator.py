@@ -11,7 +11,7 @@ from sklearn.preprocessing import StandardScaler
 from apps.api_vis.enums import TypeChoice
 from apps.api_vis.models import EntityVersion, EntityProperty, Entity
 from apps.nn_disambiguator import names, time, geography
-from apps.nn_disambiguator.models import Classifier
+from apps.nn_disambiguator.models import Classifier, SimilarityCache
 from apps.projects.models import EntitySchema, Taxonomy
 from collaborative_platform import settings
 from collaborative_platform.settings import DEFAULT_ENTITIES, CUSTOM_ENTITY
@@ -110,15 +110,24 @@ class SimilarityCalculator:
 
             avg = 0
             for _e1v, _e2v in pairs:
-                fv = self.__calculate_similarity(_e1v, _e2v)
-                fv.append(files_text_sim)
-                fv.extend([0 for _ in range(unifiable_schemas)])
-                fv.extend(self.__calculate_files_creation_dates_and_places(_e1v, _e2v))
+                try:
+                    if SimilarityCache.objects.filter(e1v=_e1v, e2v=_e2v).exists():
+                        sc = SimilarityCache.objects.get(e1v=_e1v, e2v=_e2v)
+                    elif SimilarityCache.objects.filter(e1v=_e2v, e2v=_e1v).exists():
+                        sc = SimilarityCache.objects.get(e1v=_e2v, e2v=_e1v)
+                    else:
+                        raise SimilarityCache.DoesNotExist
+                except SimilarityCache.DoesNotExist:
+                    fv = self.__calculate_similarity(_e1v, _e2v)
+                    fv.append(files_text_sim)
+                    fv.extend([0 for _ in range(unifiable_schemas)])
+                    fv.extend(self.__calculate_files_creation_dates_and_places(_e1v, _e2v))
+                else:
+                    fv = sc.vector
+                finally:
+                    fv = scaler.transform([fv])
+                    avg += model.predict_proba(fv)[0][1]
 
-                fv = scaler.transform([fv])
-
-
-                avg += model.predict_proba(fv)[0][1]
             avg /= len(pairs)
             sims.append(avg)
 
@@ -188,5 +197,7 @@ class SimilarityCalculator:
 
         files_features = self.__calculate_files_creation_dates_and_places(e1lv, e2lv)
         sims.extend(files_features)
+
+        SimilarityCache.objects.update_or_create(e1v=e1lv, e2v=e2lv, defaults={"vector": sims})
 
         return sims

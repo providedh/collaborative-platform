@@ -1,13 +1,14 @@
 from io import BytesIO
 
 from django.contrib.auth.models import User
+from django.contrib.postgres.fields import ArrayField
 from django.core.exceptions import ValidationError
 from django.core.files.base import ContentFile
 from django.db.models import Model, FileField, ForeignKey, CASCADE, IntegerField, SET_NULL, CharField, BooleanField, \
-    DateTimeField
+    DateTimeField, FloatField
 
 from apps.api_vis.db_handler import DbHandler
-from apps.api_vis.models import Entity, Clique
+from apps.api_vis.models import Entity, Clique, EntityVersion
 from apps.projects.models import Project, EntitySchema
 import joblib
 
@@ -50,7 +51,7 @@ class UnificationProposal(Model):
     entity = ForeignKey(Entity, on_delete=CASCADE, related_name='e1s')
     entity2 = ForeignKey(Entity, on_delete=CASCADE, related_name='e2s', null=True)
     clique = ForeignKey(Clique, on_delete=CASCADE, related_name='proposals', null=True)
-    confidence = IntegerField()
+    confidence = FloatField()
 
     decision_maker = ForeignKey(User, on_delete=SET_NULL, null=True, blank=True)
     user_confidence = CharField(max_length=9, null=True, blank=True)
@@ -113,3 +114,12 @@ class CeleryTask(Model):
     type = CharField(max_length=7, choices=types)
     task_id = CharField(max_length=36, null=True)
     created = DateTimeField(auto_now=True)
+
+
+class SimilarityCache(Model):
+    e1v = ForeignKey(EntityVersion, on_delete=CASCADE, related_name="sim_cache_e1v")
+    e2v = ForeignKey(EntityVersion, on_delete=CASCADE, related_name="sim_cache_e2v")
+    vector = ArrayField(FloatField())
+
+    class Meta:
+        unique_together = ("e1v", "e2v")

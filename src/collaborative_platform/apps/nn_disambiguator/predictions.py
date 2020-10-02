@@ -1,5 +1,5 @@
 import traceback
-from time import sleep
+from time import sleep, strftime
 
 from celery import shared_task
 from numpy import average
@@ -16,6 +16,10 @@ from apps.projects.models import Project, EntitySchema
 from itertools import combinations, permutations, product
 
 from collaborative_platform.settings import DEFAULT_ENTITIES
+
+
+def log(text):
+    print(f"{strftime('%H:%M:%S')}: {text}")
 
 
 def generate_entities_pairs(schema: EntitySchema) -> List[Tuple[Entity, Entity]]:
@@ -85,20 +89,41 @@ def make_entities_cliques_proposals(data_processor, model, scaler, schema):
 
 def make_entities_proposals(data_processor, model, scaler, schema):
     pairs = generate_entities_pairs(schema)
-    sim_vecs = [data_processor.get_features_vector(e1, e2) for e1, e2 in pairs]
-    sim_vecs = scaler.transform(sim_vecs)
-    results = [p[1] for p in model.predict_proba(sim_vecs)]
-    proposals = []
-    for i in range(len(pairs)):
-        if results[i] > 0.0:  # TODO: make this threshold configurable?
-            proposals.append((pairs[i], results[i]))
-    UnificationProposal.objects.bulk_create(
-        UnificationProposal(
-            entity=proposal[0][0],
-            entity2=proposal[0][1],
-            confidence=proposal[1] * 100
-        ) for proposal in proposals
-    )
+    log("Generated pairs")
+
+    for e1, e2 in pairs:
+        sim_vec = data_processor.get_features_vector(e1, e2)
+        log("Got sims vector")
+        sim_vec = scaler.transform([sim_vec])
+        p = model.predict_proba(sim_vec)[0][1]
+
+        log(f"Predicted. p={p}")
+
+        if p > 0.0:
+            UnificationProposal(
+                entity=e1,
+                entity2=e2,
+                confidence=p * 100
+            ).save()
+        log("Saved")
+
+    # sim_vecs = [data_processor.get_features_vector(e1, e2) for e1, e2 in pairs]
+    # sim_vecs = scaler.transform(sim_vecs)
+    # log("Scaled vectors")
+    # results = [p[1] for p in model.predict_proba(sim_vecs)]
+    # # proposals = []
+    # for i in range(len(pairs)):
+    #     if results[i] > 0.0:  # TODO: make this threshold configurable?
+    #         # proposals.append((pairs[i], results[i]))
+    #
+
+    # UnificationProposal.objects.bulk_create(
+    #     UnificationProposal(
+    #         entity=proposal[0][0],
+    #         entity2=proposal[0][1],
+    #         confidence=proposal[1] * 100
+    #     ) for proposal in proposals
+    # )
 
 
 def reset_undecided_proposals(project_id: int):
@@ -117,6 +142,7 @@ def calculate_proposals(self, project_id: int):
         task = CeleryTask.objects.get(project_id=project_id, task_id=self.request.id, status="S")
         task.status = "R"
         task.save()
+        log("Proposals task ran")
 
         try:
             project = Project.objects.get(id=project_id)
@@ -126,6 +152,7 @@ def calculate_proposals(self, project_id: int):
             return
 
         reset_undecided_proposals(project_id)
+        log("Proposals reset")
 
         schemas = project.taxonomy.entities_schemas.all()
         for schema in schemas:
