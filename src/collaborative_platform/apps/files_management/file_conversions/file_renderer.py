@@ -256,6 +256,19 @@ class FileRenderer:
     def __create_certainties_elements_from_unifications(self, unifications):
         elements = []
 
+        latest_commit = self.__get_latest_commit_from_db()
+
+        for unification in unifications:
+            joined_unifications = self.__get_joined_unifications_from_db(unification, latest_commit)
+
+            for joined_unification in joined_unifications:
+                certainty_element = self.__create_certainty_element_from_unification(unification, joined_unification)
+
+                elements.append(certainty_element)
+
+        return elements
+
+    def __get_latest_commit_from_db(self):
         project_versions = ProjectVersion.objects.filter(
             file_versions__id=self.__file_version.id
         ).order_by('-id')
@@ -263,23 +276,20 @@ class FileRenderer:
         project_version = project_versions[0]
         latest_commit = project_version.latest_commit
 
-        for unification in unifications:
-            matching_unifications = unification.clique.unifications.all()
-            matching_unifications = matching_unifications.filter(
-                Q(deleted_in_commit_id__gte=latest_commit.id) | Q(deleted_in_commit__isnull=True),
-                created_in_commit_id__lte=latest_commit.id
-            )
-            matching_unifications = matching_unifications.exclude(
-                id=unification.id
-            )
-            matching_unifications = matching_unifications.order_by('id')
+        return latest_commit
 
-            for matching_unification in matching_unifications:
-                certainty_element = self.__create_certainty_element_from_unification(unification, matching_unification)
+    def __get_joined_unifications_from_db(self, unification, latest_commit):
+        joined_unifications = unification.clique.unifications.all()
+        joined_unifications = joined_unifications.filter(
+            Q(deleted_in_commit_id__gte=latest_commit.id) | Q(deleted_in_commit__isnull=True),
+            created_in_commit_id__lte=latest_commit.id
+        )
+        joined_unifications = joined_unifications.exclude(
+            id=unification.id
+        )
+        joined_unifications = joined_unifications.order_by('id')
 
-                elements.append(certainty_element)
-
-        return elements
+        return joined_unifications
 
     def __create_certainty_element_from_unification(self, unification, matching_unification):
         default_prefix = '{%s}' % XML_NAMESPACES['default']
