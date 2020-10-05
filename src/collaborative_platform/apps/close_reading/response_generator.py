@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from django.db.models import Q
 from django.forms.models import model_to_dict
 
-from apps.api_vis.models import Certainty, EntityProperty, EntityVersion
+from apps.api_vis.models import Certainty, EntityProperty, EntityVersion, Unification
 from apps.close_reading.loggers import CloseReadingLogger
 from apps.close_reading.models import AnnotatingBodyContent, Operation
 from apps.files_management.file_conversions.xml_tools import get_first_xpath_match
@@ -182,7 +182,8 @@ class ResponseGenerator:
         certainties = self.__get_certainties_from_db()
         certainties = self.__serialize_certainties(certainties)
 
-        # TODO: Append certainties created from unifications
+        certainties_from_unifications = self.__create_serialized_certainties_from_unifications()
+        certainties += certainties_from_unifications
 
         return certainties
 
@@ -224,6 +225,74 @@ class ResponseGenerator:
             certainties_serialized.append(certainty_serialized)
 
         return certainties_serialized
+
+    def __create_serialized_certainties_from_unifications(self):
+        unifications = self.__get_unifications_from_db()
+        serialized_certainties = []
+
+        for unification in unifications:
+            joined_unifications = self.__get_joined_unifications_from_db(unification)
+            certainties = self.__transform_unification_to_certainties(unification, joined_unifications)
+            serialized_certainties += certainties
+
+        return serialized_certainties
+
+    def __get_unifications_from_db(self):
+        unifications = Unification.objects.filter(
+            deleted_in_commit__isnull=True,
+            created_in_file_version__file=self.__file,
+        )
+        unifications = unifications.order_by('id')
+
+        return unifications
+
+    def __transform_unification_to_certainties(self, unification, joined_unifications):
+        certainties = []
+
+        for joined_unification in joined_unifications:
+            certainty = self.__create_serialized_certainty_from_unification(unification, joined_unification)
+
+            certainties.append(certainty)
+
+        return certainties
+
+    def __get_joined_unifications_from_db(self, unification):
+        joined_unifications = unification.clique.unifications.all()
+        joined_unifications = joined_unifications.filter(
+            deleted_in_commit__isnull=True,
+            created_in_commit__isnull=False,
+        )
+        joined_unifications = joined_unifications.exclude(
+            id=unification.id
+        )
+        joined_unifications = joined_unifications.order_by('id')
+
+        return joined_unifications
+
+    def __create_serialized_certainty_from_unification(self, unification, matching_unification):
+        first_index = unification.xml_id.split('-')[-1]
+        second_index = matching_unification.entity.file.id
+        third_index = matching_unification.xml_id.split('-')[-1]
+
+        path_to_file = matching_unification.entity.file.get_relative_path()
+        entity_xml_id = matching_unification.entity.xml_id
+
+        certainty = {
+            'ana': unification.get_categories(as_str=True),
+            'locus': 'value',
+            'degree': None,
+            'cert': unification.certainty,
+            'resp': f'#{unification.created_by.profile.get_xml_id()}',
+            'match': '@sameAs',
+            'target': f'#{unification.entity.xml_id}',
+            'xml:id': f'certainty-{first_index}.{second_index}.{third_index}',
+            'assertedValue': f'{path_to_file}#{entity_xml_id}',
+            'desc': unification.description,
+            'saved': True if unification.created_in_commit is not None else False,
+            'deleted': True if unification.deleted_by is not None else False
+        }
+
+        return certainty
 
     def __get_entities_lists(self):
         file_version = self.__file.file_versions.order_by('-number')[0]

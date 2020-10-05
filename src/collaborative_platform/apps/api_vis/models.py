@@ -165,8 +165,8 @@ class Unification(models.Model):
                                           related_name='deleted_unifications')
 
     categories = models.ManyToManyField(UncertaintyCategory)
-    certainty = models.CharField(max_length=255)
-    description = models.TextField(default='')
+    certainty = models.CharField(max_length=255, null=True)
+    description = models.CharField(max_length=255, null=True)
     xml_id = models.CharField(max_length=255)
 
     def delete_fake(self, user, commit):

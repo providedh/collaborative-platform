@@ -31,8 +31,6 @@ class FileRenderer:
         self.__append_unifications()
         self.__append_annotators()
 
-        # TODO: Fix appending unifications
-
         # TODO: Reorder lists in <body>
 
         # TODO: Move appending line with xml-model here
