@@ -327,6 +327,17 @@
   }
 },
 {
+  "model": "files_management.directory",
+  "pk": 2,
+  "fields": {
+    "project": 2,
+    "name": "Empty_project",
+    "deleted": false,
+    "deleted_on": null,
+    "parent_dir": null
+  }
+},
+{
   "model": "files_management.file",
   "pk": 1,
   "fields": {
@@ -672,6 +683,18 @@
   }
 },
 {
+  "model": "projects.project",
+  "pk": 2,
+  "fields": {
+    "title": "Empty_project",
+    "description": "",
+    "creation_date": "2020-10-06T06:53:35.854Z",
+    "modification_date": "2020-10-06T06:53:35.854Z",
+    "license": "GPL",
+    "public": false
+  }
+},
+{
   "model": "projects.projectversion",
   "pk": 1,
   "fields": {
@@ -838,10 +861,29 @@
   }
 },
 {
+  "model": "projects.projectversion",
+  "pk": 12,
+  "fields": {
+    "project": 2,
+    "file_version_counter": 0,
+    "latest_commit": null,
+    "commit_counter": 0,
+    "date": "2020-10-06T06:53:35.858Z",
+    "file_versions": []
+  }
+},
+{
   "model": "projects.taxonomy",
   "pk": 1,
   "fields": {
     "contents": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<TEI xmlns=\"http://www.tei-c.org/ns/1.0\">\n  <teiHeader>\n    <fileDesc>\n      <titleStmt>\n        <title>Uncertainty Taxonomy for project Project_1</title>\n      </titleStmt>\n    </fileDesc>\n    <encodingDesc>\n      <classDecl>\n        <taxonomy>\n          <category>\n            <catDesc>User recognized uncertainty</catDesc>\n            \n            <category xml:id=\"new_awesome_category\">\n              <catDesc>new_awesome_category</catDesc>\n              <desc></desc>\n            </category>\n\n            <category xml:id=\"incompleteness\">\n              <catDesc>incompleteness</catDesc>\n              <desc></desc>\n            </category>\n\n            <category xml:id=\"imprecision\">\n              <catDesc>imprecision</catDesc>\n              <desc></desc>\n            </category>\n\n            <category xml:id=\"credibility\">\n              <catDesc>credibility</catDesc>\n              <desc></desc>\n            </category>\n\n            <category xml:id=\"ignorance\">\n              <catDesc>ignorance</catDesc>\n              <desc></desc>\n            </category>\n\n          </category>\n          <category>\n            <catDesc>Machine generated uncertainty</catDesc>\n            <category xml:id=\"algorithmic\">\n              <catDesc>Algorithmic</catDesc>\n            </category>\n          </category>\n        </taxonomy>\n      </classDecl>\n    </encodingDesc>\n  </teiHeader>\n</TEI>"
+  }
+},
+{
+  "model": "projects.taxonomy",
+  "pk": 2,
+  "fields": {
+    "contents": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<TEI xmlns=\"http://www.tei-c.org/ns/1.0\">\n  <teiHeader>\n    <fileDesc>\n      <titleStmt>\n        <title>Uncertainty Taxonomy for project Empty_project</title>\n      </titleStmt>\n    </fileDesc>\n    <encodingDesc>\n      <classDecl>\n        <taxonomy>\n          <category>\n            <catDesc>User recognized uncertainty</catDesc>\n            \n            <category xml:id=\"new_awesome_category\">\n              <catDesc>new_awesome_category</catDesc>\n              <desc></desc>\n            </category>\n\n            <category xml:id=\"incompleteness\">\n              <catDesc>incompleteness</catDesc>\n              <desc></desc>\n            </category>\n\n            <category xml:id=\"imprecision\">\n              <catDesc>imprecision</catDesc>\n              <desc></desc>\n            </category>\n\n            <category xml:id=\"credibility\">\n              <catDesc>credibility</catDesc>\n              <desc></desc>\n            </category>\n\n            <category xml:id=\"ignorance\">\n              <catDesc>ignorance</catDesc>\n              <desc></desc>\n            </category>\n\n          </category>\n          <category>\n            <catDesc>Machine generated uncertainty</catDesc>\n            <category xml:id=\"algorithmic\">\n              <catDesc>Algorithmic</catDesc>\n            </category>\n          </category>\n        </taxonomy>\n      </classDecl>\n    </encodingDesc>\n  </teiHeader>\n</TEI>"
   }
 },
 {
@@ -893,6 +935,61 @@
   "pk": 5,
   "fields": {
     "taxonomy": 1,
+    "name": "new_awesome_category",
+    "xml_id": "new_awesome_category",
+    "color": "#aaaaaa",
+    "description": ""
+  }
+},
+{
+  "model": "projects.uncertaintycategory",
+  "pk": 6,
+  "fields": {
+    "taxonomy": 2,
+    "name": "ignorance",
+    "xml_id": "ignorance",
+    "color": "#9270a8",
+    "description": ""
+  }
+},
+{
+  "model": "projects.uncertaintycategory",
+  "pk": 7,
+  "fields": {
+    "taxonomy": 2,
+    "name": "credibility",
+    "xml_id": "credibility",
+    "color": "#cc4c3b",
+    "description": ""
+  }
+},
+{
+  "model": "projects.uncertaintycategory",
+  "pk": 8,
+  "fields": {
+    "taxonomy": 2,
+    "name": "imprecision",
+    "xml_id": "imprecision",
+    "color": "#f1d155",
+    "description": ""
+  }
+},
+{
+  "model": "projects.uncertaintycategory",
+  "pk": 9,
+  "fields": {
+    "taxonomy": 2,
+    "name": "incompleteness",
+    "xml_id": "incompleteness",
+    "color": "#67b2ac",
+    "description": ""
+  }
+},
+{
+  "model": "projects.uncertaintycategory",
+  "pk": 10,
+  "fields": {
+    "taxonomy": 2,
     "name": "new_awesome_category",
     "xml_id": "new_awesome_category",
     "color": "#aaaaaa",
@@ -966,6 +1063,72 @@
   }
 },
 {
+  "model": "projects.entityschema",
+  "pk": 7,
+  "fields": {
+    "taxonomy": 2,
+    "name": "person",
+    "color": "#ff7f00",
+    "icon": "\uf007",
+    "body_list": false
+  }
+},
+{
+  "model": "projects.entityschema",
+  "pk": 8,
+  "fields": {
+    "taxonomy": 2,
+    "name": "event",
+    "color": "#cecece",
+    "icon": "\uf274",
+    "body_list": true
+  }
+},
+{
+  "model": "projects.entityschema",
+  "pk": 9,
+  "fields": {
+    "taxonomy": 2,
+    "name": "place",
+    "color": "#204191",
+    "icon": "\uf279",
+    "body_list": false
+  }
+},
+{
+  "model": "projects.entityschema",
+  "pk": 10,
+  "fields": {
+    "taxonomy": 2,
+    "name": "date",
+    "color": "#868788",
+    "icon": "\uf073",
+    "body_list": false
+  }
+},
+{
+  "model": "projects.entityschema",
+  "pk": 11,
+  "fields": {
+    "taxonomy": 2,
+    "name": "time",
+    "color": "#eab9e4",
+    "icon": "\uf017",
+    "body_list": false
+  }
+},
+{
+  "model": "projects.entityschema",
+  "pk": 12,
+  "fields": {
+    "taxonomy": 2,
+    "name": "ingredient",
+    "color": "#02ff00",
+    "icon": "\uf0c3",
+    "body_list": true
+  }
+},
+{
   "model": "auth.user",
   "pk": 1,
   "fields": {
@@ -988,7 +1151,7 @@
   "pk": 2,
   "fields": {
     "password": "pbkdf2_sha256$150000$ypZrXP1a5q6Q$YgcS5xyWasdPt2q8w8gMm1NY6s3eRft0yK0ik/Y3R5I=",
-    "last_login": "2020-10-02T07:56:37.222Z",
+    "last_login": "2020-10-06T06:50:29.613Z",
     "is_superuser": false,
     "username": "tony_stark",
     "first_name": "Tony",
@@ -3185,6 +3348,26 @@
   }
 },
 {
+  "model": "projects.contributor",
+  "pk": 3,
+  "fields": {
+    "project": 2,
+    "user": 2,
+    "profile": 2,
+    "permissions": "AD"
+  }
+},
+{
+  "model": "projects.contributor",
+  "pk": 4,
+  "fields": {
+    "project": 2,
+    "user": 3,
+    "profile": 3,
+    "permissions": "RW"
+  }
+},
+{
   "model": "projects.activity",
   "pk": 1,
   "fields": {
@@ -3332,6 +3515,21 @@
     "user": 2,
     "user_name": "Tony Stark",
     "action_text": "File migrated: Appended TEI ProvideDH schema. Reformatted xml. Corrected xml:ids for project entities. Moved elements from file to database. "
+  }
+},
+{
+  "model": "projects.activity",
+  "pk": 11,
+  "fields": {
+    "project": 2,
+    "date": "2020-10-06T06:53:35.880Z",
+    "related_file": null,
+    "related_file_name": null,
+    "related_dir": null,
+    "related_dir_name": null,
+    "user": 2,
+    "user_name": "Tony Stark",
+    "action_text": "created project"
   }
 }
 ]
