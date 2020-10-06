@@ -1122,6 +1122,77 @@ class TestIssueUnnamed01:
         assert result_xml == expected_xml
 
 
+@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
+@pytest.mark.asyncio
+@pytest.mark.django_db(transaction=True, reset_sequences=True)
+@pytest.mark.integration_tests
+class TestIssue137:
+    """Discarding entity creation causes error"""
+
+    async def test_discarding_adding_reference_does_not_cause_an_error(self):
+        test_name = inspect.currentframe().f_code.co_name
+
+        user_id = 2
+        project_id = 2
+
+        client = Client()
+        user = User.objects.get(id=user_id)
+        client.force_login(user)
+
+        project = Project.objects.get(id=project_id)
+        project_files = project.file_set
+        assert project_files.count() == 0
+
+        directory = Directory.objects.get(project=project, name=project.title, parent_dir=None)
+        source_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files', 'music.xml')
+        upload_file(client, source_file_path, directory.id)
+        assert project_files.count() == 1
+
+        file_id = project_files.latest('id').id
+        communicator = get_communicator(project_id, file_id, user_id)
+        await communicator.connect()
+        await communicator.receive_json_from()
+
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'POST',
+                    'element_type': 'tag',
+                    'parameters': {
+                        'start_pos': 341,
+                        'end_pos': 355,
+                    }
+                },
+                {
+                    'method': 'POST',
+                    'element_type': 'reference',
+                    'edited_element_id': 0,
+                    'parameters': {
+                        'entity_type': 'person',
+                    }
+                },
+            ]
+        }
+        request_nr = 0
+
+        await communicator.send_json_to(request)
+        response = await communicator.receive_json_from()
+        verify_response(test_name, response, request_nr)
+
+        request = {
+            'method': 'discard',
+            'payload': [2]
+        }
+        request_nr = 1
+
+        await communicator.send_json_to(request)
+        response = await communicator.receive_json_from()
+        verify_response(test_name, response, request_nr)
+
+        await communicator.disconnect()
+
+
 def verify_response(test_name, response, request_nr):
     test_results_file_path = os.path.join(SCRIPT_DIR, 'tests_results_for_issues.json')
     test_results = read_file(test_results_file_path)
