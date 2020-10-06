@@ -3669,7 +3669,7 @@ class TestAnnotatorWithWsAndDb:
 
         assert len(file_versions) == 2
 
-        project_version = ProjectVersion.objects.latest('id')
+        project_version = ProjectVersion.objects.filter(project_id=project_id).latest('id')
         file_versions_ids = project_version.file_versions.order_by('id').values_list('id', flat=True)
         file_versions_ids = list(file_versions_ids)
         assert file_versions_ids == [2, 4, 6]
