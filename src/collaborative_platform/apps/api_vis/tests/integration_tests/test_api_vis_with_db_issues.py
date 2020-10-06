@@ -73,30 +73,6 @@ class TestIssue158:
                         'entity_type': 'person',
                     }
                 },
-                {
-                    'method': 'POST',
-                    'element_type': 'entity_property',
-                    'edited_element_id': 1,
-                    'parameters': {
-                        'name': 'Barry White'
-                    }
-                },
-                {
-                    'method': 'POST',
-                    'element_type': 'entity_property',
-                    'edited_element_id': 1,
-                    'parameters': {
-                        'forename': 'Barry Eugene'
-                    }
-                },
-                {
-                    'method': 'POST',
-                    'element_type': 'entity_property',
-                    'edited_element_id': 1,
-                    'parameters': {
-                        'surname': 'Carter'
-                    }
-                }
             ]
         }
         request_nr = 1
@@ -107,7 +83,7 @@ class TestIssue158:
 
         request = {
             'method': 'save',
-            'payload': [1, 2, 3, 4, 5]
+            'payload': [1, 2]
         }
         request_nr = 2
 

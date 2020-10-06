@@ -8,17 +8,14 @@
       "authors": [],
       "operations": [
         {"id": 1, "method": "POST", "element_type": "tag", "edited_element_id": null, "old_element_id": null, "new_element_id": null, "operation_result": "ab-0", "dependencies": []},
-        {"id": 2, "method": "POST", "element_type": "reference", "edited_element_id": "ab-0", "old_element_id": null, "new_element_id": null, "operation_result": "person-0", "dependencies": [1]},
-        {"id": 3, "method": "POST", "element_type": "entity_property", "edited_element_id": "person-0", "old_element_id": null, "new_element_id": null, "operation_result": "person-0/name", "dependencies": [2]},
-        {"id": 4, "method": "POST", "element_type": "entity_property", "edited_element_id": "person-0", "old_element_id": null, "new_element_id": null, "operation_result": "person-0/forename", "dependencies": [2]},
-        {"id": 5, "method": "POST", "element_type": "entity_property", "edited_element_id": "person-0", "old_element_id": null, "new_element_id": null, "operation_result": "person-0/surname", "dependencies": [2]}
+        {"id": 2, "method": "POST", "element_type": "reference", "edited_element_id": "ab-0", "old_element_id": null, "new_element_id": null, "operation_result": "person-0", "dependencies": [1]}
       ],
       "certainties": [],
       "entities_lists": {
         "event": [],
         "ingredient": [],
         "person": [
-          {"type": "person", "xml:id": "person-0", "resp": "#annotator-2", "saved": false, "deleted": false, "properties": [{"name": "forename", "value": "Barry Eugene", "saved": false, "deleted": false}, {"name": "name", "value": "Barry White", "saved": false, "deleted": false}, {"name": "surname", "value": "Carter", "saved": false, "deleted": false}]}],
+          {"type": "person", "xml:id": "person-0", "resp": "#annotator-2", "saved": false, "deleted": false, "properties": []}],
         "place": []
       },
       "body_content": "<body xmlns=\"http://www.tei-c.org/ns/1.0\">\n  <div type=\"ingredient\">\n    <listObject/>\n  </div>\n  <div type=\"utensil\">\n    <listObject/>\n  </div>\n  <div type=\"dietetic\">\n    <listObject/>\n  </div>\n  <div type=\"recipe\">\n    <p>Take Cucumbers of the same <name xml:id=\"ab-0\" respAdded=\"#annotator-2\" saved=\"false\" refAdded=\"#person-0\" xml:idAdded=\"name-0\" xml:idDeleted=\"ab-0\">Bigness</name> that you wou’d to pickle; pick them fresh, green, and free from Spots; boil them in Water ’till they are tender; then run a Knitting-needle through them the long Way, and scrape off all Roughness; then green them, which is done thus: Let your Water be ready to boil, take it off, and put in a good Piece of Roach-Allum; set it on the Fire, and put in the Cucumbers; cover them close ’till you see they look green; weigh them, and take their Weight in single-refin’d Sugar clarify’d; to a Pound of Sugar put a Pint of Water; put your Cucumbers in; boil them a little close-cover’d; set them by, and boil them a little every Day for four Days; then take them out of your Syrup, and make a Syrup of double-refin’d Sugar, a Pound of Sugar and half a Pint of Water to every Pound of Cucumbers; put in your Cucumbers, and boil them ’till they are clear; then put in the Juice of two or three Lemmons, and a little Orange-flower-water, and give them a Boil altogether: You may either lay them out to dry, or keep them in Syrup; but every Time you take any out, make the other scalding hot, and they will keep two or three Years.</p>\n  </div>\n</body>\n"
@@ -36,7 +33,7 @@
         "event": [],
         "ingredient": [],
         "person": [
-          {"type": "person", "xml:id": "person-0", "resp": "#annotator-2", "saved": true, "deleted": false, "properties": [{"name": "forename", "value": "Barry Eugene", "saved": true, "deleted": false}, {"name": "name", "value": "Barry White", "saved": true, "deleted": false}, {"name": "surname", "value": "Carter", "saved": true, "deleted": false}]}],
+          {"type": "person", "xml:id": "person-0", "resp": "#annotator-2", "saved": true, "deleted": false, "properties": []}],
         "place": []
       },
       "body_content": "<body xmlns=\"http://www.tei-c.org/ns/1.0\">\n  <div type=\"ingredient\">\n    <listObject/>\n  </div>\n  <div type=\"utensil\">\n    <listObject/>\n  </div>\n  <div type=\"dietetic\">\n    <listObject/>\n  </div>\n  <div type=\"recipe\">\n    <p>Take Cucumbers of the same <name xml:id=\"name-0\" resp=\"#annotator-2\" ref=\"#person-0\">Bigness</name> that you wou’d to pickle; pick them fresh, green, and free from Spots; boil them in Water ’till they are tender; then run a Knitting-needle through them the long Way, and scrape off all Roughness; then green them, which is done thus: Let your Water be ready to boil, take it off, and put in a good Piece of Roach-Allum; set it on the Fire, and put in the Cucumbers; cover them close ’till you see they look green; weigh them, and take their Weight in single-refin’d Sugar clarify’d; to a Pound of Sugar put a Pint of Water; put your Cucumbers in; boil them a little close-cover’d; set them by, and boil them a little every Day for four Days; then take them out of your Syrup, and make a Syrup of double-refin’d Sugar, a Pound of Sugar and half a Pint of Water to every Pound of Cucumbers; put in your Cucumbers, and boil them ’till they are clear; then put in the Juice of two or three Lemmons, and a little Orange-flower-water, and give them a Boil altogether: You may either lay them out to dry, or keep them in Syrup; but every Time you take any out, make the other scalding hot, and they will keep two or three Years.</p>\n  </div>\n</body>\n"
@@ -44,11 +41,7 @@
     [
       {
         "id": 23,
-        "properties": {
-          "forename": "Barry Eugene",
-          "name": "Barry White",
-          "surname": "Carter"
-        },
+        "properties": {},
         "type": "person"
       }
     ]
