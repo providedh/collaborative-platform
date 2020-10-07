@@ -3,8 +3,9 @@ import PropTypes from 'prop-types'
 
 import styles from './styles.module.css' // eslint-disable-line no-unused-vars
 
-export default function Body ({currentIndex, unifications, ...restProps}) {
-
+export default function Body ({focused}) {
+  if (focused === null) {return ''}
+  console.log(focused)
   return (<div className={styles.body}></div>)
 }
 
