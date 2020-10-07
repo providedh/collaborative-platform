@@ -6,6 +6,8 @@ import { Header } from 'components/header'
 import { Navigation } from 'components/navigation'
 import { Body } from 'components/body'
 import styles from './styles.module.css' // eslint-disable-line no-unused-vars
+    import details from './details.json'
+
 
 const buffSize = 10
 
@@ -14,27 +16,32 @@ function useProposalIds(projectId) {
   useEffect(() => {
     API.getProposalList(projectId)
     .then(ids => {
-      setIds(ids);
+      console.log(ids)
+      setIds('2'.repeat(details.length).split('').map(x => +x))
+      //setIds(ids);
     })
     .catch(err => console.error('Failed to retrieve proposal ids for project ' + projectId))
   }, [])
   return ids;
 }
 
-function useProposalDetails(projectId, listIndex, focusedIndex, proposalIds, proposals, setFocused) {
+function useProposalDetails(projectId, listIndex, focusedIndex, ids, proposals, setFocused) {
   useEffect(() => {
     if ((proposals.length === 0) || (listIndex > focusedIndex) || (listIndex+buffSize < focusedIndex)) {
-      // fetch the proposalIds[focusedIndex] item
+      // fetch the ids[focusedIndex] item
+      setFocused(details[focusedIndex])      
+
     } else {
       setFocused(proposals[focusedIndex % buffSize])
     }
-  }, focusedIndex)
+  }, [focusedIndex])
 }
 
-function useProposalList(projectId, listIndex, proposalIds, setProposals) {
+function useProposalList(projectId, listIndex, ids, setProposals) {
   useEffect(() => {
-    // fetch the proposalIds[listIndex : listIndex + buffSize] items
-  }, listIndex)
+    // fetch the ids[listIndex : listIndex + buffSize] items
+    setProposals(details.slice(listIndex, buffSize))      
+  }, [listIndex])
 }
 
 export default function Unifications ({projectName, projectId, projectVersion, ...restProps}) {
@@ -43,10 +50,14 @@ export default function Unifications ({projectName, projectId, projectVersion, .
   const [focused, setFocused] = useState(null)
   const [proposals, setProposals] = useState([])
   const [listIndex, setListIndex] = useState(0)
+  
+  useProposalIds(projectId)
+  useProposalDetails(projectId, listIndex, focusedIndex, ids, proposals, setFocused)
+  useProposalList(projectId, listIndex, ids, setProposals)
 
   return (
     <div>
-      <Navigation {...{proposals, listIndex, setListIndex, focusedIndex, setFocusedIndex}}/>
+      <Navigation {...{proposals, listIndex, buffSize, ids, setListIndex, focusedIndex, setFocusedIndex}}/>
       <Body focused={focused}/>
     </div>
   )
