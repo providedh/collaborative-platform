@@ -6,7 +6,6 @@ import styles from './styles.module.css' // eslint-disable-line no-unused-vars
 export default function Navigation ({proposals, listIndex, buffSize, ids, setListIndex, focusedIndex, setFocusedIndex}) {
   const [listShown, setListVisibility] = useState(false)
 
-  console.log(ids)
   const navigationCssClasses = [
     'd-flex',
     'position-relative',
