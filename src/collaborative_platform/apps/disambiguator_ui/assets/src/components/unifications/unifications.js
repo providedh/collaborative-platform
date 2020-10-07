@@ -16,7 +16,6 @@ function useProposalIds(projectId) {
   useEffect(() => {
     API.getProposalList(projectId)
     .then(ids => {
-      console.log(ids)
       setIds('2'.repeat(details.length).split('').map(x => +x))
       //setIds(ids);
     })
@@ -58,7 +57,7 @@ export default function Unifications ({projectName, projectId, projectVersion, .
   return (
     <div>
       <Navigation {...{proposals, listIndex, buffSize, ids, setListIndex, focusedIndex, setFocusedIndex}}/>
-      <Body focused={focused}/>
+      <Body focused={focused} projectId={projectId}/>
     </div>
   )
 }
