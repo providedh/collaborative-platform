@@ -1,0 +1,5 @@
+.targetPreview{
+width: 100%;
+padding: .5em;
+background: var(--light);
+}
