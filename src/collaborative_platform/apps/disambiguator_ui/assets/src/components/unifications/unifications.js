@@ -43,7 +43,7 @@ function useProposalList(projectId, listIndex, ids, setProposals) {
   }, [listIndex])
 }
 
-export default function Unifications ({projectName, projectId, projectVersion, ...restProps}) {
+export default function Unifications ({projectId, configuration}) {
   const ids = useProposalIds(projectId)
   const [focusedIndex, setFocusedIndex] = useState(0)
   const [focused, setFocused] = useState(null)
@@ -57,7 +57,7 @@ export default function Unifications ({projectName, projectId, projectVersion, .
   return (
     <div>
       <Navigation {...{proposals, listIndex, buffSize, ids, setListIndex, focusedIndex, setFocusedIndex}}/>
-      <Body focused={focused} projectId={projectId}/>
+      <Body {...{focused, projectId, configuration}}/>
     </div>
   )
 }

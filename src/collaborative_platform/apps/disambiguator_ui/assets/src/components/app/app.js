@@ -14,7 +14,7 @@ export default function App ({projectName, projectId, projectVersion, ...restPro
   return (
     <div className={appCssClasses}>
       <Header {...{projectName, projectId, projectVersion}}/>
-      <Unifications {...{projectName, projectId, projectVersion}}/>
+      <Unifications {...{projectId, configuration: restProps.configuration}}/>
     </div>
   )
 }

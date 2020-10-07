@@ -8,7 +8,7 @@ function capitalize(text){
     text.slice(1).toLocaleLowerCase()
 }
 
-export default function Target ({entity, projectId}) {
+export default function Target ({entity, projectId, configuration}) {
   if (entity === null) {return ''}
   console.log(entity)
 
@@ -21,6 +21,8 @@ export default function Target ({entity, projectId}) {
       <span key={i} className={styles.property}>
         <i>{capitalize(p[0])}</i>: {p[1]}
       </span>))
+  console.log(configuration)
+  const iconCode = configuration.entities[entity.type].icon;
 
   return (<div className={styles.target}>
     <p>
@@ -29,7 +31,9 @@ export default function Target ({entity, projectId}) {
         <a target="new" href={annotatorURL}><i className="fas fa-external-link-alt"></i></a>
       </span>
       <span className={styles.slash}>/</span>
-      <span className={styles.entity}>{entity.type + '-' + entity.id}</span>
+      <span className={styles.entity}>
+        <i className="fas" data={iconCode}></i> {entity.type + '-' + entity.id}
+      </span>
       {properties}
     </p>
   </div>)

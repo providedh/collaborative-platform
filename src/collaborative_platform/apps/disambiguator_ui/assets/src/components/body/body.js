@@ -4,11 +4,11 @@ import PropTypes from 'prop-types'
 import styles from './styles.module.css' // eslint-disable-line no-unused-vars
 import { TargetDescription } from 'components/targetDescription'
 
-export default function Body ({projectId, focused}) {
+export default function Body ({projectId, focused, configuration}) {
   if (focused === null) {return ''}
   console.log(focused)
   return (<div className={styles.body}>
-    <TargetDescription entity={focused.entity} projectId={projectId} />
+    <TargetDescription {...{projectId, configuration, entity: focused.entity}} />
   </div>)
 }
 

@@ -29,3 +29,7 @@ font-weight: bolder;
 .entity{
 font-weight: bolder;
 }
+.entity i:before{
+content: attr(data);
+font-size: .9em;
+}
