@@ -8,7 +8,7 @@ function capitalize(text){
     text.slice(1).toLocaleLowerCase()
 }
 
-export default function Target ({entity, projectId, configuration}) {
+export default function TargetDescription ({entity, projectId, configuration}) {
   if (entity === null) {return ''}
   console.log(entity)
 
@@ -39,7 +39,7 @@ export default function Target ({entity, projectId, configuration}) {
   </div>)
 }
 
-Target.propTypes = {
+TargetDescription.propTypes = {
   currentIndex: PropTypes.number,
   unifications: PropTypes.arrayOf(PropTypes.object),
 }
