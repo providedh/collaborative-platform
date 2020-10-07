@@ -73,6 +73,7 @@ class RequestHandler:
                     dependencies_ids = self.__find_dependencies(operation, operation_result)
 
                 self.__db_handler.add_operation(operation, operation_result, dependencies_ids)
+
             else:
                 if operation['method'] == 'PUT':
                     dependencies_ids = self.__find_dependencies(operation, operation_result, modification=True)

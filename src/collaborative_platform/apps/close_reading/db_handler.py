@@ -120,6 +120,12 @@ class DbHandler:
             certainty = self.__get_certainty_from_db(certainty_xml_id, saved)
             certainty = self.__clone_certainty(certainty)
 
+        else:
+            saved_certainty = self.__get_certainty_from_db(certainty_xml_id, saved=True)
+
+            if saved_certainty:
+                saved = True
+
         if parameter_name == 'categories':
             categories = certainty.categories.all()
 
