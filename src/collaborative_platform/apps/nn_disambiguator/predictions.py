@@ -71,17 +71,23 @@ def calculate_entity_clique_sim_vector(entity: Entity, clique: Clique, data_proc
 
 def make_entities_cliques_proposals(data_processor, model, scaler, schema):
     pairs = generate_entity_clique_pairs(schema)
+    log("Generated pairs")
 
     for e, c in pairs:
         sim_vec = calculate_entity_clique_sim_vector(e, c, data_processor)
+        log("Got sims vector")
         sim_vec = scaler.transform([sim_vec])
-        result = model.predict_proba(sim_vec)[0][1]
-        if result > 0.0:  # TODO: make this threshold configurable?
+        p = model.predict_proba(sim_vec)[0][1]
+
+        log(f"Predicted. p={p}")
+
+        if p > 0.0:  # TODO: make this threshold configurable?
             UnificationProposal(
                 entity=e,
                 clique=c,
-                confidence=result * 100
+                confidence=p * 100
             ).save()
+            log("Saved")
 
 
 def make_entities_proposals(data_processor, model, scaler, schema):
@@ -102,7 +108,7 @@ def make_entities_proposals(data_processor, model, scaler, schema):
                 entity2=e2,
                 confidence=p * 100
             ).save()
-        log("Saved")
+            log("Saved")
 
     # sim_vecs = [data_processor.get_features_vector(e1, e2) for e1, e2 in pairs]
     # sim_vecs = scaler.transform(sim_vecs)
