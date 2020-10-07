@@ -1,7 +1,6 @@
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django.db import models
-from django.contrib.postgres import fields
 
 from apps.core.models import Profile
 from apps.projects.taxonomy_template import taxonomy_template_string, category_template_string

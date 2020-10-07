@@ -35,6 +35,12 @@ def api_vis_with_db_setup(django_db_setup, django_db_blocker):
         __remove_db_files_directory()
 
 
+@pytest.fixture(scope='function')
+def reset_db_files_directory_before_each_test():
+    __remove_db_files_directory()
+    __create_db_files_directory()
+
+
 def __create_db_files_directory():
     source_files = os.path.join(SCRIPT_DIR, 'database_fixture', 'media')
 

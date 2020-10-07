@@ -5,7 +5,7 @@ from django.db.models import Q
 
 from apps.files_management.file_conversions.xml_tools import add_property_to_element, get_or_create_element_from_xpath
 from apps.api_vis.models import Certainty, EntityProperty, EntityVersion, Unification
-from apps.projects.models import EntitySchema
+from apps.projects.models import EntitySchema, ProjectVersion
 
 from collaborative_platform.settings import XML_NAMESPACES, DEFAULT_ENTITIES, NS_MAP, CUSTOM_ENTITY
 
@@ -30,8 +30,6 @@ class FileRenderer:
         self.__append_certainties()
         self.__append_unifications()
         self.__append_annotators()
-
-        # TODO: Fix appending unifications
 
         # TODO: Reorder lists in <body>
 
@@ -201,14 +199,11 @@ class FileRenderer:
         certainty_element = etree.Element(default_prefix + 'certainty', nsmap=NS_MAP)
 
         certainty_element.set(xml_prefix + 'id', certainty.xml_id)
-        certainty_element.set('resp', f'#annotator-{certainty.created_by_id}')
+        certainty_element.set('resp', f'#{certainty.created_by.profile.get_xml_id()}')
 
         certainty_element.set('ana', certainty.get_categories(as_str=True))
         certainty_element.set('locus', certainty.locus)
         certainty_element.set('cert', certainty.certainty)
-
-        # TODO: Keep `target` attribute in database in form `#<xml:id-X.0> #<xml:id-X.1>` from the beginning
-        # TODO: to avoid appending `#` on every request
 
         target = certainty.target_xml_id
         targets = target.split(' ')
@@ -235,7 +230,14 @@ class FileRenderer:
 
     def __append_unifications(self):
         unifications = self.__get_unifications_from_db()
-        certainties = self.__convert_unifications_to_certainties(unifications)
+
+        if unifications:
+            elements = self.__create_certainties_elements_from_unifications(unifications)
+
+            list_xpath = './default:teiHeader/default:profileDesc/default:textClass/' \
+                         'default:classCode[@scheme="http://providedh.eu/uncertainty/ns/1.0"]'
+
+            self.__append_elements_to_the_list(elements, list_xpath)
 
     def __get_unifications_from_db(self):
         unifications = Unification.objects.filter(
@@ -249,13 +251,74 @@ class FileRenderer:
 
         return unifications
 
-    def __convert_unifications_to_certainties(self, unifications):
-        certainties = []
+    def __create_certainties_elements_from_unifications(self, unifications):
+        elements = []
+
+        latest_commit = self.__get_latest_commit_from_db()
 
         for unification in unifications:
-            certainty = Certainty()
+            joined_unifications = self.__get_joined_unifications_from_db(unification, latest_commit)
 
-        return certainties
+            for joined_unification in joined_unifications:
+                certainty_element = self.__create_certainty_element_from_unification(unification, joined_unification)
+
+                elements.append(certainty_element)
+
+        return elements
+
+    def __get_latest_commit_from_db(self):
+        project_versions = ProjectVersion.objects.filter(
+            file_versions__id=self.__file_version.id
+        ).order_by('-id')
+
+        project_version = project_versions[0]
+        latest_commit = project_version.latest_commit
+
+        return latest_commit
+
+    def __get_joined_unifications_from_db(self, unification, latest_commit):
+        joined_unifications = unification.clique.unifications.all()
+        joined_unifications = joined_unifications.filter(
+            Q(deleted_in_commit_id__gte=latest_commit.id) | Q(deleted_in_commit__isnull=True),
+            created_in_commit_id__lte=latest_commit.id
+        )
+        joined_unifications = joined_unifications.exclude(
+            id=unification.id
+        )
+        joined_unifications = joined_unifications.order_by('id')
+
+        return joined_unifications
+
+    def __create_certainty_element_from_unification(self, unification, matching_unification):
+        default_prefix = '{%s}' % XML_NAMESPACES['default']
+        xml_prefix = '{%s}' % XML_NAMESPACES['xml']
+
+        certainty_element = etree.Element(default_prefix + 'certainty', nsmap=NS_MAP)
+
+        first_index = unification.xml_id.split('-')[-1]
+        second_index = matching_unification.entity.file.id
+        third_index = matching_unification.xml_id.split('-')[-1]
+        xml_id = f'certainty-{first_index}.{second_index}.{third_index}'
+        certainty_element.set(xml_prefix + 'id', xml_id)
+
+        certainty_element.set('resp', f'#{unification.created_by.profile.get_xml_id()}')
+        certainty_element.set('ana', unification.get_categories(as_str=True))
+        certainty_element.set('locus', 'value')
+        certainty_element.set('cert', unification.certainty)
+        certainty_element.set('target', f'#{unification.entity.xml_id}')
+        certainty_element.set('match', '@sameAs')
+
+        path_to_file = matching_unification.entity.file.get_relative_path()
+        entity_xml_id = matching_unification.entity.xml_id
+        certainty_element.set('assertedValue', f'{path_to_file}#{entity_xml_id}')
+
+        if unification.description:
+            description_element = etree.Element(default_prefix + 'desc', nsmap=NS_MAP)
+            description_element.text = unification.description
+
+            certainty_element.append(description_element)
+
+        return certainty_element
 
     def __append_annotators(self):
         users_ids = self.__get_annotators_ids_of_xml_elements()

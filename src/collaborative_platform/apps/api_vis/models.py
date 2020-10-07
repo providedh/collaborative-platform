@@ -165,8 +165,8 @@ class Unification(models.Model):
                                           related_name='deleted_unifications')
 
     categories = models.ManyToManyField(UncertaintyCategory)
-    certainty = models.CharField(max_length=255)
-    description = models.TextField(default='')
+    certainty = models.CharField(max_length=255, null=True)
+    description = models.CharField(max_length=255, null=True)
     xml_id = models.CharField(max_length=255)
 
     learned = models.BooleanField(default=False)
@@ -181,6 +181,20 @@ class Unification(models.Model):
         self.learned = False
 
         self.save()
+
+    def get_categories(self, as_str=False):
+        if as_str:
+            categories = self.categories.all().order_by('id')
+
+            categories_links = [category.get_link() for category in categories]
+            categories = ' '.join(categories_links)
+
+            return categories
+
+        else:
+            categories = self.categories.all()
+
+            return categories
 
 
 class Certainty(models.Model):
@@ -206,7 +220,7 @@ class Certainty(models.Model):
 
     def get_categories(self, as_str=False):
         if as_str:
-            categories = self.categories.all()
+            categories = self.categories.all().order_by('id')
 
             categories_links = [category.get_link() for category in categories]
             categories = ' '.join(categories_links)

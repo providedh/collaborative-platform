@@ -4373,7 +4373,7 @@
     "deleted_in_file_version": null,
     "deleted_in_commit": null,
     "certainty": "high",
-    "description": "",
+    "description": null,
     "xml_id": "",
     "categories": []
   }
@@ -4394,7 +4394,7 @@
     "deleted_in_file_version": 4,
     "deleted_in_commit": 5,
     "certainty": "high",
-    "description": "",
+    "description": null,
     "xml_id": "",
     "categories": [
       2
@@ -4417,7 +4417,7 @@
     "deleted_in_file_version": null,
     "deleted_in_commit": null,
     "certainty": "high",
-    "description": "",
+    "description": null,
     "xml_id": "",
     "categories": [
       2
@@ -4440,7 +4440,7 @@
     "deleted_in_file_version": null,
     "deleted_in_commit": null,
     "certainty": "high",
-    "description": "",
+    "description": null,
     "xml_id": "",
     "categories": [
       2
@@ -4463,7 +4463,7 @@
     "deleted_in_file_version": null,
     "deleted_in_commit": null,
     "certainty": "medium",
-    "description": "",
+    "description": null,
     "xml_id": "",
     "categories": [
       2
@@ -4486,7 +4486,7 @@
     "deleted_in_file_version": null,
     "deleted_in_commit": null,
     "certainty": "medium",
-    "description": "",
+    "description": null,
     "xml_id": "",
     "categories": [
       2
@@ -4509,7 +4509,7 @@
     "deleted_in_file_version": null,
     "deleted_in_commit": null,
     "certainty": "medium",
-    "description": "",
+    "description": null,
     "xml_id": "",
     "categories": [
       2
@@ -4532,7 +4532,7 @@
     "deleted_in_file_version": null,
     "deleted_in_commit": null,
     "certainty": "medium",
-    "description": "",
+    "description": null,
     "xml_id": "",
     "categories": [
       2
@@ -4555,7 +4555,7 @@
     "deleted_in_file_version": 2,
     "deleted_in_commit": 5,
     "certainty": "low",
-    "description": "",
+    "description": null,
     "xml_id": "",
     "categories": [
       2
@@ -4578,7 +4578,7 @@
     "deleted_in_file_version": 4,
     "deleted_in_commit": 5,
     "certainty": "low",
-    "description": "",
+    "description": null,
     "xml_id": "",
     "categories": [
       2
@@ -4601,7 +4601,7 @@
     "deleted_in_file_version": null,
     "deleted_in_commit": null,
     "certainty": "low",
-    "description": "",
+    "description": null,
     "xml_id": "",
     "categories": [
       2
@@ -4624,7 +4624,7 @@
     "deleted_in_file_version": null,
     "deleted_in_commit": null,
     "certainty": "low",
-    "description": "",
+    "description": null,
     "xml_id": "",
     "categories": [
       2

@@ -40,7 +40,7 @@ def add_property_to_element(root, property_xpath, value):
 def get_or_create_element_from_xpath(root, xpath, namespaces):
     element = get_first_xpath_match(root, xpath, namespaces)
 
-    if not element:
+    if element is None:
         create_elements_from_xpath(root, xpath, namespaces)
         element = get_first_xpath_match(root, xpath, namespaces)
 

@@ -9,7 +9,7 @@ from django.contrib.auth.models import User
 from django.test import Client
 
 from apps.api_vis.models import Entity, EntityProperty
-from apps.files_management.models import FileVersion
+from apps.files_management.models import FileVersion, ProjectVersion
 
 from collaborative_platform.routing import application
 
@@ -3669,6 +3669,11 @@ class TestAnnotatorWithWsAndDb:
 
         assert len(file_versions) == 2
 
+        project_version = ProjectVersion.objects.filter(project_id=project_id).latest('id')
+        file_versions_ids = project_version.file_versions.order_by('id').values_list('id', flat=True)
+        file_versions_ids = list(file_versions_ids)
+        assert file_versions_ids == [2, 4, 6]
+
         await communicator.connect()
         await communicator.receive_json_from()
 
@@ -3704,6 +3709,11 @@ class TestAnnotatorWithWsAndDb:
         ).order_by('-id')
 
         assert len(file_versions) == 3
+
+        project_version = ProjectVersion.objects.latest('id')
+        file_versions_ids = project_version.file_versions.order_by('id').values_list('id', flat=True)
+        file_versions_ids = list(file_versions_ids)
+        assert file_versions_ids == [4, 6, 7]
 
         expected_file_name = f'{test_name}.xml'
         expected_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'expected_files', expected_file_name)
@@ -3912,7 +3922,7 @@ class TestAnnotatorWithWsAndDb:
                 {
                     'method': 'POST',
                     'element_type': 'certainty',
-                    'new_element_id': 'certainty-5',
+                    'new_element_id': 'certainty-7',
                     'parameters': {
                         'categories': ['ignorance', 'incompleteness'],
                         'locus': 'value',
