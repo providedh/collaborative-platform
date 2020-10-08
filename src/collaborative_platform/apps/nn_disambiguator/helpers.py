@@ -1,4 +1,5 @@
 import traceback
+from typing import List
 
 from celery import shared_task
 from django.core.exceptions import MultipleObjectsReturned
@@ -8,7 +9,7 @@ from sklearn.preprocessing import StandardScaler
 
 from apps.api_vis.request_handler import RequestHandler
 from apps.nn_disambiguator.learning import learn_unprocessed
-from apps.nn_disambiguator.models import Classifier, CeleryTask
+from apps.nn_disambiguator.models import Classifier, CeleryTask, UnificationProposal
 from apps.nn_disambiguator.predictions import calculate_proposals
 from apps.nn_disambiguator.similarity_calculator import SimilarityCalculator
 from apps.projects.models import Project, ProjectVersion
@@ -84,21 +85,27 @@ def run_queued_tasks():
         traceback.print_exc()
 
 
-def serialize_unification_proposals(project_id: int, ups, user):
+def serialize_unification_proposals(project_id: int, ups: List[UnificationProposal], user):
     rh = RequestHandler(project_id, user)
     pv = ProjectVersion.objects.filter(project_id=project_id).latest("id")
     result = []
     for up in ups:
         res = {"id": up.id, "degree": up.confidence, "entity": rh.serialize_entities([up.entity], pv)[0]}
+        res["entity"]["file_id"] = up.entity.file_id
+        res["entity"]["file_name"] = up.entity.file.name
         if up.entity2 is not None:
             res["target_entity"] = rh.serialize_entities([up.entity2], pv)[0]
+            res["target_entity"]["file_id"] = up.entity2.file_id
+            res["target_entity"]["file_name"] = up.entity2.file.name
         elif up.clique is not None:
             clq = up.clique
             res["target_clique"] = {
                 "id": clq.id,
                 "name": clq.name,
                 "type": clq.type,
-                "entities": clq.unifications.values_list("entity_id", flat=True)
+                "entities": list(map(lambda x: {"id": x["entity_id"], "file_id": x["entity__file_id"],
+                                                "file_name": x["entity__file__name"]},
+                                     clq.unifications.values("entity_id", "entity__file_id", "entity__file__name")))
             }
         else:
             raise KeyError("Unification proposal has no target")
