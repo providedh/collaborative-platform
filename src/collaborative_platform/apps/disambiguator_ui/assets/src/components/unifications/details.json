@@ -17,6 +17,48 @@
 			"name": "Michelangelo"
 		}
 	},
+	"target_clique": {
+		"id": 2,
+		"name": "unión",
+		"type": "person",
+		"entities": [
+			{
+				"id": 2,
+				"file_id": 11,
+				"file_name": "dep_some_12.xml",
+				"type": "person",
+				"properties": {}
+			},
+			{
+				"id": 0,
+				"file_id": 11,
+				"file_name": "dep_some_12.xml",
+				"type": "place",
+				"properties": {
+					"where": "salamanca"
+				}
+			}
+		]
+	}
+},
+{
+	"id": 2,
+	"degree": 21.268693726154154,
+	"entity":{
+		"id": 2,
+		"file_id": 11,
+		"file_name": "dep_some_12.xml",
+		"type": "person",
+		"properties": {
+			"sex": "male",
+			"forename": "Michelangelo",
+			"surname": "di Lodovico Buonarroti Simoni",
+			"occupation": "painter",
+			"birth": "1475-03-06",
+			"death": "1564-02-18",
+			"name": "Michelangelo"
+		}
+	},
 	"target_entity": {
 		"id": 2,
 		"file_id": 10,

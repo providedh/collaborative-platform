@@ -1,20 +1,45 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import PropTypes from 'prop-types'
 
 import {TargetDescription} from 'components/targetDescription'
 import {TargetPreview} from 'components/targetPreview'
 import styles from './styles.module.css' // eslint-disable-line no-unused-vars
 
-export default function Target ({entity, projectId, configuration}) {
-  if (entity === null) {return ''}
+function useEntities(target, targetIsClique) {
+  let entities
 
-  const annotatorURL =
-    `/close_reading/project/${projectId}/file/${entity.file_id}/`
+  if (targetIsClique) {
+    entities = target.entities
+  } else {
+    entities = [target]
+  }
 
-return (<div className={styles.targetView}>
-    <TargetDescription {...{projectId, configuration, entity}} />
-    <TargetPreview {...{projectId, configuration, entity}} />
-  </div>)
+  const [entity, setEntity] = useState(entities[0])
+
+  useEffect(() => {
+    setEntity(entities[0])
+  }, [target])
+
+  return [entities, entity, setEntity]
+}
+
+export default function Target ({target, projectId, configuration, targetIsClique=false}) {
+  if (target === null) {return ''}
+
+  const [entities, entity, setEntity] = useEntities(target, targetIsClique)
+  //console.log(target, targetIsClique, entity, entities)
+
+  return (<div className={styles.targetView}>
+      <TargetDescription {...{
+        projectId,
+        configuration,
+        entity,
+        targetIsClique,
+        cliqueName: target?.name || '',
+        entities,
+        setEntity}} />
+      <TargetPreview {...{projectId, configuration, entity}} />
+    </div>)
 }
 
 Target.propTypes = {
