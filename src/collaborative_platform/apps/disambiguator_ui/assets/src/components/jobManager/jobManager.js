@@ -6,11 +6,9 @@ import styles from './styles.module.css' // eslint-disable-line no-unused-vars
 
 const fetchPeriod = 1000 * 60 * 10
 
-function useJobFetch(projectId, setJobs) {
-  useEffect(() => {
-    fetchJobs(projectId, setJobs)
-    setTimeout(() => useJobFetch(projectId, setJobs), fetchPeriod)
-  }, [])
+function periodicJobFetch(projectId, setJobs) {
+  fetchJobs(projectId, setJobs)
+  setTimeout(() => periodicJobFetch(projectId, setJobs), fetchPeriod)
 }
 
 function fetchJobs(projectId, setJobs) {
@@ -89,7 +87,7 @@ function JobAction({job, setJobs, projectId}) {
 export default function Jobs ({projectId, ...restProps}) {
   const [jobs, setJobs] = useState([])
   const [historyShown, setHistoryVisibility] = useState(false)
-  useJobFetch(projectId, setJobs)
+  useEffect(() => {periodicJobFetch(projectId, setJobs)}, [])
 
   window.pushAction = status => setJobs(
     [...jobs, {status, id: jobs.length, created: '1999-10-' + jobs.length}]

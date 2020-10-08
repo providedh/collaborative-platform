@@ -1,0 +1,36 @@
+.target{
+}
+.property{
+display: block;
+font-size: .9em;
+color: var(--dark);
+}
+.property i{
+color: var(--info);
+}
+.filename{
+color: var(--info);
+font-weight: bolder;
+}
+.filename i{
+color: var(--info);
+margin-left: .5em;
+font-size: .8em;
+}
+.filename i:hover{
+color: var(--blue);
+}
+.slash{
+color: var(--dark);
+display: inline-block;
+margin: 0 .5em;
+font-weight: bolder;
+}
+.entity{
+font-weight: bolder;
+}
+.entity i:before{
+content: attr(data);
+font-size: .9em;
+color: var(--gray);
+}

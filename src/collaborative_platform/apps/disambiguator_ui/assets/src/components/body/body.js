@@ -2,10 +2,15 @@ import React, {useState} from 'react'
 import PropTypes from 'prop-types'
 
 import styles from './styles.module.css' // eslint-disable-line no-unused-vars
+import { TargetView } from 'components/targetView'
 
-export default function Body ({currentIndex, unifications, ...restProps}) {
-
-  return (<div className={styles.body}></div>)
+export default function Body ({projectId, focused, configuration}) {
+  if (focused === null) {return ''}
+  console.log(focused)
+  return (<div className={styles.body}>
+    <TargetView {...{projectId, configuration, entity: focused.entity}} />
+    <TargetView {...{projectId, configuration, entity: focused.target_entity}} />
+  </div>)
 }
 
 Body.propTypes = {
