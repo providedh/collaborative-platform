@@ -3,12 +3,16 @@ import PropTypes from 'prop-types'
 
 import styles from './styles.module.css' // eslint-disable-line no-unused-vars
 import { TargetView } from 'components/targetView'
+import { AssertMenu } from 'components/assertMenu'
 
 export default function Body ({projectId, focused, configuration}) {
   if (focused === null) {return ''}
   return (<div className={styles.body}>
-    <TargetView {...{projectId, configuration, entity: focused.entity}} />
-    <TargetView {...{projectId, configuration, entity: focused.target_entity}} />
+    <AssertMenu {...{projectId, focused}}/>
+    <div className={styles.viewContainer}>
+      <TargetView {...{projectId, configuration, entity: focused.entity}} />
+      <TargetView {...{projectId, configuration, entity: focused.target_entity}} />
+    </div>
   </div>)
 }
 
