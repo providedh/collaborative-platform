@@ -8,7 +8,7 @@ import { AssertMenu } from 'components/assertMenu'
 export default function Body ({projectId, focused, configuration}) {
   if (focused === null) {return ''}
   return (<div className={styles.body}>
-    <AssertMenu {...{projectId, focused}}/>
+    <AssertMenu {...{projectId, focused, configuration}}/>
     <div className={styles.viewContainer}>
       <TargetView {...{projectId, configuration, entity: focused.entity}} />
       <TargetView {...{projectId, configuration, entity: focused.target_entity}} />
