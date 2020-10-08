@@ -1,11 +1,11 @@
-.body{
+.viewContainer{
 min-height: 30em;
 background-color: #eee;
 display: flex;
 justify-content: space-between;
 }
 @media(max-width: 1400px) { /* 2 x targetView width */
-    .body{
+    .viewContainer{
         flex-direction: column;
     }
 }
