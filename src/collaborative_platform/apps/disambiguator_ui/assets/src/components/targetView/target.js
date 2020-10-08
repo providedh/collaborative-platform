@@ -7,7 +7,6 @@ import styles from './styles.module.css' // eslint-disable-line no-unused-vars
 
 export default function Target ({entity, projectId, configuration}) {
   if (entity === null) {return ''}
-  console.log(entity)
 
   const annotatorURL =
     `/close_reading/project/${projectId}/file/${entity.file_id}/`

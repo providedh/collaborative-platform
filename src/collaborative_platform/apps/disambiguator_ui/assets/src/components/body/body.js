@@ -6,7 +6,6 @@ import { TargetView } from 'components/targetView'
 
 export default function Body ({projectId, focused, configuration}) {
   if (focused === null) {return ''}
-  console.log(focused)
   return (<div className={styles.body}>
     <TargetView {...{projectId, configuration, entity: focused.entity}} />
     <TargetView {...{projectId, configuration, entity: focused.target_entity}} />

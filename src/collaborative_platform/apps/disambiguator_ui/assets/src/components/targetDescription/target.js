@@ -10,7 +10,6 @@ function capitalize(text){
 
 export default function TargetDescription ({entity, projectId, configuration}) {
   if (entity === null) {return ''}
-  console.log(entity)
 
   const annotatorURL =
     `/close_reading/project/${projectId}/file/${entity.file_id}/`
@@ -21,7 +20,6 @@ export default function TargetDescription ({entity, projectId, configuration}) {
       <span key={i} className={styles.property}>
         <i>{capitalize(p[0])}</i>: {p[1]}
       </span>))
-  console.log(configuration)
   const iconCode = configuration.entities[entity.type].icon;
 
   return (<div className={styles.target}>

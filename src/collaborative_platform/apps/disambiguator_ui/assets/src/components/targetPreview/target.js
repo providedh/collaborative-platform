@@ -9,7 +9,6 @@ function useContent(container, url) {
     .then(r => r.json())
     .then(json => {
       if (json?.data !== undefined && container !== undefined) {
-        console.log({'text': json.data})
         const doc = $.parseXML(json.data)
         const body =
           doc.getElementsByTagName('body')[0].innerHTML
