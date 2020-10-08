@@ -7,6 +7,7 @@ from django.http import JsonResponse, HttpResponse
 from sklearn.neural_network import MLPClassifier
 from sklearn.preprocessing import StandardScaler
 
+from apps.api_vis.models import Entity
 from apps.api_vis.request_handler import RequestHandler
 from apps.nn_disambiguator.learning import learn_unprocessed
 from apps.nn_disambiguator.models import Classifier, CeleryTask, UnificationProposal
@@ -99,13 +100,18 @@ def serialize_unification_proposals(project_id: int, ups: List[UnificationPropos
             res["target_entity"]["file_name"] = up.entity2.file.name
         elif up.clique is not None:
             clq = up.clique
+            entities = []
+            for entity in Entity.objects.filter(id__in=clq.unifications.values_list("entity_id", flat=True)):
+                e = rh.serialize_entities([up.entity], pv)[0]
+                e["file_id"] = entity.file_id
+                e["file_name"] = entity.file.name
+                entities.append(e)
+
             res["target_clique"] = {
                 "id": clq.id,
                 "name": clq.name,
                 "type": clq.type,
-                "entities": list(map(lambda x: {"id": x["entity_id"], "file_id": x["entity__file_id"],
-                                                "file_name": x["entity__file__name"]},
-                                     clq.unifications.values("entity_id", "entity__file_id", "entity__file__name")))
+                "entities": entities
             }
         else:
             raise KeyError("Unification proposal has no target")
