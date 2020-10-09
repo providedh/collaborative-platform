@@ -57,15 +57,11 @@ function useProposalList(projectId, listIndex, ids, setProposals) {
 
 export default function Unifications ({projectId, configuration}) {
   const ids = useProposalIds(projectId)
-  const [focusedIndex, _setFocusedIndex] = useState(0)
+  const [focusedIndex, setFocusedIndex] = useState(0)
   const [focused, setFocused] = useState(null)
   const [proposals, setProposals] = useState([])
   const [listIndex, setListIndex] = useState(0)
-  
-  const setFocusedIndex = (i) => {
-    console.log('setting idx', i)
-    _setFocusedIndex(i)
-  }
+
   useProposalIds(projectId)
   useProposalDetails(projectId, listIndex, focusedIndex, ids, proposals, setFocused)
   useProposalList(projectId, listIndex, ids, setProposals)
