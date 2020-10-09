@@ -3,15 +3,68 @@ import PropTypes from 'prop-types'
 
 import styles from './styles.module.css' // eslint-disable-line no-unused-vars
 
-export default function ProposalList ({proposals, listIndex, buffSize, ids, setListIndex, focusedIndex, setFocusedIndex}) {
+function EntityName({entity, configuration}) {
+  const name = entity.type + '-' + entity.id
+  const iconCode = configuration.entities[entity.type].icon;
+  
+  return <div className={styles.entityName}>
+    <span className={styles.filename}>
+      {entity.file_name}
+    </span>
+    <span className={styles.slash}>/</span>
+    <span className={styles.entity}>
+      <i className="fas" data={iconCode}></i> {name}
+    </span>
+  </div>
+}
+
+function CliqueName({clique, configuration}) {
+  const name = 'clique ' + clique.name
+  const iconCode = configuration.entities[clique.entities[0].type].icon;
+  const files = new Set(clique.entities.map(d => d.file_id))
+
+  return <div className={styles.entityName}>
+    <span className={styles.filename}>
+      {name}
+    </span>
+    <span className={styles.slash}>/</span>
+    <span className={styles.entity}>
+      <i className="fas" data={iconCode}></i> {clique.entities.length} entities in {files.size} files
+    </span>
+  </div>
+}
+
+export default function ProposalList ({
+    proposals,
+    listIndex,
+    buffSize,
+    ids,
+    setListIndex,
+    focusedIndex,
+    configuration,
+    setFocusedIndex}) {
   const listCssClasses = [
     'card',
+    'shadow',
     styles.proposalList
   ].join(' ')
+
+  const proposalEntries = proposals.map((p, i) => {
+    const {target_entity, target_clique} = p
+    const targetIsClique = target_entity === undefined && target_clique !== undefined
+    return <div key={i} className={styles.proposalEntry}>
+      <EntityName entity={p.entity} configuration={configuration}/>
+      <p className={styles.updownArrow}>⇳</p>
+      {targetIsClique === false
+        ?<EntityName entity={target_entity} configuration={configuration}/>
+        :<CliqueName clique={target_clique} configuration={configuration}/>}
+    </div>
+  })
+
   return (
   <div className={listCssClasses}>
     <div className="card-body">
-      This is some text within a card body.
+      {proposalEntries}
     </div>
   </div>)
 }

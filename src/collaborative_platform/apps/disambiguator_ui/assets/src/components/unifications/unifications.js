@@ -9,7 +9,7 @@ import styles from './styles.module.css' // eslint-disable-line no-unused-vars
     import details from './details.json'
 
 
-const buffSize = 10
+const buffSize = 5
 
 function useProposalIds(projectId) {
   const [ids, setIds] = useState([])
@@ -56,7 +56,15 @@ export default function Unifications ({projectId, configuration}) {
 
   return (
     <div>
-      <Navigation {...{proposals, listIndex, buffSize, ids, setListIndex, focusedIndex, setFocusedIndex}}/>
+      <Navigation {...{
+        proposals,
+        listIndex,
+        buffSize,
+        ids,
+        setListIndex,
+        focusedIndex,
+        configuration,
+        setFocusedIndex}}/>
       <Body {...{focused, projectId, configuration}}/>
     </div>
   )

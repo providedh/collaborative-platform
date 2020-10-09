@@ -4,7 +4,15 @@ import PropTypes from 'prop-types'
 import ProposalList from './proposalList.js'
 import styles from './styles.module.css' // eslint-disable-line no-unused-vars
 
-export default function Navigation ({proposals, listIndex, buffSize, ids, setListIndex, focusedIndex, setFocusedIndex}) {
+export default function Navigation ({
+    proposals,
+    listIndex,
+    buffSize,
+    ids,
+    setListIndex,
+    focusedIndex,
+    configuration,
+    setFocusedIndex}) {
   const [listShown, setListVisibility] = useState(false)
 
   const navigationCssClasses = [
@@ -52,6 +60,7 @@ export default function Navigation ({proposals, listIndex, buffSize, ids, setLis
         ids,
         setListIndex,
         focusedIndex,
+        configuration,
         setFocusedIndex}}/>
     </div>
     <hr className="my-0 mx-4" style={{backgroundColor: 'var(--blue)'}}/>
