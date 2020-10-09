@@ -251,6 +251,7 @@ class DbHandler:
 
         Unification.objects.bulk_update(unifications_to_delete, ['deleted_in_commit'])
 
+
     def delete_clique(self, clique, project_version):
         clique.deleted_by = self.__user
         clique.deleted_on = timezone.now()

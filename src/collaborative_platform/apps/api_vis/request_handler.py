@@ -7,6 +7,9 @@ class RequestHandler:
     def __init__(self, project_id, user):
         self.__db_handler = DbHandler(project_id, user)
 
+    def serialize_entities(self, entities, project_version):
+        return self.__serialize_entities(entities, project_version)
+
     def create_clique(self, request_data):
         clique_name = request_data.get('name')
         entities_ids = request_data['entities']

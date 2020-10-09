@@ -47,9 +47,10 @@ def signup(request):  # type: (HttpRequest) -> HttpResponse
             user = auth.authenticate(username=user.username, password=raw_password)
             auth.login(request, user)
 
-            name = "{} {}".format(user.first_name, user.last_name)
-            es_user = ESUser(id=user.id, name=name)
-            es_user.save()
+            # name = "{} {}".format(user.first_name, user.last_name)
+            # es_user = ESUser(id=user.id, name=name)
+            # es_user.save()
+            # TODO: possibly enable ES indexing again if needed
 
             return redirect('index')
     else:

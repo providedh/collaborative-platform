@@ -79,6 +79,7 @@ def __process_file(file, directory, user):
 
             upload_status.update({'migrated': True, 'message': message})
 
+
             log_activity(directory.project, user, f"File migrated: {message} ", file_object)
 
             FilesManagementLogger().log_migrating_file(old_file_id, file_object.id, message)

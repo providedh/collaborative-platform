@@ -1,0 +1,62 @@
+.target{
+}
+.property{
+display: block;
+font-size: .9em;
+color: var(--dark);
+}
+.property i{
+color: var(--info);
+}
+.filename{
+color: var(--info);
+font-weight: bolder;
+}
+.filename i{
+color: var(--info);
+margin-left: .5em;
+font-size: .8em;
+}
+.filename i:hover{
+color: var(--blue);
+}
+.slash{
+color: var(--dark);
+display: inline-block;
+margin: 0 .5em;
+font-weight: bolder;
+}
+.entity{
+font-weight: bolder;
+}
+.entity i:before{
+content: attr(data);
+font-size: .9em;
+color: var(--gray);
+}
+.cliqueName{
+color: var(--info);
+font-weight: bolder;
+margin-right: 1em;
+border-right: solid 1px var(--blue);
+padding-right: 1em;
+}
+.clique{}
+.clique .filename{
+color: var(--dark);
+font-weight: bolder;
+}
+.clique .entityName{
+padding: 0 .3em;
+cursor: pointer;
+}
+.clique .entityName:hover{
+background-color: lightgray;
+}
+.clique .isSelected:hover{
+background-color: white;
+}
+.clique .isSelected{
+background-color: white;
+cursor: default;
+}

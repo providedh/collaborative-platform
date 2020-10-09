@@ -2,15 +2,10 @@ import React, {useState} from 'react'
 import PropTypes from 'prop-types'
 
 import { Header } from 'components/header'
-import { Navigation } from 'components/navigation'
-import { Body } from 'components/body'
+import { Unifications } from 'components/unifications'
 import styles from './app.module.css' // eslint-disable-line no-unused-vars
-import defState from './def_state.js'
 
 export default function App ({projectName, projectId, projectVersion, ...restProps}) {
-  const [unifications, updateUnifications] = useState([])
-  const [currentIndex, setIndex] = useState(0)
-
   const appCssClasses = [
     'container',
     styles.app
@@ -19,8 +14,7 @@ export default function App ({projectName, projectId, projectVersion, ...restPro
   return (
     <div className={appCssClasses}>
       <Header {...{projectName, projectId, projectVersion}}/>
-      <Navigation {...{unifications, currentIndex, setIndex}}/>
-      <Body {...{unifications, currentIndex}}/>
+      <Unifications {...{projectId, configuration: restProps.configuration}}/>
     </div>
   )
 }

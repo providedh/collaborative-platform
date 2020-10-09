@@ -1,0 +1,554 @@
+[
+{
+	"id": 2,
+	"degree": 21.268693726154154,
+	"entity":{
+		"id": 2,
+		"file_id": 11,
+		"file_name": "dep_some_12.xml",
+		"type": "person",
+		"properties": {
+			"sex": "male",
+			"forename": "Michelangelo",
+			"surname": "di Lodovico Buonarroti Simoni",
+			"occupation": "painter",
+			"birth": "1475-03-06",
+			"death": "1564-02-18",
+			"name": "Michelangelo"
+		}
+	},
+	"target_clique": {
+		"id": 2,
+		"name": "unión",
+		"type": "person",
+		"entities": [
+			{
+				"id": 2,
+				"file_id": 11,
+				"file_name": "dep_some_12.xml",
+				"type": "person",
+				"properties": {}
+			},
+			{
+				"id": 0,
+				"file_id": 11,
+				"file_name": "dep_some_12.xml",
+				"type": "place",
+				"properties": {
+					"where": "salamanca"
+				}
+			}
+		]
+	}
+},
+{
+	"id": 3,
+	"degree": 21.268693726154154,
+	"entity":{
+		"id": 2,
+		"file_id": 11,
+		"file_name": "dep_some_12.xml",
+		"type": "person",
+		"properties": {
+			"sex": "male",
+			"forename": "Michelangelo",
+			"surname": "di Lodovico Buonarroti Simoni",
+			"occupation": "painter",
+			"birth": "1475-03-06",
+			"death": "1564-02-18",
+			"name": "Michelangelo"
+		}
+	},
+	"target_entity": {
+		"id": 2,
+		"file_id": 10,
+		"file_name": "test_File_23.xml",
+		"type": "person",
+		"properties": {
+			"sex": "female",
+			"age": "38",
+			"forename": "Onika Tanya",
+			"surname": "Maraj-Petty",
+			"occupation": "rapper",
+			"birth": "1982-12-08",
+			"name": "Nicki Minaj"
+		}
+	}
+},
+{
+	"id": 4,
+	"degree": 23.268693726154154,
+	"entity":{
+		"id": 0,
+		"file_id": 11,
+		"file_name": "dep_some_12.xml",
+		"type": "place",
+		"properties": {
+			"sex": "male",
+			"forename": "Felipe",
+			"surname": "di Lodovico Buonarroti Simoni",
+			"occupation": "painter",
+			"birth": "1475-03-06",
+			"death": "1564-02-18",
+			"name": "Michelangelo"
+		}
+	},
+	"target_entity": {
+		"id": 2,
+		"file_id": 10,
+		"file_name": "test_File_23.xml",
+		"type": "person",
+		"properties": {
+			"sex": "female",
+			"age": "38",
+			"forename": "Marina Tanya",
+			"surname": "Maraj-Petty",
+			"occupation": "rapper",
+			"birth": "1982-12-08",
+			"name": "Nicki Minaj"
+		}
+	}
+},
+{
+	"id": 5,
+	"degree": 1.268693726154154,
+	"entity":{
+		"id": 2,
+		"file_id": 11,
+		"file_name": "dep_some_12.xml",
+		"type": "person",
+		"properties": {
+			"sex": "male",
+			"forename": "Michelangelo",
+			"surname": "di Lodovico Buonarroti Simoni",
+			"occupation": "painter",
+			"birth": "1475-03-06",
+			"death": "1564-02-18",
+			"name": "Michelangelo"
+		}
+	},
+	"target_entity": {
+		"id": 2,
+		"file_id": 10,
+		"file_name": "test_File_23.xml",
+		"type": "person",
+		"properties": {
+			"sex": "female",
+			"age": "38",
+			"forename": "Onika Tanya",
+			"surname": "Maraj-Petty",
+			"occupation": "rapper",
+			"birth": "1982-12-08",
+			"name": "Nicki Minaj"
+		}
+	}
+},
+{
+	"id": 6,
+	"degree": 34.268693726154154,
+	"entity":{
+		"id": 2,
+		"file_id": 11,
+		"file_name": "dep_some_12.xml",
+		"type": "person",
+		"properties": {
+			"sex": "male",
+			"forename": "Michelangelo",
+			"surname": "di Lodovico Buonarroti Simoni",
+			"occupation": "painter",
+			"birth": "1475-03-06",
+			"death": "1564-02-18",
+			"name": "Michelangelo"
+		}
+	},
+	"target_entity": {
+		"id": 2,
+		"file_id": 10,
+		"file_name": "test_File_23.xml",
+		"type": "person",
+		"properties": {
+			"sex": "female",
+			"age": "38",
+			"forename": "Onika Tanya",
+			"surname": "Maraj-Petty",
+			"occupation": "rapper",
+			"birth": "1982-12-08",
+			"name": "Nicki Minaj"
+		}
+	}
+},
+{
+	"id": 7,
+	"degree": 45.268693726154154,
+	"entity":{
+		"id": 2,
+		"file_id": 11,
+		"file_name": "dep_some_12.xml",
+		"type": "person",
+		"properties": {
+			"sex": "male",
+			"forename": "David",
+			"surname": "di Lodovico Buonarroti Simoni",
+			"occupation": "painter",
+			"birth": "1475-03-06",
+			"death": "1564-02-18",
+			"name": "Michelangelo"
+		}
+	},
+	"target_entity": {
+		"id": 2,
+		"file_id": 10,
+		"file_name": "test_File_23.xml",
+		"type": "person",
+		"properties": {
+			"sex": "female",
+			"age": "38",
+			"forename": "Maria Tanya",
+			"surname": "Maraj-Petty",
+			"occupation": "rapper",
+			"birth": "1982-12-08",
+			"name": "Nicki Minaj"
+		}
+	}
+},
+{
+	"id": 8,
+	"degree": 45.268693726154154,
+	"entity":{
+		"id": 2,
+		"file_id": 11,
+		"file_name": "dep_some_12.xml",
+		"type": "person",
+		"properties": {
+			"sex": "male",
+			"forename": "Michelangelo",
+			"surname": "di Lodovico Buonarroti Simoni",
+			"occupation": "painter",
+			"birth": "1475-03-06",
+			"death": "1564-02-18",
+			"name": "Michelangelo"
+		}
+	},
+	"target_entity": {
+		"id": 2,
+		"file_id": 10,
+		"file_name": "test_File_23.xml",
+		"type": "person",
+		"properties": {
+			"sex": "female",
+			"age": "38",
+			"forename": "Onika Tanya",
+			"surname": "Maraj-Petty",
+			"occupation": "rapper",
+			"birth": "1982-12-08",
+			"name": "Nicki Minaj"
+		}
+	}
+},
+{
+	"id": 9,
+	"degree": 21.268693726154154,
+	"entity":{
+		"id": 2,
+		"file_id": 11,
+		"file_name": "dep_some_12.xml",
+		"type": "person",
+		"properties": {
+			"sex": "male",
+			"forename": "Michelangelo",
+			"surname": "di Lodovico Buonarroti Simoni",
+			"occupation": "painter",
+			"birth": "1475-03-06",
+			"death": "1564-02-18",
+			"name": "Michelangelo"
+		}
+	},
+	"target_entity": {
+		"id": 2,
+		"file_id": 10,
+		"file_name": "test_File_23.xml",
+		"type": "person",
+		"properties": {
+			"sex": "female",
+			"age": "38",
+			"forename": "Onika Tanya",
+			"surname": "Maraj-Petty",
+			"occupation": "rapper",
+			"birth": "1982-12-08",
+			"name": "Nicki Minaj"
+		}
+	}
+},
+{
+	"id": 10,
+	"degree": 21.268693726154154,
+	"entity":{
+		"id": 2,
+		"file_id": 11,
+		"file_name": "dep_some_12.xml",
+		"type": "person",
+		"properties": {
+			"sex": "male",
+			"forename": "Michelangelo",
+			"surname": "di Lodovico Buonarroti Simoni",
+			"occupation": "painter",
+			"birth": "1475-03-06",
+			"death": "1564-02-18",
+			"name": "Michelangelo"
+		}
+	},
+	"target_entity": {
+		"id": 2,
+		"file_id": 10,
+		"file_name": "test_File_23.xml",
+		"type": "person",
+		"properties": {
+			"sex": "female",
+			"age": "38",
+			"forename": "Onika Tanya",
+			"surname": "Maraj-Petty",
+			"occupation": "rapper",
+			"birth": "1982-12-08",
+			"name": "Nicki Minaj"
+		}
+	}
+},
+{
+	"id": 11,
+	"degree": 21.268693726154154,
+	"entity":{
+		"id": 2,
+		"file_id": 11,
+		"file_name": "dep_some_12.xml",
+		"type": "person",
+		"properties": {
+			"sex": "male",
+			"forename": "Michelangelo",
+			"surname": "di Lodovico Buonarroti Simoni",
+			"occupation": "painter",
+			"birth": "1475-03-06",
+			"death": "1564-02-18",
+			"name": "Michelangelo"
+		}
+	},
+	"target_entity": {
+		"id": 2,
+		"file_id": 10,
+		"file_name": "test_File_23.xml",
+		"type": "person",
+		"properties": {
+			"sex": "female",
+			"age": "38",
+			"forename": "Onika Tanya",
+			"surname": "Maraj-Petty",
+			"occupation": "rapper",
+			"birth": "1982-12-08",
+			"name": "Nicki Minaj"
+		}
+	}
+},
+{
+	"id": 12,
+	"degree": 21.268693726154154,
+	"entity":{
+		"id": 2,
+		"file_id": 11,
+		"file_name": "dep_some_12.xml",
+		"type": "person",
+		"properties": {
+			"sex": "male",
+			"forename": "Michelangelo",
+			"surname": "di Lodovico Buonarroti Simoni",
+			"occupation": "painter",
+			"birth": "1475-03-06",
+			"death": "1564-02-18",
+			"name": "Michelangelo"
+		}
+	},
+	"target_entity": {
+		"id": 2,
+		"file_id": 10,
+		"file_name": "test_File_23.xml",
+		"type": "person",
+		"properties": {
+			"sex": "female",
+			"age": "38",
+			"forename": "Onika Tanya",
+			"surname": "Maraj-Petty",
+			"occupation": "rapper",
+			"birth": "1982-12-08",
+			"name": "Nicki Minaj"
+		}
+	}
+},
+{
+	"id": 13,
+	"degree": 21.268693726154154,
+	"entity":{
+		"id": 2,
+		"file_id": 11,
+		"file_name": "dep_some_12.xml",
+		"type": "person",
+		"properties": {
+			"sex": "male",
+			"forename": "Michelangelo",
+			"surname": "di Lodovico Buonarroti Simoni",
+			"occupation": "painter",
+			"birth": "1475-03-06",
+			"death": "1564-02-18",
+			"name": "Michelangelo"
+		}
+	},
+	"target_entity": {
+		"id": 2,
+		"file_id": 10,
+		"file_name": "test_File_23.xml",
+		"type": "person",
+		"properties": {
+			"sex": "female",
+			"age": "38",
+			"forename": "Onika Tanya",
+			"surname": "Maraj-Petty",
+			"occupation": "rapper",
+			"birth": "1982-12-08",
+			"name": "Nicki Minaj"
+		}
+	}
+},
+{
+	"id": 14,
+	"degree": 21.268693726154154,
+	"entity":{
+		"id": 2,
+		"file_id": 11,
+		"file_name": "dep_some_12.xml",
+		"type": "person",
+		"properties": {
+			"sex": "male",
+			"forename": "Michelangelo",
+			"surname": "di Lodovico Buonarroti Simoni",
+			"occupation": "painter",
+			"birth": "1475-03-06",
+			"death": "1564-02-18",
+			"name": "Michelangelo"
+		}
+	},
+	"target_entity": {
+		"id": 2,
+		"file_id": 10,
+		"file_name": "test_File_23.xml",
+		"type": "person",
+		"properties": {
+			"sex": "female",
+			"age": "38",
+			"forename": "Onika Tanya",
+			"surname": "Maraj-Petty",
+			"occupation": "rapper",
+			"birth": "1982-12-08",
+			"name": "Nicki Minaj"
+		}
+	}
+},
+{
+	"id": 15,
+	"degree": 21.268693726154154,
+	"entity":{
+		"id": 2,
+		"file_id": 11,
+		"file_name": "dep_some_12.xml",
+		"type": "person",
+		"properties": {
+			"sex": "male",
+			"forename": "Michelangelo",
+			"surname": "di Lodovico Buonarroti Simoni",
+			"occupation": "painter",
+			"birth": "1475-03-06",
+			"death": "1564-02-18",
+			"name": "Michelangelo"
+		}
+	},
+	"target_entity": {
+		"id": 2,
+		"file_id": 10,
+		"file_name": "test_File_23.xml",
+		"type": "person",
+		"properties": {
+			"sex": "female",
+			"age": "38",
+			"forename": "Onika Tanya",
+			"surname": "Maraj-Petty",
+			"occupation": "rapper",
+			"birth": "1982-12-08",
+			"name": "Nicki Minaj"
+		}
+	}
+},
+{
+	"id": 16,
+	"degree": 21.268693726154154,
+	"entity":{
+		"id": 2,
+		"file_id": 11,
+		"file_name": "dep_some_12.xml",
+		"type": "person",
+		"properties": {
+			"sex": "male",
+			"forename": "Michelangelo",
+			"surname": "di Lodovico Buonarroti Simoni",
+			"occupation": "painter",
+			"birth": "1475-03-06",
+			"death": "1564-02-18",
+			"name": "Michelangelo"
+		}
+	},
+	"target_entity": {
+		"id": 2,
+		"file_id": 10,
+		"file_name": "test_File_23.xml",
+		"type": "person",
+		"properties": {
+			"sex": "female",
+			"age": "38",
+			"forename": "Onika Tanya",
+			"surname": "Maraj-Petty",
+			"occupation": "rapper",
+			"birth": "1982-12-08",
+			"name": "Nicki Minaj"
+		}
+	}
+},
+{
+	"id": 17,
+	"degree": 21.268693726154154,
+	"entity":{
+		"id": 2,
+		"file_id": 11,
+		"file_name": "dep_some_12.xml",
+		"type": "person",
+		"properties": {
+			"sex": "male",
+			"forename": "Michelangelo",
+			"surname": "di Lodovico Buonarroti Simoni",
+			"occupation": "painter",
+			"birth": "1475-03-06",
+			"death": "1564-02-18",
+			"name": "Michelangelo"
+		}
+	},
+	"target_entity": {
+		"id": 2,
+		"file_id": 10,
+		"file_name": "test_File_23.xml",
+		"type": "person",
+		"properties": {
+			"sex": "female",
+			"age": "38",
+			"forename": "Onika Tanya",
+			"surname": "Maraj-Petty",
+			"occupation": "rapper",
+			"birth": "1982-12-08",
+			"name": "Nicki Minaj"
+		}
+	}
+}
+]

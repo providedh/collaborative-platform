@@ -227,6 +227,9 @@ def commits(request, project_id):
             request_handler = RequestHandler(project_id, request.user)
             response = request_handler.create_commit(request_data)
 
+            from apps.nn_disambiguator.helpers import queue_task
+            queue_task(project_id, type="L")
+
             return JsonResponse(response)
 
         except NotModified as exception:

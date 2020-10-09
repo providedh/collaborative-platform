@@ -53,7 +53,7 @@ class EntityVersion(models.Model):
 
 
 class EntityProperty(models.Model):
-    entity = models.ForeignKey(Entity, on_delete=models.CASCADE)
+    entity = models.ForeignKey(Entity, on_delete=models.CASCADE, related_name='properties')
     entity_version = models.ForeignKey(EntityVersion, default=None, null=True, on_delete=models.CASCADE,
                                        related_name='properties')
     xpath = models.CharField(max_length=255, null=True)
@@ -146,7 +146,7 @@ class Clique(models.Model):
 
 
 class Unification(models.Model):
-    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='unifications')
     entity = models.ForeignKey(Entity, on_delete=models.CASCADE, related_name='unifications')
     clique = models.ForeignKey(Clique, on_delete=models.CASCADE, related_name='unifications')
 
@@ -169,6 +169,8 @@ class Unification(models.Model):
     description = models.CharField(max_length=255, null=True)
     xml_id = models.CharField(max_length=255)
 
+    learned = models.BooleanField(default=False)
+
     def delete_fake(self, user, commit):
         file_version = self.entity.file.file_versions.order_by('-number')[0]
 
@@ -176,6 +178,7 @@ class Unification(models.Model):
         self.deleted_by = user
         self.deleted_in_commit = commit
         self.deleted_in_file_version = file_version
+        self.learned = False
 
         self.save()
 

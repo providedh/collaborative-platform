@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'apps.close_reading',
     'apps.dataset_stats',
     'apps.vis_dashboard',
+    'apps.nn_disambiguator',
     'apps.help',
     'apps.disambiguator_ui',
     'social_django',
@@ -247,6 +248,10 @@ CELERY_BEAT_SCHEDULE = {
         'task': 'close_reading.tasks.prune_orphaned_annotating_body_contents',
         'schedule': timedelta(seconds=120),
     },
+    'run_queued_nn_disambiguation_tasks': {
+        'task': 'nn_disambiguator.run_queued_tasks',
+        'schedule': timedelta(seconds=5)
+    }
 }
 
 
@@ -308,6 +313,7 @@ SOCIAL_AUTH_RAISE_EXCEPTIONS = False
 # XML namespaces
 XML_NAMESPACES = {
     'default': 'http://www.tei-c.org/ns/1.0',
+    'tei': 'http://www.tei-c.org/ns/1.0',
     'xml': 'http://www.w3.org/XML/1998/namespace',
     'xi': 'http://www.w3.org/2001/XInclude',
 }
@@ -361,6 +367,7 @@ DEFAULT_ENTITIES = {
         'list_tag': 'listPerson',
         'color': '#ff7f00',
         'icon': r'\f007',
+        'unifiable': True,
     },
     'event': {
         'properties': {
@@ -374,6 +381,7 @@ DEFAULT_ENTITIES = {
         'list_tag': 'listEvent',
         'color': '#cecece',
         'icon': r'\f274',
+        'unifiable': True,
     },
     'org': {
         'properties': {
@@ -387,6 +395,7 @@ DEFAULT_ENTITIES = {
         'list_tag': 'listOrg',
         'color': '#b4edfc',
         'icon': r'\f1ad',
+        'unifiable': True,
     },
     'object': {
         'properties': {
@@ -400,6 +409,7 @@ DEFAULT_ENTITIES = {
         'list_tag': 'listObject',
         'color': '#b4d38d',
         'icon': r'\f466',
+        'unifiable': True,
     },
     'place': {
         'properties': {
@@ -425,6 +435,7 @@ DEFAULT_ENTITIES = {
         'list_tag': 'listPlace',
         'color': '#204191',
         'icon': r'\f279',
+        'unifiable': True,
     },
     'date': {
         'properties': {
@@ -442,6 +453,7 @@ DEFAULT_ENTITIES = {
         'list_tag': None,
         'color': '#868788',
         'icon': r'\f073',
+        'unifiable': False,
     },
     'time': {
         'properties': {
@@ -459,6 +471,7 @@ DEFAULT_ENTITIES = {
         'list_tag': None,
         'color': '#eab9e4',
         'icon': r'\f017',
+        'unifiable': False,
     },
 }
 

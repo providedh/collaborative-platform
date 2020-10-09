@@ -7,22 +7,24 @@
 {% endblock %}
 
 {% block content %}
-  <div class="projects d-flex flex-column flex-fill">
-    <div class="projects-private flex-fill">
-      <div class="container">
-        <div class="row">
-          <div class="col p-5">
-            <div class="d-md-flex justify-content-between align-items-center mb-3 mb-md-0">
-              <h1>Dashboard</h1>
-              <div>
-                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#createNewProject">Create new project</a>
-              </div>
-            </div>
-            <p>
-              <span class="d-md-block">Projects allow organizing your work an collaborating on related douments. </span>
-              <span class="d-md-block">Select an existing one or create a new project to start working the platform. </span>
-            </p>
-            {% load no_projects_hint %}
+    <div class="projects d-flex flex-column flex-fill">
+        <div class="projects-private flex-fill">
+            <div class="container">
+                <div class="row">
+                    <div class="col p-5">
+                        <div class="d-md-flex justify-content-between align-items-center mb-3 mb-md-0">
+                            <h1>Dashboard</h1>
+                            <div>
+                                <button type="button" class="btn btn-success" data-toggle="modal"
+                                        data-target="#createNewProject">Create new project
+                                </button>
+                            </div>
+                        </div>
+                        <p>
+                            <span class="d-md-block">Projects allow organizing your work an collaborating on related douments. </span>
+                            <span class="d-md-block">Select an existing one or create a new project to start working the platform. </span>
+                        </p>
+                        {% load no_projects_hint %}
             {% no_projects_hint %}
             <div class="projects-table flex-fill p-md-5 pt-md-0">
               <div class="table-responsive projects-table__container">

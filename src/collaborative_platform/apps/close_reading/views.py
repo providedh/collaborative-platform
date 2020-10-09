@@ -30,6 +30,7 @@ def close_reading(request, project_id, file_id):  # type: (HttpRequest, int, int
         'origin_url': origin_url,
         'project_id': project.id,
         'file_id': file.id,
+        'file_version': file.version_number,
         'title': file.name,
         'preferences': json.dumps(preferences),
         'DEVELOPMENT': False,
@@ -68,7 +69,7 @@ def get_entities(project) -> dict:
         'color': entity.color,
         'icon': entity.icon,
         'listable': entity.body_list,
-    } for entity in project.taxonomy.entities.all()}
+    } for entity in project.taxonomy.entities_schemas.all()}
 
     return entities
 

@@ -30,5 +30,6 @@ urlpatterns = [
     path('stats/', include('apps.dataset_stats.urls')),
     path('dashboard/', include('apps.vis_dashboard.urls')),
     path('disambiguator/', include('apps.disambiguator_ui.urls')),
+    path('api/disambiguator/', include('apps.nn_disambiguator.urls_api')),
     path('', include('apps.core.urls')),
 ]

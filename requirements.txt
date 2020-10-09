@@ -59,3 +59,15 @@ asgiref==3.2.10
 # For NLP
 pandas
 tqdm
+
+#For Neural Networks
+geopy~=2.0.0
+editdistance~=0.5.3
+Fuzzy~=1.2.2
+spacy~=2.3.2
+wheel~=0.34.2
+scikit-learn~=0.23.1
+joblib
+timefhuman
+maya
+
