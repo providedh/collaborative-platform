@@ -5,7 +5,7 @@ import styles from './styles.module.css' // eslint-disable-line no-unused-vars
 import { TargetView } from 'components/targetView'
 import { AssertMenu } from 'components/assertMenu'
 
-export default function Body ({projectId, focused, configuration}) {
+export default function Body ({projectId, refresh, focused, configuration}) {
   if (focused === null) {return ''}
 
   const {entity, target_entity, target_clique} = focused
@@ -13,7 +13,7 @@ export default function Body ({projectId, focused, configuration}) {
   const target = targetIsClique === true ? target_clique : target_entity
 
   return (<div className={styles.body}>
-    <AssertMenu {...{projectId, focused, configuration}}/>
+    <AssertMenu {...{projectId, refresh, focused, configuration}}/>
     <div className={styles.viewContainer}>
       <TargetView {...{projectId, configuration, target: entity}} />
       <TargetView {...{projectId, configuration, targetIsClique, target}} />

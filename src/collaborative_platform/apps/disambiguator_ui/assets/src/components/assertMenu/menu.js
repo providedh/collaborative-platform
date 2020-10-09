@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 import PropTypes from 'prop-types'
 
+import {API} from 'common/helpers'
 import styles from './styles.module.css' // eslint-disable-line no-unused-vars
 
 function onAction(
@@ -8,21 +9,27 @@ function onAction(
     accept,
     certainty,
     categories,
+    projectId,
     setCertainty,
-    setCategories) {
+    setCategories,
+    refresh) {
   const payload = {id, decision: accept}
   if (accept === true) {
     payload.certainty = certainty
     payload.categories = categories
   }
 
-  console.log(payload)
+  API.updateUnification(projectId, {}, payload)
+    .then(d => {
+      refresh()
+    })
+    .catch(err => console.error('Failed to update unification '+id+' for project ' + projectId, err))
 
   setCertainty('medium')
   setCategories([])
 }
 
-export default function Menu ({projectId, focused, configuration}) {
+export default function Menu ({projectId, refresh, focused, configuration}) {
   if (focused === null) {return ''}
   const [unifying, setUnifying] = useState(false)
   const [certainty, setCertainty] = useState('medium')
@@ -44,7 +51,15 @@ export default function Menu ({projectId, focused, configuration}) {
         <li className="list-group-item">
           <button
             type="button"
-            onClick={() => onAction(focused.id, false, null, null, setCertainty, setCategories)}
+            onClick={() => onAction(
+              focused.id,
+              false,
+              null,
+              null,
+              projectId,
+              setCertainty,
+              setCategories,
+              refresh)}
             className="btn btn-outline-danger">Reject</button>
         </li>
         <li className="list-group-item">
@@ -98,7 +113,14 @@ export default function Menu ({projectId, focused, configuration}) {
           <button
             type="button"
             onClick={() => {
-              onAction(focused.id, true, certainty, categories, setCertainty, setCategories)
+              onAction(focused.id,
+                true,
+                certainty,
+                categories,
+                projectId,
+                setCertainty,
+                setCategories,
+                refresh)
               setUnifying(false)
             }}
             className="btn btn-success">Unify</button>
