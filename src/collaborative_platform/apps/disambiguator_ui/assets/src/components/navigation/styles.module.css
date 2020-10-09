@@ -24,15 +24,14 @@ margin-left: -12px;
 }
 .proposalList{
 position: absolute;
-top: 100%;
+top: 80%;
 left: calc(50% - 10em);
 z-index: 1;
 margin: 0 auto;
 width: 20em;
 }
 .proposalList > div {
-padding-left: 0;
-padding-right: 0;
+padding: 0;
 }
 .filename{
 color: var(--info);
