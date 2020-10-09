@@ -68,6 +68,21 @@ export default function ProposalList ({
   <div className={listCssClasses}>
     <div className="card-body">
       {proposalEntries}
+      <div className={styles.listPagination}>
+        <button
+            onClick={() => setListIndex(Math.max(0, listIndex-buffSize))}
+            type="button"
+            className="btn btn-link">
+          <p className="d-inline m-0 p-0"></p> <span>⟵</span>
+        </button>
+        <span>{listIndex}-{listIndex + proposals.length} / {ids.length}</span>
+        <button
+            onClick={() => setListIndex(Math.min(buffSize * Math.trunc(proposals.length / buffSize), listIndex+buffSize))}
+            type="button"
+            className="btn btn-link">
+          <p className="d-inline m-0 p-0"></p> <span>⟶</span>
+        </button>
+      </div>
     </div>
   </div>)
 }

@@ -94,3 +94,16 @@ margin: 0;
 text-align: center;
 color: var(--blue);
 }
+.listPagination{
+display: flex;
+align-items: center;
+justify-content: center;
+}
+.listPagination button{
+color: var(--blue);
+font-size: 2em;
+font-family: SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+}
+.listPagination button:hover{
+text-decoration: none;
+}
