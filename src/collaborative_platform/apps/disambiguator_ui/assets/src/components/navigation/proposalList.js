@@ -52,7 +52,10 @@ export default function ProposalList ({
   const proposalEntries = proposals.map((p, i) => {
     const {target_entity, target_clique} = p
     const targetIsClique = target_entity === undefined && target_clique !== undefined
-    return <div key={i} className={styles.proposalEntry}>
+    return <div
+        onClick={() => setFocusedIndex(listIndex + i)}
+        key={i}
+        className={styles.proposalEntry}>
       <EntityName entity={p.entity} configuration={configuration}/>
       <p className={styles.updownArrow}>⇳</p>
       {targetIsClique === false
