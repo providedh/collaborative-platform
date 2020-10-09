@@ -39,7 +39,7 @@ export default function Navigation ({
         <span>⟵</span> <p className="d-inline m-0 p-0">Previous unification</p>
       </button>
       <div className={styles.listToggle}>
-        <b>{Math.min(focusedIndex + 1, proposals.length)} / {ids.length}</b>
+        <b>{Math.min(focusedIndex + 1, ids.length)} / {ids.length}</b>
         <button
           onClick={() => setListVisibility(!listShown)}
           type="button"
@@ -48,7 +48,7 @@ export default function Navigation ({
       </button>
       </div>
       <button
-          onClick={() => setFocusedIndex(Math.min(proposals.length-1 , focusedIndex+1))}
+          onClick={() => setFocusedIndex(Math.min(ids.length-1 , focusedIndex+1))}
           type="button"
           className={navButtonCssClasses}>
         <p className="d-inline m-0 p-0">Next unification</p> <span>⟶</span>

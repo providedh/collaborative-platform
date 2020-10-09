@@ -16,8 +16,7 @@ function useProposalIds(projectId) {
   useEffect(() => {
     API.getProposalList(projectId)
     .then(ids => {
-      setIds('2'.repeat(details.length).split('').map((x,i) => 2+i))
-      //setIds(ids);
+      setIds(ids)
     })
     .catch(err => console.error('Failed to retrieve proposal ids for project ' + projectId))
   }, [])
@@ -27,29 +26,46 @@ function useProposalIds(projectId) {
 function useProposalDetails(projectId, listIndex, focusedIndex, ids, proposals, setFocused) {
   useEffect(() => {
     if ((proposals.length === 0) || (listIndex > focusedIndex) || (listIndex+buffSize < focusedIndex)) {
-      // fetch the ids[focusedIndex] item
-      setFocused(details[focusedIndex])      
+      if (focusedIndex >= ids.length) {return}
+      API.getProposalDetails(projectId, {ids:ids[focusedIndex]}, {})
+      .then(details => {
+        setFocused(details[0])
+      })
+      .catch(err => console.error('Failed to retrieve proposal details for project ' + projectId))
+      //setFocused(details[focusedIndex])
 
     } else {
       setFocused(proposals[focusedIndex % buffSize])
     }
-  }, [focusedIndex])
+  }, [ids, focusedIndex])
 }
 
 function useProposalList(projectId, listIndex, ids, setProposals) {
   useEffect(() => {
-    // fetch the ids[listIndex : listIndex + buffSize] items
-    setProposals(details.slice(listIndex, listIndex + buffSize))      
-  }, [listIndex])
+    const ids2fetch = ids.slice(listIndex, listIndex+buffSize)
+    if (ids2fetch.length === 0) {return}
+
+    const idQueryParameter = ids2fetch.join('&ids=')
+    API.getProposalDetails(projectId, {ids:idQueryParameter}, {})
+    .then(details => {
+      setProposals(details.sort((a,b) => ids2fetch.indexOf(a.id) - ids2fetch.indexOf(b.id)))
+    })
+    .catch(err => console.error('Failed to retrieve proposal ids for project ' + projectId))
+    //setProposals(details.slice(listIndex, listIndex + buffSize))      
+  }, [listIndex, ids])
 }
 
 export default function Unifications ({projectId, configuration}) {
   const ids = useProposalIds(projectId)
-  const [focusedIndex, setFocusedIndex] = useState(0)
+  const [focusedIndex, _setFocusedIndex] = useState(0)
   const [focused, setFocused] = useState(null)
   const [proposals, setProposals] = useState([])
   const [listIndex, setListIndex] = useState(0)
   
+  const setFocusedIndex = (i) => {
+    console.log('setting idx', i)
+    _setFocusedIndex(i)
+  }
   useProposalIds(projectId)
   useProposalDetails(projectId, listIndex, focusedIndex, ids, proposals, setFocused)
   useProposalList(projectId, listIndex, ids, setProposals)
