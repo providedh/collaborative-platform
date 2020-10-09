@@ -54,10 +54,14 @@ export default function ProposalList ({
   const proposalEntries = proposals.map((p, i) => {
     const {target_entity, target_clique} = p
     const targetIsClique = target_entity === undefined && target_clique !== undefined
+    const cssClasses = [
+      styles.proposalEntry,
+      ids[focusedIndex] === p.id ? styles.listEntryFocused : ''
+    ].join(' ')
     return <div
         onClick={() => setFocusedIndex(listIndex + i)}
         key={i}
-        className={styles.proposalEntry}>
+        className={cssClasses}>
       <EntityName entity={p.entity} configuration={configuration}/>
       <p className={styles.updownArrow}>⇳</p>
       {targetIsClique === false

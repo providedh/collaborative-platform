@@ -16,7 +16,7 @@ function useProposalIds(projectId) {
   useEffect(() => {
     API.getProposalList(projectId)
     .then(ids => {
-      setIds('2'.repeat(details.length).split('').map(x => +x))
+      setIds('2'.repeat(details.length).split('').map((x,i) => 2+i))
       //setIds(ids);
     })
     .catch(err => console.error('Failed to retrieve proposal ids for project ' + projectId))
