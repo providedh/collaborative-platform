@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 import PropTypes from 'prop-types'
 
+import ProposalList from './proposalList.js'
 import styles from './styles.module.css' // eslint-disable-line no-unused-vars
 
 export default function Navigation ({proposals, listIndex, buffSize, ids, setListIndex, focusedIndex, setFocusedIndex}) {
@@ -44,6 +45,14 @@ export default function Navigation ({proposals, listIndex, buffSize, ids, setLis
           className={navButtonCssClasses}>
         <p className="d-inline m-0 p-0">Next unification</p> <span>⟶</span>
       </button>
+      <ProposalList {...{
+        proposals,
+        listIndex,
+        buffSize,
+        ids,
+        setListIndex,
+        focusedIndex,
+        setFocusedIndex}}/>
     </div>
     <hr className="my-0 mx-4" style={{backgroundColor: 'var(--blue)'}}/>
   </React.Fragment>)
