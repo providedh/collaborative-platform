@@ -77,7 +77,7 @@ export default function ProposalList ({
         </button>
         <span>{listIndex}-{listIndex + proposals.length} / {ids.length}</span>
         <button
-            onClick={() => setListIndex(Math.min(buffSize * Math.trunc(proposals.length / buffSize), listIndex+buffSize))}
+            onClick={() => setListIndex(Math.min(buffSize * Math.trunc(ids.length / buffSize), listIndex+buffSize))}
             type="button"
             className="btn btn-link">
           <p className="d-inline m-0 p-0"></p> <span>⟶</span>

@@ -39,7 +39,7 @@ function useProposalDetails(projectId, listIndex, focusedIndex, ids, proposals, 
 function useProposalList(projectId, listIndex, ids, setProposals) {
   useEffect(() => {
     // fetch the ids[listIndex : listIndex + buffSize] items
-    setProposals(details.slice(listIndex, buffSize))      
+    setProposals(details.slice(listIndex, listIndex + buffSize))      
   }, [listIndex])
 }
 
