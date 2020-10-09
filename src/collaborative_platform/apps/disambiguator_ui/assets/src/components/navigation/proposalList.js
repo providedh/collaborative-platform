@@ -35,6 +35,7 @@ function CliqueName({clique, configuration}) {
 }
 
 export default function ProposalList ({
+    listShown,
     proposals,
     listIndex,
     buffSize,
@@ -46,7 +47,8 @@ export default function ProposalList ({
   const listCssClasses = [
     'card',
     'shadow',
-    styles.proposalList
+    styles.proposalList,
+    listShown === false ? 'd-none' : ''
   ].join(' ')
 
   const proposalEntries = proposals.map((p, i) => {

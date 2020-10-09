@@ -54,6 +54,7 @@ export default function Navigation ({
         <p className="d-inline m-0 p-0">Next unification</p> <span>⟶</span>
       </button>
       <ProposalList {...{
+        listShown,
         proposals,
         listIndex,
         buffSize,
