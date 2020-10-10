@@ -94,10 +94,12 @@ def serialize_unification_proposals(project_id: int, ups: List[UnificationPropos
         res = {"id": up.id, "degree": up.confidence, "entity": rh.serialize_entities([up.entity], pv)[0]}
         res["entity"]["file_id"] = up.entity.file_id
         res["entity"]["file_name"] = up.entity.file.name
+        res["entity"]["xml:id"] = up.entity.xml_id
         if up.entity2 is not None:
             res["target_entity"] = rh.serialize_entities([up.entity2], pv)[0]
             res["target_entity"]["file_id"] = up.entity2.file_id
             res["target_entity"]["file_name"] = up.entity2.file.name
+            res["target_entity"]["xml:id"] = up.entity2.xml_id
         elif up.clique is not None:
             clq = up.clique
             entities = []
@@ -105,6 +107,7 @@ def serialize_unification_proposals(project_id: int, ups: List[UnificationPropos
                 e = rh.serialize_entities([up.entity], pv)[0]
                 e["file_id"] = entity.file_id
                 e["file_name"] = entity.file.name
+                e["xml:id"] = entity.xml_id
                 entities.append(e)
 
             res["target_clique"] = {
