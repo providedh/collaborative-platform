@@ -2,57 +2,89 @@ import React, {useState, useEffect} from 'react'
 import PropTypes from 'prop-types'
 
 import {API} from 'common/helpers'
-import { Header } from 'components/header'
 import { Navigation } from 'components/navigation'
 import { Body } from 'components/body'
-import styles from './styles.module.css' // eslint-disable-line no-unused-vars
-    import details from './details.json'
 
 
 const buffSize = 5
 
 function useProposalIds(projectId) {
   const [ids, setIds] = useState([])
+
   useEffect(() => {
-    API.getProposalList(projectId)
-    .then(ids => {
-      setIds('2'.repeat(details.length).split('').map((x,i) => 2+i))
-      //setIds(ids);
-    })
-    .catch(err => console.error('Failed to retrieve proposal ids for project ' + projectId))
+    updateProposalIds(projectId, setIds)
   }, [])
-  return ids;
+  return [ids, () => updateProposalIds(projectId, setIds)]
+}
+
+function updateProposalIds(projectId, setIds) {
+  API.getProposalList(projectId)
+  .then(ids => {
+    setIds(ids)
+  })
+  .catch(err => console.error('Failed to update proposal ids for project ' + projectId, err))
 }
 
 function useProposalDetails(projectId, listIndex, focusedIndex, ids, proposals, setFocused) {
   useEffect(() => {
-    if ((proposals.length === 0) || (listIndex > focusedIndex) || (listIndex+buffSize < focusedIndex)) {
-      // fetch the ids[focusedIndex] item
-      setFocused(details[focusedIndex])      
+    updateProposalDetails(projectId, listIndex, focusedIndex, ids, proposals, setFocused)
+  }, [ids, focusedIndex])
+}
 
-    } else {
-      setFocused(proposals[focusedIndex % buffSize])
-    }
-  }, [focusedIndex])
+function updateProposalDetails(projectId, listIndex, focusedIndex, ids, proposals, setFocused) {
+  if ((proposals.length === 0) || (listIndex > focusedIndex) || (listIndex+buffSize < focusedIndex)) {
+    if (focusedIndex >= ids.length) {return}
+    API.getProposalDetails(projectId, {ids:ids[focusedIndex]}, {})
+    .then(details => {
+      setFocused(details[0])
+    })
+    .catch(err => console.error('Failed to update proposal details for project ' + projectId))
+    //setFocused(details[focusedIndex])
+
+  } else {
+    setFocused(proposals[focusedIndex % buffSize])
+  }
 }
 
 function useProposalList(projectId, listIndex, ids, setProposals) {
   useEffect(() => {
-    // fetch the ids[listIndex : listIndex + buffSize] items
-    setProposals(details.slice(listIndex, listIndex + buffSize))      
-  }, [listIndex])
+    updateProposalList(projectId, listIndex, ids, setProposals)
+  }, [listIndex, ids])
+}
+
+function updateProposalList(projectId, listIndex, ids, setProposals) {
+  const ids2fetch = ids.slice(listIndex, listIndex+buffSize)
+  if (ids2fetch.length === 0) {return}
+
+  const idQueryParameter = ids2fetch.join('&ids=')
+  API.getProposalDetails(projectId, {ids:idQueryParameter}, {})
+  .then(details => {
+    setProposals(details.sort((a,b) => ids2fetch.indexOf(a.id) - ids2fetch.indexOf(b.id)))
+  })
+  .catch(err => console.error('Failed to retrieve proposal list for project ' + projectId))
 }
 
 export default function Unifications ({projectId, configuration}) {
-  const ids = useProposalIds(projectId)
+  const [ids, updateIds] = useProposalIds(projectId)
   const [focusedIndex, setFocusedIndex] = useState(0)
   const [focused, setFocused] = useState(null)
   const [proposals, setProposals] = useState([])
   const [listIndex, setListIndex] = useState(0)
-  
+
   useProposalIds(projectId)
-  useProposalDetails(projectId, listIndex, focusedIndex, ids, proposals, setFocused)
   useProposalList(projectId, listIndex, ids, setProposals)
+  useProposalDetails(projectId, listIndex, focusedIndex, ids, proposals, setFocused)
+
+  const refresh = () => {
+    if (focusedIndex === ids.length - 1) {
+      setFocusedIndex(focusedIndex+1)
+    }
+    updateProposalIds(projectId, newIds => {
+      updateProposalList(projectId, listIndex, newIds, setProposals)
+      updateProposalDetails(projectId, listIndex, focusedIndex, newIds, [], setFocused)
+      updateIds()
+    })
+  }
 
   return (
     <div>
@@ -65,7 +97,7 @@ export default function Unifications ({projectId, configuration}) {
         focusedIndex,
         configuration,
         setFocusedIndex}}/>
-      <Body {...{focused, projectId, configuration}}/>
+      <Body {...{focused, refresh, projectId, configuration}}/>
     </div>
   )
 }

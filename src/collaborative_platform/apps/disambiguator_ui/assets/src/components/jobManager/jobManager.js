@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import {API} from 'common/helpers'
 import styles from './styles.module.css' // eslint-disable-line no-unused-vars
 
-const fetchPeriod = 1000 * 60 * 10
+const fetchPeriod = 1000 * 60 * 2
 
 function periodicJobFetch(projectId, setJobs) {
   fetchJobs(projectId, setJobs)

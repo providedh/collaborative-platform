@@ -22,13 +22,16 @@ font-weight: bold;
 display: block;
 margin-left: -12px;
 }
-.proposalList{
+.listContainer{
 position: absolute;
 top: 80%;
-left: calc(50% - 10em);
 z-index: 1;
+width: 100%;
+}
+.proposalList{
 margin: 0 auto;
-width: 20em;
+display: block;
+width: fit-content;
 }
 .proposalList > div {
 padding: 0;
