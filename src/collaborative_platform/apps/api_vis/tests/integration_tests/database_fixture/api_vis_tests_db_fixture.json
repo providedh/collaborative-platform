@@ -4536,7 +4536,7 @@
     "deleted_in_file_version": null,
     "deleted_in_commit": null,
     "certainty": "high",
-    "description": "",
+    "description": null,
     "xml_id": "certainty-5",
     "categories": []
   }
@@ -4557,7 +4557,7 @@
     "deleted_in_file_version": 4,
     "deleted_in_commit": 5,
     "certainty": "high",
-    "description": "",
+    "description": null,
     "xml_id": "certainty-3",
     "categories": [
       2
@@ -4580,7 +4580,7 @@
     "deleted_in_file_version": null,
     "deleted_in_commit": null,
     "certainty": "high",
-    "description": "",
+    "description": null,
     "xml_id": "certainty-4",
     "categories": [
       2
@@ -4603,7 +4603,7 @@
     "deleted_in_file_version": null,
     "deleted_in_commit": null,
     "certainty": "high",
-    "description": "",
+    "description": null,
     "xml_id": "certainty-2",
     "categories": [
       2
@@ -4626,7 +4626,7 @@
     "deleted_in_file_version": null,
     "deleted_in_commit": null,
     "certainty": "medium",
-    "description": "",
+    "description": null,
     "xml_id": "certainty-3",
     "categories": [
       2
@@ -4649,7 +4649,7 @@
     "deleted_in_file_version": null,
     "deleted_in_commit": null,
     "certainty": "medium",
-    "description": "",
+    "description": null,
     "xml_id": "certainty-6",
     "categories": [
       2
@@ -4672,7 +4672,7 @@
     "deleted_in_file_version": null,
     "deleted_in_commit": null,
     "certainty": "medium",
-    "description": "",
+    "description": null,
     "xml_id": "certainty-7",
     "categories": [
       2
@@ -4695,7 +4695,7 @@
     "deleted_in_file_version": null,
     "deleted_in_commit": null,
     "certainty": "medium",
-    "description": "",
+    "description": null,
     "xml_id": "certainty-5",
     "categories": [
       2
@@ -4718,7 +4718,7 @@
     "deleted_in_file_version": 2,
     "deleted_in_commit": 5,
     "certainty": "low",
-    "description": "",
+    "description": null,
     "xml_id": "certainty-8",
     "categories": [
       2
@@ -4741,7 +4741,7 @@
     "deleted_in_file_version": 4,
     "deleted_in_commit": 5,
     "certainty": "low",
-    "description": "",
+    "description": null,
     "xml_id": "certainty-6",
     "categories": [
       2
@@ -4764,7 +4764,7 @@
     "deleted_in_file_version": null,
     "deleted_in_commit": null,
     "certainty": "low",
-    "description": "",
+    "description": null,
     "xml_id": "certainty-9",
     "categories": [
       2
@@ -4787,7 +4787,7 @@
     "deleted_in_file_version": null,
     "deleted_in_commit": null,
     "certainty": "low",
-    "description": "",
+    "description": null,
     "xml_id": "certainty-7",
     "categories": [
       2
@@ -4803,7 +4803,7 @@
     "xml_id": "certainty-0",
     "locus": "value",
     "certainty": "high",
-    "degree": 0.857142857142857,
+    "degree": 0.86,
     "target_xml_id": "name-3",
     "target_match": "@ref",
     "asserted_value": "#met",
@@ -4875,7 +4875,7 @@
     "certainty": "high",
     "degree": null,
     "target_xml_id": "person-2",
-    "target_match": "name/forename",
+    "target_match": "./persName/forename",
     "asserted_value": "McDuck",
     "description": null,
     "created_by": 2,
@@ -4919,7 +4919,7 @@
     "xml_id": "certainty-0",
     "locus": "value",
     "certainty": "high",
-    "degree": 0.857142857142857,
+    "degree": 0.86,
     "target_xml_id": "name-3",
     "target_match": "@ref",
     "asserted_value": "#met",
@@ -4991,7 +4991,7 @@
     "certainty": "high",
     "degree": null,
     "target_xml_id": "person-2",
-    "target_match": "name/forename",
+    "target_match": "./persName/forename",
     "asserted_value": "McDuck",
     "description": null,
     "created_by": 2,
@@ -5035,7 +5035,7 @@
     "xml_id": "certainty-0",
     "locus": "value",
     "certainty": "high",
-    "degree": 0.857142857142857,
+    "degree": 0.86,
     "target_xml_id": "name-4",
     "target_match": "@ref",
     "asserted_value": "#sand",
@@ -5058,7 +5058,7 @@
     "xml_id": "certainty-1",
     "locus": "value",
     "certainty": "high",
-    "degree": 0.857142857142857,
+    "degree": 0.86,
     "target_xml_id": "name-5",
     "target_match": "@ref",
     "asserted_value": "#sand",
@@ -5081,7 +5081,7 @@
     "xml_id": "certainty-2",
     "locus": "value",
     "certainty": "high",
-    "degree": 0.857142857142857,
+    "degree": 0.86,
     "target_xml_id": "name-6",
     "target_match": "@ref",
     "asserted_value": "#jus",
@@ -5104,7 +5104,7 @@
     "xml_id": "certainty-0",
     "locus": "value",
     "certainty": "high",
-    "degree": 0.857142857142857,
+    "degree": 0.86,
     "target_xml_id": "name-4",
     "target_match": "@ref",
     "asserted_value": "#sand",
@@ -5127,7 +5127,7 @@
     "xml_id": "certainty-1",
     "locus": "value",
     "certainty": "high",
-    "degree": 0.857142857142857,
+    "degree": 0.86,
     "target_xml_id": "name-5",
     "target_match": "@ref",
     "asserted_value": "#sand",
@@ -5150,7 +5150,7 @@
     "xml_id": "certainty-2",
     "locus": "value",
     "certainty": "high",
-    "degree": 0.857142857142857,
+    "degree": 0.86,
     "target_xml_id": "name-6",
     "target_match": "@ref",
     "asserted_value": "#jus",
@@ -5173,7 +5173,7 @@
     "xml_id": "certainty-0",
     "locus": "value",
     "certainty": "high",
-    "degree": 0.857142857142857,
+    "degree": 0.86,
     "target_xml_id": "name-1",
     "target_match": "@ref",
     "asserted_value": "#sand",
@@ -5196,7 +5196,7 @@
     "xml_id": "certainty-1",
     "locus": "value",
     "certainty": "high",
-    "degree": 0.833333333333333,
+    "degree": 0.83,
     "target_xml_id": "name-0",
     "target_match": "@ref",
     "asserted_value": "#ingwer",
@@ -5219,7 +5219,7 @@
     "xml_id": "certainty-0",
     "locus": "value",
     "certainty": "high",
-    "degree": 0.857142857142857,
+    "degree": 0.86,
     "target_xml_id": "name-1",
     "target_match": "@ref",
     "asserted_value": "#sand",
@@ -5242,7 +5242,7 @@
     "xml_id": "certainty-1",
     "locus": "value",
     "certainty": "high",
-    "degree": 0.833333333333333,
+    "degree": 0.83,
     "target_xml_id": "name-0",
     "target_match": "@ref",
     "asserted_value": "#ingwer",
@@ -5265,7 +5265,7 @@
     "xml_id": "certainty-0",
     "locus": "value",
     "certainty": "high",
-    "degree": 0.857142857142857,
+    "degree": 0.86,
     "target_xml_id": "name-3",
     "target_match": "@ref",
     "asserted_value": "#met",
@@ -5337,7 +5337,7 @@
     "certainty": "high",
     "degree": null,
     "target_xml_id": "person-2",
-    "target_match": "name/forename",
+    "target_match": "./persName/forename",
     "asserted_value": "McDuck",
     "description": null,
     "created_by": 2,
@@ -5397,14 +5397,14 @@
 },
 {
   "model": "api_vis.certainty",
-  "pk": 27,
+  "pk": 26,
   "fields": {
     "file": 1,
     "file_version": 8,
     "xml_id": "certainty-0",
     "locus": "value",
     "certainty": "high",
-    "degree": 0.857142857142857,
+    "degree": 0.86,
     "target_xml_id": "name-3",
     "target_match": "@ref",
     "asserted_value": "#met",
@@ -5421,7 +5421,7 @@
 },
 {
   "model": "api_vis.certainty",
-  "pk": 28,
+  "pk": 27,
   "fields": {
     "file": 1,
     "file_version": 8,
@@ -5444,7 +5444,7 @@
 },
 {
   "model": "api_vis.certainty",
-  "pk": 29,
+  "pk": 28,
   "fields": {
     "file": 1,
     "file_version": 8,
@@ -5467,7 +5467,7 @@
 },
 {
   "model": "api_vis.certainty",
-  "pk": 30,
+  "pk": 29,
   "fields": {
     "file": 1,
     "file_version": 8,
@@ -5476,7 +5476,7 @@
     "certainty": "high",
     "degree": null,
     "target_xml_id": "person-2",
-    "target_match": "name/forename",
+    "target_match": "./persName/forename",
     "asserted_value": "McDuck",
     "description": null,
     "created_by": 2,
@@ -5490,7 +5490,7 @@
 },
 {
   "model": "api_vis.certainty",
-  "pk": 31,
+  "pk": 30,
   "fields": {
     "file": 1,
     "file_version": 8,

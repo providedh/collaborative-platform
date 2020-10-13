@@ -101,7 +101,7 @@
           </certainty>
           <certainty xml:id="certainty-2" resp="#annotator-2" ana="https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness" locus="value" cert="high" target="#name-5" match="@ref" assertedValue="#ingredient-0"/>
           <certainty xml:id="certainty-3" resp="#annotator-2" ana="https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness" locus="value" cert="high" target="#person-2" match="./persName/forename" assertedValue="McDuck"/>
-          <certainty xml:id="certainty-5" resp="#annotator-2" ana="https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#new_awesome_category" locus="value" cert="high" target="#certainty-10" match="@cert" assertedValue="low"/>
+          <certainty xml:id="certainty-4" resp="#annotator-1" ana="https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#new_awesome_category" locus="value" cert="high" target="#certainty-10" match="@cert" assertedValue="low"/>
           <certainty xml:id="certainty-5.2.3" resp="#annotator-2" ana="" locus="value" cert="high" target="#ingredient-0" match="@sameAs" assertedValue="Project_1/group_0_long_annotated_1_modified_xml#ingredient-0"/>
           <certainty xml:id="certainty-6.3.3" resp="#annotator-3" ana="https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#credibility" locus="value" cert="medium" target="#ingredient-0" match="@sameAs" assertedValue="Project_1/group_0_long_annotated_2_modified_xml#ingredient-0"/>
           <certainty xml:id="certainty-7.2.5" resp="#annotator-2" ana="https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#credibility" locus="value" cert="medium" target="#person-0" match="@sameAs" assertedValue="Project_1/group_0_long_annotated_1_modified_xml#person-0"/>
