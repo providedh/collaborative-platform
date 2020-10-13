@@ -1,0 +1,10 @@
+.targetView{
+width: 50%;
+max-width: 650px;
+padding: 1.5rem;
+}
+@media(max-width: 1400px) { /* 2 x targetView width */
+    .targetView{
+        width: 100%;
+    }
+}

@@ -1,10 +1,19 @@
 import React, {useState} from 'react'
 import PropTypes from 'prop-types'
 
+import ProposalList from './proposalList.js'
 import styles from './styles.module.css' // eslint-disable-line no-unused-vars
 
-export default function Navigation ({currentIndex, setIndex, unifications, ...restProps}) {
-  const [listShown, setListVisibility] = useState([])
+export default function Navigation ({
+    proposals,
+    listIndex,
+    buffSize,
+    ids,
+    setListIndex,
+    focusedIndex,
+    configuration,
+    setFocusedIndex}) {
+  const [listShown, setListVisibility] = useState(false)
 
   const navigationCssClasses = [
     'd-flex',
@@ -24,13 +33,13 @@ export default function Navigation ({currentIndex, setIndex, unifications, ...re
   return (<React.Fragment>
     <div className={navigationCssClasses}>
       <button
-          onClick={() => setIndex(Math.max(0, currentIndex-1))}
+          onClick={() => setFocusedIndex(Math.max(0, focusedIndex-1))}
           type="button"
           className={navButtonCssClasses}>
         <span>⟵</span> <p className="d-inline m-0 p-0">Previous unification</p>
       </button>
       <div className={styles.listToggle}>
-        <b>{Math.min(currentIndex + 1, unifications.length)} / {unifications.length}</b>
+        <b>{Math.min(focusedIndex + 1, ids.length)} / {ids.length}</b>
         <button
           onClick={() => setListVisibility(!listShown)}
           type="button"
@@ -39,17 +48,30 @@ export default function Navigation ({currentIndex, setIndex, unifications, ...re
       </button>
       </div>
       <button
-          onClick={() => setIndex(Math.min(unifications.length-1 , currentIndex+1))}
+          onClick={() => setFocusedIndex(Math.min(ids.length-1 , focusedIndex+1))}
           type="button"
           className={navButtonCssClasses}>
         <p className="d-inline m-0 p-0">Next unification</p> <span>⟶</span>
       </button>
+      <ProposalList {...{
+        listShown,
+        proposals,
+        listIndex,
+        buffSize,
+        ids,
+        setListIndex,
+        focusedIndex,
+        configuration,
+        setFocusedIndex}}/>
     </div>
     <hr className="my-0 mx-4" style={{backgroundColor: 'var(--blue)'}}/>
   </React.Fragment>)
 }
 
 Navigation.propTypes = {
-  currentIndex: PropTypes.number,
-  setIndex: PropTypes.func,
+  proposals: PropTypes.arrayOf(PropTypes.object),
+  listIndex: PropTypes.number,
+  setListIndex: PropTypes.func,
+  focusedIndex: PropTypes.number,
+  setFocusedIndex: PropTypes.func,
 }

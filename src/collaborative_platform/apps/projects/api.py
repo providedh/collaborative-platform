@@ -16,6 +16,7 @@ from apps.views_decorators import objects_exists, user_has_access
 
 from .helpers import paginate_page_perpage, order_queryset
 from .models import Project, Contributor, Taxonomy, UncertaintyCategory, EntitySchema
+from ..nn_disambiguator.helpers import create_models
 
 
 @login_required
@@ -47,6 +48,8 @@ def create(request):  # type: (HttpRequest) -> HttpResponse
 
             project_directory = Directory(name=project_name, project=project)
             project_directory.save()
+
+            create_models(project)
 
             log_activity(project, request.user, "created project")
 
