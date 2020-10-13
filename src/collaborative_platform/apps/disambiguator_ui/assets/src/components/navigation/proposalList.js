@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import styles from './styles.module.css' // eslint-disable-line no-unused-vars
 
 function EntityName({entity, configuration}) {
-  const name = entity.type + '-' + entity.id
+  const name = entity['xml:id']
   const iconCode = configuration.entities[entity.type].icon;
   
   return <div className={styles.entityName}>

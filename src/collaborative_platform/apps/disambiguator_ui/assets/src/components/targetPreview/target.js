@@ -21,14 +21,14 @@ function useContent(container, url, entity) {
 }
 
 function useHighlight(container, entity) {
-  const target = `#${entity.type}-${entity.id}`
+  const target = '#' + entity['xml:id']
   useEffect(() => {
     highlightTargets(container, entity)
   }, [target])
 }
 
 function highlightTargets(container, entity) {
-  const target = `#${entity.type}-${entity.id}`
+  const target = '#' + entity['xml:id']
   if (container === undefined) {return}
   Array.from(container.getElementsByTagName('name'))
     .map(x => {
