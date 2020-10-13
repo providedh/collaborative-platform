@@ -1,11 +1,11 @@
 import endpoints from './endpoints'
-import { port } from './config.js'
 
 /* Module for building full API call urls and returning JS Promises.
  *
  * */
 export default (function (args) {
-  const baseUrl = [window.location.protocol + '/', window.location.hostname + ':' + port].join('/')
+  const port = window.location.port !== '' ? (':'+window.location.port) : ''
+  const baseUrl = [window.location.protocol + '/', window.location.hostname + port].join('/')
 
   function _init (args) {
     const obj = {}
