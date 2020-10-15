@@ -16,7 +16,8 @@ passes = {
     "low": 40,
     "medium": 60,
     "high": 80,
-    "very high": 100
+    "very high": 100,
+    None: 100
 }
 
 

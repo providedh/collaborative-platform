@@ -87,7 +87,7 @@ class UnificationProposal(Model):
             self.decision = True
             self.save()
 
-    def reject(self, user, certainty):
+    def reject(self, user, certainty=None):
         self.decision_maker = user
         self.user_confidence = certainty
         self.decided = True

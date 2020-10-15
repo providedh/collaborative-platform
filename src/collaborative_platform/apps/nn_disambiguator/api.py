@@ -65,7 +65,7 @@ def proposals(request: HttpRequest, project_id: int):
             up.accept(request.user, args["certainty"], args["categories"])
             return JsonResponse({"message": "Unified successfully"})
         else:
-            up.reject(request.user, args["certainty"])
+            up.reject(request.user)
             return JsonResponse({"message": "Rejected successfully"})
 
     else:
