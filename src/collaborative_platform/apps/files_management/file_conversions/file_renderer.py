@@ -256,13 +256,14 @@ class FileRenderer:
 
         latest_commit = self.__get_latest_commit_from_db()
 
-        for unification in unifications:
-            joined_unifications = self.__get_joined_unifications_from_db(unification, latest_commit)
+        if latest_commit:
+            for unification in unifications:
+                joined_unifications = self.__get_joined_unifications_from_db(unification, latest_commit)
 
-            for joined_unification in joined_unifications:
-                certainty_element = self.__create_certainty_element_from_unification(unification, joined_unification)
+                for joined_unification in joined_unifications:
+                    certainty_element = self.__create_certainty_element_from_unification(unification, joined_unification)
 
-                elements.append(certainty_element)
+                    elements.append(certainty_element)
 
         return elements
 
