@@ -24,6 +24,8 @@ def levenshtein_distance(s1: str, s2: str) -> int:
 
 
 def nlp_sim(s1: str, s2: str) -> float:
+    if s1 == s2:
+        return 1
     if s1 and s2:
         s1 = nlp(s1)
         s2 = nlp(s2)
