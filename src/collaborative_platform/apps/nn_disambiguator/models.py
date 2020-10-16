@@ -9,6 +9,7 @@ from django.db.models import Model, FileField, ForeignKey, CASCADE, IntegerField
 
 from apps.api_vis.db_handler import DbHandler
 from apps.api_vis.models import Entity, Clique, EntityVersion
+from apps.files_management.models import FileVersion
 from apps.projects.models import Project, EntitySchema
 import joblib
 
@@ -123,3 +124,9 @@ class SimilarityCache(Model):
 
     class Meta:
         unique_together = ("e1v", "e2v")
+
+
+class FileTextSimilarityCache(Model):
+    fv1 = ForeignKey(FileVersion, on_delete=CASCADE, related_name="textsim1")
+    fv2 = ForeignKey(FileVersion, on_delete=CASCADE, related_name="textsim2")
+    sim = FloatField(null=True)

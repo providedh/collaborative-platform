@@ -24,10 +24,9 @@ def levenshtein_distance(s1: str, s2: str) -> int:
 
 
 def nlp_sim(s1: str, s2: str) -> float:
-    tokens = nlp(f"{s1} {s2}")
-    avsim = 0
-    tokens_num_h = len(tokens) // 2
-    for i in range(0, tokens_num_h):
-        avsim += tokens[i].similarity(tokens[i + tokens_num_h])
-    avsim /= tokens_num_h
-    return avsim
+    if s1 and s2:
+        s1 = nlp(s1)
+        s2 = nlp(s2)
+        if s1.vector_norm and s2.vector_norm:
+            return s1.similarity(s2)
+    return 0

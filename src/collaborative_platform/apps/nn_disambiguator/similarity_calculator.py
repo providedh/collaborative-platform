@@ -11,7 +11,7 @@ from sklearn.preprocessing import StandardScaler
 from apps.api_vis.enums import TypeChoice
 from apps.api_vis.models import EntityVersion, EntityProperty, Entity
 from apps.nn_disambiguator import names, time, geography
-from apps.nn_disambiguator.models import Classifier, SimilarityCache
+from apps.nn_disambiguator.models import Classifier, SimilarityCache, FileTextSimilarityCache
 from apps.projects.models import EntitySchema, Taxonomy
 from collaborative_platform import settings
 from collaborative_platform.settings import DEFAULT_ENTITIES, CUSTOM_ENTITY
@@ -69,13 +69,16 @@ class SimilarityCalculator:
         if e1lv.file_version == e2lv.file_version:
             return 1.0
         else:
-            nlp_file1 = self.nlp(e1lv.file_version.body_text)
-            nlp_file2 = self.nlp(e2lv.file_version.body_text)
-            return nlp_file1.similarity(nlp_file2)
+            ftsc, created = FileTextSimilarityCache.objects.get_or_create(fv1=e1lv.file_version, fv2=e2lv.file_version)
+            if created:
+                nlp_file1 = self.nlp(e1lv.file_version.body_text)
+                nlp_file2 = self.nlp(e2lv.file_version.body_text)
+                ftsc.sim = nlp_file1.similarity(nlp_file2)
+                ftsc.save()
+            return ftsc.sim
 
     def __calculate_other_entities_avg_similarity(self, e1v: EntityVersion, e2v: EntityVersion,
-                                                  files_text_sim: float) -> \
-            List[float]:
+                                                  files_text_sim: float) -> List[float]:
         schemas = e1v.file_version.file.project.taxonomy.entities_schemas.all()
         sims = []
 
@@ -120,7 +123,7 @@ class SimilarityCalculator:
                 except SimilarityCache.DoesNotExist:
                     fv = self.__calculate_similarity(_e1v, _e2v)
                     fv.append(files_text_sim)
-                    fv.extend([0 for _ in range(unifiable_schemas)])
+                    fv.extend([0] * unifiable_schemas)
                     fv.extend(self.__calculate_files_creation_dates_and_places(_e1v, _e2v))
                 else:
                     fv = sc.vector
