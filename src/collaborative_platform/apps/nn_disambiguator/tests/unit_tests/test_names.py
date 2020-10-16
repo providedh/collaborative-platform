@@ -22,4 +22,4 @@ class TestNames:
     def test_nlp_sim(self):
         assert nlp_sim('a', 'a') == 1.
         assert 0.25 < nlp_sim('Amber', 'Zebra') < 0.26
-        assert 0.73 < nlp_sim("James Bond Junior", "Jamie Bond Jr.") < 0.74
+        assert 0.84 < nlp_sim("James Bond Junior", "Jamie Bond Jr.") < 0.85
