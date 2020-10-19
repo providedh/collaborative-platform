@@ -1,0 +1,27 @@
+.button{
+position: relative;
+display: inline;
+}
+.button.collapsed{}
+.button.visible{}
+.operations{
+position: absolute;
+left: calc(100% + 1em);
+top: -1em;
+z-index: 1;
+border-left: solid 2px var(--primary);
+width: 25em;
+}
+.arrow{
+position: absolute;
+left: calc(100% + .5em);
+top: 0;
+display: block;
+height: 1em;
+width: 1em;
+transform: rotateZ(45deg);
+background: var(--primary);
+}
+.operations,.arrow{display: none;}
+.button:hover .operations,
+.button:hover .arrow{display: initial;}

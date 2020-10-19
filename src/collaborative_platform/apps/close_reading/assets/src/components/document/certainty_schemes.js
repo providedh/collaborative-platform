@@ -10,11 +10,13 @@ export const aScheme = {
       })
     })
 
+
     const gradStops = []
+    const numSpacers = annotations.length > 1 ? annotations.length - 1 : 0
     const numberAnnotations = annotationsFlattened.length
     const color4author = (color, author, currentUser) => color
     const annotationSpacer = 10
-    const percIncrement = (100 - numberAnnotations * annotationSpacer) / annotations.length// author=='#'+currentUser?'#fff0':'#ffff'
+    const percIncrement = (100 - numSpacers * annotationSpacer) / numberAnnotations// author=='#'+currentUser?'#fff0':'#ffff'
 
     const colors = annotationsFlattened.map(([category, cert, resp, id]) =>
       colorForUncertainty(category, cert, taxonomy))
@@ -79,11 +81,13 @@ export const aScheme = {
       })
     })
 
+
     const gradStops = []
+    const numSpacers = annotations.length > 1 ? annotations.length - 1 : 0
     const numberAnnotations = annotationsFlattened.length
     const color4author = (color, author, currentUser) => 'lightgrey'
     const annotationSpacer = 10
-    const percIncrement = (100 - numberAnnotations * annotationSpacer) / annotations.length// author=='#'+currentUser?'#fff0':'#ffff'
+    const percIncrement = (100 - numSpacers * annotationSpacer) / numberAnnotations// author=='#'+currentUser?'#fff0':'#ffff'
 
     const colors = annotationsFlattened.map(([category, cert, resp, id]) =>
       colorForUncertainty(category, cert, taxonomy))
@@ -129,11 +133,13 @@ export const aScheme = {
       })
     })
 
+
     const gradStops = []
+    const numSpacers = annotations.length > 1 ? annotations.length - 1 : 0
     const numberAnnotations = annotationsFlattened.length
     const color4author = (color, author, currentUser) => author === currentUser ? '#fff0' : '#ffff'
     const annotationSpacer = 10
-    const percIncrement = (100 - numberAnnotations * annotationSpacer) / annotations.length// author=='#'+currentUser?'#fff0':'#ffff'
+    const percIncrement = (100 - numSpacers * annotationSpacer) / numberAnnotations// author=='#'+currentUser?'#fff0':'#ffff'
 
     const colors = annotationsFlattened.map(([category, cert, resp, id]) =>
       colorForUncertainty(category, cert, taxonomy))
