@@ -1,5 +1,14 @@
 import xml from 'common/helpers/xml.js'
 
+function sanityzeEndindex(source, start, end) {
+  const fragment = source.slice(start, end)
+  const trailingCode = /<[^>]*$/.exec(fragment)?.[0]
+  if (trailingCode != undefined) {
+    return end - trailingCode.length
+  }
+  return end
+}
+
 function contentsFromRange (range) {
   const fragment = range.cloneRange().cloneContents()
   const container = document.createElement('div')
@@ -47,7 +56,9 @@ export function getSelection (container, selection, originalContent) {
     ? [anchorOffset, focusOffset]
     : [focusOffset, anchorOffset]
 
-  return [start, end]
+  const corectedEndIndex = sanityzeEndindex(originalContent, start, end)
+
+  return [start, corectedEndIndex]
 }
 
 export function processSelection (selectionEvent) {
