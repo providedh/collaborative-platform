@@ -10,7 +10,9 @@ left: calc(100% + 1em);
 top: -1em;
 z-index: 1;
 border-left: solid 2px var(--primary);
-width: 25em;
+min-width: 25em;
+max-height: 30em;
+overflow-y: auto;
 }
 .arrow{
 position: absolute;

@@ -19,7 +19,7 @@ background: lightgrey;
 margin: 0 auto;
 }
 .acceptMenu{
-width: 15em;
+width: 25em;
 display: none;
 flex-direction: column;
 align-items: center;
