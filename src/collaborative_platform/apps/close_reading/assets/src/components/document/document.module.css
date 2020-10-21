@@ -1,12 +1,11 @@
 .document{
   background-color: white;
-  line-height: 2.5em;
   min-height: 80vh;
   margin-top: 0 !important;
 }
 
 .document *{
-  line-height: 2.3em;
+  line-height: 2.5em;
 }
 
 .entityListContainer{
@@ -41,4 +40,23 @@
 .document list {
     display: block;
     margin: 0 2em;
+}
+.document table{
+  display: table;
+  margin: 0 auto;
+}
+.document table,
+.document table *{
+  line-height: 1em;
+}
+.document table head{
+  display: none;
+}
+.document table row{
+  display: table-row;
+}
+.document table cell{
+  display: table-cell;
+  border: double 1px var(--gray);
+  padding: 5px;
 }

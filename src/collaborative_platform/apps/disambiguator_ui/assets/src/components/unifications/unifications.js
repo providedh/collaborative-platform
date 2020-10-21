@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import {API} from 'common/helpers'
 import { Navigation } from 'components/navigation'
 import { Body } from 'components/body'
+import { SaveButton } from 'components/saveButton'
 
 
 const buffSize = 5
@@ -70,6 +71,7 @@ export default function Unifications ({projectId, configuration}) {
   const [focused, setFocused] = useState(null)
   const [proposals, setProposals] = useState([])
   const [listIndex, setListIndex] = useState(0)
+  const [unsavedOperations, setUnsavedOperations] = useState([])
 
   useProposalIds(projectId)
   useProposalList(projectId, listIndex, ids, setProposals)
@@ -88,6 +90,7 @@ export default function Unifications ({projectId, configuration}) {
 
   return (
     <div>
+      <SaveButton {...{projectId, unsavedOperations}}/>
       <Navigation {...{
         proposals,
         listIndex,

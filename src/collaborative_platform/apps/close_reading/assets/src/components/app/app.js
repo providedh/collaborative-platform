@@ -55,6 +55,7 @@ export default class App extends React.Component {
       newState.context.annotations = response.certainties
       newState.context.operations = response.operations
       newState.fileVersion = '' + response.file_version
+      newState.selection = null
 
       const entities = Object
         .values(response.entities_lists)

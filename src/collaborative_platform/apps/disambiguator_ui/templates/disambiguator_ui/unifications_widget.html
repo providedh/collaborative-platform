@@ -1,6 +1,6 @@
 {% load static %}
 <style type="text/css">
-	#unifications table * {
+	#unifications table thead * {
 		border-color: #ccc;
 		font-size: 12.8px;
 		height: 35px;
@@ -10,37 +10,194 @@
 		margin: 0 auto;
     	display: block;
 	}
+	#unifications .jobStatusIndicator{
+		vertical-align: middle;
+	}
+	#unifications .jobStatusIndicator > span{
+		display: block;
+	    height: .9em;
+	    width: .9em;
+	    border-radius: 50%;
+	    margin: 0 auto;
+	}
+	#unifications .jobStatusIndicator > span.Queued{
+		background-color: var(--warning);
+	}
+	#unifications .jobStatusIndicator > span.Started{
+		background-color: var(--primary);
+	}
+	#unifications .jobStatusIndicator > span.Running{
+		background-color: var(--primary);
+	}
+	#unifications .jobStatusIndicator > span.Finished{
+		background-color: var(--success);
+	}
+	#unifications .jobStatusIndicator > span.Aborted{
+		background-color: var(--danger);
+	}
+	#unifications .jobStatusIndicator > span.Failed{
+		background-color: var(--danger);
+	}
 </style>
 <div id="unifications" class="box mb-3">
 	<div class="box__header">
-	  <h3 class="box__text--title">Entity unifications</h3>
+	  <h3 class="box__text--title">Machine learning job runs</h3>
 	</div>
 	<div class="box__content pt-3">
-		<div class="row ml-0">
-	      	<input placeholder="Search by file" type="text" style="width:100%;" class="form-control col-4 form-control-sm">
+		<p>
+			Machinme learning jobs analize the documents in search for possible unifications:
+			a same entity that was annotated as distinct ones accross the documents.
+		</p>
+		<div class="my-2">
+			<a class="btn btn-outline-primary" href="/disambiguator/project/{{ project_id }}" target="blank" role="button">
+				Open the app to start jobs and see unification proposals
+			</a>
 		</div>
-		<table class="mt-2 table table-bordered table-sm">
+		<table id="job-history" class="mt-3 table table-bordered table-sm">
 		  <thead style="background-color: #eee;">
+		  	<tr>
+		  		<th colspan="3" class="text-muted text-right">
+		  			Updates automatically (last update: )
+		  		</th>
+		  	</tr>
 		    <tr>
-		      <th scope="col">Type</th>
-		      <th scope="col">Entity</th>
-		      <th scope="col">Match</th>
-		      <th scope="col">Open in app</th>
+		      <th scope="col"></th>
+		      <th scope="col">Status</th>
+		      <th scope="col">Creation time</th>
 		    </tr>
 		  </thead>
 		  <tbody>
-		    <tr>
-		      <td>Person</td>
-		      <td>filename/person-1</td>
-		      <td>filename2/person-2</td>
-		      <td class="text-center">
-		      	<a href="/disambiguator/project/{{ project_id }}" target="blank">🔗</a>
-		      </td>
-		    </tr>
+		  	<tr>
+		  		<td></td>
+		  		<td>
+		  			<div class="spinner-grow text-primary" role="status">
+					  <span class="sr-only">Loading...</span>
+					</div>
+		  		</td>
+		  		<td>
+		  			<div class="spinner-grow text-primary" role="status">
+					  <span class="sr-only">Loading...</span>
+					</div>
+		  		</td> 
+		  	</tr>
 		  </tbody>
 		</table>
-		<div class="spinner-grow text-primary" role="status">
-		  <span class="sr-only">Loading...</span>
-		</div>
 	</div>
+	<script type="text/javascript">
+		function getCookie (name) {
+	      let cookieValue = null
+	      if (document.cookie && document.cookie !== '') {
+	        const cookies = document.cookie.split(';')
+	        for (let i = 0; i < cookies.length; i++) {
+	          const cookie = cookies[i].trim()
+	          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+	            cookieValue = decodeURIComponent(cookie.substring(name.length + 1))
+	            break
+	          }
+	        }
+	      }
+	      return cookieValue
+	    }
+
+	    function fetchJobs() {
+	    	const csrfToken = getCookie('csrftoken');
+	    	const url='/api/disambiguator/projects/{{ project_id }}/calculations/';
+
+		    const fetchBody = {
+		      method: 'GET',
+		      mode: 'cors',
+		      cache: 'no-cache',
+		      credentials: 'same-origin',
+		      headers: {
+		        'Content-Type': 'application/json',
+		        'X-CSRF-TOKEN': csrfToken,
+		        'X-CSRFToken': csrfToken,
+		      },
+		      redirect: 'follow',
+		      referrer: 'no-referrer'
+		    }	
+
+		    return new Promise((resolve, reject) => {
+		      fetch(url, fetchBody)
+		        .then(response => {
+		          if (response.ok === false){ throw {status: response.status} }
+		          response.json()
+		            .then(json => { resolve(json) })
+		            .catch(err => { resolve(response) })
+		        })
+		        .catch(err => { reject(err) });
+		    })
+		}
+
+		function getCurrentFormattedTIme() {
+			const currentTime = new Date(Date.now());
+			const formatter = new Intl.NumberFormat("en-IN", {minimumIntegerDigits: 2});
+			const hours = formatter.format(currentTime.getHours());
+			const minutes = formatter.format(currentTime.getMinutes());
+			const currentTimeFormatted = `${hours}:${minutes}`
+			return currentTimeFormatted;
+		}
+
+		function renderEmptyJobs(tableRows) {
+			tableRows.innerHTML = `
+				<tr>
+		  			<td colspan="3" class="pl-5 py-2">
+		  				No job has been started jet, open the app to start a new one.
+		  			</td>
+		  		</tr>
+			`
+		}
+
+		function renderJobs(tableRows, jobs) {
+			const jobHTML = job => `
+					<tr>
+			  			<td class="jobStatusIndicator">
+			  				<span class="${job.status}"></span>
+			  			</td>
+			  			<td>${job.status}</td>
+			  			<td>${new Date(job.created)}</td>
+			  		</tr>
+				`
+			tableRows.innerHTML = jobs.map(jobHTML).join('\n')
+		}
+
+		function updateJobs(tableRows) {
+			const maxJobs = 3
+			fetchJobs().then(jobs => {
+				if (jobs.length === 0) {
+					renderEmptyJobs(tableRows);
+				} else {
+					renderJobs(tableRows, jobs.slice(0, Math.min(maxJobs, jobs.length)));
+				}
+
+				if (jobs.length > maxJobs) {
+					tableRows.innerHTML = tableRows.innerHTML + `
+						<tr><td class="text-right" colspan="3">+ ${jobs.length - maxJobs} jobs</td></tr>
+					`
+				}
+
+				const updateTime = getCurrentFormattedTIme()
+				tableRows.parentElement.tHead.rows[0].children[0].innerText =
+					`Updates automatically (last updated at ${updateTime})`
+			});
+		}
+
+		function periodicJobUpdate(tableRows) {
+			const period = 1000 * 60 * 2; // 2 minute
+			updateJobs(tableRows);
+			setTimeout(() => {
+				periodicJobUpdate(tableRows);
+			}, period);
+		}
+
+		function setupJobHistoryLoad() {
+			const tableRows = document
+				.getElementById('job-history').tBodies[0];
+			setTimeout(() => {
+				periodicJobUpdate(tableRows);
+			}, 0);
+		}
+
+		document.addEventListener('DOMContentLoaded', setupJobHistoryLoad)
+	</script>
 </div>

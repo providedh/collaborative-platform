@@ -1,3 +1,5 @@
+import re
+
 from datetime import date, datetime, time
 
 from django.contrib.auth.models import User
@@ -90,8 +92,9 @@ class EntityProperty(models.Model):
         elif self.type == TypeChoice.time:
             self.value_time = time.fromisoformat(str(value))
         elif self.type == TypeChoice.Point:
-            value = value.replace(',', ' ')
-            values = value.split(' ')
+            clean_value = value.replace(',', ' ')
+            clean_value = re.sub(r'\s+', ' ', clean_value)
+            values = clean_value.split(' ')
 
             self.value_point = Point(float(values[0]), float(values[1]))
 

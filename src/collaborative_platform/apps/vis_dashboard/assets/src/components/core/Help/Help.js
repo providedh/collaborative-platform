@@ -4,7 +4,7 @@ import css from './style.css' // eslint-disable-line no-unused-vars
 
 export default function Help (props) {
   return (
-    <div id="help" className={'container shadow-lg pt-2 hiddens ' + styles.help}>
+    <div id="help" className={'container shadow-lg pt-2 hidden ' + styles.help}>
       <h3>
                 PROVIDEDH Visualization Dashboard
         <button type="button" onClick={() => document.getElementById('help').classList.add('hidden')} className="close mt-2 mr-2" aria-label="Close">

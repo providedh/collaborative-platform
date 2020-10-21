@@ -224,8 +224,12 @@ class FileVersion(models.Model):
     def get_rendered_content(self):
         from apps.files_management.file_conversions.file_renderer import FileRenderer
 
-        file_renderer = FileRenderer()
-        content = file_renderer.render_file_version(self)
+        if self.number == 1:
+            content = self.get_raw_content()
+
+        else:
+            file_renderer = FileRenderer()
+            content = file_renderer.render_file_version(self)
 
         return content
 

@@ -63,7 +63,7 @@ function handleEntityEvent (target, event, callback, type) {
   // screenX absolute placement is harder to work with
   // const screenX = boundingRect.x + (boundingRect.width / 2)
 
-  const screenY = boundingRect.y + window.scrollY + boundingRect.height
+  const screenY = boundingRect.y + window.scrollY + boundingRect.height - 15
   const selection = Selection(type, target, event.clientX, screenY)
   callback(selection)
 }

@@ -89,10 +89,6 @@ export default function Jobs ({projectId, ...restProps}) {
   const [historyShown, setHistoryVisibility] = useState(false)
   useEffect(() => {periodicJobFetch(projectId, setJobs)}, [])
 
-  window.pushAction = status => setJobs(
-    [...jobs, {status, id: jobs.length, created: '1999-10-' + jobs.length}]
-  )
-
   return (<div className={styles.jobs}>
     <div className="d-flex">
       <JobStatus job={jobs.length === 0 ? null : jobs[jobs.length-1]}/>
