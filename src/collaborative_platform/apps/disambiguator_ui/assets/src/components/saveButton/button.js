@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 
 import {API} from 'common/helpers'
 import styles from './styles.module.css' // eslint-disable-line no-unused-vars
+import {EntityName, CliqueName} from 'common/components'
 
 const updateTimeDelays = [
   500,
@@ -42,7 +43,7 @@ function scheduleCommitUpdates(projectId, waitTimes, setWaitTimes) {
   setWaitTimes(newWaitTimes)
 }
 
-export default function Button ({projectId, assertFlag}) {
+export default function Button ({projectId, assertFlag, configuration}) {
   const [visible, setVisibility] = useState(false)
   const [unsavedOperations, setUnsavedOperations] = useState([])
   const [waitTimes, setWaitTimes] = useState([])
@@ -79,7 +80,18 @@ export default function Button ({projectId, assertFlag}) {
     : `Save ${unsavedOperations.length} unifications`
 
   const operations = unsavedOperations.map((x, i) =>
-    <li key={i} className="list-group-item">Some operation {i}</li>)
+    <li key={i} className="list-group-item">
+      <div className="text-nowrap">
+        <span className="d-inline-flex">
+          <EntityName {...{configuration, entity: {
+            type: x.entity_type,
+            'xml:id': x['entity_xml-id'],
+            file_name: x.entity_file_name
+          }}}/>
+        </span> ⇨ <span>Clique {x.clique_id} {x.clique_name.length > 0 ? `(${x.clique_name})` : ''}</span>
+      </div>
+      ({x.certainty} certainty)
+    </li>)
 
   return (<div className={cssClasses}>
     <button

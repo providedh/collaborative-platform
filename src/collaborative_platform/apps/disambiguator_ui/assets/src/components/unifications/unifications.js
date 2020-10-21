@@ -91,7 +91,7 @@ export default function Unifications ({projectId, configuration}) {
 
   return (
     <div>
-      <SaveButton {...{projectId, assertFlag}}/>
+      <SaveButton {...{projectId, assertFlag, configuration}}/>
       <Navigation {...{
         proposals,
         listIndex,
