@@ -74,7 +74,7 @@ export default function Menu ({projectId, refresh, focused, configuration}) {
       </ul>
     </div>
     <div className={styles.acceptMenu}>
-      <form>
+      <form className="d-flex justify-content-center">
         <div className="form-group">
           <label htmlFor="confidenceSelect">Confidence</label>
           <select

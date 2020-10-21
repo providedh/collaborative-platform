@@ -11,6 +11,8 @@ top: -1em;
 z-index: 1;
 border-left: solid 2px var(--primary);
 min-width: 25em;
+max-height: 30em;
+overflow-y: auto;
 }
 .arrow{
 position: absolute;

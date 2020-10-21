@@ -101,9 +101,11 @@ export default function Button ({projectId, assertFlag, configuration}) {
       {msg}
     </button>
     <div className={arrowCssClasses}/>
-    <ul className={tooltipCssClasses}>
-      {operations}
-    </ul>
+    <div className={tooltipCssClasses}>
+      <ul className="pl-0">
+        {operations}
+      </ul>
+    </div>
   </div>)
 }
 
