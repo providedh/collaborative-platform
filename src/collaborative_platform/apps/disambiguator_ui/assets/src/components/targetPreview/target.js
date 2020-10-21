@@ -3,9 +3,8 @@ import PropTypes from 'prop-types'
 
 import styles from './styles.module.css' // eslint-disable-line no-unused-vars
 
-function useContent(container, url, entity) {
-  useEffect(() => {
-    fetch(url)
+function renderUrlContent(container, url, entity) {
+  fetch(url)
     .then(r => r.json())
     .then(json => {
       if (json?.data !== undefined && container !== undefined) {
@@ -17,6 +16,11 @@ function useContent(container, url, entity) {
       }
     })
     .catch(err => console.error(err))
+}
+
+function useContent(container, url, entity) {
+  useEffect(() => {
+    renderUrlContent(container, url, entity)
   }, [url, container])
 }
 
@@ -47,10 +51,10 @@ export default function TargetPreview ({entity, projectId, configuration}) {
   useContent(preview.current, fileURL, entity)
   useHighlight(preview.current, entity)
 
+  useEffect(() => renderUrlContent(preview.current, fileURL, entity), [])
+
   return (
-    <div ref={preview} className={styles.targetPreview}>
-      
-    </div>
+    <div ref={preview} className={styles.targetPreview}>Getting file . . .</div>
   )
 }
 
