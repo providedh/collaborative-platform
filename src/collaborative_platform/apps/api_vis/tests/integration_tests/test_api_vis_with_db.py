@@ -787,6 +787,7 @@ class TestApiVisWithDb:
                         'id': 7,
                         'name': 'seventh_clique',
                         'created_by_id': 2,
+                        'type': 'ingredient'
                      }
                 ],
                 'cliques_to_delete': [
@@ -794,6 +795,7 @@ class TestApiVisWithDb:
                         'id': 2,
                         'name': 'second_clique',
                         'created_by_id': 2,
+                        'type': 'ingredient'
                     }
                 ],
                 'unifications_to_add': [
@@ -806,6 +808,9 @@ class TestApiVisWithDb:
                         'certainty': 'high',
                         'categories': ['ignorance', 'incompleteness'],
                         'created_by': 2,
+                        'entity_file_name': 'group_0_long_annotated_0_modified_xml',
+                        'entity_type': 'ingredient',
+                        'entity_xml-id': 'ingredient-1',
                     },
                     {
                         'id': 14,
@@ -816,6 +821,9 @@ class TestApiVisWithDb:
                         'certainty': 'high',
                         'categories': ['ignorance', 'incompleteness'],
                         'created_by': 2,
+                        'entity_file_name': 'group_0_long_annotated_1_modified_xml',
+                        'entity_type': 'ingredient',
+                        'entity_xml-id': 'ingredient-1',
                     },
                     {
                         'id': 15,
@@ -826,6 +834,9 @@ class TestApiVisWithDb:
                         'certainty': 'medium',
                         'categories': [],
                         'created_by': 2,
+                        'entity_file_name': 'group_0_long_annotated_2_modified_xml',
+                        'entity_type': 'ingredient',
+                        'entity_xml-id': 'ingredient-1',
                     },
                 ],
                 'unifications_to_remove': [
@@ -838,6 +849,9 @@ class TestApiVisWithDb:
                         'certainty': 'high',
                         'categories': [],
                         'created_by': 2,
+                        'entity_file_name': 'group_0_long_annotated_0_modified_xml',
+                        'entity_type': 'ingredient',
+                        'entity_xml-id': 'ingredient-0',
                     },
                     {
                         'id': 3,
@@ -848,6 +862,9 @@ class TestApiVisWithDb:
                         'certainty': 'high',
                         'categories': ['credibility'],
                         'created_by': 2,
+                        'entity_file_name': 'group_0_long_annotated_1_modified_xml',
+                        'entity_type': 'ingredient',
+                        'entity_xml-id': 'ingredient-0',
                     },
                     {
                         'id': 4,
@@ -858,6 +875,9 @@ class TestApiVisWithDb:
                         'certainty': 'high',
                         'categories': ['credibility'],
                         'created_by': 2,
+                        'entity_file_name': 'group_0_long_annotated_2_modified_xml',
+                        'entity_type': 'ingredient',
+                        'entity_xml-id': 'ingredient-0',
                     },
                 ]
             },
