@@ -27,7 +27,8 @@ def generate_entities_pairs(schema: EntitySchema) -> List[Tuple[Entity, Entity]]
                                                                                                           flat=True)
     pairs = set(combinations(entities, 2))
 
-    cliques = Clique.objects.filter(type=schema.name, project=schema.taxonomy.project).all()
+    cliques = Clique.objects.filter(type=schema.name, project=schema.taxonomy.project,
+                                    created_in_commit__isnull=False).all()
 
     for clique in cliques:
         unified = clique.unifications.values_list("entity", flat=True)
@@ -48,7 +49,8 @@ def generate_entity_clique_pairs(schema: EntitySchema) -> List[Tuple[Entity, Cli
 
     pairs = set(product(entities, cliques))
 
-    existing_unifications = Unification.objects.filter(project=schema.taxonomy.project, clique__type=schema.name)
+    existing_unifications = Unification.objects.filter(project=schema.taxonomy.project, clique__type=schema.name,
+                                                       created_in_commit__isnull=False)
     existing_unifications_pairs = [(u.entity, u.clique) for u in existing_unifications]
 
     pairs.difference_update(existing_unifications_pairs)
@@ -81,7 +83,7 @@ def make_entities_cliques_proposals(data_processor, model, scaler, schema):
 
         log(f"Predicted. p={p}")
 
-        if p > 0.0:  # TODO: make this threshold configurable?
+        if p >= 0.0:  # TODO: make this threshold configurable?
             UnificationProposal(
                 entity=e,
                 clique=c,
@@ -102,7 +104,7 @@ def make_entities_proposals(data_processor, model, scaler, schema):
 
         log(f"Predicted. p={p}")
 
-        if p > 0.0:
+        if p >= 0.0:
             UnificationProposal(
                 entity=e1,
                 entity2=e2,
