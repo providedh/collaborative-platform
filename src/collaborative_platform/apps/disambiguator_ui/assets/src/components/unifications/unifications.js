@@ -71,7 +71,7 @@ export default function Unifications ({projectId, configuration}) {
   const [focused, setFocused] = useState(null)
   const [proposals, setProposals] = useState([])
   const [listIndex, setListIndex] = useState(0)
-  const [unsavedOperations, setUnsavedOperations] = useState([])
+  const [assertFlag, setAssertFlag] = useState(true) // used to fire the unsaved commits update
 
   useProposalIds(projectId)
   useProposalList(projectId, listIndex, ids, setProposals)
@@ -86,11 +86,12 @@ export default function Unifications ({projectId, configuration}) {
       updateProposalDetails(projectId, listIndex, focusedIndex, newIds, [], setFocused)
       updateIds()
     })
+    setAssertFlag(!assertFlag)
   }
 
   return (
     <div>
-      <SaveButton {...{projectId, unsavedOperations}}/>
+      <SaveButton {...{projectId, assertFlag}}/>
       <Navigation {...{
         proposals,
         listIndex,

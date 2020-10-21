@@ -4,8 +4,54 @@ import PropTypes from 'prop-types'
 import {API} from 'common/helpers'
 import styles from './styles.module.css' // eslint-disable-line no-unused-vars
 
-export default function Button ({projectId, unsavedOperations}) {
+const updateTimeDelays = [
+  500,
+  1000,
+  2500,
+  5500,
+]
+
+function updateUnsavedOperations(projectId, setUnsavedOperations) {
+  API.getUnsavedUnifications(projectId).then(json => {
+    const unsaved = json?.uncommitted_changes?.unifications_to_add
+    if (unsaved !== undefined) {
+      setUnsavedOperations(unsaved)
+    }
+  })
+}
+
+function periodicUpdate(projectId, setUnsavedOperations, waitTimes, setWaitTimes) {
+  if (waitTimes.length === 0) {return}
+  (new Promise((resolve, reject) => { // ensures that no update will interfere
+    setWaitTimes([])
+    resolve(waitTimes)
+  })).then(times => {
+    times.map(tsp => setTimeout(() => updateUnsavedOperations(projectId, setUnsavedOperations), tsp))  
+  })
+}
+
+function saveUncommitedChanges(projectId, waitTimes, setWaitTimes) {
+  API.saveUnifications(projectId).then(() => {
+    scheduleCommitUpdates(projectId, waitTimes, setWaitTimes)
+  })
+}
+
+function scheduleCommitUpdates(projectId, waitTimes, setWaitTimes) {
+  const newWaitTimes = [...waitTimes, ...updateTimeDelays]
+  newWaitTimes.sort((a, b) => a-b)
+  setWaitTimes(newWaitTimes)
+}
+
+export default function Button ({projectId, assertFlag}) {
   const [visible, setVisibility] = useState(false)
+  const [unsavedOperations, setUnsavedOperations] = useState([])
+  const [waitTimes, setWaitTimes] = useState([])
+
+  periodicUpdate(projectId, setUnsavedOperations, waitTimes, setWaitTimes)
+  useEffect(() => {
+    scheduleCommitUpdates(projectId, waitTimes, setWaitTimes)
+  }, [assertFlag])
+  window.API = API
 
   const cssClasses = [
     styles.button,
@@ -36,7 +82,10 @@ export default function Button ({projectId, unsavedOperations}) {
     <li key={i} className="list-group-item">Some operation {i}</li>)
 
   return (<div className={cssClasses}>
-    <button type="button" className={buttonCssClasses} disabled={unsavedOperations.length === 0}>
+    <button
+      type="button"
+      onClick={unsavedOperations.length === 0 ? null : () => saveUncommitedChanges(projectId, waitTimes, setWaitTimes)}
+      className={buttonCssClasses} disabled={unsavedOperations.length === 0}>
       {msg}
     </button>
     <div className={arrowCssClasses}/>
