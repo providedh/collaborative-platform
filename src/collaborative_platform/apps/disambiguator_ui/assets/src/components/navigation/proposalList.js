@@ -2,37 +2,7 @@ import React, {useState} from 'react'
 import PropTypes from 'prop-types'
 
 import styles from './styles.module.css' // eslint-disable-line no-unused-vars
-
-function EntityName({entity, configuration}) {
-  const name = entity['xml:id']
-  const iconCode = configuration.entities[entity.type].icon;
-  
-  return <div className={styles.entityName}>
-    <span className={styles.filename}>
-      {entity.file_name}
-    </span>
-    <span className={styles.slash}>/</span>
-    <span className={styles.entity}>
-      <i className="fas" data={iconCode}></i> {name}
-    </span>
-  </div>
-}
-
-function CliqueName({clique, configuration}) {
-  const name = 'clique ' + clique.name
-  const iconCode = configuration.entities[clique.entities[0].type].icon;
-  const files = new Set(clique.entities.map(d => d.file_id))
-
-  return <div className={styles.entityName}>
-    <span className={styles.filename}>
-      {name}
-    </span>
-    <span className={styles.slash}>/</span>
-    <span className={styles.entity}>
-      <i className="fas" data={iconCode}></i> {clique.entities.length} entities in {files.size} files
-    </span>
-  </div>
-}
+import {EntityName, CliqueName} from 'common/components'
 
 export default function ProposalList ({
     listShown,
