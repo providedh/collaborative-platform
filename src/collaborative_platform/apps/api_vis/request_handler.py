@@ -355,7 +355,8 @@ class RequestHandler:
             serialized_clique = {
                 'id': clique.id,
                 'name': clique.name,
-                'created_by_id': clique.created_by.id
+                'created_by_id': clique.created_by.id,
+                'type': clique.type
             }
 
             serialized_cliques.append(serialized_clique)
@@ -378,6 +379,9 @@ class RequestHandler:
                 'clique_name': unification.clique.name,
                 'entity_id': unification.entity.id,
                 'entity_name': entity_name.get_value(),
+                'entity_xml-id': unification.entity.xml_id,
+                'entity_type': unification.entity.type,
+                'entity_file_name': unification.entity.file.name,
                 'certainty': unification.certainty,
                 'categories': categories,
                 'created_by': unification.created_by.id,
