@@ -154,7 +154,9 @@ function processAnnotations (annotations, targets) {
 
     // set the status
     if (annotation.length === 1) {
-      if (annotation[0].saved === false) {
+      if (annotation[0].isUnification === true) {
+        return { status: OperationStatus.unified, ...annotation[0] }
+      }else if (annotation[0].saved === false) {
         return { status: OperationStatus.unsaved, ...annotation[0] }
       } else if (annotation[0].saved === true && annotation[0].deleted === false) {
         return { status: OperationStatus.saved, ...annotation[0] }
