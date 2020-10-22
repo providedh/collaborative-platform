@@ -77,6 +77,7 @@ function AnnotationDescription ({annotation, props}) {
 
 export default function Annotation({annotation, ...props}) {
   const author = authorName(annotation.resp, props.context.user, props.context.authors);
+
   return (
     <li>
       <span className={(author === 'I' && annotation.status === OperationStatus.unsaved) ? 'text-danger' : 'd-none'}>

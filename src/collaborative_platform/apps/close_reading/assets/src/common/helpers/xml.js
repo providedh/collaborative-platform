@@ -131,6 +131,7 @@ function processTag (domNode) {
     deleted: (domNode.attributes?.deleted?.value === 'true')
   }
 
+  if (domNode.tagName === 'ab') {return tag}
   if (Object.values(commonAttributes).filter(x => x.value === null).length > 0) {return null}
 
   tag.ref.value = tag.ref.value.slice(1)
@@ -243,6 +244,22 @@ function processEntitiesInDocument (raw, entities, annotations, conf) {
       details.type = tag.tagName
       details.annotations = referred.annotations
       details.properties = referred.properties
+
+      entityDetails.push(details)
+    })
+
+  // annotated plain text
+  const annotatedTags = [...body.getElementsByTagName('ab')]
+    .map(node => [node, processTag(node)])
+    .map(([tag, details]) => [
+      tag,
+      {...details, annotations : processAnnotations (annotations, [details.id.value])}
+    ])
+    .filter(([tag, details]) => details.annotations.length > 0)
+    .forEach(([tag, details]) => {
+      details.target = null
+      details.type = 'text fragment'
+      details.properties = []
 
       entityDetails.push(details)
     })

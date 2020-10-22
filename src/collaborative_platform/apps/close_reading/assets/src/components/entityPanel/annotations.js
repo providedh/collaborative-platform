@@ -13,7 +13,6 @@ import {
 import { WithAppContext } from 'common/context/app'
 import AnnotateForm from './annotate_form.js'
 import Annotation from './annotation.js'
-import { saveOperations, discardOperations} from 'common/helpers'
 import {onDeleteClick, onDiscard, onSave, onCreate, onModify} from './annotationActionHelpers.js'
 
 export default function CreateAnnotationWithContext (props) {
@@ -28,8 +27,6 @@ function CreateAnnotation (props) {
   const [visible, show] = useState(false)
   const [editingAnnotation, edit] = useState(null)
 
-  console.log(props.entity.annotations)
-
   const annotationItems = props.entity.annotations.map((annotation, i) =>
     <Annotation key={i} annotation={annotation} {...props}/>)
 
@@ -42,7 +39,7 @@ function CreateAnnotation (props) {
       {editingAnnotation === null
         ? <AnnotateForm entity={props.entity}
           submitText="Create annotation"
-          callback={form => onCreate(props.entity.target.value, form, props.context.websocket)}/>
+          callback={form => onCreate(props.entity?.target?.value || props.entity.id.value, form, props.context.websocket)}/>
         : <AnnotateForm entity={props.entity}
           annotation={editingAnnotation}
           submitText="Modify"

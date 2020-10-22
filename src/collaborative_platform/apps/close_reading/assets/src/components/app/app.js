@@ -17,7 +17,7 @@ export default class App extends React.Component {
     super(props)
 
     const { projectId, user, fileId, fileName, configuration } = props
-
+    configuration.entities['text fragment'] = {color: 'grey', icon: '', listable: false}
     TEIentities.update(configuration.properties_per_entity)
     this.socket = websocket.socket(projectId, fileId)
     this.state = defState(
