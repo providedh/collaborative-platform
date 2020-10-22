@@ -51,7 +51,7 @@ class ResponseGenerator:
         parser = etree.XMLParser(remove_blank_text=True)
         tree = etree.fromstring(xml_content, parser=parser)
 
-        body_xpath = './default:text/default:body'
+        body_xpath = './default:text'
         body_element = get_first_xpath_match(tree, body_xpath, XML_NAMESPACES)
 
         body_content = etree.tounicode(body_element, pretty_print=True)

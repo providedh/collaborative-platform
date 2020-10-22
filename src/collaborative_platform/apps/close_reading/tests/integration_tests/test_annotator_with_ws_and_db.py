@@ -103,8 +103,8 @@ class TestAnnotatorWithWsAndDb:
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 265,
-                        'end_pos': 271,
+                        'start_pos': 294,
+                        'end_pos': 300,
                     }
                 }
             ]
@@ -122,8 +122,8 @@ class TestAnnotatorWithWsAndDb:
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 425,
-                        'end_pos': 429,
+                        'start_pos': 454,
+                        'end_pos': 458,
                     }
                 }
             ]
@@ -156,8 +156,8 @@ class TestAnnotatorWithWsAndDb:
                         'element_type': 'tag',
                         'edited_element_id': 'name-3',
                         'parameters': {
-                            'start_pos': 272,
-                            'end_pos': 362,
+                            'start_pos': 301,
+                            'end_pos': 391,
                         }
                     }
                 ]
@@ -219,8 +219,8 @@ class TestAnnotatorWithWsAndDb:
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 265,
-                        'end_pos': 271,
+                        'start_pos': 294,
+                        'end_pos': 300,
                     }
                 }
             ]
@@ -271,8 +271,8 @@ class TestAnnotatorWithWsAndDb:
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 265,
-                        'end_pos': 271,
+                        'start_pos': 294,
+                        'end_pos': 300,
                     }
                 }
             ]
@@ -329,8 +329,8 @@ class TestAnnotatorWithWsAndDb:
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 265,
-                        'end_pos': 271,
+                        'start_pos': 294,
+                        'end_pos': 300,
                     }
                 }
             ]
@@ -379,8 +379,8 @@ class TestAnnotatorWithWsAndDb:
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 265,
-                        'end_pos': 271,
+                        'start_pos': 294,
+                        'end_pos': 300,
                     }
                 }
             ]
@@ -716,8 +716,8 @@ class TestAnnotatorWithWsAndDb:
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 265,
-                        'end_pos': 271,
+                        'start_pos': 294,
+                        'end_pos': 300,
                     }
                 }
             ]
@@ -1290,8 +1290,8 @@ class TestAnnotatorWithWsAndDb:
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 265,
-                        'end_pos': 271,
+                        'start_pos': 294,
+                        'end_pos': 300,
                     }
                 },
                 {
@@ -1364,8 +1364,8 @@ class TestAnnotatorWithWsAndDb:
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 265,
-                        'end_pos': 271,
+                        'start_pos': 294,
+                        'end_pos': 300,
                     }
                 }
             ]
@@ -1408,8 +1408,8 @@ class TestAnnotatorWithWsAndDb:
                     'element_type': 'tag',
                     'edited_element_id': 'name-3',
                     'parameters': {
-                        'start_pos': 272,
-                        'end_pos': 362,
+                        'start_pos': 301,
+                        'end_pos': 391,
                     }
                 }
             ]
@@ -1491,8 +1491,8 @@ class TestAnnotatorWithWsAndDb:
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 265,
-                        'end_pos': 271,
+                        'start_pos': 294,
+                        'end_pos': 300,
                     }
                 }
             ]
@@ -1551,8 +1551,8 @@ class TestAnnotatorWithWsAndDb:
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 265,
-                        'end_pos': 271,
+                        'start_pos': 294,
+                        'end_pos': 300,
                     }
                 }
             ]
@@ -1617,8 +1617,8 @@ class TestAnnotatorWithWsAndDb:
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 265,
-                        'end_pos': 271,
+                        'start_pos': 294,
+                        'end_pos': 300,
                     }
                 }
             ]
@@ -1675,8 +1675,8 @@ class TestAnnotatorWithWsAndDb:
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 265,
-                        'end_pos': 271,
+                        'start_pos': 294,
+                        'end_pos': 300,
                     }
                 }
             ]
@@ -2091,8 +2091,8 @@ class TestAnnotatorWithWsAndDb:
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 265,
-                        'end_pos': 271,
+                        'start_pos': 294,
+                        'end_pos': 300,
                     }
                 }
             ]
@@ -2504,8 +2504,8 @@ class TestAnnotatorWithWsAndDb:
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 265,
-                        'end_pos': 271,
+                        'start_pos': 294,
+                        'end_pos': 300,
                     }
                 }
             ]
@@ -2548,8 +2548,8 @@ class TestAnnotatorWithWsAndDb:
                     'element_type': 'tag',
                     'edited_element_id': 'name-3',
                     'parameters': {
-                        'start_pos': 272,
-                        'end_pos': 362,
+                        'start_pos': 301,
+                        'end_pos': 391,
                     }
                 }
             ]
@@ -2631,8 +2631,8 @@ class TestAnnotatorWithWsAndDb:
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 265,
-                        'end_pos': 271,
+                        'start_pos': 294,
+                        'end_pos': 300,
                     }
                 }
             ]
@@ -2691,8 +2691,8 @@ class TestAnnotatorWithWsAndDb:
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 265,
-                        'end_pos': 271,
+                        'start_pos': 294,
+                        'end_pos': 300,
                     }
                 }
             ]
@@ -2757,8 +2757,8 @@ class TestAnnotatorWithWsAndDb:
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 265,
-                        'end_pos': 271,
+                        'start_pos': 294,
+                        'end_pos': 300,
                     }
                 }
             ]
@@ -2815,8 +2815,8 @@ class TestAnnotatorWithWsAndDb:
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 265,
-                        'end_pos': 271,
+                        'start_pos': 294,
+                        'end_pos': 300,
                     }
                 }
             ]
@@ -3263,8 +3263,8 @@ class TestAnnotatorWithWsAndDb:
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 265,
-                        'end_pos': 271,
+                        'start_pos': 294,
+                        'end_pos': 300,
                     }
                 }
             ]
@@ -3684,8 +3684,8 @@ class TestAnnotatorWithWsAndDb:
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 265,
-                        'end_pos': 271,
+                        'start_pos': 294,
+                        'end_pos': 300,
                     }
                 }
             ]
@@ -3742,8 +3742,8 @@ class TestAnnotatorWithWsAndDb:
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 265,
-                        'end_pos': 271,
+                        'start_pos': 294,
+                        'end_pos': 300,
                     }
                 }
             ]
@@ -3761,8 +3761,8 @@ class TestAnnotatorWithWsAndDb:
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 425,
-                        'end_pos': 429,
+                        'start_pos': 454,
+                        'end_pos': 458,
                     }
                 }
             ]
@@ -3959,16 +3959,16 @@ class TestAnnotatorWithWsAndDb:
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 265,
-                        'end_pos': 271,
+                        'start_pos': 294,
+                        'end_pos': 300,
                     }
                 },
                 {
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 425,
-                        'end_pos': 429,
+                        'start_pos': 454,
+                        'end_pos': 458,
                     }
                 },
                 {
@@ -4087,16 +4087,16 @@ class TestAnnotatorWithWsAndDb:
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 265,
-                        'end_pos': 271,
+                        'start_pos': 294,
+                        'end_pos': 300,
                     }
                 },
                 {
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 425,
-                        'end_pos': 429,
+                        'start_pos': 454,
+                        'end_pos': 458,
                     }
                 },
                 {
@@ -4215,16 +4215,16 @@ class TestAnnotatorWithWsAndDb:
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 265,
-                        'end_pos': 271,
+                        'start_pos': 294,
+                        'end_pos': 300,
                     }
                 },
                 {
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 425,
-                        'end_pos': 429,
+                        'start_pos': 454,
+                        'end_pos': 458,
                     }
                 },
                 {
@@ -4363,8 +4363,8 @@ class TestAnnotatorWithWsAndDb:
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 265,
-                        'end_pos': 338,
+                        'start_pos': 294,
+                        'end_pos': 367,
                     }
                 }
             ]
@@ -4396,8 +4396,8 @@ class TestAnnotatorWithWsAndDb:
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 265,
-                        'end_pos': 338,
+                        'start_pos': 294,
+                        'end_pos': 367,
                     }
                 }
             ]
@@ -4452,8 +4452,8 @@ class TestAnnotatorWithWsAndDb:
                     'element_type': 'tag',
                     'edited_element_id': 'ab-0',
                     'parameters': {
-                        'start_pos': 528,
-                        'end_pos': 548,
+                        'start_pos': 557,
+                        'end_pos': 577,
                     }
                 }
             ]
@@ -4485,8 +4485,8 @@ class TestAnnotatorWithWsAndDb:
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 265,
-                        'end_pos': 338,
+                        'start_pos': 294,
+                        'end_pos': 367,
                     }
                 }
             ]
@@ -4537,8 +4537,8 @@ class TestAnnotatorWithWsAndDb:
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 265,
-                        'end_pos': 338,
+                        'start_pos': 294,
+                        'end_pos': 367,
                     }
                 }
             ]
@@ -4600,8 +4600,8 @@ class TestAnnotatorWithWsAndDb:
                     'element_type': 'tag',
                     'edited_element_id': 'ab-0',
                     'parameters': {
-                        'start_pos': 528,
-                        'end_pos': 548,
+                        'start_pos': 557,
+                        'end_pos': 577,
                     }
                 }
             ]
@@ -4643,8 +4643,8 @@ class TestAnnotatorWithWsAndDb:
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 265,
-                        'end_pos': 338,
+                        'start_pos': 294,
+                        'end_pos': 367,
                     }
                 }
             ]
@@ -4692,8 +4692,8 @@ class TestAnnotatorWithWsAndDb:
                     'element_type': 'tag',
                     'edited_element_id': 'name-8',
                     'parameters': {
-                        'start_pos': 251,
-                        'end_pos': 256,
+                        'start_pos': 280,
+                        'end_pos': 285,
                     }
                 }
             ]
@@ -4730,8 +4730,8 @@ class TestAnnotatorWithWsAndDb:
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 265,
-                        'end_pos': 271,
+                        'start_pos': 294,
+                        'end_pos': 300,
                     }
                 }
             ]
@@ -4752,8 +4752,8 @@ class TestAnnotatorWithWsAndDb:
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 425,
-                        'end_pos': 429,
+                        'start_pos': 454,
+                        'end_pos': 458,
                     }
                 }
             ]
@@ -4790,7 +4790,7 @@ class TestAnnotatorWithWsAndDb:
                     'element_type': 'tag',
                     'edited_element_id': 'date-0',
                     'parameters': {
-                        'start_pos': 272,
+                        'start_pos': 301,
                         'end_pos': 342,
                     }
                 }

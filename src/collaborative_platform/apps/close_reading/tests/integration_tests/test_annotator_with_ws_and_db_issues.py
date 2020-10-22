@@ -42,8 +42,8 @@ class TestIssue111:
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 265,
-                        'end_pos': 271,
+                        'start_pos': 294,
+                        'end_pos': 300,
                     }
                 }
             ]
@@ -93,8 +93,8 @@ class TestIssue111:
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 265,
-                        'end_pos': 271,
+                        'start_pos': 294,
+                        'end_pos': 300,
                     }
                 }
             ]
@@ -278,8 +278,8 @@ class TestIssue112:
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 265,
-                        'end_pos': 271,
+                        'start_pos': 294,
+                        'end_pos': 300,
                     }
                 }
             ]
@@ -298,8 +298,8 @@ class TestIssue112:
                     'element_type': 'tag',
                     'edited_element_id': 'ab-1',
                     'parameters': {
-                        'start_pos': 251,
-                        'end_pos': 336,
+                        'start_pos': 280,
+                        'end_pos': 365,
                     }
                 }
             ]
@@ -331,8 +331,8 @@ class TestIssue112:
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 265,
-                        'end_pos': 271,
+                        'start_pos': 294,
+                        'end_pos': 300,
                     }
                 }
             ]
@@ -416,8 +416,8 @@ class TestIssue112:
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 265,
-                        'end_pos': 271,
+                        'start_pos': 294,
+                        'end_pos': 300,
                     }
                 }
             ]
@@ -498,8 +498,8 @@ class TestIssue112:
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 265,
-                        'end_pos': 271,
+                        'start_pos': 294,
+                        'end_pos': 300,
                     }
                 }
             ]
@@ -724,8 +724,8 @@ class TestIssue113:
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 265,
-                        'end_pos': 271,
+                        'start_pos': 294,
+                        'end_pos': 300,
                     }
                 }
             ]
@@ -826,8 +826,8 @@ class TestIssue114:
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 265,
-                        'end_pos': 271,
+                        'start_pos': 294,
+                        'end_pos': 300,
                     }
                 }
             ]
@@ -930,8 +930,8 @@ class TestIssue122:
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 265,
-                        'end_pos': 271,
+                        'start_pos': 294,
+                        'end_pos': 300,
                     }
                 },
                 {
@@ -1017,115 +1017,6 @@ class TestIssue124:
 @pytest.mark.asyncio
 @pytest.mark.django_db(transaction=True, reset_sequences=True)
 @pytest.mark.integration_tests
-class TestIssueUnnamed01:
-    """Entities properties doesn't exists after file download"""
-
-    async def test_added_entities_are_properly_rendered_in_downloaded_file(self):
-        """Case replicated without issue description"""
-
-        test_name = inspect.currentframe().f_code.co_name
-
-        user_id = 2
-        project_id = 1
-
-        client = Client()
-        user = User.objects.get(id=user_id)
-        client.force_login(user)
-
-        project = Project.objects.get(id=project_id)
-        directory = Directory.objects.get(project=project, name=project.title, parent_dir=None)
-        source_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files', 'music_xml_clean.xml')
-
-        upload_file(client, source_file_path, directory.id)
-
-        file_id = 4
-        user_id = 2
-
-        communicator = get_communicator(project_id, file_id, user_id)
-
-        await communicator.connect()
-        response = await communicator.receive_json_from()
-        request_nr = 0
-        verify_response(test_name, response, request_nr)
-
-        request = {
-            'method': 'modify',
-            'payload': [
-                {
-                    'method': 'POST',
-                    'element_type': 'tag',
-                    'parameters': {
-                        'start_pos': 317,
-                        'end_pos': 331,
-                    }
-                },
-                {
-                    'method': 'POST',
-                    'element_type': 'reference',
-                    'edited_element_id': 0,
-                    'parameters': {
-                        'entity_type': 'person',
-                    }
-                },
-                {
-                    'method': 'POST',
-                    'element_type': 'entity_property',
-                    'edited_element_id': 'person-0',
-                    'parameters': {
-                        'forename': 'Freddy'
-                    }
-                },
-                {
-                    'method': 'POST',
-                    'element_type': 'entity_property',
-                    'edited_element_id': 'person-0',
-                    'parameters': {
-                        'surname': 'Mercury'
-                    }
-                },
-                {
-                    'method': 'POST',
-                    'element_type': 'entity_property',
-                    'edited_element_id': 'person-0',
-                    'parameters': {
-                        'sex': 'M'
-                    }
-                }
-            ]
-        }
-        request_nr = 1
-
-        await communicator.send_json_to(request)
-        response = await communicator.receive_json_from()
-        verify_response(test_name, response, request_nr)
-
-        request = {
-            'method': 'save',
-            'payload': [1, 2, 3, 4, 5]
-        }
-        request_nr = 2
-
-        await communicator.send_json_to(request)
-        response = await communicator.receive_json_from()
-        verify_response(test_name, response, request_nr)
-
-        await communicator.disconnect()
-
-        expected_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'expected_files',
-                                          'music_xml_clean_expected.xml')
-        expected_xml = read_file(expected_file_path)
-
-        file = File.objects.order_by('-id')[0]
-        latest_file_version = file.file_versions.latest('id')
-        result_xml = download_file(client, file_id, latest_file_version.number)
-
-        assert result_xml == expected_xml
-
-
-@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
-@pytest.mark.asyncio
-@pytest.mark.django_db(transaction=True, reset_sequences=True)
-@pytest.mark.integration_tests
 class TestIssue137:
     """Discarding entity creation causes error"""
 
@@ -1160,8 +1051,8 @@ class TestIssue137:
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 341,
-                        'end_pos': 355,
+                        'start_pos': 352,
+                        'end_pos': 366,
                     }
                 },
                 {
@@ -1242,6 +1133,115 @@ class TestIssue155:
         verify_response(test_name, response, request_nr)
 
         await communicator.disconnect()
+        
+
+@pytest.mark.usefixtures('annotator_with_ws_and_db_setup', 'reset_db_files_directory_before_each_test')
+@pytest.mark.asyncio
+@pytest.mark.django_db(transaction=True, reset_sequences=True)
+@pytest.mark.integration_tests
+class TestIssueUnnamed01:
+    """Entities properties doesn't exists after file download"""
+
+    async def test_added_entities_are_properly_rendered_in_downloaded_file(self):
+        """Case replicated without issue description"""
+
+        test_name = inspect.currentframe().f_code.co_name
+
+        user_id = 2
+        project_id = 1
+
+        client = Client()
+        user = User.objects.get(id=user_id)
+        client.force_login(user)
+
+        project = Project.objects.get(id=project_id)
+        directory = Directory.objects.get(project=project, name=project.title, parent_dir=None)
+        source_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files', 'music_xml_clean.xml')
+
+        upload_file(client, source_file_path, directory.id)
+
+        file_id = 4
+        user_id = 2
+
+        communicator = get_communicator(project_id, file_id, user_id)
+
+        await communicator.connect()
+        response = await communicator.receive_json_from()
+        request_nr = 0
+        verify_response(test_name, response, request_nr)
+
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'POST',
+                    'element_type': 'tag',
+                    'parameters': {
+                        'start_pos': 328,
+                        'end_pos': 342,
+                    }
+                },
+                {
+                    'method': 'POST',
+                    'element_type': 'reference',
+                    'edited_element_id': 0,
+                    'parameters': {
+                        'entity_type': 'person',
+                    }
+                },
+                {
+                    'method': 'POST',
+                    'element_type': 'entity_property',
+                    'edited_element_id': 'person-0',
+                    'parameters': {
+                        'forename': 'Freddy'
+                    }
+                },
+                {
+                    'method': 'POST',
+                    'element_type': 'entity_property',
+                    'edited_element_id': 'person-0',
+                    'parameters': {
+                        'surname': 'Mercury'
+                    }
+                },
+                {
+                    'method': 'POST',
+                    'element_type': 'entity_property',
+                    'edited_element_id': 'person-0',
+                    'parameters': {
+                        'sex': 'M'
+                    }
+                }
+            ]
+        }
+        request_nr = 1
+
+        await communicator.send_json_to(request)
+        response = await communicator.receive_json_from()
+        verify_response(test_name, response, request_nr)
+
+        request = {
+            'method': 'save',
+            'payload': [1, 2, 3, 4, 5]
+        }
+        request_nr = 2
+
+        await communicator.send_json_to(request)
+        response = await communicator.receive_json_from()
+        verify_response(test_name, response, request_nr)
+
+        await communicator.disconnect()
+
+        expected_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'expected_files',
+                                          'music_xml_clean_expected.xml')
+        expected_xml = read_file(expected_file_path)
+
+        file = File.objects.order_by('-id')[0]
+        latest_file_version = file.file_versions.latest('id')
+        result_xml = download_file(client, file_id, latest_file_version.number)
+
+        assert result_xml == expected_xml
 
 
 def verify_response(test_name, response, request_nr):

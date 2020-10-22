@@ -857,7 +857,7 @@ class XmlHandler:
         parser = etree.XMLParser(remove_blank_text=True)
         tree = etree.fromstring(old_xml_content, parser=parser)
 
-        body_xpath = './default:text/default:body'
+        body_xpath = './default:text'
         old_body_element = get_first_xpath_match(tree, body_xpath, XML_NAMESPACES)
 
         body_parent = old_body_element.getparent()
