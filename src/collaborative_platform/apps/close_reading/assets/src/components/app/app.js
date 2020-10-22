@@ -5,6 +5,7 @@ import { TEIentities, SelectionType } from 'common/types'
 import xml from 'common/helpers/xml.js'
 import { AppContext } from 'common/context/app'
 import websocket from 'common/helpers/websocket_api'
+import parseAnnotation from 'common/helpers/annotationParse'
 import { Document } from 'components/document'
 import { Tooltip } from 'components/tooltip'
 import { Header } from 'components/header'
@@ -52,7 +53,7 @@ export default class App extends React.Component {
       const newState = Object.assign({}, prev)
       newState.documentContent = response.body_content
       newState.context.authors = response.authors
-      newState.context.annotations = response.certainties
+      newState.context.annotations = response.certainties.map(parseAnnotation)
       newState.context.operations = response.operations
       newState.fileVersion = '' + response.file_version
       newState.selection = null
@@ -64,7 +65,7 @@ export default class App extends React.Component {
       newState.context.entities = xml.processEntitiesInDocument(
         response.body_content,
         entities,
-        response.certainties,
+        response.certainties.map(parseAnnotation),
         prev.context.configuration.properties_per_entity)
 
       console.log(newState.context.entities, response)
