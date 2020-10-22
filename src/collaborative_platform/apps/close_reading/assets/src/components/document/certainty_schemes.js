@@ -59,7 +59,6 @@ export const aScheme = {
   },
   greyBefore: (id, annotations, currentUser, css, colorForUncertainty, taxonomy) => {
     const isUnified = annotations.reduce((ac, dc) => ac || dc.isUnification, false)
-    console.log(isUnified)
     const node = document.getElementById(id)
     const numberAnnotations = annotations.length
     const style = window.getComputedStyle(node, '::before')
