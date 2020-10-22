@@ -76,9 +76,10 @@ function AnnotationDescription ({annotation, props}) {
 }
 
 export default function Annotation({annotation, ...props}) {
+  const author = authorName(annotation.resp, props.context.user, props.context.authors);
   return (
     <li>
-      <span className={annotation.status === OperationStatus.unsaved ? 'text-danger' : 'd-none'}>
+      <span className={(author === 'I' && annotation.status === OperationStatus.unsaved) ? 'text-danger' : 'd-none'}>
         (unsaved)
         <AnnotationOption classes="text-danger" text=" -discard" onClick={e => {
           const operation = props.context.operations.filter(x => (
@@ -101,7 +102,7 @@ export default function Annotation({annotation, ...props}) {
           onSave(props.context.operations, operation[0].id, props.context.websocket)
         }}/>
       </span>
-      <span className={annotation.status === OperationStatus.deleted ? 'text-danger' : 'd-none'}>
+      <span className={(author === 'I' && annotation.status === OperationStatus.deleted) ? 'text-danger' : 'd-none'}>
         (deleted)
         <AnnotationOption classes="text-danger" text=" commit" onClick={e => {
           const operation = props.context.operations.filter(x => (
@@ -124,7 +125,7 @@ export default function Annotation({annotation, ...props}) {
           onDiscard([operation[0]], operation[0].id, props.context.websocket)
         }}/>
       </span>
-      <span className={annotation.status === OperationStatus.edited ? 'text-danger' : 'd-none'}>
+      <span className={(author === 'I' && annotation.status === OperationStatus.edited) ? 'text-danger' : 'd-none'}>
         (edited)
         <AnnotationOption classes="text-danger" text=" discard" onClick={e => {
           const operation = props.context.operations.filter(x => (
@@ -147,7 +148,7 @@ export default function Annotation({annotation, ...props}) {
           onSave([operation[0]], operation[0].id, props.context.websocket)
         }}/>
       </span>
-      <span className={annotation.status === OperationStatus.saved ? '' : 'd-none'}>
+      <span className={(author === 'I' && annotation.status === OperationStatus.saved) ? '' : 'd-none'}>
         <AnnotationOption classes="text-danger" text=" -delete" onClick={e => {
           onDeleteClick(annotation['xml:id'], props.context.websocket)
         }}/>
