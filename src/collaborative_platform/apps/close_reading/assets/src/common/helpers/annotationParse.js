@@ -1,4 +1,5 @@
 export default function(annotation) {
-  let isUnification = annotation.locus === 'attribute' && annotation.match === 'sameAs'
+  console.log(annotation)
+  let isUnification = annotation.match === '@sameAs'
   return {isUnification, ...annotation}
 }

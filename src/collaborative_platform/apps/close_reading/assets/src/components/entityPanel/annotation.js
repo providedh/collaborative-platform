@@ -36,6 +36,18 @@ function AnnotationDescription ({annotation, props}) {
   const annotationCategories = 
     x => x.split(' ').map(x => x.split('#')[1]).join(', ')
 
+  if (annotation.isUnification === true) {
+    return <React.Fragment>
+      <span>{authorName(annotation.resp, props.context.user, props.context.authors)}</span>
+      <span> accepted the automatic unification (<span className="text-primary">{annotation.degree}</span> algorithmic confidence) with </span>
+      <span className="text-primary">{annotation.assertedValue} </span>
+      with <span className="text-primary">{annotation.cert} {annotationCategories(annotation.ana)}</span> certainty.
+      <span className={annotation?.desc?.length > 0 ? 'text-primary' : 'd-none'}>
+        <br/><b>&quot;</b><i>{annotation.desc}</i><b>&quot;</b>
+      </span>
+    </React.Fragment>
+  }
+
   return <React.Fragment>
     {annotation.status !== OperationStatus.edited ? ''
       : <del className="text-muted">
