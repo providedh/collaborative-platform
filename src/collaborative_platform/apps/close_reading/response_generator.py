@@ -280,7 +280,7 @@ class ResponseGenerator:
         certainty = {
             'ana': unification.get_categories(as_str=True),
             'locus': 'value',
-            'degree': None,
+            'degree': unification.degree,
             'cert': unification.certainty,
             'resp': f'#{unification.created_by.profile.get_xml_id()}',
             'match': '@sameAs',

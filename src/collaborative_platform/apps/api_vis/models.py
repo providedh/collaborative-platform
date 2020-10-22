@@ -169,6 +169,7 @@ class Unification(models.Model):
 
     categories = models.ManyToManyField(UncertaintyCategory)
     certainty = models.CharField(max_length=255, null=True)
+    degree = models.FloatField(null=True)
     description = models.CharField(max_length=255, null=True)
     xml_id = models.CharField(max_length=255)
 

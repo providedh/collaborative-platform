@@ -192,7 +192,7 @@ class DbHandler:
 
         return clique
 
-    def create_unification(self, clique, entity, certainty, categories, project_version):
+    def create_unification(self, clique, entity, certainty, categories, project_version, degree=None):
         file_version = FileVersion.objects.get(
             projectversion=project_version,
             file=entity.file
@@ -205,6 +205,7 @@ class DbHandler:
             entity=entity,
             clique=clique,
             certainty=certainty,
+            degree=degree,
             created_by=self.__user,
             created_in_file_version=file_version,
             xml_id=xml_id,

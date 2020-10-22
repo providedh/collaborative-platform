@@ -95,7 +95,7 @@
     <profileDesc>
       <textClass>
         <classCode scheme="http://providedh.eu/uncertainty/ns/1.0">
-          <certainty xml:id="certainty-0" resp="#annotator-1" ana="https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#credibility https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness" locus="value" cert="high" target="#name-3" degree="0.86" match="@ref" assertedValue="#met"/>
+          <certainty xml:id="certainty-0" resp="#annotator-1" ana="https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#credibility https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness" locus="value" cert="high" degree="0.86" target="#name-3" match="@ref" assertedValue="#met"/>
           <certainty xml:id="certainty-1" resp="#annotator-2" ana="https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness" locus="value" cert="high" target="#test" assertedValue="Balloons">
             <desc>Some important decription</desc>
           </certainty>

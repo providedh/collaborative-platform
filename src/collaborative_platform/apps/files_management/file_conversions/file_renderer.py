@@ -203,16 +203,18 @@ class FileRenderer:
 
         certainty_element.set('ana', certainty.get_categories(as_str=True))
         certainty_element.set('locus', certainty.locus)
-        certainty_element.set('cert', certainty.certainty)
+
+        if certainty.certainty:
+            certainty_element.set('cert', certainty.certainty)
+
+        if certainty.degree:
+            certainty_element.set('degree', str(certainty.degree))
 
         target = certainty.target_xml_id
         targets = target.split(' ')
         targets = [f'#{xml_id}' for xml_id in targets]
         target = ' '.join(targets)
         certainty_element.set('target', target)
-
-        if certainty.degree:
-            certainty_element.set('degree', str(certainty.degree))
 
         if certainty.target_match:
             certainty_element.set('match', certainty.target_match)
@@ -305,7 +307,13 @@ class FileRenderer:
         certainty_element.set('resp', f'#{unification.created_by.profile.get_xml_id()}')
         certainty_element.set('ana', unification.get_categories(as_str=True))
         certainty_element.set('locus', 'value')
-        certainty_element.set('cert', unification.certainty)
+
+        if unification.certainty:
+            certainty_element.set('cert', unification.certainty)
+
+        if unification.degree:
+            certainty_element.set('degree', str(unification.degree))
+
         certainty_element.set('target', f'#{unification.entity.xml_id}')
         certainty_element.set('match', '@sameAs')
 
