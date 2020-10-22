@@ -68,7 +68,7 @@ class UnificationProposal(Model):
         elif self.entity2 is None:
             db = DbHandler(self.entity.file.project_id, user)
             db.create_unification(self.clique, self.entity, certainty, categories,
-                                  self.entity.file.project.versions.latest('id'))
+                                  self.entity.file.project.versions.latest('id'), self.confidence)
             self.decision_maker = user
             self.user_confidence = certainty
             self.decided = True
@@ -79,9 +79,9 @@ class UnificationProposal(Model):
             clique = db.create_clique(self.entity2.properties.filter(name='name').latest('id').get_value(),
                                       self.entity.type)
             db.create_unification(clique, self.entity, certainty, categories,
-                                  self.entity.file.project.versions.latest('id'))
+                                  self.entity.file.project.versions.latest('id'), self.confidence)
             db.create_unification(clique, self.entity2, certainty, categories,
-                                  self.entity.file.project.versions.latest('id'))
+                                  self.entity.file.project.versions.latest('id'), self.confidence)
             self.decision_maker = user
             self.user_confidence = certainty
             self.decided = True
