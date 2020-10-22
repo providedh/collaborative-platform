@@ -32,10 +32,38 @@ function AnnotationOption (props) {
   }} className={className}><u>{text}</u></button>
 }
 
-export default function Annotation({annotation, ...props}) {
+function AnnotationDescription ({annotation, props}) {
   const annotationCategories = 
     x => x.split(' ').map(x => x.split('#')[1]).join(', ')
 
+  return <React.Fragment>
+    {annotation.status !== OperationStatus.edited ? ''
+      : <del className="text-muted">
+        {authorName(annotation.prev.resp, props.context.user, props.context.authors) + ' '}
+        marked with {annotation.prev.cert} {annotationCategories(annotation.prev.ana)} certainty: that the {annotation.prev.locus + ' '}
+        <span className={annotation.prev?.match?.length > 0 ? '' : 'd-none'}> of {annotation.prev.match + ' '} </span>
+        should be {annotation.prev.assertedValue}.
+        <span className={annotation.prev?.desc?.length > 0 ? '' : 'd-none'}>
+          <br/><b>&quot;</b><i>{annotation.prev.desc}</i><b>&quot;</b>
+        </span>
+      </del>
+    }
+
+    <span>{authorName(annotation.resp, props.context.user, props.context.authors)}</span>
+    <span> marked with </span>
+    <span className="text-primary">{annotation.cert} {annotationCategories(annotation.ana)}</span>
+    <span> certainty: that the </span>
+    <span className="text-primary">{annotation.locus}</span>
+    <span className={annotation?.match?.length > 0 ? '' : 'd-none'}> of <span className="text-primary">{annotation.match}</span></span>
+    <span> should be </span>
+    <span className="text-primary">{annotation.assertedValue}.</span>
+    <span className={annotation?.desc?.length > 0 ? 'text-primary' : 'd-none'}>
+      <br/><b>&quot;</b><i>{annotation.desc}</i><b>&quot;</b>
+    </span>
+  </React.Fragment>
+}
+
+export default function Annotation({annotation, ...props}) {
   return (
     <li>
       <span className={annotation.status === OperationStatus.unsaved ? 'text-danger' : 'd-none'}>
@@ -116,29 +144,7 @@ export default function Annotation({annotation, ...props}) {
         }}/>
       </span>
 
-      {annotation.status !== OperationStatus.edited ? ''
-        : <del className="text-muted">
-          {authorName(annotation.prev.resp, props.context.user, props.context.authors) + ' '}
-          marked with {annotation.prev.cert} {annotationCategories(annotation.prev.ana)} certainty: that the {annotation.prev.locus + ' '}
-          <span className={annotation.prev?.match?.length > 0 ? '' : 'd-none'}> of {annotation.prev.match + ' '} </span>
-          should be {annotation.prev.assertedValue}.
-          <span className={annotation.prev?.desc?.length > 0 ? '' : 'd-none'}>
-            <br/><b>&quot;</b><i>{annotation.prev.desc}</i><b>&quot;</b>
-          </span>
-        </del>
-      }
-
-      <span>{authorName(annotation.resp, props.context.user, props.context.authors)}</span>
-      <span> marked with </span>
-      <span className="text-primary">{annotation.cert} {annotationCategories(annotation.ana)}</span>
-      <span> certainty: that the </span>
-      <span className="text-primary">{annotation.locus}</span>
-      <span className={annotation?.match?.length > 0 ? '' : 'd-none'}> of <span className="text-primary">{annotation.match}</span></span>
-      <span> should be </span>
-      <span className="text-primary">{annotation.assertedValue}.</span>
-      <span className={annotation?.desc?.length > 0 ? 'text-primary' : 'd-none'}>
-        <br/><b>&quot;</b><i>{annotation.desc}</i><b>&quot;</b>
-      </span>
+      <AnnotationDescription {...{annotation, props}}/>
     </li>)
 }
 
