@@ -22,11 +22,12 @@ def create_models(project):  # type: (Project) -> None
         model = MLPClassifier(hidden_layer_sizes=(15, 7, 2))
         scaler = StandardScaler()
 
-        vector = [0] * SimilarityCalculator().calculate_features_vector_length(schema)
-        scaler.partial_fit([vector])
+        vector_0 = [0] * SimilarityCalculator().calculate_features_vector_length(schema)
+        vector_1 = [1] * SimilarityCalculator().calculate_features_vector_length(schema)
+        scaler.partial_fit([vector_0, vector_1])
 
-        model.partial_fit([vector], [0], classes=[0, 1])
-        model.partial_fit([vector], [1], classes=[0, 1])
+        for _ in range(1000):
+            model.partial_fit([vector_0, vector_1], [1, 0], classes=[0, 1])
 
         dbo = Classifier(project=project, entity_schema=schema)
         dbo.save()
