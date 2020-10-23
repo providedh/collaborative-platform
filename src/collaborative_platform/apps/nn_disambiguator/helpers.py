@@ -56,7 +56,7 @@ def abort_pending(project_id: int, type: str):
         ).all()
         for task in tasks:
             task.status = "A"
-        CeleryTask.objects.bulk_update(tasks)
+        CeleryTask.objects.bulk_update(tasks, fields=['status'])
     except CeleryTask.DoesNotExist:
         return JsonResponse({"message": "No  pending jobs to delete"}, status=304)
     else:

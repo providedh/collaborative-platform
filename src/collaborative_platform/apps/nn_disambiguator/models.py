@@ -1,11 +1,11 @@
 from io import BytesIO
 
 from django.contrib.auth.models import User
-from django.contrib.postgres.fields import ArrayField
+from django.contrib.postgres.fields import ArrayField, JSONField
 from django.core.exceptions import ValidationError
 from django.core.files.base import ContentFile
 from django.db.models import Model, FileField, ForeignKey, CASCADE, IntegerField, SET_NULL, CharField, BooleanField, \
-    DateTimeField, FloatField
+    DateTimeField, FloatField, TextField
 
 from apps.api_vis.db_handler import DbHandler
 from apps.api_vis.models import Entity, Clique, EntityVersion
@@ -130,3 +130,9 @@ class FileTextSimilarityCache(Model):
     fv1 = ForeignKey(FileVersion, on_delete=CASCADE, related_name="textsim1")
     fv2 = ForeignKey(FileVersion, on_delete=CASCADE, related_name="textsim2")
     sim = FloatField(null=True)
+
+
+class APIRequestCache(Model):
+    p1 = JSONField(null=True)
+    p2 = JSONField(null=True)
+    result = JSONField(null=True)
