@@ -3,12 +3,12 @@ import React from 'react';
 import LoadingComponent from './loading';
 import EntityStats from './entityStats';
 
-export default function({stats}){
+export default function({stats, docCount}){
 	let content = ''
 	if(stats == null || stats.length == 0){
 		content = <LoadingComponent />;
 	}else{
-		content = stats.map((entity,i)=><EntityStats key={i} data={entity}/>);
+		content = stats.map((entity,i)=><EntityStats key={i} data={entity} docCount={docCount}/>);
 	}
 
 	return(

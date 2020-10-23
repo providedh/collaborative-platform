@@ -15,7 +15,7 @@ export default function useContentRendering (node, documentContent, callbacks, c
 
   const parser = new DOMParser()
   const xmlDoc = parser.parseFromString(bodyContent, 'text/xml')
-  const body = xmlDoc.getElementsByTagName('body')[0]
+  const body = xmlDoc.getElementsByTagName('text')[0]
 
   node.innerHTML = ''
   node.appendChild(body)

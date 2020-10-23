@@ -1,9 +1,8 @@
 import React from 'react';
-export default ({data})=>{
+export default ({data, docCount})=>{
 	const {
-		location, 
+		location,
 		attributes, 
-		document_count, 
 		distinct_doc_occurrences, 
 		coverage
 	} = data;
@@ -12,7 +11,7 @@ export default ({data})=>{
         <div className="d-flex flex-row">
           <div className="d-block">
             <p>
-              <b className="big">{ distinct_doc_occurrences } out of { document_count } documents have this tag</b><br/>
+              <b className="big">{ distinct_doc_occurrences } out of { docCount } documents have this tag</b><br/>
               <b className="big">This tag is mainly found in the { location }</b><br/>
               There is a total of { attributes.length } distinct attributes <br/>for this tag in the dataset <br/>
               <br/>

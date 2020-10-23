@@ -20,6 +20,7 @@ function useTimeline(setVersion){
 function useProjectVersion(){
 	const [projectVersion, setProjectVersion] = useState('loading versions . . .');
 	const [stats, setStats] = useState([]);
+	const [docCount, setDocCount] = useState(0)
 
 	function setVersion(v){
 		setProjectVersion(`fetching data . . .`);
@@ -28,11 +29,12 @@ function useProjectVersion(){
 			if(res.success === true){
 				setProjectVersion(`v.${v}`);
 				setStats(res.content.entities);
+				setDocCount(res.content.document_count)
 			}
 		});
 	}
 
-	return [projectVersion, stats, setVersion];
+	return [projectVersion, stats, docCount, setVersion];
 }
 
 function useProjectVersionLabel(projectVersion){
@@ -43,14 +45,14 @@ function useProjectVersionLabel(projectVersion){
 }
 
 export default function App(){
-	const [projectVersion, stats, setVersion] = useProjectVersion();
+	const [projectVersion, stats, docCount, setVersion] = useProjectVersion();
 	useTimeline(setVersion);
 	useProjectVersionLabel(projectVersion)
 
 	return(
 		<div>
 			<EntitySelector stats={stats}/>
-			<ProjectStats stats={stats}/>
+			<ProjectStats stats={stats} docCount={docCount}/>
 		</div>
 	);
 }

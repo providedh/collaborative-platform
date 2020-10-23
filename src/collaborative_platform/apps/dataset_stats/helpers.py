@@ -97,7 +97,7 @@ def create_summary_for_document(doc_raw: str, doc_name:str='undefined')->pd.Data
     doc_tree = et.fromstring(doc_raw.encode())
 
     header_tags = doc_tree.find('.//tei:teiHeader', namespaces=NAMESPACES).iter()
-    body_tags = doc_tree.find('.//tei:body', namespaces=NAMESPACES).iter()
+    body_tags = doc_tree.find('.//tei:text', namespaces=NAMESPACES).iter()
 
     stats_df = pd.DataFrame(columns=['document', 'tag', 'tag_id', 'location', 'attr_name', 'attr_value'])
 

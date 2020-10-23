@@ -187,7 +187,7 @@ function processEntitiesInDocument (raw, entities, annotations, conf) {
   // Get DOM elements
   const parser = new DOMParser()
   const xmlDoc = parser.parseFromString(raw, 'text/xml')
-  const body = xmlDoc.getElementsByTagName('body')[0]
+  const body = xmlDoc.getElementsByTagName('text')[0]
 
   const unlistableTags = []
   unlistableEntities.forEach(e => unlistableTags.push(...body.getElementsByTagName(e)))
