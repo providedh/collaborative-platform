@@ -328,7 +328,8 @@ export default function Timeline(args){
 		return new Promise((resolve, error)=>{
 			self.ajax.getVersions(window.project_id).then(d=>{
 				_setupContainer();
-				[self._versions, self._dates, self._timeSpanPadding] = _processVersions(d.content.project_versions);
+				const sorted = d.content.project_versions.sort((a, b) => a.version < b.version);
+				[self._versions, self._dates, self._timeSpanPadding] = _processVersions(sorted);
 				_setupScales();
 				_renderTimeline();
 				_renderTimeSpans();
