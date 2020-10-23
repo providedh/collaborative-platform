@@ -2,6 +2,7 @@ from apps.nn_disambiguator.geography import *
 import pytest
 
 
+@pytest.mark.django_db
 class TestGeography:
     def test_coordinates(self):
         assert coordinates("Salamanca, ES") == (40.9651572, -5.6640182)
