@@ -131,6 +131,7 @@ function processTag (domNode) {
     deleted: (domNode.attributes?.deleted?.value === 'true')
   }
 
+  if (domNode.tagName === 'ab') {return tag}
   if (Object.values(commonAttributes).filter(x => x.value === null).length > 0) {return null}
 
   tag.ref.value = tag.ref.value.slice(1)
@@ -154,7 +155,9 @@ function processAnnotations (annotations, targets) {
 
     // set the status
     if (annotation.length === 1) {
-      if (annotation[0].saved === false) {
+      if (annotation[0].isUnification === true) {
+        return { status: OperationStatus.unified, ...annotation[0] }
+      }else if (annotation[0].saved === false) {
         return { status: OperationStatus.unsaved, ...annotation[0] }
       } else if (annotation[0].saved === true && annotation[0].deleted === false) {
         return { status: OperationStatus.saved, ...annotation[0] }
@@ -241,6 +244,22 @@ function processEntitiesInDocument (raw, entities, annotations, conf) {
       details.type = tag.tagName
       details.annotations = referred.annotations
       details.properties = referred.properties
+
+      entityDetails.push(details)
+    })
+
+  // annotated plain text
+  const annotatedTags = [...body.getElementsByTagName('ab')]
+    .map(node => [node, processTag(node)])
+    .map(([tag, details]) => [
+      tag,
+      {...details, annotations : processAnnotations (annotations, [details.id.value])}
+    ])
+    .filter(([tag, details]) => details.annotations.length > 0)
+    .forEach(([tag, details]) => {
+      details.target = null
+      details.type = 'text fragment'
+      details.properties = []
 
       entityDetails.push(details)
     })

@@ -14,9 +14,12 @@ export default function FormWithContext (props) {
 
 function Form (props) {
   // const conf = props.context.configuration.entities[props.entity.type]
+  const entityType = TEIentities[props.entity]
   const categoryOptions = Object.keys(props.context.configuration.taxonomy).map(x =>
     <option key={x} value={x}>{x}</option>)
   const entityOptions = Object.keys(props.context.configuration.entities).map(x =>
+    <option key={x} value={x}>{x}</option>)
+  const propertyOptions = entityType.properties.map(x =>
     <option key={x} value={x}>{x}</option>)
 
   const defState = {
@@ -35,6 +38,14 @@ function Form (props) {
     const newForm = Object.assign({}, form)
     newForm[key] = value
 
+    if (key === 'locus') {
+      if (value === 'name') {
+        newForm.assertedValue = props.entity
+      } else if (value === 'attribute') {
+        newForm.match = entityType.properties[0]
+      }
+    }
+
     update(newForm)
     props.onChange(newForm)
   }
@@ -42,7 +53,7 @@ function Form (props) {
   let assertedValueInput = <div className="col">
     <label htmlFor="assertedValue">Value</label>
     <input className="form-control form-control-sm"
-      type="text"
+      type={!['when', 'death', 'birth'].includes(form.match) ? 'text' : (form.match === 'when' && props.entity === 'time' ? 'time' : 'date')}
       value={form.assertedValue}
       onChange={e => handleUpdate('assertedValue', e.target.value)}
       id="assertedValue"/>
@@ -73,6 +84,7 @@ function Form (props) {
             onChange={e => handleUpdate('locus', e.target.value)}>
             <option value="name">Tag name</option>
             <option value="value">Value</option>
+            <option value="attribute">Attribute</option>
           </select>
         </div>
       </div>
@@ -106,6 +118,17 @@ function Form (props) {
     </div>
     <div className="row">
       {assertedValueInput}
+      <div className={'col ' + (form.locus === 'attribute' ? '' : 'd-none')}>
+        <div className="form-group">
+          <label htmlFor="attributeName">Attribute</label>
+          <select className="form-control form-control-sm"
+            value={form.match}
+            onChange={e => handleUpdate('match', e.target.value)}
+            id="attributeName">
+            {propertyOptions}
+          </select>
+        </div>
+      </div>
     </div>
     <div className="row">
       <div className="col">

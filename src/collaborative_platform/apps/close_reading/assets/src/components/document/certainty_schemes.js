@@ -58,20 +58,22 @@ export const aScheme = {
     return ''
   },
   greyBefore: (id, annotations, currentUser, css, colorForUncertainty, taxonomy) => {
+    const isUnified = annotations.reduce((ac, dc) => ac || dc.isUnification, false)
     const node = document.getElementById(id)
     const numberAnnotations = annotations.length
     const style = window.getComputedStyle(node, '::before')
     const content = style.getPropertyValue('content')
 
-    return `content: ${content.slice(0, -1)} ${'' + numberAnnotations} \\f591" !important;`
+    return `content: ${content.slice(0, -1)} ${'' + numberAnnotations} \\f591 ${isUnified ? ' unified' : ''}" !important;`
   },
   noEntityBefore: (id, annotations, currentUser, css, colorForUncertainty, taxonomy) => {
+    const isUnified = annotations.reduce((ac, dc) => ac || dc.isUnification, false)
     const node = document.getElementById(id)
     const numberAnnotations = annotations.length
     const style = window.getComputedStyle(node, '::before')
     const content = style.getPropertyValue('content')
 
-    return `content: "${'' + numberAnnotations} \\f591";`
+    return `content: "${'' + numberAnnotations} \\f591 ${isUnified ? ' unified' : ''}";`
   },
   greyContent: (id, annotations, currentUser, css, colorForUncertainty, taxonomy) => {
     const annotationsFlattened = []

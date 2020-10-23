@@ -17,6 +17,7 @@ export default function styleEntity (id, color, icon, css) {
             font-family: "Font Awesome 5 Free";
             font-weight: 900;
             min-width: 5em;
+            white-space: nowrap;
         }
     `
   const hideBorder = `

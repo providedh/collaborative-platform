@@ -3,5 +3,6 @@ export default {
   edited: 'edited',
   deleted: 'deleted',
   saved: 'saved',
+  unified: 'unified',
   null: 'null'
 }

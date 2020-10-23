@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
 import { AnnotationCreationPanel } from 'components/annotationCreationPanel'
+import { EntityAndUncertaintyCreationPanel } from 'components/entityAndUncertaintyCreationPanel'
 import { EntityCreationPanel } from 'components/entityCreationPanel'
 import styles from './selection_panel.module.css'
 
@@ -15,7 +16,7 @@ export default function CreateAttributeWithContext (props) {
   )
 }
 
-const CreationOption = { entity: 'Add entity', certainty: 'Annotate uncertainty' }
+const CreationOption = { entity: 'Add entity', uncertainty: 'Annotate uncertainty', both: 'Annotate entity and uncertainty' }
 
 function Navigation (option, setOption) {
   const navigation = (option === null
@@ -27,8 +28,13 @@ function Navigation (option, setOption) {
       </button>
       <button type="button"
         className="btn btn-sm btn-primary ml-3"
-        onClick={() => setOption(CreationOption.certainty)}>
+        onClick={() => setOption(CreationOption.uncertainty)}>
           Annotate uncertainty
+      </button>
+      <button type="button"
+        className="btn btn-sm btn-primary ml-3"
+        onClick={() => setOption(CreationOption.both)}>
+          Annotate entity and uncertainty
       </button>
     </div>)
     : (<div className={styles.navigation}>
@@ -49,9 +55,17 @@ function SelectionPanel (props) {
 
   let body = ''
   if (option !== null) {
-    body = (option === CreationOption.certainty
-      ? <AnnotationCreationPanel selection={props.selection}/>
-      : <EntityCreationPanel selection={props.selection}/>)
+    switch(option) {
+      case CreationOption.entity:
+        body = <EntityCreationPanel selection={props.selection}/>
+        break
+      case CreationOption.uncertainty:
+        body = <AnnotationCreationPanel selection={props.selection}/>
+        break
+      case CreationOption.both:
+        body = <EntityAndUncertaintyCreationPanel selection={props.selection}/>
+        break
+    }
   }
 
   const bodyCssClasses = ['card-body']
