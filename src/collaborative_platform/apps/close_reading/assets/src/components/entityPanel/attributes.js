@@ -55,7 +55,7 @@ function Attributes (props) {
 
   const attributeOptions = freeAttributes.map(x => <option key={x} value={x}>{x}</option>)
 
-  return <div>
+  return <div className={props.entity.type === 'text fragment' ? 'd-none' : ''}>
     <span>Attributes</span>
     <ul className={(visible === false && editingAttribute === null) ? 'mb-1' : 'd-none'}>
       {attributeItems}
