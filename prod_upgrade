@@ -11,5 +11,5 @@ python3 manage.py shell -c "from apps.index_and_search.initialize import initial
 rm -rf ~/collaborative-platform/static/*
 python3 manage.py collectstatic
 screen -d -m celery -A collaborative_platform worker -B -l info -E
-screen -d -m uwsgi --socket /home/ubuntu/collaborative-platform/src/collaborative_platform/collaborative_platform.sock --chmod-socket=666 --module collaborative_platform.wsgi
+screen -d -m uwsgi --socket /home/ubuntu/collaborative-platform/src/collaborative_platform/collaborative_platform.sock --chmod-socket=666 --module collaborative_platform.wsgi --workers 32
 screen -d -m daphne -u collaborative_platform_websockets.sock collaborative_platform.asgi:application
