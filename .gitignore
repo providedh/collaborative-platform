@@ -46,3 +46,5 @@ celerybeat-schedule
 # Collected static files
 /static/
 /fixtures/
+
+*.lock
