@@ -19,11 +19,11 @@ def get_project_versions_files(project_id):
         .filter(project=project_id)\
         .order_by('id')
 
-    get_fv_data = lambda fv: (fv.file.name, {'file': fv.file.name,
+    get_fv_data = lambda fv: (fv.id, {'file': fv.file.name,
                                              'version': fv.number,
                                              'date': fv.creation_date,
                                              'author': fv.created_by.username})
-    fv_hash = lambda fv: f'{fv.file.name}.{fv.number}'
+    fv_hash = lambda fv: f'{fv.id}.{fv.number}'
 
     prev_files = set()
     data = []
