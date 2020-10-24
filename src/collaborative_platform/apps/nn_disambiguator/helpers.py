@@ -1,4 +1,5 @@
 import traceback
+from time import sleep
 from typing import List
 
 from celery import shared_task
@@ -16,23 +17,43 @@ from apps.nn_disambiguator.similarity_calculator import SimilarityCalculator
 from apps.projects.models import Project, ProjectVersion
 
 
-def create_models(project):  # type: (Project) -> None
-    schemas = project.taxonomy.entities_schemas.all()
-    for schema in schemas:
-        model = MLPClassifier(hidden_layer_sizes=(15, 7, 2))
-        scaler = StandardScaler()
+@shared_task(bind=True, name='nn_disambiguator.create_models')
+def create_models(self, project_id):  # type: (int) -> None
+    sleep(5)
+    try:
+        task = CeleryTask.objects.get(project_id=project_id, task_id=self.request.id, status="S")
+        task.status = "R"
+        task.save()
 
-        vector_0 = [0] * SimilarityCalculator().calculate_features_vector_length(schema)
-        vector_1 = [1] * SimilarityCalculator().calculate_features_vector_length(schema)
-        scaler.partial_fit([vector_0, vector_1])
+        try:
+            project = Project.objects.get(id=project_id)
+            schemas = project.taxonomy.entities_schemas.all()
+            for schema in schemas:
+                model = MLPClassifier(hidden_layer_sizes=(15, 7, 2))
+                scaler = StandardScaler()
 
-        for _ in range(1000):
-            model.partial_fit([vector_0, vector_1], [1, 0], classes=[0, 1])
+                vector_0 = [0] * SimilarityCalculator().calculate_features_vector_length(schema)
+                vector_1 = [1] * SimilarityCalculator().calculate_features_vector_length(schema)
+                scaler.partial_fit([vector_0, vector_1])
 
-        dbo = Classifier(project=project, entity_schema=schema)
-        dbo.save()
-        dbo.set_model(model)
-        dbo.set_scaler(scaler)
+                for _ in range(1000):
+                    model.partial_fit([vector_0, vector_1], [1, 0], classes=[0, 1])
+
+                dbo = Classifier(project=project, entity_schema=schema)
+                dbo.save()
+                dbo.set_model(model)
+                dbo.set_scaler(scaler)
+
+        except Exception:
+            traceback.print_exc()
+            task.status = "X"
+            task.save()
+        else:
+            task.status = "F"
+            task.save()
+
+    except:
+        traceback.print_exc()
 
 
 def queue_task(project_id: int, type: str):
@@ -69,7 +90,8 @@ def run_queued_tasks():
     try:
         tasks = {
             "L": learn_unprocessed,
-            "P": calculate_proposals
+            "P": calculate_proposals,
+            "C": create_models
         }
 
         queued_tasks = CeleryTask.objects.filter(status="Q").all()

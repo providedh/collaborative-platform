@@ -16,7 +16,7 @@ from apps.views_decorators import objects_exists, user_has_access
 
 from .helpers import paginate_page_perpage, order_queryset
 from .models import Project, Contributor, Taxonomy, UncertaintyCategory, EntitySchema
-from ..nn_disambiguator.helpers import create_models
+from ..nn_disambiguator.helpers import queue_task
 
 
 @login_required
@@ -49,7 +49,7 @@ def create(request):  # type: (HttpRequest) -> HttpResponse
             project_directory = Directory(name=project_name, project=project)
             project_directory.save()
 
-            create_models(project)
+            queue_task(project.id, "C")
 
             log_activity(project, request.user, "created project")
 
