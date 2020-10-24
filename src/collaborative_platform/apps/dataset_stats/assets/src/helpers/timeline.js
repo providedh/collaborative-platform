@@ -308,10 +308,10 @@ export default function Timeline(args){
 			subtitle = body.append('h7').attr('class', 'card-subtitle mb-2 text-muted'),
 			content = body.append('p').attr('class', 'card-text');
 
-		self._fVersions.on('mouseenter', function(d){
+		self._fVersions.on('mouseenter', function([filename, d]){
 			const {top, left} = d3.select(this).node().getBoundingClientRect();
 
-			title.text(d.file);
+			title.text(filename);
 			subtitle.text('Version '+d.version);
 			content.text(`Done by ${d.author} on ${d.date.slice(0, 10)}`);
 
@@ -328,8 +328,7 @@ export default function Timeline(args){
 		return new Promise((resolve, error)=>{
 			self.ajax.getVersions(window.project_id).then(d=>{
 				_setupContainer();
-				const sorted = d.content.project_versions.sort((a, b) => a.version < b.version);
-				[self._versions, self._dates, self._timeSpanPadding] = _processVersions(sorted);
+				[self._versions, self._dates, self._timeSpanPadding] = _processVersions(d.content.project_versions);
 				_setupScales();
 				_renderTimeline();
 				_renderTimeSpans();
