@@ -1,4 +1,5 @@
 from typing import Iterable, Dict
+import multiprocessing
 
 from apps.files_management.models import File, FileVersion
 from apps.projects.models import Project, ProjectVersion
@@ -27,13 +28,14 @@ def get_project_versions_files(project_id):
     prev_files = set()
     data = []
     for idx, pv in enumerate(project_versions):
-        modified_fv = filter(lambda fv: fv_hash(fv) not in prev_files, pv.file_versions.all())
+        files = pv.file_versions.all()
+        modified_fv = filter(lambda fv: fv_hash(fv) not in prev_files, files)
         data.append({
             'version': str(pv),
             'date': pv.date,
             'files': tuple(map(get_fv_data, modified_fv))
             })
-        prev_files = set(map(fv_hash, pv.file_versions.all()))
+        prev_files = set(map(fv_hash, files))
 
     return data
 
@@ -59,7 +61,8 @@ def files_for_project_version(project: int, version: float)->Iterable[FileVersio
     return file_contents        
 
 
-def create_summary_for_document(doc_raw: str, doc_name:str='undefined')->pd.DataFrame: 
+def create_summary_for_document(doc)->pd.DataFrame: 
+    doc_raw, doc_name = doc
     doc_tree = et.fromstring(doc_raw.encode())
 
     header_tags = doc_tree.find('.//tei:teiHeader', namespaces=NAMESPACES).iter()
@@ -96,11 +99,8 @@ def create_summary_for_document(doc_raw: str, doc_name:str='undefined')->pd.Data
 
 
 def create_summary_for_document_collection(doc_gen: Iterable[str])->pd.DataFrame: 
-    stats_df = pd.DataFrame(columns=['document', 'tag', 'tag_id', 'location', 'attr_name', 'attr_value'])
-
-    for doc, doc_name in tqdm(doc_gen):
-        stats = create_summary_for_document(doc, doc_name)
-        stats_df = stats_df.append(stats)
+    with multiprocessing.Pool() as p:
+        stats_df = pd.concat(p.imap_unordered(create_summary_for_document, doc_gen))
 
     return stats_df
 
