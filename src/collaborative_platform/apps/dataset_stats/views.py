@@ -30,7 +30,6 @@ def versions(request, project_id):  # type: (HttpRequest, int, float) -> JSONRes
 @login_required
 @user_has_access()
 def stats(request, project_id, project_version):  # type: (HttpRequest, int, float) -> JSONResponse
-    data = {}
 
     try:
         files = helpers.files_for_project_version(project_id, project_version)
@@ -39,6 +38,6 @@ def stats(request, project_id, project_version):  # type: (HttpRequest, int, flo
 
         data = {'entities': stats, 'document_count': len(files), 'version': project_version}
     except ValueError:
-        data = {v: project_version, entities: []}
+        data = {"v": project_version, "entities": []}
     
     return JsonResponse(data)
