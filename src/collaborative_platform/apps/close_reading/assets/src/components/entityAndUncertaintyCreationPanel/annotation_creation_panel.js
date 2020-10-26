@@ -29,7 +29,7 @@ function onTagCreate (selection, entityPayload, annotation, websocket) {
   const tagAction = tagBuilder(...selection.target)
   const refAction = refBuilder(0, entityPayload)
   const certAction = certBuilder(
-    1,
+    annotation.locus === 'value' ? 0 : 1,
     annotation.locus,
     annotation.ana,
     annotation.cert,

@@ -48,7 +48,9 @@ function EntitySelector (props) {
 
   const entities = Object.values(
     Object.fromEntries(
-      props.context.entities.map(x => [x.target.value, x])))
+      props.context.entities
+        .filter(x => x.target !== null)
+        .map(x => [x.target.value, x])))
 
   useEffect(() => props.onChange(getPayloadForOptions(selectedEntity, ref, attributes, usingRef)), [])
 
