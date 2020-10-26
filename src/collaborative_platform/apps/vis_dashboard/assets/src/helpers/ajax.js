@@ -30,6 +30,7 @@ var AjaxCalls = function (args) {
   const visCliques = ({ project }) => ['/api', 'vis', 'projects', project, 'cliques'].join('/')
   const visCliquesFile = ({ project, file }) => ['/api', 'vis', 'projects', project, 'files', file, 'cliques'].join('/')
   const visEntities = ({ project }) => ['/api', 'vis', 'projects', project, 'entities'].join('/')
+  const visCertainties = ({ project }) => ['/api', 'vis', 'projects', project, 'certainties'].join('/')
   const visEntitiesFile = ({ project, file }) => ['/api', 'vis', 'projects', project, 'files', file, 'entities'].join('/')
   const visEntitiesUnbound = ({ project }) => ['/api', 'vis', 'projects', project, 'entities', 'unboundedEntities'].join('/')
   const visEntitiesUnboundFile = ({ project, file }) => ['/api', 'vis', 'projects', project, 'files', file, 'entities', 'unboundedEntities'].join('/')
@@ -63,6 +64,7 @@ var AjaxCalls = function (args) {
       getCliques: (options, params, data) => _createCall('GET', _createUrl(visCliques, options, params), data),
       getFileCliques: (options, params, data) => _createCall('GET', _createUrl(visCliquesFile, options, params), data),
       getEntities: (options, params, data) => _createCall('GET', _createUrl(visEntities, options, params), data),
+      getAllAnnotations: (options, params, data) => _createCall('GET', _createUrl(visCertainties, options, params), data),
       getFileEntities: (options, params, data) => _createCall('GET', _createUrl(visEntitiesFile, options, params), data),
       getUnboundEntities: (options, params, data) => _createCall('GET', _createUrl(visEntitiesUnbound, options, params), data),
       getFileUnboundEntities: (options, params, data) => _createCall('GET', _createUrl(visEntitiesUnboundFile, options, params), data),
