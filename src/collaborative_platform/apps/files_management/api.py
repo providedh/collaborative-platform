@@ -1,3 +1,5 @@
+import multiprocessing
+from functools import partial
 from json import dumps, loads
 from os import mkdir
 from zipfile import ZipFile
@@ -31,15 +33,11 @@ def upload(request, directory_id):  # type: (HttpRequest, int) -> HttpResponse
             directory = Directory.objects.get(id=directory_id, deleted=False)
             user = request.user
 
-            upload_statuses = []
+            pp = partial(__process_file, directory=directory, user=user)
+            with multiprocessing.pool.ThreadPool() as p:
+                upload_statuses = list(p.imap_unordered(pp, files_list))
 
-            for file in files_list:
-                upload_status = __process_file(file, directory, user)
-                upload_statuses.append(upload_status)
-
-            response = dumps(upload_statuses)
-
-            return HttpResponse(response, status=200, content_type='application/json')
+            return JsonResponse(upload_statuses, safe=False)
 
         except BadRequest as exception:
             return HttpResponseBadRequest(str(exception))
@@ -78,7 +76,6 @@ def __process_file(file, directory, user):
             clone_db_objects(file_object)
 
             upload_status.update({'migrated': True, 'message': message})
-
 
             log_activity(directory.project, user, f"File migrated: {message} ", file_object)
 

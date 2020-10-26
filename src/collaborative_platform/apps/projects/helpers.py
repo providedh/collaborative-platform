@@ -4,6 +4,7 @@ from json import loads
 from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.paginator import Paginator, Page
+from django.db import transaction, IntegrityError
 from django.db.models import QuerySet, F
 from django.http import HttpRequest, JsonResponse
 from django.urls import reverse
@@ -92,31 +93,38 @@ def log_activity(project, user, action_text="", file=None, related_dir=None):
 def create_new_project_version(project, files_modification=False, commit=None):
     # type: (Project, bool, Commit) -> None
 
-    latest_file_versions = FileVersion.objects.filter(file__project=project, file__version_number=F('number'))
-    project_versions = ProjectVersion.objects.filter(project=project)
+    while True:
+        try:
+            with transaction.atomic():
+                latest_file_versions = FileVersion.objects.filter(file__project=project,
+                                                                  file__version_number=F('number'))
+                project_versions = ProjectVersion.objects.filter(project=project)
 
-    if project_versions.exists():
-        latest_project_version = project_versions.latest('id')
+                if project_versions.exists():
+                    latest_project_version = project_versions.latest('id')
 
-        if not commit:
-            commit = latest_project_version.latest_commit
+                    if not commit:
+                        commit = latest_project_version.latest_commit
 
-        file_version_counter = latest_project_version.file_version_counter + int(files_modification)
-        commit_counter = latest_project_version.commit_counter + int(commit is not None)
+                    file_version_counter = latest_project_version.file_version_counter + int(files_modification)
+                    commit_counter = latest_project_version.commit_counter + int(commit is not None)
 
-        new_project_version = ProjectVersion(file_version_counter=file_version_counter,
-                                             latest_commit=commit,
-                                             commit_counter=commit_counter,
-                                             project=project)
-        new_project_version.save()
-        new_project_version.file_versions.set(latest_file_versions)
-        new_project_version.save()
+                    new_project_version = ProjectVersion(file_version_counter=file_version_counter,
+                                                         latest_commit=commit,
+                                                         commit_counter=commit_counter,
+                                                         project=project)
+                    new_project_version.save()
+                    new_project_version.file_versions.set(latest_file_versions)
+                    new_project_version.save()
 
-    else:
-        new_project_version = ProjectVersion(file_version_counter=0,
-                                             latest_commit=commit,
-                                             commit_counter=0,
-                                             project=project)
-        new_project_version.save()
-        new_project_version.file_versions.set(latest_file_versions)
-        new_project_version.save()
+                else:
+                    new_project_version = ProjectVersion(file_version_counter=0,
+                                                         latest_commit=commit,
+                                                         commit_counter=0,
+                                                         project=project)
+                    new_project_version.save()
+                    new_project_version.file_versions.set(latest_file_versions)
+                    new_project_version.save()
+                break
+        except IntegrityError:
+            pass
