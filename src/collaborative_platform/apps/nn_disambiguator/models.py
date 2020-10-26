@@ -108,6 +108,7 @@ class CeleryTask(Model):
     types = [
         ("L", "Learn"),
         ("P", "Predict"),
+        ("C", "Create Models")
     ]
 
     project = ForeignKey(Project, on_delete=CASCADE, related_name="tasks")

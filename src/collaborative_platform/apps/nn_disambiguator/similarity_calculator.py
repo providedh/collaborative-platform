@@ -1,10 +1,9 @@
 import itertools
 import sys
-from pprint import pprint
+import numpy as np
 from typing import List, Tuple
 
 from lxml import etree
-from sklearn.exceptions import NotFittedError
 from sklearn.neural_network import MLPClassifier
 from sklearn.preprocessing import StandardScaler
 
@@ -204,3 +203,32 @@ class SimilarityCalculator:
         SimilarityCache.objects.update_or_create(e1v=e1lv, e2v=e2lv, defaults={"vector": sims})
 
         return sims
+
+    @staticmethod
+    def get_max_sim_vector(schema: EntitySchema) -> np.ndarray:
+        vec = []
+
+        entity_settings = DEFAULT_ENTITIES.get(schema.name, None)
+        properties = entity_settings['properties'] if entity_settings is not None else CUSTOM_ENTITY['properties']
+
+        for property, params in properties.items():
+            if params['type'] == TypeChoice.str:
+                vec.extend([1., 0., 1., 1.])
+            elif params['type'] == TypeChoice.date:
+                vec.append(0.)
+            elif params['type'] == TypeChoice.time:
+                vec.append(0.)
+            elif params['type'] == TypeChoice.Point:
+                vec.append(0.)
+
+        vec.append(1.)  # files sim
+
+        schemas = schema.taxonomy.entities_schemas.all()
+        for schema in schemas:
+            schema_settings = DEFAULT_ENTITIES.get(schema.name, None)
+            if schema_settings is not None and not schema_settings["unifiable"]:
+                continue
+            vec.append(1.)
+
+        vec.extend([0., 0.])  # files creation dates and places
+        return np.array(vec)

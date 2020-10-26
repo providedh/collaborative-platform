@@ -12,12 +12,12 @@ from apps.projects.models import Project
 from collaborative_platform.settings import DEFAULT_ENTITIES
 
 passes = {
-    "very low": 20,
-    "low": 40,
-    "medium": 60,
-    "high": 80,
-    "very high": 100,
-    None: 100
+    "very low": 200,
+    "low": 400,
+    "medium": 600,
+    "high": 800,
+    "very high": 1000,
+    None: 1000
 }
 
 
@@ -112,7 +112,10 @@ def learn_unprocessed_proposals(project: Project):
                     entity1 = proposal.entity
                     if proposal.clique is not None:
                         _ids = list(proposal.clique.unifications.values_list("entity_id", flat=True))
-                        _ids.remove(entity1.id)
+                        try:
+                            _ids.remove(entity1.id)
+                        except ValueError:
+                            pass
                         for entity2 in Entity.objects.filter(id__in=_ids).all():
                             learn_entity_pair(entity1, entity2, data_processor, model, scaler, proposal.user_confidence,
                                               proposal.decision)

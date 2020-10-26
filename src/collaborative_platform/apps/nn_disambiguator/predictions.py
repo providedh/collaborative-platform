@@ -10,6 +10,7 @@ from sklearn.utils.validation import check_is_fitted
 from typing import List, Tuple
 
 from apps.api_vis.models import Entity, Clique, Unification
+from apps.files_management.models import File
 from apps.nn_disambiguator.models import Classifier, UnificationProposal, CeleryTask
 from apps.nn_disambiguator.similarity_calculator import SimilarityCalculator
 from apps.projects.models import Project, EntitySchema
@@ -34,6 +35,9 @@ def generate_entities_pairs(schema: EntitySchema) -> List[Tuple[Entity, Entity]]
         unified = clique.unifications.values_list("entity", flat=True)
         pairs.difference_update(permutations(unified, 2))
 
+    for file in File.objects.filter(project=schema.taxonomy.project, deleted=False).all():
+        pairs.difference_update(permutations(file.entity_set.values_list("id", flat=True), 2))
+
     pairs_obj = []
     for e1, e2 in pairs:
         e1o = Entity.objects.get(id=e1)
@@ -45,7 +49,8 @@ def generate_entities_pairs(schema: EntitySchema) -> List[Tuple[Entity, Entity]]
 
 def generate_entity_clique_pairs(schema: EntitySchema) -> List[Tuple[Entity, Clique]]:
     entities = Entity.objects.filter(type=schema.name, file__project=schema.taxonomy.project).all()
-    cliques = Clique.objects.filter(type=schema.name, project=schema.taxonomy.project).all()
+    cliques = Clique.objects.filter(type=schema.name, project=schema.taxonomy.project,
+                                    created_in_commit__isnull=False).all()
 
     pairs = set(product(entities, cliques))
 
@@ -112,23 +117,6 @@ def make_entities_proposals(data_processor, model, scaler, schema):
             ).save()
             log("Saved")
 
-    # sim_vecs = [data_processor.get_features_vector(e1, e2) for e1, e2 in pairs]
-    # sim_vecs = scaler.transform(sim_vecs)
-    # log("Scaled vectors")
-    # results = [p[1] for p in model.predict_proba(sim_vecs)]
-    # # proposals = []
-    # for i in range(len(pairs)):
-    #     if results[i] > 0.0:  # TODO: make this threshold configurable?
-    #         # proposals.append((pairs[i], results[i]))
-    #
-
-    # UnificationProposal.objects.bulk_create(
-    #     UnificationProposal(
-    #         entity=proposal[0][0],
-    #         entity2=proposal[0][1],
-    #         confidence=proposal[1] * 100
-    #     ) for proposal in proposals
-    # )
 
 
 def reset_undecided_proposals(project_id: int):

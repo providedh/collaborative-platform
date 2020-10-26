@@ -1,6 +1,7 @@
 import traceback
 from time import sleep
 from typing import List
+import numpy as np
 
 from celery import shared_task
 from django.core.exceptions import MultipleObjectsReturned
@@ -32,12 +33,14 @@ def create_models(self, project_id):  # type: (int) -> None
                 model = MLPClassifier(hidden_layer_sizes=(15, 7, 2))
                 scaler = StandardScaler()
 
-                vector_0 = [0] * SimilarityCalculator().calculate_features_vector_length(schema)
-                vector_1 = [1] * SimilarityCalculator().calculate_features_vector_length(schema)
-                scaler.partial_fit([vector_0, vector_1])
+                vector_1 = SimilarityCalculator.get_max_sim_vector(schema)
+                vector_0 = np.abs(vector_1 - 1)
 
-                for _ in range(1000):
-                    model.partial_fit([vector_0, vector_1], [1, 0], classes=[0, 1])
+                scaler.partial_fit([vector_0, vector_1])
+                vectors = scaler.transform([vector_0, vector_1])
+
+                for _ in range(5000):
+                    model.partial_fit(vectors, [0, 1], classes=[0, 1])
 
                 dbo = Classifier(project=project, entity_schema=schema)
                 dbo.save()
@@ -127,7 +130,7 @@ def serialize_unification_proposals(project_id: int, ups: List[UnificationPropos
             clq = up.clique
             entities = []
             for entity in Entity.objects.filter(id__in=clq.unifications.values_list("entity_id", flat=True)):
-                e = rh.serialize_entities([up.entity], pv)[0]
+                e = rh.serialize_entities([entity], pv)[0]
                 e["file_id"] = entity.file_id
                 e["file_name"] = entity.file.name
                 e["xml:id"] = entity.xml_id
