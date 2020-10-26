@@ -87,16 +87,16 @@ export default function CertaintyDataSource (pubSubService, appContext) {
     else dimension.filterFunction(filter)
     _publishData()
   }
-  function _processData (data, fileId) {
-    const filename = self._appContext.id2document[fileId].name
+  function _processData (data) {
     return data.map(d => {
+      const filename = self._appContext.id2document[d.file].name
       const {ana, target, locus, ...annotation} = d
       const categories = ana.length === 0 ? ['no category'] : ana.split(' ').map(c => c.split('#')[1])
 
       return {
         categories,
         filename,
-        file_id: +fileId,
+        file_id: +d.file,
         target: target.slice(1),
         locus: d.match !== null ? 'attribute' : locus,
         ...annotation}
@@ -106,20 +106,15 @@ export default function CertaintyDataSource (pubSubService, appContext) {
     * Retrieves data from the external source.
     */
   function _retrieve () {
-    const files = Object.keys(self._appContext.id2document)
-    let retrieved = 0; const retrieving = files.length
     self.publish('status', { action: 'fetching' })
     self._data.remove(() => true) // clear previous data
-    files.forEach(file => {
-      self._source.getAnnotations({ project: self._appContext.project, file }, {}, null).then(response => {
-        if (response.success === false) { console.info('Failed to retrieve entities for file: ' + file) } else {
-          self._data.add(_processData(response.content, file))
-          _publishData()
-        }
-        if (++retrieved == retrieving) {
-          self.publish('status', { action: 'fetched' })
-        }
-      })
+
+    self._source.getAllAnnotations({ project: self._appContext.project }, {}, null).then(response => {
+      if (response.success === false) { console.info('Failed to retrieve annotations') } else {
+        self._data.add(_processData(response.content))
+        _publishData()
+      }
+      self.publish('status', { action: 'fetched' })
     })
   }
   return _init(pubSubService, appContext)

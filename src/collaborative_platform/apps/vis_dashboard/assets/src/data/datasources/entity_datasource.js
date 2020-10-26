@@ -86,11 +86,11 @@ export default function EntityDataSource (pubSubService, appContext) {
     _publishData()
   }
 
-  function _processData (data, fileId) {
-    const filename = self._appContext.id2document[fileId].name
+  function _processData (data) {
     return data.map(d => {
+      const filename = self._appContext.id2document[d.file].name
       return Object.assign({},
-        {file_id: +fileId, filename, ...d },
+        {file_id: +d.file, filename, ...d },
         {properties: Object.keys(d.properties).length === 0 ? {'no properties': 'no properties'} : d.properties},
         {id: `${d.type}-${d.id}`})
     })
@@ -100,24 +100,17 @@ export default function EntityDataSource (pubSubService, appContext) {
     * Retrieves data from the external source.
     */
   function _retrieve () {
-    const files = Object.keys(self._appContext.id2document)
-    const getName = fileId => self._appContext.id2document[fileId].name
-    let retrieved = 0; const retrieving = files.length
-
     self.publish('status', { action: 'fetching' })
     self._data.remove(() => true) // clear previous data
-    files.forEach(file => {
-      self._source.getFileEntities({ project: self._appContext.project, file }, {}, null).then(response => {
-        if (response.success === false) {
-          console.info('Failed to retrieve entities for file: ' + file)
-        } else {
-          self._data.add(_processData(response.content, file))
-        }
-        _publishData()
-        if (++retrieved === retrieving) {
-          self.publish('status', { action: 'fetched' })
-        }
-      })
+
+    self._source.getEntities({ project: self._appContext.project }, {}, null).then(response => {
+      if (response.success === false) {
+        console.info('Failed to retrieve entities.' + file)
+      } else {
+        self._data.add(_processData(response.content))
+      }
+      _publishData()
+      self.publish('status', { action: 'fetched' })
     })
   }
 
