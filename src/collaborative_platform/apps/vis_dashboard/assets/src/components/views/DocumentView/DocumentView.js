@@ -111,7 +111,7 @@ export default function DocumentView ({ layout, syncWithViews, documentId, showE
   return (
     <div className={styles.documentView}>
       <div className="bg-white d-flex justify-content-between justify-space-between p-2">
-        <span>{data.name}</span>
+        <span className={styles.docName}>{data.name}</span>
         {data.id !== '' ? (
           <a className="btn btn-sm btn-outline-primary"
             target="blank"
