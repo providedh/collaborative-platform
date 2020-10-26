@@ -6,6 +6,7 @@ from . import api
 urlpatterns = [
     path('projects/', api_old.projects),
     path('projects/<int:project_id>/history/', api_old.project_history),
+    path('projects/<int:project_id>/certainties/', api.project_certainties),
     path('projects/<int:project_id>/files/<int:file_id>/body/', api_old.file_body),
     path('projects/<int:project_id>/files/<int:file_id>/meta/', api_old.file_meta),
     path('projects/<int:project_id>/files/<int:file_id>/names/', api_old.file_names),

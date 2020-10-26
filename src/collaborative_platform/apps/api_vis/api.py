@@ -142,6 +142,25 @@ def file_certainties(request, project_id, file_id):
 @login_required
 @objects_exists
 @user_has_access('RW')
+def project_certainties(request, project_id):
+    if request.method == 'GET':
+        try:
+            request_data = parse_query_string(request.GET)
+
+            request_handler = RequestHandler(project_id, request.user)
+            response = request_handler.get_file_certainties(request_data, file_id=None)
+
+            return JsonResponse(response, safe=False)
+
+        except BadRequest as exception:
+            response = get_error(exception, BadRequest.status_code)
+
+            return JsonResponse(response, status=BadRequest.status_code)
+
+
+@login_required
+@objects_exists
+@user_has_access('RW')
 def clique_entities(request, project_id, clique_id):
     if request.method == 'PUT':
         try:
