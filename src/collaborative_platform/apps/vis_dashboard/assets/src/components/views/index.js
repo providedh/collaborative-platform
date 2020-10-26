@@ -6,8 +6,10 @@ import Sunburst from './Sunburst'
 import Note from './Note'
 import Map from './Map'
 import Timeline from './Timeline'
+import Table from './Table'
 
 export default {
+  'EntryList': Table,
   BarChart,
   Timeline,
   Map,

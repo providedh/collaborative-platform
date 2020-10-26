@@ -56,6 +56,8 @@ function EntityPanel (props) {
   const deleted = props.selection.target.deleted === true
   const saved = !deleted && props.selection.target.saved === true
 
+  console.log(props)
+
   return <div className={styles.entityPanel}>
     <div className="card">
       <div className="card-header d-flex justify-content-between">

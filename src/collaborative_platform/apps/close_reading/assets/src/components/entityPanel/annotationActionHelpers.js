@@ -30,13 +30,18 @@ export function onSave (operations, id, websocket) {
   websocket.send(request)
 }
 
-export function onCreate (id, values, websocket) {
+export function onCreate (id, nameId, values, websocket) {
   const { locus, ana, cert, assertedValue, desc, match } = values
   const builder = AtomicActionBuilder(ActionTarget.certainty, ActionType.add, ActionObject.certainty)
 
   let action = builder(id, locus, ana, cert, assertedValue, desc)
-  if (locus === 'attribute') {
-    action = builder(`${id}/${match}`, 'value', ana, cert, assertedValue, desc)
+  switch(locus) {
+    case 'attribute':
+      action = builder(`${id}/${match}`, 'value', ana, cert, assertedValue, desc)
+      break
+    case 'value':
+      action = builder(nameId, 'value', ana, cert, assertedValue, desc)
+      break
   }
 
   const request = WebsocketRequest(WebsocketRequestType.modify, [action])

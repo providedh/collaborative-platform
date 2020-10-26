@@ -39,7 +39,7 @@ function CreateAnnotation (props) {
       {editingAnnotation === null
         ? <AnnotateForm entity={props.entity}
           submitText="Create annotation"
-          callback={form => onCreate(props.entity?.target?.value || props.entity.id.value, form, props.context.websocket)}/>
+          callback={form => onCreate(props.entity?.target?.value || props.entity.id.value, props.entity.id.value, form, props.context.websocket)}/>
         : <AnnotateForm entity={props.entity}
           annotation={editingAnnotation}
           submitText="Modify"
