@@ -420,6 +420,7 @@ class RequestHandler:
                 'xml:id': certainty.xml_id,
                 'assertedValue': certainty.asserted_value,
                 'desc': certainty.description,
+                'file': certainty.file_id
             }
 
             certainties_serialized.append(certainty_serialized)
