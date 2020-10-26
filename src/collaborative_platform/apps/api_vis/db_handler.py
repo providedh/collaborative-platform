@@ -252,7 +252,6 @@ class DbHandler:
 
         Unification.objects.bulk_update(unifications_to_delete, ['deleted_in_commit'])
 
-
     def delete_clique(self, clique, project_version):
         clique.deleted_by = self.__user
         clique.deleted_on = timezone.now()
@@ -345,18 +344,24 @@ class DbHandler:
     def get_entity_property(self, entity, project_version, property_name):
         entity_version = self.__get_entity_version(entity, project_version)
 
-        property_version = entity_version.properties.get(
-            name=property_name
-        )
+        if entity_version is not None:
+            property_version = entity_version.properties.get(
+                name=property_name
+            )
+            return property_version
 
-        return property_version
+        else:
+            return None
 
     def get_entity_properties(self, entity, project_version):
         entity_version = self.__get_entity_version(entity, project_version)
 
-        properties_versions = entity_version.properties.all()
+        if entity_version is not None:
+            properties_versions = entity_version.properties.all()
+            return properties_versions
 
-        return properties_versions
+        else:
+            return []
 
     def get_project_version(self, project_version_nr=None, date=None):
         if project_version_nr:
@@ -463,16 +468,19 @@ class DbHandler:
 
     @staticmethod
     def __get_entity_version(entity, project_version):
-        file_version = project_version.file_versions.get(
-            file=entity.file
-        )
+        try:
+            file_version = project_version.file_versions.get(
+                file=entity.file
+            )
 
-        entity_version = EntityVersion.objects.get(
-            entity=entity,
-            file_version=file_version
-        )
+            entity_version = EntityVersion.objects.get(
+                entity=entity,
+                file_version=file_version
+            )
 
-        return entity_version
+            return entity_version
+        except (FileVersion.DoesNotExist, EntityVersion.DoesNotExist):
+            return None
 
     def __get_file_id_from_path(self, file_path, parent_directory_id=None):
         splitted_path = file_path.split('/')
