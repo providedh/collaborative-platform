@@ -1,0 +1,29 @@
+.table{
+    height: 100%;
+    width: 100%;
+}
+.entity a,
+.annotation a{
+display: block;
+max-width: calc(100% - 7em);
+overflow-x: hidden;
+text-overflow: ellipsis;
+white-space: nowrap;
+}
+.entity i:before{
+    content: attr(data);
+}
+.entity,
+.annotation{
+display: block;
+padding: 1em;
+}
+.entity:nth-of-type(2n),
+.annotation:nth-of-type(2n){
+background: var(--grey);
+}
+.container{
+display: block;
+height: calc(100% - 4em);
+overflow-y: auto;
+}
