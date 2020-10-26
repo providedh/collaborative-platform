@@ -17,7 +17,8 @@ class Serializer:
 
     @staticmethod
     def serialize_entity(entity):
-        serialized_entity = model_to_dict(entity, ['id', 'type'])
+        serialized_entity = model_to_dict(entity, ['id', 'type', 'xml_id', 'file'])
+        serialized_entity["file_name"] = entity.file.name
 
         return serialized_entity
 
