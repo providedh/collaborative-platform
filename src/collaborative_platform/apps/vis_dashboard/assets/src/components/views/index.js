@@ -9,7 +9,7 @@ import Timeline from './Timeline'
 import Table from './Table'
 
 export default {
-  Table,
+  'EntryList': Table,
   BarChart,
   Timeline,
   Map,

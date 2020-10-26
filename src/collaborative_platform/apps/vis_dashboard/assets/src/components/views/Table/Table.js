@@ -38,18 +38,14 @@ function EntityEntry({entity, context}) {
   </div>
 }
 
-function AnnotationEntry({annotation, projectId}) {
-  const properties = Object
-    .entries(annotation.properties)
-    .map(p => `${p[0]}: ${p[1]}`, '')
-    .join(', ')
+function AnnotationEntry({annotation, context}) {
+  const categories = annotation.categories.join(', ')
 
-  return <div>
-    <span scope="row">{annotation.id}</span>
-    <span>{annotation.type}</span>
-    <span>{properties}</span>
+  return <div className={styles.annotation}>
+    <span className="mr-2 text-primary" scope="row">{annotation['xml:id']}</span>
+    <span>{annotation.cert} {categories} certainty {annotation.locus} annotation.</span>    
     <span>
-      <a href={`/close_reading/project/${projectId}/file/${entity.file_id}/`}>{entity.filename}</a>
+      <a target="blank" href={`/close_reading/project/${context.project}/file/${annotation.file_id}/`}>File: {annotation.filename}</a>
     </span>
   </div>
 }
@@ -63,17 +59,24 @@ export default function Table ({ layout, source, context }) {
   useCleanup(dataClient)
 
   const data = useData(dataClient, source)
+
+  const dataSource = data.source
   const pages = Math.ceil(data.filtered.length / maxItems)
 
   useEffect(() => {
     setPage(0)
   }, [data])
 
+  if (data === null || data.filtered.length === 0){
+    return <b className="text-blue">No data available</b>
+  }
+
   const entriesData = data.filtered.slice(page*maxItems, Math.min((page+1)*maxItems, data.filtered.length))
-  const entries = source === DataSource.entity ? (
+
+  const entries = dataSource === DataSource.entity ? (
     entriesData.map(d => <EntityEntry key={d.id} context={context} entity={d}/>)
   ) : (
-    entriesData.map(d => <AnnotationEntry key={d.id} context={context} annotation={d}/>)
+    entriesData.map(d => <AnnotationEntry key={d['xml:id']} context={context} annotation={d}/>)
   )
 
   return (
@@ -97,7 +100,7 @@ export default function Table ({ layout, source, context }) {
   )
 }
 
-Table.prototype.description = 'Display certainty annotations and entity details in a readable form.'
+Table.prototype.description = 'List certainty annotations and entity details in a readable form.'
 
 Table.prototype.getConfigOptions = getConfig
 

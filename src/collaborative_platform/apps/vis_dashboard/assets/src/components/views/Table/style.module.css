@@ -2,7 +2,8 @@
     height: 100%;
     width: 100%;
 }
-.entity a{
+.entity a,
+.annotation a{
 display: block;
 max-width: calc(100% - 7em);
 overflow-x: hidden;
@@ -12,11 +13,13 @@ white-space: nowrap;
 .entity i:before{
     content: attr(data);
 }
-.entity{
+.entity,
+.annotation{
 display: block;
 padding: 1em;
 }
-.entity:nth-of-type(2n){
+.entity:nth-of-type(2n),
+.annotation:nth-of-type(2n){
 background: var(--grey);
 }
 .container{
