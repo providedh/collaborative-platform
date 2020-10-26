@@ -4,6 +4,7 @@ from json import dumps, loads
 from os import mkdir
 from zipfile import ZipFile
 
+from django import db
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db import IntegrityError
@@ -34,7 +35,9 @@ def upload(request, directory_id):  # type: (HttpRequest, int) -> HttpResponse
             user = request.user
 
             pp = partial(__process_file, directory=directory, user=user)
-            with multiprocessing.pool.ThreadPool() as p:
+
+            db.connections.close_all()
+            with multiprocessing.Pool() as p:
                 upload_statuses = list(p.imap_unordered(pp, files_list))
 
             return JsonResponse(upload_statuses, safe=False)
