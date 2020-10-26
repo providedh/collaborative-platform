@@ -4,31 +4,45 @@
       "id": 1,
       "name": "first_clique",
       "type": "ingredient",
-      "entities": [11]
+      "entities": [
+        11
+      ]
     },
     {
       "id": 2,
       "name": "second_clique",
       "type": "ingredient",
-      "entities": [18, 20]
+      "entities": [
+        18,
+        20
+      ]
     },
     {
       "id": 3,
       "name": "third_clique",
       "type": "ingredient",
-      "entities": [20, 11]
+      "entities": [
+        20,
+        11
+      ]
     },
     {
       "id": 4,
       "name": "fourth_clique",
       "type": "person",
-      "entities": [3, 14]
+      "entities": [
+        3,
+        14
+      ]
     },
     {
       "id": 6,
       "name": "sixth_clique",
       "type": "person",
-      "entities": [4, 15]
+      "entities": [
+        4,
+        15
+      ]
     }
   ],
   "test_get_all_cliques_in_project_types": [
@@ -36,13 +50,19 @@
       "id": 4,
       "name": "fourth_clique",
       "type": "person",
-      "entities": [3, 14]
+      "entities": [
+        3,
+        14
+      ]
     },
     {
       "id": 6,
       "name": "sixth_clique",
       "type": "person",
-      "entities": [4, 15]
+      "entities": [
+        4,
+        15
+      ]
     }
   ],
   "test_get_all_cliques_in_project_users": [
@@ -50,19 +70,27 @@
       "id": 1,
       "name": "first_clique",
       "type": "ingredient",
-      "entities": [11]
+      "entities": [
+        11
+      ]
     },
     {
       "id": 2,
       "name": "second_clique",
       "type": "ingredient",
-      "entities": [18, 20]
+      "entities": [
+        18,
+        20
+      ]
     },
     {
       "id": 4,
       "name": "fourth_clique",
       "type": "person",
-      "entities": [3, 14]
+      "entities": [
+        3,
+        14
+      ]
     }
   ],
   "test_get_all_cliques_in_project_start_date": [
@@ -70,25 +98,37 @@
       "id": 2,
       "name": "second_clique",
       "type": "ingredient",
-      "entities": [18, 20]
+      "entities": [
+        18,
+        20
+      ]
     },
     {
       "id": 3,
       "name": "third_clique",
       "type": "ingredient",
-      "entities": [20, 11]
+      "entities": [
+        20,
+        11
+      ]
     },
     {
       "id": 4,
       "name": "fourth_clique",
       "type": "person",
-      "entities": [3, 14]
+      "entities": [
+        3,
+        14
+      ]
     },
     {
       "id": 6,
       "name": "sixth_clique",
       "type": "person",
-      "entities": [4, 15]
+      "entities": [
+        4,
+        15
+      ]
     }
   ],
   "test_get_all_cliques_in_project_end_date": [
@@ -96,25 +136,36 @@
       "id": 1,
       "name": "first_clique",
       "type": "ingredient",
-      "entities": [11]
+      "entities": [
+        11
+      ]
     },
     {
       "id": 2,
       "name": "second_clique",
       "type": "ingredient",
-      "entities": [18, 20]
+      "entities": [
+        18,
+        20
+      ]
     },
     {
       "id": 3,
       "name": "third_clique",
       "type": "ingredient",
-      "entities": [20, 11]
+      "entities": [
+        20,
+        11
+      ]
     },
     {
       "id": 4,
       "name": "fourth_clique",
       "type": "person",
-      "entities": [3, 14]
+      "entities": [
+        3,
+        14
+      ]
     }
   ],
   "test_get_all_cliques_in_project_date": [
@@ -122,31 +173,46 @@
       "id": 1,
       "name": "first_clique",
       "type": "ingredient",
-      "entities": [11, 18]
+      "entities": [
+        11,
+        18
+      ]
     },
     {
       "id": 2,
       "name": "second_clique",
       "type": "ingredient",
-      "entities": [18, 20]
+      "entities": [
+        18,
+        20
+      ]
     },
     {
       "id": 3,
       "name": "third_clique",
       "type": "ingredient",
-      "entities": [20, 11]
+      "entities": [
+        20,
+        11
+      ]
     },
     {
       "id": 4,
       "name": "fourth_clique",
       "type": "person",
-      "entities": [3, 14]
+      "entities": [
+        3,
+        14
+      ]
     },
     {
       "id": 5,
       "name": "fifth_clique",
       "type": "person",
-      "entities": [5, 16]
+      "entities": [
+        5,
+        16
+      ]
     }
   ],
   "test_get_all_cliques_in_project_project_version": [
@@ -154,286 +220,1882 @@
       "id": 1,
       "name": "first_clique",
       "type": "ingredient",
-      "entities": [11, 18]
+      "entities": [
+        11,
+        18
+      ]
     },
     {
       "id": 2,
       "name": "second_clique",
       "type": "ingredient",
-      "entities": [18, 20]
+      "entities": [
+        18,
+        20
+      ]
     },
     {
       "id": 3,
       "name": "third_clique",
       "type": "ingredient",
-      "entities": [20, 11]
+      "entities": [
+        20,
+        11
+      ]
     },
     {
       "id": 4,
       "name": "fourth_clique",
       "type": "person",
-      "entities": [3, 14]
+      "entities": [
+        3,
+        14
+      ]
     },
     {
       "id": 5,
       "name": "fifth_clique",
       "type": "person",
-      "entities": [5, 16]
+      "entities": [
+        5,
+        16
+      ]
     }
   ],
   "test_get_all_entities_in_project_no_filtering": [
-    {"id": 1, "properties": {"country": "Poland", "geo": "52.408333 16.934167", "name": "PCSS", "settlement": "Poznań"}, "type": "place"},
-    {"id": 2, "properties": {"name": "Big Bang"}, "type": "event"},
-    {"id": 3, "properties": {"name": "Butter"}, "type": "person"},
-    {"id": 4, "properties": {"name": "Sand"}, "type": "person"},
-    {"id": 5, "properties": {"age": "child", "birth": "2001-02-03", "forename": "Jerry", "name": "Jerry Maguire", "sex": "M", "surname": "Maguire"}, "type": "person"},
-    {"id": 6, "properties": {"name": "Ingwer"}, "type": "person"},
-    {"id": 7, "properties": {"name": "Grieben"}, "type": "person"},
-    {"id": 8, "properties": {"name": "Met"}, "type": "person"},
-    {"id": 9, "properties": {"name": "4th of july 2010", "when": "2020-07-04"}, "type": "date"},
-    {"id": 10, "properties": {"name": "3rd of may 1791", "when": "1791-05-03"}, "type": "date"},
-    {"id": 11, "properties": {"name": "Rag"}, "type": "ingredient"},
-    {"id": 12, "properties": {"name": "Ingwer"}, "type": "ingredient"},
-    {"id": 14, "properties": {"age": "child", "birth": "1812-01-01", "forename": "Snow", "name": "Snow white", "sex": "M", "surname": "White"}, "type": "person"},
-    {"id": 15, "properties": {"name": "Doc"}, "type": "person"},
-    {"id": 16, "properties": {"name": "Grumpy"}, "type": "person"},
-    {"id": 17, "properties": {"name": "Sleepy"}, "type": "person"},
-    {"id": 18, "properties": {"name": "Jus"}, "type": "ingredient"},
-    {"id": 19, "properties": {"name": "Sand"}, "type": "ingredient"},
-    {"id": 20, "properties": {"name": "Ingwer"}, "type": "ingredient"},
-    {"id": 21, "properties": {"name": "Sand"}, "type": "ingredient"},
-    {"id": 22, "properties": {"forename": "Bugs", "name": "Bugs Bunny", "sex": "M", "surname": "Bunny"}, "type": "person"}
+    {
+      "id": 1,
+      "file": 1,
+      "type": "place",
+      "xml_id": "place-0",
+      "properties": {
+        "country": "Poland",
+        "settlement": "Pozna\u0144",
+        "geo": "52.408333 16.934167",
+        "name": "PCSS"
+      }
+    },
+    {
+      "id": 2,
+      "file": 1,
+      "type": "event",
+      "xml_id": "event-0",
+      "properties": {
+        "name": "Big Bang"
+      }
+    },
+    {
+      "id": 3,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-0",
+      "properties": {
+        "name": "Butter"
+      }
+    },
+    {
+      "id": 4,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-1",
+      "properties": {
+        "name": "Sand"
+      }
+    },
+    {
+      "id": 5,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-2",
+      "properties": {
+        "sex": "M",
+        "age": "child",
+        "forename": "Jerry",
+        "surname": "Maguire",
+        "birth": "2001-02-03",
+        "name": "Jerry Maguire"
+      }
+    },
+    {
+      "id": 6,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-3",
+      "properties": {
+        "name": "Ingwer"
+      }
+    },
+    {
+      "id": 7,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-4",
+      "properties": {
+        "name": "Grieben"
+      }
+    },
+    {
+      "id": 8,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-5",
+      "properties": {
+        "name": "Met"
+      }
+    },
+    {
+      "id": 9,
+      "file": 1,
+      "type": "date",
+      "xml_id": "date-0",
+      "properties": {
+        "when": "2020-07-04",
+        "name": "4th of july 2010"
+      }
+    },
+    {
+      "id": 10,
+      "file": 1,
+      "type": "date",
+      "xml_id": "date-2",
+      "properties": {
+        "when": "1791-05-03",
+        "name": "3rd of may 1791"
+      }
+    },
+    {
+      "id": 11,
+      "file": 1,
+      "type": "ingredient",
+      "xml_id": "ingredient-0",
+      "properties": {
+        "name": "Rag"
+      }
+    },
+    {
+      "id": 12,
+      "file": 1,
+      "type": "ingredient",
+      "xml_id": "ingredient-1",
+      "properties": {
+        "name": "Ingwer"
+      }
+    },
+    {
+      "id": 14,
+      "file": 2,
+      "type": "person",
+      "xml_id": "person-0",
+      "properties": {
+        "sex": "M",
+        "age": "child",
+        "forename": "Snow",
+        "surname": "White",
+        "birth": "1812-01-01",
+        "name": "Snow white"
+      }
+    },
+    {
+      "id": 15,
+      "file": 2,
+      "type": "person",
+      "xml_id": "person-1",
+      "properties": {
+        "name": "Doc"
+      }
+    },
+    {
+      "id": 16,
+      "file": 2,
+      "type": "person",
+      "xml_id": "person-2",
+      "properties": {
+        "name": "Grumpy"
+      }
+    },
+    {
+      "id": 17,
+      "file": 2,
+      "type": "person",
+      "xml_id": "person-3",
+      "properties": {
+        "name": "Sleepy"
+      }
+    },
+    {
+      "id": 18,
+      "file": 2,
+      "type": "ingredient",
+      "xml_id": "ingredient-0",
+      "properties": {
+        "name": "Jus"
+      }
+    },
+    {
+      "id": 19,
+      "file": 2,
+      "type": "ingredient",
+      "xml_id": "ingredient-1",
+      "properties": {
+        "name": "Sand"
+      }
+    },
+    {
+      "id": 20,
+      "file": 3,
+      "type": "ingredient",
+      "xml_id": "ingredient-0",
+      "properties": {
+        "name": "Ingwer"
+      }
+    },
+    {
+      "id": 21,
+      "file": 3,
+      "type": "ingredient",
+      "xml_id": "ingredient-1",
+      "properties": {
+        "name": "Sand"
+      }
+    },
+    {
+      "id": 22,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-6",
+      "properties": {
+        "forename": "Bugs",
+        "surname": "Bunny",
+        "sex": "M",
+        "name": "Bugs Bunny"
+      }
+    }
   ],
   "test_get_all_entities_in_project_types": [
-    {"id": 3, "properties": {"name": "Butter"}, "type": "person"},
-    {"id": 4, "properties": {"name": "Sand"}, "type": "person"},
-    {"id": 5, "properties": {"age": "child", "birth": "2001-02-03", "forename": "Jerry", "name": "Jerry Maguire", "sex": "M", "surname": "Maguire"}, "type": "person"},
-    {"id": 6, "properties": {"name": "Ingwer"}, "type": "person"},
-    {"id": 7, "properties": {"name": "Grieben"}, "type": "person"},
-    {"id": 8, "properties": {"name": "Met"}, "type": "person"},
-    {"id": 14, "properties": {"age": "child", "birth": "1812-01-01", "forename": "Snow", "name": "Snow white", "sex": "M", "surname": "White"}, "type": "person"},
-    {"id": 15, "properties": {"name": "Doc"}, "type": "person"},
-    {"id": 16, "properties": {"name": "Grumpy"}, "type": "person"},
-    {"id": 17, "properties": {"name": "Sleepy"}, "type": "person"},
-    {"id": 22, "properties": {"forename": "Bugs", "name": "Bugs Bunny", "sex": "M", "surname": "Bunny"}, "type": "person"}
+    {
+      "id": 3,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-0",
+      "properties": {
+        "name": "Butter"
+      }
+    },
+    {
+      "id": 4,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-1",
+      "properties": {
+        "name": "Sand"
+      }
+    },
+    {
+      "id": 5,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-2",
+      "properties": {
+        "sex": "M",
+        "age": "child",
+        "forename": "Jerry",
+        "surname": "Maguire",
+        "birth": "2001-02-03",
+        "name": "Jerry Maguire"
+      }
+    },
+    {
+      "id": 6,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-3",
+      "properties": {
+        "name": "Ingwer"
+      }
+    },
+    {
+      "id": 7,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-4",
+      "properties": {
+        "name": "Grieben"
+      }
+    },
+    {
+      "id": 8,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-5",
+      "properties": {
+        "name": "Met"
+      }
+    },
+    {
+      "id": 14,
+      "file": 2,
+      "type": "person",
+      "xml_id": "person-0",
+      "properties": {
+        "sex": "M",
+        "age": "child",
+        "forename": "Snow",
+        "surname": "White",
+        "birth": "1812-01-01",
+        "name": "Snow white"
+      }
+    },
+    {
+      "id": 15,
+      "file": 2,
+      "type": "person",
+      "xml_id": "person-1",
+      "properties": {
+        "name": "Doc"
+      }
+    },
+    {
+      "id": 16,
+      "file": 2,
+      "type": "person",
+      "xml_id": "person-2",
+      "properties": {
+        "name": "Grumpy"
+      }
+    },
+    {
+      "id": 17,
+      "file": 2,
+      "type": "person",
+      "xml_id": "person-3",
+      "properties": {
+        "name": "Sleepy"
+      }
+    },
+    {
+      "id": 22,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-6",
+      "properties": {
+        "forename": "Bugs",
+        "surname": "Bunny",
+        "sex": "M",
+        "name": "Bugs Bunny"
+      }
+    }
   ],
   "test_get_all_entities_in_project_users": [
-    {"id": 5, "properties": {"age": "child", "birth": "2001-02-03", "forename": "Jerry", "name": "Jerry Maguire", "sex": "M", "surname": "Maguire"}, "type": "person"},
-    {"id": 14, "properties": {"age": "child", "birth": "1812-01-01", "forename": "Snow", "name": "Snow white", "sex": "M", "surname": "White"}, "type": "person"},
-    {"id": 15, "properties": {"name": "Doc"}, "type": "person"},
-    {"id": 16, "properties": {"name": "Grumpy"}, "type": "person"},
-    {"id": 22, "properties": {"forename": "Bugs", "name": "Bugs Bunny", "sex": "M", "surname": "Bunny"}, "type": "person"}
+    {
+      "id": 5,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-2",
+      "properties": {
+        "sex": "M",
+        "age": "child",
+        "forename": "Jerry",
+        "surname": "Maguire",
+        "birth": "2001-02-03",
+        "name": "Jerry Maguire"
+      }
+    },
+    {
+      "id": 14,
+      "file": 2,
+      "type": "person",
+      "xml_id": "person-0",
+      "properties": {
+        "sex": "M",
+        "age": "child",
+        "forename": "Snow",
+        "surname": "White",
+        "birth": "1812-01-01",
+        "name": "Snow white"
+      }
+    },
+    {
+      "id": 15,
+      "file": 2,
+      "type": "person",
+      "xml_id": "person-1",
+      "properties": {
+        "name": "Doc"
+      }
+    },
+    {
+      "id": 16,
+      "file": 2,
+      "type": "person",
+      "xml_id": "person-2",
+      "properties": {
+        "name": "Grumpy"
+      }
+    },
+    {
+      "id": 22,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-6",
+      "properties": {
+        "forename": "Bugs",
+        "surname": "Bunny",
+        "sex": "M",
+        "name": "Bugs Bunny"
+      }
+    }
   ],
   "test_get_all_entities_in_project_project_version": [
-    {"id": 1, "properties": {"country": "Poland", "geo": "52.408333 16.934167", "name": "PCSS", "settlement": "Poznań"}, "type": "place"},
-    {"id": 2, "properties": {"name": "Big Bang"}, "type": "event"},
-    {"id": 3, "properties": {"name": "Butter"}, "type": "person"},
-    {"id": 4, "properties": {"name": "Sand"}, "type": "person"},
-    {"id": 5, "properties": {"age": "child", "birth": "2001-02-03", "forename": "Jerry", "name": "Jerry Maguire", "sex": "M", "surname": "Maguire"}, "type": "person"},
-    {"id": 6, "properties": {"name": "Ingwer"}, "type": "person"},
-    {"id": 7, "properties": {"name": "Grieben"}, "type": "person"},
-    {"id": 8, "properties": {"name": "Met"}, "type": "person"},
-    {"id": 9, "properties": {"name": "4th of july 2010", "when": "2020-07-04"}, "type": "date"},
-    {"id": 10, "properties": {"name": "3rd of may 1791", "when": "1791-05-03"}, "type": "date"},
-    {"id": 11, "properties": {"name": "Rag"}, "type": "ingredient"},
-    {"id": 12, "properties": {"name": "Ingwer"}, "type": "ingredient"},
-    {"id": 13, "properties": {"name": "Met"}, "type": "ingredient"},
-    {"id": 14, "properties": {"age": "child", "birth": "1812-01-01", "forename": "Snow", "name": "Snow white", "sex": "M", "surname": "White"}, "type": "person"},
-    {"id": 15, "properties": {"name": "Doc"}, "type": "person"},
-    {"id": 16, "properties": {"name": "Grumpy"}, "type": "person"},
-    {"id": 17, "properties": {"name": "Sleepy"}, "type": "person"},
-    {"id": 18, "properties": {"name": "Jus"}, "type": "ingredient"},
-    {"id": 19, "properties": {"name": "Sand"}, "type": "ingredient"},
-    {"id": 20, "properties": {"name": "Ingwer"}, "type": "ingredient"},
-    {"id": 21, "properties": {"name": "Sand"}, "type": "ingredient"}
+    {
+      "id": 1,
+      "file": 1,
+      "type": "place",
+      "xml_id": "place-0",
+      "properties": {
+        "country": "Poland",
+        "settlement": "Pozna\u0144",
+        "geo": "52.408333 16.934167",
+        "name": "PCSS"
+      }
+    },
+    {
+      "id": 2,
+      "file": 1,
+      "type": "event",
+      "xml_id": "event-0",
+      "properties": {
+        "name": "Big Bang"
+      }
+    },
+    {
+      "id": 3,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-0",
+      "properties": {
+        "name": "Butter"
+      }
+    },
+    {
+      "id": 4,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-1",
+      "properties": {
+        "name": "Sand"
+      }
+    },
+    {
+      "id": 5,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-2",
+      "properties": {
+        "sex": "M",
+        "age": "child",
+        "forename": "Jerry",
+        "surname": "Maguire",
+        "birth": "2001-02-03",
+        "name": "Jerry Maguire"
+      }
+    },
+    {
+      "id": 6,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-3",
+      "properties": {
+        "name": "Ingwer"
+      }
+    },
+    {
+      "id": 7,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-4",
+      "properties": {
+        "name": "Grieben"
+      }
+    },
+    {
+      "id": 8,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-5",
+      "properties": {
+        "name": "Met"
+      }
+    },
+    {
+      "id": 9,
+      "file": 1,
+      "type": "date",
+      "xml_id": "date-0",
+      "properties": {
+        "when": "2020-07-04",
+        "name": "4th of july 2010"
+      }
+    },
+    {
+      "id": 10,
+      "file": 1,
+      "type": "date",
+      "xml_id": "date-2",
+      "properties": {
+        "when": "1791-05-03",
+        "name": "3rd of may 1791"
+      }
+    },
+    {
+      "id": 11,
+      "file": 1,
+      "type": "ingredient",
+      "xml_id": "ingredient-0",
+      "properties": {
+        "name": "Rag"
+      }
+    },
+    {
+      "id": 12,
+      "file": 1,
+      "type": "ingredient",
+      "xml_id": "ingredient-1",
+      "properties": {
+        "name": "Ingwer"
+      }
+    },
+    {
+      "id": 13,
+      "file": 1,
+      "type": "ingredient",
+      "xml_id": "ingredient-2",
+      "properties": {
+        "name": "Met"
+      }
+    },
+    {
+      "id": 14,
+      "file": 2,
+      "type": "person",
+      "xml_id": "person-0",
+      "properties": {
+        "sex": "M",
+        "age": "child",
+        "forename": "Snow",
+        "surname": "White",
+        "birth": "1812-01-01",
+        "name": "Snow white"
+      }
+    },
+    {
+      "id": 15,
+      "file": 2,
+      "type": "person",
+      "xml_id": "person-1",
+      "properties": {
+        "name": "Doc"
+      }
+    },
+    {
+      "id": 16,
+      "file": 2,
+      "type": "person",
+      "xml_id": "person-2",
+      "properties": {
+        "name": "Grumpy"
+      }
+    },
+    {
+      "id": 17,
+      "file": 2,
+      "type": "person",
+      "xml_id": "person-3",
+      "properties": {
+        "name": "Sleepy"
+      }
+    },
+    {
+      "id": 18,
+      "file": 2,
+      "type": "ingredient",
+      "xml_id": "ingredient-0",
+      "properties": {
+        "name": "Jus"
+      }
+    },
+    {
+      "id": 19,
+      "file": 2,
+      "type": "ingredient",
+      "xml_id": "ingredient-1",
+      "properties": {
+        "name": "Sand"
+      }
+    },
+    {
+      "id": 20,
+      "file": 3,
+      "type": "ingredient",
+      "xml_id": "ingredient-0",
+      "properties": {
+        "name": "Ingwer"
+      }
+    },
+    {
+      "id": 21,
+      "file": 3,
+      "type": "ingredient",
+      "xml_id": "ingredient-1",
+      "properties": {
+        "name": "Sand"
+      }
+    }
   ],
   "test_get_all_entities_in_project_date": [
-    {"id": 1, "properties": {"country": "Poland", "geo": "52.408333 16.934167", "name": "PCSS", "settlement": "Poznań"}, "type": "place"},
-    {"id": 2, "properties": {"name": "Big Bang"}, "type": "event"},
-    {"id": 3, "properties": {"name": "Butter"}, "type": "person"},
-    {"id": 4, "properties": {"name": "Sand"}, "type": "person"},
-    {"id": 5, "properties": {"age": "child", "birth": "2001-02-03", "forename": "Jerry", "name": "Jerry Maguire", "sex": "M", "surname": "Maguire"}, "type": "person"},
-    {"id": 6, "properties": {"name": "Ingwer"}, "type": "person"},
-    {"id": 7, "properties": {"name": "Grieben"}, "type": "person"},
-    {"id": 8, "properties": {"name": "Met"}, "type": "person"},
-    {"id": 9, "properties": {"name": "4th of july 2010", "when": "2020-07-04"}, "type": "date"},
-    {"id": 10, "properties": {"name": "3rd of may 1791", "when": "1791-05-03"}, "type": "date"},
-    {"id": 11, "properties": {"name": "Rag"}, "type": "ingredient"},
-    {"id": 12, "properties": {"name": "Ingwer"}, "type": "ingredient"},
-    {"id": 13, "properties": {"name": "Met"}, "type": "ingredient"},
-    {"id": 14, "properties": {"age": "child", "birth": "1812-01-01", "forename": "Snow", "name": "Snow white", "sex": "M", "surname": "White"}, "type": "person"},
-    {"id": 15, "properties": {"name": "Doc"}, "type": "person"},
-    {"id": 16, "properties": {"name": "Grumpy"}, "type": "person"},
-    {"id": 17, "properties": {"name": "Sleepy"}, "type": "person"},
-    {"id": 18, "properties": {"name": "Jus"}, "type": "ingredient"},
-    {"id": 19, "properties": {"name": "Sand"}, "type": "ingredient"},
-    {"id": 20, "properties": {"name": "Ingwer"}, "type": "ingredient"},
-    {"id": 21, "properties": {"name": "Sand"}, "type": "ingredient"}
+    {
+      "id": 1,
+      "file": 1,
+      "type": "place",
+      "xml_id": "place-0",
+      "properties": {
+        "country": "Poland",
+        "settlement": "Pozna\u0144",
+        "geo": "52.408333 16.934167",
+        "name": "PCSS"
+      }
+    },
+    {
+      "id": 2,
+      "file": 1,
+      "type": "event",
+      "xml_id": "event-0",
+      "properties": {
+        "name": "Big Bang"
+      }
+    },
+    {
+      "id": 3,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-0",
+      "properties": {
+        "name": "Butter"
+      }
+    },
+    {
+      "id": 4,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-1",
+      "properties": {
+        "name": "Sand"
+      }
+    },
+    {
+      "id": 5,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-2",
+      "properties": {
+        "sex": "M",
+        "age": "child",
+        "forename": "Jerry",
+        "surname": "Maguire",
+        "birth": "2001-02-03",
+        "name": "Jerry Maguire"
+      }
+    },
+    {
+      "id": 6,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-3",
+      "properties": {
+        "name": "Ingwer"
+      }
+    },
+    {
+      "id": 7,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-4",
+      "properties": {
+        "name": "Grieben"
+      }
+    },
+    {
+      "id": 8,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-5",
+      "properties": {
+        "name": "Met"
+      }
+    },
+    {
+      "id": 9,
+      "file": 1,
+      "type": "date",
+      "xml_id": "date-0",
+      "properties": {
+        "when": "2020-07-04",
+        "name": "4th of july 2010"
+      }
+    },
+    {
+      "id": 10,
+      "file": 1,
+      "type": "date",
+      "xml_id": "date-2",
+      "properties": {
+        "when": "1791-05-03",
+        "name": "3rd of may 1791"
+      }
+    },
+    {
+      "id": 11,
+      "file": 1,
+      "type": "ingredient",
+      "xml_id": "ingredient-0",
+      "properties": {
+        "name": "Rag"
+      }
+    },
+    {
+      "id": 12,
+      "file": 1,
+      "type": "ingredient",
+      "xml_id": "ingredient-1",
+      "properties": {
+        "name": "Ingwer"
+      }
+    },
+    {
+      "id": 13,
+      "file": 1,
+      "type": "ingredient",
+      "xml_id": "ingredient-2",
+      "properties": {
+        "name": "Met"
+      }
+    },
+    {
+      "id": 14,
+      "file": 2,
+      "type": "person",
+      "xml_id": "person-0",
+      "properties": {
+        "sex": "M",
+        "age": "child",
+        "forename": "Snow",
+        "surname": "White",
+        "birth": "1812-01-01",
+        "name": "Snow white"
+      }
+    },
+    {
+      "id": 15,
+      "file": 2,
+      "type": "person",
+      "xml_id": "person-1",
+      "properties": {
+        "name": "Doc"
+      }
+    },
+    {
+      "id": 16,
+      "file": 2,
+      "type": "person",
+      "xml_id": "person-2",
+      "properties": {
+        "name": "Grumpy"
+      }
+    },
+    {
+      "id": 17,
+      "file": 2,
+      "type": "person",
+      "xml_id": "person-3",
+      "properties": {
+        "name": "Sleepy"
+      }
+    },
+    {
+      "id": 18,
+      "file": 2,
+      "type": "ingredient",
+      "xml_id": "ingredient-0",
+      "properties": {
+        "name": "Jus"
+      }
+    },
+    {
+      "id": 19,
+      "file": 2,
+      "type": "ingredient",
+      "xml_id": "ingredient-1",
+      "properties": {
+        "name": "Sand"
+      }
+    },
+    {
+      "id": 20,
+      "file": 3,
+      "type": "ingredient",
+      "xml_id": "ingredient-0",
+      "properties": {
+        "name": "Ingwer"
+      }
+    },
+    {
+      "id": 21,
+      "file": 3,
+      "type": "ingredient",
+      "xml_id": "ingredient-1",
+      "properties": {
+        "name": "Sand"
+      }
+    }
   ],
   "test_get_unbound_entities_in_project_no_filtering": [
-    {"id": 1, "properties": {"country": "Poland", "geo": "52.408333 16.934167", "name": "PCSS", "settlement": "Poznań"}, "type": "place"},
-    {"id": 2, "properties": {"name": "Big Bang"}, "type": "event"},
-    {"id": 5, "properties": {"age": "child", "birth": "2001-02-03", "forename": "Jerry", "name": "Jerry Maguire", "sex": "M", "surname": "Maguire"}, "type": "person"},
-    {"id": 6, "properties": {"name": "Ingwer"}, "type": "person"},
-    {"id": 7, "properties": {"name": "Grieben"}, "type": "person"},
-    {"id": 8, "properties": {"name": "Met"}, "type": "person"},
-    {"id": 9, "properties": {"name": "4th of july 2010", "when": "2020-07-04"}, "type": "date"},
-    {"id": 10, "properties": {"name": "3rd of may 1791", "when": "1791-05-03"}, "type": "date"},
-    {"id": 12, "properties": {"name": "Ingwer"}, "type": "ingredient"},
-    {"id": 16, "properties": {"name": "Grumpy"}, "type": "person"},
-    {"id": 17, "properties": {"name": "Sleepy"}, "type": "person"},
-    {"id": 19, "properties": {"name": "Sand"}, "type": "ingredient"},
-    {"id": 21, "properties": {"name": "Sand"}, "type": "ingredient"},
-    {"id": 22, "properties": {"forename": "Bugs", "name": "Bugs Bunny", "sex": "M", "surname": "Bunny"}, "type": "person"}
+    {
+      "id": 1,
+      "file": 1,
+      "type": "place",
+      "xml_id": "place-0",
+      "properties": {
+        "country": "Poland",
+        "settlement": "Pozna\u0144",
+        "geo": "52.408333 16.934167",
+        "name": "PCSS"
+      }
+    },
+    {
+      "id": 2,
+      "file": 1,
+      "type": "event",
+      "xml_id": "event-0",
+      "properties": {
+        "name": "Big Bang"
+      }
+    },
+    {
+      "id": 5,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-2",
+      "properties": {
+        "sex": "M",
+        "age": "child",
+        "forename": "Jerry",
+        "surname": "Maguire",
+        "birth": "2001-02-03",
+        "name": "Jerry Maguire"
+      }
+    },
+    {
+      "id": 6,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-3",
+      "properties": {
+        "name": "Ingwer"
+      }
+    },
+    {
+      "id": 7,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-4",
+      "properties": {
+        "name": "Grieben"
+      }
+    },
+    {
+      "id": 8,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-5",
+      "properties": {
+        "name": "Met"
+      }
+    },
+    {
+      "id": 9,
+      "file": 1,
+      "type": "date",
+      "xml_id": "date-0",
+      "properties": {
+        "when": "2020-07-04",
+        "name": "4th of july 2010"
+      }
+    },
+    {
+      "id": 10,
+      "file": 1,
+      "type": "date",
+      "xml_id": "date-2",
+      "properties": {
+        "when": "1791-05-03",
+        "name": "3rd of may 1791"
+      }
+    },
+    {
+      "id": 12,
+      "file": 1,
+      "type": "ingredient",
+      "xml_id": "ingredient-1",
+      "properties": {
+        "name": "Ingwer"
+      }
+    },
+    {
+      "id": 16,
+      "file": 2,
+      "type": "person",
+      "xml_id": "person-2",
+      "properties": {
+        "name": "Grumpy"
+      }
+    },
+    {
+      "id": 17,
+      "file": 2,
+      "type": "person",
+      "xml_id": "person-3",
+      "properties": {
+        "name": "Sleepy"
+      }
+    },
+    {
+      "id": 19,
+      "file": 2,
+      "type": "ingredient",
+      "xml_id": "ingredient-1",
+      "properties": {
+        "name": "Sand"
+      }
+    },
+    {
+      "id": 21,
+      "file": 3,
+      "type": "ingredient",
+      "xml_id": "ingredient-1",
+      "properties": {
+        "name": "Sand"
+      }
+    },
+    {
+      "id": 22,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-6",
+      "properties": {
+        "forename": "Bugs",
+        "surname": "Bunny",
+        "sex": "M",
+        "name": "Bugs Bunny"
+      }
+    }
   ],
   "test_get_unbound_entities_in_project_types": [
-    {"id": 5, "properties": {"age": "child", "birth": "2001-02-03", "forename": "Jerry", "name": "Jerry Maguire", "sex": "M", "surname": "Maguire"}, "type": "person"},
-    {"id": 6, "properties": {"name": "Ingwer"}, "type": "person"},
-    {"id": 7, "properties": {"name": "Grieben"}, "type": "person"},
-    {"id": 8, "properties": {"name": "Met"}, "type": "person"},
-    {"id": 16, "properties": {"name": "Grumpy"}, "type": "person"},
-    {"id": 17, "properties": {"name": "Sleepy"}, "type": "person"},
-    {"id": 22, "properties": {"forename": "Bugs", "name": "Bugs Bunny", "sex": "M", "surname": "Bunny"}, "type": "person"}
+    {
+      "id": 5,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-2",
+      "properties": {
+        "sex": "M",
+        "age": "child",
+        "forename": "Jerry",
+        "surname": "Maguire",
+        "birth": "2001-02-03",
+        "name": "Jerry Maguire"
+      }
+    },
+    {
+      "id": 6,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-3",
+      "properties": {
+        "name": "Ingwer"
+      }
+    },
+    {
+      "id": 7,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-4",
+      "properties": {
+        "name": "Grieben"
+      }
+    },
+    {
+      "id": 8,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-5",
+      "properties": {
+        "name": "Met"
+      }
+    },
+    {
+      "id": 16,
+      "file": 2,
+      "type": "person",
+      "xml_id": "person-2",
+      "properties": {
+        "name": "Grumpy"
+      }
+    },
+    {
+      "id": 17,
+      "file": 2,
+      "type": "person",
+      "xml_id": "person-3",
+      "properties": {
+        "name": "Sleepy"
+      }
+    },
+    {
+      "id": 22,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-6",
+      "properties": {
+        "forename": "Bugs",
+        "surname": "Bunny",
+        "sex": "M",
+        "name": "Bugs Bunny"
+      }
+    }
   ],
   "test_get_unbound_entities_in_project_users": [
-    {"id": 1, "properties": {"country": "Poland", "geo": "52.408333 16.934167", "name": "PCSS", "settlement": "Poznań"}, "type": "place"},
-    {"id": 2, "properties": {"name": "Big Bang"}, "type": "event"},
-    {"id": 4, "properties": {"name": "Sand"}, "type": "person"},
-    {"id": 5, "properties": {"age": "child", "birth": "2001-02-03", "forename": "Jerry", "name": "Jerry Maguire", "sex": "M", "surname": "Maguire"}, "type": "person"},
-    {"id": 6, "properties": {"name": "Ingwer"}, "type": "person"},
-    {"id": 7, "properties": {"name": "Grieben"}, "type": "person"},
-    {"id": 8, "properties": {"name": "Met"}, "type": "person"},
-    {"id": 9, "properties": {"name": "4th of july 2010", "when": "2020-07-04"}, "type": "date"},
-    {"id": 10, "properties": {"name": "3rd of may 1791", "when": "1791-05-03"}, "type": "date"},
-    {"id": 12, "properties": {"name": "Ingwer"}, "type": "ingredient"},
-    {"id": 15, "properties": {"name": "Doc"}, "type": "person"},
-    {"id": 16, "properties": {"name": "Grumpy"}, "type": "person"},
-    {"id": 17, "properties": {"name": "Sleepy"}, "type": "person"},
-    {"id": 19, "properties": {"name": "Sand"}, "type": "ingredient"},
-    {"id": 21, "properties": {"name": "Sand"}, "type": "ingredient"},
-    {"id": 22, "properties": {"forename": "Bugs", "name": "Bugs Bunny", "sex": "M", "surname": "Bunny"}, "type": "person"}
+    {
+      "id": 1,
+      "file": 1,
+      "type": "place",
+      "xml_id": "place-0",
+      "properties": {
+        "country": "Poland",
+        "settlement": "Pozna\u0144",
+        "geo": "52.408333 16.934167",
+        "name": "PCSS"
+      }
+    },
+    {
+      "id": 2,
+      "file": 1,
+      "type": "event",
+      "xml_id": "event-0",
+      "properties": {
+        "name": "Big Bang"
+      }
+    },
+    {
+      "id": 4,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-1",
+      "properties": {
+        "name": "Sand"
+      }
+    },
+    {
+      "id": 5,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-2",
+      "properties": {
+        "sex": "M",
+        "age": "child",
+        "forename": "Jerry",
+        "surname": "Maguire",
+        "birth": "2001-02-03",
+        "name": "Jerry Maguire"
+      }
+    },
+    {
+      "id": 6,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-3",
+      "properties": {
+        "name": "Ingwer"
+      }
+    },
+    {
+      "id": 7,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-4",
+      "properties": {
+        "name": "Grieben"
+      }
+    },
+    {
+      "id": 8,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-5",
+      "properties": {
+        "name": "Met"
+      }
+    },
+    {
+      "id": 9,
+      "file": 1,
+      "type": "date",
+      "xml_id": "date-0",
+      "properties": {
+        "when": "2020-07-04",
+        "name": "4th of july 2010"
+      }
+    },
+    {
+      "id": 10,
+      "file": 1,
+      "type": "date",
+      "xml_id": "date-2",
+      "properties": {
+        "when": "1791-05-03",
+        "name": "3rd of may 1791"
+      }
+    },
+    {
+      "id": 12,
+      "file": 1,
+      "type": "ingredient",
+      "xml_id": "ingredient-1",
+      "properties": {
+        "name": "Ingwer"
+      }
+    },
+    {
+      "id": 15,
+      "file": 2,
+      "type": "person",
+      "xml_id": "person-1",
+      "properties": {
+        "name": "Doc"
+      }
+    },
+    {
+      "id": 16,
+      "file": 2,
+      "type": "person",
+      "xml_id": "person-2",
+      "properties": {
+        "name": "Grumpy"
+      }
+    },
+    {
+      "id": 17,
+      "file": 2,
+      "type": "person",
+      "xml_id": "person-3",
+      "properties": {
+        "name": "Sleepy"
+      }
+    },
+    {
+      "id": 19,
+      "file": 2,
+      "type": "ingredient",
+      "xml_id": "ingredient-1",
+      "properties": {
+        "name": "Sand"
+      }
+    },
+    {
+      "id": 21,
+      "file": 3,
+      "type": "ingredient",
+      "xml_id": "ingredient-1",
+      "properties": {
+        "name": "Sand"
+      }
+    },
+    {
+      "id": 22,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-6",
+      "properties": {
+        "forename": "Bugs",
+        "surname": "Bunny",
+        "sex": "M",
+        "name": "Bugs Bunny"
+      }
+    }
   ],
   "test_get_unbound_entities_in_project_start_date": [
-    {"id": 1, "properties": {"country": "Poland", "geo": "52.408333 16.934167", "name": "PCSS", "settlement": "Poznań"}, "type": "place"},
-    {"id": 2, "properties": {"name": "Big Bang"}, "type": "event"},
-    {"id": 5, "properties": {"age": "child", "birth": "2001-02-03", "forename": "Jerry", "name": "Jerry Maguire", "sex": "M", "surname": "Maguire"}, "type": "person"},
-    {"id": 6, "properties": {"name": "Ingwer"}, "type": "person"},
-    {"id": 7, "properties": {"name": "Grieben"}, "type": "person"},
-    {"id": 8, "properties": {"name": "Met"}, "type": "person"},
-    {"id": 9, "properties": {"name": "4th of july 2010", "when": "2020-07-04"}, "type": "date"},
-    {"id": 10, "properties": {"name": "3rd of may 1791", "when": "1791-05-03"}, "type": "date"},
-    {"id": 11, "properties": {"name": "Rag"}, "type": "ingredient"},
-    {"id": 12, "properties": {"name": "Ingwer"}, "type": "ingredient"},
-    {"id": 16, "properties": {"name": "Grumpy"}, "type": "person"},
-    {"id": 17, "properties": {"name": "Sleepy"}, "type": "person"},
-    {"id": 18, "properties": {"name": "Jus"}, "type": "ingredient"},
-    {"id": 19, "properties": {"name": "Sand"}, "type": "ingredient"},
-    {"id": 20, "properties": {"name": "Ingwer"}, "type": "ingredient"},
-    {"id": 21, "properties": {"name": "Sand"}, "type": "ingredient"},
-    {"id": 22, "properties": {"forename": "Bugs", "name": "Bugs Bunny", "sex": "M", "surname": "Bunny"}, "type": "person"}
+    {
+      "id": 1,
+      "file": 1,
+      "type": "place",
+      "xml_id": "place-0",
+      "properties": {
+        "country": "Poland",
+        "settlement": "Pozna\u0144",
+        "geo": "52.408333 16.934167",
+        "name": "PCSS"
+      }
+    },
+    {
+      "id": 2,
+      "file": 1,
+      "type": "event",
+      "xml_id": "event-0",
+      "properties": {
+        "name": "Big Bang"
+      }
+    },
+    {
+      "id": 5,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-2",
+      "properties": {
+        "sex": "M",
+        "age": "child",
+        "forename": "Jerry",
+        "surname": "Maguire",
+        "birth": "2001-02-03",
+        "name": "Jerry Maguire"
+      }
+    },
+    {
+      "id": 6,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-3",
+      "properties": {
+        "name": "Ingwer"
+      }
+    },
+    {
+      "id": 7,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-4",
+      "properties": {
+        "name": "Grieben"
+      }
+    },
+    {
+      "id": 8,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-5",
+      "properties": {
+        "name": "Met"
+      }
+    },
+    {
+      "id": 9,
+      "file": 1,
+      "type": "date",
+      "xml_id": "date-0",
+      "properties": {
+        "when": "2020-07-04",
+        "name": "4th of july 2010"
+      }
+    },
+    {
+      "id": 10,
+      "file": 1,
+      "type": "date",
+      "xml_id": "date-2",
+      "properties": {
+        "when": "1791-05-03",
+        "name": "3rd of may 1791"
+      }
+    },
+    {
+      "id": 11,
+      "file": 1,
+      "type": "ingredient",
+      "xml_id": "ingredient-0",
+      "properties": {
+        "name": "Rag"
+      }
+    },
+    {
+      "id": 12,
+      "file": 1,
+      "type": "ingredient",
+      "xml_id": "ingredient-1",
+      "properties": {
+        "name": "Ingwer"
+      }
+    },
+    {
+      "id": 16,
+      "file": 2,
+      "type": "person",
+      "xml_id": "person-2",
+      "properties": {
+        "name": "Grumpy"
+      }
+    },
+    {
+      "id": 17,
+      "file": 2,
+      "type": "person",
+      "xml_id": "person-3",
+      "properties": {
+        "name": "Sleepy"
+      }
+    },
+    {
+      "id": 18,
+      "file": 2,
+      "type": "ingredient",
+      "xml_id": "ingredient-0",
+      "properties": {
+        "name": "Jus"
+      }
+    },
+    {
+      "id": 19,
+      "file": 2,
+      "type": "ingredient",
+      "xml_id": "ingredient-1",
+      "properties": {
+        "name": "Sand"
+      }
+    },
+    {
+      "id": 20,
+      "file": 3,
+      "type": "ingredient",
+      "xml_id": "ingredient-0",
+      "properties": {
+        "name": "Ingwer"
+      }
+    },
+    {
+      "id": 21,
+      "file": 3,
+      "type": "ingredient",
+      "xml_id": "ingredient-1",
+      "properties": {
+        "name": "Sand"
+      }
+    },
+    {
+      "id": 22,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-6",
+      "properties": {
+        "forename": "Bugs",
+        "surname": "Bunny",
+        "sex": "M",
+        "name": "Bugs Bunny"
+      }
+    }
   ],
   "test_get_unbound_entities_in_project_end_date": [
-    {"id": 1, "properties": {"country": "Poland", "geo": "52.408333 16.934167", "name": "PCSS", "settlement": "Poznań"}, "type": "place"},
-    {"id": 2, "properties": {"name": "Big Bang"}, "type": "event"},
-    {"id": 4, "properties": {"name": "Sand"}, "type": "person"},
-    {"id": 5, "properties": {"age": "child", "birth": "2001-02-03", "forename": "Jerry", "name": "Jerry Maguire", "sex": "M", "surname": "Maguire"}, "type": "person"},
-    {"id": 6, "properties": {"name": "Ingwer"}, "type": "person"},
-    {"id": 7, "properties": {"name": "Grieben"}, "type": "person"},
-    {"id": 8, "properties": {"name": "Met"}, "type": "person"},
-    {"id": 9, "properties": {"name": "4th of july 2010", "when": "2020-07-04"}, "type": "date"},
-    {"id": 10, "properties": {"name": "3rd of may 1791", "when": "1791-05-03"}, "type": "date"},
-    {"id": 12, "properties": {"name": "Ingwer"}, "type": "ingredient"},
-    {"id": 15, "properties": {"name": "Doc"}, "type": "person"},
-    {"id": 16, "properties": {"name": "Grumpy"}, "type": "person"},
-    {"id": 17, "properties": {"name": "Sleepy"}, "type": "person"},
-    {"id": 19, "properties": {"name": "Sand"}, "type": "ingredient"},
-    {"id": 21, "properties": {"name": "Sand"}, "type": "ingredient"},
-    {"id": 22, "properties": {"forename": "Bugs", "name": "Bugs Bunny", "sex": "M", "surname": "Bunny"}, "type": "person"}
+    {
+      "id": 1,
+      "file": 1,
+      "type": "place",
+      "xml_id": "place-0",
+      "properties": {
+        "country": "Poland",
+        "settlement": "Pozna\u0144",
+        "geo": "52.408333 16.934167",
+        "name": "PCSS"
+      }
+    },
+    {
+      "id": 2,
+      "file": 1,
+      "type": "event",
+      "xml_id": "event-0",
+      "properties": {
+        "name": "Big Bang"
+      }
+    },
+    {
+      "id": 4,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-1",
+      "properties": {
+        "name": "Sand"
+      }
+    },
+    {
+      "id": 5,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-2",
+      "properties": {
+        "sex": "M",
+        "age": "child",
+        "forename": "Jerry",
+        "surname": "Maguire",
+        "birth": "2001-02-03",
+        "name": "Jerry Maguire"
+      }
+    },
+    {
+      "id": 6,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-3",
+      "properties": {
+        "name": "Ingwer"
+      }
+    },
+    {
+      "id": 7,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-4",
+      "properties": {
+        "name": "Grieben"
+      }
+    },
+    {
+      "id": 8,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-5",
+      "properties": {
+        "name": "Met"
+      }
+    },
+    {
+      "id": 9,
+      "file": 1,
+      "type": "date",
+      "xml_id": "date-0",
+      "properties": {
+        "when": "2020-07-04",
+        "name": "4th of july 2010"
+      }
+    },
+    {
+      "id": 10,
+      "file": 1,
+      "type": "date",
+      "xml_id": "date-2",
+      "properties": {
+        "when": "1791-05-03",
+        "name": "3rd of may 1791"
+      }
+    },
+    {
+      "id": 12,
+      "file": 1,
+      "type": "ingredient",
+      "xml_id": "ingredient-1",
+      "properties": {
+        "name": "Ingwer"
+      }
+    },
+    {
+      "id": 15,
+      "file": 2,
+      "type": "person",
+      "xml_id": "person-1",
+      "properties": {
+        "name": "Doc"
+      }
+    },
+    {
+      "id": 16,
+      "file": 2,
+      "type": "person",
+      "xml_id": "person-2",
+      "properties": {
+        "name": "Grumpy"
+      }
+    },
+    {
+      "id": 17,
+      "file": 2,
+      "type": "person",
+      "xml_id": "person-3",
+      "properties": {
+        "name": "Sleepy"
+      }
+    },
+    {
+      "id": 19,
+      "file": 2,
+      "type": "ingredient",
+      "xml_id": "ingredient-1",
+      "properties": {
+        "name": "Sand"
+      }
+    },
+    {
+      "id": 21,
+      "file": 3,
+      "type": "ingredient",
+      "xml_id": "ingredient-1",
+      "properties": {
+        "name": "Sand"
+      }
+    },
+    {
+      "id": 22,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-6",
+      "properties": {
+        "forename": "Bugs",
+        "surname": "Bunny",
+        "sex": "M",
+        "name": "Bugs Bunny"
+      }
+    }
   ],
   "test_get_unbound_entities_in_project_date": [
-    {"id": 1, "properties": {"country": "Poland", "geo": "52.408333 16.934167", "name": "PCSS", "settlement": "Poznań"}, "type": "place"},
-    {"id": 2, "properties": {"name": "Big Bang"}, "type": "event"},
-    {"id": 4, "properties": {"name": "Sand"}, "type": "person"},
-    {"id": 6, "properties": {"name": "Ingwer"}, "type": "person"},
-    {"id": 7, "properties": {"name": "Grieben"}, "type": "person"},
-    {"id": 8, "properties": {"name": "Met"}, "type": "person"},
-    {"id": 9, "properties": {"name": "4th of july 2010", "when": "2020-07-04"}, "type": "date"},
-    {"id": 10, "properties": {"name": "3rd of may 1791", "when": "1791-05-03"}, "type": "date"},
-    {"id": 12, "properties": {"name": "Ingwer"}, "type": "ingredient"},
-    {"id": 13, "properties": {"name": "Met"}, "type": "ingredient"},
-    {"id": 15, "properties": {"name": "Doc"}, "type": "person"},
-    {"id": 17, "properties": {"name": "Sleepy"}, "type": "person"},
-    {"id": 19, "properties": {"name": "Sand"}, "type": "ingredient"},
-    {"id": 21, "properties": {"name": "Sand"}, "type": "ingredient"}
+    {
+      "id": 1,
+      "file": 1,
+      "type": "place",
+      "xml_id": "place-0",
+      "properties": {
+        "country": "Poland",
+        "settlement": "Pozna\u0144",
+        "geo": "52.408333 16.934167",
+        "name": "PCSS"
+      }
+    },
+    {
+      "id": 2,
+      "file": 1,
+      "type": "event",
+      "xml_id": "event-0",
+      "properties": {
+        "name": "Big Bang"
+      }
+    },
+    {
+      "id": 4,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-1",
+      "properties": {
+        "name": "Sand"
+      }
+    },
+    {
+      "id": 6,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-3",
+      "properties": {
+        "name": "Ingwer"
+      }
+    },
+    {
+      "id": 7,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-4",
+      "properties": {
+        "name": "Grieben"
+      }
+    },
+    {
+      "id": 8,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-5",
+      "properties": {
+        "name": "Met"
+      }
+    },
+    {
+      "id": 9,
+      "file": 1,
+      "type": "date",
+      "xml_id": "date-0",
+      "properties": {
+        "when": "2020-07-04",
+        "name": "4th of july 2010"
+      }
+    },
+    {
+      "id": 10,
+      "file": 1,
+      "type": "date",
+      "xml_id": "date-2",
+      "properties": {
+        "when": "1791-05-03",
+        "name": "3rd of may 1791"
+      }
+    },
+    {
+      "id": 12,
+      "file": 1,
+      "type": "ingredient",
+      "xml_id": "ingredient-1",
+      "properties": {
+        "name": "Ingwer"
+      }
+    },
+    {
+      "id": 13,
+      "file": 1,
+      "type": "ingredient",
+      "xml_id": "ingredient-2",
+      "properties": {
+        "name": "Met"
+      }
+    },
+    {
+      "id": 15,
+      "file": 2,
+      "type": "person",
+      "xml_id": "person-1",
+      "properties": {
+        "name": "Doc"
+      }
+    },
+    {
+      "id": 17,
+      "file": 2,
+      "type": "person",
+      "xml_id": "person-3",
+      "properties": {
+        "name": "Sleepy"
+      }
+    },
+    {
+      "id": 19,
+      "file": 2,
+      "type": "ingredient",
+      "xml_id": "ingredient-1",
+      "properties": {
+        "name": "Sand"
+      }
+    },
+    {
+      "id": 21,
+      "file": 3,
+      "type": "ingredient",
+      "xml_id": "ingredient-1",
+      "properties": {
+        "name": "Sand"
+      }
+    }
   ],
   "test_get_unbound_entities_in_project_project_version": [
-    {"id": 1, "properties": {"country": "Poland", "geo": "52.408333 16.934167", "name": "PCSS", "settlement": "Poznań"}, "type": "place"},
-    {"id": 2, "properties": {"name": "Big Bang"}, "type": "event"},
-    {"id": 4, "properties": {"name": "Sand"}, "type": "person"},
-    {"id": 6, "properties": {"name": "Ingwer"}, "type": "person"},
-    {"id": 7, "properties": {"name": "Grieben"}, "type": "person"},
-    {"id": 8, "properties": {"name": "Met"}, "type": "person"},
-    {"id": 9, "properties": {"name": "4th of july 2010", "when": "2020-07-04"}, "type": "date"},
-    {"id": 10, "properties": {"name": "3rd of may 1791", "when": "1791-05-03"}, "type": "date"},
-    {"id": 12, "properties": {"name": "Ingwer"}, "type": "ingredient"},
-    {"id": 13, "properties": {"name": "Met"}, "type": "ingredient"},
-    {"id": 15, "properties": {"name": "Doc"}, "type": "person"},
-    {"id": 17, "properties": {"name": "Sleepy"}, "type": "person"},
-    {"id": 19, "properties": {"name": "Sand"}, "type": "ingredient"},
-    {"id": 21, "properties": {"name": "Sand"}, "type": "ingredient"}
+    {
+      "id": 1,
+      "file": 1,
+      "type": "place",
+      "xml_id": "place-0",
+      "properties": {
+        "country": "Poland",
+        "settlement": "Pozna\u0144",
+        "geo": "52.408333 16.934167",
+        "name": "PCSS"
+      }
+    },
+    {
+      "id": 2,
+      "file": 1,
+      "type": "event",
+      "xml_id": "event-0",
+      "properties": {
+        "name": "Big Bang"
+      }
+    },
+    {
+      "id": 4,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-1",
+      "properties": {
+        "name": "Sand"
+      }
+    },
+    {
+      "id": 6,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-3",
+      "properties": {
+        "name": "Ingwer"
+      }
+    },
+    {
+      "id": 7,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-4",
+      "properties": {
+        "name": "Grieben"
+      }
+    },
+    {
+      "id": 8,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-5",
+      "properties": {
+        "name": "Met"
+      }
+    },
+    {
+      "id": 9,
+      "file": 1,
+      "type": "date",
+      "xml_id": "date-0",
+      "properties": {
+        "when": "2020-07-04",
+        "name": "4th of july 2010"
+      }
+    },
+    {
+      "id": 10,
+      "file": 1,
+      "type": "date",
+      "xml_id": "date-2",
+      "properties": {
+        "when": "1791-05-03",
+        "name": "3rd of may 1791"
+      }
+    },
+    {
+      "id": 12,
+      "file": 1,
+      "type": "ingredient",
+      "xml_id": "ingredient-1",
+      "properties": {
+        "name": "Ingwer"
+      }
+    },
+    {
+      "id": 13,
+      "file": 1,
+      "type": "ingredient",
+      "xml_id": "ingredient-2",
+      "properties": {
+        "name": "Met"
+      }
+    },
+    {
+      "id": 15,
+      "file": 2,
+      "type": "person",
+      "xml_id": "person-1",
+      "properties": {
+        "name": "Doc"
+      }
+    },
+    {
+      "id": 17,
+      "file": 2,
+      "type": "person",
+      "xml_id": "person-3",
+      "properties": {
+        "name": "Sleepy"
+      }
+    },
+    {
+      "id": 19,
+      "file": 2,
+      "type": "ingredient",
+      "xml_id": "ingredient-1",
+      "properties": {
+        "name": "Sand"
+      }
+    },
+    {
+      "id": 21,
+      "file": 3,
+      "type": "ingredient",
+      "xml_id": "ingredient-1",
+      "properties": {
+        "name": "Sand"
+      }
+    }
   ],
-  "test_get_all_cliques_which_include_entities_from_given_file_no_filtering":[
+  "test_get_all_cliques_which_include_entities_from_given_file_no_filtering": [
     {
       "id": 1,
       "name": "first_clique",
       "type": "ingredient",
-      "entities": [11]
+      "entities": [
+        11
+      ]
     },
     {
       "id": 3,
       "name": "third_clique",
       "type": "ingredient",
-      "entities": [20, 11]
+      "entities": [
+        20,
+        11
+      ]
     },
     {
       "id": 4,
       "name": "fourth_clique",
       "type": "person",
-      "entities": [3, 14]
+      "entities": [
+        3,
+        14
+      ]
     },
     {
       "id": 6,
       "name": "sixth_clique",
       "type": "person",
-      "entities": [4, 15]
+      "entities": [
+        4,
+        15
+      ]
     }
   ],
-  "test_get_all_cliques_which_include_entities_from_given_file_types":[
+  "test_get_all_cliques_which_include_entities_from_given_file_types": [
     {
       "id": 1,
       "name": "first_clique",
       "type": "ingredient",
-      "entities": [11]
+      "entities": [
+        11
+      ]
     },
     {
       "id": 3,
       "name": "third_clique",
       "type": "ingredient",
-      "entities": [20, 11]
+      "entities": [
+        20,
+        11
+      ]
     }
   ],
-  "test_get_all_cliques_which_include_entities_from_given_file_users":[
+  "test_get_all_cliques_which_include_entities_from_given_file_users": [
     {
       "id": 1,
       "name": "first_clique",
       "type": "ingredient",
-      "entities": [11]
+      "entities": [
+        11
+      ]
     },
     {
       "id": 4,
       "name": "fourth_clique",
       "type": "person",
-      "entities": [3, 14]
+      "entities": [
+        3,
+        14
+      ]
     }
   ],
   "test_get_all_cliques_which_include_entities_from_given_file_start_date": [
@@ -441,19 +2103,28 @@
       "id": 3,
       "name": "third_clique",
       "type": "ingredient",
-      "entities": [20, 11]
+      "entities": [
+        20,
+        11
+      ]
     },
     {
       "id": 4,
       "name": "fourth_clique",
       "type": "person",
-      "entities": [3, 14]
+      "entities": [
+        3,
+        14
+      ]
     },
     {
       "id": 6,
       "name": "sixth_clique",
       "type": "person",
-      "entities": [4, 15]
+      "entities": [
+        4,
+        15
+      ]
     }
   ],
   "test_get_all_cliques_which_include_entities_from_given_file_end_date": [
@@ -461,19 +2132,27 @@
       "id": 1,
       "name": "first_clique",
       "type": "ingredient",
-      "entities": [11]
+      "entities": [
+        11
+      ]
     },
     {
       "id": 3,
       "name": "third_clique",
       "type": "ingredient",
-      "entities": [20, 11]
+      "entities": [
+        20,
+        11
+      ]
     },
     {
       "id": 4,
       "name": "fourth_clique",
       "type": "person",
-      "entities": [3, 14]
+      "entities": [
+        3,
+        14
+      ]
     }
   ],
   "test_get_all_cliques_which_include_entities_from_given_file_date": [
@@ -481,25 +2160,37 @@
       "id": 1,
       "name": "first_clique",
       "type": "ingredient",
-      "entities": [11, 18]
+      "entities": [
+        11,
+        18
+      ]
     },
     {
       "id": 3,
       "name": "third_clique",
       "type": "ingredient",
-      "entities": [20, 11]
+      "entities": [
+        20,
+        11
+      ]
     },
     {
       "id": 4,
       "name": "fourth_clique",
       "type": "person",
-      "entities": [3, 14]
+      "entities": [
+        3,
+        14
+      ]
     },
     {
       "id": 5,
       "name": "fifth_clique",
       "type": "person",
-      "entities": [5, 16]
+      "entities": [
+        5,
+        16
+      ]
     }
   ],
   "test_get_all_cliques_which_include_entities_from_given_file_project_version": [
@@ -507,192 +2198,1479 @@
       "id": 1,
       "name": "first_clique",
       "type": "ingredient",
-      "entities": [11, 18]
+      "entities": [
+        11,
+        18
+      ]
     },
     {
       "id": 3,
       "name": "third_clique",
       "type": "ingredient",
-      "entities": [20, 11]
+      "entities": [
+        20,
+        11
+      ]
     },
     {
       "id": 4,
       "name": "fourth_clique",
       "type": "person",
-      "entities": [3, 14]
+      "entities": [
+        3,
+        14
+      ]
     },
     {
       "id": 5,
       "name": "fifth_clique",
       "type": "person",
-      "entities": [5, 16]
+      "entities": [
+        5,
+        16
+      ]
     }
   ],
   "test_get_all_entities_from_given_file_no_filtering": [
-    {"id": 1, "properties": {"country": "Poland", "geo": "52.408333 16.934167", "name": "PCSS", "settlement": "Poznań"}, "type": "place"},
-    {"id": 2, "properties": {"name": "Big Bang"}, "type": "event"},
-    {"id": 3, "properties": {"name": "Butter"}, "type": "person"},
-    {"id": 4, "properties": {"name": "Sand"}, "type": "person"},
-    {"id": 5, "properties": {"age": "child", "birth": "2001-02-03", "forename": "Jerry", "name": "Jerry Maguire", "sex": "M", "surname": "Maguire"}, "type": "person"},
-    {"id": 6, "properties": {"name": "Ingwer"}, "type": "person"},
-    {"id": 7, "properties": {"name": "Grieben"}, "type": "person"},
-    {"id": 8, "properties": {"name": "Met"}, "type": "person"},
-    {"id": 9, "properties": {"name": "4th of july 2010", "when": "2020-07-04"}, "type": "date"},
-    {"id": 10, "properties": {"name": "3rd of may 1791", "when": "1791-05-03"}, "type": "date"},
-    {"id": 11, "properties": {"name": "Rag"}, "type": "ingredient"},
-    {"id": 12, "properties": {"name": "Ingwer"}, "type": "ingredient"},
-    {"id": 22, "properties": {"forename": "Bugs", "name": "Bugs Bunny", "sex": "M", "surname": "Bunny"}, "type": "person"}
+    {
+      "id": 1,
+      "file": 1,
+      "type": "place",
+      "xml_id": "place-0",
+      "properties": {
+        "country": "Poland",
+        "settlement": "Pozna\u0144",
+        "geo": "52.408333 16.934167",
+        "name": "PCSS"
+      }
+    },
+    {
+      "id": 2,
+      "file": 1,
+      "type": "event",
+      "xml_id": "event-0",
+      "properties": {
+        "name": "Big Bang"
+      }
+    },
+    {
+      "id": 3,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-0",
+      "properties": {
+        "name": "Butter"
+      }
+    },
+    {
+      "id": 4,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-1",
+      "properties": {
+        "name": "Sand"
+      }
+    },
+    {
+      "id": 5,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-2",
+      "properties": {
+        "sex": "M",
+        "age": "child",
+        "forename": "Jerry",
+        "surname": "Maguire",
+        "birth": "2001-02-03",
+        "name": "Jerry Maguire"
+      }
+    },
+    {
+      "id": 6,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-3",
+      "properties": {
+        "name": "Ingwer"
+      }
+    },
+    {
+      "id": 7,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-4",
+      "properties": {
+        "name": "Grieben"
+      }
+    },
+    {
+      "id": 8,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-5",
+      "properties": {
+        "name": "Met"
+      }
+    },
+    {
+      "id": 9,
+      "file": 1,
+      "type": "date",
+      "xml_id": "date-0",
+      "properties": {
+        "when": "2020-07-04",
+        "name": "4th of july 2010"
+      }
+    },
+    {
+      "id": 10,
+      "file": 1,
+      "type": "date",
+      "xml_id": "date-2",
+      "properties": {
+        "when": "1791-05-03",
+        "name": "3rd of may 1791"
+      }
+    },
+    {
+      "id": 11,
+      "file": 1,
+      "type": "ingredient",
+      "xml_id": "ingredient-0",
+      "properties": {
+        "name": "Rag"
+      }
+    },
+    {
+      "id": 12,
+      "file": 1,
+      "type": "ingredient",
+      "xml_id": "ingredient-1",
+      "properties": {
+        "name": "Ingwer"
+      }
+    },
+    {
+      "id": 22,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-6",
+      "properties": {
+        "forename": "Bugs",
+        "surname": "Bunny",
+        "sex": "M",
+        "name": "Bugs Bunny"
+      }
+    }
   ],
   "test_get_all_entities_from_given_file_types": [
-    {"id": 3, "properties": {"name": "Butter"}, "type": "person"},
-    {"id": 4, "properties": {"name": "Sand"}, "type": "person"},
-    {"id": 5, "properties": {"age": "child", "birth": "2001-02-03", "forename": "Jerry", "name": "Jerry Maguire", "sex": "M", "surname": "Maguire"}, "type": "person"},
-    {"id": 6, "properties": {"name": "Ingwer"}, "type": "person"},
-    {"id": 7, "properties": {"name": "Grieben"}, "type": "person"},
-    {"id": 8, "properties": {"name": "Met"}, "type": "person"},
-    {"id": 22, "properties": {"forename": "Bugs", "name": "Bugs Bunny", "sex": "M", "surname": "Bunny"}, "type": "person"}
+    {
+      "id": 3,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-0",
+      "properties": {
+        "name": "Butter"
+      }
+    },
+    {
+      "id": 4,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-1",
+      "properties": {
+        "name": "Sand"
+      }
+    },
+    {
+      "id": 5,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-2",
+      "properties": {
+        "sex": "M",
+        "age": "child",
+        "forename": "Jerry",
+        "surname": "Maguire",
+        "birth": "2001-02-03",
+        "name": "Jerry Maguire"
+      }
+    },
+    {
+      "id": 6,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-3",
+      "properties": {
+        "name": "Ingwer"
+      }
+    },
+    {
+      "id": 7,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-4",
+      "properties": {
+        "name": "Grieben"
+      }
+    },
+    {
+      "id": 8,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-5",
+      "properties": {
+        "name": "Met"
+      }
+    },
+    {
+      "id": 22,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-6",
+      "properties": {
+        "forename": "Bugs",
+        "surname": "Bunny",
+        "sex": "M",
+        "name": "Bugs Bunny"
+      }
+    }
   ],
   "test_get_all_entities_from_given_file_users": [
-    {"id": 5, "properties": {"age": "child", "birth": "2001-02-03", "forename": "Jerry", "name": "Jerry Maguire", "sex": "M", "surname": "Maguire"}, "type": "person"},
-    {"id": 22, "properties": {"forename": "Bugs", "name": "Bugs Bunny", "sex": "M", "surname": "Bunny"}, "type": "person"}
+    {
+      "id": 5,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-2",
+      "properties": {
+        "sex": "M",
+        "age": "child",
+        "forename": "Jerry",
+        "surname": "Maguire",
+        "birth": "2001-02-03",
+        "name": "Jerry Maguire"
+      }
+    },
+    {
+      "id": 22,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-6",
+      "properties": {
+        "forename": "Bugs",
+        "surname": "Bunny",
+        "sex": "M",
+        "name": "Bugs Bunny"
+      }
+    }
   ],
   "test_get_all_entities_from_given_file_date": [
-    {"id": 1, "properties": {"country": "Poland", "geo": "52.408333 16.934167", "name": "PCSS", "settlement": "Poznań"}, "type": "place"},
-    {"id": 2, "properties": {"name": "Big Bang"}, "type": "event"},
-    {"id": 3, "properties": {"name": "Butter"}, "type": "person"},
-    {"id": 4, "properties": {"name": "Sand"}, "type": "person"},
-    {"id": 5, "properties": {"age": "child", "birth": "2001-02-03", "forename": "Jerry", "name": "Jerry Maguire", "sex": "M", "surname": "Maguire"}, "type": "person"},
-    {"id": 6, "properties": {"name": "Ingwer"}, "type": "person"},
-    {"id": 7, "properties": {"name": "Grieben"}, "type": "person"},
-    {"id": 8, "properties": {"name": "Met"}, "type": "person"},
-    {"id": 9, "properties": {"name": "4th of july 2010", "when": "2020-07-04"}, "type": "date"},
-    {"id": 10, "properties": {"name": "3rd of may 1791", "when": "1791-05-03"}, "type": "date"},
-    {"id": 11, "properties": {"name": "Rag"}, "type": "ingredient"},
-    {"id": 12, "properties": {"name": "Ingwer"}, "type": "ingredient"},
-    {"id": 13, "properties": {"name": "Met"}, "type": "ingredient"}
+    {
+      "id": 1,
+      "file": 1,
+      "type": "place",
+      "xml_id": "place-0",
+      "properties": {
+        "country": "Poland",
+        "settlement": "Pozna\u0144",
+        "geo": "52.408333 16.934167",
+        "name": "PCSS"
+      }
+    },
+    {
+      "id": 2,
+      "file": 1,
+      "type": "event",
+      "xml_id": "event-0",
+      "properties": {
+        "name": "Big Bang"
+      }
+    },
+    {
+      "id": 3,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-0",
+      "properties": {
+        "name": "Butter"
+      }
+    },
+    {
+      "id": 4,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-1",
+      "properties": {
+        "name": "Sand"
+      }
+    },
+    {
+      "id": 5,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-2",
+      "properties": {
+        "sex": "M",
+        "age": "child",
+        "forename": "Jerry",
+        "surname": "Maguire",
+        "birth": "2001-02-03",
+        "name": "Jerry Maguire"
+      }
+    },
+    {
+      "id": 6,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-3",
+      "properties": {
+        "name": "Ingwer"
+      }
+    },
+    {
+      "id": 7,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-4",
+      "properties": {
+        "name": "Grieben"
+      }
+    },
+    {
+      "id": 8,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-5",
+      "properties": {
+        "name": "Met"
+      }
+    },
+    {
+      "id": 9,
+      "file": 1,
+      "type": "date",
+      "xml_id": "date-0",
+      "properties": {
+        "when": "2020-07-04",
+        "name": "4th of july 2010"
+      }
+    },
+    {
+      "id": 10,
+      "file": 1,
+      "type": "date",
+      "xml_id": "date-2",
+      "properties": {
+        "when": "1791-05-03",
+        "name": "3rd of may 1791"
+      }
+    },
+    {
+      "id": 11,
+      "file": 1,
+      "type": "ingredient",
+      "xml_id": "ingredient-0",
+      "properties": {
+        "name": "Rag"
+      }
+    },
+    {
+      "id": 12,
+      "file": 1,
+      "type": "ingredient",
+      "xml_id": "ingredient-1",
+      "properties": {
+        "name": "Ingwer"
+      }
+    },
+    {
+      "id": 13,
+      "file": 1,
+      "type": "ingredient",
+      "xml_id": "ingredient-2",
+      "properties": {
+        "name": "Met"
+      }
+    }
   ],
   "test_get_all_entities_from_given_file_project_version": [
-    {"id": 1, "properties": {"country": "Poland", "geo": "52.408333 16.934167", "name": "PCSS", "settlement": "Poznań"}, "type": "place"},
-    {"id": 2, "properties": {"name": "Big Bang"}, "type": "event"},
-    {"id": 3, "properties": {"name": "Butter"}, "type": "person"},
-    {"id": 4, "properties": {"name": "Sand"}, "type": "person"},
-    {"id": 5, "properties": {"age": "child", "birth": "2001-02-03", "forename": "Jerry", "name": "Jerry Maguire", "sex": "M", "surname": "Maguire"}, "type": "person"},
-    {"id": 6, "properties": {"name": "Ingwer"}, "type": "person"},
-    {"id": 7, "properties": {"name": "Grieben"}, "type": "person"},
-    {"id": 8, "properties": {"name": "Met"}, "type": "person"},
-    {"id": 9, "properties": {"name": "4th of july 2010", "when": "2020-07-04"}, "type": "date"},
-    {"id": 10, "properties": {"name": "3rd of may 1791", "when": "1791-05-03"}, "type": "date"},
-    {"id": 11, "properties": {"name": "Rag"}, "type": "ingredient"},
-    {"id": 12, "properties": {"name": "Ingwer"}, "type": "ingredient"},
-    {"id": 13, "properties": {"name": "Met"}, "type": "ingredient"}
+    {
+      "id": 1,
+      "file": 1,
+      "type": "place",
+      "xml_id": "place-0",
+      "properties": {
+        "country": "Poland",
+        "settlement": "Pozna\u0144",
+        "geo": "52.408333 16.934167",
+        "name": "PCSS"
+      }
+    },
+    {
+      "id": 2,
+      "file": 1,
+      "type": "event",
+      "xml_id": "event-0",
+      "properties": {
+        "name": "Big Bang"
+      }
+    },
+    {
+      "id": 3,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-0",
+      "properties": {
+        "name": "Butter"
+      }
+    },
+    {
+      "id": 4,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-1",
+      "properties": {
+        "name": "Sand"
+      }
+    },
+    {
+      "id": 5,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-2",
+      "properties": {
+        "sex": "M",
+        "age": "child",
+        "forename": "Jerry",
+        "surname": "Maguire",
+        "birth": "2001-02-03",
+        "name": "Jerry Maguire"
+      }
+    },
+    {
+      "id": 6,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-3",
+      "properties": {
+        "name": "Ingwer"
+      }
+    },
+    {
+      "id": 7,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-4",
+      "properties": {
+        "name": "Grieben"
+      }
+    },
+    {
+      "id": 8,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-5",
+      "properties": {
+        "name": "Met"
+      }
+    },
+    {
+      "id": 9,
+      "file": 1,
+      "type": "date",
+      "xml_id": "date-0",
+      "properties": {
+        "when": "2020-07-04",
+        "name": "4th of july 2010"
+      }
+    },
+    {
+      "id": 10,
+      "file": 1,
+      "type": "date",
+      "xml_id": "date-2",
+      "properties": {
+        "when": "1791-05-03",
+        "name": "3rd of may 1791"
+      }
+    },
+    {
+      "id": 11,
+      "file": 1,
+      "type": "ingredient",
+      "xml_id": "ingredient-0",
+      "properties": {
+        "name": "Rag"
+      }
+    },
+    {
+      "id": 12,
+      "file": 1,
+      "type": "ingredient",
+      "xml_id": "ingredient-1",
+      "properties": {
+        "name": "Ingwer"
+      }
+    },
+    {
+      "id": 13,
+      "file": 1,
+      "type": "ingredient",
+      "xml_id": "ingredient-2",
+      "properties": {
+        "name": "Met"
+      }
+    }
   ],
   "test_get_all_certainties_from_given_file_no_filtering": [
-    {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#credibility https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness", "assertedValue": "#met", "cert": "high", "degree": 0.86, "desc": null, "locus": "value", "match": "@ref", "resp": 1, "target": "#name-3", "xml:id": "certainty-0"},
-    {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness", "assertedValue": "Balloons", "cert": "high", "degree": null, "desc": "Some important decription", "locus": "value", "match": null, "resp": 2, "target": "#test", "xml:id": "certainty-1"},
-    {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness", "assertedValue": "#ingredient-0", "cert": "high", "degree": null, "desc": null, "locus": "value", "match": "@ref", "resp": 2, "target": "#name-5", "xml:id": "certainty-2"},
-    {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness", "assertedValue": "McDuck", "cert": "high", "degree": null, "desc": null, "locus": "value", "match": "./persName/forename", "resp": 2, "target": "#person-2", "xml:id": "certainty-3"},
-    {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#new_awesome_category", "assertedValue": "low", "cert": "high", "degree": null, "desc": null, "locus": "value", "match": "@cert", "resp": 2, "target": "#certainty-10", "xml:id": "certainty-5"}
+    {
+      "ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#credibility https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness",
+      "locus": "value",
+      "degree": 0.86,
+      "cert": "high",
+      "resp": 1,
+      "match": "@ref",
+      "target": "#name-3",
+      "xml:id": "certainty-0",
+      "assertedValue": "#met",
+      "desc": null,
+      "file": 1
+    },
+    {
+      "ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness",
+      "locus": "value",
+      "degree": null,
+      "cert": "high",
+      "resp": 2,
+      "match": null,
+      "target": "#test",
+      "xml:id": "certainty-1",
+      "assertedValue": "Balloons",
+      "desc": "Some important decription",
+      "file": 1
+    },
+    {
+      "ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness",
+      "locus": "value",
+      "degree": null,
+      "cert": "high",
+      "resp": 2,
+      "match": "@ref",
+      "target": "#name-5",
+      "xml:id": "certainty-2",
+      "assertedValue": "#ingredient-0",
+      "desc": null,
+      "file": 1
+    },
+    {
+      "ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness",
+      "locus": "value",
+      "degree": null,
+      "cert": "high",
+      "resp": 2,
+      "match": "./persName/forename",
+      "target": "#person-2",
+      "xml:id": "certainty-3",
+      "assertedValue": "McDuck",
+      "desc": null,
+      "file": 1
+    },
+    {
+      "ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#new_awesome_category",
+      "locus": "value",
+      "degree": null,
+      "cert": "high",
+      "resp": 2,
+      "match": "@cert",
+      "target": "#certainty-10",
+      "xml:id": "certainty-5",
+      "assertedValue": "low",
+      "desc": null,
+      "file": 1
+    }
   ],
   "test_get_all_certainties_from_given_file_users": [
-    {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness", "assertedValue": "Balloons", "cert": "high", "degree": null, "desc": "Some important decription", "locus": "value", "match": null, "resp": 2, "target": "#test", "xml:id": "certainty-1"},
-    {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness", "assertedValue": "#ingredient-0", "cert": "high", "degree": null, "desc": null, "locus": "value", "match": "@ref", "resp": 2, "target": "#name-5", "xml:id": "certainty-2"},
-    {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness", "assertedValue": "McDuck", "cert": "high", "degree": null, "desc": null, "locus": "value", "match": "./persName/forename", "resp": 2, "target": "#person-2", "xml:id": "certainty-3"},
-    {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#new_awesome_category", "assertedValue": "low", "cert": "high", "degree": null, "desc": null, "locus": "value", "match": "@cert", "resp": 2, "target": "#certainty-10", "xml:id": "certainty-5"}
+    {
+      "ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness",
+      "locus": "value",
+      "degree": null,
+      "cert": "high",
+      "resp": 2,
+      "match": null,
+      "target": "#test",
+      "xml:id": "certainty-1",
+      "assertedValue": "Balloons",
+      "desc": "Some important decription",
+      "file": 1
+    },
+    {
+      "ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness",
+      "locus": "value",
+      "degree": null,
+      "cert": "high",
+      "resp": 2,
+      "match": "@ref",
+      "target": "#name-5",
+      "xml:id": "certainty-2",
+      "assertedValue": "#ingredient-0",
+      "desc": null,
+      "file": 1
+    },
+    {
+      "ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness",
+      "locus": "value",
+      "degree": null,
+      "cert": "high",
+      "resp": 2,
+      "match": "./persName/forename",
+      "target": "#person-2",
+      "xml:id": "certainty-3",
+      "assertedValue": "McDuck",
+      "desc": null,
+      "file": 1
+    },
+    {
+      "ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#new_awesome_category",
+      "locus": "value",
+      "degree": null,
+      "cert": "high",
+      "resp": 2,
+      "match": "@cert",
+      "target": "#certainty-10",
+      "xml:id": "certainty-5",
+      "assertedValue": "low",
+      "desc": null,
+      "file": 1
+    }
   ],
   "test_get_all_certainties_from_given_file_date": [
-    {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#credibility https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness", "assertedValue": "#met", "cert": "high", "degree": 0.86, "desc": null, "locus": "value", "match": "@ref", "resp": 1, "target": "#name-3", "xml:id": "certainty-0"},
-    {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness", "assertedValue": "Balloons", "cert": "high", "degree": null, "desc": "Some important decription", "locus": "value", "match": null, "resp": 2, "target": "#test", "xml:id": "certainty-1"},
-    {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness", "assertedValue": "#ingredient-0", "cert": "high", "degree": null, "desc": null, "locus": "value", "match": "@ref", "resp": 2, "target": "#name-5", "xml:id": "certainty-2"},
-    {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness", "assertedValue": "McDuck", "cert": "high", "degree": null, "desc": null, "locus": "value", "match": "./persName/forename", "resp": 2, "target": "#person-2", "xml:id": "certainty-3"},
-    {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#new_awesome_category", "assertedValue": "low", "cert": "high", "degree": null, "desc": null, "locus": "value", "match": "@cert", "resp": 1, "target": "#certainty-10", "xml:id": "certainty-4"}
+    {
+      "ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#credibility https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness",
+      "locus": "value",
+      "degree": 0.86,
+      "cert": "high",
+      "resp": 1,
+      "match": "@ref",
+      "target": "#name-3",
+      "xml:id": "certainty-0",
+      "assertedValue": "#met",
+      "desc": null,
+      "file": 1
+    },
+    {
+      "ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness",
+      "locus": "value",
+      "degree": null,
+      "cert": "high",
+      "resp": 2,
+      "match": null,
+      "target": "#test",
+      "xml:id": "certainty-1",
+      "assertedValue": "Balloons",
+      "desc": "Some important decription",
+      "file": 1
+    },
+    {
+      "ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness",
+      "locus": "value",
+      "degree": null,
+      "cert": "high",
+      "resp": 2,
+      "match": "@ref",
+      "target": "#name-5",
+      "xml:id": "certainty-2",
+      "assertedValue": "#ingredient-0",
+      "desc": null,
+      "file": 1
+    },
+    {
+      "ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness",
+      "locus": "value",
+      "degree": null,
+      "cert": "high",
+      "resp": 2,
+      "match": "./persName/forename",
+      "target": "#person-2",
+      "xml:id": "certainty-3",
+      "assertedValue": "McDuck",
+      "desc": null,
+      "file": 1
+    },
+    {
+      "ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#new_awesome_category",
+      "locus": "value",
+      "degree": null,
+      "cert": "high",
+      "resp": 1,
+      "match": "@cert",
+      "target": "#certainty-10",
+      "xml:id": "certainty-4",
+      "assertedValue": "low",
+      "desc": null,
+      "file": 1
+    }
   ],
   "test_get_all_certainties_from_given_file_project_version": [
-    {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#credibility https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness", "assertedValue": "#met", "cert": "high", "degree": 0.86, "desc": null, "locus": "value", "match": "@ref", "resp": 1, "target": "#name-3", "xml:id": "certainty-0"},
-    {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness", "assertedValue": "Balloons", "cert": "high", "degree": null, "desc": "Some important decription", "locus": "value", "match": null, "resp": 2, "target": "#test", "xml:id": "certainty-1"},
-    {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness", "assertedValue": "#ingredient-0", "cert": "high", "degree": null, "desc": null, "locus": "value", "match": "@ref", "resp": 2, "target": "#name-5", "xml:id": "certainty-2"},
-    {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness", "assertedValue": "McDuck", "cert": "high", "degree": null, "desc": null, "locus": "value", "match": "./persName/forename", "resp": 2, "target": "#person-2", "xml:id": "certainty-3"},
-    {"ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#new_awesome_category", "assertedValue": "low", "cert": "high", "degree": null, "desc": null, "locus": "value", "match": "@cert", "resp": 1, "target": "#certainty-10", "xml:id": "certainty-4"}
+    {
+      "ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#credibility https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness",
+      "locus": "value",
+      "degree": 0.86,
+      "cert": "high",
+      "resp": 1,
+      "match": "@ref",
+      "target": "#name-3",
+      "xml:id": "certainty-0",
+      "assertedValue": "#met",
+      "desc": null,
+      "file": 1
+    },
+    {
+      "ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness",
+      "locus": "value",
+      "degree": null,
+      "cert": "high",
+      "resp": 2,
+      "match": null,
+      "target": "#test",
+      "xml:id": "certainty-1",
+      "assertedValue": "Balloons",
+      "desc": "Some important decription",
+      "file": 1
+    },
+    {
+      "ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness",
+      "locus": "value",
+      "degree": null,
+      "cert": "high",
+      "resp": 2,
+      "match": "@ref",
+      "target": "#name-5",
+      "xml:id": "certainty-2",
+      "assertedValue": "#ingredient-0",
+      "desc": null,
+      "file": 1
+    },
+    {
+      "ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#incompleteness",
+      "locus": "value",
+      "degree": null,
+      "cert": "high",
+      "resp": 2,
+      "match": "./persName/forename",
+      "target": "#person-2",
+      "xml:id": "certainty-3",
+      "assertedValue": "McDuck",
+      "desc": null,
+      "file": 1
+    },
+    {
+      "ana": "https://providedh.ehum.psnc.pl/api/projects/1/taxonomy/#new_awesome_category",
+      "locus": "value",
+      "degree": null,
+      "cert": "high",
+      "resp": 1,
+      "match": "@cert",
+      "target": "#certainty-10",
+      "xml:id": "certainty-4",
+      "assertedValue": "low",
+      "desc": null,
+      "file": 1
+    }
   ],
   "test_get_unbound_entities_in_file_no_filtering": [
-    {"id": 1, "properties": {"country": "Poland", "geo": "52.408333 16.934167", "name": "PCSS", "settlement": "Poznań"}, "type": "place"},
-    {"id": 2, "properties": {"name": "Big Bang"}, "type": "event"},
-    {"id": 5, "properties": {"age": "child", "birth": "2001-02-03", "forename": "Jerry", "name": "Jerry Maguire", "sex": "M", "surname": "Maguire"}, "type": "person"},
-    {"id": 6, "properties": {"name": "Ingwer"}, "type": "person"},
-    {"id": 7, "properties": {"name": "Grieben"}, "type": "person"},
-    {"id": 8, "properties": {"name": "Met"}, "type": "person"},
-    {"id": 9, "properties": {"name": "4th of july 2010", "when": "2020-07-04"}, "type": "date"},
-    {"id": 10, "properties": {"name": "3rd of may 1791", "when": "1791-05-03"}, "type": "date"},
-    {"id": 12, "properties": {"name": "Ingwer"}, "type": "ingredient"},
-    {"id": 22, "properties": {"forename": "Bugs", "name": "Bugs Bunny", "sex": "M", "surname": "Bunny"}, "type": "person"}
+    {
+      "id": 1,
+      "file": 1,
+      "type": "place",
+      "xml_id": "place-0",
+      "properties": {
+        "country": "Poland",
+        "settlement": "Pozna\u0144",
+        "geo": "52.408333 16.934167",
+        "name": "PCSS"
+      }
+    },
+    {
+      "id": 2,
+      "file": 1,
+      "type": "event",
+      "xml_id": "event-0",
+      "properties": {
+        "name": "Big Bang"
+      }
+    },
+    {
+      "id": 5,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-2",
+      "properties": {
+        "sex": "M",
+        "age": "child",
+        "forename": "Jerry",
+        "surname": "Maguire",
+        "birth": "2001-02-03",
+        "name": "Jerry Maguire"
+      }
+    },
+    {
+      "id": 6,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-3",
+      "properties": {
+        "name": "Ingwer"
+      }
+    },
+    {
+      "id": 7,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-4",
+      "properties": {
+        "name": "Grieben"
+      }
+    },
+    {
+      "id": 8,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-5",
+      "properties": {
+        "name": "Met"
+      }
+    },
+    {
+      "id": 9,
+      "file": 1,
+      "type": "date",
+      "xml_id": "date-0",
+      "properties": {
+        "when": "2020-07-04",
+        "name": "4th of july 2010"
+      }
+    },
+    {
+      "id": 10,
+      "file": 1,
+      "type": "date",
+      "xml_id": "date-2",
+      "properties": {
+        "when": "1791-05-03",
+        "name": "3rd of may 1791"
+      }
+    },
+    {
+      "id": 12,
+      "file": 1,
+      "type": "ingredient",
+      "xml_id": "ingredient-1",
+      "properties": {
+        "name": "Ingwer"
+      }
+    },
+    {
+      "id": 22,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-6",
+      "properties": {
+        "forename": "Bugs",
+        "surname": "Bunny",
+        "sex": "M",
+        "name": "Bugs Bunny"
+      }
+    }
   ],
   "test_get_unbound_entities_in_file_types": [
-    {"id": 5, "properties": {"age": "child", "birth": "2001-02-03", "forename": "Jerry", "name": "Jerry Maguire", "sex": "M", "surname": "Maguire"}, "type": "person"},
-    {"id": 6, "properties": {"name": "Ingwer"}, "type": "person"},
-    {"id": 7, "properties": {"name": "Grieben"}, "type": "person"},
-    {"id": 8, "properties": {"name": "Met"}, "type": "person"},
-    {"id": 22, "properties": {"forename": "Bugs", "name": "Bugs Bunny", "sex": "M", "surname": "Bunny"}, "type": "person"}
+    {
+      "id": 5,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-2",
+      "properties": {
+        "sex": "M",
+        "age": "child",
+        "forename": "Jerry",
+        "surname": "Maguire",
+        "birth": "2001-02-03",
+        "name": "Jerry Maguire"
+      }
+    },
+    {
+      "id": 6,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-3",
+      "properties": {
+        "name": "Ingwer"
+      }
+    },
+    {
+      "id": 7,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-4",
+      "properties": {
+        "name": "Grieben"
+      }
+    },
+    {
+      "id": 8,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-5",
+      "properties": {
+        "name": "Met"
+      }
+    },
+    {
+      "id": 22,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-6",
+      "properties": {
+        "forename": "Bugs",
+        "surname": "Bunny",
+        "sex": "M",
+        "name": "Bugs Bunny"
+      }
+    }
   ],
   "test_get_unbound_entities_in_file_users": [
-    {"id": 1, "properties": {"country": "Poland", "geo": "52.408333 16.934167", "name": "PCSS", "settlement": "Poznań"}, "type": "place"},
-    {"id": 2, "properties": {"name": "Big Bang"}, "type": "event"},
-    {"id": 4, "properties": {"name": "Sand"}, "type": "person"},
-    {"id": 5, "properties": {"age": "child", "birth": "2001-02-03", "forename": "Jerry", "name": "Jerry Maguire", "sex": "M", "surname": "Maguire"}, "type": "person"},
-    {"id": 6, "properties": {"name": "Ingwer"}, "type": "person"},
-    {"id": 7, "properties": {"name": "Grieben"}, "type": "person"},
-    {"id": 8, "properties": {"name": "Met"}, "type": "person"},
-    {"id": 9, "properties": {"name": "4th of july 2010", "when": "2020-07-04"}, "type": "date"},
-    {"id": 10, "properties": {"name": "3rd of may 1791", "when": "1791-05-03"}, "type": "date"},
-    {"id": 12, "properties": {"name": "Ingwer"}, "type": "ingredient"},
-    {"id": 22, "properties": {"forename": "Bugs", "name": "Bugs Bunny", "sex": "M", "surname": "Bunny"}, "type": "person"}
+    {
+      "id": 1,
+      "file": 1,
+      "type": "place",
+      "xml_id": "place-0",
+      "properties": {
+        "country": "Poland",
+        "settlement": "Pozna\u0144",
+        "geo": "52.408333 16.934167",
+        "name": "PCSS"
+      }
+    },
+    {
+      "id": 2,
+      "file": 1,
+      "type": "event",
+      "xml_id": "event-0",
+      "properties": {
+        "name": "Big Bang"
+      }
+    },
+    {
+      "id": 4,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-1",
+      "properties": {
+        "name": "Sand"
+      }
+    },
+    {
+      "id": 5,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-2",
+      "properties": {
+        "sex": "M",
+        "age": "child",
+        "forename": "Jerry",
+        "surname": "Maguire",
+        "birth": "2001-02-03",
+        "name": "Jerry Maguire"
+      }
+    },
+    {
+      "id": 6,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-3",
+      "properties": {
+        "name": "Ingwer"
+      }
+    },
+    {
+      "id": 7,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-4",
+      "properties": {
+        "name": "Grieben"
+      }
+    },
+    {
+      "id": 8,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-5",
+      "properties": {
+        "name": "Met"
+      }
+    },
+    {
+      "id": 9,
+      "file": 1,
+      "type": "date",
+      "xml_id": "date-0",
+      "properties": {
+        "when": "2020-07-04",
+        "name": "4th of july 2010"
+      }
+    },
+    {
+      "id": 10,
+      "file": 1,
+      "type": "date",
+      "xml_id": "date-2",
+      "properties": {
+        "when": "1791-05-03",
+        "name": "3rd of may 1791"
+      }
+    },
+    {
+      "id": 12,
+      "file": 1,
+      "type": "ingredient",
+      "xml_id": "ingredient-1",
+      "properties": {
+        "name": "Ingwer"
+      }
+    },
+    {
+      "id": 22,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-6",
+      "properties": {
+        "forename": "Bugs",
+        "surname": "Bunny",
+        "sex": "M",
+        "name": "Bugs Bunny"
+      }
+    }
   ],
   "test_get_unbound_entities_in_file_start_date": [
-    {"id": 1, "properties": {"country": "Poland", "geo": "52.408333 16.934167", "name": "PCSS", "settlement": "Poznań"}, "type": "place"},
-    {"id": 2, "properties": {"name": "Big Bang"}, "type": "event"},
-    {"id": 5, "properties": {"age": "child", "birth": "2001-02-03", "forename": "Jerry", "name": "Jerry Maguire", "sex": "M", "surname": "Maguire"}, "type": "person"},
-    {"id": 6, "properties": {"name": "Ingwer"}, "type": "person"},
-    {"id": 7, "properties": {"name": "Grieben"}, "type": "person"},
-    {"id": 8, "properties": {"name": "Met"}, "type": "person"},
-    {"id": 9, "properties": {"name": "4th of july 2010", "when": "2020-07-04"}, "type": "date"},
-    {"id": 10, "properties": {"name": "3rd of may 1791", "when": "1791-05-03"}, "type": "date"},
-    {"id": 11, "properties": {"name": "Rag"}, "type": "ingredient"},
-    {"id": 12, "properties": {"name": "Ingwer"}, "type": "ingredient"},
-    {"id": 22, "properties": {"forename": "Bugs", "name": "Bugs Bunny", "sex": "M", "surname": "Bunny"}, "type": "person"}
+    {
+      "id": 1,
+      "file": 1,
+      "type": "place",
+      "xml_id": "place-0",
+      "properties": {
+        "country": "Poland",
+        "settlement": "Pozna\u0144",
+        "geo": "52.408333 16.934167",
+        "name": "PCSS"
+      }
+    },
+    {
+      "id": 2,
+      "file": 1,
+      "type": "event",
+      "xml_id": "event-0",
+      "properties": {
+        "name": "Big Bang"
+      }
+    },
+    {
+      "id": 5,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-2",
+      "properties": {
+        "sex": "M",
+        "age": "child",
+        "forename": "Jerry",
+        "surname": "Maguire",
+        "birth": "2001-02-03",
+        "name": "Jerry Maguire"
+      }
+    },
+    {
+      "id": 6,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-3",
+      "properties": {
+        "name": "Ingwer"
+      }
+    },
+    {
+      "id": 7,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-4",
+      "properties": {
+        "name": "Grieben"
+      }
+    },
+    {
+      "id": 8,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-5",
+      "properties": {
+        "name": "Met"
+      }
+    },
+    {
+      "id": 9,
+      "file": 1,
+      "type": "date",
+      "xml_id": "date-0",
+      "properties": {
+        "when": "2020-07-04",
+        "name": "4th of july 2010"
+      }
+    },
+    {
+      "id": 10,
+      "file": 1,
+      "type": "date",
+      "xml_id": "date-2",
+      "properties": {
+        "when": "1791-05-03",
+        "name": "3rd of may 1791"
+      }
+    },
+    {
+      "id": 11,
+      "file": 1,
+      "type": "ingredient",
+      "xml_id": "ingredient-0",
+      "properties": {
+        "name": "Rag"
+      }
+    },
+    {
+      "id": 12,
+      "file": 1,
+      "type": "ingredient",
+      "xml_id": "ingredient-1",
+      "properties": {
+        "name": "Ingwer"
+      }
+    },
+    {
+      "id": 22,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-6",
+      "properties": {
+        "forename": "Bugs",
+        "surname": "Bunny",
+        "sex": "M",
+        "name": "Bugs Bunny"
+      }
+    }
   ],
   "test_get_unbound_entities_in_file_end_date": [
-    {"id": 1, "properties": {"country": "Poland", "geo": "52.408333 16.934167", "name": "PCSS", "settlement": "Poznań"}, "type": "place"},
-    {"id": 2, "properties": {"name": "Big Bang"}, "type": "event"},
-    {"id": 4, "properties": {"name": "Sand"}, "type": "person"},
-    {"id": 5, "properties": {"age": "child", "birth": "2001-02-03", "forename": "Jerry", "name": "Jerry Maguire", "sex": "M", "surname": "Maguire"}, "type": "person"},
-    {"id": 6, "properties": {"name": "Ingwer"}, "type": "person"},
-    {"id": 7, "properties": {"name": "Grieben"}, "type": "person"},
-    {"id": 8, "properties": {"name": "Met"}, "type": "person"},
-    {"id": 9, "properties": {"name": "4th of july 2010", "when": "2020-07-04"}, "type": "date"},
-    {"id": 10, "properties": {"name": "3rd of may 1791", "when": "1791-05-03"}, "type": "date"},
-    {"id": 12, "properties": {"name": "Ingwer"}, "type": "ingredient"},
-    {"id": 22, "properties": {"forename": "Bugs", "name": "Bugs Bunny", "sex": "M", "surname": "Bunny"}, "type": "person"}
+    {
+      "id": 1,
+      "file": 1,
+      "type": "place",
+      "xml_id": "place-0",
+      "properties": {
+        "country": "Poland",
+        "settlement": "Pozna\u0144",
+        "geo": "52.408333 16.934167",
+        "name": "PCSS"
+      }
+    },
+    {
+      "id": 2,
+      "file": 1,
+      "type": "event",
+      "xml_id": "event-0",
+      "properties": {
+        "name": "Big Bang"
+      }
+    },
+    {
+      "id": 4,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-1",
+      "properties": {
+        "name": "Sand"
+      }
+    },
+    {
+      "id": 5,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-2",
+      "properties": {
+        "sex": "M",
+        "age": "child",
+        "forename": "Jerry",
+        "surname": "Maguire",
+        "birth": "2001-02-03",
+        "name": "Jerry Maguire"
+      }
+    },
+    {
+      "id": 6,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-3",
+      "properties": {
+        "name": "Ingwer"
+      }
+    },
+    {
+      "id": 7,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-4",
+      "properties": {
+        "name": "Grieben"
+      }
+    },
+    {
+      "id": 8,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-5",
+      "properties": {
+        "name": "Met"
+      }
+    },
+    {
+      "id": 9,
+      "file": 1,
+      "type": "date",
+      "xml_id": "date-0",
+      "properties": {
+        "when": "2020-07-04",
+        "name": "4th of july 2010"
+      }
+    },
+    {
+      "id": 10,
+      "file": 1,
+      "type": "date",
+      "xml_id": "date-2",
+      "properties": {
+        "when": "1791-05-03",
+        "name": "3rd of may 1791"
+      }
+    },
+    {
+      "id": 12,
+      "file": 1,
+      "type": "ingredient",
+      "xml_id": "ingredient-1",
+      "properties": {
+        "name": "Ingwer"
+      }
+    },
+    {
+      "id": 22,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-6",
+      "properties": {
+        "forename": "Bugs",
+        "surname": "Bunny",
+        "sex": "M",
+        "name": "Bugs Bunny"
+      }
+    }
   ],
   "test_get_unbound_entities_in_file_date": [
-    {"id": 1, "properties": {"country": "Poland", "geo": "52.408333 16.934167", "name": "PCSS", "settlement": "Poznań"}, "type": "place"},
-    {"id": 2, "properties": {"name": "Big Bang"}, "type": "event"},
-    {"id": 4, "properties": {"name": "Sand"}, "type": "person"},
-    {"id": 6, "properties": {"name": "Ingwer"}, "type": "person"},
-    {"id": 7, "properties": {"name": "Grieben"}, "type": "person"},
-    {"id": 8, "properties": {"name": "Met"}, "type": "person"},
-    {"id": 9, "properties": {"name": "4th of july 2010", "when": "2020-07-04"}, "type": "date"},
-    {"id": 10, "properties": {"name": "3rd of may 1791", "when": "1791-05-03"}, "type": "date"},
-    {"id": 12, "properties": {"name": "Ingwer"}, "type": "ingredient"},
-    {"id": 13, "properties": {"name": "Met"}, "type": "ingredient"}
+    {
+      "id": 1,
+      "file": 1,
+      "type": "place",
+      "xml_id": "place-0",
+      "properties": {
+        "country": "Poland",
+        "settlement": "Pozna\u0144",
+        "geo": "52.408333 16.934167",
+        "name": "PCSS"
+      }
+    },
+    {
+      "id": 2,
+      "file": 1,
+      "type": "event",
+      "xml_id": "event-0",
+      "properties": {
+        "name": "Big Bang"
+      }
+    },
+    {
+      "id": 4,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-1",
+      "properties": {
+        "name": "Sand"
+      }
+    },
+    {
+      "id": 6,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-3",
+      "properties": {
+        "name": "Ingwer"
+      }
+    },
+    {
+      "id": 7,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-4",
+      "properties": {
+        "name": "Grieben"
+      }
+    },
+    {
+      "id": 8,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-5",
+      "properties": {
+        "name": "Met"
+      }
+    },
+    {
+      "id": 9,
+      "file": 1,
+      "type": "date",
+      "xml_id": "date-0",
+      "properties": {
+        "when": "2020-07-04",
+        "name": "4th of july 2010"
+      }
+    },
+    {
+      "id": 10,
+      "file": 1,
+      "type": "date",
+      "xml_id": "date-2",
+      "properties": {
+        "when": "1791-05-03",
+        "name": "3rd of may 1791"
+      }
+    },
+    {
+      "id": 12,
+      "file": 1,
+      "type": "ingredient",
+      "xml_id": "ingredient-1",
+      "properties": {
+        "name": "Ingwer"
+      }
+    },
+    {
+      "id": 13,
+      "file": 1,
+      "type": "ingredient",
+      "xml_id": "ingredient-2",
+      "properties": {
+        "name": "Met"
+      }
+    }
   ],
   "test_get_unbound_entities_in_file_project_version": [
-    {"id": 1, "properties": {"country": "Poland", "geo": "52.408333 16.934167", "name": "PCSS", "settlement": "Poznań"}, "type": "place"},
-    {"id": 2, "properties": {"name": "Big Bang"}, "type": "event"},
-    {"id": 4, "properties": {"name": "Sand"}, "type": "person"},
-    {"id": 6, "properties": {"name": "Ingwer"}, "type": "person"},
-    {"id": 7, "properties": {"name": "Grieben"}, "type": "person"},
-    {"id": 8, "properties": {"name": "Met"}, "type": "person"},
-    {"id": 9, "properties": {"name": "4th of july 2010", "when": "2020-07-04"}, "type": "date"},
-    {"id": 10, "properties": {"name": "3rd of may 1791", "when": "1791-05-03"}, "type": "date"},
-    {"id": 12, "properties": {"name": "Ingwer"}, "type": "ingredient"},
-    {"id": 13, "properties": {"name": "Met"}, "type": "ingredient"}
+    {
+      "id": 1,
+      "file": 1,
+      "type": "place",
+      "xml_id": "place-0",
+      "properties": {
+        "country": "Poland",
+        "settlement": "Pozna\u0144",
+        "geo": "52.408333 16.934167",
+        "name": "PCSS"
+      }
+    },
+    {
+      "id": 2,
+      "file": 1,
+      "type": "event",
+      "xml_id": "event-0",
+      "properties": {
+        "name": "Big Bang"
+      }
+    },
+    {
+      "id": 4,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-1",
+      "properties": {
+        "name": "Sand"
+      }
+    },
+    {
+      "id": 6,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-3",
+      "properties": {
+        "name": "Ingwer"
+      }
+    },
+    {
+      "id": 7,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-4",
+      "properties": {
+        "name": "Grieben"
+      }
+    },
+    {
+      "id": 8,
+      "file": 1,
+      "type": "person",
+      "xml_id": "person-5",
+      "properties": {
+        "name": "Met"
+      }
+    },
+    {
+      "id": 9,
+      "file": 1,
+      "type": "date",
+      "xml_id": "date-0",
+      "properties": {
+        "when": "2020-07-04",
+        "name": "4th of july 2010"
+      }
+    },
+    {
+      "id": 10,
+      "file": 1,
+      "type": "date",
+      "xml_id": "date-2",
+      "properties": {
+        "when": "1791-05-03",
+        "name": "3rd of may 1791"
+      }
+    },
+    {
+      "id": 12,
+      "file": 1,
+      "type": "ingredient",
+      "xml_id": "ingredient-1",
+      "properties": {
+        "name": "Ingwer"
+      }
+    },
+    {
+      "id": 13,
+      "file": 1,
+      "type": "ingredient",
+      "xml_id": "ingredient-2",
+      "properties": {
+        "name": "Met"
+      }
+    }
   ]
 }
