@@ -21,6 +21,7 @@ def disambiguator_ui(request, project_id):  # type: (HttpRequest, int, int) -> H
     }
 
     context = {
+        'title': 'Disambiguator',
         'user_id': request.user.profile.get_xml_id(),
         'project_id': project.id,
         'project_name': project.title,

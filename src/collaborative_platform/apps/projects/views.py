@@ -45,7 +45,7 @@ def project_files(request, project_id):  # type: (HttpRequest, int) -> HttpRespo
     project = Project.objects.get(id=project_id)
 
     context = {
-        'title': project.title,
+        'title': f'{project.title} files',
         'alerts': None,
         'project': project,
     }
