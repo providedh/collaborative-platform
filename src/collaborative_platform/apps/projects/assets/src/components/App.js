@@ -72,6 +72,7 @@ class App extends React.Component {
         }
     });
 
+    $('#createNewProject').modal('hide');
     $.ajax({
         type: "POST",
         url: "/api/projects/create/",
@@ -82,7 +83,6 @@ class App extends React.Component {
             window.location.href = '/projects/' + resultData.id
         },
         error: function (xhr, ajaxOptions, thrownError) {
-            $('#createNewProject').modal('hide');
             $('[js-createNewProjectInfo]').text(xhr.responseJSON.message)
             $('#createNewProjectInfo').modal('show');
         }
