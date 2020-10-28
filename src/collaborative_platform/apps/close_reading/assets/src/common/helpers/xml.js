@@ -211,7 +211,7 @@ function processEntitiesInDocument (raw, entities, annotations, conf) {
         .map(attr => processListableAttribute(attr, entityMap[targetId].properties))
         .filter(attr => attr.status !== OperationStatus.null)
 
-      details.annotations = processAnnotations(annotations, [details.id.value, targetId])
+      details.annotations = processAnnotations(annotations, [details.id.value, details.id.prev, targetId])
 
     entityDetails.push(details)
   })
@@ -223,7 +223,7 @@ function processEntitiesInDocument (raw, entities, annotations, conf) {
     .forEach(([tag, details]) => {
       details.target = details.ref
       details.type = tag.tagName
-      details.annotations = processAnnotations(annotations, [details.target.value])
+      details.annotations = processAnnotations(annotations, [details.target.value, details.id.prev, details.id.value])
       details.properties = conf[tag.tagName].properties
         .map(attr => processTagAttribute(attr, tag))
         .filter(attr => attr.status !== OperationStatus.null)
