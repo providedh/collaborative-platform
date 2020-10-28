@@ -23,20 +23,33 @@ export default function AnnotationCreationPanelWithContext (props) {
 }
 
 function onTagCreate (selection, entityPayload, annotation, websocket) {
+  const operations = []
   const tagBuilder = AtomicActionBuilder(ActionTarget.text, ActionType.add, ActionObject.tag)
+  const propertyBuilder = AtomicActionBuilder(ActionTarget.entity, ActionType.add, ActionObject.property)
   const refBuilder = AtomicActionBuilder(ActionTarget.entity, ActionType.add, ActionObject.reference)
   const certBuilder = AtomicActionBuilder(ActionTarget.certainty, ActionType.add, ActionObject.certainty)
-  const tagAction = tagBuilder(...selection.target)
-  const refAction = refBuilder(0, entityPayload)
-  const certAction = certBuilder(
+
+  operations.push(tagBuilder(...selection.target))
+
+  if (Object.hasOwnProperty.call(entityPayload, 'new_element_id')) {
+    operations.push(refBuilder(0, entityPayload))
+  } else {
+    const {entity_type, entity_properties} = entityPayload.parameters
+    operations.push(refBuilder(0, {parameters: {entity_type}}))
+    for (const [key, value] of Object.entries(entity_properties)) {
+      operations.push(propertyBuilder(1, key, value))
+    }
+  }
+
+  operations.push(certBuilder(
     annotation.locus === 'value' ? 0 : 1,
     annotation.locus,
     annotation.ana,
     annotation.cert,
     annotation.assertedValue,
-    annotation.desc)
+    annotation.desc))
 
-  const request = WebsocketRequest(WebsocketRequestType.modify, [tagAction, refAction, certAction])
+  const request = WebsocketRequest(WebsocketRequestType.modify, operations)
   websocket.send(request)
 }
 
