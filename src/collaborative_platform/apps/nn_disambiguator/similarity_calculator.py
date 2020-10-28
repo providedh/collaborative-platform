@@ -137,7 +137,11 @@ class SimilarityCalculator:
 
     def __calculate_files_creation_dates_and_places(self, e1v: EntityVersion, e2v: EntityVersion) -> Tuple[int, float]:
         def get_date_and_place(ev):
-            et = etree.fromstring(ev.file_version.get_raw_content())
+            try:
+                et = etree.fromstring(ev.file_version.get_raw_content())
+            except ValueError:
+                et = etree.fromstring(ev.file_version.get_raw_content().encode())
+
             creation = et.xpath(".//tei:creation", namespaces=self.namespaces)
             if creation:
                 creation = creation[0]
