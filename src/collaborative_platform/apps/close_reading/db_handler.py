@@ -641,7 +641,8 @@ class DbHandler:
             try:
                 entity_version = EntityVersion.objects.get(
                     entity__xml_id=entity_xml_id,
-                    file_version__isnull=True
+                    file_version__isnull=True,
+                    entity__file=self.__file
                 )
 
             except EntityVersion.DoesNotExist:

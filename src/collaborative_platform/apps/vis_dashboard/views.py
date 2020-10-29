@@ -35,6 +35,7 @@ def get_dashboard(request, project_id, dashboard_id):
 
         context = {
             'DEVELOPMENT': False,
+            'title': 'Dashboard',
             'project_id': project_id,
             'dashboard_config': json.dumps(dashboard.config),
             'dashboard': dashboard
@@ -94,6 +95,7 @@ def dashboard_list(request, project_id):
             .order_by('last_edited')
 
         context = {
+            'title': 'Dashboard',
             'project_title': project.title,
             'project_id': project_id,
             'dashboards': dashboards,

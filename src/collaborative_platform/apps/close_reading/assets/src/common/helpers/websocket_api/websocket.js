@@ -30,7 +30,6 @@ export default function AnnotatorWebSocket (projectId, fileId) {
 
   function _createWebSocket () {
     const wsPrefix = (window.location.protocol === 'https:') ? 'wss:' : 'ws:'
-    console.log(window.location.host)
 
     socket = new WebSocket(wsPrefix + window.location.host + '/ws/close_reading/' + projectId + '_' + fileId + '/')
 
@@ -49,6 +48,7 @@ export default function AnnotatorWebSocket (projectId, fileId) {
       content = JSON.parse(event.data)
       const validation = validate(content)
       if (validation.valid === false) {
+        console.info('ws::invalid::', content)
         validation.errors.forEach(e => console.error(e.toString()))
         return 1
       }

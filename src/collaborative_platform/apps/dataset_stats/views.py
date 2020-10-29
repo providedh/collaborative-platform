@@ -15,7 +15,8 @@ from . import helpers
 def main(request, project_id):  # type: (HttpRequest, int, int) -> HttpResponse
     project = Project.objects.get(pk=project_id)
     return render(request, "dataset_stats/app.html", {
-        "title":project.title, 
+        "title":'TEI stats',
+        "project_name":project.title,
         "project_id":project_id,
         "DEVELOPMENT":False,
     })
