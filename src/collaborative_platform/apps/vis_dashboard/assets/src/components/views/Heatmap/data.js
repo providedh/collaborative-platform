@@ -15,24 +15,18 @@ export default function useData (dataClient, source, entityType) {
       let accessor = null
       switch (source) {
         case SourceOption.uncertaintyCategories:
-          accessor = d => d.categories
+          accessor = d => [d['xml:id'], d.categories]
         break
         case SourceOption.entityProperties:
-          accessor = d => Object.keys(d.properties)
+          accessor = d => [d.id, Object.keys(d.properties)]
         break
         case SourceOption.entityConcurrency:
           accessor = d => [d.type, d.filename]
         break
       }
 
-      const selected = source !== SourceOption.entityProperties
-        ? data
-        : {
-          all: data.all.filter(d => d.type === entityType),
-          filtered: data.filtered.filter(d => d.type === entityType)
-        }
-
-      const [concurrenceMatrix, maxOccurrences] = processData(selected, accessor) 
+      const preprocessed = preprocessData(data, accessor, entityType, source)
+      const [concurrenceMatrix, maxOccurrences] = processData(preprocessed) 
       setData([concurrenceMatrix, maxOccurrences])
     })
   }, [source, entityType])
@@ -40,11 +34,56 @@ export default function useData (dataClient, source, entityType) {
   return data
 }
 
-function processData(data, accessor) {
-  const processed = {
-    all: data.filtered.map(accessor),
-    filtered: data.filtered.map(accessor)
+function preprocessData(data, accessor, entityType, source) {
+  let preprocessed = null
+
+  switch (source) {
+    case SourceOption.uncertaintyCategories:
+      preprocessed = {
+        all: data.filtered.map(accessor),
+        filtered: data.filtered.map(accessor)
+      }
+    break
+    case SourceOption.entityProperties:
+      preprocessed = {
+        all: data.all.filter(d => d.type === entityType).map(accessor),
+        filtered: data.filtered.filter(d => d.type === entityType).map(accessor)
+      }
+    break
+    case SourceOption.entityConcurrency:
+      const byFiles = {
+        all: {},
+        filtered: {}
+      }
+
+      data.filtered.forEach(d => {
+        const [type, filename] = accessor(d)
+        if (byFiles.filtered?.[filename] === undefined) {
+          byFiles.filtered[filename] = new Set()
+        }
+        byFiles.filtered[filename].add(type)
+      })
+
+      data.all.forEach(d => {
+        const [type, filename] = accessor(d)
+        if (byFiles.all?.[filename] === undefined) {
+          byFiles.all[filename] = new Set()
+        }
+        byFiles.all[filename].add(type)
+      })
+
+
+      preprocessed = {
+        all: Object.entries(byFiles.all),
+        filtered: Object.entries(byFiles.filtered)
+      }
+    break
   }
 
-  return [processed, Math.max(...processed.all.map(d => d.length))]
+  return preprocessed
+}
+
+function processData(preprocessed) {
+  console.log(preprocessed)
+  return [null, 0]
 }
