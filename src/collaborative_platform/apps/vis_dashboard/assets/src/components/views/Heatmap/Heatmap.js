@@ -33,16 +33,17 @@ function useRender (width, height, heatmap, data, containerRef, canvasRef, overl
 function handleEvent (dataClient, event) {
 }
 
-export default function Heatmap ({ layout, tileLayout, colorScale, rangeScale, source, axis1, axis2 }) {
+export default function Heatmap ({ layout, source, entityType }) {
   const [containerRef, canvasRef, overlayCanvasRef, legendRef] = [useRef(), useRef(), useRef(), useRef()]
   const [width, height] = layout !== undefined ? [layout.w, layout.h] : [4, 4]
 
   const dataClient = useState(DataClient())[0]
   useCleanup(dataClient)
-  const data = useData(dataClient, source, axis1, axis2)
-  const heatmap = useHeatmap(tileLayout, colorScale, rangeScale, event => handleEvent(dataClient, event))
+  const data = useData(dataClient, source, entityType)
+  console.log(data)
+  //const heatmap = useHeatmap(tileLayout, colorScale, rangeScale, event => handleEvent(dataClient, event))
 
-  useRender(width, height, heatmap, data, containerRef, canvasRef, overlayCanvasRef, legendRef)
+  //useRender(width, height, heatmap, data, containerRef, canvasRef, overlayCanvasRef, legendRef)
 
   return (
     <div className={styles.heatmap} ref={containerRef}>
