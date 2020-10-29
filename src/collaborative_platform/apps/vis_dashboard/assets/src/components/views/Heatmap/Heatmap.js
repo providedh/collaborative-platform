@@ -21,7 +21,7 @@ export default function Heatmap ({ layout, source, entityType }) {
   useCleanup(dataClient)
   const data = useData(dataClient, source, entityType)
 
-  useEffect(() => render(data, vis.current, width, height),
+  useEffect(() => {setTimeout(() => render(data, vis.current, width, height), 200)},
     [data, vis.current, width, height])
 
   return (

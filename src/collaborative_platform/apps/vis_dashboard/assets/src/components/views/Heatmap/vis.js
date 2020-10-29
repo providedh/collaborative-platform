@@ -4,7 +4,7 @@ import styles from './style.module.css'
 
 const heatmap = {
   cellPadding: .1,
-  axisSpace: 70,
+  axisSpace: 35,
   axisWidth: 70
 }
 
@@ -50,7 +50,7 @@ export default function render(data, svgNode, width, height) {
   const colorScale = d3.interpolateBlues
   const bandScale = d3.scaleBand()
     .domain(d3.range(Object.keys(data.all).length))
-    .range([0, Math.min(width - heatmap.axisWidth - heatmap.axisSpace, height - heatmap.axisSpace)])
+    .range([0, Math.min(width - heatmap.axisWidth - heatmap.axisSpace, height - heatmap.axisSpace - 10)])
     .padding(heatmap.cellPadding)
 
   svg.select('g.cells')
@@ -77,16 +77,25 @@ export default function render(data, svgNode, width, height) {
 
   const max = Math.max(...svg.selectAll('g.bin text').nodes().map(d => +d.textContent))
   svg.selectAll('g.bin').each(function(d) {
-    const cell = d3.select(this)
-    const count = +cell.select('text').text()
-    cell.select('rect').attr('fill', colorScale(count / max))
-  })
+      const cell = d3.select(this)
+      const count = +cell.select('text').text()
+      cell.select('rect').attr('fill', colorScale(count / max))
+      cell.on('mouseenter', function(event, d){
+        d3.select(event.target).classed(styles.focused, true)
+        svg.select(`.x-${d.x.replace(' ', '-')}`).classed(styles.focused, true)
+        svg.select(`.y-${d.y.replace(' ', '-')}`).classed(styles.focused, true)
+      })
+      cell.on('mouseleave', function(event, d){
+        d3.selectAll('.'+styles.focused).classed(styles.focused, false)
+      })
+    })
 
   svg.select('g.legendX')
     .selectAll('text')
     .data(Object.keys(data.all), d => d)
     .join('text')
     .classed(styles.legend, true)
+    .each(function(d){d3.select(this).classed('x-'+d.replace(' ', '-'), true)})
     .text(d => d)
     .attr('x', (d, i) => bandScale(i) +heatmap.axisSpace + heatmap.axisWidth + 10)
     .attr('y', (d, i) => heatmap.axisSpace + bandScale(i) - 10)
@@ -96,6 +105,7 @@ export default function render(data, svgNode, width, height) {
     .data(Object.keys(data.all), d => d)
     .join('text')
     .classed(styles.legend, true)
+    .each(function(d){d3.select(this).classed('y-'+d.replace(' ', '-'), true)})
     .text(d => d)
     .attr('x', heatmap.axisWidth + heatmap.axisSpace)
     .attr('y', (d, i) => heatmap.axisSpace + bandScale(i) + bandScale.bandwidth()/2)

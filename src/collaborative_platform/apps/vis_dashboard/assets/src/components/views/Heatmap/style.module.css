@@ -6,13 +6,22 @@
 .heatmapSvg{
 font-family: Helvetica, Arial;
 }
-.heatmapSvg text{
+.heatmapSvg g:first-of-type text{
 text-anchor: middle;
 font-weight: bold;
+cursor: default;
 }
 
 .heatmapSvg .legendBrush{position: absolute;}
 text.legend{
 text-anchor: start;
 transform-origin: start;
+}
+text.focused{
+font-weight: bold;
+text-transform: uppercase;
+}
+.focused rect{
+stroke-width: 3px;
+stroke: black;
 }
