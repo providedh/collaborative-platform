@@ -197,7 +197,7 @@ class SimilarityCalculator:
             e2lv = e2.versions.filter(file_version__isnull=False).latest('id')
         except EntityVersion.DoesNotExist:
             return np.abs(
-                self.get_max_sim_vector(EntitySchema.objects.get(name=e1.type, taxonomy__project=e1.file.project) - 1))
+                self.get_max_sim_vector(EntitySchema.objects.get(name=e1.type, taxonomy__project=e1.file.project)) - 1)
 
         sims = self.__calculate_similarity(e1lv, e2lv)
 
