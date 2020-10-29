@@ -51,20 +51,15 @@ function useDocumentRendering (data, container, taxonomy) {
     if (container === undefined) { return }
 
     container.innerHTML = data.html
-    styleEntities(container, data.doc, taxonomy)
-    styleCertainty(container, data.doc, taxonomy)
-  }, [data.id])
-}
-
-function useRawDocumentRendering (data, container, taxonomy) {
-  useEffect(() => {
-    if (container === undefined) { return }
-
-    container.innerHTML = data.html
     if (container.innerText.length == 0) {
       container.innerHTML = '<i>This file does not have text content.</i>'
     }
-  }, [data.id, container])
+
+    if (data.doc !== null) {
+      styleEntities(container, data.doc, taxonomy)
+      styleCertainty(container, data.doc, taxonomy)
+    }
+  }, [data.id])
 }
 
 export default function DocumentView ({ layout, syncWithViews, documentId, showEntities, showCertainty, context }) {
@@ -72,7 +67,7 @@ export default function DocumentView ({ layout, syncWithViews, documentId, showE
 
   const dataClient = useState(DataClient())[0]
   const data = useRawData(dataClient, syncWithViews, documentId, context.id2document)
-  useRawDocumentRendering(data, viewRef.current, context.taxonomy)
+  useDocumentRendering(data, viewRef.current, context.taxonomy)
   useCleanup(dataClient)
 
   return (
