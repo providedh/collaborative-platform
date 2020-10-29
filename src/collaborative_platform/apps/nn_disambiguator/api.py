@@ -26,8 +26,8 @@ def calculations(request: HttpRequest, project_id: int):
             hist = CeleryTask.objects.filter(project_id=project_id, type="P").order_by("created").all()
             hist = [{
                 "id": task.id,
-                "status": dict(task.statuses)[task.status],
-                "type": dict(task.types)[task.type],
+                "status": task.get_status_display(),
+                "type": task.get_type_display(),
                 "task_id": task.task_id,
                 "created": task.created
             } for task in hist]
