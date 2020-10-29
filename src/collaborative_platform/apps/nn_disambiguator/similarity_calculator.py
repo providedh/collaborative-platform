@@ -66,7 +66,9 @@ class SimilarityCalculator:
 
     def __calculate_files_text_similarity(self, e1lv, e2lv) -> float:
         if e1lv.file_version == e2lv.file_version:
-            return 1.0
+            return 1.
+        elif e1lv.file_version is None or e2lv.file_version is None:
+            return 0.
         else:
             ftsc, created = FileTextSimilarityCache.objects.get_or_create(fv1=e1lv.file_version, fv2=e2lv.file_version)
             if created:
