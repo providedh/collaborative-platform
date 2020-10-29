@@ -1,8 +1,11 @@
 import * as d3 from 'd3' 
 
+import styles from './style.module.css'
+
 const heatmap = {
   cellPadding: .1,
-  axisSpace: 70
+  axisSpace: 70,
+  axisWidth: 70
 }
 
 function getBins(data) {
@@ -18,9 +21,13 @@ function getBins(data) {
 
 function updateCell(cell, d, data, bandScale){
   const entries = [...data.all[d.x]].filter(x => data.all[d.y].has(x))
+  const [left, top] = [
+    bandScale(d.pos[0]),
+    bandScale(d.pos[1]) + heatmap.axisSpace
+  ]
 
   cell
-    .attr('transform', d => `translate(${bandScale(d.pos[0]) + heatmap.axisSpace}, ${bandScale(d.pos[1])})`)
+    .attr('transform', d => `translate(${left}, ${top})`)
   cell.select('rect')
     .attr('width', bandScale.bandwidth())
     .attr('height', bandScale.bandwidth())
@@ -37,14 +44,18 @@ export default function render(data, svgNode, width, height) {
     .attr('width', width)
     .attr('height', height)
 
+  heatmap.axisWidth = Math.max(...Object.keys(data.all).map(d => d.length)) * 8.3
+
   const bins = getBins(data)
   const colorScale = d3.interpolateBlues
   const bandScale = d3.scaleBand()
     .domain(d3.range(Object.keys(data.all).length))
-    .range([0, Math.min(width, height)-heatmap.axisSpace])
+    .range([0, Math.min(width - heatmap.axisWidth - heatmap.axisSpace, height - heatmap.axisSpace)])
     .padding(heatmap.cellPadding)
 
-  svg.selectAll('g.bin')
+  svg.select('g.cells')
+    .attr('transform', `translate(${heatmap.axisWidth + heatmap.axisSpace}, 0)`)
+    .selectAll('g.bin')
     .data(bins, d => `${d.x}-${d.y}`)
     .join(
       enter => enter
@@ -70,4 +81,23 @@ export default function render(data, svgNode, width, height) {
     const count = +cell.select('text').text()
     cell.select('rect').attr('fill', colorScale(count / max))
   })
+
+  svg.select('g.legendX')
+    .selectAll('text')
+    .data(Object.keys(data.all), d => d)
+    .join('text')
+    .classed(styles.legend, true)
+    .text(d => d)
+    .attr('x', (d, i) => bandScale(i) +heatmap.axisSpace + heatmap.axisWidth + 10)
+    .attr('y', (d, i) => heatmap.axisSpace + bandScale(i) - 10)
+
+  svg.select('g.legendY')
+    .selectAll('text')
+    .data(Object.keys(data.all), d => d)
+    .join('text')
+    .classed(styles.legend, true)
+    .text(d => d)
+    .attr('x', heatmap.axisWidth + heatmap.axisSpace)
+    .attr('y', (d, i) => heatmap.axisSpace + bandScale(i) + bandScale.bandwidth()/2)
+    .style('text-anchor', 'end')
 }

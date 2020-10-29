@@ -27,7 +27,9 @@ export default function Heatmap ({ layout, source, entityType }) {
   return (
     <div className={styles.heatmap} ref={containerRef}>
       <svg ref={vis} className={styles.heatmapSvg}>
-        <g className="legend"></g>
+        <g className="cells"></g>
+        <g className="legendX"></g>
+        <g className="legendY"></g>
       </svg>
     </div>
   )

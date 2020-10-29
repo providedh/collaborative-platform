@@ -11,4 +11,8 @@ text-anchor: middle;
 font-weight: bold;
 }
 
-.legendBrush{position: absolute;}
+.heatmapSvg .legendBrush{position: absolute;}
+text.legend{
+text-anchor: start;
+transform-origin: start;
+}
