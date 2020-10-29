@@ -12,41 +12,6 @@ import styleCertainty from './certaintyStyling'
 
 const ajax = AjaxCalls()
 
-function useData (dataClient, syncWithViews, documentId, id2Document) {
-  const [data, setData] = useState({ id: '', name: '', html: '' })
-
-  useEffect(() => {
-    if (syncWithViews === true) {
-      if (dataClient.getSubscriptions().includes('document')) { dataClient.unsubscribe('document') }
-
-      dataClient.subscribe('document', ({ id, html }) => {
-        if (id === null || html === null) { return }
-
-        if (id !== '') {
-          setData({ id, html: html.getElementsByTagName('body')[0].innerHTML, doc: html, name: id2Document[id].name })
-        } else {
-          setData({ id: '', html: '<i>Hover over documents in other views to see its contents here.</i>', doc: null, name: '' })
-        }
-      })
-    } else {
-      if (dataClient.getSubscriptions().includes('document')) { dataClient.unsubscribe('document') }
-
-      ajax.getFile({ project: window.project, file: documentId }, {}, null).then(response => {
-        if (response.success === true) {
-          setData({
-            id: documentId,
-            name: id2Document[documentId].name,
-            doc: response.content,
-            html: response.content.getElementsByTagName('body')[0].innerHTML
-          })
-        }
-      })
-    }
-  }, [syncWithViews, documentId])
-
-  return data
-}
-
 function useRawData (dataClient, syncWithViews, documentId, id2Document) {
   const [data, setData] = useState({ id: '', name: '', html: '' })
 
@@ -54,11 +19,10 @@ function useRawData (dataClient, syncWithViews, documentId, id2Document) {
     if (syncWithViews === true) {
       if (dataClient.getSubscriptions().includes('document')) { dataClient.unsubscribe('document') }
 
-      dataClient.subscribe('document', ({ id, html }) => {
+      dataClient.subscribe('document', ({ id, doc, html }) => {
         if (id === null || html === null) { return }
-
         if (id !== '') {
-          setData({ id, html: html, doc: html, name: id2Document[id].name })
+          setData({ id, html: html, doc: doc, name: id2Document[id].name })
         } else {
           setData({ id: '', html: 'Hover over documents in other views to see its contents here.', doc: null, name: '' })
         }
@@ -72,7 +36,7 @@ function useRawData (dataClient, syncWithViews, documentId, id2Document) {
             id: documentId,
             name: id2Document[documentId].name,
             doc: response.content,
-            html: response.content
+            html: response.content.getElementsByTagName('text')[0].innerHTML
           })
         }
       })
@@ -97,7 +61,10 @@ function useRawDocumentRendering (data, container, taxonomy) {
     if (container === undefined) { return }
 
     container.innerHTML = data.html
-  }, [data.id])
+    if (container.innerText.length == 0) {
+      container.innerHTML = '<i>This file does not have text content.</i>'
+    }
+  }, [data.id, container])
 }
 
 export default function DocumentView ({ layout, syncWithViews, documentId, showEntities, showCertainty, context }) {
