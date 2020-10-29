@@ -4,52 +4,31 @@ import PropTypes from 'prop-types'
 import styles from './style.module.css'
 import css from './style.css' // eslint-disable-line no-unused-vars
 import getConfig from './config'
-import { RegularHeatmapBuilder, StairHeatmapBuilder, HeartHeatmapBuilder, Director } from './vis'
 import { DataClient, useCleanup } from '../../../data'
 import useData from './data'
-
-function useHeatmap (layout, colorScale, rangeScale, eventCallback) {
-  const [heatmap, setHeatmap] = useState(null)
-  useEffect(() => {
-    let builder = RegularHeatmapBuilder()
-    if (layout === 'Split') { builder = StairHeatmapBuilder() }
-    if (layout === 'Tilted') { builder = HeartHeatmapBuilder() }
-
-    const director = Director(builder)
-    director.make(colorScale, rangeScale, eventCallback)
-    setHeatmap(builder.getResult())
-  }, [layout, colorScale, rangeScale])
-
-  return heatmap
-}
-
-function useRender (width, height, heatmap, data, containerRef, canvasRef, overlayCanvasRef, legendRef) {
-  useEffect(() => {
-    if (heatmap != null) { heatmap.render(data, containerRef.current, canvasRef.current, overlayCanvasRef.current, legendRef.current) }
-  }, // Render
-  [width, height, heatmap, data, containerRef, canvasRef, overlayCanvasRef, legendRef]) // Conditions*/
-}
+import render from './vis.js'
 
 function handleEvent (dataClient, event) {
 }
 
 export default function Heatmap ({ layout, source, entityType }) {
-  const [containerRef, canvasRef, overlayCanvasRef, legendRef] = [useRef(), useRef(), useRef(), useRef()]
-  const [width, height] = layout !== undefined ? [layout.w, layout.h] : [4, 4]
+  const [containerRef, vis, legendRef] = [useRef(), useRef(), useRef(), useRef()]
+  const {width, height} = (containerRef.current !== undefined
+    ? containerRef.current.getBoundingClientRect()
+    : {width:0, height:0})
 
   const dataClient = useState(DataClient())[0]
   useCleanup(dataClient)
   const data = useData(dataClient, source, entityType)
-  console.log(data)
-  //const heatmap = useHeatmap(tileLayout, colorScale, rangeScale, event => handleEvent(dataClient, event))
 
-  //useRender(width, height, heatmap, data, containerRef, canvasRef, overlayCanvasRef, legendRef)
+  useEffect(() => render(data, vis.current, width, height),
+    [data, vis.current, width, height])
 
   return (
     <div className={styles.heatmap} ref={containerRef}>
-      <canvas ref={canvasRef} className={styles.canvas}/>
-      <canvas className={styles.overlayCanvas} ref={overlayCanvasRef}/>
-      <svg ref={legendRef} className={styles.legendBrush}/>
+      <svg ref={vis} className={styles.heatmapSvg}>
+        <g className="legend"></g>
+      </svg>
     </div>
   )
 }

@@ -26,8 +26,8 @@ export default function useData (dataClient, source, entityType) {
       }
 
       const preprocessed = preprocessData(data, accessor, entityType, source)
-      const [concurrenceMatrix, maxOccurrences] = processData(preprocessed) 
-      setData([concurrenceMatrix, maxOccurrences])
+      const processed = processData(preprocessed) 
+      setData(processed)
     })
   }, [source, entityType])
 
@@ -84,6 +84,19 @@ function preprocessData(data, accessor, entityType, source) {
 }
 
 function processData(preprocessed) {
-  console.log(preprocessed)
-  return [null, 0]
+  function fillObject(object, items) {
+    items.forEach(([item, categories]) => {
+      [...categories].forEach(c => {
+        if (object?.[c] === undefined) {
+          object[c] = new Set()
+        }
+        object[c].add(item)
+      })
+    })
+  }
+  const data = { all: {}, filtered: {} }
+  fillObject(data.all, preprocessed.all)
+  fillObject(data.filtered, preprocessed.filtered)
+
+  return data
 }

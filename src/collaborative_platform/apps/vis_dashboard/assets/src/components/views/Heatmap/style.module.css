@@ -3,17 +3,12 @@
 	position: relative;
 }
 
-.canvas{
-	image-rendering: pixelated;
-    image-rendering: crisp-edges;
+.heatmapSvg{
+font-family: Helvetica, Arial;
 }
-
-.overlayCanvas{
-	image-rendering: pixelated;
-    image-rendering: crisp-edges;
-	pointer-events: none;
-	position: absolute;
-	left: 5px;
+.heatmapSvg text{
+text-anchor: middle;
+font-weight: bold;
 }
 
 .legendBrush{position: absolute;}
