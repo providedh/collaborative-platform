@@ -23,7 +23,7 @@ def calculations(request: HttpRequest, project_id: int):
 
     elif request.method == "GET":
         try:
-            hist = CeleryTask.objects.filter(project_id=project_id, type="P").all()
+            hist = CeleryTask.objects.filter(project_id=project_id, type="P").order_by("created").all()
             hist = [{
                 "id": task.id,
                 "status": dict(task.statuses)[task.status],
