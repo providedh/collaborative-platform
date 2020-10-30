@@ -33,7 +33,11 @@ export default function DocumentDataSource (pubSubService, appContext) {
   }
 
   function _getData () {
-    return ({ id: self._focused, html: self._document })
+    return ({
+      id: self._focused,
+      doc: self._document,
+      html: self._document?.getElementsByTagName('text')?.[0]?.innerHTML
+    })
   }
 
   function _focusDocument (documentId) {
@@ -50,7 +54,6 @@ export default function DocumentDataSource (pubSubService, appContext) {
     self.publish('status', { action: 'fetching' })
     self._source.getFile({ project: self._appContext.project, file: self._focused }, {}, null).then(response => {
       if (response.success === false) { throw (Error('Failed to retrieve files for the current project.')) }
-
       self._document = response.content
       self.publish('status', { action: 'fetched' })
       _publishData()

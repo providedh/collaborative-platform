@@ -4,57 +4,49 @@ import PropTypes from 'prop-types'
 import styles from './style.module.css'
 import css from './style.css' // eslint-disable-line no-unused-vars
 import getConfig from './config'
-import { RegularHeatmapBuilder, StairHeatmapBuilder, HeartHeatmapBuilder, Director } from './vis'
 import { DataClient, useCleanup } from '../../../data'
 import useData from './data'
-
-function useHeatmap (layout, colorScale, rangeScale, eventCallback) {
-  const [heatmap, setHeatmap] = useState(null)
-  useEffect(() => {
-    let builder = RegularHeatmapBuilder()
-    if (layout === 'Split') { builder = StairHeatmapBuilder() }
-    if (layout === 'Tilted') { builder = HeartHeatmapBuilder() }
-
-    const director = Director(builder)
-    director.make(colorScale, rangeScale, eventCallback)
-    setHeatmap(builder.getResult())
-  }, [layout, colorScale, rangeScale])
-
-  return heatmap
-}
-
-function useRender (width, height, heatmap, data, containerRef, canvasRef, overlayCanvasRef, legendRef) {
-  useEffect(() => {
-    if (heatmap != null) { heatmap.render(data, containerRef.current, canvasRef.current, overlayCanvasRef.current, legendRef.current) }
-  }, // Render
-  [width, height, heatmap, data, containerRef, canvasRef, overlayCanvasRef, legendRef]) // Conditions*/
-}
+import render from './vis.js'
 
 function handleEvent (dataClient, event) {
 }
 
-export default function Heatmap ({ layout, tileLayout, colorScale, rangeScale, source, axis1, axis2 }) {
-  const [containerRef, canvasRef, overlayCanvasRef, legendRef] = [useRef(), useRef(), useRef(), useRef()]
-  const [width, height] = layout !== undefined ? [layout.w, layout.h] : [4, 4]
+export default function Heatmap ({ layout, source, entityType }) {
+  const [containerRef, vis, legendRef] = [useRef(), useRef(), useRef(), useRef()]
+  const {width, height} = (containerRef.current !== undefined
+    ? containerRef.current.getBoundingClientRect()
+    : {width:0, height:0})
 
   const dataClient = useState(DataClient())[0]
   useCleanup(dataClient)
-  const data = useData(dataClient, source, axis1, axis2)
-  const heatmap = useHeatmap(tileLayout, colorScale, rangeScale, event => handleEvent(dataClient, event))
+  const data = useData(dataClient, source, entityType)
 
-  useRender(width, height, heatmap, data, containerRef, canvasRef, overlayCanvasRef, legendRef)
+  useEffect(() => {setTimeout(() => render(data, vis.current, width, height), 200)},
+    [data, vis.current, width, height])
+
+  const heatmapCssClasses = [
+    styles.heatmapSvg,
+    Object.keys(data.all).length === 0 ? styles.filteredOut : ''
+  ].join(' ')
 
   return (
     <div className={styles.heatmap} ref={containerRef}>
-      <canvas ref={canvasRef} className={styles.canvas}/>
-      <canvas className={styles.overlayCanvas} ref={overlayCanvasRef}/>
-      <svg ref={legendRef} className={styles.legendBrush}/>
+      {Object.keys(data.all).length === 0
+        ? <i>This view has no data to show either because the project does not have
+            or current filters restrict all.</i>
+        :''}
+      <svg ref={vis} className={heatmapCssClasses}>
+        <g className="filtered"></g>
+        <g className="cells"></g>
+        <g className="legendX"></g>
+        <g className="legendY"></g>
+      </svg>
     </div>
   )
 }
 
-Heatmap.prototype.description = 'Examine multivariate data, relationship among data, and evolution through time in ' +
-    'a generalized manner user a color encoded grid array.'
+Heatmap.prototype.description =
+  'See how many entities have a property combination, concur in files, or how the taxonomy is used in annotations.'
 
 Heatmap.prototype.getConfigOptions = getConfig
 

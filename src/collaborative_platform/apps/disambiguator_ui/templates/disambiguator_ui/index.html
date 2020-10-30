@@ -37,7 +37,28 @@
 <h3>Entity disambiguation</h3>
 <h5 class="text-muted">Machine-learning assisted corpus analysis</h5>
 <p>
-  [TODO: explain unification]
+  Different entities scattered accross the project may refer to the same person/place/etc. Finding
+  and unifying these different entities may be hard in a <br/>
+  large corpus; this is why we provide a
+  machine-learning tool that will provide you with proposals that can be easily revised and accepted or
+  rejected.
+  <br>
+  This process consists of three main steps:
+  <ol>
+    <li>
+      A new analysis job is started using the top-right widget on this page. You can also see how
+      previous jobs ran there.
+    </li>
+    <li>
+      Different proposals will be created during the analysis. You may start working right away or
+      wait until the whole analysis is done.
+    </li>
+    <li>
+      In order to see and use the proposals, refresh the page. This will retrieve the different unifications
+      that can be navigated,<br/> accepted and rejected. When an unification is accepted, it will show up in the
+      annotator.
+    </li>
+  </ol>
 </p>
 
 {% end_bottom_hint %}
