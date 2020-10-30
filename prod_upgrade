@@ -12,4 +12,4 @@ rm -rf ~/collaborative-platform/static/*
 python3 manage.py collectstatic
 screen -d -m celery -A collaborative_platform worker -B -l info -E
 screen -d -m bash -c 'while true; do uwsgi uwsgi.ini; done;'
-screen -d -m daphne -u collaborative_platform_websockets.sock collaborative_platform.asgi:application
+screen -d -m gunicorn -b unix://collaborative_platform_websockets.sock -w 16 -k uvicorn.workers.UvicornWorker collaborative_platform.asgi:application
