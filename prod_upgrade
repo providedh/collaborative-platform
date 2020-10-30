@@ -1,6 +1,9 @@
 #!/bin/bash
 cd /home/ubuntu/collaborative-platform
 pkill screen
+pkill gunicorn
+pkill uwsgi
+pkill celery
 git pull
 cd src/collaborative_platform/
 cp collaborative_platform/settings_template.py collaborative_platform/settings.py
