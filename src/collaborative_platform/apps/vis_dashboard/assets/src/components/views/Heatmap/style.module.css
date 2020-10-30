@@ -5,6 +5,8 @@
 
 .heatmapSvg{
 font-family: Helvetica, Arial;
+width: 100%;
+height: 100%;
 }
 .heatmapSvg g:first-of-type text{
 text-anchor: middle;
@@ -24,4 +26,7 @@ text-transform: uppercase;
 .focused rect{
 stroke-width: 3px;
 stroke: black;
+}
+.filteredOut{
+display: none;
 }

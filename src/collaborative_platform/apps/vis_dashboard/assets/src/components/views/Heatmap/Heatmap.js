@@ -24,9 +24,19 @@ export default function Heatmap ({ layout, source, entityType }) {
   useEffect(() => {setTimeout(() => render(data, vis.current, width, height), 200)},
     [data, vis.current, width, height])
 
+  const heatmapCssClasses = [
+    styles.heatmapSvg,
+    Object.keys(data.all).length === 0 ? styles.filteredOut : ''
+  ].join(' ')
+
   return (
     <div className={styles.heatmap} ref={containerRef}>
-      <svg ref={vis} className={styles.heatmapSvg}>
+      {Object.keys(data.all).length === 0
+        ? <i>This view has no data to show either because the project does not have
+            or current filters restrict all.</i>
+        :''}
+      <svg ref={vis} className={heatmapCssClasses}>
+        <g className="filtered"></g>
         <g className="cells"></g>
         <g className="legendX"></g>
         <g className="legendY"></g>
@@ -35,8 +45,8 @@ export default function Heatmap ({ layout, source, entityType }) {
   )
 }
 
-Heatmap.prototype.description = 'Examine multivariate data, relationship among data, and evolution through time in ' +
-    'a generalized manner user a color encoded grid array.'
+Heatmap.prototype.description =
+  'See how many entities have a property combination, concur in files, or how the taxonomy is used in annotations.'
 
 Heatmap.prototype.getConfigOptions = getConfig
 

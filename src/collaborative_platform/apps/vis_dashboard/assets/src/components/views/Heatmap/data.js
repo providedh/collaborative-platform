@@ -2,15 +2,15 @@ import { useEffect, useState } from 'react'
 import {SourceOption} from './config.js'
 
 export default function useData (dataClient, source, entityType) {
-  const [data, setData] = useState(null)
+  const [data, setData] = useState({all: {}, filtered: {}})
 
   useEffect(() => {
     const dataSource = source === SourceOption.uncertaintyCategories
       ? 'certainty'
       : 'entity';
     dataClient.clearSubscriptions()
-    dataClient.subscribe(dataSource, data => {
-      if (data === null || data.all.length === 0) { return 0 }
+    dataClient.subscribe(dataSource, retrieved => {
+      if (retrieved === null || retrieved.all.length === 0) { return 0 }
 
       let accessor = null
       switch (source) {
@@ -25,7 +25,7 @@ export default function useData (dataClient, source, entityType) {
         break
       }
 
-      const preprocessed = preprocessData(data, accessor, entityType, source)
+      const preprocessed = preprocessData(retrieved, accessor, entityType, source)
       const processed = processData(preprocessed) 
       setData(processed)
     })

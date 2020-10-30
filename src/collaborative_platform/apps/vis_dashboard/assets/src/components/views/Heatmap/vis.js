@@ -20,7 +20,11 @@ function getBins(data) {
 }
 
 function updateCell(cell, d, data, bandScale){
-  const entries = [...data.all[d.x]].filter(x => data.all[d.y].has(x))
+  const xEntries = data.filtered[d.x]
+  const yEntries = data.filtered[d.y]
+  const filteredOut = xEntries === undefined || yEntries === undefined
+  const entries = filteredOut ? -1 : [...xEntries].filter(x => yEntries.has(x)).length
+  
   const [left, top] = [
     bandScale(d.pos[0]),
     bandScale(d.pos[1]) + heatmap.axisSpace
@@ -31,11 +35,25 @@ function updateCell(cell, d, data, bandScale){
   cell.select('rect')
     .attr('width', bandScale.bandwidth())
     .attr('height', bandScale.bandwidth())
-    .attr('fill', 'skyblue')
+
   cell.select('text')
-    .text(entries.length)
+    .text(entries)
     .attr('x', bandScale.bandwidth()/2)
     .attr('y', bandScale.bandwidth()/2)
+}
+
+function updateFIltered(cell, d, data, bandScale){
+  const [left, top] = [
+    bandScale(d.pos[0]),
+    bandScale(d.pos[1]) + heatmap.axisSpace
+  ]
+
+  cell
+    .attr('transform', d => `translate(${left}, ${top})`)
+  cell.select('rect')
+    .attr('width', bandScale.bandwidth())
+    .attr('height', bandScale.bandwidth())
+    .attr('fill', 'lightgrey')
 }
 
 export default function render(data, svgNode, width, height) {
@@ -75,10 +93,32 @@ export default function render(data, svgNode, width, height) {
                 })
       )
 
-  const max = Math.max(...svg.selectAll('g.bin text').nodes().map(d => +d.textContent))
-  svg.selectAll('g.bin').each(function(d) {
+  svg.select('g.filtered')
+    .attr('transform', `translate(${heatmap.axisWidth + heatmap.axisSpace}, 0)`)
+    .selectAll('g.bin')
+    .data(bins, d => `${d.x}-${d.y}`)
+    .join(
+      enter => enter
+                .append('g')
+                .classed('bin', true)
+                .each(function(d){
+                  const cell = d3.select(this)
+                  cell.append('rect')
+                    .attr('rx', 20)
+                    .attr('ry', 20)
+                  updateFIltered(d3.select(this), d, data, bandScale)
+                }),
+      update => update
+                .each(function(d){
+                  updateFIltered(d3.select(this), d, data, bandScale)
+                })
+      )
+
+  const max = Math.max(...svg.selectAll('g.cells g.bin text').nodes().map(d => +d.textContent))
+  svg.selectAll('g.cells g.bin').each(function(d) {
       const cell = d3.select(this)
       const count = +cell.select('text').text()
+      cell.classed(styles.filteredOut, count === -1)
       cell.select('rect').attr('fill', colorScale(count / max))
       cell.on('mouseenter', function(event, d){
         d3.select(event.target).classed(styles.focused, true)
