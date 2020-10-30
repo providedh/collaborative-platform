@@ -72,5 +72,6 @@ timefhuman
 maya
 
 
-guvicorn[standard]
+uvicorn[standard]
+
 gunicorn
