@@ -679,7 +679,8 @@ class DbHandler:
                 entity_property = EntityProperty.objects.get(
                     entity__xml_id=entity_xml_id,
                     name=property_name,
-                    entity_version__isnull=True
+                    entity_version__isnull=True,
+                    entity__file=self.__file
                 )
             except EntityProperty.DoesNotExist:
                 pass
@@ -713,7 +714,8 @@ class DbHandler:
             try:
                 certainty = Certainty.objects.get(
                     xml_id=certainty_xml_id,
-                    file_version__isnull=True
+                    file_version__isnull=True,
+                    file=self.__file
                 )
             except Certainty.DoesNotExist:
                 pass
