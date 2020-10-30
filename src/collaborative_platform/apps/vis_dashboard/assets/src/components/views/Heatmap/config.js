@@ -1,143 +1,58 @@
-const attributes = {
-  entity: ['id', 'type', 'documentName'],
-  certainty: ['id', 'locus', 'match', 'resp']
+export const SourceOption = {
+  uncertaintyCategories: 'Uncertainty categories',
+  entityProperties: 'Entity properties',
+  entityConcurrency: 'Entity concurrency'
 }
 
 const defaultConfig = [
   {
-    name: 'tileLayout',
-    type: 'selection',
-    value: 'Regular',
-    params: {
-      options: [
-        'Regular',
-        'Split',
-        'Tilted'
-      ]
-    }
-  },
-  {
-    name: 'colorScale',
-    type: 'selection',
-    value: 'Red and blue',
-    params: {
-      options: [
-        'Red and blue',
-        'Spectral',
-        'Blues'
-      ]
-    }
-  },
-  {
-    name: 'rangeScale',
-    type: 'selection',
-    value: 'Linear',
-    params: {
-      options: [
-        'Linear',
-        'Logarithmic',
-        'Power'
-      ]
-    }
-  },
-  {
     name: 'source',
     type: 'selection',
-    value: 'entity',
+    value: SourceOption.uncertaintyCategories,
     params: {
       options: [
-        'entity',
-        'certainty'
+        SourceOption.uncertaintyCategories,
+        SourceOption.entityProperties,
+        SourceOption.entityConcurrency
       ]
     }
   },
-  {
-    name: 'axis1',
-    type: 'selection',
-    value: attributes.entity[3],
-    params: { options: attributes.entity }
-  },
-  {
-    name: 'axis2',
-    type: 'selection',
-    value: attributes.entity[3],
-    params: { options: attributes.entity }
-  }
 ]
 
-export default function getOptions (form) {
+export default function getOptions (form, cfg) {
   if (form == null) { return defaultConfig }
 
   const currentValues = {}
   form.forEach(x => { currentValues[x.name] = x.value })
 
-  let { tileLayout, colorScale, rangeScale, source, axis1, axis2 } = currentValues
-
-  if (!attributes[source].includes(axis1)) { axis1 = attributes[source][0] }
-
-  if (!attributes[source].includes(axis2)) { axis2 = attributes[source][0] }
+  let { source, entityType } = currentValues
 
   const configOptions = [
-    {
-      name: 'tileLayout',
-      type: 'selection',
-      value: tileLayout,
-      params: {
-        options: [
-          'Regular',
-          'Split',
-          'Tilted'
-        ]
-      }
-    },
-    {
-      name: 'colorScale',
-      type: 'selection',
-      value: colorScale,
-      params: {
-        options: [
-          'Red and blue',
-          'Spectral',
-          'Blues'
-        ]
-      }
-    },
-    {
-      name: 'rangeScale',
-      type: 'selection',
-      value: rangeScale,
-      params: {
-        options: [
-          'Linear',
-          'Logarithmic',
-          'Power'
-        ]
-      }
-    },
     {
       name: 'source',
       type: 'selection',
       value: source,
       params: {
         options: [
-          'entity',
-          'certainty'
+          SourceOption.uncertaintyCategories,
+          SourceOption.entityProperties,
+          SourceOption.entityConcurrency
         ]
       }
     },
-    {
-      name: 'axis1',
-      type: 'selection',
-      value: axis1,
-      params: { options: attributes[source] }
-    },
-    {
-      name: 'axis2',
-      type: 'selection',
-      value: axis2,
-      params: { options: attributes[source] }
-    }
   ]
+
+  if (source === SourceOption.entityProperties) {
+    const entities = cfg.taxonomy.entities.map(x => x.name)
+    configOptions.push({
+      name: 'entityType',
+      type: 'selection',
+      value: entities.includes(entityType) ? entityType : entities[0],
+      params: {
+        options: entities
+      }
+    })
+  }
 
   return configOptions
 }

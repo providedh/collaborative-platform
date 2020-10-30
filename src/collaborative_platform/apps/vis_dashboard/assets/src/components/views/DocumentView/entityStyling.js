@@ -2,6 +2,7 @@ export default function (container, doc, settings) {
   const containerEntities = settings.entities.map(e => container.getElementsByTagName(e.name))
   const containerEntitiesFlattened = containerEntities.reduce((ac, dc) => [...ac, ...dc], [])
   const containerObjectNames = [...container.getElementsByTagName('objectname')]
+  const containerNames = [...container.getElementsByTagName('name')]
   const id2entity = Object.fromEntries(
     containerEntitiesFlattened
       .filter(x => Object.hasOwnProperty.call(x.attributes, 'xml:id'))
@@ -11,6 +12,16 @@ export default function (container, doc, settings) {
     settings.entities
       .map(e => [e.name, e])
   )
+
+
+  containerNames.forEach(e => {
+    if (Object.hasOwnProperty.call(e.attributes, 'ref')) {
+      const type = e.attributes.ref.value.slice(1).split('-')[0]
+      if (Object.hasOwnProperty.call(name2style, type)){
+        applyStyle(e, name2style[type])
+      }
+    }
+  })
 
   containerEntitiesFlattened.forEach(e => {
     const entityName = (Object.hasOwnProperty.call(e.attributes, 'type') &&
