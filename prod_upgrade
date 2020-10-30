@@ -1,6 +1,9 @@
 #!/bin/bash
 cd /home/ubuntu/collaborative-platform
 pkill screen
+pkill gunicorn
+pkill uwsgi
+pkill celery
 git pull
 cd src/collaborative_platform/
 cp collaborative_platform/settings_template.py collaborative_platform/settings.py
@@ -12,4 +15,4 @@ rm -rf ~/collaborative-platform/static/*
 python3 manage.py collectstatic
 screen -d -m celery -A collaborative_platform worker -B -l info -E
 screen -d -m bash -c 'while true; do uwsgi uwsgi.ini; done;'
-screen -d -m daphne -u collaborative_platform_websockets.sock collaborative_platform.asgi:application
+screen -d -m gunicorn -b unix://collaborative_platform_websockets.sock -w 16 -k uvicorn.workers.UvicornWorker collaborative_platform.asgi:application

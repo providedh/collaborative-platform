@@ -66,7 +66,9 @@ class SimilarityCalculator:
 
     def __calculate_files_text_similarity(self, e1lv, e2lv) -> float:
         if e1lv.file_version == e2lv.file_version:
-            return 1.0
+            return 1.
+        elif e1lv.file_version is None or e2lv.file_version is None:
+            return 0.
         else:
             ftsc, created = FileTextSimilarityCache.objects.get_or_create(fv1=e1lv.file_version, fv2=e2lv.file_version)
             if created:
@@ -190,8 +192,12 @@ class SimilarityCalculator:
         return v
 
     def get_features_vector(self, e1: Entity, e2: Entity) -> List[float]:
-        e1lv = e1.versions.latest('id')
-        e2lv = e2.versions.latest('id')
+        try:
+            e1lv = e1.versions.filter(file_version__isnull=False).latest('id')
+            e2lv = e2.versions.filter(file_version__isnull=False).latest('id')
+        except EntityVersion.DoesNotExist:
+            return np.abs(
+                self.get_max_sim_vector(EntitySchema.objects.get(name=e1.type, taxonomy__project=e1.file.project)) - 1)
 
         sims = self.__calculate_similarity(e1lv, e2lv)
 

@@ -122,14 +122,14 @@
 		        .then(response => {
 		          if (response.ok === false){ throw {status: response.status} }
 		          response.json()
-		            .then(json => { resolve(json) })
+		            .then(json => { resolve(json.sort((a, b) => new Date(b.created) - new Date(a.created))) })
 		            .catch(err => { resolve(response) })
 		        })
 		        .catch(err => { reject(err) });
 		    })
 		}
 
-		function getCurrentFormattedTIme() {
+		function getCurrentFormattedTime() {
 			const currentTime = new Date(Date.now());
 			const formatter = new Intl.NumberFormat("en-IN", {minimumIntegerDigits: 2});
 			const hours = formatter.format(currentTime.getHours());
@@ -176,7 +176,7 @@
 					`
 				}
 
-				const updateTime = getCurrentFormattedTIme()
+				const updateTime = getCurrentFormattedTime()
 				tableRows.parentElement.tHead.rows[0].children[0].innerText =
 					`Updates automatically (last updated at ${updateTime})`
 			});

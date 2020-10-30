@@ -200,7 +200,7 @@ export default function Sunburst () {
     const freeHspace = width - (self._padding * 2)
     const maxDiameter = Math.min(freeHspace, freeVspace) + self._extraVspacing
     const centerX = width / 2
-    const centerY = freeVspace / 2 + self._padding - self._extraVspacing
+    const centerY = (freeVspace - (self._padding*2)) / 2 + self._padding
     const innerCircleRadius = 50
 
     self._colorSchemes.default = d3.scaleOrdinal(d3.quantize(d3.interpolateRainbow, data.children.length + 1))

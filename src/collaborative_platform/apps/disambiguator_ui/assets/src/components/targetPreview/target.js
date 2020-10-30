@@ -10,8 +10,11 @@ function renderUrlContent(container, url, entity) {
       if (json?.data !== undefined && container !== undefined) {
         const doc = $.parseXML(json.data)
         const body =
-          doc.getElementsByTagName('body')[0].innerHTML
+          doc.getElementsByTagName('text')[0].innerHTML
         container.innerHTML = body
+        if (container.innerText.length === 0) {
+          container.innerHTML = '<i>This file does not have text content.</i>'
+        }
         highlightTargets(container, entity)
       }
     })

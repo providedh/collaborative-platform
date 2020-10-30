@@ -71,3 +71,6 @@ joblib
 timefhuman
 maya
 
+
+guvicorn[standard]
+gunicorn

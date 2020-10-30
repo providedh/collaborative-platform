@@ -14,7 +14,7 @@ function periodicJobFetch(projectId, setJobs) {
 function fetchJobs(projectId, setJobs) {
   API.getDisambiguatorStatus(projectId)
     .then((jobs) => {
-      setJobs(jobs);
+      setJobs(jobs.sort((a, b) => new Date(b.created) - new Date(a.created)));
     })
     .catch(err => console.error('Failed to retrieve jobs for project ' + projectId))
 }
@@ -22,7 +22,6 @@ function fetchJobs(projectId, setJobs) {
 function startAnalysis(projectId, setJobs) {
   API.updateDisambiguatorStatus(projectId, {}, {action: 'start'})
     .then(() => {
-      console.log('hi')
       setTimeout(() => fetchJobs(projectId, setJobs), 500)
     })
     .catch(err => console.error('Failed to start analysis job for project ' + projectId, err))
@@ -91,8 +90,8 @@ export default function Jobs ({projectId, ...restProps}) {
 
   return (<div className={styles.jobs}>
     <div className="d-flex">
-      <JobStatus job={jobs.length === 0 ? null : jobs[jobs.length-1]}/>
-      <JobAction projectId={projectId} setJobs={setJobs} job={jobs.length === 0 ? null : jobs[jobs.length-1]}/>
+      <JobStatus job={jobs.length === 0 ? null : jobs[0]}/>
+      <JobAction projectId={projectId} setJobs={setJobs} job={jobs.length === 0 ? null : jobs[0]}/>
     </div>
     <button
       type="button"
@@ -100,7 +99,7 @@ export default function Jobs ({projectId, ...restProps}) {
       onClick={() => setHistoryVisibility(true)}>Show analysis history </button>
     <div className={historyShown ? '' : ' d-none'}>
       <div className="d-flex align-items-center justify-content-between">
-        <span className="text-muted">Oldest first</span>
+        <span className="text-muted">Most recent first</span>
         <button
           type="button"
           className={styles.hideHistory + " btn btn-link"}
