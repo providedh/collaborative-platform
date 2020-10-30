@@ -71,7 +71,6 @@ joblib
 timefhuman
 maya
 
-
+#For websockets serving
 uvicorn[standard]
-
 gunicorn

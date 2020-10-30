@@ -8,7 +8,7 @@ from django.db.models import Model, FileField, ForeignKey, CASCADE, IntegerField
     DateTimeField, FloatField, TextField
 
 from apps.api_vis.db_handler import DbHandler
-from apps.api_vis.models import Entity, Clique, EntityVersion
+from apps.api_vis.models import Entity, Clique, EntityVersion, EntityProperty
 from apps.files_management.models import FileVersion
 from apps.projects.models import Project, EntitySchema
 import joblib
@@ -76,8 +76,11 @@ class UnificationProposal(Model):
             self.save()
         elif self.clique is None:
             db = DbHandler(self.entity.file.project_id, user)
-            clique = db.create_clique(self.entity2.properties.filter(name='name').latest('id').get_value(),
-                                      self.entity.type)
+            try:
+                clique_name = self.entity2.properties.filter(name='name').latest('id').get_value()
+            except EntityProperty.DoesNotExist:
+                clique_name = ""
+            clique = db.create_clique(clique_name, self.entity.type)
             db.create_unification(clique, self.entity, certainty, categories,
                                   self.entity.file.project.versions.latest('id'), self.confidence)
             db.create_unification(clique, self.entity2, certainty, categories,
