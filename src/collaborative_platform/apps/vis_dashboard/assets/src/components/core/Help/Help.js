@@ -263,54 +263,34 @@ export default function Help (props) {
             <h4>Heatmap</h4>
           </div>
           <div className="row ml-0 mr-0">
-            <h5><i>Display distributions encoding the information with bars.</i></h5>
+            <h5><i>Display combinations of entities, taxonomy categories and entity properties in a grid fashion.</i></h5>
           </div>
           <div className="row mt-2">
             <div className="col-sm">
               <p>
-                                Bar charts allow to easily display distributions such as the
-                                named entities per document, common values for certain entity
-                                attribute, or the level of certainty associated to a category.
+                  The heatmap show the amount of entities and uncertaity annotations that fit a specific combination.
+                  Questions like <i>how many location entities have both country and settlement specified?</i> or
+                  <i>are uncertainty categories usually used separately?</i> can be answered with this view.
               </p>
             </div>
             <div className="col-sm">
               <h5>Configuration Parameters</h5>
               <ul>
-                <li><b>Tile layout</b><br/>
-                                    Toggle between a regular, split, or tile layout for the grid; which
-                                    allows to remove redundant information for the eligible options.
-                </li>
-                <li><b>Color scale</b><br/>
-                                    Choose between a set of available color schemes for encoding the
-                                    selected dimension.
-                </li>
-                <li><b>Range scale</b><br/>
-                                    Choose what type of transformation will be applied to the data, allowing
-                                    the least or most represented entries to be more visible.
-                </li>
                 <li><b>Source</b><br/>
-                                    Choose wether to use entities or annotations in the visualization.
+                  Choose whether to show uncertainty category combinations, entity properties or the amount of files
+                  where two entities concur.
                 </li>
-                <li><b>Axis 1 and 2</b><br/>
-                                    Choose what different dimension are used to map data in the visualization,
-                                    being Axis1 the dimension used for the rows, and Axis2 for the columns;
+                <li><b>Entity</b><br/>
+                  Choose the specific entity for which to show property combinations if that is the seleceted source.
                 </li>
               </ul>
             </div>
             <div className="col-sm">
               <p>Available certainty dimensions</p>
               <ul className="list-group ">
-                <li className="list-group-item">Id</li>
-                <li className="list-group-item">Tag</li>
-                <li className="list-group-item">type</li>
-                <li className="list-group-item">Text</li>
-              </ul>
-              <p>Available entity dimensions</p>
-              <ul className="list-group ">
-                <li className="list-group-item">Id</li>
-                <li className="list-group-item">Text</li>
-                <li className="list-group-item">Tag</li>
-                <li className="list-group-item">Document name</li>
+                <li className="list-group-item">Uncertainty categories</li>
+                <li className="list-group-item">Entity properties</li>
+                <li className="list-group-item">Entity concurrency</li>
               </ul>
             </div>
           </div>
