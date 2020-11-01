@@ -17,8 +17,9 @@ function Form (props) {
   const entityType = TEIentities[props.entity.type]
   const categoryOptions = Object.keys(props.context.configuration.taxonomy).map(x =>
     <option key={x} value={x}>{x}</option>)
-  const entityOptions = Object.keys(props.context.configuration.entities).map(x =>
-    <option key={x} value={x}>{x}</option>)
+  const entityOptions = Object.keys(props.context.configuration.entities)
+    .filter(x => x !== 'text fragment')
+    .map(x => <option key={x} value={x}>{x}</option>)
   const propertyOptions = entityType.properties.map(x =>
     <option key={x} value={x}>{x}</option>)
 
