@@ -310,7 +310,8 @@ class ResponseGenerator:
 
     def __get_list_of_certain_type_entities(self, entity_type, file_version):
         entities_versions = EntityVersion.objects.filter(
-            Q(file_version=file_version) | Q(file_version__isnull=True),
+            Q(file_version=file_version)
+            | (Q(file_version__isnull=True) & Q(entity__file=self.__file)),
             entity__type=entity_type,
         ).order_by('entity__xml_id')
 
@@ -337,7 +338,7 @@ class ResponseGenerator:
     def __get_entity_properties(entity_version):
         entity_properties = EntityProperty.objects.filter(
             Q(entity_version=entity_version)
-            | (Q(entity=entity_version.entity) & Q(entity_version__isnull=True))
+            | (Q(entity_version__isnull=True) & Q(entity=entity_version.entity))
         ).order_by('name', 'created_in_file_version', 'deleted_by')
 
         properties = []
