@@ -16,8 +16,9 @@ function Form (props) {
   // const conf = props.context.configuration.entities[props.entity.type]
   const categoryOptions = Object.keys(props.context.configuration.taxonomy).map(x =>
     <option key={x} value={x}>{x}</option>)
-  const entityOptions = Object.keys(props.context.configuration.entities).map(x =>
-    <option key={x} value={x}>{x}</option>)
+  const entityOptions = Object.keys(props.context.configuration.entities)
+    .filter(x => x !== 'text fragment')
+    .map(x => <option key={x} value={x}>{x}</option>)
 
   const defState = {
     locus: 'value',

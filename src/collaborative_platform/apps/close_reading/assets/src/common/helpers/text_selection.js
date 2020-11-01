@@ -1,6 +1,15 @@
 import xml from 'common/helpers/xml.js'
 
-function sanityzeEndindex(source, start, end) {
+function sanityzeStartIndex(source, start, end) {
+  const fragment = source.slice(start, end)
+  const precedingCode = /[^<]>*$/.exec(fragment)?.[0]
+  if (precedingCode != undefined) {
+    return start - precedingCode.length
+  }
+  return start
+}
+
+function sanityzeEndIndex(source, start, end) {
   const fragment = source.slice(start, end)
   const trailingCode = /<[^>]*$/.exec(fragment)?.[0]
   if (trailingCode != undefined) {
@@ -56,9 +65,10 @@ export function getSelection (container, selection, originalContent) {
     ? [anchorOffset, focusOffset]
     : [focusOffset, anchorOffset]
 
-  const corectedEndIndex = sanityzeEndindex(originalContent, start, end)
+  const correctedStartIndex = sanityzeStartIndex(originalContent, start, end)
+  const correctedEndIndex = sanityzeEndIndex(originalContent, correctedStartIndex, end)
 
-  return [start, corectedEndIndex]
+  return [correctedStartIndex, correctedEndIndex]
 }
 
 export function processSelection (selectionEvent) {

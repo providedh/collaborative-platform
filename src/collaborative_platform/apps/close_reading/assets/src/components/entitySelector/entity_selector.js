@@ -77,8 +77,9 @@ function EntitySelector (props) {
     props.onChange(getPayloadForOptions(selectedEntity, ref, attributes, value))
   }
 
-  const entityOptions = Object.keys(entityConfiguration).map(x =>
-    <option key={x} value={x}>{capitalized(x)}</option>)
+  const entityOptions = Object.keys(entityConfiguration)
+    .filter(x => x !== 'text fragment')
+    .map(x => <option key={x} value={x}>{capitalized(x)}</option>)
 
   const attributeFields = Object.entries(attributes).map(([name, value]) => <div className="form-group col-4" key={name}>
     <label htmlFor={name}>{name}</label>
