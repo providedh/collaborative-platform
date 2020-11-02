@@ -4,7 +4,7 @@ function sanityzeStartIndex(source, start, end) {
   const fragment = source.slice(start, end)
   const precedingCode = /[^<]>*$/.exec(fragment)?.[0]
   if (precedingCode != undefined) {
-    return start - precedingCode.length
+    return start + precedingCode.length
   }
   return start
 }
