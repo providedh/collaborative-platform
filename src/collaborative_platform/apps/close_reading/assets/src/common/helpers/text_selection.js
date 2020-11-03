@@ -2,7 +2,7 @@ import xml from 'common/helpers/xml.js'
 
 function sanityzeStartIndex(source, start, end) {
   const fragment = source.slice(start, end)
-  const precedingCode = /[^<]>*$/.exec(fragment)?.[0]
+  const precedingCode = /^[^>]*>/.exec(fragment)?.[0]
   if (precedingCode != undefined) {
     return start + precedingCode.length
   }
