@@ -3,6 +3,7 @@ from typing import Union
 from lxml import etree as et
 
 from django.conf import settings
+from lxml.etree import XMLSyntaxError
 
 
 class ContentExtractor:
@@ -14,10 +15,10 @@ class ContentExtractor:
             return ""
         if type(contents) == str:
             contents = contents.encode("utf-8")
-        tree = et.fromstring(contents)
         try:
+            tree = et.fromstring(contents)
             body = tree.xpath('//default:text/default:body', namespaces=cls.namespaces)[0]
-        except IndexError:
+        except (IndexError, XMLSyntaxError):
             return ""
         else:
             text_nodes = body.xpath('.//text()')
