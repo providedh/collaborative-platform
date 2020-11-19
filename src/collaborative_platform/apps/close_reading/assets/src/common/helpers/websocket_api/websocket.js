@@ -45,22 +45,24 @@ export default function AnnotatorWebSocket (projectId, fileId) {
     }
 
     socket.onmessage = function message (event) {
-      content = JSON.parse(event.data)
+      const content = JSON.parse(event.data)
+      let ok = true
       const validation = validate(content)
+
       if (validation.valid === false) {
         console.info('ws::invalid::', content)
         validation.errors.forEach(e => console.error(e.toString()))
-        return 1
+        ok = false
       }
 
       if (content.status !== 200) {
-        return 1
+        ok = false
       }
 
       if (firstEntry === true) { firstEntry = false }
       // Run any callbacks if any, with the contents retrieved
       const f = firstEntry === true ? callbacks.onload : callbacks.onreload
-      f.forEach(callback => callback(content))
+      f.forEach(callback => callback({...content, ok}))
     }
 
     setInterval(function () {

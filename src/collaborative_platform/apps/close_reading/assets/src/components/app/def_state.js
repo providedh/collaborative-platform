@@ -4,6 +4,7 @@ export default function defState (fileId, fileName, user, configuration, websock
     fileName,
     fileVersion: '',
     documentContent: '',
+    toasts: [],
 
     selection: null,
 
