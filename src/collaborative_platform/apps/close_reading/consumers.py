@@ -1,6 +1,7 @@
 import json
 
 from asgiref.sync import async_to_sync
+from channels.exceptions import StopConsumer
 from channels.generic.websocket import WebsocketConsumer
 from channels.layers import get_channel_layer
 
@@ -110,6 +111,8 @@ class AnnotatorConsumer(WebsocketConsumer):
 
         if not remain_users and not pending_operations and self.__response_generator:
             self.__response_generator.remove_xml_content()
+
+        raise StopConsumer()
 
     def __remove_user_from_room_group(self):
         if self.groups and self.channel_name in self.groups[self.__room_group_name]:
