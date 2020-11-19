@@ -23,9 +23,8 @@ django-recaptcha==2.0.6
 redis==3.5.3
 
 # For WebSockets
-channels==3.0.2
+channels==2.4.0
 channels-redis==3.2.0
-asyncio==3.4.3
 
 # For periodical tasks
 celery==4.4.7
