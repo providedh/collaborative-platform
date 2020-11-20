@@ -64,9 +64,7 @@ class AnnotatorConsumer(WebsocketConsumer):
             self.close()
 
     def __check_if_project_exist(self):
-        try:
-            _ = Project.objects.get(id=self.__project_id)
-        except Project.DoesNotExist:
+        if not Project.objects.filter(id=self.__project_id).exists():
             raise BadRequest(f"Project with id: {self.__project_id} doesn't exist.")
 
     def __get_file_from_db(self):
@@ -78,8 +76,8 @@ class AnnotatorConsumer(WebsocketConsumer):
     def __check_if_user_is_contributor(self):
         contributor = Contributor.objects.filter(project_id=self.__project_id, user_id=self.scope['user'].id)
 
-        if not contributor:
-            raise Forbidden(f"You aren't contributor in project with id: {self.__project_id}.")
+        if not contributor.exists():
+            raise Forbidden(f"You are not contributor to project with id: {self.__project_id}.")
 
     def __add_user_to_room_group(self):
         async_to_sync(self.channel_layer.group_add)(
@@ -106,7 +104,7 @@ class AnnotatorConsumer(WebsocketConsumer):
 
         self.close()
 
-        remain_users = self.__count_remain_users()
+        remain_users = self.__count_remaining_users()
         pending_operations = self.__count_pending_operations()
 
         if not remain_users and not pending_operations and self.__response_generator:
@@ -125,19 +123,16 @@ class AnnotatorConsumer(WebsocketConsumer):
 
     def __remove_user_from_presence_table(self):
         if self.scope['user'].pk is not None:
-            room_presences = RoomPresence.objects.filter(
+            RoomPresence.objects.filter(
                 room_symbol=self.__room_name,
                 user=self.scope['user'],
-            )
-
-            for presence in room_presences:
-                presence.delete()
+            ).delete()
 
             CloseReadingLogger().log_removing_user_from_room_presence_table(self.scope['user'].id)
 
-    def __count_remain_users(self):
-        remain_users = RoomPresence.objects.filter(room_symbol=self.__room_name)
-        users_number = remain_users.count()
+    def __count_remaining_users(self):
+        remaining_users = RoomPresence.objects.filter(room_symbol=self.__room_name)
+        users_number = remaining_users.count()
 
         CloseReadingLogger().log_number_of_remaining_users_in_room(self.__room_name, users_number)
 
@@ -185,7 +180,7 @@ class AnnotatorConsumer(WebsocketConsumer):
                     self.__send_personalized_changes_to_users()
 
                 else:
-                    raise BadRequest("There is no operation matching to this request")
+                    raise BadRequest("There is no operation matching this request")
 
             except NotModified as exception:
                 self.__send_error(304, exception)
@@ -195,40 +190,44 @@ class AnnotatorConsumer(WebsocketConsumer):
 
             except Exception as exception:
                 CloseReadingLogger().log_unhandled_exception(self.scope['user'].id, str(exception))
-
                 self.__send_error(500, "Unhandled exception.")
 
     def __update_users_presence(self):
         if self.scope['user'].id is not None:
-            room_presences = RoomPresence.objects.filter(
-                room_symbol=self.__room_name,
-                user=self.scope['user'],
-            ).order_by('-timestamp')
-
-            if room_presences:
-                room_presence = room_presences[0]
-                room_presence.save()
+            try:
+                RoomPresence.objects.filter(
+                    room_symbol=self.__room_name,
+                    user=self.scope['user'],
+                ).latest('timestamp').save()
+            except RoomPresence.DoesNotExist:
+                RoomPresence.objects.create(
+                    room_symbol=self.__room_name,
+                    user=self.scope['user'],
+                )
 
     def __send_personalized_changes_to_users(self):
         room_presences = RoomPresence.objects.filter(
             room_symbol=self.__room_name
-        )
+        ).order_by(
+            'user_id',
+            '-timestamp'
+        ).distinct('user_id').values('user_id', 'channel_name')
 
         for presence in room_presences:
-            user_id = presence.user.id
+            user_id = presence['user_id']
 
             response = self.__response_generator.get_response(user_id)
 
             channel_layer = get_channel_layer()
             async_to_sync(channel_layer.send)(
-                presence.channel_name,
+                presence['channel_name'],
                 {
                     'type': 'xml_modification',
                     'message': response,
                 }
             )
 
-        users_ids = list(room_presences.values_list('user_id', flat=True))
+        users_ids = tuple(room_presences.values_list('user_id', flat=True))
 
         CloseReadingLogger().log_correct_response(self.__file_id, self.scope['user'].id, users_ids)
 
