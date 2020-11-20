@@ -2,7 +2,7 @@ from apps.close_reading.enums import ElementTypes
 from apps.close_reading.db_handler import DbHandler
 from apps.close_reading.response_generator import get_listable_entities_types
 from apps.close_reading.xml_handler import XmlHandler
-from apps.exceptions import BadRequest, Forbidden, UnsavedElement
+from apps.exceptions import BadParameters, BadRequest, Forbidden, UnsavedElement
 
 
 class RequestHandler:
@@ -177,7 +177,13 @@ class RequestHandler:
         tag_xml_id = self.__db_handler.get_next_xml_id('ab')
 
         body_content = self.__db_handler.get_body_content()
-        body_content = self.__xml_handler.add_tag(body_content, start_pos, end_pos, tag_xml_id)
+
+        try:
+            body_content = self.__xml_handler.add_tag(body_content, start_pos, end_pos, tag_xml_id)
+
+        except BadParameters as exception:
+            raise BadRequest(str(exception))
+
         self.__db_handler.set_body_content(body_content)
 
         self.__operations_results.append(tag_xml_id)

@@ -3,7 +3,7 @@ import re
 
 from lxml import etree
 
-from apps.exceptions import Forbidden, UnsavedElement
+from apps.exceptions import BadParameters, Forbidden, UnsavedElement
 from apps.close_reading.text_splitter import TextSplitter
 from apps.files_management.file_conversions.xml_tools import get_first_xpath_match
 
@@ -18,6 +18,8 @@ class XmlHandler:
         self.__annotator_xml_id = annotator_xml_id
 
     def add_tag(self, text, start_pos, end_pos, tag_xml_id):
+        self.__check_if_positions_are_valid(text, start_pos, end_pos)
+
         text = self.__add_tag(text, start_pos, end_pos, tag_xml_id)
 
         attributes = {
@@ -480,6 +482,28 @@ class XmlHandler:
             return False
         else:
             return True
+
+    @staticmethod
+    def __check_if_positions_are_valid(text, start_pos, end_pos):
+        if start_pos >= end_pos:
+            raise BadParameters(f"'start_pos' or 'end_pos' parameter is not valid. 'start_pos' parameter must be less "
+                                f"than 'end_pos' parameter. 'start_pos': {start_pos}, 'end_pos': {end_pos}")
+
+        selected_fragment = text[start_pos:end_pos]
+
+        regex = r'^[^<]*?>'
+        match = re.search(regex, selected_fragment)
+
+        if match:
+            raise BadParameters(f"'start_pos' parameter is not valid. Selected fragment can't start or end "
+                                f"in the middle of the tag. Selected fragment: '{selected_fragment}'")
+
+        regex = r'<[^>]*?$'
+        match = re.search(regex, selected_fragment)
+
+        if match:
+            raise BadParameters(f"'end_pos' parameter is not valid. Selected fragment can't start or end "
+                                f"in the middle of the tag. Selected fragment: '{selected_fragment}'")
 
     def __add_resp_if_needed(self, attributes, text, tag_xml_id):
         resp_in_tag = self.__check_if_resp_in_tag(text, tag_xml_id)

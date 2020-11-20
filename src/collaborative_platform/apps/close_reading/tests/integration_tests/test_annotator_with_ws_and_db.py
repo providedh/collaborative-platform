@@ -136,6 +136,49 @@ class TestAnnotatorWithWsAndDb:
 
         await communicator.disconnect()
 
+    test_parameters_names = "start_pos, end_pos, error_message"
+    test_parameters_list = [
+        (275, 300, "'start_pos' parameter is not valid. Selected fragment can't start or end in the middle of the tag. "
+                   "Selected fragment: '>Put three or four Pounds'"),
+        (294, 306, "'end_pos' parameter is not valid. Selected fragment can't start or end in the middle of the tag. "
+                   "Selected fragment: 'Pounds of <n'"),
+        (275, 275, "'start_pos' or 'end_pos' parameter is not valid. 'start_pos' parameter must be less than 'end_pos' "
+                   "parameter. 'start_pos': 275, 'end_pos': 275")
+    ]
+
+    @pytest.mark.parametrize(test_parameters_names, test_parameters_list)
+    async def test_wrong_text_positions_return_error(self, start_pos, end_pos, error_message):
+        project_id = 1
+        file_id = 1
+        user_id = 2
+
+        communicator = get_communicator(project_id, file_id, user_id)
+
+        await communicator.connect()
+        await communicator.receive_json_from()
+
+        request = {
+            'method': 'modify',
+            'payload': [
+                {
+                    'method': 'POST',
+                    'element_type': 'tag',
+                    'parameters': {
+                        'start_pos': start_pos,
+                        'end_pos': end_pos,
+                    }
+                }
+            ]
+        }
+
+        await communicator.send_json_to(request)
+        response = await communicator.receive_json_from()
+
+        assert response['status'] == 400
+        assert response['message'] == error_message
+
+        await communicator.disconnect()
+
     async def test_move_tag_to_new_position(self):
         test_name = inspect.currentframe().f_code.co_name
 
