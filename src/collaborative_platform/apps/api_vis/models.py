@@ -88,9 +88,9 @@ class EntityProperty(models.Model):
         elif self.type == TypeChoice.float:
             self.value_float = float(value)
         elif self.type == TypeChoice.date:
-            self.value_date = date.fromisoformat(str(value))
+            self.value_date = datetime.strptime(str(value), '%Y-%m-%d').date()
         elif self.type == TypeChoice.time:
-            self.value_time = time.fromisoformat(str(value))
+            self.value_time = datetime.strptime(str(value), '%H:%M:%S').time()
         elif self.type == TypeChoice.Point:
             clean_value = value.replace(',', ' ')
             clean_value = re.sub(r'\s+', ' ', clean_value)
