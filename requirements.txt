@@ -43,7 +43,7 @@ elasticsearch-dsl>=7.0.0,<8.0.0
 social-auth-app-django==4.0.0
 
 # For SSL on localhost
-# django-extensions==3.0.8
+django-extensions==3.0.8
 # Werkzeug==0.15.5
 # pyOpenSSL==19.0.0
 # service_identity==18.1.0
