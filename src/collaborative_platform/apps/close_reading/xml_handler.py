@@ -665,7 +665,7 @@ class XmlHandler:
                     else:
                         new_tag_xml_id = f'{new_tag_xml_id}.{index}'
 
-                tagged_part = f'<ab xml:id="{new_tag_xml_id}">{part}</ab>'
+                tagged_part = f'<seg xml:id="{new_tag_xml_id}">{part}</seg>'
 
                 tagged_parts.append(tagged_part)
                 index += 1
@@ -765,7 +765,7 @@ class XmlHandler:
             remaining_references = (references | references_added) - references_deleted
             if not remaining_references:
                 prefix = "{%s}" % XML_NAMESPACES['default']
-                tag = prefix + 'ab'
+                tag = prefix + 'seg'
                 element.tag = tag
 
             if new_tag:

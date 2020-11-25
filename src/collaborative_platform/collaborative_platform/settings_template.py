@@ -486,7 +486,7 @@ CUSTOM_ENTITY = {
     'text_tag': 'name',
 }
 
-ADDITIONAL_USABLE_TAGS = ['certainty', 'name', 'ab']
+ADDITIONAL_USABLE_TAGS = ['certainty', 'name', 'seg']
 
 ADDITIONAL_XML_ID_BASES = ['annotator']
 

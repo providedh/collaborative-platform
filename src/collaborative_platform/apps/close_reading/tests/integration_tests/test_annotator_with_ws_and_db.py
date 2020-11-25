@@ -122,8 +122,8 @@ class TestAnnotatorWithWsAndDb:
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 454,
-                        'end_pos': 458,
+                        'start_pos': 457,
+                        'end_pos': 461,
                     }
                 }
             ]
@@ -280,7 +280,7 @@ class TestAnnotatorWithWsAndDb:
                 {
                     'method': 'POST',
                     'element_type': 'reference',
-                    'edited_element_id': 'ab-1',
+                    'edited_element_id': 'seg-1',
                     'parameters': {
                         'entity_type': 'person',
                     }
@@ -335,7 +335,7 @@ class TestAnnotatorWithWsAndDb:
                 {
                     'method': 'POST',
                     'element_type': 'reference',
-                    'edited_element_id': 'ab-1',
+                    'edited_element_id': 'seg-1',
                     'parameters': {
                         'entity_type': 'date',
                     }
@@ -390,7 +390,7 @@ class TestAnnotatorWithWsAndDb:
                 {
                     'method': 'POST',
                     'element_type': 'reference',
-                    'edited_element_id': 'ab-1',
+                    'edited_element_id': 'seg-1',
                     'new_element_id': 'person-2'
                 }
             ]
@@ -443,7 +443,7 @@ class TestAnnotatorWithWsAndDb:
                 {
                     'method': 'POST',
                     'element_type': 'reference',
-                    'edited_element_id': 'ab-1',
+                    'edited_element_id': 'seg-1',
                     'new_element_id': 'date-0'
                 }
             ]
@@ -775,7 +775,7 @@ class TestAnnotatorWithWsAndDb:
                 {
                     'method': 'POST',
                     'element_type': 'reference',
-                    'edited_element_id': 'ab-1',
+                    'edited_element_id': 'seg-1',
                     'parameters': {
                         'entity_type': 'date',
                     }
@@ -983,7 +983,7 @@ class TestAnnotatorWithWsAndDb:
                 {
                     'method': 'POST',
                     'element_type': 'certainty',
-                    'new_element_id': 'ab-0',
+                    'new_element_id': 'seg-0',
                     'parameters': {
                         'categories': ['ignorance', 'incompleteness'],
                         'locus': 'value',
@@ -1550,7 +1550,7 @@ class TestAnnotatorWithWsAndDb:
                 {
                     'method': 'POST',
                     'element_type': 'reference',
-                    'edited_element_id': 'ab-1',
+                    'edited_element_id': 'seg-1',
                     'parameters': {
                         'entity_type': 'person',
                     }
@@ -1610,7 +1610,7 @@ class TestAnnotatorWithWsAndDb:
                 {
                     'method': 'POST',
                     'element_type': 'reference',
-                    'edited_element_id': 'ab-1',
+                    'edited_element_id': 'seg-1',
                     'parameters': {
                         'entity_type': 'date',
                     }
@@ -1676,7 +1676,7 @@ class TestAnnotatorWithWsAndDb:
                 {
                     'method': 'POST',
                     'element_type': 'reference',
-                    'edited_element_id': 'ab-1',
+                    'edited_element_id': 'seg-1',
                     'new_element_id': 'person-2'
                 }
             ]
@@ -1734,7 +1734,7 @@ class TestAnnotatorWithWsAndDb:
                 {
                     'method': 'POST',
                     'element_type': 'reference',
-                    'edited_element_id': 'ab-1',
+                    'edited_element_id': 'seg-1',
                     'new_element_id': 'date-0'
                 }
             ]
@@ -2150,7 +2150,7 @@ class TestAnnotatorWithWsAndDb:
                 {
                     'method': 'POST',
                     'element_type': 'reference',
-                    'edited_element_id': 'ab-1',
+                    'edited_element_id': 'seg-1',
                     'parameters': {
                         'entity_type': 'date',
                     }
@@ -2416,7 +2416,7 @@ class TestAnnotatorWithWsAndDb:
                 {
                     'method': 'POST',
                     'element_type': 'certainty',
-                    'new_element_id': 'ab-0',
+                    'new_element_id': 'seg-0',
                     'parameters': {
                         'categories': ['ignorance', 'incompleteness'],
                         'locus': 'value',
@@ -2690,7 +2690,7 @@ class TestAnnotatorWithWsAndDb:
                 {
                     'method': 'POST',
                     'element_type': 'reference',
-                    'edited_element_id': 'ab-1',
+                    'edited_element_id': 'seg-1',
                     'parameters': {
                         'entity_type': 'person',
                     }
@@ -2750,7 +2750,7 @@ class TestAnnotatorWithWsAndDb:
                 {
                     'method': 'POST',
                     'element_type': 'reference',
-                    'edited_element_id': 'ab-1',
+                    'edited_element_id': 'seg-1',
                     'parameters': {
                         'entity_type': 'date',
                     }
@@ -2816,7 +2816,7 @@ class TestAnnotatorWithWsAndDb:
                 {
                     'method': 'POST',
                     'element_type': 'reference',
-                    'edited_element_id': 'ab-1',
+                    'edited_element_id': 'seg-1',
                     'new_element_id': 'person-2'
                 }
             ]
@@ -2874,7 +2874,7 @@ class TestAnnotatorWithWsAndDb:
                 {
                     'method': 'POST',
                     'element_type': 'reference',
-                    'edited_element_id': 'ab-1',
+                    'edited_element_id': 'seg-1',
                     'new_element_id': 'date-0'
                 }
             ]
@@ -3322,7 +3322,7 @@ class TestAnnotatorWithWsAndDb:
                 {
                     'method': 'POST',
                     'element_type': 'reference',
-                    'edited_element_id': 'ab-1',
+                    'edited_element_id': 'seg-1',
                     'parameters': {
                         'entity_type': 'date',
                     }
@@ -3585,7 +3585,7 @@ class TestAnnotatorWithWsAndDb:
                 {
                     'method': 'POST',
                     'element_type': 'certainty',
-                    'new_element_id': 'ab-0',
+                    'new_element_id': 'seg-0',
                     'parameters': {
                         'categories': ['ignorance', 'incompleteness'],
                         'locus': 'value',
@@ -3804,8 +3804,8 @@ class TestAnnotatorWithWsAndDb:
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 454,
-                        'end_pos': 458,
+                        'start_pos': 457,
+                        'end_pos': 461,
                     }
                 }
             ]
@@ -3822,7 +3822,7 @@ class TestAnnotatorWithWsAndDb:
                 {
                     'method': 'POST',
                     'element_type': 'reference',
-                    'edited_element_id': 'ab-1',
+                    'edited_element_id': 'seg-1',
                     'parameters': {
                         'entity_type': 'person',
                     }
@@ -3841,7 +3841,7 @@ class TestAnnotatorWithWsAndDb:
                 {
                     'method': 'POST',
                     'element_type': 'reference',
-                    'edited_element_id': 'ab-2',
+                    'edited_element_id': 'seg-2',
                     'new_element_id': 'person-6'
                 }
             ]
@@ -3877,7 +3877,7 @@ class TestAnnotatorWithWsAndDb:
                 {
                     'method': 'POST',
                     'element_type': 'certainty',
-                    'new_element_id': 'ab-2',
+                    'new_element_id': 'seg-2',
                     'parameters': {
                         'categories': ['ignorance', 'incompleteness'],
                         'locus': 'value',
@@ -3899,7 +3899,7 @@ class TestAnnotatorWithWsAndDb:
                 {
                     'method': 'POST',
                     'element_type': 'certainty',
-                    'new_element_id': 'ab-2@ref',
+                    'new_element_id': 'seg-2@ref',
                     'parameters': {
                         'categories': ['ignorance', 'incompleteness'],
                         'locus': 'value',
@@ -4010,8 +4010,8 @@ class TestAnnotatorWithWsAndDb:
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 454,
-                        'end_pos': 458,
+                        'start_pos': 457,
+                        'end_pos': 461,
                     }
                 },
                 {
@@ -4138,8 +4138,8 @@ class TestAnnotatorWithWsAndDb:
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 454,
-                        'end_pos': 458,
+                        'start_pos': 457,
+                        'end_pos': 461,
                     }
                 },
                 {
@@ -4266,8 +4266,8 @@ class TestAnnotatorWithWsAndDb:
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 454,
-                        'end_pos': 458,
+                        'start_pos': 457,
+                        'end_pos': 461,
                     }
                 },
                 {
@@ -4457,7 +4457,7 @@ class TestAnnotatorWithWsAndDb:
                 {
                     'method': 'POST',
                     'element_type': 'certainty',
-                    'new_element_id': 'ab-1',
+                    'new_element_id': 'seg-1',
                     'parameters': {
                         'categories': ['ignorance', 'incompleteness'],
                         'locus': 'value',
@@ -4493,10 +4493,10 @@ class TestAnnotatorWithWsAndDb:
                 {
                     'method': 'PUT',
                     'element_type': 'tag',
-                    'edited_element_id': 'ab-0',
+                    'edited_element_id': 'seg-0',
                     'parameters': {
-                        'start_pos': 557,
-                        'end_pos': 577,
+                        'start_pos': 560,
+                        'end_pos': 580,
                     }
                 }
             ]
@@ -4546,7 +4546,7 @@ class TestAnnotatorWithWsAndDb:
                 {
                     'method': 'POST',
                     'element_type': 'reference',
-                    'edited_element_id': 'ab-1',
+                    'edited_element_id': 'seg-1',
                     'parameters': {
                         'entity_type': 'person',
                     }
@@ -4598,7 +4598,7 @@ class TestAnnotatorWithWsAndDb:
                 {
                     'method': 'POST',
                     'element_type': 'reference',
-                    'edited_element_id': 'ab-1',
+                    'edited_element_id': 'seg-1',
                     'parameters': {
                         'entity_type': 'person',
                     }
@@ -4641,10 +4641,10 @@ class TestAnnotatorWithWsAndDb:
                 {
                     'method': 'PUT',
                     'element_type': 'tag',
-                    'edited_element_id': 'ab-0',
+                    'edited_element_id': 'seg-0',
                     'parameters': {
-                        'start_pos': 557,
-                        'end_pos': 577,
+                        'start_pos': 560,
+                        'end_pos': 580,
                     }
                 }
             ]
@@ -4704,7 +4704,7 @@ class TestAnnotatorWithWsAndDb:
                 {
                     'method': 'POST',
                     'element_type': 'reference',
-                    'edited_element_id': 'ab-1',
+                    'edited_element_id': 'seg-1',
                     'parameters': {
                         'entity_type': 'person',
                     }
@@ -4795,8 +4795,8 @@ class TestAnnotatorWithWsAndDb:
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 454,
-                        'end_pos': 458,
+                        'start_pos': 457,
+                        'end_pos': 461,
                     }
                 }
             ]

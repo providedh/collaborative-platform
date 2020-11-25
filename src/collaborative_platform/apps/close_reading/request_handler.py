@@ -174,7 +174,7 @@ class RequestHandler:
 
         start_pos = request['parameters']['start_pos']
         end_pos = request['parameters']['end_pos']
-        tag_xml_id = self.__db_handler.get_next_xml_id('ab')
+        tag_xml_id = self.__db_handler.get_next_xml_id('seg')
 
         body_content = self.__db_handler.get_body_content()
 
@@ -442,7 +442,7 @@ class RequestHandler:
         tag_xml_id = request.get('edited_element_id')
         entity_xml_id = request.get('old_element_id')
 
-        new_tag = 'ab'
+        new_tag = 'seg'
         new_tag_xml_id = self.__get_new_tag_xml_id(tag_xml_id, new_tag)
 
         entity_type = self.__db_handler.get_entity_type(entity_xml_id)

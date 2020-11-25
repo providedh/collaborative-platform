@@ -450,7 +450,7 @@
   "pk": 9,
   "fields": {
     "file": 1,
-    "xml_id_base": "ab",
+    "xml_id_base": "seg",
     "xml_id_number": 1
   }
 },
@@ -549,7 +549,7 @@
   "pk": 20,
   "fields": {
     "file": 2,
-    "xml_id_base": "ab",
+    "xml_id_base": "seg",
     "xml_id_number": 0
   }
 },
@@ -648,7 +648,7 @@
   "pk": 31,
   "fields": {
     "file": 3,
-    "xml_id_base": "ab",
+    "xml_id_base": "seg",
     "xml_id_number": 0
   }
 },
@@ -2779,7 +2779,7 @@
     "locus": "value",
     "certainty": "high",
     "degree": null,
-    "target_xml_id": "ab-0",
+    "target_xml_id": "seg-0",
     "target_match": null,
     "asserted_value": "Balloons",
     "description": "Some important decription",
@@ -2895,7 +2895,7 @@
     "locus": "value",
     "certainty": "high",
     "degree": null,
-    "target_xml_id": "ab-0",
+    "target_xml_id": "seg-0",
     "target_match": null,
     "asserted_value": "Balloons",
     "description": "Some important decription",

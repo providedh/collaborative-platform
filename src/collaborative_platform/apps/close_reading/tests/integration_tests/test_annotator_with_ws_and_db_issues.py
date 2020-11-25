@@ -60,7 +60,7 @@ class TestIssue111:
                 {
                     'method': 'DELETE',
                     'element_type': 'tag',
-                    'edited_element_id': 'ab-1'
+                    'edited_element_id': 'seg-1'
                 }
             ]
         }
@@ -111,7 +111,7 @@ class TestIssue111:
                 {
                     'method': 'POST',
                     'element_type': 'reference',
-                    'edited_element_id': 'ab-1',
+                    'edited_element_id': 'seg-1',
                     'new_element_id': 'person-2'
                 }
             ]
@@ -128,7 +128,7 @@ class TestIssue111:
                 {
                     'method': 'DELETE',
                     'element_type': 'reference',
-                    'edited_element_id': 'ab-1',
+                    'edited_element_id': 'seg-1',
                     'old_element_id': 'person-2',
                 }
             ]
@@ -215,7 +215,7 @@ class TestIssue111:
                 {
                     'method': 'POST',
                     'element_type': 'certainty',
-                    'new_element_id': 'ab-0',
+                    'new_element_id': 'seg-0',
                     'parameters': {
                         'categories': ['imprecision'],
                         'locus': 'value',
@@ -296,10 +296,10 @@ class TestIssue112:
                 {
                     'method': 'PUT',
                     'element_type': 'tag',
-                    'edited_element_id': 'ab-1',
+                    'edited_element_id': 'seg-1',
                     'parameters': {
                         'start_pos': 280,
-                        'end_pos': 365,
+                        'end_pos': 368,
                     }
                 }
             ]
@@ -349,7 +349,7 @@ class TestIssue112:
                 {
                     'method': 'POST',
                     'element_type': 'reference',
-                    'edited_element_id': 'ab-1',
+                    'edited_element_id': 'seg-1',
                     'parameters': {
                         'entity_type': 'person',
                     }
@@ -374,7 +374,7 @@ class TestIssue112:
                 {
                     'method': 'PUT',
                     'element_type': 'reference',
-                    'edited_element_id': 'ab-1',
+                    'edited_element_id': 'seg-1',
                     'old_element_id': 'person-6',
                     'new_element_id': 'date-2'
                 }
@@ -437,7 +437,7 @@ class TestIssue112:
                 {
                     'method': 'POST',
                     'element_type': 'reference',
-                    'edited_element_id': 'ab-1',
+                    'edited_element_id': 'seg-1',
                     'parameters': {
                         'entity_type': 'date',
                         'entity_properties': {
@@ -462,7 +462,7 @@ class TestIssue112:
                 {
                     'method': 'PUT',
                     'element_type': 'reference',
-                    'edited_element_id': 'ab-1',
+                    'edited_element_id': 'seg-1',
                     'old_element_id': 'date-3',
                     'new_element_id': 'ingredient-0'
                 }
@@ -516,7 +516,7 @@ class TestIssue112:
                 {
                     'method': 'POST',
                     'element_type': 'reference',
-                    'edited_element_id': 'ab-1',
+                    'edited_element_id': 'seg-1',
                     'parameters': {
                         'entity_type': 'date',
                         'entity_properties': {
@@ -620,7 +620,7 @@ class TestIssue112:
                 {
                     'method': 'POST',
                     'element_type': 'certainty',
-                    'new_element_id': 'ab-0',
+                    'new_element_id': 'seg-0',
                     'parameters': {
                         'categories': ['imprecision'],
                         'locus': 'value',
@@ -742,7 +742,7 @@ class TestIssue113:
                 {
                     'method': 'POST',
                     'element_type': 'reference',
-                    'edited_element_id': 'ab-1',
+                    'edited_element_id': 'seg-1',
                     'parameters': {
                         'entity_type': 'event',
                     }
@@ -844,7 +844,7 @@ class TestIssue114:
                 {
                     'method': 'POST',
                     'element_type': 'reference',
-                    'edited_element_id': 'ab-1',
+                    'edited_element_id': 'seg-1',
                     'parameters': {
                         'entity_type': 'person',
                     }
