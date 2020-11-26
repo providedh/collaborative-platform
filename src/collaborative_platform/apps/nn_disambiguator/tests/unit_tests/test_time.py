@@ -19,6 +19,6 @@ class TestTime:
 
     def test_seconds_apart(self):
         assert seconds_apart("now", "now") == 0
-        assert seconds_apart(datetime.now().time(), datetime.now() + timedelta(hours=7)) == 25200
+        assert seconds_apart(datetime.min.time(), datetime.min + timedelta(hours=7)) == 25200
         assert seconds_apart("12 p.m.", "6. p.m.") == 21600
         assert seconds_apart("13:37", "21:37") == 28800
