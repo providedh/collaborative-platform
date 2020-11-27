@@ -1329,8 +1329,7 @@
       "taxonomy": 1,
       "name": "person",
       "color": "#ff7f00",
-      "icon": "\uf007",
-      "body_list": true
+      "icon": "\uf007"
     }
   },
   {
@@ -1340,8 +1339,7 @@
       "taxonomy": 1,
       "name": "event",
       "color": "#cecece",
-      "icon": "\uf274",
-      "body_list": true
+      "icon": "\uf274"
     }
   },
   {
@@ -1351,8 +1349,7 @@
       "taxonomy": 1,
       "name": "org",
       "color": "#b4edfc",
-      "icon": "\uf1ad",
-      "body_list": true
+      "icon": "\uf1ad"
     }
   },
   {
@@ -1362,8 +1359,7 @@
       "taxonomy": 1,
       "name": "object",
       "color": "#b4d38d",
-      "icon": "\uf466",
-      "body_list": true
+      "icon": "\uf466"
     }
   },
   {
@@ -1373,8 +1369,7 @@
       "taxonomy": 1,
       "name": "place",
       "color": "#204191",
-      "icon": "\uf279",
-      "body_list": true
+      "icon": "\uf279"
     }
   },
   {
@@ -1384,8 +1379,7 @@
       "taxonomy": 1,
       "name": "date",
       "color": "#868788",
-      "icon": "\uf073",
-      "body_list": true
+      "icon": "\uf073"
     }
   },
   {
@@ -1395,8 +1389,7 @@
       "taxonomy": 1,
       "name": "time",
       "color": "#eab9e4",
-      "icon": "\uf017",
-      "body_list": true
+      "icon": "\uf017"
     }
   },
   {
@@ -1406,8 +1399,7 @@
       "taxonomy": 1,
       "name": "band",
       "color": "#ff0000",
-      "icon": "\uf7a6",
-      "body_list": true
+      "icon": "\uf7a6"
     }
   },
   {
@@ -1417,8 +1409,7 @@
       "taxonomy": 1,
       "name": "song",
       "color": "#0037ff",
-      "icon": "\uf001",
-      "body_list": true
+      "icon": "\uf001"
     }
   },
   {

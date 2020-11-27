@@ -127,12 +127,12 @@ class ElementsExtractor:
     def __move_listable_entities(self):
         for entity in self.__listable_entities:
             list_tag = DEFAULT_ENTITIES[entity.name]['list_tag']
-            xpath = f'//default:{list_tag}[@type="{entity.name}List"]//default:{entity.name}'
+            xpath = f'//default:standOff//default:{list_tag}[@type="{entity.name}List"]//default:{entity.name}'
             elements = self.__tree.xpath(xpath, namespaces=XML_NAMESPACES)
 
             self.__create_entities_in_db(elements, entity.name)
 
-            xpath = f'//default:{list_tag}[@type="{entity.name}List"]'
+            xpath = f'//default:standOff//default:{list_tag}[@type="{entity.name}List"]'
             lists = self.__tree.xpath(xpath, namespaces=XML_NAMESPACES)
 
             self.__remove_elements_from_tree(lists)
@@ -147,12 +147,12 @@ class ElementsExtractor:
 
     def __move_custom_entities(self):
         for entity in self.__custom_entities:
-            xpath = f'//default:listObject[@type="{entity.name}List"]//default:object[@type="{entity.name}"]'
+            xpath = f'//default:standOff//default:listObject[@type="{entity.name}List"]//default:object[@type="{entity.name}"]'
             elements = self.__tree.xpath(xpath, namespaces=XML_NAMESPACES)
 
             self.__create_entities_in_db(elements, entity.name, custom=True)
 
-            xpath = f'//default:listObject[@type="{entity.name}List"]'
+            xpath = f'//default:standOff//default:listObject[@type="{entity.name}List"]'
             lists = self.__tree.xpath(xpath, namespaces=XML_NAMESPACES)
 
             self.__remove_elements_from_tree(lists)

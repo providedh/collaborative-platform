@@ -42,6 +42,8 @@ class FileRenderer:
     def __create_tree(self):
         raw_content = self.__file_version.get_raw_content()
 
+        print(raw_content)
+
         parser = etree.XMLParser(remove_blank_text=True)
         self.__tree = etree.fromstring(raw_content, parser=parser)
 
@@ -69,13 +71,7 @@ class FileRenderer:
                 elements = self.__create_entities_elements(entities_versions)
 
                 list_tag = DEFAULT_ENTITIES[entity.name]['list_tag']
-
-                if entity.body_list:
-                    list_xpath = f'./default:text/default:body/default:div[@type="{entity.name}"]/' \
-                                 f'default:{list_tag}[@type="{entity.name}List"]'
-                else:
-                    list_xpath = f'./default:teiHeader/default:fileDesc/default:sourceDesc/' \
-                                 f'default:{list_tag}[@type="{entity.name}List"]'
+                list_xpath = f'./default:standOff/default:{list_tag}[@type="{entity.name}List"]'
 
                 self.__append_elements_to_the_list(elements, list_xpath)
 
@@ -86,12 +82,7 @@ class FileRenderer:
             if entities_versions:
                 elements = self.__create_entities_elements(entities_versions, custom=True)
 
-                if entity.body_list:
-                    list_xpath = f'./default:text/default:body/default:div[@type="{entity.name}"]/' \
-                                 f'default:listObject[@type="{entity.name}List"]'
-                else:
-                    list_xpath = f'./default:teiHeader/default:fileDesc/default:sourceDesc/' \
-                                 f'default:listObject[@type="{entity.name}List"]'
+                list_xpath = f'./default:standOff/default:listObject[@type="{entity.name}List"]'
 
                 self.__append_elements_to_the_list(elements, list_xpath)
 

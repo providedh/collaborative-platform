@@ -42,8 +42,8 @@ class TestIssue111:
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 294,
-                        'end_pos': 300,
+                        'start_pos': 103,
+                        'end_pos': 109,
                     }
                 }
             ]
@@ -93,8 +93,8 @@ class TestIssue111:
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 294,
-                        'end_pos': 300,
+                        'start_pos': 103,
+                        'end_pos': 109,
                     }
                 }
             ]
@@ -278,8 +278,8 @@ class TestIssue112:
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 294,
-                        'end_pos': 300,
+                        'start_pos': 103,
+                        'end_pos': 109,
                     }
                 }
             ]
@@ -298,8 +298,8 @@ class TestIssue112:
                     'element_type': 'tag',
                     'edited_element_id': 'seg-1',
                     'parameters': {
-                        'start_pos': 280,
-                        'end_pos': 368,
+                        'start_pos': 89,
+                        'end_pos': 177,
                     }
                 }
             ]
@@ -331,8 +331,8 @@ class TestIssue112:
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 294,
-                        'end_pos': 300,
+                        'start_pos': 103,
+                        'end_pos': 109,
                     }
                 }
             ]
@@ -416,8 +416,8 @@ class TestIssue112:
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 294,
-                        'end_pos': 300,
+                        'start_pos': 103,
+                        'end_pos': 109,
                     }
                 }
             ]
@@ -498,8 +498,8 @@ class TestIssue112:
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 294,
-                        'end_pos': 300,
+                        'start_pos': 103,
+                        'end_pos': 109,
                     }
                 }
             ]
@@ -724,8 +724,8 @@ class TestIssue113:
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 294,
-                        'end_pos': 300,
+                        'start_pos': 103,
+                        'end_pos': 109,
                     }
                 }
             ]
@@ -826,8 +826,8 @@ class TestIssue114:
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 294,
-                        'end_pos': 300,
+                        'start_pos': 103,
+                        'end_pos': 109,
                     }
                 }
             ]
@@ -930,8 +930,8 @@ class TestIssue122:
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 294,
-                        'end_pos': 300,
+                        'start_pos': 103,
+                        'end_pos': 109,
                     }
                 },
                 {

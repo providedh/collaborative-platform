@@ -106,15 +106,15 @@ class TestIssue164:
         payload = {
             "description": "",
             "entities": [
-                {"body_list": False, "color": "#ff7f00", "icon": "\uf007", "name": "person"},
-                {"body_list": False, "color": "#cecece", "icon": "\uf274", "name": "event"},
-                {"body_list": False, "color": "#b4edfc", "icon": "\uf1ad", "name": "org"},
-                {"body_list": False, "color": "#b4d38d", "icon": "\uf466", "name": "object"},
-                {"body_list": False, "color": "#204191", "icon": "\uf279", "name": "place"},
-                {"body_list": False, "color": "#868788", "icon": "\uf073", "name": "date"},
-                {"body_list": False, "color": "#eab9e4", "icon": "\uf017", "name": "time"},
-                {"body_list": False, "color": "#aaaaaa", "icon": "\uf042", "name": "song"},
-                {"body_list": False, "color": "#aaaaaa", "icon": "\uf042", "name": "band"}
+                {"color": "#ff7f00", "icon": "\uf007", "name": "person"},
+                {"color": "#cecece", "icon": "\uf274", "name": "event"},
+                {"color": "#b4edfc", "icon": "\uf1ad", "name": "org"},
+                {"color": "#b4d38d", "icon": "\uf466", "name": "object"},
+                {"color": "#204191", "icon": "\uf279", "name": "place"},
+                {"color": "#868788", "icon": "\uf073", "name": "date"},
+                {"color": "#eab9e4", "icon": "\uf017", "name": "time"},
+                {"color": "#aaaaaa", "icon": "\uf042", "name": "song"},
+                {"color": "#aaaaaa", "icon": "\uf042", "name": "band"}
             ],
             "taxonomy": [
                 {"color": "#9270a8", "description": "", "name": "ignorance", "xml_id": "ignorance"},

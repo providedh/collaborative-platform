@@ -33,14 +33,6 @@
             <idno/>
           </msIdentifier>
         </msDesc>
-        <listPerson type="personList">
-          <person xml:id="person-0" resp="#annotator-2" sex="M">
-            <persName>
-              <forename>Freddy</forename>
-              <surname>Mercury</surname>
-            </persName>
-          </person>
-        </listPerson>
       </sourceDesc>
     </fileDesc>
     <profileDesc>
@@ -103,4 +95,14 @@
       </div>
     </body>
   </text>
+  <standOff>
+    <listPerson type="personList">
+      <person xml:id="person-0" resp="#annotator-2" sex="M">
+        <persName>
+          <forename>Freddy</forename>
+          <surname>Mercury</surname>
+        </persName>
+      </person>
+    </listPerson>
+  </standOff>
 </TEI>

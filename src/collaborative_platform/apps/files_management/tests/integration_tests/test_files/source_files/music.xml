@@ -120,122 +120,116 @@
                 <name xml:id="name-18" resp="#annotator-2" ref="#person-9">Michelangelo</name>
                 rise again and bring new artistic beauty in this world. And you will all see just how bad it really was.
             </div>
-            <div type="person">
-                <listPerson type="personList">
-                    <person xml:id="person-6" resp="#annotator-2" age="36" sex="male">
-                        <birth when="1984-05-14"/>
-                        <persName>
-                            <forename>Mark</forename>
-                            <surname>Zuckerberg</surname>
-                        </persName>
-                        <name>Mark Zuckerberg</name>
-                        <occupation>internet entrepreneur</occupation>
-                    </person>
-                    <person xml:id="person-7" resp="#annotator-2" age="26" sex="male">
-                        <birth when="1994-03-01"/>
-                        <persName>
-                            <forename>Justin</forename>
-                            <surname>Bieber</surname>
-                        </persName>
-                        <name>Justin Bieber</name>
-                        <occupation>singer</occupation>
-                    </person>
-                    <person xml:id="person-8" resp="#annotator-2" sex="male">
-                        <birth when="1452-04-14"/>
-                        <death when="1519-05-02"/>
-                        <persName>
-                            <forename>Leonardo</forename>
-                            <surname>da Vinci</surname>
-                        </persName>
-                        <name>Leonardo da Vinci</name>
-                        <occupation>polymath</occupation>
-                    </person>
-                    <person xml:id="person-9" resp="#annotator-2" sex="male">
-                        <birth when="1475-03-06"/>
-                        <death when="1564-02-18"/>
-                        <persName>
-                            <forename>Michelangelo</forename>
-                            <surname>di Lodovico Buonarroti Simoni</surname>
-                        </persName>
-                        <name>Michelangelo</name>
-                        <occupation>painter</occupation>
-                    </person>
-                    <person xml:id="person-4" resp="#annotator-2" age="39" sex="female">
-                        <birth when="1980-10-21"/>
-                        <persName>
-                            <forename>Kimberly Noel</forename>
-                            <surname>Kardashian West</surname>
-                        </persName>
-                        <name>Kim Kardashian</name>
-                        <occupation>celebrity</occupation>
-                    </person>
-                    <person xml:id="person-5" resp="#annotator-2" sex="male">
-                        <birth when="1965-04-02"/>
-                        <death when="2012-06-17"/>
-                        <persName>
-                            <forename>Rodney</forename>
-                            <surname>King</surname>
-                        </persName>
-                        <name>Rodney King</name>
-                        <occupation>taxi driver</occupation>
-                    </person>
-                    <person xml:id="person-3" resp="#annotator-2" sex="male">
-                        <birth when="1940-10-09"/>
-                        <death when="1980-12-08"/>
-                        <persName>
-                            <forename>John</forename>
-                            <surname>Lennon</surname>
-                        </persName>
-                        <name>John Lennon</name>
-                        <occupation>musician</occupation>
-                    </person>
-                    <person xml:id="person-1" resp="#annotator-2" age="36" sex="female">
-                        <birth when="1984-10-25"/>
-                        <persName>
-                            <forename>Katheryn</forename>
-                            <surname>Hudson</surname>
-                        </persName>
-                        <name>Katy Perry</name>
-                        <occupation>singer</occupation>
-                    </person>
-                    <person xml:id="person-2" resp="#annotator-2" age="38" sex="female">
-                        <birth when="1982-12-08"/>
-                        <persName>
-                            <forename>Onika Tanya</forename>
-                            <surname>Maraj-Petty</surname>
-                        </persName>
-                        <name>Nicki Minaj</name>
-                        <occupation>rapper</occupation>
-                    </person>
-                    <person xml:id="person-0" resp="#annotator-2" sex="male">
-                        <birth when="1946-09-05"/>
-                        <death when="1991-11-24"/>
-                        <persName>
-                            <forename>Farrokh</forename>
-                            <surname>Bulsara</surname>
-                        </persName>
-                        <name>Freddy Mercury</name>
-                        <occupation>singer</occupation>
-                    </person>
-                </listPerson>
-            </div>
-            <div type="org">
-                <listOrg type="orgList">
-                    <org xml:id="org-2" resp="#annotator-2">The Kardashians Family</org>
-                    <org xml:id="org-0" resp="#annotator-2">Facebook</org>
-                    <org xml:id="org-1" resp="#annotator-2">Twitter</org>
-                </listOrg>
-            </div>
-            <div type="band">
-                <listObject type="bandList">
-                    <object type="band" xml:id="band-0" resp="#annotator-2">Queen</object>
-                </listObject>
-            </div>
-            <div type="song">
-                <listObject type="songList">
-                    <object type="song" xml:id="song-0" resp="#annotator-2">We are the champions</object>
-                </listObject>
-            </div>
         </body>
     </text>
+    <standOff>
+        <listPerson type="personList">
+            <person xml:id="person-6" resp="#annotator-2" age="36" sex="male">
+                <birth when="1984-05-14"/>
+                <persName>
+                    <forename>Mark</forename>
+                    <surname>Zuckerberg</surname>
+                </persName>
+                <name>Mark Zuckerberg</name>
+                <occupation>internet entrepreneur</occupation>
+            </person>
+            <person xml:id="person-7" resp="#annotator-2" age="26" sex="male">
+                <birth when="1994-03-01"/>
+                <persName>
+                    <forename>Justin</forename>
+                    <surname>Bieber</surname>
+                </persName>
+                <name>Justin Bieber</name>
+                <occupation>singer</occupation>
+            </person>
+            <person xml:id="person-8" resp="#annotator-2" sex="male">
+                <birth when="1452-04-14"/>
+                <death when="1519-05-02"/>
+                <persName>
+                    <forename>Leonardo</forename>
+                    <surname>da Vinci</surname>
+                </persName>
+                <name>Leonardo da Vinci</name>
+                <occupation>polymath</occupation>
+            </person>
+            <person xml:id="person-9" resp="#annotator-2" sex="male">
+                <birth when="1475-03-06"/>
+                <death when="1564-02-18"/>
+                <persName>
+                    <forename>Michelangelo</forename>
+                    <surname>di Lodovico Buonarroti Simoni</surname>
+                </persName>
+                <name>Michelangelo</name>
+                <occupation>painter</occupation>
+            </person>
+            <person xml:id="person-4" resp="#annotator-2" age="39" sex="female">
+                <birth when="1980-10-21"/>
+                <persName>
+                    <forename>Kimberly Noel</forename>
+                    <surname>Kardashian West</surname>
+                </persName>
+                <name>Kim Kardashian</name>
+                <occupation>celebrity</occupation>
+            </person>
+            <person xml:id="person-5" resp="#annotator-2" sex="male">
+                <birth when="1965-04-02"/>
+                <death when="2012-06-17"/>
+                <persName>
+                    <forename>Rodney</forename>
+                    <surname>King</surname>
+                </persName>
+                <name>Rodney King</name>
+                <occupation>taxi driver</occupation>
+            </person>
+            <person xml:id="person-3" resp="#annotator-2" sex="male">
+                <birth when="1940-10-09"/>
+                <death when="1980-12-08"/>
+                <persName>
+                    <forename>John</forename>
+                    <surname>Lennon</surname>
+                </persName>
+                <name>John Lennon</name>
+                <occupation>musician</occupation>
+            </person>
+            <person xml:id="person-1" resp="#annotator-2" age="36" sex="female">
+                <birth when="1984-10-25"/>
+                <persName>
+                    <forename>Katheryn</forename>
+                    <surname>Hudson</surname>
+                </persName>
+                <name>Katy Perry</name>
+                <occupation>singer</occupation>
+            </person>
+            <person xml:id="person-2" resp="#annotator-2" age="38" sex="female">
+                <birth when="1982-12-08"/>
+                <persName>
+                    <forename>Onika Tanya</forename>
+                    <surname>Maraj-Petty</surname>
+                </persName>
+                <name>Nicki Minaj</name>
+                <occupation>rapper</occupation>
+            </person>
+            <person xml:id="person-0" resp="#annotator-2" sex="male">
+                <birth when="1946-09-05"/>
+                <death when="1991-11-24"/>
+                <persName>
+                    <forename>Farrokh</forename>
+                    <surname>Bulsara</surname>
+                </persName>
+                <name>Freddy Mercury</name>
+                <occupation>singer</occupation>
+            </person>
+        </listPerson>
+        <listOrg type="orgList">
+            <org xml:id="org-2" resp="#annotator-2">The Kardashians Family</org>
+            <org xml:id="org-0" resp="#annotator-2">Facebook</org>
+            <org xml:id="org-1" resp="#annotator-2">Twitter</org>
+        </listOrg>
+        <listObject type="bandList">
+            <object type="band" xml:id="band-0" resp="#annotator-2">Queen</object>
+        </listObject>
+        <listObject type="songList">
+            <object type="song" xml:id="song-0" resp="#annotator-2">We are the champions</object>
+        </listObject>
+    </standOff>
 </TEI>

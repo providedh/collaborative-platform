@@ -1003,8 +1003,7 @@
     "taxonomy": 1,
     "name": "person",
     "color": "#ff7f00",
-    "icon": "\uf007",
-    "body_list": false
+    "icon": "\uf007"
   }
 },
 {
@@ -1014,8 +1013,7 @@
     "taxonomy": 1,
     "name": "event",
     "color": "#cecece",
-    "icon": "\uf274",
-    "body_list": true
+    "icon": "\uf274"
   }
 },
 {
@@ -1025,8 +1023,7 @@
     "taxonomy": 1,
     "name": "place",
     "color": "#204191",
-    "icon": "\uf279",
-    "body_list": false
+    "icon": "\uf279"
   }
 },
 {
@@ -1036,8 +1033,7 @@
     "taxonomy": 1,
     "name": "date",
     "color": "#868788",
-    "icon": "\uf073",
-    "body_list": false
+    "icon": "\uf073"
   }
 },
 {
@@ -1047,8 +1043,7 @@
     "taxonomy": 1,
     "name": "time",
     "color": "#eab9e4",
-    "icon": "\uf017",
-    "body_list": false
+    "icon": "\uf017"
   }
 },
 {
@@ -1058,8 +1053,7 @@
     "taxonomy": 1,
     "name": "ingredient",
     "color": "#00ff10",
-    "icon": "\uf042",
-    "body_list": true
+    "icon": "\uf042"
   }
 },
 {
@@ -1069,8 +1063,7 @@
     "taxonomy": 2,
     "name": "person",
     "color": "#ff7f00",
-    "icon": "\uf007",
-    "body_list": false
+    "icon": "\uf007"
   }
 },
 {
@@ -1080,8 +1073,7 @@
     "taxonomy": 2,
     "name": "event",
     "color": "#cecece",
-    "icon": "\uf274",
-    "body_list": true
+    "icon": "\uf274"
   }
 },
 {
@@ -1091,8 +1083,7 @@
     "taxonomy": 2,
     "name": "place",
     "color": "#204191",
-    "icon": "\uf279",
-    "body_list": false
+    "icon": "\uf279"
   }
 },
 {
@@ -1102,8 +1093,7 @@
     "taxonomy": 2,
     "name": "date",
     "color": "#868788",
-    "icon": "\uf073",
-    "body_list": false
+    "icon": "\uf073"
   }
 },
 {
@@ -1113,8 +1103,7 @@
     "taxonomy": 2,
     "name": "time",
     "color": "#eab9e4",
-    "icon": "\uf017",
-    "body_list": false
+    "icon": "\uf017"
   }
 },
 {
@@ -1124,8 +1113,7 @@
     "taxonomy": 2,
     "name": "ingredient",
     "color": "#02ff00",
-    "icon": "\uf0c3",
-    "body_list": true
+    "icon": "\uf0c3"
   }
 },
 {

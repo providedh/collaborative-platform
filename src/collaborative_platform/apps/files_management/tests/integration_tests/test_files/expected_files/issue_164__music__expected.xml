@@ -33,108 +33,6 @@
             <idno/>
           </msIdentifier>
         </msDesc>
-        <listPerson type="personList">
-          <person xml:id="person-0" resp="#annotator-1" age="36" sex="female">
-            <birth when="1984-10-25"/>
-            <persName>
-              <forename>Katy</forename>
-              <surname>Perry</surname>
-            </persName>
-            <name>Katy Perry</name>
-            <occupation>singer</occupation>
-          </person>
-          <person xml:id="person-1" resp="#annotator-1" age="46" sex="male">
-            <birth when="1974-11-11"/>
-            <persName>
-              <forename>Leonardo</forename>
-              <surname>diCaprio</surname>
-            </persName>
-            <name>Leonardo diCaprio</name>
-            <occupation>actor</occupation>
-          </person>
-          <person xml:id="person-2" resp="#annotator-1" age="38" sex="female">
-            <birth when="1982-12-08"/>
-            <persName>
-              <forename>Nicki</forename>
-              <surname>Minaj</surname>
-            </persName>
-            <name>Nicki Minaj</name>
-            <occupation>rapper</occupation>
-          </person>
-          <person xml:id="person-3" resp="#annotator-1" sex="male">
-            <birth when="1946-09-05"/>
-            <death when="1991-11-24"/>
-            <persName>
-              <forename>Freddie</forename>
-              <surname>Mercury</surname>
-            </persName>
-            <name>Freddie Mercury</name>
-            <occupation>singer</occupation>
-          </person>
-          <person xml:id="person-4" resp="#annotator-1">
-            <persName>
-              <forename>Clivie</forename>
-              <surname>Thompson</surname>
-            </persName>
-            <name>Clive Thompson</name>
-          </person>
-          <person xml:id="person-5" resp="#annotator-1" sex="male">
-            <persName>
-              <forename>Norman</forename>
-              <surname>Abjorensen</surname>
-            </persName>
-            <name>Norman Abjorensen</name>
-          </person>
-          <person xml:id="person-6" resp="#annotator-1" sex="male">
-            <birth when="1940-10-09"/>
-            <death when="1980-12-08"/>
-            <persName>
-              <forename>John Winston</forename>
-              <surname>Lennon</surname>
-            </persName>
-            <name>John Lennon</name>
-            <occupation>musician</occupation>
-          </person>
-          <person xml:id="person-7" resp="#annotator-1" sex="male">
-            <birth when="1958-08-29"/>
-            <death when="2009-06-25"/>
-            <persName>
-              <forename>Michael</forename>
-              <surname>Jackson</surname>
-            </persName>
-            <name>Michael Jackson</name>
-            <occupation>singer</occupation>
-          </person>
-          <person xml:id="person-8" resp="#annotator-1" sex="male">
-            <birth when="1935-01-08"/>
-            <death when="1977-08-16"/>
-            <persName>
-              <forename>Elvis Aaron</forename>
-              <surname>Presley</surname>
-            </persName>
-            <name>Elvis Presley</name>
-            <occupation>singer</occupation>
-          </person>
-          <person xml:id="person-9" resp="#annotator-1" sex="male">
-            <birth when="1967-02-20"/>
-            <death when="1994-04-05"/>
-            <persName>
-              <forename>Kurt</forename>
-              <surname>Cobain</surname>
-            </persName>
-            <name>Kurt Cobain</name>
-            <occupation>musician</occupation>
-          </person>
-        </listPerson>
-        <listObject type="songList">
-          <object type="song" xml:id="song-0" resp="#annotator-1">The Minstrel’s Return’d From the War
-                    </object>
-          <object type="song" xml:id="song-1" resp="#annotator-1">The Battle Hymn of the Republic</object>
-        </listObject>
-        <listObject type="bandList">
-          <object type="band" xml:id="band-0" resp="#annotator-1">Queen</object>
-          <object type="band" xml:id="band-1" resp="#annotator-1">The Beatles</object>
-        </listObject>
       </sourceDesc>
     </fileDesc>
     <profileDesc>
@@ -1167,4 +1065,107 @@
       </div>
     </body>
   </text>
+  <standOff>
+    <listPerson type="personList">
+      <person xml:id="person-0" resp="#annotator-1" age="36" sex="female">
+        <birth when="1984-10-25"/>
+        <persName>
+          <forename>Katy</forename>
+          <surname>Perry</surname>
+        </persName>
+        <name>Katy Perry</name>
+        <occupation>singer</occupation>
+      </person>
+      <person xml:id="person-1" resp="#annotator-1" age="46" sex="male">
+        <birth when="1974-11-11"/>
+        <persName>
+          <forename>Leonardo</forename>
+          <surname>diCaprio</surname>
+        </persName>
+        <name>Leonardo diCaprio</name>
+        <occupation>actor</occupation>
+      </person>
+      <person xml:id="person-2" resp="#annotator-1" age="38" sex="female">
+        <birth when="1982-12-08"/>
+        <persName>
+          <forename>Nicki</forename>
+          <surname>Minaj</surname>
+        </persName>
+        <name>Nicki Minaj</name>
+        <occupation>rapper</occupation>
+      </person>
+      <person xml:id="person-3" resp="#annotator-1" sex="male">
+        <birth when="1946-09-05"/>
+        <death when="1991-11-24"/>
+        <persName>
+          <forename>Freddie</forename>
+          <surname>Mercury</surname>
+        </persName>
+        <name>Freddie Mercury</name>
+        <occupation>singer</occupation>
+      </person>
+      <person xml:id="person-4" resp="#annotator-1">
+        <persName>
+          <forename>Clivie</forename>
+          <surname>Thompson</surname>
+        </persName>
+        <name>Clive Thompson</name>
+      </person>
+      <person xml:id="person-5" resp="#annotator-1" sex="male">
+        <persName>
+          <forename>Norman</forename>
+          <surname>Abjorensen</surname>
+        </persName>
+        <name>Norman Abjorensen</name>
+      </person>
+      <person xml:id="person-6" resp="#annotator-1" sex="male">
+        <birth when="1940-10-09"/>
+        <death when="1980-12-08"/>
+        <persName>
+          <forename>John Winston</forename>
+          <surname>Lennon</surname>
+        </persName>
+        <name>John Lennon</name>
+        <occupation>musician</occupation>
+      </person>
+      <person xml:id="person-7" resp="#annotator-1" sex="male">
+        <birth when="1958-08-29"/>
+        <death when="2009-06-25"/>
+        <persName>
+          <forename>Michael</forename>
+          <surname>Jackson</surname>
+        </persName>
+        <name>Michael Jackson</name>
+        <occupation>singer</occupation>
+      </person>
+      <person xml:id="person-8" resp="#annotator-1" sex="male">
+        <birth when="1935-01-08"/>
+        <death when="1977-08-16"/>
+        <persName>
+          <forename>Elvis Aaron</forename>
+          <surname>Presley</surname>
+        </persName>
+        <name>Elvis Presley</name>
+        <occupation>singer</occupation>
+      </person>
+      <person xml:id="person-9" resp="#annotator-1" sex="male">
+        <birth when="1967-02-20"/>
+        <death when="1994-04-05"/>
+        <persName>
+          <forename>Kurt</forename>
+          <surname>Cobain</surname>
+        </persName>
+        <name>Kurt Cobain</name>
+        <occupation>musician</occupation>
+      </person>
+    </listPerson>
+    <listObject type="songList">
+      <object type="song" xml:id="song-0" resp="#annotator-1">The Minstrel’s Return’d From the War</object>
+      <object type="song" xml:id="song-1" resp="#annotator-1">The Battle Hymn of the Republic</object>
+    </listObject>
+    <listObject type="bandList">
+      <object type="band" xml:id="band-0" resp="#annotator-1">Queen</object>
+      <object type="band" xml:id="band-1" resp="#annotator-1">The Beatles</object>
+    </listObject>
+  </standOff>
 </TEI>

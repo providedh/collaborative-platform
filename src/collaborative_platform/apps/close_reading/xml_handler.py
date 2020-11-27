@@ -885,10 +885,15 @@ class XmlHandler:
         old_body_element = get_first_xpath_match(tree, body_xpath, XML_NAMESPACES)
 
         body_parent = old_body_element.getparent()
+        body_previous = old_body_element.getprevious()
         body_parent.remove(old_body_element)
 
         new_body_element = etree.fromstring(new_body_content, parser=parser)
-        body_parent.append(new_body_element)
+
+        if body_previous is not None:
+            body_previous.addnext(new_body_element)
+        else:
+            body_parent.append(new_body_element)
 
         new_xml_content = etree.tounicode(tree, pretty_print=True)
 
