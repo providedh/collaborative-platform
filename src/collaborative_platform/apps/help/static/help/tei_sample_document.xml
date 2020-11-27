@@ -5,51 +5,6 @@
       <titleStmt>
         <title>The PROVIDEDH platform</title>
       </titleStmt>
-      <sourceDesc>
-        <listPerson type="personList">
-          <person xml:id="person-0" resp="#annotator-2"/>
-        </listPerson>
-        <listEvent type="eventList">
-          <event xml:id="event-2" resp="#annotator-2"/>
-          <event xml:id="event-1" resp="#annotator-2"/>
-        </listEvent>
-        <listOrg type="orgList">
-          <org xml:id="org-5" resp="#annotator-2"/>
-          <org xml:id="org-2" resp="#annotator-2"/>
-          <org xml:id="org-3" resp="#annotator-2"/>
-          <org xml:id="org-4" resp="#annotator-2"/>
-          <org xml:id="org-0" resp="#annotator-2"/>
-          <org xml:id="org-1" resp="#annotator-2"/>
-        </listOrg>
-        <listObject type="objectList">
-          <object xml:id="object-2" resp="#annotator-2"/>
-          <object xml:id="object-1" resp="#annotator-2"/>
-          <object xml:id="object-0" resp="#annotator-2"/>
-        </listObject>
-        <listPlace type="placeList">
-          <place xml:id="place-4" resp="#annotator-2"/>
-          <place xml:id="place-2" resp="#annotator-2">
-          <location>
-              <geo>48.195745 16.367497</geo>
-            </location>
-          </place>
-          <place xml:id="place-3" resp="#annotator-2">
-          <location>
-              <geo>53.349451 -6.260004</geo>
-            </location>
-          </place>
-          <place xml:id="place-0" resp="#annotator-2">
-          <location>
-              <geo>40.965361, -5.664139</geo>
-            </location>
-          </place>
-          <place xml:id="place-1" resp="#annotator-2">
-          <location>
-              <geo>52.408333 16.934167</geo>
-            </location>
-          </place>
-        </listPlace>
-      </sourceDesc>
     </fileDesc>
     <profileDesc>
       <particDesc>
@@ -69,7 +24,7 @@
     <body>
       <p>
       The PROgressive VIsual DEcision-Making in Digital Humanities (PROVIDEDH) project is a three-year project
-      funded within the   <name xml:id="name-1" resp="#annotator-2" ref="#event-1">CHIST-ERA call 2016</name> for the topic “Visual Analytics for Decision Making under Uncertainty – VADMU.” 
+      funded within the   <name xml:id="name-1" resp="#annotator-2" ref="#event-1">CHIST-ERA call 2016</name> for the topic “Visual Analytics for Decision Making under Uncertainty – VADMU.”
     </p>
       <p>
       The aim of the PROVIDEDH project is to  to give Digital Humanities (DH) scholars a space to explore and assess
@@ -122,4 +77,49 @@
     </p>
     </body>
   </text>
+  <standOff>
+    <listPerson type="personList">
+      <person xml:id="person-0" resp="#annotator-2"/>
+    </listPerson>
+    <listEvent type="eventList">
+      <event xml:id="event-2" resp="#annotator-2"/>
+      <event xml:id="event-1" resp="#annotator-2"/>
+    </listEvent>
+    <listOrg type="orgList">
+      <org xml:id="org-5" resp="#annotator-2"/>
+      <org xml:id="org-2" resp="#annotator-2"/>
+      <org xml:id="org-3" resp="#annotator-2"/>
+      <org xml:id="org-4" resp="#annotator-2"/>
+      <org xml:id="org-0" resp="#annotator-2"/>
+      <org xml:id="org-1" resp="#annotator-2"/>
+    </listOrg>
+    <listObject type="objectList">
+      <object xml:id="object-2" resp="#annotator-2"/>
+      <object xml:id="object-1" resp="#annotator-2"/>
+      <object xml:id="object-0" resp="#annotator-2"/>
+    </listObject>
+    <listPlace type="placeList">
+      <place xml:id="place-4" resp="#annotator-2"/>
+      <place xml:id="place-2" resp="#annotator-2">
+        <location>
+          <geo>48.195745 16.367497</geo>
+        </location>
+      </place>
+      <place xml:id="place-3" resp="#annotator-2">
+        <location>
+          <geo>53.349451 -6.260004</geo>
+        </location>
+      </place>
+      <place xml:id="place-0" resp="#annotator-2">
+        <location>
+          <geo>40.965361, -5.664139</geo>
+        </location>
+      </place>
+      <place xml:id="place-1" resp="#annotator-2">
+        <location>
+          <geo>52.408333 16.934167</geo>
+        </location>
+      </place>
+    </listPlace>
+  </standOff>
 </TEI>
