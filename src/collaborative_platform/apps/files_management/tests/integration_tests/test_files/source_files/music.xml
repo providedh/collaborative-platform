@@ -226,10 +226,18 @@
             <org xml:id="org-1" resp="#annotator-2">Twitter</org>
         </listOrg>
         <listObject type="bandList">
-            <object type="band" xml:id="band-0" resp="#annotator-2">Queen</object>
+            <object type="band" xml:id="band-0" resp="#annotator-2">
+              <objectIdentifier>
+                <objectName>Queen</objectName>
+              </objectIdentifier>
+            </object>
         </listObject>
         <listObject type="songList">
-            <object type="song" xml:id="song-0" resp="#annotator-2">We are the champions</object>
+            <object type="song" xml:id="song-0" resp="#annotator-2">
+              <objectIdentifier>
+                <objectName>We are the champions</objectName>
+              </objectIdentifier>
+            </object>
         </listObject>
     </standOff>
 </TEI>

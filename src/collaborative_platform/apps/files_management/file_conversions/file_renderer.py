@@ -42,8 +42,6 @@ class FileRenderer:
     def __create_tree(self):
         raw_content = self.__file_version.get_raw_content()
 
-        print(raw_content)
-
         parser = etree.XMLParser(remove_blank_text=True)
         self.__tree = etree.fromstring(raw_content, parser=parser)
 

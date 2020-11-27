@@ -151,8 +151,16 @@
       </place>
     </listPlace>
     <listObject type="ingredientList">
-      <object type="ingredient" xml:id="ingredient-0" resp="#annotator-1">Rag</object>
-      <object type="ingredient" xml:id="ingredient-1" resp="#annotator-1">Ingwer</object>
+      <object type="ingredient" xml:id="ingredient-0" resp="#annotator-1">
+        <objectIdentifier>
+          <objectName>Rag</objectName>
+        </objectIdentifier>
+      </object>
+      <object type="ingredient" xml:id="ingredient-1" resp="#annotator-1">
+        <objectIdentifier>
+          <objectName>Ingwer</objectName>
+        </objectIdentifier>
+      </object>
     </listObject>
   </standOff>
 </TEI>

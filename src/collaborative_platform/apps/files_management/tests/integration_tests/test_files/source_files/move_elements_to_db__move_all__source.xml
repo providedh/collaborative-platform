@@ -143,15 +143,43 @@
       </place>
     </listPlace>
     <listObject type="ingredientList">
-      <object type="ingredient" xml:id="ingredient-0">Rag</object>
-      <object type="ingredient" xml:id="ingredient-1">Ingwer</object>
-      <object type="ingredient" xml:id="ingredient-2">Grieben</object>
-      <object type="ingredient" xml:id="ingredient-3">Met</object>
-      <object type="ingredient" xml:id="ingredient-4">Butter</object>
-      <object type="ingredient" xml:id="ingredient-5">Sand</object>
+      <object type="ingredient" xml:id="ingredient-0">
+        <objectIdentifier>
+          <objectName>Rag</objectName>
+        </objectIdentifier>
+      </object>
+      <object type="ingredient" xml:id="ingredient-1">
+        <objectIdentifier>
+          <objectName>Ingwer</objectName>
+        </objectIdentifier>
+      </object>
+      <object type="ingredient" xml:id="ingredient-2">
+        <objectIdentifier>
+          <objectName>Grieben</objectName>
+        </objectIdentifier>
+      </object>
+      <object type="ingredient" xml:id="ingredient-3">
+        <objectIdentifier>
+          <objectName>Met</objectName>
+        </objectIdentifier>
+      </object>
+      <object type="ingredient" xml:id="ingredient-4">
+        <objectIdentifier>
+          <objectName>Butter</objectName>
+        </objectIdentifier>
+      </object>
+      <object type="ingredient" xml:id="ingredient-5">
+        <objectIdentifier>
+          <objectName>Sand</objectName>
+        </objectIdentifier>
+      </object>
     </listObject>
     <listObject type="utensilList">
-      <object type="utensil" xml:id="form">Form</object>
+      <object type="utensil" xml:id="form">
+        <objectIdentifier>
+          <objectName>Form</objectName>
+        </objectIdentifier>
+      </object>
     </listObject>
   </standOff>
 </TEI>

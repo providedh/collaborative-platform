@@ -103,7 +103,11 @@
   </text>
   <standOff>
     <listObject type="utensilList">
-      <object type="utensil" xml:id="form">Form</object>
+      <object type="utensil" xml:id="form">
+        <objectIdentifier>
+          <objectName>Form</objectName>
+        </objectIdentifier>
+      </object>
     </listObject>
     <listPerson type="personList">
       <person xml:id="person-0" resp="#annotator-2" age="child" sex="M">
@@ -146,12 +150,36 @@
       </place>
     </listPlace>
     <listObject type="ingredientList">
-      <object type="ingredient" xml:id="ingredient-0" resp="#annotator-1">Rag</object>
-      <object type="ingredient" xml:id="ingredient-1" resp="#annotator-1">Ingwer</object>
-      <object type="ingredient" xml:id="ingredient-2" resp="#annotator-1">Grieben</object>
-      <object type="ingredient" xml:id="ingredient-3" resp="#annotator-1">Met</object>
-      <object type="ingredient" xml:id="ingredient-4" resp="#annotator-1">Butter</object>
-      <object type="ingredient" xml:id="ingredient-5" resp="#annotator-1">Sand</object>
+      <object type="ingredient" xml:id="ingredient-0" resp="#annotator-1">
+        <objectIdentifier>
+          <objectName>Rag</objectName>
+        </objectIdentifier>
+      </object>
+      <object type="ingredient" xml:id="ingredient-1" resp="#annotator-1">
+        <objectIdentifier>
+          <objectName>Ingwer</objectName>
+        </objectIdentifier>
+      </object>
+      <object type="ingredient" xml:id="ingredient-2" resp="#annotator-1">
+        <objectIdentifier>
+          <objectName>Grieben</objectName>
+        </objectIdentifier>
+      </object>
+      <object type="ingredient" xml:id="ingredient-3" resp="#annotator-1">
+        <objectIdentifier>
+          <objectName>Met</objectName>
+        </objectIdentifier>
+      </object>
+      <object type="ingredient" xml:id="ingredient-4" resp="#annotator-1">
+        <objectIdentifier>
+          <objectName>Butter</objectName>
+        </objectIdentifier>
+      </object>
+      <object type="ingredient" xml:id="ingredient-5" resp="#annotator-1">
+        <objectIdentifier>
+          <objectName>Sand</objectName>
+        </objectIdentifier>
+      </object>
     </listObject>
   </standOff>
 </TEI>

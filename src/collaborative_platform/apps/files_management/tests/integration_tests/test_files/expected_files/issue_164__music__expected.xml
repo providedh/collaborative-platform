@@ -1160,12 +1160,28 @@
       </person>
     </listPerson>
     <listObject type="songList">
-      <object type="song" xml:id="song-0" resp="#annotator-1">The Minstrel’s Return’d From the War</object>
-      <object type="song" xml:id="song-1" resp="#annotator-1">The Battle Hymn of the Republic</object>
+      <object type="song" xml:id="song-0" resp="#annotator-1">
+        <objectIdentifier>
+          <objectName>The Minstrel’s Return’d From the War</objectName>
+        </objectIdentifier>
+      </object>
+      <object type="song" xml:id="song-1" resp="#annotator-1">
+        <objectIdentifier>
+          <objectName>The Battle Hymn of the Republic</objectName>
+        </objectIdentifier>
+      </object>
     </listObject>
     <listObject type="bandList">
-      <object type="band" xml:id="band-0" resp="#annotator-1">Queen</object>
-      <object type="band" xml:id="band-1" resp="#annotator-1">The Beatles</object>
+      <object type="band" xml:id="band-0" resp="#annotator-1">
+        <objectIdentifier>
+          <objectName>Queen</objectName>
+        </objectIdentifier>
+      </object>
+      <object type="band" xml:id="band-1" resp="#annotator-1">
+        <objectIdentifier>
+          <objectName>The Beatles</objectName>
+        </objectIdentifier>
+      </object>
     </listObject>
   </standOff>
 </TEI>
