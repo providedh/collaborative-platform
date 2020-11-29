@@ -59,7 +59,11 @@
   </text>
   <standOff>
     <listObject type="utensilList">
-      <object type="utensil" xml:id="form">Form</object>
+      <object type="utensil" xml:id="form">
+        <objectIdentifier>
+          <objectName>Form</objectName>
+        </objectIdentifier>
+      </object>
     </listObject>
   </standOff>
 </TEI>

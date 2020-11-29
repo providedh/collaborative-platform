@@ -61,8 +61,8 @@ class TestIssue158:
                     'method': 'POST',
                     'element_type': 'tag',
                     'parameters': {
-                        'start_pos': 284,
-                        'end_pos': 291,
+                        'start_pos': 112,
+                        'end_pos': 119,
                     }
                 },
                 {

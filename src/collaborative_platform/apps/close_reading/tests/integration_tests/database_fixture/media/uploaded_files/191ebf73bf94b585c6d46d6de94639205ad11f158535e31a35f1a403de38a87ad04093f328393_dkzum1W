@@ -51,17 +51,18 @@
   </teiHeader>
   <text>
     <body>
-      <div type="utensil">
-        <listObject type="utensilList">
-          <object type="utensil" xml:id="quart">Quart</object>
-        </listObject>
-      </div>
-      <div type="dietetic">
-        <listObject type="dieteticList"/>
-      </div>
       <div type="recipe">
         <p>Take a Pound of fine Sugar , <name xml:id="name-0" ref="#ingredient-1">and</name> a Pint of Water , or more , as the Quantity you intend to make requires ; set it on the Fire , let it boil , <name xml:id="name-1" ref="#ingredient-1">and</name> set a Pan of Water to boil ; when it boils , put in your Plums ; let them <name xml:id="name-2" ref="#ingredient-0">just</name> boil , and then take them out with a Ladle , as they flip their Skins off ; take off the Skins , and put the Plums into the Syrup ; do this as fast as you can , that they may not turn : Boil them all to Pieces ; and to a Quart of Plums put a Pint of Apple-Jelly ; boil them well together , and rub it thro ’ a Hair Sieve ; to a Pint of this put a Pound and a half of sifted Sugar ; let the Jelly boil before you shake the Sugar , and let it scald ’ till the Sugar is well melted ; skin it , put it in Pots , and dry it in the Stove .</p>
       </div>
     </body>
   </text>
+  <standOff>
+    <listObject type="utensilList">
+      <object type="utensil" xml:id="quart">
+        <objectIdentifier>
+          <objectName>Quart</objectName>
+        </objectIdentifier>
+      </object>
+    </listObject>
+  </standOff>
 </TEI>

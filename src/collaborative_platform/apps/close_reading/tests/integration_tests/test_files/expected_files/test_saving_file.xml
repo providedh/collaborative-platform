@@ -100,7 +100,11 @@
   </text>
   <standOff>
     <listObject type="utensilList">
-      <object type="utensil" xml:id="form">Form</object>
+      <object type="utensil" xml:id="form">
+        <objectIdentifier>
+          <objectName>Form</objectName>
+        </objectIdentifier>
+      </object>
     </listObject>
     <listPerson type="personList">
       <person xml:id="person-0" resp="#annotator-1">
