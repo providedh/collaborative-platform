@@ -52,7 +52,7 @@
   <div id="breadcrumb-container" class="container-lg px-3 px-lg-5">
     <nav aria-label="breadcrumb" id="breadcrumb">
       <ol class="breadcrumb bg-transparent mb-0 px-0">
-        <a href="{{ origin_url }}" class="breadcrumb-item">{{ origin }}</a>
+        <a href="{% url 'projects:files' project_id %}" class="breadcrumb-item">Files</a>
         <li class="breadcrumb-item active" aria-current="page">Close Reading</li>
       </ol>
     </nav>
