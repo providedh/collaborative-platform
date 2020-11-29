@@ -92,7 +92,7 @@ function Document (props) {
 
   const listableEntities = Object.entries(props.context.configuration.entities)
     .map(([type, conf]) => ({...conf, type}))
-    .filter(e => e.listable === true)
+    .filter(e => true) // e.listable === true)
     .map(({type}) => ({
       type,
       key: type,
@@ -101,10 +101,11 @@ function Document (props) {
     }))
 
   const entityLists = listableEntities.map(x => <EntityList {...x}/>)
-  
+  const entityCount = listableEntities.reduce((ac, dc) => ac + dc.entities.length, 0)
+
   const entityListCss = [
     styles.entityListContainer,
-    entityLists.length === 0 ? 'd-none' : '',
+    entityCount === 0 ? 'd-none' : '',
     'border',
     'border-bottom-0',
     'border-primary',
