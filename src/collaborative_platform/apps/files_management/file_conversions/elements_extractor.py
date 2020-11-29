@@ -325,15 +325,18 @@ class ElementsExtractor:
             degree = float(degree)
             degree = round(degree, 2)
 
+        val_xml_id = None
         asserted_value = get_first_xpath_match(certainty, '@assertedValue', XML_NAMESPACES)
         asserted_value = str(asserted_value)
 
         if asserted_value.startswith('#val-'):
+            val_xml_id = asserted_value.replace('#', '')
             asserted_value = self.__get_asserted_value_from_another_element(asserted_value)
 
         certainty_object = Certainty.objects.create(
             file=self.__file,
             xml_id=get_first_xpath_match(certainty, '@xml:id', XML_NAMESPACES),
+            val_xml_id=val_xml_id,
             locus=get_first_xpath_match(certainty, '@locus', XML_NAMESPACES),
             certainty=get_first_xpath_match(certainty, '@cert', XML_NAMESPACES),
             degree=degree,

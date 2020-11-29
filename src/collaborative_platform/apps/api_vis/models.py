@@ -205,6 +205,7 @@ class Certainty(models.Model):
     file = models.ForeignKey(File, on_delete=models.CASCADE)
     file_version = models.ForeignKey(FileVersion, default=None, null=True, on_delete=models.CASCADE)
     xml_id = models.CharField(max_length=255)
+    val_xml_id = models.CharField(max_length=255, null=True)
     categories = models.ManyToManyField(UncertaintyCategory)
     locus = models.CharField(max_length=255)
     certainty = models.CharField(max_length=255, null=True)

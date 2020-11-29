@@ -238,3 +238,26 @@ class TestIssue181:
         assert certainties.count() == 2
         assert certainties[0].asserted_value == 'Balloons'
         assert certainties[1].asserted_value == 'multiple word value'
+
+    def test_asserted_value_attribute_of_certainty_element_is_properly_rendered(self):
+        user_id = 2
+        project_id = 2
+
+        client = Client()
+        user = User.objects.get(id=user_id)
+        client.force_login(user)
+
+        project = Project.objects.get(id=project_id)
+        directory = Directory.objects.get(project=project, name=project.title, parent_dir=None)
+        source_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files',
+                                        'issue_181__import_asserted_value__source.xml')
+
+        upload_file(client, source_file_path, directory.id)
+
+        file_id = File.objects.latest('id').id
+        result_xml = download_file(client, file_id)
+
+        expected_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'expected_files',
+                                          'issue_181__asserted_value_rendered__expected.xml')
+        expected_xml = read_file(expected_file_path)
+        assert result_xml == expected_xml

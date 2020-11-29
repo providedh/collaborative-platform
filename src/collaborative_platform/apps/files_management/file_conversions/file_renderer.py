@@ -1,3 +1,5 @@
+import re
+
 from lxml import etree
 
 from django.contrib.auth.models import User
@@ -175,8 +177,14 @@ class FileRenderer:
 
         for certainty in certainties:
             certainty_element = self.__create_certainty_element(certainty)
-
             elements.append(certainty_element)
+
+            whitespace_regex = r'\s'
+            match = re.search(whitespace_regex, certainty.asserted_value)
+
+            if match:
+                val_element = self.create_val_element(certainty)
+                elements.append(val_element)
 
         return elements
 
@@ -209,7 +217,14 @@ class FileRenderer:
             certainty_element.set('match', certainty.target_match)
 
         if certainty.asserted_value:
-            certainty_element.set('assertedValue', certainty.asserted_value)
+            whitespace_regex = r'\s'
+            match = re.search(whitespace_regex, certainty.asserted_value)
+
+            if match:
+                certainty_element.set('assertedValue', f'#{certainty.val_xml_id}')
+
+            else:
+                certainty_element.set('assertedValue', certainty.asserted_value)
 
         if certainty.description:
             description_element = etree.Element(default_prefix + 'desc', nsmap=NS_MAP)
@@ -218,6 +233,20 @@ class FileRenderer:
             certainty_element.append(description_element)
 
         return certainty_element
+
+    @staticmethod
+    def create_val_element(certainty):
+        default_prefix = '{%s}' % XML_NAMESPACES['default']
+        xml_prefix = '{%s}' % XML_NAMESPACES['xml']
+
+        val_element = etree.Element(default_prefix + 'val', nsmap=NS_MAP)
+
+        val_element.set(xml_prefix + 'id', certainty.val_xml_id)
+        val_element.set('resp', f'#{certainty.created_by.profile.get_xml_id()}')
+
+        val_element.text = certainty.asserted_value
+
+        return val_element
 
     def __append_unifications(self):
         unifications = self.__get_unifications_from_db()

@@ -1,0 +1,94 @@
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <?xml-model href="https://providedh.ehum.psnc.pl/tei_providedh.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title>To make Pease Soop</title>
+      </titleStmt>
+      <publicationStmt>
+        <publisher>
+          <orgName>Des Zentrums fur Gastrosophie</orgName>
+          <ptr target="http://gastrosophie.sbg.ac.at/"/>
+        </publisher>
+        <date when="">2015-02-11</date>
+      </publicationStmt>
+      <sourceDesc>
+        <biblStruct>
+          <monogr>
+            <title>To make Pease Soop</title>
+            <title type="alt">Erbsensuppe</title>
+            <note/>
+            <author>
+              <persName xml:id="person1">
+                <forename>Peter</forename>
+                <surname>Griffin</surname>
+                <email>peter_griffin@zmyslonymail.com</email>
+              </persName>
+            </author>
+            <author>
+              <persName xml:id="person32">
+                <forename>Lois</forename>
+                <surname>Griffin</surname>
+                <email>lois_griffin@zmyslonymail.com</email>
+              </persName>
+            </author>
+            <textLang mainLang="deu"/>
+            <imprint>
+              <biblScope unit="volume">Teil 2, S. 058</biblScope>
+              <biblScope unit="chapter">Teil 2, S. 058</biblScope>
+              <biblScope unit="entry">Teil 2, S. 058</biblScope>
+            </imprint>
+          </monogr>
+        </biblStruct>
+        <msDesc>
+          <msIdentifier>
+            <repository>Rezeptdatenbank</repository>
+            <idno/>
+          </msIdentifier>
+        </msDesc>
+      </sourceDesc>
+    </fileDesc>
+    <profileDesc>
+      <textClass>
+        <classCode scheme="http://providedh.eu/uncertainty/ns/1.0">
+          <certainty xml:id="certainty-0" resp="#annotator-2" ana="https://providedh.ehum.psnc.pl/api/projects/2/taxonomy/#incompleteness" locus="value" cert="high" target="#test" assertedValue="Balloons">
+            <desc>Some important decription</desc>
+          </certainty>
+          <certainty xml:id="certainty-1" resp="#annotator-2" ana="https://providedh.ehum.psnc.pl/api/projects/2/taxonomy/#incompleteness" locus="value" cert="high" target="#person-0" match="./persName/forename" assertedValue="#val-0"/>
+          <val xml:id="val-0" resp="#annotator-2">multiple word value</val>
+        </classCode>
+      </textClass>
+      <particDesc>
+        <listPerson type="PROVIDEDH Annotators">
+          <person xml:id="annotator-2">
+            <persName>
+              <forename>Tony</forename>
+              <surname>Stark</surname>
+              <email>tony_stark@zmyslonymail.com</email>
+            </persName>
+          </person>
+        </listPerson>
+      </particDesc>
+    </profileDesc>
+  </teiHeader>
+  <text>
+    <body>
+      <div type="recipe">
+        <p>Put three or four Pounds of <name ref="#person-0" xml:id="name-0">Jerry Maguire's</name> coarse Beef , with three Pints of Pease , into two <seg xml:id="seg-0">Gallons</seg> of Hank Moody's Water ; let it boil till the Meat is all to Rags ; and Half an Hour before you strain it out , put in two or three Anchovies ; then strain it from the Meat and Husks , and put in as much as you want for the Meal into a Sauce-pan , with an Onion stuck with Cloves , a Race of Ginger bruis 'd , a little Fagot of Thyme , Savory , Parsley , and a little Pepper . Let it boil near Half an Hour ; stir in a Piece of Butter , and fry some forc 'd Meat Balls , Bacon and French Bread cut in Dice , with Spinage boil 'd green , to put to it in the Dish .</p>
+        <p>Some random date 4th of july 2010 for test unlistable entities, and reference to this date the exact same day</p>
+      </div>
+    </body>
+  </text>
+  <standOff>
+    <listPerson type="personList">
+      <person xml:id="person-0" resp="#annotator-2" age="child" sex="M">
+        <birth when="2001-02-03"/>
+        <persName>
+          <forename>Jerry</forename>
+          <surname>Maguire</surname>
+        </persName>
+        <name>Jerry Maguire</name>
+      </person>
+    </listPerson>
+  </standOff>
+</TEI>
