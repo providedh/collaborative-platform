@@ -40,7 +40,7 @@ class IDsCorrector:
         self.__correct_tags_ids_in_body_text_related_to_entities()
         self.__correct_annotators_ids()
         self.__correct_certainties_xml_ids()
-        self.__correct_additional_usable_tags_ids_in_body()
+        self.__correct_additional_usable_tags_ids()
         self.__create_xml_content()
 
         self._dump_max_xml_ids_to_db(file_id)
@@ -157,11 +157,11 @@ class IDsCorrector:
 
         self.__correct_elements_ids(elements, 'annotator')
 
-    def __correct_additional_usable_tags_ids_in_body(self):
+    def __correct_additional_usable_tags_ids(self):
         additional_usable_tags = set(ADDITIONAL_USABLE_TAGS) - {'certainty', 'name'}
 
         for tag in additional_usable_tags:
-            xpath = f'//default:text//default:body//default:{tag}'
+            xpath = f'//default:{tag}'
 
             elements = self.__tree.xpath(xpath, namespaces=XML_NAMESPACES)
 
@@ -182,7 +182,8 @@ class IDsCorrector:
             else:
                 self.__update_element_xml_id(element, xml_id_base)
 
-    def __get_difference_of_elements(self, elements_a, elements_b):
+    @staticmethod
+    def __get_difference_of_elements(elements_a, elements_b):
         elements = set(elements_a) - set(elements_b)
         elements = list(elements)
 
@@ -195,7 +196,7 @@ class IDsCorrector:
         old_xml_id = element.attrib[XML_ID_KEY]
         new_xml_id = self.__update_element_xml_id(element, xml_id_base, collision=collision)
 
-        reference_attributes = ['ref', 'resp', 'target']
+        reference_attributes = ['assertedValue', 'ref', 'resp', 'target']
 
         for attribute in reference_attributes:
             xpath = f"//*[contains(concat(' ', @{attribute}, ' '), ' #{old_xml_id} ')]"

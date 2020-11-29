@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.test import Client
 
 from apps.api_vis.models import Clique, Entity, Unification
-from apps.files_management.models import Directory
+from apps.files_management.models import Directory, File
 from apps.files_management.tests.integration_tests.test_file_handling_with_hd_and_db import download_file, read_file, \
     upload_file
 from apps.projects.models import Project
@@ -195,3 +195,46 @@ class TestIssue164:
 
         result_xml = download_file(client, second_file.id)
         assert result_xml == expected_xml
+
+
+@pytest.mark.usefixtures('file_handling_with_hd_and_db__db_setup', 'reset_db_files_directory_after_each_test')
+@pytest.mark.django_db(transaction=True, reset_sequences=True)
+@pytest.mark.integration_tests
+class TestIssue181:
+    """Text longer than 1 word in Asserted Value must be wrapped in a separate tag"""
+
+    def test_asserted_value_attribute_of_certainty_element_is_properly_imported(self):
+        user_id = 2
+        project_id = 2
+
+        client = Client()
+        user = User.objects.get(id=user_id)
+        client.force_login(user)
+
+        files_in_project = File.objects.filter(project_id=project_id)
+        assert files_in_project.count() == 0
+
+        project = Project.objects.get(id=project_id)
+        directory = Directory.objects.get(project=project, name=project.title, parent_dir=None)
+        source_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'source_files',
+                                        'issue_181__import_asserted_value__source.xml')
+
+        upload_file(client, source_file_path, directory.id)
+
+        assert files_in_project.count() == 1
+
+        uploaded_file = files_in_project.latest('id')
+        file_versions = uploaded_file.file_versions.all()
+        assert file_versions.count() == 2
+
+        latest_file_version = file_versions.latest('id')
+        raw_content = latest_file_version.get_raw_content()
+        expected_file_path = os.path.join(SCRIPT_DIR, 'test_files', 'expected_files',
+                                          'issue_181__import_asserted_value__expected.xml')
+        expected_xml = read_file(expected_file_path)
+        assert raw_content == expected_xml
+
+        certainties = latest_file_version.certainty_set.all().order_by('id')
+        assert certainties.count() == 2
+        assert certainties[0].asserted_value == 'Balloons'
+        assert certainties[1].asserted_value == 'multiple word value'

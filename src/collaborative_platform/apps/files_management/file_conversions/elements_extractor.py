@@ -325,6 +325,12 @@ class ElementsExtractor:
             degree = float(degree)
             degree = round(degree, 2)
 
+        asserted_value = get_first_xpath_match(certainty, '@assertedValue', XML_NAMESPACES)
+        asserted_value = str(asserted_value)
+
+        if asserted_value.startswith('#val-'):
+            asserted_value = self.__get_asserted_value_from_another_element(asserted_value)
+
         certainty_object = Certainty.objects.create(
             file=self.__file,
             xml_id=get_first_xpath_match(certainty, '@xml:id', XML_NAMESPACES),
@@ -333,7 +339,7 @@ class ElementsExtractor:
             degree=degree,
             target_xml_id=target_xml_id,
             target_match=target_xpath,
-            asserted_value=get_first_xpath_match(certainty, '@assertedValue', XML_NAMESPACES),
+            asserted_value=asserted_value,
             description=get_first_xpath_match(certainty, './default:desc/text()', XML_NAMESPACES),
             created_by=author,
             created_in_file_version=self.__file_version,
@@ -341,6 +347,14 @@ class ElementsExtractor:
         )
 
         certainty_object.categories.add(*categories)
+
+    def __get_asserted_value_from_another_element(self, asserted_value):
+        xml_id = asserted_value.replace('#', '')
+        xpath = f"//*[contains(concat(' ', @xml:id, ' '), ' {xml_id} ')]"
+        element = get_first_xpath_match(self.__tree, xpath, XML_NAMESPACES)
+        asserted_value = element.text
+
+        return asserted_value
 
     def __create_xml_content(self):
         self.__new_xml_content = etree.tounicode(self.__tree, pretty_print=True)
