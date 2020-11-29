@@ -237,7 +237,7 @@ class TestIssue181:
         certainties = latest_file_version.certainty_set.all().order_by('id')
         assert certainties.count() == 2
         assert certainties[0].asserted_value == 'Balloons'
-        assert certainties[1].asserted_value == 'multiple word value'
+        assert certainties[1].asserted_value == 'multiple words value'
 
     def test_asserted_value_attribute_of_certainty_element_is_properly_rendered(self):
         user_id = 2

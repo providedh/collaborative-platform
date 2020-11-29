@@ -66,7 +66,7 @@
             <desc>Some important decription</desc>
           </certainty>
           <certainty ana="https://providedh-test.ehum.psnc.pl/api/projects/17/taxonomy/#incompleteness" locus="value" cert="high" assertedValue="#val-7" target="#person-0" match="./persName/forename" resp="#second_annotator" xml:id="certainty24"/>
-          <val xml:id="val-7">multiple word value</val>
+          <val xml:id="val-7">multiple words value</val>
         </classCode>
       </textClass>
     </profileDesc>

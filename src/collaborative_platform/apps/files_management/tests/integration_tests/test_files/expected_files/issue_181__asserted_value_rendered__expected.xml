@@ -55,7 +55,7 @@
             <desc>Some important decription</desc>
           </certainty>
           <certainty xml:id="certainty-1" resp="#annotator-2" ana="https://providedh.ehum.psnc.pl/api/projects/2/taxonomy/#incompleteness" locus="value" cert="high" target="#person-0" match="./persName/forename" assertedValue="#val-0"/>
-          <val xml:id="val-0" resp="#annotator-2">multiple word value</val>
+          <val xml:id="val-0" resp="#annotator-2">multiple words value</val>
         </classCode>
       </textClass>
       <particDesc>
