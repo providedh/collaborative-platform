@@ -127,7 +127,7 @@ function processTag (domNode) {
     deleted: (domNode.attributes?.deleted?.value === 'true')
   }
 
-  if (domNode.tagName === 'ab') {return tag}
+  if (domNode.tagName === 'seg') {return tag}
   if (Object.values(commonAttributes).filter(x => x.value === null).length > 0) {return null}
 
   tag.ref.value = tag.ref.value.slice(1)
@@ -245,7 +245,7 @@ function processEntitiesInDocument (raw, entities, annotations, conf) {
     })
 
   // annotated plain text
-  const annotatedTags = [...body.getElementsByTagName('ab')]
+  const annotatedTags = [...body.getElementsByTagName('seg')]
     .map(node => [node, processTag(node)])
     .map(([tag, details]) => [
       tag,
