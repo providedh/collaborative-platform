@@ -11,7 +11,6 @@ class TEIentitiesSection extends React.PureComponent {
       icon: "\uf042",
       color: '#aaaaaa',
       name: '',
-      body_list: "false"
     };
     this.state = this.defState;
   }
@@ -86,32 +85,6 @@ class TEIentitiesSection extends React.PureComponent {
           </button>
         )}
         {this.entityProperties(e[0])}
-        {
-          ['date', 'time'].includes(e[0]) ? '' :
-            <div className="small d-block px-5">
-              <span className="d-block">List existing {e[0]}s in the documents?</span>
-              <div className="form-check form-check-inline">
-                <input className="form-check-input" 
-                  checked={e[1].body_list == "true"} 
-                  type="radio" 
-                  name={e[0]+'list'+i} 
-                  id={e[0]+'showList'+i} 
-                  onChange={event=>this.handleBodyListChange(i, event.target.value)}
-                  value="true"/>
-                <label className="form-check-label" htmlFor={e[0]+'showList'+i}>yes</label>
-              </div>
-              <div className="form-check form-check-inline">
-                <input className="form-check-input" 
-                  checked={e[1].body_list == "false"} 
-                  type="radio" 
-                  name={e[0]+'list'+i} 
-                  id={e[0]+'hideList'+i} 
-                  onChange={event=>this.handleBodyListChange(i, event.target.value)}
-                  value="false"/>
-                  <label className="form-check-label" htmlFor={e[0]+'hideList'+i}>no</label>
-              </div>
-            </div>
-        }
         <hr />
       </li>
     )});
@@ -140,35 +113,13 @@ class TEIentitiesSection extends React.PureComponent {
             {isInvalid?<div className="invalid-feedback">{msg}</div>:''}
           </div>
           <button type="button" className="btn btn-light ml-3" onClick={()=>this.handleAddEntity()}>Add</button>
-          <div className="small d-block px-5">
-            <span className="d-block">List existing {this.state.name}s in the documents?</span>
-            <div className="form-check form-check-inline">
-              <input className="form-check-input" 
-                checked={this.state.body_list == "true"} 
-                onChange={()=>this.setState({body_list: "true"})}
-                type="radio" 
-                name={this.state.name+'list'} 
-                id={this.state.name+'showList'}
-                value="true"/>
-              <label className="form-check-label" htmlFor='teiShow'>yes</label>
-            </div>
-            <div className="form-check form-check-inline">
-              <input className="form-check-input" 
-                checked={this.state.body_list == "false"} type="radio" 
-                onChange={()=>this.setState({body_list: "false"})}
-                name={this.state.name+'list'} 
-                id={this.state.name+'hideList'}
-                value="false"/>
-              <label className="form-check-label" htmlFor='teiHide'>no</label>
-            </div>
-          </div>
       </li>
     );
     
   }
   
   handleAddEntity(){
-    const {name, color, icon, body_list} = this.state;
+    const {name, color, icon} = this.state;
 
     if(name.length == 0)
       return;
@@ -177,7 +128,7 @@ class TEIentitiesSection extends React.PureComponent {
     if(alreadyIncluded===true)
       return;
 
-    const newEntity = [name, {color, icon, body_list}];
+    const newEntity = [name, {color, icon}];
     const newScheme = [...this.props.scheme, newEntity];
     this.props.updateScheme(newScheme);
     this.setState(this.defState);
@@ -186,13 +137,6 @@ class TEIentitiesSection extends React.PureComponent {
   handleNameChange(index, newName){
     const newValue = this.props.scheme[index];
     newValue[0] = newName;
-    const newScheme = this.props.scheme.map((x,i)=>i!=index?x:newValue);
-    this.props.updateScheme(newScheme);
-  }
-
-  handleBodyListChange(index, body_list){
-    const newValue = this.props.scheme[index];
-    newValue[1].body_list = body_list;
     const newScheme = this.props.scheme.map((x,i)=>i!=index?x:newValue);
     this.props.updateScheme(newScheme);
   }

@@ -51,8 +51,6 @@ class App extends React.Component {
   createProject(e){
     e.preventDefault()
     const key2name = array=>({...array[1], name:array[0]});
-    const body_list2boolean = ({name, color, icon, body_list})=>
-      ({name, color, icon, body_list:body_list=='true'})
 
     if(this.validateScheme() === false)
       return;
@@ -61,7 +59,7 @@ class App extends React.Component {
       title: this.state.title,
       description: this.state.description,
       taxonomy: this.state.certScheme.map(key2name),
-      entities: this.state.teiScheme.map(key2name).map(body_list2boolean)
+      entities: this.state.teiScheme.map(key2name)
     };
 
     var form = $(this).serializeObject()
