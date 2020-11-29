@@ -117,11 +117,7 @@ function processTag (domNode) {
   )
 
   commonAttributes.htmlId = Object.assign({}, commonAttributes['xml:id'])
-  if (commonAttributes.htmlId.status === OperationStatus.edited) {
-    commonAttributes.htmlId.value = replacedId(commonAttributes['xml:id'].prev)
-  } else {
-    commonAttributes.htmlId.value = replacedId(commonAttributes['xml:id'].value)
-  }
+  commonAttributes.htmlId.value = replacedId(commonAttributes['xml:id'].value)
 
   const tag = {
     id: commonAttributes['xml:id'],
