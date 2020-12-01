@@ -70,12 +70,12 @@
       <textClass>
         <classCode scheme="http://providedh.eu/uncertainty/ns/1.0">
           <certainty ana="https://providedh-test.ehum.psnc.pl/api/projects/17/taxonomy/#incompleteness https://providedh-test.ehum.psnc.pl/api/projects/17/taxonomy/#credibility" locus="value" degree="0.8571428571428571" cert="high" resp="#recipe_levenshtein_matching" match="@ref" target="#name-4" xml:id="certainty-0" assertedValue="#met"/>
-          <certainty ana="https://providedh-test.ehum.psnc.pl/api/projects/17/taxonomy/#incompleteness" locus="value" cert="high" assertedValue="Balloons" target="#test" resp="#second_annotator" xml:id="certainty22">
+          <certainty ana="https://providedh-test.ehum.psnc.pl/api/projects/17/taxonomy/#incompleteness" locus="value" cert="high" assertedValue="Balloons" target="#seg-0" resp="#second_annotator" xml:id="certainty22">
             <desc>Some important decription</desc>
           </certainty>
           <certainty ana="https://providedh-test.ehum.psnc.pl/api/projects/17/taxonomy/#incompleteness https://providedh-test.ehum.psnc.pl/api/projects/17/taxonomy/#invalid_category"  locus="value" cert="high" assertedValue="#ingredient-0" target="#name-8" match="@ref" resp="#second_annotator" xml:id="certainty23"/>
           <certainty ana="https://providedh-test.ehum.psnc.pl/api/projects/17/taxonomy/#incompleteness" locus="value" cert="high" assertedValue="McDuck" target="#person-0" match="./persName/forename" resp="#second_annotator" xml:id="certainty24"/>
-          <certainty ana="https://providedh-test.ehum.psnc.pl/api/projects/17/taxonomy/#new_awesome_category" locus="value" cert="high" assertedValue="low" target="#certainty-10" match="@cert" resp="#xml_id_autora" xml:id="certainty25"/>
+          <certainty ana="https://providedh-test.ehum.psnc.pl/api/projects/17/taxonomy/#new_awesome_category" locus="value" cert="high" assertedValue="low" target="#certainty22" match="@cert" resp="#xml_id_autora" xml:id="certainty25"/>
         </classCode>
       </textClass>
     </profileDesc>
@@ -98,10 +98,10 @@
         <name>Jerry Maguire</name>
         <birth when="2001-02-03"/>
       </person>
-      <person resp="recipe_levenshtein_matching" xml:id="person-1">
+      <person resp="#recipe_levenshtein_matching" xml:id="person-1">
         <name>Ingwer</name>
       </person>
-      <person resp="recipe_levenshtein_matching" xml:id="person-2">
+      <person resp="#recipe_levenshtein_matching" xml:id="person-2">
         <name>Grieben</name>
       </person>
       <person xml:id="person-3">
