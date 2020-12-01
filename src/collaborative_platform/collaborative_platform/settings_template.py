@@ -401,7 +401,7 @@ DEFAULT_ENTITIES = {
         'properties': {
             'name': {
                 'type': TypeChoice.str,
-                'xpath': './text()',
+                'xpath': './default:objectIdentifier/default:objectName/text()',
             },
         },
         'listable': True,
@@ -479,14 +479,14 @@ CUSTOM_ENTITY = {
     'properties': {
         'name': {
             'type': TypeChoice.str,
-            'xpath': './text()'
+            'xpath': './default:objectIdentifier/default:objectName/text()'
         }
     },
     'listable': True,
     'text_tag': 'name',
 }
 
-ADDITIONAL_USABLE_TAGS = ['certainty', 'name', 'seg']
+ADDITIONAL_USABLE_TAGS = ['certainty', 'name', 'seg', 'val']
 
 ADDITIONAL_XML_ID_BASES = ['annotator']
 
