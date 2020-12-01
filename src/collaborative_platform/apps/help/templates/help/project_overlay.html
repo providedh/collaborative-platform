@@ -293,7 +293,7 @@ img#process{width: 30em;}
     </button>
   </div>
 </div>
-<script type="text/javascript">
+<script nonce="{{request.csp_nonce}}" type="text/javascript">
   window.onload = () => document
     .getElementById('project-overlay-toggle-button')
     .addEventListener('click', () => {

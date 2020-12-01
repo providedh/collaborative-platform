@@ -90,7 +90,7 @@
 
 <div id="react-root"></div>
 
-<script type="text/javascript">
+<script nonce="{{request.csp_nonce}}" type="text/javascript">
   window.project = {{ project_id }};
   window.dashboard = {{ dashboard.id }};
   window.config = JSON.parse('{{dashboard_config}}'.replace(/&quot;/g, '"'));

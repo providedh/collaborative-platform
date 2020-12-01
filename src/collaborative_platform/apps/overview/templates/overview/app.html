@@ -59,7 +59,7 @@
 <h1>{{ title }} overview</h1>
 <div id="react-root"></div>
 
-<script type="text/javascript">
+<script nonce="{{request.csp_nonce}}" type="text/javascript">
 window.onload = function() {
 var csrftoken = $("[name=csrfmiddlewaretoken]").val();
 $.ajaxSetup({

@@ -101,7 +101,7 @@
   </div>
 </div>
 
-<script type="text/javascript">
+<script nonce="{{request.csp_nonce}}" type="text/javascript">
 window.project_id = {{ project_id }};
 window.onload = function() {
 var csrftoken = $("[name=csrfmiddlewaretoken]").val();
