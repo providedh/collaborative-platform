@@ -38,6 +38,7 @@ class TestAnnotatorWithWsAndDb:
         response = await communicator.receive_json_from()
         assert response['status'] == 200
         assert response['message'] == 'OK'
+        _ = await communicator.receive_json_from()
 
         await communicator.send_to(text_data='ping')
         response = await communicator.receive_from()
@@ -94,7 +95,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -155,7 +157,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -189,7 +192,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
                 'method': 'modify',
@@ -223,7 +227,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -253,7 +258,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -305,7 +311,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -363,7 +370,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -413,7 +421,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -469,7 +478,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -500,7 +510,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         date_entity_in_db = Entity.objects.get(
             file_id=file_id,
@@ -552,7 +563,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         date_entity_in_db = Entity.objects.get(
             file_id=file_id,
@@ -607,7 +619,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         date_entities_in_db = Entity.objects.filter(type='date')
         assert len(date_entities_in_db) == 2
@@ -647,7 +660,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -679,7 +693,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         date_entities_in_db = Entity.objects.filter(type='date')
         assert len(date_entities_in_db) == 2
@@ -717,7 +732,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -750,7 +766,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -817,7 +834,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -848,7 +866,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         entity_property = EntityProperty.objects.filter(
             entity_version__entity__xml_id='date-0',
@@ -889,7 +908,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -923,7 +943,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         entity_property_old = EntityProperty.objects.filter(
             entity_version__entity__xml_id='date-0',
@@ -975,7 +996,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -1011,7 +1033,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -1047,7 +1070,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -1083,7 +1107,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -1119,7 +1144,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -1155,7 +1181,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -1191,7 +1218,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -1221,7 +1249,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -1255,7 +1284,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -1289,7 +1319,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -1324,7 +1355,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -1398,7 +1430,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -1441,7 +1474,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -1485,7 +1519,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -1525,7 +1560,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -1585,7 +1621,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -1651,7 +1688,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -1709,7 +1747,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -1773,7 +1812,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -1839,7 +1879,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -1889,7 +1930,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -1931,7 +1973,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -1979,7 +2022,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -2020,7 +2064,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -2082,7 +2127,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -2125,7 +2171,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -2202,7 +2249,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -2246,7 +2294,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -2316,7 +2365,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -2357,7 +2407,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -2408,7 +2459,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -2454,7 +2506,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -2498,7 +2551,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -2538,7 +2592,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -2581,7 +2636,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -2625,7 +2681,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -2665,7 +2722,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -2725,7 +2783,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -2791,7 +2850,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -2849,7 +2909,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -2913,7 +2974,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -2981,7 +3043,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -3057,7 +3120,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -3099,7 +3163,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -3147,7 +3212,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -3188,7 +3254,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -3254,7 +3321,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -3297,7 +3365,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -3374,7 +3443,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -3418,7 +3488,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -3484,7 +3555,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -3525,7 +3597,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -3577,7 +3650,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -3623,7 +3697,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -3667,7 +3742,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -3718,7 +3794,8 @@ class TestAnnotatorWithWsAndDb:
         assert file_versions_ids == [2, 4, 6]
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -3776,7 +3853,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -3993,7 +4071,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -4121,7 +4200,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -4249,7 +4329,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -4397,7 +4478,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -4430,7 +4512,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -4485,7 +4568,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -4519,7 +4603,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -4571,7 +4656,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -4633,7 +4719,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -4677,7 +4764,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -4749,6 +4837,43 @@ class TestAnnotatorWithWsAndDb:
 
         await communicator.disconnect()
 
+    async def test_users_see_changes_in_the_presence_of_other_users(self):
+        test_name = inspect.currentframe().f_code.co_name
+
+        project_id = 1
+        file_id = 1
+        first_user_id = 2
+        second_user_id = 3
+
+        first_communicator = get_communicator(project_id, file_id, first_user_id)
+        second_communicator = get_communicator(project_id, file_id, second_user_id)
+
+        await first_communicator.connect()
+        _ = await first_communicator.receive_json_from()
+
+        users_list = await first_communicator.receive_json_from()
+        response_nr = 0
+        verify_response(test_name, users_list, response_nr)
+
+        await second_communicator.connect()
+        _ = await second_communicator.receive_json_from()
+
+        users_list = await first_communicator.receive_json_from()
+        response_nr = 1
+        verify_response(test_name, users_list, response_nr)
+
+        users_list = await second_communicator.receive_json_from()
+        response_nr = 1
+        verify_response(test_name, users_list, response_nr)
+
+        await first_communicator.disconnect()
+
+        users_list = await second_communicator.receive_json_from()
+        response_nr = 2
+        verify_response(test_name, users_list, response_nr)
+
+        await second_communicator.disconnect()
+
     async def test_users_see_changes_made_by_another_users(self):
         test_name = inspect.currentframe().f_code.co_name
 
@@ -4761,10 +4886,13 @@ class TestAnnotatorWithWsAndDb:
         second_communicator = get_communicator(project_id, file_id, second_user_id)
 
         await first_communicator.connect()
-        await first_communicator.receive_json_from()
+        _ = await first_communicator.receive_json_from()
+        _ = await first_communicator.receive_json_from()
 
         await second_communicator.connect()
-        await second_communicator.receive_json_from()
+        _ = await second_communicator.receive_json_from()
+        _ = await second_communicator.receive_json_from()
+        _ = await first_communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -4823,7 +4951,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -4857,7 +4986,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -4882,12 +5012,13 @@ class TestAnnotatorWithWsAndDb:
 
         project_id = 1
         file_id = 1
-        second_user_id = 3
+        user_id = 3
 
-        second_communicator = get_communicator(project_id, file_id, second_user_id)
+        communicator = get_communicator(project_id, file_id, user_id)
 
-        await second_communicator.connect()
-        await second_communicator.receive_json_from()
+        await communicator.connect()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -4903,11 +5034,11 @@ class TestAnnotatorWithWsAndDb:
         }
         request_nr = 0
 
-        await second_communicator.send_json_to(request)
-        second_response = await second_communicator.receive_json_from()
+        await communicator.send_json_to(request)
+        second_response = await communicator.receive_json_from()
         verify_response(test_name, second_response, request_nr)
 
-        await second_communicator.disconnect()
+        await communicator.disconnect()
 
     async def test_user_cant_delete_another_users_reference(self):
         test_name = inspect.currentframe().f_code.co_name
@@ -4919,7 +5050,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -4950,7 +5082,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -4984,7 +5117,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -5015,7 +5149,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -5048,7 +5183,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -5082,7 +5218,8 @@ class TestAnnotatorWithWsAndDb:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',

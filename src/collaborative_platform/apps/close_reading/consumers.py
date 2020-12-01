@@ -4,6 +4,7 @@ from asgiref.sync import async_to_sync
 from channels.exceptions import StopConsumer
 from channels.generic.websocket import WebsocketConsumer
 from channels.layers import get_channel_layer
+from django.forms.models import model_to_dict
 
 from apps.close_reading.loggers import CloseReadingLogger
 from apps.close_reading.models import Operation, RoomPresence
@@ -47,6 +48,8 @@ class AnnotatorConsumer(WebsocketConsumer):
 
             self.__response_generator = ResponseGenerator(self.__file_id)
             self.__request_handler = RequestHandler(self.scope['user'], self.__file_id)
+
+            self.__propagate_updated_list_of_connected_users()
 
             user_id = self.scope['user'].id
             response = self.__response_generator.get_response(user_id)
@@ -105,6 +108,8 @@ class AnnotatorConsumer(WebsocketConsumer):
         self.__remove_user_from_presence_table()
 
         self.close()
+
+        self.__propagate_updated_list_of_connected_users()
 
         remain_users = self.__count_remain_users()
         pending_operations = self.__count_pending_operations()
@@ -208,6 +213,32 @@ class AnnotatorConsumer(WebsocketConsumer):
             if room_presences:
                 room_presence = room_presences[0]
                 room_presence.save()
+
+    def __propagate_updated_list_of_connected_users(self):
+        room_presences = RoomPresence.objects.filter(
+            room_symbol=self.__room_name
+        )
+
+        users_details = []
+
+        for presence in room_presences:
+            fields = ['id', 'username', 'first_name', 'last_name']
+            user_details = model_to_dict(presence.user, fields=fields)
+
+            users_details.append(user_details)
+
+        message = {'connected_users': users_details}
+        message = json.dumps(message)
+
+        for presence in room_presences:
+            channel_layer = get_channel_layer()
+            async_to_sync(channel_layer.send)(
+                presence.channel_name,
+                {
+                    'type': 'xml_modification',
+                    'message': message,
+                }
+            )
 
     def __send_personalized_changes_to_users(self):
         room_presences = RoomPresence.objects.filter(

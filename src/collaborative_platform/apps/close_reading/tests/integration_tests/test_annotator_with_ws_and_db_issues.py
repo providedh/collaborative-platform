@@ -33,7 +33,8 @@ class TestIssue111:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -84,7 +85,8 @@ class TestIssue111:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -153,7 +155,8 @@ class TestIssue111:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -207,7 +210,8 @@ class TestIssue111:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -269,7 +273,8 @@ class TestIssue112:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -322,7 +327,8 @@ class TestIssue112:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -407,7 +413,8 @@ class TestIssue112:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -489,7 +496,8 @@ class TestIssue112:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -612,7 +620,8 @@ class TestIssue112:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -678,7 +687,8 @@ class TestIssue113:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -715,7 +725,8 @@ class TestIssue113:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -817,7 +828,8 @@ class TestIssue114:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -921,7 +933,8 @@ class TestIssue122:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -970,7 +983,8 @@ class TestIssue124:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -1042,7 +1056,8 @@ class TestIssue137:
         file_id = project_files.latest('id').id
         communicator = get_communicator(project_id, file_id, user_id)
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -1101,7 +1116,8 @@ class TestIssue155:
         communicator = get_communicator(project_id, file_id, user_id)
 
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
@@ -1169,6 +1185,7 @@ class TestIssueUnnamed01:
         response = await communicator.receive_json_from()
         request_nr = 0
         verify_response(test_name, response, request_nr)
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',

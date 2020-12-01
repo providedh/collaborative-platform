@@ -52,7 +52,8 @@ class TestIssue158:
 
         communicator = get_communicator(project_id, file_id, user_id)
         await communicator.connect()
-        await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
+        _ = await communicator.receive_json_from()
 
         request = {
             'method': 'modify',
