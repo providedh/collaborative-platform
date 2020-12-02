@@ -42,7 +42,7 @@ opacity: .6;
 .userNames{
 position: absolute;
 top: 100%;
-right: 0;
+left: 0;
 z-index: 10;
 padding: 0.1em .5em;
 display: none;
