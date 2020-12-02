@@ -6,7 +6,8 @@
  * produces : onopen, onload, onreload, onsend
  * */
 
-import validate from './response_schema'
+import validateContent from './content_response_schema'
+import validateUsers from './users_response_schema'
 
 export default function AnnotatorWebSocket (projectId, fileId) {
   let content = ''
@@ -47,15 +48,18 @@ export default function AnnotatorWebSocket (projectId, fileId) {
     socket.onmessage = function message (event) {
       const content = JSON.parse(event.data)
       let ok = true
-      const validation = validate(content)
+      const validContentUpdate = validateContent(content)
+      const validUsersUpdate = validateUsers(content)
 
-      if (validation.valid === false) {
+      if (validContentUpdate.valid === true) {
+        content.type = 'content';
+        if (content.status !== 200) { ok = false }
+
+      } else if (validUsersUpdate.valid === true) {
+        content.type = 'users';
+
+      } else {
         console.info('ws::invalid::', content)
-        validation.errors.forEach(e => console.error(e.toString()))
-        ok = false
-      }
-
-      if (content.status !== 200) {
         ok = false
       }
 
