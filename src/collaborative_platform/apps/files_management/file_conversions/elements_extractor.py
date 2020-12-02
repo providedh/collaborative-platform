@@ -283,6 +283,9 @@ class ElementsExtractor:
 
             unique_categories.update(categories)
 
+        wrong_categories = {''}
+        unique_categories = unique_categories - wrong_categories
+
         for category in unique_categories:
             regex = r'#\w+$'
             match = re.search(regex, category)
