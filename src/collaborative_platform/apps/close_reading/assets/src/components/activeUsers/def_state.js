@@ -5,12 +5,12 @@ export default function defState (fileId, fileName, user, configuration, websock
     fileVersion: '',
     documentContent: '',
     toasts: [],
-    users: [],
 
     selection: null,
 
     context: {
       user,
+      users: [],
       configuration,
       websocket,
       authors: [],

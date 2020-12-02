@@ -44,6 +44,8 @@ function setupEntityInteractions (entities, callbacks) {
     const { onHover, onHoverOut, onClick } = callbacks
     const node = document.getElementById(entity.htmlId.value)
 
+    if (node === null) {return}
+
     node.addEventListener('mouseenter', event => {
       handleEntityEvent(entity, event, onHover, SelectionType.hover)
     })

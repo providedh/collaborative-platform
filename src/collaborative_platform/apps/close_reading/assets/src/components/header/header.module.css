@@ -1,4 +1,6 @@
-.header{}
+.header{
+position: relative;
+}
 .fileName{
   width: calc(100% - 5.8em);
 }

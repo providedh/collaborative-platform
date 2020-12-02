@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 
 import { WithAppContext } from 'common/context/app'
 import { SaveButton } from 'components/saveButton'
+import { ActiveUsers } from 'components/activeUsers'
 import styles from './header.module.css'
 
 export default function HeaderWithContext (props) {
@@ -15,6 +16,7 @@ export default function HeaderWithContext (props) {
 
 function Header (props) {
   return <div className={styles.header}>
+    <ActiveUsers users={props.users} />
     <div className={styles.top}>
       <div className={styles.fileName}>
         <h1>
@@ -31,5 +33,11 @@ function Header (props) {
 
 Header.propTypes = {
   fileName: PropTypes.string,
-  fileVersion: PropTypes.string
+  fileVersion: PropTypes.string,
+  users: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number,
+    username: PropTypes.string,
+    first_name: PropTypes.string,
+    last_name: PropTypes.string
+  }))
 }

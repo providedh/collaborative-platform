@@ -34,6 +34,8 @@ export default class App extends React.Component {
     this.onClickOut = this.onClickOut.bind(this)
     this.onSelection = this.onSelection.bind(this)
     this.handleWebsocketResponse = this.handleWebsocketResponse.bind(this)
+    this.handleContentUpdate = this.handleContentUpdate.bind(this)
+    this.handleUsersUpdate = this.handleUsersUpdate.bind(this)
     this.pushToast = this.pushToast.bind(this)
     this.popToast = this.popToast.bind(this)
     this.removeToast = this.removeToast.bind(this)
@@ -89,31 +91,42 @@ export default class App extends React.Component {
   handleWebsocketResponse (response) {
     if (response.ok === false) {
       this.pushToast(false, 'Error', 'There was an error handling the request.')
-      console.log(response)
-    } else {
-      this.setState(prev => {
-        const newState = Object.assign({}, prev)
-        newState.documentContent = response.body_content
-        newState.context.authors = response.authors
-        newState.context.annotations = response.certainties.map(parseAnnotation)
-        newState.context.operations = response.operations
-        newState.fileVersion = '' + response.file_version
-        newState.selection = null
-
-        const entities = Object
-          .values(response.entities_lists)
-          .reduce((ac, dc) => [...ac, ...dc], [])
-
-        newState.context.entities = xml.processEntitiesInDocument(
-          response.body_content,
-          entities,
-          response.certainties.map(parseAnnotation),
-          prev.context.configuration.properties_per_entity)
-
-        return newState
-      })
-      this.pushToast(true, 'Refreshed', 'The content just updated.')
+      console.error('Non-valid websoket message.')
+      console.error(response)
+    } else if (response.type === 'content'){
+      this.handleContentUpdate (response)
+    } else if (response.type === 'users'){
+      this.handleUsersUpdate (response)
     }
+  }
+
+  handleUsersUpdate (response) {
+    this.setState({users: response.connected_users})
+  }
+
+  handleContentUpdate (response) {
+    this.setState(prev => {
+      const newState = Object.assign({}, prev)
+      newState.documentContent = response.body_content
+      newState.context.authors = response.authors
+      newState.context.annotations = response.certainties.map(parseAnnotation)
+      newState.context.operations = response.operations
+      newState.fileVersion = '' + response.file_version
+      newState.selection = null
+
+      const entities = Object
+        .values(response.entities_lists)
+        .reduce((ac, dc) => [...ac, ...dc], [])
+
+      newState.context.entities = xml.processEntitiesInDocument(
+        response.body_content,
+        entities,
+        response.certainties.map(parseAnnotation),
+        prev.context.configuration.properties_per_entity)
+
+      return newState
+    })
+    this.pushToast(true, 'Refreshed', 'The content just updated.')
   }
 
   onSelection (selection) {
@@ -191,6 +204,7 @@ export default class App extends React.Component {
             fileName={this.state.fileName}
             fileId={this.state.fileId}
             fileVersion={this.state.fileVersion}
+            users={this.state.users}
           />
           <Document
             documentContent={this.state.documentContent}
