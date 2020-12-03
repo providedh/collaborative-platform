@@ -506,7 +506,7 @@ CSP_FONT_SRC = ["'self'", "fonts.googleapis.com", "fonts.gstatic.com"]
 CSP_STYLE_SRC_ELEM = ["'self'", "fonts.googleapis.com", "'unsafe-inline'"]
 CSP_STYLE_SRC = ["'self'", "'unsafe-inline'"]
 CSP_IMG_SRC = ["'self'", "data:"]
-CSP_SCRIPT_SRC_ELEM = ["'self'", "'sha256-TwoyHk4yqGfMbkZZ206voXlZprnmtIZp26gRxf/0/4I='"]
+CSP_SCRIPT_SRC_ELEM = ["'self'", "'sha256-gCP5gEgugtamIDQq3uWm8y47vANpgCYYqWH6T3uodIg='"]
 CSP_INCLUDE_NONCE_IN = [
     "script-src-elem",
 ]
