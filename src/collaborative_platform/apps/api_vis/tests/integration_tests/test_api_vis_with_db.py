@@ -419,8 +419,6 @@ class TestApiVisWithDb:
 
         payload = {
             'entities': [11, 15],
-            'certainty': 'high',
-            'categories': ['ignorance', 'incompleteness'],
             'project_version': 6.3,
         }
 
@@ -810,7 +808,7 @@ class TestApiVisWithDb:
                         'created_by': 2,
                         'entity_file_name': 'group_0_long_annotated_0_modified_xml',
                         'entity_type': 'ingredient',
-                        'entity_xml-id': 'ingredient-1',
+                        'entity_xml_id': 'ingredient-1',
                     },
                     {
                         'id': 14,
@@ -823,7 +821,7 @@ class TestApiVisWithDb:
                         'created_by': 2,
                         'entity_file_name': 'group_0_long_annotated_1_modified_xml',
                         'entity_type': 'ingredient',
-                        'entity_xml-id': 'ingredient-1',
+                        'entity_xml_id': 'ingredient-1',
                     },
                     {
                         'id': 15,
@@ -836,7 +834,7 @@ class TestApiVisWithDb:
                         'created_by': 2,
                         'entity_file_name': 'group_0_long_annotated_2_modified_xml',
                         'entity_type': 'ingredient',
-                        'entity_xml-id': 'ingredient-1',
+                        'entity_xml_id': 'ingredient-1',
                     },
                 ],
                 'unifications_to_remove': [
@@ -851,7 +849,7 @@ class TestApiVisWithDb:
                         'created_by': 2,
                         'entity_file_name': 'group_0_long_annotated_0_modified_xml',
                         'entity_type': 'ingredient',
-                        'entity_xml-id': 'ingredient-0',
+                        'entity_xml_id': 'ingredient-0',
                     },
                     {
                         'id': 3,
@@ -864,7 +862,7 @@ class TestApiVisWithDb:
                         'created_by': 2,
                         'entity_file_name': 'group_0_long_annotated_1_modified_xml',
                         'entity_type': 'ingredient',
-                        'entity_xml-id': 'ingredient-0',
+                        'entity_xml_id': 'ingredient-0',
                     },
                     {
                         'id': 4,
@@ -877,7 +875,7 @@ class TestApiVisWithDb:
                         'created_by': 2,
                         'entity_file_name': 'group_0_long_annotated_2_modified_xml',
                         'entity_type': 'ingredient',
-                        'entity_xml-id': 'ingredient-0',
+                        'entity_xml_id': 'ingredient-0',
                     },
                 ]
             },

@@ -379,7 +379,7 @@ class RequestHandler:
                 'clique_name': unification.clique.name,
                 'entity_id': unification.entity.id,
                 'entity_name': entity_name.get_value(),
-                'entity_xml-id': unification.entity.xml_id,
+                'entity_xml_id': unification.entity.xml_id,
                 'entity_type': unification.entity.type,
                 'entity_file_name': unification.entity.file.name,
                 'certainty': unification.certainty,
