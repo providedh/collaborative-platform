@@ -50,11 +50,15 @@ function onRestoreClick (id, websocket) {
   websocket.send(request)
 }
 
-function EntityPanel (props) {
-  const style = props.context.configuration.entities[props.selection.target.type]
+function EntityPanel ({selection, context}) {
+  let target = context.entities.filter(d => d.id.value === selection.target.id.value)
+  if (target.length === 0) {return}
+  target = target[0]
+
+  const style = context.configuration.entities[target.type]
   const icon = style.icon
-  const deleted = props.selection.target.deleted === true
-  const saved = !deleted && props.selection.target.saved === true
+  const deleted = target.deleted === true
+  const saved = !deleted && target.saved === true
 
   return <div className={styles.entityPanel}>
     <div className="card">
@@ -64,8 +68,8 @@ function EntityPanel (props) {
             <div dangerouslySetInnerHTML={{ __html: icon }} />
           </span>
           <h5 className="d-inline">
-            {props.selection?.target?.target?.value}
-            <span className={styles.entityType + (deleted === false ? '' : 'text-danger')}> ({props.selection.target.type})</span>
+            {selection?.target?.target?.value}
+            <span className={styles.entityType + (deleted === false ? '' : 'text-danger')}> ({target.type})</span>
           </h5>
         </div>
         <span className={deleted === true ? 'ml-4 text-danger' : 'd-none'}>
@@ -73,34 +77,34 @@ function EntityPanel (props) {
           <button type="button"
             onClick={e => {
               e.preventDefault()
-              const operation = props.context.operations.filter(x => (
-                x.edited_element_id === props.selection.target.id.value &&
+              const operation = context.operations.filter(x => (
+                x.edited_element_id === target.id.value &&
                 x.element_type === 'tag' &&
                 x.method === 'DELETE'
               ))
 
               if (operation.length !== 1) { return }
 
-              onRestoreClick(operation[0].id, props.context.websocket)
+              onRestoreClick(operation[0].id, context.websocket)
             }}
             className="btn btn-link p-0 mx-1 text-primary">
             <u> restore</u>
           </button>
         </span>
-        <span className={props.selection.target.saved === false ? 'ml-4 text-danger' : 'd-none'}>
+        <span className={target.saved === false ? 'ml-4 text-danger' : 'd-none'}>
           (unsaved)
           <button type="button"
             onClick={e => {
               e.preventDefault()
-              const operation = props.context.operations.filter(x => (
-                x.operation_result === props.selection.target.target.value &&
+              const operation = context.operations.filter(x => (
+                x.operation_result === target.target.value &&
                 x.element_type === 'reference' &&
                 x.method === 'POST'
               ))
 
               if (operation.length !== 1) { return }
 
-              onSaveClick(props.context.operations, operation[0].id, props.context.websocket)
+              onSaveClick(context.operations, operation[0].id, context.websocket)
             }}
             className="btn btn-link p-0 mx-1 text-primary">
             <u> +save</u>
@@ -108,15 +112,15 @@ function EntityPanel (props) {
           <button type="button"
             onClick={e => {
               e.preventDefault()
-              const operation = props.context.operations.filter(x => (
-                x.operation_result === props.selection.target.target.value &&
+              const operation = context.operations.filter(x => (
+                x.operation_result === target.target.value &&
                 x.element_type === 'reference' &&
                 x.method === 'POST'
               ))
 
               if (operation.length !== 1) { return }
 
-              onDiscardClick(props.context.operations, operation[0].id, props.context.websocket)
+              onDiscardClick(context.operations, operation[0].id, context.websocket)
             }}
             className="btn btn-link p-0 mx-1 text-danger">
             <u> -discard</u>
@@ -124,15 +128,15 @@ function EntityPanel (props) {
         </span>
         <span className={saved === true ? 'ml-4 text-danger' : 'd-none'}>
           <button type="button"
-            onClick={() => onDeleteClick(props.selection.target.id.value, props.context.websocket)}
+            onClick={() => onDeleteClick(target.id.value, context.websocket)}
             className="btn btn-link p-0 mx-1 text-danger">
             <u> -delete</u>
           </button>
         </span>
       </div>
       <div className="card-body">
-        <Attributes entity={props.selection.target}/>
-        <Annotations entity={props.selection.target}/>
+        <Attributes entity={target}/>
+        <Annotations entity={target}/>
       </div>
     </div>
   </div>

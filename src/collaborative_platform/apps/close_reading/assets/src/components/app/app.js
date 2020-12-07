@@ -118,11 +118,15 @@ export default class App extends React.Component {
         .values(response.entities_lists)
         .reduce((ac, dc) => [...ac, ...dc], [])
 
-      newState.context.entities = xml.processEntitiesInDocument(
-        response.body_content,
-        entities,
-        response.certainties.map(parseAnnotation),
-        prev.context.configuration.properties_per_entity)
+      newState.context = Object.assign(
+        {},
+        newState.context,
+        {entities: xml.processEntitiesInDocument(
+          response.body_content,
+          entities,
+          response.certainties.map(parseAnnotation),
+          prev.context.configuration.properties_per_entity)
+        })
 
       return newState
     })
