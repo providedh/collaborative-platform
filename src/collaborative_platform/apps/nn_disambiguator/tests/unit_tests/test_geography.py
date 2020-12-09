@@ -6,7 +6,7 @@ import pytest
 class TestGeography:
     def test_coordinates(self):
         assert coordinates("Salamanca, ES") == (40.9651572, -5.6640182)
-        assert coordinates("Warsaw, PL") == (52.3121346, 21.027036305160426)
+        assert coordinates("Warsaw, PL") == (52.2319581, 21.0067249)
 
     def test_distance(self):
         assert distance((0, 0), (0, 0)) == 0.
