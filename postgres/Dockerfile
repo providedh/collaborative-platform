@@ -1,4 +1,4 @@
-FROM postgres
+FROM postgres:13.1
 ENV POSTGISV 2.5
 
 RUN apt update
