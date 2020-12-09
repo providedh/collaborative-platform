@@ -20,7 +20,11 @@ services:
       - 9200:9200
       - 9300:9300
     environment:
-      - discovery.type=single-node
+      discovery.type: "single-node"
+      ES_JAVA_OPTS: "-Xmx1024m -Xms1024m"
+      LimitNOFILE: 65536
+      LimitMEMLOCK: "infinity"
+      TimeoutStopSec: 0
     ulimits:
       memlock:
         soft: -1
