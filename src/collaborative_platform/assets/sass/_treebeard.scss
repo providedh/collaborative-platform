@@ -797,3 +797,23 @@
     }
   }
 }
+
+/*dragged files*/
+.fileOver {
+  background: var(--light);
+  height: 70px !important;
+  border: dashed 1px var(--primary);
+  &:after {
+    content: "Drop file to upload";
+    margin-top: -2em;
+    display: block;
+    margin-left: 10px;
+    color: var(--cyan);
+    width: 93%;
+    font-weight: 400;
+    text-align: center;
+    border-top: solid 1px;
+    margin: -2em 15px 0 15px;
+    pointer-events: none;
+  }
+}
