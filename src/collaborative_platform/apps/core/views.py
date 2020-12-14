@@ -192,4 +192,4 @@ def static_docs(request, file_name):  # type: (HttpRequest, str) -> HttpResponse
         return HttpResponse(file_content, content_type='application/octet-stream')
 
 def fonts(request):  # type: (HttpRequest) -> HttpResponse
-    return render(request, 'static-google-fonts.css', None)
+    return render(request, 'static-google-fonts.css', None, content_type='text/css')
