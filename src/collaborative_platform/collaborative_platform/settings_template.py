@@ -502,11 +502,6 @@ SECURE_HSTS_PRELOAD = True
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 CSP_DEFAULT_SRC = ["'self'"]
-CSP_FONT_SRC = ["'self'", "fonts.googleapis.com", "fonts.gstatic.com"]
-CSP_STYLE_SRC_ELEM = ["'self'", "fonts.googleapis.com", "'unsafe-inline'"]
 CSP_STYLE_SRC = ["'self'", "'unsafe-inline'"]
 CSP_IMG_SRC = ["'self'", "data:"]
-CSP_SCRIPT_SRC_ELEM = ["'self'", "'sha256-gCP5gEgugtamIDQq3uWm8y47vANpgCYYqWH6T3uodIg='"]
-CSP_INCLUDE_NONCE_IN = [
-    "script-src-elem",
-]
+CSP_SCRIPT_SRC_ELEM = ["'self'"]
