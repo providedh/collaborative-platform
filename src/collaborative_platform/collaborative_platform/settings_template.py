@@ -10,7 +10,6 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
-
 import os
 
 from datetime import timedelta
@@ -18,10 +17,8 @@ from datetime import timedelta
 from .log_filters import skip_logs_from_certain_modules
 from apps.api_vis.enums import TypeChoice
 
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
@@ -73,6 +70,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'csp.middleware.CSPMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -103,7 +101,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'collaborative_platform.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
@@ -118,7 +115,6 @@ DATABASES = {
     }
 }
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
@@ -132,7 +128,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
@@ -143,11 +138,9 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
 
-
 # File storage
 MEDIA_ROOT = os.path.join(BASE_DIR, '..', '..', 'media')
 MEDIA_URL = "/media/"
-
 
 # Logging
 LOGS_ROOT = os.path.join(BASE_DIR, '..', '..', 'logs')
@@ -209,7 +202,6 @@ LOGGING = {
     },
 }
 
-
 # ReCaptcha keys
 # Comment this settings for local testing
 # https://pypi.org/project/django-recaptcha/#installation
@@ -232,7 +224,6 @@ CHANNEL_LAYERS = {
     }
 }
 
-
 # For periodic tasks
 CELERY_BROKER_URL = 'redis://{}:6379'.format(REDIS_HOST)
 CELERY_RESULT_BACKEND = 'redis://{}:6379'.format(REDIS_HOST)
@@ -254,11 +245,9 @@ CELERY_BEAT_SCHEDULE = {
     }
 }
 
-
 # For getting site url from database
 # https://docs.djangoproject.com/en/2.2/ref/contrib/sites/#enabling-the-sites-framework
 SITE_ID = 1
-
 
 # For social-auth-app-django
 # https://python-social-auth-docs.readthedocs.io/en/latest/configuration/django.html
@@ -323,7 +312,6 @@ NS_MAP = {
     'xml': XML_NAMESPACES['xml'],
     # 'xi': XML_NAMESPACES['xi']
 }
-
 
 # Entities structure
 DEFAULT_ENTITIES = {
@@ -490,5 +478,30 @@ ADDITIONAL_USABLE_TAGS = ['certainty', 'name', 'seg', 'val']
 
 ADDITIONAL_XML_ID_BASES = ['annotator']
 
-
 ANONYMOUS_USER_ID = 1
+
+# Cache
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": 'redis://{}:6379'.format(REDIS_HOST),
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient"
+        },
+        "KEY_PREFIX": "PROVIDEDHcache"
+    }
+}
+SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
+
+# Security
+X_FRAME_OPTIONS = 'DENY'
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+SECURE_HSTS_SECONDS = 60  # TODO: increase if everything works as expected
+SECURE_HSTS_PRELOAD = True
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+CSP_DEFAULT_SRC = ["'self'"]
+CSP_STYLE_SRC = ["'self'", "'unsafe-inline'"]
+CSP_IMG_SRC = ["'self'", "data:"]
+CSP_SCRIPT_SRC_ELEM = ["'self'"]

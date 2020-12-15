@@ -10,5 +10,6 @@ urlpatterns = [
     path('settings/password/', views.password, name='password'),
     path('user/<int:user_id>/', views.user, name='user'),
     path('user/', views.user, name='user_template'),
+    path('fonts.css/', views.fonts, name='platform_fonts'),
     re_path(r'^(?P<file_name>[^/]+?)$', views.static_docs, name='docs'),
 ]

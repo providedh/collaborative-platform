@@ -21,6 +21,7 @@ django-recaptcha==2.0.6
 
 # For message broker (for Celery and WebSockets)
 redis==3.5.3
+django-redis==4.12.1
 
 # For WebSockets
 channels==2.4.0
@@ -74,3 +75,6 @@ maya
 #For websockets serving
 uvicorn[standard]
 gunicorn
+
+# Security policy
+django-csp==3.7
