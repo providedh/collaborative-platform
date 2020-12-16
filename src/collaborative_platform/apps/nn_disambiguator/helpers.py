@@ -39,8 +39,8 @@ def create_models(self, project_id):  # type: (int) -> None
                 scaler.partial_fit([vector_0, vector_1])
                 vectors = scaler.transform([vector_0, vector_1])
 
-                for _ in range(5000):
-                    model.partial_fit(vectors, [0, 1], classes=[0, 1])
+                model.partial_fit(vectors, [0, 1])
+                # model.fit(vectors, [0, 1], classes=[0, 1])
 
                 dbo = Classifier(project=project, entity_schema=schema)
                 dbo.save()
