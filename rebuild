@@ -5,7 +5,7 @@ sudo rm -f src/collaborative_platform/apps/*/migrations/0*.py
 sudo rm -f media/uploaded_files/*
 sudo rm -f media/NN_Models/*
 docker-compose build
-docker-compose run web python src/collaborative_platform/manage.py makemigrations
+docker-compose run web python src/collaborative_platform/manage.py makemigrations > /dev/null 2>&1
 docker-compose run web python src/collaborative_platform/manage.py makemigrations
 docker-compose run web python src/collaborative_platform/manage.py migrate
 docker-compose run web python src/collaborative_platform/manage.py shell -c "from apps.index_and_search.initialize import initialize; initialize()"
