@@ -31,5 +31,6 @@ urlpatterns = [
     path('dashboard/', include('apps.vis_dashboard.urls')),
     path('disambiguator/', include('apps.disambiguator_ui.urls')),
     path('api/disambiguator/', include('apps.nn_disambiguator.urls_api')),
+    path('overview/', include('apps.overview.urls')),
     path('', include('apps.core.urls')),
 ]

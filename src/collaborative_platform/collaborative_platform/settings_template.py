@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'apps.nn_disambiguator',
     'apps.help',
     'apps.disambiguator_ui',
+    'apps.overview',
     'social_django',
     'django_cleanup',
     # 'django_extensions',  # for SSL on localhost
