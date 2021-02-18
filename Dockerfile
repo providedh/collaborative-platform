@@ -8,7 +8,7 @@ RUN apt install -y --no-install-recommends binutils libproj-dev gdal-bin
 RUN pip install -r requirements.txt
 RUN python -m spacy download en_core_web_lg
 COPY . /code/
-RUN ls -al /code
+RUN src/collaborative_platform/collaborative_platform/settings_template.py /code/src/collaborative_platform/collaborative_platform/settings.py
 
 EXPOSE 8000
 STOPSIGNAL SIGINT
