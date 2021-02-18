@@ -101,17 +101,10 @@
   </div>
 </div>
 
-<script type="text/javascript">
-window.project_id = {{ project_id }};
-window.onload = function() {
-var csrftoken = $("[name=csrfmiddlewaretoken]").val();
-$.ajaxSetup({
-    beforeSend: function(xhr, settings) {
-        xhr.setRequestHeader("X-CSRFToken", csrftoken);
-    }
-});
-}
-</script>
+<div id="app-params" class="d-none">
+  <span id="project_id">{{ project_id }}</span>
+</div>
+<script src="{% static 'dataset_stats/js/setup.js' %}" type="text/javascript"></script>
 {% if DEVELOPMENT is True %}
   <script type="text/javascript" src="http://localhost:3000/main.js"></script>
 {% else %}

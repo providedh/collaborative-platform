@@ -36,7 +36,9 @@ $('[js-listProjectsMine]').DataTable( {
     "drawCallback": function () {
         $('.dataTables_paginate > .pagination').addClass('pagination-sm');
     }
-} );
+} ).on('init', function (e, settings, json) {
+    if(json.entries === 0) {document.getElementById('no-projects-hint').classList.remove('d-none')}
+});
 
 $('[js-listProjectsPublic]').DataTable( {
     "ajax": {

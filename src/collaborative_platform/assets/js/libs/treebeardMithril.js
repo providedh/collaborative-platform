@@ -1452,8 +1452,8 @@ require.register("dropzone/lib/dropzone.js", function (exports, module) {
       url: null,
       method: "post",
       withCredentials: false,
-      parallelUploads: 2,
-      uploadMultiple: false,
+      parallelUploads: 25,
+      uploadMultiple: true,
       maxFilesize: 256,
       paramName: "file",
       createImageThumbnails: true,
@@ -2024,7 +2024,7 @@ require.register("dropzone/lib/dropzone.js", function (exports, module) {
       if (typeof this.options.paramName === "function") {
         return this.options.paramName(n);
       } else {
-        return "" + this.options.paramName + (this.options.uploadMultiple ? "[" + n + "]" : "");
+        return "" + this.options.paramName;
       }
     };
 
@@ -2683,7 +2683,9 @@ require.register("dropzone/lib/dropzone.js", function (exports, module) {
 
   Dropzone.version = "3.10.2";
 
-  Dropzone.options = {};
+  Dropzone.options = {
+    uploadMultiple: true
+  };
 
   Dropzone.optionsForElement = function(element) {
     if (element.getAttribute("id")) {

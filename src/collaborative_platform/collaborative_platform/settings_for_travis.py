@@ -24,3 +24,5 @@ CELERY_BROKER_URL = 'redis://{}:6379'.format(REDIS_HOST)
 CELERY_RESULT_BACKEND = 'redis://{}:6379'.format(REDIS_HOST)
 
 TEST_ENV = 'travis'
+
+SESSION_ENGINE = "django.contrib.sessions.backends.db"
