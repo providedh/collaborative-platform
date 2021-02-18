@@ -3,6 +3,7 @@ ENV PYTHONUNBUFFERED 1
 #RUN mkdir /code
 RUN ls -al
 WORKDIR /code
+RUN ls -al /code
 COPY requirements.txt /code/
 RUN apt update
 RUN apt install -y --no-install-recommends binutils libproj-dev gdal-bin
