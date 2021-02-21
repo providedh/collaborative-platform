@@ -1,6 +1,5 @@
 FROM python:3
 ENV PYTHONUNBUFFERED 1
-#RUN mkdir /code
 WORKDIR /code
 COPY requirements.txt /code/
 RUN apt update
@@ -9,6 +8,8 @@ RUN pip install -r requirements.txt
 RUN python -m spacy download en_core_web_lg
 COPY . /code/
 COPY src/collaborative_platform/collaborative_platform/settings_template.py /code/src/collaborative_platform/collaborative_platform/settings.py
+RUN mkdir /code/logs
+RUN mkdir /code/media
 
 EXPOSE 8000
 STOPSIGNAL SIGINT
