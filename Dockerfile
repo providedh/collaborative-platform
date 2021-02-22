@@ -11,4 +11,4 @@ STOPSIGNAL SIGINT
 
 
 COPY . /code/
-ENTRYPOINT ["bash startup.sh"]
+ENTRYPOINT ["./startup.sh"]
