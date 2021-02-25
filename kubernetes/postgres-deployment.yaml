@@ -28,15 +28,26 @@ spec:
         - env:
             - name: PGDATA
               value: /var/lib/postgresql/data/pgdata
-            - name: POSTGRES_PASSWORD
-              value: collapass
             - name: POSTGRES_USER
-              value: collaborative_platform
+                valueFrom:
+                  secretKeyRef:
+                    key: database-user
+                    name: postgres
+            - name: POSTGRES_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    key: database-password
+                    name: postgres
+            - name: POSTGRES_DATABASE
+                valueFrom:
+                  secretKeyRef:
+                    key: database-name
+                    name: postgres
           image: postgres
           name: postgres
           ports:
             - containerPort: 5432
-          resources: {}
+          resources: { }
           stdin: true
           volumeMounts:
             - mountPath: /var/lib/postgresql/data
@@ -46,4 +57,4 @@ spec:
         - name: db-data
           persistentVolumeClaim:
             claimName: db-data
-status: {}
+status: { }

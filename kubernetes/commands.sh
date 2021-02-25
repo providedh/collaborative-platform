@@ -13,4 +13,6 @@ docker tag collaborative-platform_web ti010/collaborative_platform:latest       
 docker push ti010/collaborative_platform:latest
 
 oc new-app "ti010/collaborative_platform:latest~https://github.com/providedh/collaborative-platform#PaaStests" --strategy=docker
-^działa – wielkość znaków ma znaczenie
+
+oc new-app "https://github.com/providedh/collaborative-platform#PaaStests"
+oc apply -f web-storage-persistentvolumeclaim.yaml
