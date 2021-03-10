@@ -28,33 +28,36 @@ spec:
         - env:
             - name: PGDATA
               value: /var/lib/postgresql/data/pgdata
-            - name: POSTGRES_USER
-                valueFrom:
-                  secretKeyRef:
-                    key: database-user
-                    name: postgres
-            - name: POSTGRES_PASSWORD
-                valueFrom:
-                  secretKeyRef:
-                    key: database-password
-                    name: postgres
-            - name: POSTGRES_DATABASE
-                valueFrom:
-                  secretKeyRef:
-                    key: database-name
-                    name: postgres
-          image: postgres
+            - name: PG_PASSWORD
+              value: Pr0viD3Dh
+            - name: PG_ROOT_PASSWORD
+              value: Pr0viD3Dh
+            - name: PG_USER
+              value: collaborative_platform
+            - name: PG_PRIMARY_USER
+              value: collaborative_platform
+            - name: PG_PRIMARY_PASSWORD
+              value: Pr0viD3Dh
+            - name: PG_PRIMARY_PORT
+              value: "5432"
+            - name: PG_DATABASE
+              value: collaborative_platform
+            - name: MODE
+              value: postgres
+            - name: PG_MODE
+              value: primary
+          image: crunchydata/crunchy-postgres-gis:centos8-13.2-3.0-4.6.1
           name: postgres
           ports:
             - containerPort: 5432
-          resources: { }
+          resources: {}
           stdin: true
           volumeMounts:
-            - mountPath: /var/lib/postgresql/data
+            - mountPath: /pgdata
               name: db-data
       restartPolicy: Always
       volumes:
         - name: db-data
           persistentVolumeClaim:
             claimName: db-data
-status: { }
+status: {}
