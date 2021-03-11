@@ -4,4 +4,4 @@ cat /secrets/secrets.py >> src/collaborative_platform/collaborative_platform/set
 
 python src/collaborative_platform/manage.py makemigrations
 python src/collaborative_platform/manage.py migrate
-python src/collaborative_platform/manage.py runserver 0.0.0.0:8000
+python src/collaborative_platform/manage.py runserver 0.0.0.0:8080

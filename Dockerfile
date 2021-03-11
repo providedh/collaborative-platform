@@ -15,7 +15,7 @@ WORKDIR /code
 COPY requirements.txt /code/
 RUN pip install -r requirements.txt
 RUN python -m spacy download en_core_web_lg
-EXPOSE 8000
+EXPOSE 8080
 STOPSIGNAL SIGINT
 
 
