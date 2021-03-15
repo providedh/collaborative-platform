@@ -3,8 +3,6 @@ ENV PYTHONUNBUFFERED 1
 ENV PG_MAJOR 11
 ENV POSTGISV 2.5
 
-
-
 RUN apt update
 RUN apt install -y --no-install-recommends binutils libproj-dev gdal-bin \
     postgresql-$PG_MAJOR-postgis-$POSTGISV \
@@ -17,7 +15,6 @@ RUN pip install -r requirements.txt
 RUN python -m spacy download en_core_web_lg
 EXPOSE 8080
 STOPSIGNAL SIGINT
-
 
 COPY . /code/
 RUN chgrp -R 0 /code && chmod -R g=u /code
