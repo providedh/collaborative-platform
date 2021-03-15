@@ -2,7 +2,7 @@
 cp src/collaborative_platform/collaborative_platform/settings_template.py src/collaborative_platform/collaborative_platform/settings.py
 cat /secrets/secrets.py >> src/collaborative_platform/collaborative_platform/settings.py
 
-cp -rf /code /app
+cp -rf /code/* /app
 cd /app
 
 python src/collaborative_platform/manage.py makemigrations
