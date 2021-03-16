@@ -1,0 +1,31 @@
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  name: celery
+spec:
+  output:
+    to:
+      kind: ImageStreamTag
+      name: 'celery:latest'
+  postCommit: {}
+  resources:
+    limits:
+      cpu: '8'
+      memory: 8Gi
+    requests:
+      cpu: '1'
+      memory: 1Gi
+  runPolicy: Serial
+  source:
+    git:
+      ref: PaaStests
+      uri: 'https://github.com/providedh/collaborative-platform'
+    type: Git
+  strategy:
+    dockerStrategy:
+      from:
+        kind: ImageStreamTag
+        name: "python:3"
+        namespace: testing-providedh
+      dockerfilePath: kubernetes/celery/Dockerfile
+    type: Docker
