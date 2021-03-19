@@ -1,5 +1,7 @@
 FROM python:3
 ENV PYTHONUNBUFFERED 1
+ENV PG_MAJOR 11
+ENV POSTGISV 2.5
 
 RUN apt update
 RUN apt install -y --no-install-recommends binutils libproj-dev gdal-bin \
