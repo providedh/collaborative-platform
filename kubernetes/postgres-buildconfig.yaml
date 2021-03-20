@@ -24,7 +24,7 @@ spec:
   strategy:
     dockerStrategy:
       env:
-        - name: "NAME"
-          value: "Value"
+        - name: "PGDATA"
+          value: "/pgdata"
       dockerfilePath: kubernetes/postgres/Dockerfile
     type: Docker
