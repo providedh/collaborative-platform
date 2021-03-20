@@ -19,4 +19,4 @@ STOPSIGNAL SIGINT
 #ENTRYPOINT ["cd /app/src/collaborative_platform && celery -A collaborative_platform worker -B -l DEBUG -E'"]
 COPY . /code/
 RUN chgrp -R 0 /code && chmod -R g=u /code
-ENTRYPOINT ["celery -A collaborative_platform worker -B -l DEBUG -E"]
+ENTRYPOINT ["./startup.sh"]
