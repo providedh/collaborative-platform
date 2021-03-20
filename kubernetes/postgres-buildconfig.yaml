@@ -23,9 +23,8 @@ spec:
     type: Git
   strategy:
     dockerStrategy:
-      from:
-        kind: ImageStreamTag
-        name: "postgres:13.1"
-        namespace: testing-providedh
+      env:
+        - name: "NAME"
+          value: "Value"
       dockerfilePath: kubernetes/postgres/Dockerfile
     type: Docker
