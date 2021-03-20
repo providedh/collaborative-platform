@@ -3,7 +3,8 @@ ENV PYTHONUNBUFFERED 1
 #ENV PG_MAJOR 11
 #ENV POSTGISV 2.5
 #
-#RUN apt update
+RUN apt update
+RUN apt install -y --no-install-recommends binutils libproj-dev gdal-bin
 #RUN apt install -y --no-install-recommends binutils libproj-dev gdal-bin \
 #    postgresql-$PG_MAJOR-postgis-$POSTGISV \
 #    postgresql-$PG_MAJOR-postgis-$POSTGISV-scripts \
