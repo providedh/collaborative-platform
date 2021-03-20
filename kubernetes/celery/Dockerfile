@@ -16,7 +16,7 @@ RUN pip install -r requirements.txt
 RUN python -m spacy download en_core_web_lg
 STOPSIGNAL SIGINT
 
-#ENTRYPOINT ["cd /app/src/collaborative_platform && celery -A collaborative_platform worker -B -l DEBUG -E'"]
-COPY . /code/
-RUN chgrp -R 0 /code && chmod -R g=u /code
-ENTRYPOINT ["./startup.sh"]
+ENTRYPOINT ["cd /app/src/collaborative_platform && celery -A collaborative_platform worker -B -l DEBUG -E'"]
+#COPY . /code/
+#RUN chgrp -R 0 /code && chmod -R g=u /code
+#ENTRYPOINT ["./startup.sh"]
