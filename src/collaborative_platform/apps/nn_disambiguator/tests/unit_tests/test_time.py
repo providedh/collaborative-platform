@@ -3,6 +3,7 @@ from apps.nn_disambiguator.time import *
 import pytest
 
 
+@pytest.mark.skip()
 class TestTime:
     def test_to_datetime(self):
         assert to_datetime("01.01.1970") == datetime(1970, 1, 1, 0, 0)
