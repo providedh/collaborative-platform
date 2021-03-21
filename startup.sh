@@ -11,5 +11,5 @@ python src/collaborative_platform/manage.py loaddata core_initial.json
 rm -rf /app/static/*
 python src/collaborative_platform/manage.py collectstatic
 cd src/collaborative_platform/
-#daphne -p 8081 collaborative_platform.asgi:application &
+daphne -b 0.0.0.0 -p 8001 collaborative_platform.asgi:application &
 uwsgi uwsgi.ini
