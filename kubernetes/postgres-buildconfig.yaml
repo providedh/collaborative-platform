@@ -25,6 +25,6 @@ spec:
     dockerStrategy:
       env:
         - name: "PGDATA"
-          value: "/pgdata"
+          value: "/var/lib/postgresql/data/db-data"
       dockerfilePath: kubernetes/postgres/Dockerfile
     type: Docker

@@ -73,8 +73,8 @@ timefhuman
 maya
 
 #For websockets serving
-uvicorn[standard]
-gunicorn
+uwsgi
+daphne
 
 # Security policy
 django-csp==3.7
