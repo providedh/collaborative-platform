@@ -10,4 +10,4 @@ RUN chgrp -R 0 /var && chmod -R g=u /var
 EXPOSE 8080
 EXPOSE 8443
 
-ENTRYPOINT ["cat", "/etc/nginx/nginx.conf"]
+ENTRYPOINT ["find", "/etc/nginx"]
