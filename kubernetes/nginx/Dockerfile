@@ -6,5 +6,5 @@ COPY kubernetes/nginx/collaborative_platform_nginx.conf /etc/nginx/sites-enabled
 RUN chgrp -R 0 /etc && chmod -R g=u /etc
 RUN chgrp -R 0 /var && chmod -R g=u /var
 
-EXPOSE 80
-EXPOSE 443
+EXPOSE 8080
+EXPOSE 8443
