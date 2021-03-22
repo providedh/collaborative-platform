@@ -38,7 +38,7 @@ REDIS_HOST = 'redis'
 
 INSTALLED_APPS = [
     'channels',
-    'captcha',
+    # 'captcha',
     'dal',
     'dal_select2',
     'django.contrib.admin',
@@ -293,11 +293,6 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'put secret key here'
 SOCIAL_AUTH_LOGIN_ERROR_URL = 'settings'
 SOCIAL_AUTH_RAISE_EXCEPTIONS = False
 
-# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-# SECURE_SSL_REDIRECT = True
-# SESSION_COOKIE_SECURE = True
-# CSRF_COOKIE_SECURE = True
-
 
 # XML namespaces
 XML_NAMESPACES = {
@@ -494,6 +489,8 @@ CACHES = {
 SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
 
 # Security
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_SSL_REDIRECT = True
 X_FRAME_OPTIONS = 'DENY'
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
