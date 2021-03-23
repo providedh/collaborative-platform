@@ -7,6 +7,7 @@ cd /app
 
 python src/collaborative_platform/manage.py makemigrations
 python src/collaborative_platform/manage.py migrate
+python manage.py shell -c "from apps.index_and_search.initialize import initialize; initialize()"
 python src/collaborative_platform/manage.py loaddata core_initial.json
 rm -rf /app/static/*
 python src/collaborative_platform/manage.py collectstatic
