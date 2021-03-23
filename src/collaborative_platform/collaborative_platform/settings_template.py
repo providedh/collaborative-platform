@@ -38,7 +38,7 @@ REDIS_HOST = 'redis'
 
 INSTALLED_APPS = [
     'channels',
-    # 'captcha',
+    'captcha',
     'dal',
     'dal_select2',
     'django.contrib.admin',
@@ -501,4 +501,6 @@ SECURE_CONTENT_TYPE_NOSNIFF = True
 CSP_DEFAULT_SRC = ["'self'"]
 CSP_STYLE_SRC = ["'self'", "'unsafe-inline'"]
 CSP_IMG_SRC = ["'self'", "data:"]
-CSP_SCRIPT_SRC_ELEM = ["'self'"]
+CSP_SCRIPT_SRC_ELEM = ["'self'", "'unsafe-inline'", "https://*.google.com", "https://*.gstatic.com"]
+CSP_FRAME_SRC = ["https://*.google.com"]
+
