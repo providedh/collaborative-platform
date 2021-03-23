@@ -74,6 +74,7 @@ maya
 
 #For websockets serving
 uwsgi
+uwsgitop
 daphne
 
 # Security policy
