@@ -16,3 +16,13 @@ oc new-app "ti010/collaborative_platform:latest~https://github.com/providedh/col
 
 oc new-app "https://github.com/providedh/collaborative-platform#PaaStests"
 oc apply -f web-storage-persistentvolumeclaim.yaml
+
+oc expose deployments/nginx
+oc expose service/nginx
+
+oc get -o yaml --export all > project.yaml
+
+for object in $(oc api-resources --namespaced=true -o name)
+do
+  oc get -o yaml $object > $object.yaml
+done
