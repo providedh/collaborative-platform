@@ -26,3 +26,9 @@ for object in $(oc api-resources --namespaced=true -o name)
 do
   oc get -o yaml $object > $object.yaml
 done
+
+postgres & redis & elasticsearch > collaborative_platform > celery > nginx
+
+persistentvolumeclaim > imagestream > buildconfig > deployment > service
+
+ręcznie: secrets
