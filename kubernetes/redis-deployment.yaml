@@ -35,9 +35,10 @@ spec:
               memory: 400Mi
           volumeMounts:
             - mountPath: /data
-              name: redis
+              name: db-data
+              subPath: redis
       volumes:
-        - name: redis
+        - name: db-data
           persistentVolumeClaim:
-            claimName: redis
+            claimName: db-data
       restartPolicy: Always
