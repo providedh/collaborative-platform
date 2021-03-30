@@ -1,0 +1,42 @@
+<style type="text/css">
+	#bottom-hint{
+		position: fixed;
+		bottom: 0;
+		z-index: 200;
+		align-self: center;
+	}
+	#bottom-hint .btn{
+		background: var(--danger);
+		border-color: var(--danger);
+	}
+	#bottom-hint .btn.collapsed{
+		background: var(--blue);
+		border-color: var(--blue);
+	}
+	#bottom-hint .btn.collapsed .closeMessage{display: none}
+	#bottom-hint .btn .callToAction{display: none;}
+	#bottom-hint .btn.collapsed .callToAction{display: inline;}
+</style>
+<div id="bottom-hint" class="container">
+  <div class="row">
+    <div class="col">
+			<div>
+				<p class="text-right">
+				  <button class="btn btn-primary px-4 py-2 shadow-lg collapsed" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+				  	<div class="callToAction">
+				    	{{ call_to_action }}
+				  	</div>
+				  	<div class="closeMessage">
+				  		Close help panel
+				  	</div>
+				  </button>
+				</p>
+				<div class="collapse" id="collapseExample">
+				  <div class="card shadow-lg card-body">
+				    {{ content }}
+				  </div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

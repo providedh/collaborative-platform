@@ -1,0 +1,69 @@
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <?xml-model href="https://providedh.ehum.psnc.pl/tei_providedh.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title>To make Pease Soop</title>
+      </titleStmt>
+      <publicationStmt>
+        <publisher>
+          <orgName>Des Zentrums für Gastrosophie</orgName>
+          <ptr target="http://gastrosophie.sbg.ac.at/"/>
+        </publisher>
+        <date when="">2015-02-11</date>
+      </publicationStmt>
+      <sourceDesc>
+        <biblStruct>
+          <monogr>
+            <title>To make Pease Soop</title>
+            <title type="alt">Erbsensuppe</title>
+            <note/>
+            <author>
+              <persName xml:id="person1">
+                <forename>Peter</forename>
+                <surname>Griffin</surname>
+                <email>peter_griffin@zmyslonymail.com</email>
+              </persName>
+            </author>
+            <author>
+              <persName xml:id="person32">
+                <forename>Lois</forename>
+                <surname>Griffin</surname>
+                <email>lois_griffin@zmyslonymail.com</email>
+              </persName>
+            </author>
+            <textLang mainLang="deu"/>
+            <imprint>
+              <biblScope unit="volume">Teil 2, S. 058</biblScope>
+              <biblScope unit="chapter">Teil 2, S. 058</biblScope>
+              <biblScope unit="entry">Teil 2, S. 058</biblScope>
+            </imprint>
+          </monogr>
+        </biblStruct>
+        <msDesc>
+          <msIdentifier>
+            <repository>Rezeptdatenbank</repository>
+            <idno/>
+          </msIdentifier>
+        </msDesc>
+      </sourceDesc>
+    </fileDesc>
+  </teiHeader>
+  <text>
+    <body>
+      <div type="recipe">
+        <p>Put three or four Pounds of <name ref="#person-0" xml:id="name-4">Jerry Maguire's</name> coarse Beef , with <name ref="#event-0" xml:id="name-17">three Pints of Pease</name> , into two <seg xml:id="seg-0">Gallons</seg> of <name ref="#person-0" xml:id="name-3">Hank Moody's</name> Water ; let it boil till the <name xml:id="name-7" ref="#ingredient-3">Meat</name> is all to <name xml:id="name-8" ref="#ingredient-0">Rags</name> ; <name xml:id="name-10" ref="#ingredient-5">and</name> Half an Hour before you strain it out , put in two or three <name ref="#place-0" xml:id="name-0">Anchovies</name> ; then strain it from the <name xml:id="name-5" ref="#ingredient-3">Meat</name> <name xml:id="name-11" ref="#ingredient-5">and</name> Husks , <name xml:id="name-14" ref="#ingredient-5">and</name> put in as much as you want <name xml:id="name-15" ref="#form">for</name> the Meal into a Sauce-pan , with an Onion stuck with Cloves , a Race of <name xml:id="name-2" ref="#ingredient-1">Ginger</name> bruis 'd , a little Fagot of Thyme , Savory , Parsley , <name xml:id="name-12" ref="#ingredient-5">and</name> a little Pepper . Let it boil near Half an Hour ; stir in a Piece of <name xml:id="name-1" ref="#ingredient-4">Butter</name> , <name xml:id="name-13" ref="#ingredient-5">and</name> fry some forc 'd <name xml:id="name-6" ref="#ingredient-3">Meat</name> Balls , Bacon <name xml:id="name-9" ref="#ingredient-5">and</name> French Bread cut in Dice , with Spinage boil 'd <name xml:id="name-16" ref="#ingredient-2">green</name> , to put to it in the Dish .</p>
+        <p>Some random date <date when="2020-07-04" xml:id="date-0">4th of july 2010</date> for test unlistable entities, and reference to this date <date ref="#date-0" xml:id="date-1">the exact same day</date></p>
+      </div>
+    </body>
+  </text>
+  <standOff>
+    <listObject type="utensilList">
+      <object type="utensil" xml:id="form">
+        <objectIdentifier>
+          <objectName>Form</objectName>
+        </objectIdentifier>
+      </object>
+    </listObject>
+  </standOff>
+</TEI>

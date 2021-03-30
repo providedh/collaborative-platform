@@ -1,0 +1,30 @@
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  name: postgres
+spec:
+  output:
+    to:
+      kind: ImageStreamTag
+      name: 'postgres:latest'
+  postCommit: {}
+  resources:
+    limits:
+      cpu: '4'
+      memory: 4Gi
+    requests:
+      cpu: '1'
+      memory: 1Gi
+  runPolicy: Serial
+  source:
+    git:
+      ref: master
+      uri: 'https://github.com/providedh/collaborative-platform'
+    type: Git
+  strategy:
+    dockerStrategy:
+      env:
+        - name: "PGDATA"
+          value: "/var/lib/postgresql/data"
+      dockerfilePath: kubernetes/postgres/Dockerfile
+    type: Docker

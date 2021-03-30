@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: collaborative-platform
+    app.kubernetes.io/component: collaborative-platform
+    app.kubernetes.io/instance: collaborative-platform
+  name: collaborative-platform
+spec:
+  ports:
+    - name: port-1
+      port: 8000
+      protocol: TCP
+      targetPort: 8000
+    - name: port-2
+      port: 8001
+      protocol: TCP
+      targetPort: 8001
+  selector:
+    deployment: collaborative-platform

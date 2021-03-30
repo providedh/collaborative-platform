@@ -1,0 +1,18 @@
+.tick line{
+  stroke: grey;
+  stroke-dasharray: 5,5;
+}
+.Timeline div.header{
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  color: var(--blue);
+  font-weight: 400;
+  padding: 0 15px;
+}
+
+.Timeline .doc:hover .timelineDocName{
+  font-weight: bold;
+}

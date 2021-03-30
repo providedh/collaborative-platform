@@ -1,0 +1,246 @@
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <?xml-model href="https://providedh.ehum.psnc.pl/tei_providedh.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title>Music</title>
+      </titleStmt>
+      <publicationStmt>
+        <publisher>
+          <orgName>Reddit</orgName>
+        </publisher>
+        <date when="2014-11-13">2014-11-13</date>
+      </publicationStmt>
+      <sourceDesc>
+        <biblStruct>
+          <monogr>
+            <title>Music</title>
+            <title type="alt">Copypasta</title>
+            <note/>
+            <author>
+              <persName xml:id="person1">
+                <forename>Anonymous</forename>
+                <surname>User</surname>
+                <email>someone@reddit.com</email>
+              </persName>
+            </author>
+            <textLang mainLang="en"/>
+          </monogr>
+        </biblStruct>
+        <msDesc>
+          <msIdentifier>
+            <repository>Reddit</repository>
+            <idno/>
+          </msIdentifier>
+        </msDesc>
+      </sourceDesc>
+    </fileDesc>
+    <profileDesc>
+      <textClass>
+        <classCode scheme="http://providedh.eu/uncertainty/ns/1.0"/>
+      </textClass>
+      <particDesc>
+        <listPerson type="PROVIDEDH Annotators">
+          <person xml:id="annotator-1">
+            <persName>
+              <forename>none</forename>
+              <surname>none</surname>
+              <email>none</email>
+            </persName>
+          </person>
+        </listPerson>
+      </particDesc>
+    </profileDesc>
+  </teiHeader>
+  <text>
+    <body>
+      <div type="text">
+                Wow, this sub just never ceases to amaze me. This just might be the worst post yet. Is this supposed to
+                be funny? Because it just isn't. How can you honestly sit there and tell me music hasn't been going
+                downhill since <name xml:id="name-9" resp="#annotator-0" ref="#band-0">Queen</name> (RIP
+                <name xml:id="name-10" resp="#annotator-0" ref="#person-9">Freddy Mercury</name>). Do you even know what
+                real music is? All this shit about
+                mom's lasagna and ladybugs is just complete and utter garbage. You hear songs from the
+                <date xml:id="date-0" resp="#annotator-0" ref="#date-0" when="1960-01-01">60s</date>
+                and <date xml:id="date-1" resp="#annotator-0" ref="#date-1" when="1970-01-01">70s</date> that
+                are still so iconic they are featured all the time. Today's music just doesn't have that staying power.
+                It is just formulaic filth that panders to whatever today's youth is into. You think you can honestly
+                sit there and tell me people will still be listening to
+                <name xml:id="name-11" resp="#annotator-0" ref="#person-7">Katy Perry</name> and
+                <name xml:id="name-12" resp="#annotator-0" ref="#person-8">Nicki Minaj</name>
+                <date xml:id="date-2" ref="date-3" resp="#annotator-0" when="2044-01-01">30 years from now</date>?
+                Yeah fucking right. You still hear
+                <name xml:id="name-13" resp="#annotator-0" ref="#song-0">we are the champions</name>
+                by <name xml:id="name-14" resp="#annotator-0" ref="#band-0">queen</name> at every single sporting
+                even in the
+                world. No song made today will last anywhere close to that long. And where's the emotion? Where's the
+                feeling? Back in my day artists actually put thought into what they wrote. And that's just it. Today's
+                artists don't even write their own songs anymore. They get some guy with a degree in bullshit who makes
+                money engineering these meaningless but catchy songs that rake in millions only because the record
+                companies are forcing radio stations to play them every ten seconds to get them stuck in people's heads
+                so that is all they can think of. This simply didn't happen in the
+                <date xml:id="date-3" resp="#annotator-0" ref="#date-1">70s</date>.
+                People made songs based on how
+                they were feeling. And guess what, their music also had impacts on what was going on in the world. You
+                guys have probably never heard of him, but there was this indie guy named
+                <name xml:id="name-15" resp="#annotator-0" ref="#person-6">John Lennon</name> who wrote a song
+                about imagining the world without any violence. Now that's the type of stuff we need in today's music.
+                Something to inspire the youth to do something good. That's why kids are always getting in so much
+                trouble now. The music is telling them to fuck everything that moves and beat the shit out of each
+                other. So they do it. No questions asked. And don't even get me started on today's celebrity worship. Do
+                we really need to know every time
+                <name xml:id="name-16" resp="#annotator-0" ref="#person-4">Kim Kardashian</name> is taking a shit?
+                Seriously, who gives a fuck what
+                those idiots are doing. Why are they even famous in the first place? And all this obsession with
+                technology is driving us into idiots. You see with the most recent
+                <name xml:id="name-17" resp="#annotator-0" ref="#org-1">facebook</name> scandal how easy it is for
+                them to manipulate you. Do you guys even realize that
+                <name xml:id="name-18" resp="#annotator-0" ref="#org-1">facebook</name> was designed for
+                college students? Anyone
+                under the age of 18 should not be allowed on it. Simple as that. I think you should be required to
+                register with a .edu email when creating an account. That also keeps out the idiots that can't get into
+                college and the poor people that can't afford it. And back in my day we didn't even need
+                <name xml:id="name-0" resp="#annotator-0" ref="#org-1">facebook</name>, if
+                you wanted to contact someone, you had to call their house. And guess what, if they weren't home, you
+                didn't talk to them. We also had to memorize each others phone numbers by heart. Kids these days have it
+                too easy putting everyone's numbers in their phones. And
+                <name xml:id="name-1" resp="#annotator-0" ref="#org-2">twitter</name> is even worse. #what is the point
+                of these things? Seriously, I don't get it. They are just made up catchphrases that make you sound stupid.
+                And what is with advertisers trying to get me to use them? Like when a couple guys are going hiking and
+                spot some wildlife and you see #ladybugs. Stop popping those things up in the middle of my show. I don't
+                fucking care! Now I know you guys all agree with everything I just said but are going to down vote me
+                anyway to try and fit in with the group. And that's fine. But listen to this first. Today's music is
+                ruining this planet. Pretty soon there will be riots in the streets that will make
+                <name xml:id="name-2" resp="#annotator-0" ref="#person-5">Rodney king</name> Dwarf in
+                comparison. <name xml:id="name-3" resp="#annotator-0" ref="#person-9">Freddy Mercury</name> will rise
+                from the dead and lead the charge in murdering
+                <name xml:id="name-4" resp="#annotator-0" ref="#person-0">Mark Zuckerberg</name>,
+                <name xml:id="name-5" resp="#annotator-0" ref="#org-0">the Kardashians</name>,
+                <name xml:id="name-6" resp="#annotator-0" ref="#person-1">Justin Bieber</name>, and
+                every other trendy celebrity that is ruining the youths. It will be
+                called "the modern cleansing where a new renaissance will emerge. We will see
+                <name xml:id="name-7" resp="#annotator-0" ref="#person-2">Davinci</name> and
+                <name xml:id="name-8" resp="#annotator-0" ref="#person-3">Michelangelo</name>
+                rise again and bring new artistic beauty in this world. And you will all see just how bad it really was.
+            </div>
+    </body>
+  </text>
+  <standOff>
+    <listPerson type="personList">
+      <person xml:id="person-0" resp="#annotator-1" age="36" sex="male">
+        <birth when="1984-05-14"/>
+        <persName>
+          <forename>Mark</forename>
+          <surname>Zuckerberg</surname>
+        </persName>
+        <name>Mark Zuckerberg</name>
+        <occupation>internet entrepreneur</occupation>
+      </person>
+      <person xml:id="person-1" resp="#annotator-1" age="26" sex="male">
+        <birth when="1994-03-01"/>
+        <persName>
+          <forename>Justin</forename>
+          <surname>Bieber</surname>
+        </persName>
+        <name>Justin Bieber</name>
+        <occupation>singer</occupation>
+      </person>
+      <person xml:id="person-2" resp="#annotator-1" sex="male">
+        <birth when="1452-04-14"/>
+        <death when="1519-05-02"/>
+        <persName>
+          <forename>Leonardo</forename>
+          <surname>da Vinci</surname>
+        </persName>
+        <name>Leonardo da Vinci</name>
+        <occupation>polymath</occupation>
+      </person>
+      <person xml:id="person-3" resp="#annotator-1" sex="male">
+        <birth when="1475-03-06"/>
+        <death when="1564-02-18"/>
+        <persName>
+          <forename>Michelangelo</forename>
+          <surname>di Lodovico Buonarroti Simoni</surname>
+        </persName>
+        <name>Michelangelo</name>
+        <occupation>painter</occupation>
+      </person>
+      <person xml:id="person-4" resp="#annotator-1" age="39" sex="female">
+        <birth when="1980-10-21"/>
+        <persName>
+          <forename>Kimberly Noel</forename>
+          <surname>Kardashian West</surname>
+        </persName>
+        <name>Kim Kardashian</name>
+        <occupation>celebrity</occupation>
+      </person>
+      <person xml:id="person-5" resp="#annotator-1" sex="male">
+        <birth when="1965-04-02"/>
+        <death when="2012-06-17"/>
+        <persName>
+          <forename>Rodney</forename>
+          <surname>King</surname>
+        </persName>
+        <name>Rodney King</name>
+        <occupation>taxi driver</occupation>
+      </person>
+      <person xml:id="person-6" resp="#annotator-1" sex="male">
+        <birth when="1940-10-09"/>
+        <death when="1980-12-08"/>
+        <persName>
+          <forename>John</forename>
+          <surname>Lennon</surname>
+        </persName>
+        <name>John Lennon</name>
+        <occupation>musician</occupation>
+      </person>
+      <person xml:id="person-7" resp="#annotator-1" age="36" sex="female">
+        <birth when="1984-10-25"/>
+        <persName>
+          <forename>Katheryn</forename>
+          <surname>Hudson</surname>
+        </persName>
+        <name>Katy Perry</name>
+        <occupation>singer</occupation>
+      </person>
+      <person xml:id="person-8" resp="#annotator-1" age="38" sex="female">
+        <birth when="1982-12-08"/>
+        <persName>
+          <forename>Onika Tanya</forename>
+          <surname>Maraj-Petty</surname>
+        </persName>
+        <name>Nicki Minaj</name>
+        <occupation>rapper</occupation>
+      </person>
+      <person xml:id="person-9" resp="#annotator-1" sex="male">
+        <birth when="1946-09-05"/>
+        <death when="1991-11-24"/>
+        <persName>
+          <forename>Farrokh</forename>
+          <surname>Bulsara</surname>
+        </persName>
+        <name>Freddy Mercury</name>
+        <occupation>singer</occupation>
+      </person>
+    </listPerson>
+    <listOrg type="orgList">
+      <org xml:id="org-0" resp="#annotator-1">The Kardashians Family</org>
+      <org xml:id="org-1" resp="#annotator-1">Facebook</org>
+      <org xml:id="org-2" resp="#annotator-1">Twitter</org>
+    </listOrg>
+    <listObject type="songList">
+      <object type="song" xml:id="song-0" resp="#annotator-1">
+        <objectIdentifier>
+          <objectName>We are the champions</objectName>
+        </objectIdentifier>
+      </object>
+    </listObject>
+    <listObject type="bandList">
+      <object type="band" xml:id="band-0" resp="#annotator-1">
+        <objectIdentifier>
+          <objectName>Queen</objectName>
+        </objectIdentifier>
+      </object>
+    </listObject>
+  </standOff>
+</TEI>

@@ -13,15 +13,20 @@ function contentFile(id) {
         }
     });
 
-    window.history.replaceState(null, null, "/files/" + id);
+    if (window.location.pathname.includes('/version/')){
+        var url = "/api/files/" + id + "/version/" + $('[js-contentFileVersion]').text() + "/";
+    }
+    else{
+        var url = "/api/files/" + id + "/";
+    }
 
     $.ajax({
         type: "GET",
-        url: "/api/files/" + id,
+        url: url,
         contentType : 'application/json',
         success: function(resultData){
             var html = Prism.highlight(resultData.data, Prism.languages.xml, 'xml');
-            $('[js-contentFile]').html(html)
+            $('[js-contentFile]').html(html);
 
             $('[js-contentFileName]').text(resultData.filename);
             $('[js-contentFileVersion]').text(resultData.version_number);
@@ -139,6 +144,9 @@ $('[js-listFileVersions]').DataTable( {
     "columns": [
         {
             "data": "number",
+            "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+                $(nTd).html('<a href="/files/' + oData.file_id + '/version/' + oData.number + '/">'+ oData.number +'</a>');
+            }
         },
     
         {
@@ -158,7 +166,7 @@ $('[js-listFileVersions]').DataTable( {
         {
             "data": "upload",
             "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
-                $(nTd).html('<a href="/' + oData.upload + '" class="tb-button"><i class="fa fa-download"></i></a>');
+                $(nTd).html('<a href="/api/files/' + oData.file_id + '/version/' + oData.number + '/download/" class="tb-button"><i class="fa fa-download"></i></a>');
             }
         }
 
@@ -221,7 +229,9 @@ $('[js-listProjectsMine]').DataTable( {
     "drawCallback": function () {
         $('.dataTables_paginate > .pagination').addClass('pagination-sm');
     }
-} );
+} ).on('init', function (e, settings, json) {
+    if(json.entries === 0) {document.getElementById('no-projects-hint').classList.remove('d-none')}
+});
 
 $('[js-listProjectsPublic]').DataTable( {
     "ajax": {
@@ -654,6 +664,7 @@ var options = {
             rowDiv = tb.select('.tb-row');
 
         rowDiv.first().find('.tb-toggle-icon').click();
+        addFileDragFeedback()
     },
 
 };
@@ -740,4 +751,11 @@ if ($('#filep').length) {
     var tb2 = Treebeard(optionsFile);
 }
 
-
+function addFileDragFeedback() {
+    Array.from(document.getElementsByClassName('ui-draggable-handle')).forEach(x => {
+        x.addEventListener('dragover', e => x.parentNode.classList.add('fileOver'))
+        x.addEventListener('dragend', e => x.parentNode.classList.remove('fileOver'))
+        x.addEventListener('dragleave', e => x.parentNode.classList.remove('fileOver'))
+        x.addEventListener('drop', e => x.parentNode.classList.remove('fileOver'))
+})
+}

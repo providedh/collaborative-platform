@@ -1,0 +1,15 @@
+.compactMultipleSelectionControl{
+    width: 100%;
+    background-color: var(--light);
+}
+
+.options{
+    margin-bottom:1rem;
+}
+
+.formGroupOverride{
+    margin-bottom:0;
+    padding-right: var(--space-s);
+    padding-top: var(--space-s);
+    padding-left: var(--space-m);
+}

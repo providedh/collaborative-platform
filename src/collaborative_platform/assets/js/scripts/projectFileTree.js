@@ -272,6 +272,7 @@ var options = {
             rowDiv = tb.select('.tb-row');
 
         rowDiv.first().find('.tb-toggle-icon').click();
+        addFileDragFeedback()
     },
 
 };
@@ -358,4 +359,11 @@ if ($('#filep').length) {
     var tb2 = Treebeard(optionsFile);
 }
 
-
+function addFileDragFeedback() {
+    Array.from(document.getElementsByClassName('ui-draggable-handle')).forEach(x => {
+        x.addEventListener('dragover', e => x.parentNode.classList.add('fileOver'))
+        x.addEventListener('dragend', e => x.parentNode.classList.remove('fileOver'))
+        x.addEventListener('dragleave', e => x.parentNode.classList.remove('fileOver'))
+        x.addEventListener('drop', e => x.parentNode.classList.remove('fileOver'))
+})
+}

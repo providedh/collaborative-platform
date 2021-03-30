@@ -1,0 +1,19 @@
+.multipleSelectionControl{
+    width: 100%;
+    background-color: var(--light);
+}
+
+.options{
+    width: 60%;
+    margin-bottom:1rem;
+}
+
+.formGroupOverride{
+    margin-bottom:0;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding-right: var(--space-l);
+    padding-top: var(--space-s);
+    padding-left: var(--space-s);
+}

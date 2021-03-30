@@ -1,0 +1,11 @@
+.workspace {
+    height: calc(100% - 54px);
+    overflow-y: scroll;
+    background-color: var(--light);
+}
+
+.visWrapper{
+	border: solid 2px lightgrey;
+    box-shadow: rgba(0, 0, 0, 0.14) 1px 2px 2px 0px, rgba(0, 0, 0, 0.2) 2px 2px 2px 0px, rgba(0, 0, 0, 0.12) 0px 5px 9px 0px;
+}
+

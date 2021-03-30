@@ -1,3 +1,5 @@
+import os
+
 from django.contrib import auth, messages
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required
@@ -8,9 +10,11 @@ from django.shortcuts import render, redirect
 from social_django.models import UserSocialAuth
 
 from apps.index_and_search.models import User as ESUser
-from apps.views_decorators import objects_exists
+from apps.views_decorators import objects_exists, static_file_exists
 
 from .forms import SignUpForm, LogInForm
+
+from collaborative_platform.settings import STATIC_ROOT
 
 
 def index(request):  # type: (HttpRequest) -> HttpResponse
@@ -43,9 +47,10 @@ def signup(request):  # type: (HttpRequest) -> HttpResponse
             user = auth.authenticate(username=user.username, password=raw_password)
             auth.login(request, user)
 
-            name = "{} {}".format(user.first_name, user.last_name)
-            es_user = ESUser(id=user.id, name=name)
-            es_user.save()
+            # name = "{} {}".format(user.first_name, user.last_name)
+            # es_user = ESUser(id=user.id, name=name)
+            # es_user.save()
+            # TODO: possibly enable ES indexing again if needed
 
             return redirect('index')
     else:
@@ -173,3 +178,18 @@ def password(request):  # type: (HttpRequest) -> HttpResponse
     }
 
     return render(request, 'core/password.html', context)
+
+
+@login_required
+@static_file_exists
+def static_docs(request, file_name):  # type: (HttpRequest, str) -> HttpResponse
+    if request.method == 'GET':
+        file_path = os.path.join(STATIC_ROOT, 'docs', file_name)
+
+        with open(file_path, 'rb') as file:
+            file_content = file.read()
+
+        return HttpResponse(file_content, content_type='application/octet-stream')
+
+def fonts(request):  # type: (HttpRequest) -> HttpResponse
+    return render(request, 'static-google-fonts.css', None, content_type='text/css')

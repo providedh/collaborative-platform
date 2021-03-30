@@ -1,4 +1,6 @@
 import json
+import os
+
 from functools import wraps
 from json import JSONDecodeError
 from typing import Callable
@@ -8,13 +10,16 @@ from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, HttpR
     RawPostDataException
 from django.shortcuts import render
 
+from apps.api_vis.models import Clique
 from apps.files_management.models import File, FileVersion, Directory
 from apps.projects.models import Contributor, Project
+
+from collaborative_platform.settings import STATIC_ROOT
 
 
 def objects_exists(view):  # type: (Callable) -> Callable
     """Requirements:
-        - decorated view must take 'project_id', 'directory_id', 'file_id' or 'version' argument
+        - decorated view must take 'project_id', 'directory_id', 'file_id', 'user_id', 'clique_id' or 'version' argument
     """
 
     def decorator(*args, **kwargs):
@@ -34,7 +39,11 @@ def objects_exists(view):  # type: (Callable) -> Callable
             'user_id': {
                 'model': User,
                 'name': 'User',
-            }
+            },
+            'clique_id': {
+                'model': Clique,
+                'name': 'Clique',
+            },
         }
 
         for kwarg in wanted_kwargs:
@@ -44,11 +53,14 @@ def objects_exists(view):  # type: (Callable) -> Callable
                 model_id = kwargs[kwarg]
 
                 try:
-                    _ = model.objects.get(id=model_id)
+                    if model_name in ['File', 'Directory']:
+                        _ = model.objects.get(id=model_id, deleted=False)
+                    else:
+                        _ = model.objects.get(id=model_id)
                 except model.DoesNotExist:
                     request = args[0]
                     status = HttpResponseBadRequest.status_code
-                    message = "{0} with id: {1} doesn't exist.".format(model_name, model_id)
+                    message = f"{model_name} with id: {model_id} doesn't exist."
                     bootstrap_alert_type = 'danger'
 
                     response = __get_response(request, status, bootstrap_alert_type, message)
@@ -91,7 +103,7 @@ def user_has_access(permissions_level=None):
     """Requirements:
         - user must be logged in ('@login_required' from django.contrib.auth.decorators)
         - decorated view must take 'project_id', 'file_id' or 'directory_id' argument
-        - project, file or directory must exist ('@exists' from apps.decorators)
+        - project, file or directory must exist ('@objects_exists' from apps.decorators)
     """
 
     def decorator(func):
@@ -121,7 +133,7 @@ def user_has_access(permissions_level=None):
                         return func(request, *args, **kwargs)
 
             status = HttpResponseForbidden.status_code
-            message = "You dont have enough permissions to perform this action.".format(project_id)
+            message = "You don't have enough permissions to perform this action.".format(project_id)
             bootstrap_alert_type = 'warning'
 
             response = __get_response(request, status, bootstrap_alert_type, message)
@@ -135,16 +147,15 @@ def user_has_access(permissions_level=None):
 
 def __get_project_id(request, **kwargs):
     project_id, file_project_id, directory_project_id, post_project_id = None, None, None, None
-
     if 'project_id' in kwargs:
         project_id = kwargs['project_id']
     if 'file_id' in kwargs:
         file_id = kwargs['file_id']
-        file = File.objects.get(id=file_id)
+        file = File.objects.get(id=file_id, deleted=False)
         file_project_id = file.project_id
     if 'directory_id' in kwargs:
         directory_id = kwargs['directory_id']
-        directory = Directory.objects.get(id=directory_id)
+        directory = Directory.objects.get(id=directory_id, deleted=False)
         directory_project_id = directory.project_id
     try:
         if request.method in ("POST", "PUT") and request.body:
@@ -167,8 +178,6 @@ def __get_project_id(request, **kwargs):
 
                 elif project_id_files is not None or project_id_dirs is not None:
                     post_project_id = project_id_files or project_id_dirs
-                else:
-                    raise KeyError("Not found required 'project_id', 'file_id' or 'directory_id' in given arguments")
     except RawPostDataException:
         pass
 
@@ -225,3 +234,33 @@ def __get_response(request, status, bootstrap_alert_type, message, data=None):
 
 def __from_api(request):  # type: (HttpRequest) -> bool
     return request.path.split('/')[1] == 'api'
+
+
+def static_file_exists(view):  # type: (Callable) -> Callable
+    """Requirements:
+        - decorated view must take 'file_name' argument
+    """
+
+    def decorator(*args, **kwargs):
+        if 'file_name' in kwargs:
+            file_name = kwargs['file_name']
+
+            try:
+                file_path = os.path.join(STATIC_ROOT, 'docs', file_name)
+
+                with open(file_path, 'rb'):
+                    pass
+
+            except FileNotFoundError:
+                request = args[0]
+                status = HttpResponseBadRequest.status_code
+                message = f"File with name: '{file_name}' doesn't exist."
+                bootstrap_alert_type = 'danger'
+
+                response = __get_response(request, status, bootstrap_alert_type, message)
+
+                return response
+
+        return view(*args, **kwargs)
+
+    return decorator

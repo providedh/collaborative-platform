@@ -1,19 +1,27 @@
+from typing import Union
+
 from lxml import etree as et
+
+from django.conf import settings
+from lxml.etree import XMLSyntaxError
 
 
 class ContentExtractor:
-    namespaces = {
-        'default': 'http://www.tei-c.org/ns/1.0',
-        'xml': 'http://www.w3.org/XML/1998/namespace',
-        'xi': 'http://www.w3.org/2001/XInclude',
-    }
+    namespaces = settings.XML_NAMESPACES
 
     @classmethod
-    def tei_contents_to_text(cls, contents):
+    def tei_contents_to_text(cls, contents: Union[str, bytes]):
         if not contents:
             return ""
-        tree = et.fromstring(contents)
-        body = tree.xpath('//default:text/default:body', namespaces=cls.namespaces)[0]
-        text_nodes = body.xpath('.//text()')
-        plain_text = ''.join(text_nodes)
-        return str(plain_text)
+        if type(contents) == str:
+            contents = contents.encode("utf-8")
+        try:
+            tree = et.fromstring(contents)
+            body = tree.xpath('//default:text/default:body', namespaces=cls.namespaces)[0]
+        except (IndexError, XMLSyntaxError):
+            return ""
+        else:
+            text_nodes = body.xpath('.//text()')
+            text_nodes = (node.strip() for node in text_nodes if node.strip())
+            plain_text = '\n'.join(text_nodes)
+            return str(plain_text)

@@ -1,105 +1,200 @@
+import multiprocessing
+from functools import partial
 from json import dumps, loads
-from os.path import basename
 from os import mkdir
 from zipfile import ZipFile
 
+from django import db
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db import IntegrityError
 from django.forms import model_to_dict
-from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, JsonResponse, HttpResponseServerError
-from lxml.etree import XMLSyntaxError
+from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, HttpResponseServerError, JsonResponse
 
-from apps.files_management.file_conversions.ids_filler import IDsFiller
+from apps.api_vis.models import Certainty, EntityVersion, EntityProperty
+from apps.exceptions import BadRequest
+from apps.files_management.file_conversions.ids_corrector import IDsCorrector
+from apps.files_management.file_conversions.elements_extractor import ElementsExtractor
+from apps.files_management.file_conversions.tei_handler import TeiHandler
+from apps.files_management.helpers import clean_name, create_uploaded_file_object_from_string, \
+    delete_directory_with_contents_fake, get_directory_content, include_user, overwrite_file, upload_file
+from apps.files_management.models import Directory, File, FileVersion
+from apps.files_management.loggers import FilesManagementLogger
 from apps.projects.helpers import log_activity, paginate_start_length, page_to_json_response
-from apps.files_management.models import File, FileVersion, Directory
-from apps.projects.models import Project
 from apps.views_decorators import objects_exists, user_has_access
-from .file_conversions.tei_handler import TeiHandler
-from .helpers import extract_text_and_entities, index_entities, upload_file, uploaded_file_object_from_string, \
-    get_directory_content, include_user, index_file
 
 
 @login_required
 @objects_exists
 @user_has_access("RW")
 def upload(request, directory_id):  # type: (HttpRequest, int) -> HttpResponse
-    if request.method == "POST" and request.FILES:
-        files_list = request.FILES.getlist("file")
-        if not files_list:
-            return HttpResponseBadRequest("File not attached properly")
+    if request.method == "POST":
+        try:
+            files_list = __get_files_list(request)
+            directory = Directory.objects.get(id=directory_id, deleted=False)
+            user = request.user
 
-        parent_dir = directory_id
-        project = Directory.objects.filter(id=parent_dir).get().project
+            pp = partial(__process_file, directory=directory, user=user)
 
-        upload_statuses = []
+            db.connections.close_all()
+            with multiprocessing.Pool() as p:
+                upload_statuses = list(p.imap_unordered(pp, files_list))
 
-        for i, file in enumerate(files_list):
-            file_name = file.name
+            return JsonResponse(upload_statuses, safe=False)
 
-            upload_status = {'file_name': file_name, 'uploaded': False, 'migrated': False, 'message': None}
-            upload_statuses.append(upload_status)
+        except BadRequest as exception:
+            return HttpResponseBadRequest(str(exception))
 
-            try:
-                dbfile = upload_file(file, project, request.user, parent_dir)
 
-                upload_status = {'uploaded': True}
-                upload_statuses[i].update(upload_status)
+def __get_files_list(request):
+    if not request.FILES:
+        raise BadRequest("File not attached")
 
-                file_version = FileVersion.objects.get(file_id=dbfile.id, number=dbfile.version_number)
-                path_to_file = file_version.upload.path
+    files_list = request.FILES.getlist("file")
 
-                tei_handler = TeiHandler(path_to_file)
-                migration, is_tei_p5_unprefixed = tei_handler.recognize()
+    if not files_list:
+        raise BadRequest("File not attached properly")
 
-                if not migration and not is_tei_p5_unprefixed:
-                    upload_status = {"message": "Invalid filetype, please provide TEI file or compatible ones.",
-                                     "uploaded": False}
-                    upload_statuses[i].update(upload_status)
-                    dbfile.activities.get().delete()
-                    dbfile.delete()
-                    continue
+    return files_list
 
-                if migration:
-                    tei_handler.migrate()
 
-                try:
-                    tei_handler = IDsFiller(tei_handler, file_name)
-                except XMLSyntaxError:
-                    is_id_filled = False
-                else:
-                    is_id_filled = tei_handler.process()
+def __process_file(file, directory, user):
+    old_file_name = file.name
+    file.name = clean_name(file.name)
+    file_object = None
+    upload_status = {'file_name': file.name, 'uploaded': False, 'migrated': False, 'message': None}
 
-                if migration or is_id_filled:
-                    migrated_string = tei_handler.text.read()
+    try:
+        file_object = upload_file(file, directory.project, user, directory.id)
+        upload_status.update({'uploaded': True})
 
-                    text, entities = extract_text_and_entities(migrated_string, project.id, dbfile.id)
+        FilesManagementLogger().log_uploading_file(file_object.project.id, user.id, old_file_name, file_object.id)
 
-                    uploaded_file = uploaded_file_object_from_string(migrated_string, file_name)
+        xml_content, content_updated, message = __update_file_content(file_object)
 
-                    dbfile = upload_file(uploaded_file, project, request.user, parent_dir)
+        if content_updated:
+            old_file_id = file_object.id
+            file_object = __update_file_object(xml_content, file_object, user)
 
-                    message = tei_handler.get_message()
-                    migration_status = {'migrated': True, 'message': message}
-                    upload_statuses[i].update(migration_status)
-                    index_entities(entities)
-                    index_file(dbfile, text)
-                    log_activity(dbfile.project, request.user, "File migrated: {} ".format(message), dbfile)
-                else:
-                    file.seek(0)
-                    text, entities = extract_text_and_entities(file.read(), project.id, dbfile.id)
-                    index_entities(entities)
-                    index_file(dbfile, text)
+            clone_db_objects(file_object)
 
-            except Exception as exception:
-                upload_status = {'message': str(exception)}
-                upload_statuses[i].update(upload_status)
+            upload_status.update({'migrated': True, 'message': message})
 
-        response = dumps(upload_statuses)
+            log_activity(directory.project, user, f"File migrated: {message} ", file_object)
 
-        return HttpResponse(response, status=200, content_type='application/json')
+            FilesManagementLogger().log_migrating_file(old_file_id, file_object.id, message)
 
-    return HttpResponseBadRequest("Invalid request method or files not attached")
+        return upload_status
+
+    except (BadRequest, FileExistsError) as exception:
+        if file_object:
+            __remove_file(file_object)
+        upload_status.update({'uploaded': False, 'migrated': False, 'message': str(exception)})
+
+        FilesManagementLogger().log_uploading_file_error(old_file_name, str(exception))
+
+        return upload_status
+
+
+def __update_file_content(file_object):
+    content_binary = __get_raw_content_binary(file_object)
+
+    tei_handler = TeiHandler()
+    xml_content, migration, migration_message = tei_handler.migrate_to_tei_p5(content_binary)
+
+    # TODO: Extract formatting xml from TeiHandler and put it here
+
+    # TODO: Create class to remove not connected xml elements (eg. annotator without certainties, certainties without
+    # TODO: existing target, certainties without any category used in project, entities without properties)
+
+    ids_corrector = IDsCorrector()
+    xml_content, correction, correction_message = ids_corrector.correct_ids(xml_content, file_object.id)
+
+    elements_extractor = ElementsExtractor()
+    xml_content, extraction, extraction_message = elements_extractor.move_elements_to_db(xml_content, file_object.id)
+
+    # TODO: Add indexing entities in Elasticsearch
+
+    if migration or correction or extraction:
+        content_updated = True
+    else:
+        content_updated = False
+
+    message = ' '.join([migration_message, correction_message, extraction_message])
+    message = message.strip()
+
+    return xml_content, content_updated, message
+
+
+def __get_raw_content_binary(file_object):
+    file_version = FileVersion.objects.get(file_id=file_object.id, number=file_object.version_number)
+    content_binary = file_version.get_raw_content_binary()
+
+    return content_binary
+
+
+def __remove_file(file_object):
+    file_object.activities.get().delete()
+    file_object.delete()
+
+
+def __update_file_object(xml_content, old_file, user):
+    new_file = create_uploaded_file_object_from_string(xml_content, old_file.name)
+
+    file = File.objects.get(name=new_file.name, parent_dir=old_file.parent_dir, project=old_file.project, deleted=False)
+    updated_file = overwrite_file(file, new_file, user)
+
+    return updated_file
+
+
+def clone_db_objects(file):
+    file_versions = file.file_versions.order_by('-number')
+
+    last_file_version = file_versions[0]
+    previous_file_version = file_versions[1]
+
+    __clone_entities_versions(last_file_version, previous_file_version)
+    __clone_certainties(last_file_version, previous_file_version)
+
+
+def __clone_entities_versions(last_file_version, previous_file_version):
+    entities_versions = EntityVersion.objects.filter(
+        file_version=previous_file_version,
+        entity__deleted_in_file_version__isnull=True
+    ).order_by('id')
+
+    for entity_version in entities_versions:
+        entity_properties = EntityProperty.objects.filter(
+            entity_version=entity_version,
+            deleted_in_file_version__isnull=True
+        ).order_by('id')
+
+        entity_version.id = None
+        entity_version.file_version = last_file_version
+        entity_version.save()
+
+        for entity_property in entity_properties:
+            entity_property.id = None
+            entity_property.entity_version = entity_version
+
+        EntityProperty.objects.bulk_create(entity_properties)
+
+
+def __clone_certainties(last_file_version, previous_file_version):
+    certainties = Certainty.objects.filter(
+        file_version=previous_file_version,
+        deleted_in_file_version__isnull=True
+    ).order_by('id')
+
+    for certainty in certainties:
+        certainty_categories = certainty.categories.all()
+
+        certainty.id = None
+        certainty.file_version = last_file_version
+        certainty.save()
+
+        for certainty_category in certainty_categories:
+            certainty.categories.add(certainty_category)
 
 
 @login_required
@@ -107,9 +202,9 @@ def upload(request, directory_id):  # type: (HttpRequest, int) -> HttpResponse
 @user_has_access()
 def get_file_versions(request, file_id):  # type: (HttpRequest, int) -> HttpResponse
     if request.method == 'GET':
-        file = File.objects.filter(id=file_id).get()
+        file = File.objects.get(id=file_id, deleted=False)
 
-        page = paginate_start_length(request, file.versions.all())
+        page = paginate_start_length(request, file.file_versions.all())
         return include_user(page_to_json_response(page))
 
     else:
@@ -123,33 +218,33 @@ def file(request, *args, **kwargs):
     if request.method == "DELETE":
         return delete(request, *args, **kwargs)
     elif request.method == "GET":
-        return get_file_version(request, *args, **kwargs)
+        return file_version(request, *args, **kwargs)
 
 
 @login_required
 @objects_exists
 @user_has_access()
-def get_file_version(request, file_id, version=None):  # type: (HttpRequest, int, int) -> HttpResponse
-    file = File.objects.filter(id=file_id).get()
+def file_version(request, file_id, version=None):  # type: (HttpRequest, int, int) -> HttpResponse
+    file = File.objects.get(id=file_id, deleted=False)
 
     if version is None:
         version = file.version_number
 
-    fv = file.versions.filter(number=version).get()  # type: FileVersion
+    file_version = file.file_versions.get(number=version)
 
     try:
-        creator = model_to_dict(fv.created_by, fields=('id', 'first_name', 'last_name'))
+        creator = model_to_dict(file_version.created_by, fields=('id', 'first_name', 'last_name'))
     except (AttributeError, User.DoesNotExist):
-        creator = fv.created_by_id
+        creator = file_version.created_by_id
 
-    fv.upload.open('r')
+    xml_content = file_version.get_rendered_content()
+
     response = {
         "filename": file.name,
-        "version_number": fv.number,
+        "version_number": file_version.number,
         "creator": creator,
-        "data": fv.upload.read()
+        "data": xml_content
     }
-    fv.upload.close()
 
     return JsonResponse(response)
 
@@ -161,25 +256,33 @@ def move(request, move_to):  # type: (HttpRequest, int) -> HttpResponse
     data = request.body
     data = loads(data)
 
-    move_to_dir = Directory.objects.filter(id=move_to).get()
+    move_to_dir = Directory.objects.get(id=move_to, deleted=False)
 
     statuses = []
 
     for directory_id in data.get('directories', ()):
-        dir = Directory.objects.filter(id=directory_id).get()
+        dir = Directory.objects.get(id=directory_id, deleted=False)
+
         try:
             dir.move_to(move_to)
         except (ReferenceError, IntegrityError) as e:
-            statuses += [str(e)]
+            statuses.append(str(e))
         else:
             log_activity(project=dir.project, user=request.user, related_dir=dir,
                          action_text="moved {} to {}".format(dir.name, move_to_dir.name))
-            statuses += ["OK"]
+            statuses.append("OK")
+
     for file_id in data.get('files', ()):
-        file = File.objects.filter(id=file_id).get()
-        file.move_to(move_to)
-        log_activity(project=file.project, user=request.user, file=file,
-                     action_text="moved file to {}: ".format(move_to_dir.name))
+        file = File.objects.get(id=file_id, deleted=False)
+
+        try:
+            file.move_to(move_to)
+        except (ReferenceError, IntegrityError) as e:
+            statuses.append(str(e))
+        else:
+            log_activity(project=file.project, user=request.user, file=file,
+                         action_text="moved file to {}: ".format(move_to_dir.name))
+            statuses.append('OK')
 
     return JsonResponse(statuses, safe=False)
 
@@ -188,7 +291,9 @@ def move(request, move_to):  # type: (HttpRequest, int) -> HttpResponse
 @objects_exists
 @user_has_access('RW')
 def create_directory(request, directory_id, name):  # type: (HttpRequest, int, str) -> HttpResponse
-    dir = Directory.objects.filter(id=directory_id).get()  # type: Directory
+    name = clean_name(name)
+
+    dir = Directory.objects.get(id=directory_id, deleted=False)  # type: Directory
     dir.create_subdirectory(name, request.user)
     return HttpResponse("OK")
 
@@ -199,16 +304,22 @@ def create_directory(request, directory_id, name):  # type: (HttpRequest, int, s
 def delete(request, **kwargs):
     if request.method != 'DELETE':
         return HttpResponseBadRequest("Only delete method is allowed here")
+
     if 'directory_id' in kwargs:
-        dir = Directory.objects.filter(id=kwargs['directory_id']).get()
-        log_activity(project=dir.project, user=request.user, related_dir=dir, action_text="deleted")
-        dir.delete()
+        # TODO: create `Directory` object method from `delete_directory_with_contents_fake()` function
+
+        delete_directory_with_contents_fake(kwargs['directory_id'], request.user)
+
     elif 'file_id' in kwargs:
-        file = File.objects.filter(id=kwargs['file_id']).get()
-        log_activity(project=file.project, user=request.user, file=file, action_text="deleted")
-        file.delete()
+        file = File.objects.get(id=kwargs['file_id'], deleted=False)
+        log_activity(project=file.project, user=request.user, action_text=f"deleted file {file.name}")
+        file.delete_fake(request.user)
+
+        FilesManagementLogger().log_deleting_file(file.project.id, request.user.id, file.id)
+
     else:
         return HttpResponseBadRequest("Invalid arguments")
+
     return HttpResponse("OK")
 
 
@@ -217,10 +328,13 @@ def delete(request, **kwargs):
 @user_has_access('RW')
 def rename(request, **kwargs):
     if 'directory_id' in kwargs:
-        file = Directory.objects.filter(id=kwargs['directory_id']).get()
+        file = Directory.objects.get(id=kwargs['directory_id'], deleted=False)
     else:
-        file = File.objects.filter(id=kwargs['file_id']).get()
-    file.rename(kwargs['new_name'], request.user)
+        file = File.objects.get(id=kwargs['file_id'], deleted=False)
+
+    new_name = clean_name(kwargs['new_name'])
+
+    file.rename(new_name, request.user)
     return HttpResponse("OK")
 
 
@@ -229,7 +343,7 @@ def rename(request, **kwargs):
 @user_has_access()
 def get_project_tree(request, project_id):
     try:
-        base_dir = Directory.objects.filter(project_id=project_id, parent_dir=None).get()
+        base_dir = Directory.objects.get(project_id=project_id, parent_dir=None, deleted=False)
     except Directory.DoesNotExist:
         return HttpResponseServerError(dumps({'message': "Invalid data in database"}))
 
@@ -242,16 +356,26 @@ def get_project_tree(request, project_id):
 @objects_exists
 @user_has_access()
 def download_file(request, file_id):  # type: (HttpRequest, int) -> HttpResponse
-    file = File.objects.filter(id=file_id).get()
-    return file.download()
+    file = File.objects.get(id=file_id, deleted=False)
+    content = file.get_rendered_content()
+
+    response = HttpResponse(content, content_type='application/xml')
+    response['Content-Disposition'] = bytes(f'attachment; filename="{file.name}"', 'utf-8')
+
+    return response
 
 
 @login_required
 @objects_exists
 @user_has_access()
-def download_fileversion(request, file_id, version):  # type: (HttpRequest, int, int) -> HttpResponse
-    fileversion = FileVersion.objects.filter(file_id=file_id, number=version).get()
-    return fileversion.download()
+def download_file_version(request, file_id, version):  # type: (HttpRequest, int, int) -> HttpResponse
+    file_version = FileVersion.objects.get(file_id=file_id, number=version)
+    content = file_version.get_rendered_content()
+
+    response = HttpResponse(content, content_type='application/xml')
+    response['Content-Disposition'] = bytes(f'attachment; filename="{file_version.file.name}"', 'utf-8')
+
+    return response
 
 
 @login_required
@@ -259,13 +383,13 @@ def download_fileversion(request, file_id, version):  # type: (HttpRequest, int,
 @user_has_access()
 def download_directory(request, directory_id):  # type: (HttpRequest, int) -> HttpResponse
     mkdir("/tmp/dummy")
-    dir = Directory.objects.get(id=directory_id)
+    dir = Directory.objects.get(id=directory_id, deleted=False)
     zf = ZipFile("/tmp/" + dir.name + ".zip", 'w')
 
     def pack_dir(dir):
         zf.write("/tmp/dummy", dir.get_path())
         for file in dir.files.all():
-            last_version = file.versions.get(number=file.version_number)
+            last_version = file.file_versions.get(number=file.version_number)
             path = last_version.upload.path
             zf.write(path, file.get_path())
         for subdir in dir.subdirs.all():

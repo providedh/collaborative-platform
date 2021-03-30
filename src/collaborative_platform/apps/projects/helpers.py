@@ -1,12 +1,20 @@
+import time
 from json import loads
 
 from django.contrib.auth.models import User
+from django.contrib.sites.shortcuts import get_current_site
 from django.core.paginator import Paginator, Page
-from django.db.models import QuerySet
+from django.db import transaction, IntegrityError
+from django.db.models import QuerySet, F
 from django.http import HttpRequest, JsonResponse
+from django.urls import reverse
 
-from apps.files_management.models import File, Directory
-from apps.projects.models import Activity, Project
+from apps.api_vis.models import Commit
+from apps.files_management.models import Directory, File, FileVersion
+from apps.projects.models import Activity, Project, ProjectVersion, Contributor
+import logging
+
+logger = logging.getLogger('projects')
 
 
 def paginate_page_perpage(request, queryset):  # type: (HttpRequest, QuerySet) -> Page
@@ -51,20 +59,25 @@ def page_to_json_response(page):  # type: (Page) -> JsonResponse
 
 
 def get_project_contributors(project_id):  # type: (int) -> QuerySet
-    ids = Project.objects.filter(id=project_id).get().contributors.values_list('user', flat=True)
+    ids = Project.objects.get(id=project_id).contributors.values_list('user', flat=True)
     return User.objects.filter(id__in=ids)
 
 
 def include_contributors(response):  # type: (JsonResponse) -> JsonResponse
     json = loads(response.content)
     for project in json['data']:
-        project['contributors'] = list(get_project_contributors(project['id']).values('id', 'first_name', 'last_name'))
+        project['contributors'] = get_contributors_list(project['id'])
 
     return JsonResponse(json)
 
 
-def log_activity(project, user, action_text="", file=None,
-                 related_dir=None):  # type: (Project, User, str, File, Directory) -> Activity
+def get_contributors_list(project_id):
+    return list(get_project_contributors(project_id).values('id', 'first_name', 'last_name'))
+
+
+def log_activity(project, user, action_text="", file=None, related_dir=None):
+    # type: (Project, User, str, File, Directory) -> Activity
+
     a = Activity(project=project, user=user, user_name="{} {}".format(user.first_name, user.last_name),
                  action_text=action_text)
     if file is not None:
@@ -75,3 +88,43 @@ def log_activity(project, user, action_text="", file=None,
         a.related_dir_name = related_dir.name
     a.save()
     return a
+
+
+def create_new_project_version(project, files_modification=False, commit=None):
+    # type: (Project, bool, Commit) -> None
+
+    while True:
+        try:
+            with transaction.atomic():
+                latest_file_versions = FileVersion.objects.filter(file__project=project,
+                                                                  file__version_number=F('number'))
+                project_versions = ProjectVersion.objects.filter(project=project)
+
+                if project_versions.exists():
+                    latest_project_version = project_versions.latest('id')
+
+                    if not commit:
+                        commit = latest_project_version.latest_commit
+
+                    file_version_counter = latest_project_version.file_version_counter + int(files_modification)
+                    commit_counter = latest_project_version.commit_counter + int(commit is not None)
+
+                    new_project_version = ProjectVersion(file_version_counter=file_version_counter,
+                                                         latest_commit=commit,
+                                                         commit_counter=commit_counter,
+                                                         project=project)
+                    new_project_version.save()
+                    new_project_version.file_versions.set(latest_file_versions)
+                    new_project_version.save()
+
+                else:
+                    new_project_version = ProjectVersion(file_version_counter=0,
+                                                         latest_commit=commit,
+                                                         commit_counter=0,
+                                                         project=project)
+                    new_project_version.save()
+                    new_project_version.file_versions.set(latest_file_versions)
+                    new_project_version.save()
+                break
+        except IntegrityError:
+            pass

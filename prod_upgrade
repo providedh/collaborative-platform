@@ -1,14 +1,18 @@
 #!/bin/bash
 cd /home/ubuntu/collaborative-platform
 pkill screen
-git pull --rebase
+pkill daphne
+pkill uwsgi
+pkill celery
+git pull
 cd src/collaborative_platform/
-cp collaborative_platform/settings.py_template collaborative_platform/settings.py
+cp collaborative_platform/settings_template.py collaborative_platform/settings.py
 cat /home/ubuntu/secrets >> collaborative_platform/settings.py
 python3 manage.py makemigrations
 python3 manage.py migrate
-rm -r ~/collaborative-platform/static/*
+python3 manage.py shell -c "from apps.index_and_search.initialize import initialize; initialize()"
+rm -rf ~/collaborative-platform/static/*
 python3 manage.py collectstatic
-screen -d -m uwsgi --socket /home/ubuntu/collaborative-platform/src/collaborative_platform/collaborative_platform.sock --chmod-socket=666 --module collaborative_platform.wsgi
+screen -d -m celery -A collaborative_platform worker -B -l info -E
+screen -d -m bash -c 'while true; do uwsgi uwsgi.ini; done;'
 screen -d -m daphne -u collaborative_platform_websockets.sock collaborative_platform.asgi:application
-screen -d -m celery -A collaborative_platform worker -B -l DEBUG -E

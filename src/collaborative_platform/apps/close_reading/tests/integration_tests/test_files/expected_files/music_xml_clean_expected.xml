@@ -1,0 +1,108 @@
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <?xml-model href="https://providedh.ehum.psnc.pl/tei_providedh.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title>Music</title>
+      </titleStmt>
+      <publicationStmt>
+        <publisher>
+          <orgName>Reddit</orgName>
+        </publisher>
+        <date when="2014-11-13">2014-11-13</date>
+      </publicationStmt>
+      <sourceDesc>
+        <biblStruct>
+          <monogr>
+            <title>Music</title>
+            <title type="alt">Copypasta</title>
+            <note/>
+            <author>
+              <persName xml:id="person1">
+                <forename>Anonymous</forename>
+                <surname>User</surname>
+                <email>someone@reddit.com</email>
+              </persName>
+            </author>
+            <textLang mainLang="en"/>
+          </monogr>
+        </biblStruct>
+        <msDesc>
+          <msIdentifier>
+            <repository>Reddit</repository>
+            <idno/>
+          </msIdentifier>
+        </msDesc>
+      </sourceDesc>
+    </fileDesc>
+    <profileDesc>
+      <particDesc>
+        <listPerson type="PROVIDEDH Annotators">
+          <person xml:id="annotator-2">
+            <persName>
+              <forename>Tony</forename>
+              <surname>Stark</surname>
+              <email>tony_stark@zmyslonymail.com</email>
+            </persName>
+          </person>
+        </listPerson>
+      </particDesc>
+    </profileDesc>
+  </teiHeader>
+  <text>
+    <body>
+      <div type="text">
+        Wow, this sub just never ceases to amaze me. This just might be the worst post yet. Is this supposed to
+        be funny? Because it just isn't. How can you honestly sit there and tell me music hasn't been going
+        downhill since Queen (RIP <name xml:id="name-0" resp="#annotator-2" ref="#person-0">Freddy Mercury</name>). Do you even know what real music is? All this shit about
+        mom's lasagna and ladybugs is just complete and utter garbage. You hear songs from the 60s and 70s that
+        are still so iconic they are featured all the time. Today's music just doesn't have that staying power.
+        It is just formulaic filth that panders to whatever today's youth is into. You think you can honestly
+        sit there and tell me people will still be listening to Katy Perry and Nicki Minaj 30 years from now?
+        Yeah fucking right. You still hear we are the champions by queen at every single sporting even in the
+        world. No song made today will last anywhere close to that long. And where's the emotion? Where's the
+        feeling? Back in my day artists actually put thought into what they wrote. And that's just it. Today's
+        artists don't even write their own songs anymore. They get some guy with a degree in bullshit who makes
+        money engineering these meaningless but catchy songs that rake in millions only because the record
+        companies are forcing radio stations to play them every ten seconds to get them stuck in people's heads
+        so that is all they can think of. This simply didn't happen in the 70s. People made songs based on how
+        they were feeling. And guess what, their music also had impacts on what was going on in the world. You
+        guys have probably never heard of him, but there was this indie guy named John Lennon who wrote a song
+        about imagining the world without any violence. Now that's the type of stuff we need in today's music.
+        Something to inspire the youth to do something good. That's why kids are always getting in so much
+        trouble now. The music is telling them to fuck everything that moves and beat the shit out of each
+        other. So they do it. No questions asked. And don't even get me started on today's celebrity worship. Do
+        we really need to know every time Kim Kardashian is taking a shit? Seriously, who gives a fuck what
+        those idiots are doing. Why are they even famous in the first place? And all this obsession with
+        technology is driving us into idiots. You see with the most recent facebook scandal how easy it is for
+        them to manipulate you. Do you guys even realize that facebook was designed for college students? Anyone
+        under the age of 18 should not be allowed on it. Simple as that. I think you should be required to
+        register with a .edu email when creating an account. That also keeps out the idiots that can't get into
+        college and the poor people that can't afford it. And back in my day we didn't even need facebook, if
+        you wanted to contact someone, you had to call their house. And guess what, if they weren't home, you
+        didn't talk to them. We also had to memorize each others phone numbers by heart. Kids these days have it
+        too easy putting everyone's numbers in their phones. And twitter is even worse. #what is the point of
+        these things? Seriously, I don't get it. They are just made up catchphrases that make you sound stupid.
+        And what is with advertisers trying to get me to use them? Like when a couple guys are going hiking and
+        spot some wildlife and you see #ladybugs. Stop popping those things up in the middle of my show. I don't
+        fucking care! Now I know you guys all agree with everything I just said but are going to down vote me
+        anyway to try and fit in with the group. And that's fine. But listen to this first. Today's music is
+        ruining this planet. Pretty soon there will be riots in the streets that will make Rodney king Dwarf in
+        comparison. Freddy Mercury will rise from the dead and lead the charge in murdering Mark Zuckerberg, the
+        Kardashians, Justin Bieber, and every other trendy celebrity that is ruining the youths. It will be
+        called "the modern cleansing where a new renaissance will emerge. We will see Davinci and Michelangelo
+        rise again and bring new artistic beauty in this world. And you will all see just how bad it really was.
+      </div>
+    </body>
+  </text>
+  <standOff>
+    <listPerson type="personList">
+      <person xml:id="person-0" resp="#annotator-2" sex="M">
+        <persName>
+          <forename>Freddy</forename>
+          <surname>Mercury</surname>
+        </persName>
+      </person>
+    </listPerson>
+  </standOff>
+</TEI>

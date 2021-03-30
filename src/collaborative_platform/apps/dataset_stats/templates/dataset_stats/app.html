@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+{%  load static %}
+
+{% block head %}
+<link rel="stylesheet" type="text/css" href="{% static 'dataset_stats/css/main.css' %}">
+{% endblock %}
+
+{% block submenu %}
+<ul class="submenu__list">
+  <li class="submenu__item">
+    <a href="{% url 'projects:project' project_id %}" class="submenu__link">{{ title }}</a>
+  </li>
+  <li class="submenu__item">
+    <a href="{% url 'projects:files' project_id %}" class="submenu__link">Files</a>
+  </li>
+  <li class="submenu__item submenu__item--active">
+    <a href="{% url 'dataset_stats:main' project_id %}" class="submenu__link">Stats</a>
+  </li>
+  <li class="submenu__item submenu__item">
+    <a href="{% url 'vis_dashboard:list' project_id %}" class="submenu__link">Dashboard</a>
+  </li>
+  <li class="submenu__item submenu__item">
+    <a href="{% url 'disambiguator_ui' project_id %}" class="submenu__link">Disambiguator</a>
+  </li>
+  <li class="submenu__item">
+    <a href="{% url 'projects:project_settings' project_id %}" class="submenu__link">Settings</a>
+  </li>
+</ul>
+{% endblock %}
+
+{% block content %}
+
+{% load bottom_hint %}
+{% bottom_hint "What is this page?" %}
+<h3>Project TEI statistics</h3>
+<h5 class="text-muted">An overview of the XML contents</h5>
+<p>
+  You are looking at the TEI usage summary of the document present in the <i>{{ dashboard.name }}</i> project. <br/>
+  The documents change as files are added and changes are made to them. Here you can see what different tags are used <br/>
+  and how are they used accross the corpus. <br/>
+  <b>What can I get from this data?</b> Clicking on each tag will reveal further information regarding what different
+  properties the <br/>tags have and how the values are distributed; including whether a entity's proprety value distribution 
+  is too skewed to be <br/>used because it would introduce biases
+</p>
+{% end_bottom_hint %}
+
+{% csrf_token %}
+<div class="submenu">
+  <div class="container">
+    <ul class="submenu__list d-flex">
+      <li class="submenu__item">
+        <a href="{% url 'projects:project' project_id %}" class="submenu__link">{{ title }}</a>
+      </li>
+      <li class="submenu__item">
+        <a href="{% url 'projects:files' project_id %}" class="submenu__link">Files</a>
+      </li>
+      <li class="submenu__item submenu__item--active">
+        <a href="{% url 'dataset_stats:main' project_id %}" class="submenu__link">Stats</a>
+      </li>
+      <li class="submenu__item submenu__item">
+        <a href="{% url 'vis_dashboard:list' project_id %}" class="submenu__link">Dashboard</a>
+      </li>
+      <li class="submenu__item submenu__item">
+        <a href="{% url 'disambiguator_ui' project_id %}" class="submenu__link">Disambiguator</a>
+      </li>
+      <li class="submenu__item">
+        <a href="{% url 'projects:project_settings' project_id %}" class="submenu__link">Settings</a>
+      </li>
+    </ul>
+  </div>
+</div>
+<div id="dataset-stats" class="container project">
+  <div class="d-flex flex-column-reverse flex-md-row project__header">
+    <div class=" project__content">
+      <h1>{{ project_name }} <small id="project-version-label" class="text-muted"></small></h1>
+      <b>Entity and attributes coverage of TEI annotations in the current dataset.</b>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <div class="box">
+        <div class="box__header">
+          <h3 class="box__text--title">Project versions</h3>
+        </div>
+        <div id="timeline" class="box__content">
+          <div class="d-flex justify-content-center">
+            <div class="spinner-grow text-primary" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+            <div class="spinner-grow text-primary" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+            <div class="spinner-grow text-primary" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="react-root"></div>
+    </div>
+  </div>
+</div>
+
+<div id="app-params" class="d-none">
+  <span id="project_id">{{ project_id }}</span>
+</div>
+<script src="{% static 'dataset_stats/js/setup.js' %}" type="text/javascript"></script>
+{% if DEVELOPMENT is True %}
+  <script type="text/javascript" src="http://localhost:3000/main.js"></script>
+{% else %}
+  <script type="text/javascript" src="{% static 'dataset_stats/js/main.js' %}"></script>
+  <script type="text/javascript" src="{% static 'dataset_stats/js/main.js.map' %}"></script>
+{% endif %}
+{% endblock %}

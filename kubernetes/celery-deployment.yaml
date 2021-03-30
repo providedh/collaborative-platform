@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: celery
+  name: celery
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: celery
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: celery
+    spec:
+      containers:
+        - image: 'docker-registry.default.svc:5000/providedh/celery:latest'
+          imagePullPolicy: Always
+          name: celery
+          resources:
+            limits:
+              cpu: 4
+              memory: 32Gi
+            requests:
+              cpu: 4
+              memory: 16Gi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+            - mountPath: /app
+              name: app
+            - mountPath: /app/media
+              name: media
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      volumes:
+        - name: app
+          persistentVolumeClaim:
+            claimName: app
+        - name: media
+          persistentVolumeClaim:
+            claimName: media

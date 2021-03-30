@@ -1,0 +1,45 @@
+[
+  {
+    "model": "sites.site",
+    "pk": 1,
+    "fields":
+    {
+      "domain": "providedh.ehum.psnc.pl",
+      "name": "providedh.ehum.psnc.pl"
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 1,
+    "fields":
+    {
+      "password": "pbkdf2_sha256$150000$OFTrgAFpeWke$d9rYa8Mlc2uIzOP+VkNJ+GO3SiQlM3R4lUgh2YflD7Q=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "anonymous",
+      "first_name": "none",
+      "last_name": "none",
+      "email": "none",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "1970-01-01T00:00:00.000Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "core.profile",
+    "pk": 1,
+    "fields":
+    {
+      "agree_to_terms": true,
+      "is_scientist": false,
+      "orcid": null,
+      "twitter": null,
+      "github": null,
+      "scholar": null,
+      "researchgate": null,
+      "about": null
+    }
+  }
+]

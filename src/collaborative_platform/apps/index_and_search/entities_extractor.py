@@ -1,28 +1,26 @@
 import json
+import re
 from typing import Dict, List
 
 from lxml import etree as et
 from lxml.etree import Element
 
+from django.conf import settings
+
 
 class EntitiesExtractor:
-    tags = ('person', 'place', 'org', 'event')
-    namespaces = {'tei': 'http://www.tei-c.org/ns/1.0', 'xml': 'http://www.w3.org/XML/1998/namespace'}
+    tags = ('person', 'place', 'org', 'event', 'certainty', 'object')
+    namespaces = settings.XML_NAMESPACES
 
     @classmethod
     def extract_entities_elements(cls, parsed_et):  # type: (et) -> Dict[str, Element]
-        entites_elements = dict(
-            (tag, parsed_et.xpath(".//tei:{}".format(tag), namespaces=cls.namespaces))
-            for tag in ('place', 'org', 'event'))
+        entites_elements = {
+            tag: parsed_et.xpath(".//tei:{}".format(tag), namespaces=cls.namespaces)
+            for tag in cls.tags}
 
-        list_persons = parsed_et.findall(".//tei:listPerson", namespaces=cls.namespaces)
-        list_persons = [listp for listp in list_persons if 'PROVIDEDH Annotators' not in listp.attrib.values()]
-        text = parsed_et.find(".//tei:text", namespaces=cls.namespaces)
-        persons = text.findall(".//tei:person", namespaces=cls.namespaces) if not list_persons else []
-
-        for list_p in list_persons:
-            persons.extend(list_p.findall(".//tei:person", namespaces=cls.namespaces))
-        entites_elements['person'] = persons
+        for elem in entites_elements['person'].copy():
+            if elem.getparent().attrib.get("type", "") == 'PROVIDEDH Annotators':
+                entites_elements['person'].remove(elem)
 
         return entites_elements
 
@@ -59,6 +57,10 @@ class EntitiesExtractor:
 
         return id if id is not None else ""
 
+    @staticmethod
+    def __get_context(element):  # type: (Element) -> str
+        return ' '.join(re.sub("<.*?>", "", str(et.tostring(element.getparent()), 'utf-8')).split())
+
     @classmethod
     def __process_person_tags(cls, elements):  # type: (List[Element]) -> map
         def process_person_tag(element):
@@ -67,9 +69,12 @@ class EntitiesExtractor:
             name = cls.__extract_subtag_text(element, 'name')
             forename = cls.__extract_subtag_text(element, 'forename')
             surname = cls.__extract_subtag_text(element, 'surname')
+            xml = str(et.tostring(element), 'utf-8')
+            context = cls.__get_context(element)
 
             name = name or text or "{} {}".format(forename, surname)
-            return {'tag': 'person', 'id': id, 'name': name, 'forename': forename, 'surname': surname}
+            return {'tag': 'person', 'id': id, 'name': name, 'forename': forename, 'surname': surname, 'xml': xml,
+                    'context': context}
 
         return map(process_person_tag, elements)
 
@@ -86,13 +91,24 @@ class EntitiesExtractor:
                 subtags,
                 (cls.__extract_subtag_text(element, subtag) for subtag in subtags)
             ))
+
+            context = cls.__get_context(element)
+            location_element = element.find(".//tei:location", namespaces=cls.namespaces)
+            if location_element is not None:
+                location = ' '.join(re.sub("<.*?>", "", str(et.tostring(location_element), 'utf-8')).split())
+            else:
+                location = None
+
             return {'tag': 'place',
                     'id': id,
                     'name': subtags_text['placeName'] or subtags_text[
                         'placename'] or element.text.strip() if element.text is not None else "",
                     'desc': subtags_text['p'],
                     'region': subtags_text['region'],
-                    'country': subtags_text['country']
+                    'country': subtags_text['country'],
+                    'location': location,
+                    'xml': str(et.tostring(element), 'utf-8'),
+                    'context': context,
                     }
 
         return map(process_place_tag, elements)
@@ -103,7 +119,9 @@ class EntitiesExtractor:
             id = cls.__extract_tag_id(element)
             name = cls.__extract_subtag_text(element, 'orgName')
             name = name or element.text.strip() if element.text is not None else ""
-            return {'tag': 'org', 'id': id, 'name': name}
+            xml = str(et.tostring(element), 'utf-8')
+            context = cls.__get_context(element)
+            return {'tag': 'org', 'id': id, 'name': name, 'xml': xml, 'context': context}
 
         return map(process_org_tag, elements)
 
@@ -112,16 +130,44 @@ class EntitiesExtractor:
         def process_event_tag(element):
             id = cls.__extract_tag_id(element)
             name = element.text.strip() if element.text is not None else ""
-            return {'tag': 'event', 'id': id, 'name': name}
+            when = element.attrib.get("when")
+            xml = str(et.tostring(element), 'utf-8')
+            context = cls.__get_context(element)
+            return {'tag': 'event', 'id': id, 'name': name, 'when': when, 'xml': xml, 'context': context}
 
         return map(process_event_tag, elements)
+
+    @classmethod
+    def __process_certainty_tags(cls, elements):  # type: (List[Element]) -> map
+        def process_certainty_tag(element):
+            id = cls.__extract_tag_id(element)
+            name = ''
+            xml = str(et.tostring(element), 'utf-8')
+            context = ''
+            return {'tag': 'certainty', 'id': id, 'name': name, 'xml': xml, 'context': context}
+
+        return map(process_certainty_tag, elements)
+
+    @classmethod
+    def __process_object_tags(cls, elements):  # type: (List[Element]) -> map
+        def process_object_tag(element):
+            id = cls.__extract_tag_id(element)
+            name = element.text.strip() if element.text is not None else ""
+            xml = str(et.tostring(element), 'utf-8')
+            context = cls.__get_context(element)
+            type = element.attrib.get("type")
+            return {'tag': type, 'id': id, 'name': name, 'xml': xml, 'context': context}
+
+        return map(process_object_tag, elements)
 
     @classmethod
     def __process_tags(cls, tag, elements):  # type: (str, List[Element]) -> map
         functions = (cls.__process_person_tags,
                      cls.__process_place_tags,
                      cls.__process_org_tags,
-                     cls.__process_event_tags)
+                     cls.__process_event_tags,
+                     cls.__process_certainty_tags,
+                     cls.__process_object_tags)
 
         return dict(zip(cls.tags, functions))[tag](elements)
 

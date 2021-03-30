@@ -1,30 +1,27 @@
 import csv
-import logging
 
 from io import BytesIO
 from lxml import etree
 
-from .recognized_types import FileType
-
-logger = logging.getLogger(__name__)
+from apps.files_management.file_conversions.recognized_types import FileType
 
 
 class FileTypeFinder:
     def __init__(self):
         pass
 
-    def check_if_xml(self, text_binary):
+    @staticmethod
+    def check_if_xml(text_binary):
         try:
             etree.parse(BytesIO(text_binary))
 
             return FileType.XML
 
-        except etree.XMLSyntaxError as err:
-            logger.info("checking if xml: {}".format(err))
+        except etree.XMLSyntaxError:
+            return FileType.PLAIN_TEXT
 
-            return FileType.OTHER
-
-    def check_if_csv_or_tsv(self, text):
+    @staticmethod
+    def check_if_csv_or_tsv(text):
         fragment_to_check = text[:1024]
 
         try:
@@ -38,7 +35,5 @@ class FileTypeFinder:
             elif file_has_header and delimiter == '\t':
                 return FileType.TSV
 
-        except Exception as ex:
-            logger.info("checking if csv or tsv: {}".format(ex))
-
-            return FileType.OTHER
+        except Exception:
+            return FileType.PLAIN_TEXT

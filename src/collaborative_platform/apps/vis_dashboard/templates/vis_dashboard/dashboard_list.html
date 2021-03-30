@@ -1,0 +1,160 @@
+{% extends 'base.html' %}
+{%  load static %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'vis_dashboard/css/main.css' %}">
+{% endblock %}
+
+{% block submenu %}
+<ul class="submenu__list">
+  <li class="submenu__item">
+    <a href="{% url 'projects:project' project_id %}" class="submenu__link">{{ project_title }}</a>
+  </li>
+  <li class="submenu__item">
+    <a href="{% url 'projects:files' project_id %}" class="submenu__link">Files</a>
+  </li>
+  <li class="submenu__item submenu__item">
+    <a href="{% url 'dataset_stats:main' project_id %}" class="submenu__link">Stats</a>
+  </li>
+  <li class="submenu__item--active">
+    <a href="{% url 'vis_dashboard:list' project_id %}" class="submenu__link">Dashboard</a>
+  </li>
+  <li class="submenu__item submenu__item">
+    <a href="{% url 'disambiguator_ui' project_id %}" class="submenu__link">Disambiguator</a>
+  </li>
+  <li class="submenu__item">
+    <a href="{% url 'projects:project_settings' project_id %}" class="submenu__link">Settings</a>
+  </li>
+</ul>
+{% endblock %}
+
+{% block content %}
+{% load bottom_hint %}
+{% bottom_hint "What are the dashboards?" %}
+<h3>Visualization dashboards</h3>
+<h5 class="text-muted">A manager for the project's visualization panels</h5>
+<p>
+  Dashboards are workspaces where you can arrange different graphs based on you research needs. <br/>
+  <b>This page is where dashboards are organized</b>. Each project can have an arbitrary number of dashboards which can be used <br/>
+  by the owner and the collaborators; each of which has a name and an optional description.
+</p>
+<p class="mb-2">
+  <b>What can I do in a dashboard?</b><br/>
+  Dashboards use your documents to provide a varied set of views that can be used to explore the corpus by the <br/>
+  properties of the entities, arrange annotations, see trends in the work done, and find incongruences and outliers.
+  <br/>
+  The currently included views are the following:
+</p>
+  <ul>
+    <li>A <b>Map</b> view for placing entities and annotations accordingly to the geographical position (given that it is provided).</li>
+    <li>A <b>Notes</b> view that allows taking notes in Markdown 
+      (<a href="https://programminghistorian.org/en/lessons/getting-started-with-markdown">read more about it in programminghistorian.org</a>)
+      that can be seen by anyone with access to the dashboard.
+    </li>
+    <li>A <b>Pixel corpus</b> view that shows an overview of the corpus based on the annotations and entities present in it.</li>
+    <li>A <b>Sunburst</b> view that allows creating hierarchies based on a number of parameters for you to easily explore and focus on specific
+    documents, authors, entities or annotations.</li>
+    <li>A <b>Heatmap</b> view that makes use of annotations and entities to show their distribution in a grid like graph.</li>
+    <li>A <b>Document view</b> that allows reading documents in the corpus without leaving the dashboard.</li>
+    <li>A <b>Bar chart</b> for rendering entities, annotations, and their properties.</li>
+    <li>A <b>Timeline</b> for displaying time-related information.</li>
+  </ul>
+  <p class="mb-2">
+    <b>Can I change dashboards after creation?</b><br/>
+    Dashboards can be changed <b>at any time</b>. Both the name and description can be changed here, whilst the views of 
+    the graphs used are changed while inside the dashboard.
+{% end_bottom_hint %}
+{% csrf_token %}
+<div class="submenu">
+  <div class="container">
+    <ul class="submenu__list d-flex">
+      <li class="submenu__item">
+        <a href="{% url 'projects:project' project_id %}" class="submenu__link">{{ project_title }}</a>
+      </li>
+      <li class="submenu__item submenu__item">
+        <a href="{% url 'projects:files' project_id %}" class="submenu__link">Files</a>
+      </li>
+      <li class="submenu__item submenu__item">
+        <a href="{% url 'dataset_stats:main' project_id %}" class="submenu__link">Stats</a>
+      </li>
+      <li class="submenu__item submenu__item--active">
+        <a href="{% url 'vis_dashboard:list' project_id %}" class="submenu__link">Dashboard</a>
+      </li>
+      <li class="submenu__item submenu__item">
+        <a href="{% url 'disambiguator_ui' project_id %}" class="submenu__link">Disambiguator</a>
+      </li>
+      <li class="submenu__item">
+        <a href="{% url 'projects:project_settings' project_id %}" class="submenu__link">Settings</a>
+      </li>
+    </ul>
+  </div>
+</div>
+<div class="container project">
+  <div class="d-flex flex-column-reverse flex-md-row project__header">
+    <div class=" project__content">
+      <h1>{{ project_title }}</h1>
+      <b>Visualization dashboards</b>
+    </div>
+  </div>
+  <div class="row">
+{#    <div class="col-lg-6">#}
+    <div class="col-12">
+      <div class="box">
+        <div class="box__header">
+          <h3 class="box__text--title">Dashboards</h3>
+        </div>
+        <div class="box__content">
+          <div class="row">
+            <div class="col-6 col-lg-4 col-xl-3">
+              <div id="create-form" class="card" style="width: 18rem;">
+                <div class="card-body">
+                  <form action="{% url 'vis_dashboard:create' project_id %}" method="POST">
+                    {% csrf_token %}
+                    <div class="form-group">
+                      <label for="name-input">Dashboard name</label>
+                      <input name="name" type="text" class="form-control" id="name-input" 
+                          aria-describedby="nameHelp" placeholder="Name the new dashboard" required>
+                      <small id="nameHelp" class="form-text text-muted">It can be changed later.</small>
+                    </div>
+                    <div class="form-group">
+                      <label for="desc-input">Description name</label>
+                      <textarea name="description" class="form-control" id="desc-input" placeholder="Enter description"></textarea>
+                    </div>
+                    <input class="btn btn-primary" type="submit" value="Create">
+                  </form>
+                </div>
+              </div>
+            </div>
+            {% for dashboard in dashboards %}
+              <div class="col-6 col-lg-4 col-xl-3">
+                <div class="card dashboardCard" style="width: 18rem;">
+                  <div class="card-body">
+                    <form class="card-form" action="{% url 'vis_dashboard:edit' project_id dashboard.id %}" method="POST">
+                      {% csrf_token %}
+                      <h5 class="card-title">
+                        <input class="form-control nameInput" type="text" name="name" value="{{ dashboard.name }}" maxlength="255">
+                      </h5>
+                      <h6 class="card-subtitle mb-2 text-muted">Created on: {{ dashboard.created_on }}</h6>
+                      <h6 class="card-subtitle mb-2 text-muted">Last time edited: {{ dashboard.last_edited }}</h6>
+                      <p class="card-text">
+                        <textarea class="form-control" name="description" cols="40" rows="10">{{ dashboard.description }}</textarea>
+                      </p>
+                      <input class="editSubmit btn btn-outline-primary" type="submit" value="Update">
+                      <a href="{% url 'vis_dashboard:app' project_id dashboard.id %}" class="card-link">Open dashboard</a>
+                    </form>
+                    <hr>
+                    <form action="{% url 'vis_dashboard:delete' project_id dashboard.id %}" method="POST">
+                      {% csrf_token %}
+                      <input class="btn btn-outline-danger ml-3" type="submit" value="Delete">
+                    </form>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,6 @@
+.mapVis{position: relative;}
+.mapMinimap, .mapMinimap canvas{
+position: absolute;
+right: 0;
+top: 0;
+}

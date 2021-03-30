@@ -2,21 +2,30 @@
 {%  load static %}
 
 {% block head %}
+<link rel="stylesheet" href="{% static 'projects/css/font-awesome.css' %}">
+<link rel="stylesheet" href="{% static 'projects/css/main.css' %}">
 {% endblock %}
 
 {% block content %}
-  <div class="projects d-flex flex-column flex-fill">
-    <div class="projects-private flex-fill">
-      <div class="container">
-        <div class="row">
-          <div class="col p-5">
-            <div class="d-md-flex justify-content-between align-items-center mb-3 mb-md-0">
-              <h1>Dashboard</h1>
-              <div>
-                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#createNewProject">Create new project</a>
-              </div>
-            </div>
-            <p><span class="d-md-block">You have no projects yet. Create a project with the button on the top right.</span><span class="d-md-block"> This feature allows you to search and quickly access your projects.</span></p>
+    <div class="projects d-flex flex-column flex-fill">
+        <div class="projects-private flex-fill">
+            <div class="container">
+                <div class="row">
+                    <div class="col p-5">
+                        <div class="d-md-flex justify-content-between align-items-center mb-3 mb-md-0">
+                            <h1>Dashboard</h1>
+                            <div>
+                                <button type="button" class="btn btn-success" data-toggle="modal"
+                                        data-target="#createNewProject">Create new project
+                                </button>
+                            </div>
+                        </div>
+                        <p>
+                            <span class="d-md-block">Projects allow organizing your work an collaborating on related douments. </span>
+                            <span class="d-md-block">Select an existing one or create a new project to start working the platform. </span>
+                        </p>
+                        {% load no_projects_hint %}
+            {% no_projects_hint %}
             <div class="projects-table flex-fill p-md-5 pt-md-0">
               <div class="table-responsive projects-table__container">
                 <table js-listProjectsMine data-link-project="{% url 'projects:project_template' %}"  data-link-contributor="{% url 'user_template' %}" class="table m-0 table-hover table-striped">
@@ -69,24 +78,10 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
-
-
-          <div class="form-group">
-            <label for="projectTitle">Project title</label>
-            <input type="text" class="form-control" name="title" id="projectTitle" placeholder="Enter project title">
-          </div>
-          <div class="form-group">
-            <label for="projectDescription">Project description</label>
-            <textarea class="form-control" name="description" id="projectDescription" rows="3" placeholder="Enter project description"></textarea>
-          </div>
-
-
-
-      </div>
+      <div class="modal-body" id="new-project-modal-body"></div>
       <div class="modal-footer">
         <button type="button" class="btn btn-light" data-dismiss="modal">Cancel</button>
-        <button type="submit" class="btn btn-success" js-createNewProject>Create project</button>
+        <button type="submit" class="btn btn-success" id="create-project-button">Create project</button>
       </div>
     </div>
     </form>
@@ -112,5 +107,12 @@
   </div>
 </div>
 
+</script>
+{% if DEVELOPMENT is True %}
+  <script type="text/javascript" src="http://localhost:3000/main.js"></script>
+{% else %}
+  <script type="text/javascript" src="{% static 'projects/js/main.js' %}"></script>
+  <script type="text/javascript" src="{% static 'projects/js/main.js.map' %}"></script>
+{% endif %}
 
 {% endblock %}

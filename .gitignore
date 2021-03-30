@@ -1,21 +1,22 @@
 # Frontend files
-node_modules
+**/node_modules/
 
 # PyCharm IDE settings files
-.idea/
+.idea/*
 !.idea/runConfigurations/
 
 # Vietualenv files
 venv/
 
 # Pyhon cache files
-__pycache__/
+**/__pycache__/
 
 # Python eggs
-*.egg-info/
+**/*.egg-info/
 
 # Uploaded files
-media/
+/media/
+/media_for_tests/
 
 # Testing framework temporary files
 .pytest_cache/
@@ -24,7 +25,12 @@ media/
 # Django default database file
 *.sqlite3
 
+# Database backup
+db_backup.json
+
 # Logs
+**/logs/*
+!**/logs/.gitignore
 *.log
 
 # Local Django settings
@@ -34,8 +40,11 @@ settings.py
 celerybeat-schedule
 
 # Migrations
-*migrations/
+**/migrations/*
+!**/migrations/__init__.py
 
-#uploaded files
+# Collected static files
+/static/
+/fixtures/
 
-*uploaded_files/
+*.lock

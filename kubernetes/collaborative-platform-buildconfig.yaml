@@ -1,0 +1,35 @@
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  labels:
+    app: collaborative-platform
+    app.kubernetes.io/component: collaborative-platform
+    app.kubernetes.io/instance: collaborative-platform
+  name: collaborative-platform
+spec:
+  nodeSelector: null
+  output:
+    to:
+      kind: ImageStreamTag
+      name: 'collaborative-platform:latest'
+  postCommit: {}
+  resources:
+    limits:
+      cpu: '4'
+      memory: 4Gi
+    requests:
+      cpu: '1'
+      memory: 1Gi
+  runPolicy: Serial
+  source:
+    git:
+      ref: master
+      uri: 'https://github.com/providedh/collaborative-platform'
+    type: Git
+  strategy:
+    dockerStrategy:
+      from:
+        kind: ImageStreamTag
+        name: 'python:3'
+        namespace: providedh
+    type: Docker

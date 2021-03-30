@@ -1,0 +1,36 @@
+.menu{
+background-color: #eee;
+}
+.container{
+display: flex;
+justify-content: center;
+}
+.menu li{
+background-color: transparent;
+border: none;
+}
+.menu li:nth-of-type(2){
+text-align: center;
+line-height: 1.3em;
+}
+.menu hr{
+width: calc(100% - 6em);
+background: lightgrey;
+margin: 0 auto;
+}
+.acceptMenu{
+width: 25em;
+display: none;
+flex-direction: column;
+align-items: center;
+margin: 0 auto;
+}
+.acceptMenu form{
+width: 100%;
+}
+.unifying .acceptMenu{
+display: flex;
+}
+.unifying .container button{
+display: none;
+}

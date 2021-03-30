@@ -1,0 +1,1184 @@
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+    <?xml-model href="https://providedh.ehum.psnc.pl/tei_providedh.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title>100 iconic moments from music history</title>
+            </titleStmt>
+            <publicationStmt>
+                <publisher>
+                    <orgName>Kake.com</orgName>
+                    <ptr target="https://www.kake.com/"/>
+                </publisher>
+                <date when="30.08.2020">30.08.2020</date>
+            </publicationStmt>
+            <sourceDesc>
+                <biblStruct>
+                    <monogr>
+                        <title>100 iconic moments from music history</title>
+                        <note/>
+                        <author>
+                            <persName xml:id="person1">
+                                <forename>Joni</forename>
+                                <surname>Sweet</surname>
+                                <email/>
+                            </persName>
+                        </author>
+                        <textLang mainLang="en"/>
+                    </monogr>
+                </biblStruct>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>Reddit</repository>
+                        <idno/>
+                    </msIdentifier>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+        <profileDesc>
+            <particDesc>
+                <listPerson type="PROVIDEDH Annotators">
+                    <person xml:id="annotator-2">
+                        <persName>
+                            <forename>Tester</forename>
+                            <surname>Test</surname>
+                            <email>test@test.test</email>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="text">
+                <p>
+                    100 iconic moments from music history
+                    Think back to the first concert you ever attended. You can probably remember the energy of the crowd
+                    yearning for the band to finally take the stage, the reverberation of the first strum of the guitar,
+                    the
+                    beats of the drum that seemed to thump inside your body. The lights, the charisma of the performers,
+                    finally hearing your favorite songs live—as they were meant to be listened to—the experience remains
+                    vivid for the rest of your life. You might still have the overpriced T-shirt you bought as a
+                    souvenir of
+                    the show buried in your closet.
+                </p>
+                <p>
+                    There’s something about music that embeds itself deeply inside memories. But this phenomenon doesn’t
+                    just happen at the individual level—music can form a collective cultural memory, as well. If you
+                    think
+                    back over the past few generations, certain moments in music stand out as markers of time and
+                    reflections of a generation. Anyone alive in 1980 can tell you where they were when
+                    <name xml:id="name-0" resp="#annotator-2" ref="#band-0">Beatle</name>
+                    <name xml:id="name-1" resp="#annotator-2" ref="#person-0">John Lennon</name>
+                    was killed, while younger music fans have had a similar experience with the death of
+                    <name xml:id="name-2" resp="#annotator-2" ref="#person-1">Michael Jackson</name>.
+                    There are also those hopeful, unforgettable shows—like
+                    <name xml:id="name-3" resp="#annotator-2" ref="#band-1">Queen’s</name>
+                    renowned performance at Live Aid,
+                    <name xml:id="name-4" resp="#annotator-2" ref="#person-2">Elvis</name>’
+                    hip thrusts on “The Milton Berle Show,” and
+                    <name xml:id="name-5" resp="#annotator-2" ref="#person-3">Kurt Cobain’s</name>
+                    moody acoustic concert on “MTV Unplugged.”
+                    No
+                    matter how you feel about these artists, there’s no doubt that they made an impact on culture and
+                    changed music for future generations.
+                </p>
+                <p>
+                    To compile a list of the most iconic moments in music history, Stacker looked at an assortment of
+                    sources, including music publications such as Billboard and Rolling Stone, general news outlets like
+                    the
+                    Guardian and NPR, and Norman Abjorensen’s “Historical Dictionary of Popular Music.” While there were
+                    no
+                    strict criteria for what was included, a wide range of memorable moments, like record-breaking
+                    albums,
+                    major music festivals, and headline-making stunts by musicians from a variety of decades and genres
+                    are
+                    showcased.
+                </p>
+                <p>
+                    Explore this slideshow and reminisce about the history of music—and see if your favorite music
+                    memory
+                    made the cut.
+                </p>
+                <p>
+                    You may also like: Controversial songs from the year you were born
+                </p>
+                <p>
+                    Unknown // Wikimedia Commons
+                    American ballad becomes internationally famous for the first time
+                    American-born songwriter John Hill Hewitt wrote “
+                    <name xml:id="name-6" resp="#annotator-2" ref="#song-0">The Minstrel’s Return’d From the War</name>”
+                    in <date xml:id="date-1" resp="#annotator-2" ref="#date-1" when="1827-01-01">1827</date>.
+                    It would become the first ballad from a U.S. songwriter to gain international fame, according to
+                    <name xml:id="name-7" resp="#annotator-2" ref="#person-4">Norman Abjorensen</name>,
+                    author of “Historical Dictionary of Popular Music.” The original song sheet is housed at the Library
+                    of Congress.
+                </p>
+                <p>
+                    National Magazine // Wikimedia Commons
+                    The Battle Hymn of the Republic is published
+                    The Atlantic published abolitionist Julia Ward Howe’s poem “
+                    <name xml:id="name-8" resp="#annotator-2" ref="#song-1">The Battle Hymn of the Republic</name>” in
+                    <date xml:id="date-0" resp="#annotator-2" ref="#date-0" when="1961-01-01">1861</date>.
+                    The now-iconic song would become associated with the Civil War and influence future generations of
+                    activists, according to Dominic Tierney of The Atlantic.
+                </p>
+                <p>
+                    You may also like: Mistakes from the 100 worst movies of all time
+                </p>
+                <p>
+                    Hulton Archive // Getty Images
+                    Thomas Edison invents the phonograph
+                    Thomas Edison revealed his latest creation, the phonograph, in
+                    <date xml:id="date-2" whenAdded="1877-01-01" resp="#annotator-2" ref="#date-2">1877</date>.
+                    While there had been other devices
+                    that could record and play audio, the phonograph was far more reliable, making music accessible to
+                    the
+                    masses. “It forever transformed the face of music,” wrote
+                    <name xml:id="name-9" resp="#annotator-2" ref="#person-5">Clive Thompson</name> of Smithsonian Magazine.
+                </p>
+                <p>
+                    Billboard Magazine // Wikimedia Commons
+                    Billboard magazine hits newsstands
+                    Billboard magazine published its first issue in
+                    <date xml:id="date-3" resp="#annotator-2" ref="#date-3" when="1894-11-01">November 1894</date>.
+                    While it was initially focused on the advertising and poster printing industry, it
+                    would eventually shift gears into the music industry.
+                    In <date xml:id="date-4" resp="#annotator-2" ref="#date-4" when="1940-07-01">July 1940</date>,
+                    it would develop its first Music Popularity Chart, which would go on to become the guide to
+                    which songs and albums are most popular every week.
+                </p>
+                <p>
+                    Michael Ochs Archives // Getty Images
+                    Swing Low, Sweet Chariot establishes the black spiritual in music history
+                    African American a cappella group The Fisk Jubilee recorded “Swing Low, Sweet Chariot” in 1909. The
+                    song
+                    would be instrumental in preserving African American spiritual folksongs in American history,
+                    according
+                    to Norman Abjorensen, author of “Historical Dictionary of Popular Music.” The original song sheet is
+                    housed at the Library of Congress.
+                </p>
+                <p>
+                    Anthony Barboza // Getty Images
+                    Bessie Smith records Down Hearted Blues
+                    Jazz and blues singer Bessie Smith saw immediate success after her first recorded song, “Down
+                    Hearted
+                    Blues,” was released in 1923. She is now considered one of the greatest vocalists of her time and an
+                    influence on future generations of blues and jazz singers.
+                </p>
+                <p>
+                    You may also like: Longest-running TV series
+                </p>
+                <p>
+                    Bettmann // Getty Images
+                    Duke Ellington gives the Swing Era its name
+                    The jazz composer, musician and orchestra leader wrote the song that would become the namesake to
+                    the
+                    swing era, “It Don’t Mean a Thing (If It Ain’t Got That Swing)” in 1932. Big band swing music would
+                    become the most popular genre of music in the United States for the next 15 years.
+                </p>
+                <p>
+                    Bettmann // Getty Images
+                    Frank Sinatra performs to crazed teen fans in Times Square
+                    America got its first glimpse of teen music fandom when Frank Sinatra performed at New York City’s
+                    Paramount Theater on Dec. 30, 1942. Frenzied “bobby soxers” flooded Times Square for the occasion
+                    and a
+                    riot broke out. The event would drive the music industry to shift its marketing efforts to
+                    adolescent
+                    fans, rather than 30-to-50-year-olds, according to Samantha Sokol of Untapped New York.
+                </p>
+                <p>
+                    Photoshot // Getty Images
+                    Ike Turner records first rock ’n’ roll song
+                    The first-ever rock ’n’ roll song, “Rocket 88,” was recorded by Ike Turner in 1951 in Memphis,
+                    Tennessee. Saxophone player Jackie Brenston sang lead vocals on the track, which was released under
+                    his
+                    name, according to Christopher John Farley of Time magazine.
+                </p>
+                <p>
+                    [Pictured: Ike Turner's Kings Of Rhythm band.]
+                </p>
+                <p>
+                    Smith &amp; Setron // Wikimedia Commons
+                    First rock ’n’ roll riot occurs at Moondog Coronation Ball
+                    Riots broke out at Ohio’s Cleveland Arena when around 15,000 people were turned away from the
+                    Moondog
+                    Coronation Ball in 1952. Widely considered the first notable rock ’n’ roll concert, the event was
+                    thrown
+                    by rock disc jockey Alan J. Freed.
+                </p>
+                <p>
+                    [Pictured: Moondog Coronation Ball Poster.]
+                </p>
+                <p>
+                    John Rodgers // Getty Images
+                    Leo Fender introduces the Stratocaster electric guitar
+                    The Stratocaster was unveiled by Leo Fender as a sleeker update to the Fender electric guitar in
+                    1954.
+                    The guitar revolutionized the sound of rock, according to Norman Abjorensen, author of “Historical
+                    Dictionary of Popular Music.” It would be the instrument of choice for a number of famous musicians,
+                    including Beck, Ritchie Blackmore, Eric Clapton, and Buddy Holly.
+                </p>
+                <p>
+                    You may also like: Best 'Simpsons' episodes of all time
+                </p>
+                <p>
+                    Capitol Records // Wikimedia Commons
+                    Frank Sinatra gives birth to concept albums
+                    “Songs for Young Lovers” was Frank Sinatra's seventh studio album, released in 1954. It is
+                    considered
+                    one of the first concept albums, according to Alva Yaffe of Musicoholics.
+                </p>
+                <p>
+                    Michael Ochs Archives // Getty Images
+                    Chuck Berry releases Maybellene
+                    “Maybellene,” a rock version of a Western fiddle tune, was Chuck Berry's first big hit. The song,
+                    released in 1955, is widely considered to be one of the world’s first rock ’n’ roll tracks.
+                </p>
+                <p>
+                    Michael Ochs Archives // Getty Images
+                    Elvis Presley thrusts his hips on TV
+                    His racy hip thrusts sparked controversy during Elvis Presley's performance of “Hound Dog” on “The
+                    Milton Berle Show” in June 1956. Fans loved it, but critics blasted the pelvis-shaking dance moves
+                    as
+                    vulgar, according to PBS.
+                </p>
+                <p>
+                    Metronome // Getty Images
+                    Harry Belafonte’s Calypso sells more than 1 million copies
+                    The LP album “Calypso,” featuring Harry Belafonte's version of the Jamaican folk song “Day-O (The
+                    Banana
+                    Boat Song),” was released in 1956. It would become the first record album to sell more than 1
+                    million
+                    copies in a single year.
+                </p>
+                <p>
+                    Michael Ochs Archives // Getty Images
+                    First Grammy Awards ceremony is held
+                    The ceremony for the first Grammy Awards took place at The Beverly Hilton in Beverly Hills,
+                    California,
+                    on May 14, 1959, to recognize the biggest names in music that year. Award winners included Ella
+                    Fitzgerald for “Ella Fitzgerald Sings The Irving Berlin Songbook,” Perry Como for “Catch a Falling
+                    Star,” and Domenico Modugno for “Nel Blu Di Pinto Di Blu (Volare).”
+                </p>
+                <p>
+                    Hulton Archive // Getty Images
+                    The day the music died
+                    Rock ’n’ roller Buddy Holly, along with Ritchie Valens and “The Big Bopper” J.P. Richardson, died in
+                    a
+                    plane crash in Iowa on Feb. 3, 1959. The tragedy would later be called “the day the music died” in
+                    singer Don McLean’s song, “American Pie,” released in 1971.
+                </p>
+                <p>
+                    Ray Avery // Getty Images
+                    Phil Spector formulates the Wall of Sound
+                    Record producer Phil Spector invented the Wall of Sound music production formula in 1962. The
+                    radical
+                    recording technique, which created a soundscape with many layers and more reverb, would add immense
+                    dynamism to rock and pop music.
+                </p>
+                <p>
+                    Michael Ochs Archives // Getty Images
+                    James Brown performs live at the Apollo
+                    James Brown performed in front of 1,500 fans at the Apollo in Harlem on Oct. 24, 1962. The show was
+                    recorded and released on record, later becoming “one of the greatest albums of all time,” according
+                    to
+                    James Maycock of The Guardian.
+                </p>
+                <p>
+                    You may also like: Biggest box office bombs of all time
+                </p>
+                <p>
+                    C Brandon // Getty Images
+                    Philips introduces compact cassette tapes
+                    Philips introduced the compact cassette in September 1963. The new recording medium offered more
+                    portability than records, and would eventually allow countless teenagers to record mix tapes.
+                </p>
+                <p>
+                    You may also like: Primetime TV shows that have stood the test of time
+                </p>
+                <p>
+                    Mirrorpix // Getty Images
+                    The Beatles perform live on American TV in 1964
+                    Beatlemania hit the United States on Feb. 9, 1964, when the Fab Four—
+                    <name xml:id="name-13" resp="#annotator-2" ref="#person-0">John Lennon</name>, Paul McCartney,
+                    George
+                    Harrison, and Ringo Starr—performed live on “The Ed Sullivan Show.” Around 700 lucky spectators got
+                    to
+                    watch the now-legendary show in person, according to Richard Harrington of The Washington Post. “I
+                    Wanna
+                    Hold Your Hand” would climb to the #1 spot on U.S. music charts the following month.
+                </p>
+                <p>
+                    Mirrorpix // Getty Images
+                    Bob Dylan introduces the Beatles to pot
+                    Bob Dylan met with the Beatles at The Delmonico Hotel in New York on Aug. 28, 1964, and offered them
+                    a
+                    joint. Some members of the band say it was the first time they got high, according to Rick Cusick of
+                    High Times. The experience would go on to influence the Beatles’ future music.
+                </p>
+                <p>
+                    Chris Morphet // Getty Images
+                    Pete Townshend smashes his guitar on stage
+                    Pete Townshend of The Who smashed his guitar during a performance at the Railway Tavern in 1964.
+                    Rolling
+                    Stone would call it one of the “50 moments that changed rock ?n’ roll.” The North London hotel that
+                    once
+                    housed the venue has since hung up a plaque commemorating the event, according to the Mirror.
+                </p>
+                <p>
+                    You may also like: 40 Black artists music wouldn't be the same without
+                </p>
+                <p>
+                    George Rose // Getty Images
+                    Bob Dylan’s Like a Rolling Stone births modern rock
+                    Bob Dylan’s stream-of-consciousness song “Like a Rolling Stone” was released in 1965. The 6-minute
+                    song
+                    was a change from formulaic pop songs that typically clocked in at under three minutes, and is
+                    credited
+                    as giving birth to the modern rock song, according to Sean O’Hagan of The Guardian.
+                </p>
+                <p>
+                    You may also like: 100 best albums of the 21st century, according to critics
+                </p>
+                <p>
+                    Silver Screen Collection // Getty Images
+                    I Got You, Babe becomes top hit
+                    “I Got You, Babe,” the duet by Sonny and Cher, took the top spot on the U.S. charts in 1965. The
+                    musical
+                    couple would launch “The Sonny and Cher Comedy Hour” show on CBS six years later.
+                </p>
+                <p>
+                    Alice Ochs // Getty Images
+                    Bob Dylan plays electric guitar at the Newport Folk Festival
+                    Fans were divided on Bob Dylan’s choice to play an electric guitar at the 1965 Newport Folk
+                    Festival.
+                    The event may have ended the Folk Revival movement that he helped lead, and would go on to influence
+                    other artists’ preference for electric over acoustic, according to Alva Yaffe of Musicoholics.
+                </p>
+                <p>
+                    Bettmann // Getty Images
+                    The Rolling Stones release “(I Can’t Get No) Satisfaction”
+                    The Rolling Stones released “(I Can’t Get No) Satisfaction” as a single in 1965, and it became an
+                    instant rock ’n’ roll classic. The Stones performed a censored version of it on “The Ed Sullivan
+                    Show”
+                    on Feb. 13, 1966. The lyric “trying to make some girl” was bleeped out of the family show.
+                </p>
+                <p>
+                    Michael Ochs Archives // Getty Images
+                    The Beach Boys release Pet Sounds
+                    After years in the making, the Beach Boys’ psychedelic album “Pet Sounds” was finally released in
+                    1966.
+                    It marked a major shift in studio technique and style for the band, and would go on to inspire the
+                    Beatles’ “Sgt. Pepper’s Lonely Hearts Club Band.” “Pet Sounds” would eventually be considered “one
+                    of
+                    the most influential albums in music history,” according to Norman Abjorensen, author of “Historical
+                    Dictionary of Popular Music.”
+                </p>
+                <p>
+                    [Pictured: Al Jardine and Brian Wilson of The Beach Boys recording 'Pet Sounds' at Western Recorders
+                    studios in the spring of 1966.]
+                </p>
+                <p>
+                    Adam Ritchie // Getty Images
+                    The Velvet Underground teams up with Andy Warhol
+                    Andy Warhol-produced LP “The Velvet Underground &amp; Nico” was released in a famous banana sleeve
+                    in
+                    1967.
+                    The album would become one of the most influential rock records in history, according to Sean
+                    O’Hagan of
+                    The Guardian.
+                </p>
+                <p>
+                    [Pictured: Nico and Sterling Morrison of the Velvet Underground.]
+                </p>
+                <p>
+                    Science &amp; Society Picture Library // Getty Images
+                    The Beatles release Sgt. Pepper’s Lonely Hearts Club Band
+                    The Beatles continued their journey into psychedelic music with the release of the album “Sgt.
+                    Pepper’s
+                    Lonely Hearts Club Band” in 1967. It took the #1 spot on the Billboard Top LPs chart for 15 weeks in
+                    the
+                    United States.
+                </p>
+                <p>
+                    Archive Photos // Getty Images
+                    Woodstock music festival draws nearly a half-million music fans
+                    Some 400,000 rock fans flooded an upstate New York farm for the multi-day Woodstock music festival
+                    in
+                    mid-August 1969. The hippie gathering would be remembered for countless memorable performances by
+                    the
+                    most famous musicians of the time, including Jimi Hendrix, who played a rock ’n’ roll version of
+                    “The
+                    Star-Spangled Banner.”
+                </p>
+                <p>
+                    Pictorial Parade // Getty Images
+                    Johnny Cash records live album at a prison
+                    Johnny Cash, who was an early criminal justice reform advocate, recorded an album at the San Quentin
+                    State Prison in San Quentin, California in 1969. After it hit record stores on Independence Day of
+                    that
+                    year, the album would be certified gold in just over a month, and eventually achieved triple
+                    platinum in
+                    2003.
+                </p>
+                <p>
+                    Express // Getty Images
+                    The Beatles perform one last time
+                    The Beatles set up instruments at the top of their Apple Corps London headquarters for an impromptu
+                    42-minute rooftop performance on Jan. 30, 1969. It would ultimately become the band’s last public
+                    performance ever and ended with the song “Get Back.”
+                </p>
+                <p>
+                    Michael Ochs Archives // Getty Images
+                    Black Sabbath sets metal in motion
+                    Black Sabbath is credited with giving birth to the genre of heavy metal, with its first studio album
+                    of
+                    the same name released in 1970. It hit the 23rd spot on the Billboard charts.
+                </p>
+                <p>
+                    Robert Knight Archive // Getty Images
+                    Elton John releases seven consecutive albums
+                    The release of “Honky Chateau” in May 1972 marked the start of a run of seven #1 albums in a row for
+                    Elton John. “Don’t Shoot Me I’m Only the Piano Player,” “Goodbye Yellow Brick Road,” “Caribou,”
+                    “Elton
+                    John’s Greatest Hits,” “Captain Fantastic and the Brown Dirt Cowboy,” and “Rock of the Westies”
+                    would go
+                    on to become extremely popular over the next three years, according to ultimateclassicrock.com.
+                </p>
+                <p>
+                    Mick Gold // Getty Images
+                    David Bowie kills off Ziggy Stardust
+                    During a Ziggy and the Spiders concert on July 3, 1973, David Bowie announced that it was their last
+                    performance. It soon became apparent that it wouldn’t be Bowie’s last show, but the final appearance
+                    of
+                    his alter ego Ziggy Stardust, save for a brief resurrection in 1980. He’d soon emerge with a darker
+                    glam
+                    persona, complete with lightning bolt face paint.
+                </p>
+                <p>
+                    Beth Gwinn // Getty Images
+                    Willie Nelson hosts his first Fourth of July Picnic
+                    Country musician Willie Nelson hosted his first Fourth of July Picnic at Hurlbut Ranch in Dripping
+                    Springs, Texas, in 1973 with a crowd of 40,000 fans. The music festival would go on to become a
+                    popular
+                    annual event for decades.
+                </p>
+                <p>
+                    Richard E. Aaron // Getty Images
+                    Dolly Parton releases Jolene
+                    “Jolene” became one of Dolly Parton’s first hit singles after its release in 1973. More than 30
+                    singers
+                    have since covered the song, according to Tom Vitale of NPR Music. The country music star would
+                    revive
+                    the song as a duet with her goddaughter Miley Cyrus at the Grammy Awards in 2019.
+                </p>
+                <p>
+                    Pete Still // Getty Images
+                    Bob Marley and The Wailers release No Woman, No Cry
+                    The release of “No Woman, No Cry” in 1975 would propel Bob Marley into the role of international
+                    reggae
+                    star. He’s the only reggae musician “to achieve iconic status,” according to Sean O’Hagan of The
+                    Guardian.
+                </p>
+                <p>
+                    Paramount Pictures // Getty Images
+                    Saturday Night Fever becomes one of the bestselling soundtracks
+                    John Travolta and the Bee Gees pushed disco into the mainstream with the general release of the
+                    soundtrack to “Saturday Night Fever” in 1977. It would become one of the bestselling movie
+                    soundtracks
+                    of all time, according to Austin Thompson of Mental Floss.
+                </p>
+                <p>
+                    You may also like: 30 best nature documentaries of all time
+                </p>
+                <p>
+                    Fox Photos // Getty Images
+                    <name xml:id="name-20" resp="#annotator-2" ref="#person-0">John Lennon</name>
+                    is murdered
+                    Mark David Chapman fired five shots at former Beatle John Lennon outside his residence at the Dakota
+                    apartment building in New York City on Dec. 8, 1980, killing him and shocking the world. Less than
+                    five
+                    years later, Central Park would open Strawberry Fields as a memorial to the late musician and peace
+                    activist.
+                </p>
+                <p>
+                    Michael Ochs Archives // Getty Images
+                    Rapper’s Delight becomes first hip-hop song to make Top 40
+                    The first hip-hop song to make it on the Billboard Top 40 chart was “Rapper’s Delight” by the
+                    Sugarhill
+                    Gang, in January 1980. The success of the single would help push hip-hop music into the mainstream.
+                </p>
+                <p>
+                    Fin Costello // Getty Images
+                    MTV airs its first music video
+                    Just after midnight on Aug. 1, 1981, MTV aired the first music video on the fledgling network,
+                    “Video
+                    Killed the Radio Star,” by The Buggles. The new 24-hour music channel would help make TV a major
+                    driver
+                    of music sales in the coming decade, according to Michelle Starr of CNet.
+                </p>
+                <p>
+                    Raymond Boyd // Getty Images
+                    Grandmaster Flash creates single with samples from at least nine artists
+                    The influential single "The Adventures of Grandmaster Flash on the Wheels of Steel,” released in
+                    1981,
+                    was the first to use samples from other songs, according to Sean O’Hagan of The Guardian. It had
+                    snippets of music from at least nine other artists, including Blondie, Queen, and the Sugarhill
+                    Gang.
+                </p>
+                <p>
+                    Bettmann // Getty Images
+                    Simon &amp; Garfunkel perform in front of 500,000 people at Central Park
+                    Half a million people attended Simon &amp; Garfunkel’s iconic concert at New York City’s Central
+                    Park in
+                    1981. The show was recorded and released in 1982 as an album, reaching sixth place on the Billboard
+                    200
+                    chart.
+                </p>
+                <p>
+                    You may also like: Best and worst
+                    <name xml:id="name-19" resp="#annotator-2" ref="#person-9">Leonardo DiCaprio</name> movies
+                </p>
+                <p>
+                    Chris Walter // Getty Images
+                    Michael Jackson releases Thriller
+                    Mega sensation “Thriller” was released in 1982. Michael Jackson's sixth studio album would become a
+                    bestseller, with more than 47 million copies purchased around the world, according to Rhian Daly of
+                    NME.
+                </p>
+                <p>
+                    [Pictured: Michael Jackson 1983 presented with the first Triple Platimum awards for the
+                    multi-platinum
+                    'Thriller" album by Jane Fonda.]
+                </p>
+                <p>
+                    You may also like: The richest country music stars
+                </p>
+                <p>
+                    Science &amp; Society Picture Library // Getty Images
+                    Compact discs enter music market
+                    Philips Records and Sony Music introduced compact discs to the world in 1982. The medium offered
+                    significantly more storage than other recording mediums. CDs would eventually become an extremely
+                    popular medium for music in the 1990s and 2000s.
+                </p>
+                <p>
+                    Dave Hogan // Getty Images
+                    Michael Jackson does the moonwalk
+                    The King of Pop performed the moonwalk for the first time in public in late March 1983, during a
+                    live
+                    recording of a TV concert special celebrating Motown. The legendary move would become Jackson’s
+                    signature showstopper, according to Lauren Effron and Susan Walsh of ABC News.
+                </p>
+                <p>
+                    Debra Trebitz // Getty Images
+                    Cyndi Lauper releases Girls Just Want to Have Fun
+                    “Girls Just Want to Have Fun” was Cyndi Lauper’s breakthrough hit in 1983. The girl power anthem has
+                    been covered by at least 30 other artists in the past few decades.
+                </p>
+                <p>
+                    Frank Micelotta Archive // Getty Images
+                    Madonna performs Like a Virgin at 1984 Video Music Awards
+                    The singer gave one of her most memorable performances of all time, wearing a wedding dress and a
+                    belt
+                    with a “Boy Toy” buckle, when she sang “Like a Virgin” at the 1984 MTV Video Music Awards. The song
+                    became the artist’s first #1 hit single.
+                </p>
+                <p>
+                    Clayton Call // Getty Images
+                    Ronald Reagan references Bruce Springsteen in 1984 campaign
+                    After Bruce Springsteen turned down a request to use “Born in the U.S.A” in former President Ronald
+                    Reagan’s 1984 reelection campaign, the conservative politician mentioned the musician in a speech,
+                    saying helping men like him make dreams come true is the purpose of the president’s job, according
+                    to
+                    Steven Inskeep of NPR Music. The Boss began criticizing Reagan for not really listening to his music
+                    shortly after, and he would soon become known as an outspoken liberal.
+                </p>
+                <p>
+                    Mirrorpix // Getty Images
+                    Live Aid raises $127 million in aid for Ethiopian famine
+                    In an effort to raise money and increase awareness for the famine in Ethiopia, musicians Bob Geldof
+                    and
+                    Midge Ure organized the Live Aid superconcert at Philadelphia’s JFK Stadium and London’s Wembley
+                    Stadium, and broadcast it via satellite around the world. The concert had performances from more
+                    than 75
+                    stars, including Queen, Madonna, Mick Jagger, and Elton John, and it would be watched by more than a
+                    billion people in 110 countries, according to History.com. Telethons during the event would raise
+                    $127
+                    million for famine relief.
+                </p>
+                <p>
+                    You may also like: Best Emmy nominated shows of all time
+                </p>
+                <p>
+                    Gareth Cattermole // Getty Images
+                    46 famous singers collaborate on We Are the World
+                    Dozens of the most famous singers in the United States teamed up in 1985 to record USA for Africa’s
+                    “We
+                    Are the World,” a charity single co-written by Lionel Richie and Michael Jackson. It would sell more
+                    than 20 million copies worldwide. Participants included Paul Simon, Dionne Warwick, Ray Charles,
+                    Cyndi
+                    Lauper, Ray Charles, and more.
+                </p>
+                <p>
+                    Mark Weiss // Getty Images
+                    Prince tops the Filthy 15 list
+                    After Tipper Gore heard her adolescent daughter listening to “Darling Nikki,” a provocative song by
+                    Prince, in 1985, she created the Parents Music Resource Center to lobby for censorship in the record
+                    industry. The PMRC developed its “Filthy 15” list of what it deemed were the most offensive songs of
+                    the
+                    time, featuring two of Prince’s tracks.
+                </p>
+                <p>
+                    [Pictured: Sally Nevius (left) and Tipper Gore (right) of the PMRC appear at a senate hearing at
+                    Capitol
+                    Hill.]
+                </p>
+                <p>
+                    Michael Ochs Archives // Getty Images
+                    Aerosmith collaborates with Run-DMC
+                    In 1986, Aerosmith teamed up with Run-DMC to create a new version of its 1970s hit, “Walk This Way.”
+                    While the two musical groups were initially reluctant to collaborate, the hip-hop/rock hybrid
+                    creation
+                    became an international success, according to James Parker of The Atlantic.
+                </p>
+                <p>
+                    Icon and Image // Getty Images
+                    Madonna kicks off her first world tour
+                    The singer began the “Who’s That Girl World Tour”—her first global concert series—in July 1987.
+                    Despite
+                    requests from Pope John Paul II to boycott her concert in Italy, the tour was considered a massive
+                    success, according to Joe Lynch of Billboard.
+                </p>
+                <p>
+                    You may also like: Greatest villains of 20th century cinema
+                </p>
+                <p>
+                    Icon and Image // Getty Images
+                    Aretha Franklin becomes first female Rock &amp; Roll Hall of Fame inductee
+                    In 1987, a year after the Rock &amp; Roll Hall of Fame inducted its first group of honorees, Aretha
+                    Franklin
+                    became the first woman to join the prestigious ranks. The “Queen of Soul” was just 25 when she
+                    released
+                    her legendary cover of Otis Redding’s “Respect.”
+                </p>
+                <p>
+                    Raymond Boyd // Getty Images
+                    N.W.A. releases protest song against racial injustice
+                    California hip-hop group N.W.A. released its controversial song slamming racial injustice and police
+                    brutality, “F*** tha Police,” in 1988. Its title would become a pop culture slogan, while the track
+                    itself would live on as a protest anthem for decades to come. It would see a nearly 300% increase in
+                    streams 32 years later during the Black Lives Matter protests, according to Kory Grow of Rolling
+                    Stone.
+                </p>
+                <p>
+                    Bettmann // Getty Images
+                    Rosanne Barr butchers the national anthem
+                    Singing the national anthem was a career-defining moment for musicians like Whitney Houston and
+                    Jennifer
+                    Hudson. But when Roseanne Barr belted out “The Star-Spangled Banner” at a televised baseball game on
+                    July 25, 1990, it would go down as one of the worst renditions in music history. She ended the
+                    performance by grabbing her crotch.
+                </p>
+                <p>
+                    Michael Zagaris // Getty Images
+                    Whitney Houston gives iconic performance of The Star-Spangled Banner
+                    Wearing a memorable white jogging suit, Whitney Houston gave an iconic performance of “The
+                    Star-Spangled
+                    Banner” at the 1991 Super Bowl. Her rendition of the national anthem garnered unanimous acclaim.
+                </p>
+                <p>
+                    David Redfern // Getty Images
+                    <name xml:id="name-10" resp="#annotator-2" ref="#person-6">Freddie Mercury</name>
+                    reveals he has AIDS
+                    After hiding his HIV diagnosis, Queen frontman
+                    <name xml:id="name-11" resp="#annotator-2" ref="#person-6">Freddie Mercury</name>
+                    went public about his health on
+                    <date xml:id="date-5" resp="#annotator-2" ref="#date-5" when="1991-11-23">Nov. 23, 1991</date>.
+                    A day later, he died of complications related to AIDS.
+                </p>
+                <p>
+                    You may also like: 25 of the most expensive TV series of all time
+                </p>
+                <p>
+                    Peter Pakvis // Getty Images
+                    Smells Like Teen Spirit marks the success of grunge
+                    Once an underground genre, grunge became mainstream when Nirvana released its second album,
+                    “Nevermind,”
+                    in 1991. The lead single, “Smells Like Teen Spirit,” was an unexpected success and helped the album
+                    reach the top of the charts.
+                </p>
+                <p>
+                    You may also like: Most Emmy wins of all time
+                </p>
+                <p>
+                    James Schnepf // Getty Images
+                    Ropin’ in Wind tops Billboard 200 and country chart
+                    Country musician Garth Brooks released his third studio album, “Ropin’ the Wind,” on Sept. 2, 1991.
+                    It
+                    was the first album to ever debut at the top spot on both the Top Country Albums chart and the
+                    Billboard
+                    200 chart.
+                </p>
+                <p>
+                    Fotos International // Getty Images
+                    Whitney Houston sings I Will Always Love You
+                    The singer covered the Dolly Parton tune “I Will Always Love You” in 1992 for the movie “The
+                    Bodyguard.”
+                    The standout song would become one of the best love songs in history.
+                </p>
+                <p>
+                    Jeff Kravitz // Getty Images
+                    Snoop Dogg makes West Coast hip hop mainstream
+                    The rapper released “Doggystyle” in 1993. The album, which debuted in the top spot on the Billboard
+                    200,
+                    would propel West Coast-style hip hop into a mainstream genre.
+                </p>
+                <p>
+                    J. Vespa // Getty Images
+                    Puff Daddy launches Bad Boy Entertainment
+                    Sean Combs, performing then as Puffy or Puff Daddy, started his own record label—Bad Boy
+                    Entertainment—in 1993, a few years after getting fired from his role as vice president of Uptown
+                    Records. The label would kickstart the careers of huge names in hip hop and R&amp;B, including the
+                    Notorious
+                    B.I.G., 112, and Craig Mack, according to Billboard.
+                </p>
+                <p>
+                    Frank Micelotta Archive // Getty Images
+                    Nirvana performs on MTV Unplugged
+                    The grunge heroes gave a memorable performance of the acoustic versions of their songs on “MTV
+                    Unplugged” in 1993. It was one of frontman Kurt Cobain’s last televised shows before he died in
+                    April
+                    1994.
+                </p>
+                <p>
+                    Denise Truscello // Getty Images
+                    Mariah Carey changes Christmas music forever
+                    The singer released her Christmas song, “All I Want for Christmas Is You,” in 1994. The
+                    critically-acclaimed song has been a long-standing international success and is one of the few
+                    modern
+                    holiday songs to become a Christmas standard.
+                </p>
+                <p>
+                    [Pictured: Mariah Carey awarded Guinness World Record for highest-charting holiday song by a solo
+                    artist
+                    at the Colosseum at Caesars Palace.]
+                </p>
+                <p>
+                    Jeff Haynes // Getty Images
+                    Selena is killed by her fan club president
+                    Award-winning Tejano music star Selena was shot dead by her fan club president outside a Days Inn
+                    motel
+                    in Texas on March 31, 1995. Her death was mourned by fans around the world. Two years later, her
+                    life
+                    story would play out on the big screen in the 1997 film “Selena,” starring Jennifer Lopez.
+                </p>
+                <p>
+                    Brian Rasic // Getty Images
+                    Spice Girls debut Wannabe
+                    “Wannabe” was released in 1996. By the end of that year, the Spice Girls debut single would top the
+                    charts in 20 countries. After being released in the United States the following January, it hit #1
+                    on
+                    the Billboard Hot 100 for four straight weeks.
+                </p>
+                <p>
+                    Raymond Boyd // Getty Images
+                    Tupac Shakur is killed in drive-by shooting
+                    Hip-hop sensation Tupac Shakur was killed in a drive-by shooting on Sept. 7, 1996, in Las Vegas, at
+                    25.
+                    After years of investigation, the gunman is still unknown.
+                </p>
+                <p>
+                    Andrew Lichtenstein // Getty Images
+                    Notorious B.I.G. is murdered in a drive-by shooting
+                    Like his rival Tupac Shakur, rapper Christopher Wallace, the Notorious B.I.G., was murdered in Los
+                    Angeles in a drive-by shooting on March 9, 1997. Wallace’s family alleged that corrupt Los Angeles
+                    police officers were to blame for his death, and filed a $400 million lawsuit against the LAPD.
+                </p>
+                <p>
+                    You may also like: 111 monumental movies from film history and why you need to see them
+                </p>
+                <p>
+                    PA Images // Getty Images
+                    Elton John performs at Princess Diana’s funeral
+                    The musician captured the mourning of the masses when he performed a reworked version of “Candle in
+                    the
+                    Wind” at Princess Diana’s funeral. The performance was broadcast to hundreds of millions of viewers
+                    around the world, according to Reuters via Al Jazeera.
+                </p>
+                <p>
+                    Martin and Rami
+                    Britney Spears wears controversial schoolgirl outfit in video
+                    In the music video for her “…Baby One More Time” debut single, 16-year-old pop artist Britney Spears
+                    wore a midriff-revealing Catholic schoolgirl uniform, complete with a miniskirt. The ensemble proved
+                    controversial among parents, but made pigtails and pom-pom hair ties trendy among teens.
+                </p>
+                <p>
+                    John Atashian // Getty Images
+                    Woodstock ’99 fails miserably
+                    Meant to celebrate the 30th anniversary of the original music festival, Woodstock ’99 turned out to
+                    be a
+                    massive failure. The notorious multi-day event had exorbitant ticket prices, $4 bottles of water,
+                    overcrowding, poor performances, multiple sexual assaults, and a number of other serious problems
+                    that
+                    left the crowds enraged, according to Daniel Kreps of Rolling Stone.
+                </p>
+                <p>
+                    Stephen J. Boitano // Getty Images
+                    Metallica sues Napster for copyright infringement
+                    The metal band took peer-to-peer file sharing service Napster to court in April 2000 over copyright
+                    violations. Napster lost and would go bankrupt soon after. The internet’s disruption of music
+                    distribution and record label profits would continue for decades, though.
+                </p>
+                <p>
+                    [Pictured: Lars Ulrich of Metallica, left, Roger McGuinn, founding member of 60s rock group The
+                    Byrds,
+                    center, and Napster Chief Executive Officer Hank Barry sit before the Senate Judiciary Committee.]
+                </p>
+                <p>
+                    James Devaney // Getty Images
+                    Mariah Carey shows up unannounced on TRL
+                    Wearing a shirt emblazoned with the word “loverboy,” Mariah Carey showed up on MTV’s “Total Request
+                    Live” in 2001 with no advance notice. Host Carson Daly was surprised and told the camera that the
+                    singer
+                    had “lost her mind,” according to Anjelica Oswald and Angélica Acevedo of Insider.
+                </p>
+                <p>
+                    [Pictured: Mariah Carey Arrives at MTV's "TRL" - June 18, 2001.]
+                </p>
+                <p>
+                    Apple Corp. // Getty Images
+                    Apple launches the first iPod
+                    Apple launched its first iPod on Oct. 23, 2001. It gave music fans the ability to store thousands of
+                    songs on a pocket-sized device.
+                </p>
+                <p>
+                    Kevin Winter // Getty Images
+                    American Idol debuts on TV
+                    Singing competition “American Idol” debuted on Fox in June 2002, giving American viewers the chance
+                    to
+                    vote for the musician most deserving of a record deal. Some of the show's contestants would go on to
+                    achieve major success, including Kelly Clarkson, Carrie Underwood, and Jennifer Hudson.
+                </p>
+                <p>
+                    You may also like: Mistakes from the 50 best movies of all time
+                </p>
+                <p>
+                    Frank Micelotta // Getty Images
+                    Dixie Chicks slam President George W. Bush
+                    Dixie Chicks’ lead singer Natalie Maines publicly bashed former President George W. Bush and the war
+                    in
+                    Iraq at a concert in March 2003. The band received death threats and country music radio stations
+                    across
+                    the country refused to play their music.
+                </p>
+                <p>
+                    Joey Foley // Getty Images
+                    The Eagles release first new material in 28 years
+                    The band dropped “Long Road Out of Eden” in 2007. It contained their first new material in almost
+                    three
+                    decades, according to Norman Abjorensen, author of “Historical Dictionary of Popular Music.” More
+                    than 1
+                    million copies of the album sold within two weeks of its release.
+                </p>
+                <p>
+                    LEON NEAL // Getty Images
+                    Radiohead experiment sparks debate in the music industry
+                    Without major label representation, Radiohead released its 2007 album “In Rainbows” as a
+                    pay-what-you-wish digital download. Believers in the experiment thought of it as a new model for the
+                    industry, while critics accused it of undermining the value of music, according to Eric Garland of
+                    NPR
+                    Music. Despite the album being available for free, it experienced high rates of piracy.
+                </p>
+                <p>
+                    Tim Mosenfelder // Getty Images
+                    Lady Gaga releases The Fame
+                    The singer released her debut studio album “The Fame” on Aug. 19, 2008. It would top the charts in
+                    multiple countries and become one of the bestselling albums the following year.
+                </p>
+                <p>
+                    Christopher Polk // Getty Images
+                    Kanye West interrupts Taylor Swift at the MTV Video Music Awards
+                    Just after Taylor Swift accepted an award for best female video at the 2009 MTV Video Music Awards,
+                    Kanye West rushed on stage to proclaim that Beyoncé had one of the best videos of all time. West
+                    would
+                    be met with severe backlash from the public, including President Barack Obama, who called him “a
+                    jackass.”
+                </p>
+                <p>
+                    You may also like: Best-selling book series of all time
+                </p>
+                <p>
+                    Rick Diamond // Getty Images
+                    Taylor Swift becomes youngest winner of top CMA Award
+                    The singer took home the Country Music Association Award for entertainer of the year in 2009, along
+                    with
+                    three other awards. Just 19, Swift would be the youngest person in history to take the top honor at
+                    the
+                    CMA Awards.
+                </p>
+                <p>
+                    Jeff Kravitz // Getty Images
+                    Beyoncé wins six Grammy Awards
+                    The singer became the first woman in history to take home six Grammy Awards in one night in 2010.
+                    Adele
+                    would tie with her two years later after her album “21” surged in popularity.
+                </p>
+                <p>
+                    Eduardo Parra // Getty Images
+                    Michael Jackson gets biggest record deal ever—after his death
+                    The estate of Michael Jackson signed a $250 million deal with Sony Music for the rights to his
+                    catalogue
+                    and posthumous new releases in 2010. It’s the biggest record deal in history, according to Paul
+                    Schrodt
+                    of Business Insider.
+                </p>
+                <p>
+                    You may also like: 30 celebrities you might not know are LGBTQ
+                </p>
+                <p>
+                    Marka // Getty Images
+                    Five songs from <name xml:id="name-18" resp="#annotator-2" ref="#person-8">Katy Perry</name>’s
+                    Teenage Dream hit number one
+                    <name xml:id="name-17" resp="#annotator-2" ref="#person-8">Katy Perry</name>
+                    made history when five songs from her 2010 album “Teenage Dream” hit the top of the Hot
+                    100
+                    list in August 2011. She was the second artist in history to do so, after Michael Jackson had five
+                    chart-toppers from “Bad’ in the late 1980s, as well as the first female artist to achieve that
+                    success, according to Billboard.
+                </p>
+                <p>
+                    Kevin Winter // Getty Images
+                    <name xml:id="name-15" resp="#annotator-2" ref="#person-7">Nicki Minaj</name>
+                    takes seven spots on Billboard Hot 100
+                    In 2010, <name xml:id="name-16" resp="#annotator-2" ref="#person-7">Nicki Minaj</name> shattered
+                    records when she became the first female soloist to appear on seven
+                    singles on the Billboard Hot 100 chart at the same time, according to MTV News. The songs included
+                    Lil
+                    Wayne’s “Knockout,” Usher’s “Lil Freak,” and Ludacris’ “My Chick Bad,” among others.
+                </p>
+                <p>
+                    Mark Sullivan // Getty Images
+                    Rebecca Black’s Friday goes viral
+                    At 13, Rebecca Black demonstrated the power of the internet on the music industry when she released
+                    the
+                    song “Friday” in 2011. The YouTube video received millions of views, despite the track regularly
+                    being
+                    referred to as “the worst song ever.”
+                </p>
+                <p>
+                    BEN STANSALL // Getty Images
+                    Amy Winehouse dies of alcohol poisoning
+                    Soul musician Amy Winehouse, who often sang about substance abuse issues, died of alcohol poisoning
+                    on
+                    July 23, 2011, at 27. Four years later, British filmmakers would chronicle her life and career in
+                    the
+                    documentary, “Amy.”
+                </p>
+                <p>
+                    Christopher Polk // Getty Images
+                    Tupac Shakur is revived in hologram form
+                    In 2012, Coachella hosted a performance from the late hip-hop artist Tupac Shakur in hologram form.
+                    It
+                    cost between $100,000 and $400,000 to create the special effect, which would become a model for
+                    other
+                    hologram tours, according to Amy X. Wang of Rolling Stone.
+                </p>
+                <p>
+                    Paul Natkin // Getty Images
+                    Jimi Hendrix gets commemorative stamp
+                    The U.S. Postal Service paid tribute to Jimi Hendrix with a postage stamp in 2014. The stamp
+                    featured a
+                    portrait of the late rocker by artist Rudy Gutierrez.
+                </p>
+                <p>
+                    Justin Sullivan // Getty Images
+                    U2 gets blowback after sending its album to iTunes customers
+                    The Irish band partnered with Apple to send its 2014 album “Songs of Innocence” to a half a billion
+                    iTunes users for free as part of its release. The unsolicited download was widely viewed as spam and
+                    Apple quickly published instructions to help customers delete the songs, according to Amy X. Wang of
+                    Rolling Stone.
+                </p>
+                <p>
+                    You may also like: 1984 and 19 other dystopian novels that predicted the future
+                </p>
+                <p>
+                    Emma McIntyre // Getty Images
+                    Mariah Carey helps James Corden launch Carpool Karaoke
+                    The singer agreed to be the first guest on a new segment of “The Late Late Show With James Corden”
+                    called “Carpool Karaoke” in March 2015. It was a smash hit and Apple Music immediately got an
+                    “exclusive
+                    first-window licensing agreement” for the music-themed series, according to Amy X. Wang of Rolling
+                    Stone.
+                </p>
+                <p>
+                    You may also like: 50 of the best SNL skits
+                </p>
+                <p>
+                    Larry Busacca/LP5 // Getty Images
+                    Taylor Swift gets Apple to pay artists
+                    The singer wrote a letter to Apple Music in 2015 encouraging it to change its policy of not paying
+                    musicians whose songs were streamed during a customer’s three-month free trial. The company
+                    announced
+                    the next day that it would pay artists after all.
+                </p>
+                <p>
+                    Dan MacMedan // Getty Images
+                    Beyoncé’s Lemonade debuts at number one
+                    The singer dropped “Lemonade” with no advance notice as both an HBO film and an album in April 2016.
+                    The
+                    record sold 485,000 copies in its first week and it debuted at the top of the charts. It would make
+                    her
+                    the first artist to ever have “six consecutive studio albums debut at #1,” according to Jon Bream of
+                    the
+                    Star Tribune.
+                </p>
+                <p>
+                    The Washington Post // Getty Images
+                    Ed Sheeran has highest-grossing tour of all time
+                    Ed Sheeran’s 2017-2019 “÷ Tour” took him across six continents for 255 shows. It would become the
+                    most
+                    lucrative tour ever, grossing $776.2 million, and selling nearly 9 million tickets, according to Eli
+                    Ellison of Work+Money.
+                </p>
+                <p>
+                    Vice Studios
+                    Fyre Festival is exposed as a fraud
+                    Promoted by celebrities and influencers as a luxury music festival in The Bahamas, Fyre Festival did
+                    not
+                    go as planned in 2017. Musicians bailed at the last minute after finding out the festival was not
+                    well-prepared, and fans found themselves with packaged sandwiches for meals and FEMA tents to sleep
+                    in.
+                    Teams of filmmakers released two documentaries about the festival in 2019, exposing a high degree of
+                    fraud.
+                </p>
+                <p>
+                    Christopher Polk // Getty Images
+                    Kendrick Lamar wins Pulitzer Prize in music
+                    Rapper Kendrick Lamar became the first winner of the Pulitzer Prize in music who wasn’t a classical
+                    or jazz musician in 2018. The award was in recognition of his album “Damn.”
+                </p>
+            </div>
+        </body>
+    </text>
+    <standOff>
+        <listPerson type="personList">
+            <person xml:id="person-8" resp="#annotator-2" age="36" sex="female">
+                <birth when="1984-10-25"/>
+                <persName>
+                    <forename>Katy</forename>
+                    <surname>Perry</surname>
+                </persName>
+                <name>Katy Perry</name>
+                <occupation>singer</occupation>
+            </person>
+            <person xml:id="person-9" resp="#annotator-2" age="46" sex="male">
+                <birth when="1974-11-11"/>
+                <persName>
+                    <forename>Leonardo</forename>
+                    <surname>diCaprio</surname>
+                </persName>
+                <name>Leonardo diCaprio</name>
+                <occupation>actor</occupation>
+            </person>
+            <person xml:id="person-7" resp="#annotator-2" age="38" sex="female">
+                <birth when="1982-12-08"/>
+                <persName>
+                    <forename>Nicki</forename>
+                    <surname>Minaj</surname>
+                </persName>
+                <name>Nicki Minaj</name>
+                <occupation>rapper</occupation>
+            </person>
+            <person xml:id="person-6" resp="#annotator-2" sex="male">
+                <birth when="1946-09-05"/>
+                <death when="1991-11-24"/>
+                <persName>
+                    <forename>Freddie</forename>
+                    <surname>Mercury</surname>
+                </persName>
+                <name>Freddie Mercury</name>
+                <occupation>singer</occupation>
+            </person>
+            <person xml:id="person-5" resp="#annotator-2">
+                <persName>
+                    <forename>Clivie</forename>
+                    <surname>Thompson</surname>
+                </persName>
+                <name>Clive Thompson</name>
+            </person>
+            <person xml:id="person-4" resp="#annotator-2" sex="male">
+                <persName>
+                    <forename>Norman</forename>
+                    <surname>Abjorensen</surname>
+                </persName>
+                <name>Norman Abjorensen</name>
+            </person>
+            <person xml:id="person-0" resp="#annotator-2" sex="male">
+                <birth when="1940-10-09"/>
+                <death when="1980-12-08"/>
+                <persName>
+                    <forename>John Winston</forename>
+                    <surname>Lennon</surname>
+                </persName>
+                <name>John Lennon</name>
+                <occupation>musician</occupation>
+            </person>
+            <person xml:id="person-1" resp="#annotator-2" sex="male">
+                <birth when="1958-08-29"/>
+                <death when="2009-06-25"/>
+                <persName>
+                    <forename>Michael</forename>
+                    <surname>Jackson</surname>
+                </persName>
+                <name>Michael Jackson</name>
+                <occupation>singer</occupation>
+            </person>
+            <person xml:id="person-2" resp="#annotator-2" sex="male">
+                <birth when="1935-01-08"/>
+                <death when="1977-08-16"/>
+                <persName>
+                    <forename>Elvis Aaron</forename>
+                    <surname>Presley</surname>
+                </persName>
+                <name>Elvis Presley</name>
+                <occupation>singer</occupation>
+            </person>
+            <person xml:id="person-3" resp="#annotator-2" sex="male">
+                <birth when="1967-02-20"/>
+                <death when="1994-04-05"/>
+                <persName>
+                    <forename>Kurt</forename>
+                    <surname>Cobain</surname>
+                </persName>
+                <name>Kurt Cobain</name>
+                <occupation>musician</occupation>
+            </person>
+        </listPerson>
+        <listObject type="bandList">
+            <object type="band" xml:id="band-1" resp="#annotator-2">
+                <objectIdentifier>
+                    <objectName>Queen</objectName>
+                </objectIdentifier>
+            </object>
+            <object type="band" xml:id="band-0" resp="#annotator-2">
+                <objectIdentifier>
+                    <objectName>The Beatles</objectName>
+                </objectIdentifier>
+            </object>
+        </listObject>
+        <listObject type="songList">
+            <object type="song" xml:id="song-0" resp="#annotator-2">
+                <objectIdentifier>
+                    <objectName>The Minstrel’s Return’d From the War</objectName>
+                </objectIdentifier>
+            </object>
+            <object type="song" xml:id="song-1" resp="#annotator-2">
+                <objectIdentifier>
+                    <objectName>The Battle Hymn of the Republic</objectName>
+                </objectIdentifier>
+            </object>
+        </listObject>
+    </standOff>
+</TEI>

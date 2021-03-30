@@ -21,6 +21,10 @@ class Entity(Document):
     name = Text(fields={'keywords': Keyword()})
     suggest = Completion(analyzer=ascii_fold)
 
+    def save(self, using=None, index=None, validate=True, skip_empty=True, **kwargs):
+        self.meta.id = f"{self.file_id}/{self.id}"
+        return super().save(using, index, validate, skip_empty, **kwargs)
+
     def clean(self):
         """
         Automatically construct the suggestion input and weight by taking all
@@ -107,8 +111,39 @@ class File(Document):
     id = Integer()
     project_id = Integer()
 
+    def save(self, using=None, index=None, validate=True, skip_empty=True, **kwargs):
+        self.meta.id = self.id
+        return super().save(using, index, validate, skip_empty, **kwargs)
+
     class Index:
         name = 'file'
+        settings = {
+            'number_of_shards': 1,
+            'number_of_replicas': 0
+        }
+
+
+class Ingredient(Entity):
+    class Index:
+        name = 'ingredient'
+        settings = {
+            'number_of_shards': 1,
+            'number_of_replicas': 0
+        }
+
+
+class Utensil(Entity):
+    class Index:
+        name = 'utensil'
+        settings = {
+            'number_of_shards': 1,
+            'number_of_replicas': 0
+        }
+
+
+class ProductionMethod(Entity):
+    class Index:
+        name = 'productionmethod'
         settings = {
             'number_of_shards': 1,
             'number_of_replicas': 0

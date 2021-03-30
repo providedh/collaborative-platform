@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: collaborative-platform
+    app.kubernetes.io/component: collaborative-platform
+    app.kubernetes.io/instance: collaborative-platform
+  name: collaborative-platform
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      deployment: collaborative-platform
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        deployment: collaborative-platform
+    spec:
+      containers:
+        - image: >-
+            docker-registry.default.svc:5000/providedh/collaborative-platform
+          imagePullPolicy: IfNotPresent
+          name: collaborative-platform
+          ports:
+            - containerPort: 8000
+              protocol: TCP
+            - containerPort: 8001
+              protocol: TCP
+          resources:
+            limits:
+              cpu: 4
+              memory: 16Gi
+            requests:
+              cpu: 1
+              memory: 4Gi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+            - mountPath: /app
+              name: app
+            - mountPath: /app/media
+              name: media
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      volumes:
+        - name: app
+          persistentVolumeClaim:
+            claimName: app
+        - name: media
+          persistentVolumeClaim:
+            claimName: media
+# needs /secrets/secrets.py

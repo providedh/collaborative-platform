@@ -1,0 +1,15 @@
+.sunburst  .innerCircle text{
+	text-anchor: middle;
+	fill: var(--primary);
+	font-weight: bold;
+}
+
+.sunburst .innerCircle text.click,
+.sunburst .innerCircle text.filters{
+	font-weight: normal;
+	font-size: 11px;
+}
+
+.sunburst .innerCircle circle{
+	fill: transparent;
+}

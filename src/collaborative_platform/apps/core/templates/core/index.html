@@ -1,31 +1,36 @@
 {% extends 'base.html' %}
-{%  load static %}
+{% load static %}
 
 {% block head %}
 {% endblock %}
 
 {% block content %}
-  <div class="homepage">
-    <div class="homepage__main">
-      <div class="container pb-3">
-        <div class="text-center"><img src="{% static 'img/logo/providedh/logo.svg' %}" class="homepage__logo"/></div>
-          <h1 class="text-center text-white pt-4 pb-5 text-uppercase font-weight-bold">Collaborative Platform</h1>
-      </div>
-    </div>
-    <div class="homepage__sub">
-      <div class="container mt-5 mb-5">
-        <h2 class="text-center text-primary pt-5 pb-3"><strong>PRO</strong>gressive <strong>VI</strong>sual <strong>DE</strong>cision-Making in <strong>D</strong>igital <strong>H</strong>umanities</h2>
-        <div class="d-md-flex pt-3">
-          <div class="flex-fill p-2 p-lg-5">
-            <h4>Uncertainty in digital humanities</h4>
-            <p>Explore the completeness and evolution of digital research objects in <strong>terms of the metrics of uncertainty</strong>, and share perspectives and insights with other stakeholders of society.</p>
-          </div>
-          <div class="flex-fill p-2 p-lg-5">
-            <h4>Progressive visual analysis</h4>
-            <p>Incorporate <strong>progressive visualizations that allow the correct interpretation</strong> of the concepts of accuracy and precision in your data.</p>
-          </div>
+    <div class="homepage">
+        <div class="homepage__main">
+            <div class="container pb-3">
+                <div class="text-center"><img src="{% static 'img/logo/providedh/logo.svg' %}" class="homepage__logo"/>
+                </div>
+                <h1 class="text-center text-white pt-4 pb-5 text-uppercase font-weight-bold">Collaborative Platform</h1>
+            </div>
         </div>
-      </div>
+        <div class="homepage__sub">
+            <div class="container mt-5 mb-5">
+                <h2 class="text-center text-primary pt-5 pb-3"><strong>PRO</strong>gressive <strong>VI</strong>sual
+                    <strong>DE</strong>cision-Making in <strong>D</strong>igital <strong>H</strong>umanities</h2>
+                <div class="d-md-flex pt-3">
+                    <div class="flex-fill p-2 p-lg-5">
+                        <h4>Uncertainty in digital humanities</h4>
+                        <p>Explore the completeness and evolution of digital research objects in <strong>terms of the
+                            metrics of uncertainty</strong>, and share perspectives and insights with other stakeholders
+                            of society.</p>
+                    </div>
+                    <div class="flex-fill p-2 p-lg-5">
+                        <h4>Progressive visual analysis</h4>
+                        <p>Incorporate <strong>progressive visualizations that allow the correct interpretation</strong>
+                            of the concepts of accuracy and precision in your data.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
 {% endblock %}

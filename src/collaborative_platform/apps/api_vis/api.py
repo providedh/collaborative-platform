@@ -1,196 +1,288 @@
-import xmltodict
+import json
 
-from lxml import etree
+from json.decoder import JSONDecodeError
 
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse, HttpRequest, HttpResponse
+from django.http import JsonResponse
 
-from apps.api_vis.helpers import search_files_by_person_name, search_files_by_content
-from apps.files_management.models import File, FileVersion
-from apps.projects.models import Contributor, Project
+from apps.api_vis.helpers import parse_query_string
+from apps.api_vis.request_handler import RequestHandler
+from apps.api_vis.request_validator import RequestValidator
+from apps.exceptions import BadRequest, NotModified
 from apps.views_decorators import objects_exists, user_has_access
-from .helpers import get_annotations_from_file_version_body
-import apps.index_and_search.models as es
-
-NAMESPACES = {
-    'default': 'http://www.tei-c.org/ns/1.0',
-    'xml': 'http://www.w3.org/XML/1998/namespace',
-    'xi': 'http://www.w3.org/2001/XInclude',
-}
-
-ANNOTATION_TAGS = ['date', 'event', 'location', 'geolocation', 'name', 'occupation', 'object', 'org', 'person', 'place',
-                   'country', 'time']
-
-
-@login_required
-def projects(request):  # type: (HttpRequest) -> JsonResponse
-    if request.method == 'GET':
-        user = request.user
-
-        contributors = Contributor.objects.filter(user=user)
-
-        response = []
-
-        for contributor in contributors:
-            project = {
-                'id': contributor.project.id,
-                'name': contributor.project.title,
-                'permissions': contributor.permissions,
-            }
-
-            response.append(project)
-
-        return JsonResponse(response, status=HttpResponse.status_code, safe=False)
 
 
 @login_required
 @objects_exists
-@user_has_access()
-def project_history(request, project_id):  # type: (HttpRequest, int) -> JsonResponse
-    if request.method == 'GET':
-        response = {
-            'info': 'Not implemented. Need to agree an appearance of response.'
-        }
+@user_has_access('RW')
+def project_cliques(request, project_id):
+    if request.method == 'POST':
+        try:
+            request_data = json.loads(request.body)
 
-        return JsonResponse(response, status=HttpResponse.status_code)
+            RequestValidator().validate_clique_creation_data(request_data)
 
+            request_handler = RequestHandler(project_id, request.user)
+            response = request_handler.create_clique(request_data)
 
-@login_required
-@objects_exists
-@user_has_access()
-def project_files(request, project_id):  # type: (HttpRequest, int) -> JsonResponse
-    if request.method == 'GET':
-        search = request.GET.get('search', None)
-        person = request.GET.get('person', None)
+            return JsonResponse(response)
 
-        if search:
-            return search_files_by_content(request, project_id, search)
+        except (BadRequest, JSONDecodeError) as exception:
+            response = get_error(exception, BadRequest.status_code)
 
-        elif person:
-            return search_files_by_person_name(request, project_id, person)
+            return JsonResponse(response, status=BadRequest.status_code)
 
-        else:
-            files = File.objects.filter(project=project_id).order_by('id')
+    elif request.method == "GET":
+        try:
+            request_data = parse_query_string(request.GET)
 
-            response = []
+            request_handler = RequestHandler(project_id, request.user)
+            response = request_handler.get_project_cliques(request_data)
 
-            for file in files:
-                file_details = {
-                    'id': file.id,
-                    'name': file.name,
-                    'path': file.get_relative_path(),
-                }
+            return JsonResponse(response, safe=False)
 
-                response.append(file_details)
+        except BadRequest as exception:
+            response = get_error(exception, BadRequest.status_code)
 
-            return JsonResponse(response, status=HttpResponse.status_code, safe=False)
+            return JsonResponse(response, status=BadRequest.status_code)
 
+    elif request.method == 'DELETE':
+        try:
+            request_data = json.loads(request.body)
 
-@login_required
-@objects_exists
-@user_has_access()
-def file(request, project_id, file_id):  # type: (HttpRequest, int, int) -> HttpResponse
-    if request.method == 'GET':
-        file = File.objects.filter(id=file_id).get()
-        response = file.download()
+            RequestValidator().validate_clique_delete_data(request_data)
 
-        return response
+            request_handler = RequestHandler(project_id, request.user)
+            response = request_handler.delete_cliques(request_data)
+
+            return JsonResponse(response)
+
+        except (BadRequest, JSONDecodeError) as exception:
+            response = get_error(exception, BadRequest.status_code)
+
+            return JsonResponse(response, status=BadRequest.status_code)
 
 
 @login_required
 @objects_exists
-@user_has_access()
-def file_body(request, project_id, file_id):  # type: (HttpRequest, int, int) -> HttpResponse
+@user_has_access('RW')
+def file_cliques(request, project_id, file_id):
     if request.method == 'GET':
-        file = File.objects.get(id=file_id)
-        file_version = FileVersion.objects.get(file=file, number=file.version_number)
-        file_path = file_version.upload.path
+        try:
+            request_data = parse_query_string(request.GET)
 
-        with open(file_path) as file:
-            xml_content = file.read()
+            request_handler = RequestHandler(project_id, request.user)
+            response = request_handler.get_file_cliques(request_data, file_id)
 
-        tree = etree.fromstring(xml_content)
-        body = tree.xpath('//default:text/default:body', namespaces=NAMESPACES)[0]
-        text_nodes = body.xpath('.//text()')
-        plain_text = ''.join(text_nodes)
+            return JsonResponse(response, safe=False)
 
-        return HttpResponse(plain_text, status=HttpResponse.status_code)
+        except BadRequest as exception:
+            response = get_error(exception, BadRequest.status_code)
+
+            return JsonResponse(response, status=BadRequest.status_code)
 
 
 @login_required
 @objects_exists
-@user_has_access()
-def file_meta(request, project_id, file_id):  # type: (HttpRequest, int, int) -> HttpResponse
+@user_has_access('RW')
+def project_entities(request, project_id):
     if request.method == 'GET':
-        file = File.objects.get(id=file_id)
-        file_version = FileVersion.objects.get(file=file, number=file.version_number)
-        file_path = file_version.upload.path
+        try:
+            request_data = parse_query_string(request.GET)
 
-        with open(file_path) as file:
-            xml_content = file.read()
+            request_handler = RequestHandler(project_id, request.user)
+            response = request_handler.get_project_entities(request_data)
 
-        parsed_xml = xmltodict.parse(xml_content)
-        response = parsed_xml['TEI']['teiHeader']
+            return JsonResponse(response, safe=False)
 
-        return JsonResponse(response, status=HttpResponse.status_code, safe=False)
+        except BadRequest as exception:
+            response = get_error(exception, BadRequest.status_code)
+
+            return JsonResponse(response, status=BadRequest.status_code)
 
 
 @login_required
 @objects_exists
-@user_has_access()
-def file_names(request, project_id, file_id):  # type: (HttpRequest, int, int) -> JsonResponse
+@user_has_access('RW')
+def file_entities(request, project_id, file_id):
     if request.method == 'GET':
-        response = {
-            'info': 'Not implemented.'
-        }
+        try:
+            request_data = parse_query_string(request.GET)
 
-        return JsonResponse(response, status=HttpResponse.status_code)
+            request_handler = RequestHandler(project_id, request.user)
+            response = request_handler.get_file_entities(request_data, file_id)
+
+            return JsonResponse(response, safe=False)
+
+        except BadRequest as exception:
+            response = get_error(exception, BadRequest.status_code)
+
+            return JsonResponse(response, status=BadRequest.status_code)
 
 
 @login_required
 @objects_exists
-@user_has_access()
-def file_annotations(request, project_id, file_id):  # type: (HttpRequest, int, int) -> JsonResponse
+@user_has_access('RW')
+def file_certainties(request, project_id, file_id):
     if request.method == 'GET':
-        file = File.objects.get(id=file_id)
-        file_version = FileVersion.objects.get(file=file, number=file.version_number)
+        try:
+            request_data = parse_query_string(request.GET)
 
-        annotations = get_annotations_from_file_version_body(file_version, NAMESPACES, ANNOTATION_TAGS)
+            request_handler = RequestHandler(project_id, request.user)
+            response = request_handler.get_file_certainties(request_data, file_id)
 
-        return JsonResponse(annotations, status=HttpResponse.status_code, safe=False)
+            return JsonResponse(response, safe=False)
+
+        except BadRequest as exception:
+            response = get_error(exception, BadRequest.status_code)
+
+            return JsonResponse(response, status=BadRequest.status_code)
 
 
 @login_required
 @objects_exists
-@user_has_access()
-def file_people(request, project_id, file_id):  # type: (HttpRequest, int, int) -> JsonResponse
+@user_has_access('RW')
+def project_certainties(request, project_id):
     if request.method == 'GET':
-        file = File.objects.get(id=file_id)
-        file_version = FileVersion.objects.get(file=file, number=file.version_number)
+        try:
+            request_data = parse_query_string(request.GET)
 
-        annotation_tags = ['persName', 'person', 'name']
+            request_handler = RequestHandler(project_id, request.user)
+            response = request_handler.get_file_certainties(request_data, file_id=None)
 
-        annotations = get_annotations_from_file_version_body(file_version, NAMESPACES, annotation_tags)
+            return JsonResponse(response, safe=False)
 
-        return JsonResponse(annotations, status=HttpResponse.status_code, safe=False)
+        except BadRequest as exception:
+            response = get_error(exception, BadRequest.status_code)
+
+            return JsonResponse(response, status=BadRequest.status_code)
 
 
 @login_required
 @objects_exists
-@user_has_access()
-def context_search(request, project_id, text):  # type: (HttpRequest, int, str) -> HttpResponse
-    r = es.File.search().filter('term', project_id=project_id).highlight('text').query('match', text=text).execute()
+@user_has_access('RW')
+def clique_entities(request, project_id, clique_id):
+    if request.method == 'PUT':
+        try:
+            request_data = json.loads(request.body)
 
-    response = []
-    for hit in r:
-        file = File.objects.get(id=hit.id)
-        response.append({
-            'file': {
-                'name': file.name,
-                'path': file.get_path(),
-                'id': file.id
-            },
-            'contexts': [fragment for fragment in hit.meta.highlight.text]
-        })
+            RequestValidator().validate_put_clique_entities_data(request_data)
 
-    return JsonResponse(response, safe=False)
+            request_handler = RequestHandler(project_id, request.user)
+            response = request_handler.add_entities_to_clique(clique_id, request_data)
+
+            return JsonResponse(response)
+
+        except (BadRequest, JSONDecodeError) as exception:
+            response = get_error(exception, BadRequest.status_code)
+
+            return JsonResponse(response, status=BadRequest.status_code)
+
+    elif request.method == 'DELETE':
+        try:
+            request_data = json.loads(request.body)
+
+            RequestValidator().validate_delete_clique_entities_data(request_data)
+
+            request_handler = RequestHandler(project_id, request.user)
+            response = request_handler.remove_entities_from_clique(clique_id, request_data)
+
+            return JsonResponse(response)
+
+        except (BadRequest, JSONDecodeError) as exception:
+            response = get_error(exception, BadRequest.status_code)
+
+            return JsonResponse(response, status=BadRequest.status_code)
+
+
+@login_required
+@objects_exists
+@user_has_access('RW')
+def project_unbound_entities(request, project_id):
+    if request.method == 'GET':
+        try:
+            request_data = parse_query_string(request.GET)
+
+            request_handler = RequestHandler(project_id, request.user)
+            response = request_handler.get_project_unbound_entities(request_data)
+
+            return JsonResponse(response, safe=False)
+
+        except BadRequest as exception:
+            response = get_error(exception, BadRequest.status_code)
+
+            return JsonResponse(response, status=BadRequest.status_code)
+
+
+@login_required
+@objects_exists
+@user_has_access('RW')
+def file_unbound_entities(request, project_id, file_id):
+    if request.method == 'GET':
+        try:
+            request_data = parse_query_string(request.GET)
+
+            request_handler = RequestHandler(project_id, request.user)
+            response = request_handler.get_file_unbound_entities(file_id, request_data)
+
+            return JsonResponse(response, safe=False)
+
+        except BadRequest as exception:
+            response = get_error(exception, BadRequest.status_code)
+
+            return JsonResponse(response, status=BadRequest.status_code)
+
+
+@login_required
+@objects_exists
+@user_has_access('RW')
+def commits(request, project_id):
+    if request.method == 'POST':
+        try:
+            request_data = json.loads(request.body)
+
+            RequestValidator().validate_commit_data(request_data)
+
+            request_handler = RequestHandler(project_id, request.user)
+            response = request_handler.create_commit(request_data)
+
+            from apps.nn_disambiguator.helpers import queue_task
+            queue_task(project_id, type="L")
+
+            return JsonResponse(response)
+
+        except NotModified as exception:
+            response = get_error(exception, NotModified.status_code)
+
+            return JsonResponse(response, status=NotModified.status_code)
+
+        except (BadRequest, JSONDecodeError) as exception:
+            response = get_error(exception, BadRequest.status_code)
+
+            return JsonResponse(response, status=BadRequest.status_code)
+
+
+@login_required
+@objects_exists
+@user_has_access('RW')
+def uncommitted_changes(request, project_id):
+    if request.method == 'GET':
+        try:
+            request_handler = RequestHandler(project_id, request.user)
+            response = request_handler.get_uncommitted_changes()
+
+            return JsonResponse(response, safe=False)
+
+        except BadRequest as exception:
+            response = get_error(exception, BadRequest.status_code)
+
+            return JsonResponse(response, status=BadRequest.status_code)
+
+
+def get_error(exception, status):
+    response = {
+        'status': status,
+        'message': str(exception),
+    }
+
+    return response

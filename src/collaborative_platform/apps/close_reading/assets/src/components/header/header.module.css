@@ -1,0 +1,23 @@
+.header{
+position: relative;
+}
+.fileName{
+  width: calc(100% - 5.8em);
+}
+.fileName h1{
+  display: block;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 0;
+  font-size: 2.2em;
+}
+.fileName h2{
+  font-size: 1.3em;
+}
+.top{
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}

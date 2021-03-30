@@ -1,0 +1,125 @@
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <?xml-model href="https://providedh.ehum.psnc.pl/tei_providedh.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title>The PROVIDEDH platform</title>
+      </titleStmt>
+    </fileDesc>
+    <profileDesc>
+      <particDesc>
+        <listPerson type="PROVIDEDH Annotators">
+          <person xml:id="annotator-2">
+            <persName>
+              <forename></forename>
+              <surname></surname>
+              <email></email>
+            </persName>
+          </person>
+        </listPerson>
+      </particDesc>
+    </profileDesc>
+  </teiHeader>
+  <text>
+    <body>
+      <p>
+      The PROgressive VIsual DEcision-Making in Digital Humanities (PROVIDEDH) project is a three-year project
+      funded within the   <name xml:id="name-1" resp="#annotator-2" ref="#event-1">CHIST-ERA call 2016</name> for the topic “Visual Analytics for Decision Making under Uncertainty – VADMU.”
+    </p>
+      <p>
+      The aim of the PROVIDEDH project is to  to give Digital Humanities (DH) scholars a space to explore and assess
+      the completeness and evolution of <name xml:id="name-2" resp="#annotator-2" ref="#object-0">digital research objects</name>, the degree of uncertainty that the models applied
+      to the data incorporate, and to share their perspectives and insights with other stakeholders of society.
+    </p>
+      <p>
+      In particular, the specific objectives of the PROVIDEDH project are:
+      <list><item>
+          Objective 1. To understand all the sources of uncertainty that can affect the DH practice.
+        </item><item>
+          Objective 2. To develop a set of metrics that convey the degree of uncertainty that research objects, data sets,
+          and collections introduce as well as the different computational models applied to them.
+        </item><item>
+          Objective 3. To propose a framework that makes use of the uncertainty metrics, so any given representation of the
+        data can be assessed according to its degree of uncertainty.
+        </item><item>
+          Objective 4. To propose a Progressive Visual Analytics solution that ensures that users can follow the behaviour
+        and degree of uncertainty of the underlying dataset as it evolves, i.e., able to trace <name xml:id="name-17" resp="#annotator-2" ref="#object-2">changes in data</name> and its
+        inherent uncertainty as well as in the way it is perceived.
+        </item><item>
+          Objective 5. To develop a web-based multimodal collaborative platform for the progressive visual analysis of different
+          DH collections, both for scholars and citizen humanists.
+        </item><item>
+          Objective 6. To trigger the formation of a “community of practice” that humanists can build on to reinforce each other’s
+          efforts to achieve metrics that are practical and of high quality.
+        </item></list>
+    </p>
+      <p>
+      To leverage the effectiveness of data visualization in the context of a collaborative project, we develop this platform. It is
+      based on the use of the TEI format to structure information and gather annotations, enrich the documents with meta-data and hold
+      uncertainty testimonies created by the users.
+      </p>
+      <p>
+      Even though projects can be configured as pleased, TEI already provides some useful entity types with usefull properties that can be
+      set for specifying meta-data. These are provided as a default configuration in the platform at project creation time and are:
+      <table rows="4" cols="4"><head>Natively supported TEI entities and their properties</head><row role="label"><cell role="data">Name</cell><cell role="data">Properties</cell><cell role="data">Can be listed in Annotator</cell></row><row role="data"><cell role="data"><name xml:id="name-12" resp="#annotator-2" ref="#person-0">Person</name></cell><cell role="data">birth, age, sex, death, surname, name, forename, occupation</cell><cell role="data">Yes</cell></row><row role="data"><cell role="data"><name xml:id="name-13" resp="#annotator-2" ref="#event-2">Event</name></cell><cell role="data">name</cell><cell role="data">Yes</cell></row><row role="data"><cell role="data"><name xml:id="name-14" resp="#annotator-2" ref="#org-5">Org</name></cell><cell role="data">name</cell><cell role="data">Yes</cell></row><row role="data"><cell role="data"><name xml:id="name-15" resp="#annotator-2" ref="#object-1">Object</name></cell><cell role="data">name</cell><cell role="data">Yes</cell></row><row role="data"><cell role="data"><name xml:id="name-16" resp="#annotator-2" ref="#place-4">Place</name></cell><cell role="data">settlement, name, country, geo</cell><cell role="data">Yes</cell></row><row role="data"><cell role="data"><date xml:id="date-3" resp="#annotator-2" ref="#date-3">Date</date></cell><cell role="data">when</cell><cell role="data">No</cell></row><row role="data"><cell role="data"><time xml:id="time-0" resp="#annotator-2" ref="#time-0">Time</time></cell><cell role="data">when</cell><cell role="data">No</cell></row></table>
+    </p>
+      <p>
+      Four partners work in the PROVIDEDH project:
+      <list><item>
+          The <name xml:id="name-3" resp="#annotator-2" ref="#org-0">University of Salamanca</name>, founded on <date xml:id="date-0" resp="#annotator-2" ref="#date-0" when="1218-01-01">1218</date> in <name xml:id="name-4" resp="#annotator-2" ref="#place-0">Salamanca</name>.
+        </item><item><name xml:id="name-5" resp="#annotator-2" ref="#org-1">Poznan Supercomputing and Networking Center (PSNC)</name> established in <date xml:id="date-1" resp="#annotator-2" ref="#date-1" when="1993-01-01">1993</date> in <name xml:id="name-6" resp="#annotator-2" ref="#place-1">Poznan</name>.
+        </item><item>
+          The <name xml:id="name-7" resp="#annotator-2" ref="#org-2">Trinity College Dublin</name>, established in <date xml:id="date-2" resp="#annotator-2" ref="#date-2" when="2006-01-01">2006</date> in <name xml:id="name-11" resp="#annotator-2" ref="#place-3">Dublin</name>.
+        </item><item>
+          The <name xml:id="name-8" resp="#annotator-2" ref="#org-3">Austrian Centre for Digital Humanities and Cultural Heritage (ACDH-CH)</name> of the <name xml:id="name-9" resp="#annotator-2" ref="#org-4">Austrian Academy of Sciences</name>,
+          in <name xml:id="name-10" resp="#annotator-2" ref="#place-2">Austria</name>.
+        </item></list>
+    </p>
+    </body>
+  </text>
+  <standOff>
+    <listPerson type="personList">
+      <person xml:id="person-0" resp="#annotator-2"/>
+    </listPerson>
+    <listEvent type="eventList">
+      <event xml:id="event-2" resp="#annotator-2"/>
+      <event xml:id="event-1" resp="#annotator-2"/>
+    </listEvent>
+    <listOrg type="orgList">
+      <org xml:id="org-5" resp="#annotator-2"/>
+      <org xml:id="org-2" resp="#annotator-2"/>
+      <org xml:id="org-3" resp="#annotator-2"/>
+      <org xml:id="org-4" resp="#annotator-2"/>
+      <org xml:id="org-0" resp="#annotator-2"/>
+      <org xml:id="org-1" resp="#annotator-2"/>
+    </listOrg>
+    <listObject type="objectList">
+      <object xml:id="object-2" resp="#annotator-2"/>
+      <object xml:id="object-1" resp="#annotator-2"/>
+      <object xml:id="object-0" resp="#annotator-2"/>
+    </listObject>
+    <listPlace type="placeList">
+      <place xml:id="place-4" resp="#annotator-2"/>
+      <place xml:id="place-2" resp="#annotator-2">
+        <location>
+          <geo>48.195745 16.367497</geo>
+        </location>
+      </place>
+      <place xml:id="place-3" resp="#annotator-2">
+        <location>
+          <geo>53.349451 -6.260004</geo>
+        </location>
+      </place>
+      <place xml:id="place-0" resp="#annotator-2">
+        <location>
+          <geo>40.965361, -5.664139</geo>
+        </location>
+      </place>
+      <place xml:id="place-1" resp="#annotator-2">
+        <location>
+          <geo>52.408333 16.934167</geo>
+        </location>
+      </place>
+    </listPlace>
+  </standOff>
+</TEI>

@@ -1,0 +1,65 @@
+.icons{
+pointer-events: none;
+margin-top: .5em;
+display: flex;
+justify-content: flex-end;
+align-items: center;
+position: relative;
+cursor: default;
+}
+.icons > * {
+pointer-events: all;
+}
+.icon{
+display: flex;
+height: 1.3em;
+width: 1.35em;
+font-size: 1.2em;
+margin-left: -.4em;
+border-radius: 50%;
+background: #fafafa;
+justify-content: center;
+align-items: center;
+}
+.icon:nth-of-type(1){
+z-index: 2;
+}
+.icon:nth-of-type(2){
+z-index: 1;
+}
+.icon:nth-of-type(3){
+z-index: 0;
+}
+.icon:nth-of-type(1) span{
+opacity: 1;
+}
+.icon:nth-of-type(2) span{
+opacity: .85;
+}
+.icon:nth-of-type(3) span{
+opacity: .6;
+}
+.userNames{
+position: absolute;
+top: 100%;
+left: 0;
+z-index: 10;
+padding: 0.1em .5em;
+display: none;
+}
+.userNames > * {
+display: block;
+white-space: nowrap;
+}
+.icons:hover .userNames{
+display: initial;
+}
+
+@media (max-width: 1600px){
+    .icons{
+    display: inline-flex;
+    position: absolute;
+    right: 0;
+    top: -1.5em;
+    }
+}

@@ -2,7 +2,8 @@ version: '3'
 
 services:
   postgres:
-    image: postgres
+    build:
+      ./postgres/
     volumes:
       - db-data:/var/lib/postgresql/data
     ports:
@@ -10,6 +11,7 @@ services:
     environment:
       POSTGRES_USER: "collaborative_platform"
       POSTGRES_PASSWORD: "collapass"
+      PGDATA: "/var/lib/postgresql/data/pgdata"
     stdin_open: true
 
   elasticsearch:
@@ -18,7 +20,11 @@ services:
       - 9200:9200
       - 9300:9300
     environment:
-      - discovery.type=single-node
+      discovery.type: "single-node"
+      ES_JAVA_OPTS: "-Xmx1024m -Xms1024m"
+      LimitNOFILE: 65536
+      LimitMEMLOCK: "infinity"
+      TimeoutStopSec: 0
     ulimits:
       memlock:
         soft: -1
@@ -29,6 +35,18 @@ services:
 
   redis:
     image: redis
+
+  celery:
+    build:
+      context: "."
+    working_dir: /code/src/collaborative_platform
+    command: celery -A collaborative_platform worker -B -l DEBUG -E
+    volumes:
+      - .:/code
+    depends_on:
+      - "redis"
+    restart: "${DOCKER_RESTART_POLICY:-unless-stopped}"
+    stop_grace_period: "${DOCKER_STOP_GRACE_PERIOD:-3s}"
 
   web:
     build: .
@@ -41,6 +59,7 @@ services:
       - postgres
       - elasticsearch
       - redis
+      - celery
     stdin_open: true
 
 volumes:
