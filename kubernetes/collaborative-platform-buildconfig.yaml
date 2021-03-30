@@ -27,9 +27,4 @@ spec:
       uri: 'https://github.com/providedh/collaborative-platform'
     type: Git
   strategy:
-    dockerStrategy:
-      from:
-        kind: ImageStreamTag
-        name: 'python:3'
-        namespace: providedh
     type: Docker
