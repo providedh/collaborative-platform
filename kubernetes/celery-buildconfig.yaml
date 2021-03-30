@@ -23,9 +23,5 @@ spec:
     type: Git
   strategy:
     dockerStrategy:
-      from:
-        kind: ImageStreamTag
-        name: "python:3"
-        namespace: testing-providedh
       dockerfilePath: kubernetes/celery/Dockerfile
     type: Docker
