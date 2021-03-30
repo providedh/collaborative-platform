@@ -51,10 +51,9 @@ spec:
           stdin: true
           volumeMounts:
             - mountPath: /usr/share/elasticsearch/data
-              name: db-data
-              subPath: elasticsearch
+              name: es
       restartPolicy: Always
       volumes:
-        - name: db-data
+        - name: es
           persistentVolumeClaim:
-            claimName: db-data
+            claimName: es

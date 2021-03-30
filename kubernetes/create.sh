@@ -5,6 +5,8 @@ oc project providedh
 oc create -f db-data-persistentvolumeclaim.yaml
 oc create -f app-persistentvolumeclaim.yaml
 oc create -f media-persistentvolumeclaim.yaml
+oc create -f es-persistentvolumeclaim.yaml
+oc create -f redis-persistentvolumeclaim.yaml
 
 oc create -f postgres-imagestream.yaml
 oc create -f collaborative-platform-imagestream.yaml
