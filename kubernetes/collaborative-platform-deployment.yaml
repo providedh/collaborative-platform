@@ -1,28 +1,13 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  annotations:
-    deployment.kubernetes.io/revision: '2'
-    image.openshift.io/triggers: >-
-      [{"from":{"kind":"ImageStreamTag","name":"collaborative-platform:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"collaborative-platform\")].image"}]
-    openshift.io/generated-by: OpenShiftNewApp
-  creationTimestamp: '2021-02-22T15:32:30Z'
-  generation: 6
   labels:
     app: collaborative-platform
     app.kubernetes.io/component: collaborative-platform
     app.kubernetes.io/instance: collaborative-platform
   name: collaborative-platform
-  namespace: testing-providedh
-  resourceVersion: '275070149'
-  selfLink: >-
-    /apis/apps/v1/namespaces/testing-providedh/deployments/collaborative-platform
-  uid: 2cce48b8-7523-11eb-b6ad-fa163eb1866d
 spec:
-  paused: true
-  progressDeadlineSeconds: 600
   replicas: 1
-  revisionHistoryLimit: 10
   selector:
     matchLabels:
       deployment: collaborative-platform
@@ -33,33 +18,32 @@ spec:
     type: RollingUpdate
   template:
     metadata:
-      annotations:
-        openshift.io/generated-by: OpenShiftNewApp
-      creationTimestamp: null
       labels:
         deployment: collaborative-platform
     spec:
       containers:
         - image: >-
-            docker-registry.default.svc:5000/testing-providedh/collaborative-platform@sha256:283a9a7b5d823956a0fdc827201dcd606cd16b614d7186f7bd23c1cbb84517f2
+            docker-registry.default.svc:5000/providedh/collaborative-platform
           imagePullPolicy: IfNotPresent
           name: collaborative-platform
           ports:
             - containerPort: 8000
               protocol: TCP
+            - containerPort: 8001
+              protocol: TCP
           resources:
             limits:
-              cpu: '3'
-              memory: 3Gi
+              cpu: 4
+              memory: 16Gi
             requests:
-              cpu: '3'
-              memory: 3Gi
+              cpu: 1
+              memory: 4Gi
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
           volumeMounts:
-            - mountPath: /code/logs
-              name: logs
-            - mountPath: /code/media
+            - mountPath: /app
+              name: app
+            - mountPath: /app/media
               name: media
       dnsPolicy: ClusterFirst
       restartPolicy: Always
@@ -67,33 +51,10 @@ spec:
       securityContext: {}
       terminationGracePeriodSeconds: 30
       volumes:
-        - name: logs
+        - name: app
           persistentVolumeClaim:
-            claimName: logs
+            claimName: app
         - name: media
           persistentVolumeClaim:
             claimName: media
-status:
-  conditions:
-    - lastTransitionTime: '2021-02-22T15:32:30Z'
-      lastUpdateTime: '2021-02-22T15:32:30Z'
-      message: >-
-        Pod "collaborative-platform-6596cc498f-lxn5k" is invalid:
-        spec.containers[0].image: Invalid value: " ": must not have leading or
-        trailing whitespace
-      reason: FailedCreate
-      status: 'True'
-      type: ReplicaFailure
-    - lastTransitionTime: '2021-02-22T15:32:36Z'
-      lastUpdateTime: '2021-02-22T15:32:36Z'
-      message: Deployment is paused
-      reason: DeploymentPaused
-      status: Unknown
-      type: Progressing
-    - lastTransitionTime: '2021-02-22T15:32:47Z'
-      lastUpdateTime: '2021-02-22T15:32:47Z'
-      message: Deployment does not have minimum availability.
-      reason: MinimumReplicasUnavailable
-      status: 'False'
-      type: Available
-  observedGeneration: 6
+# needs /secrets/secrets.py

@@ -26,6 +26,19 @@ spec:
       containers:
         - image: redis
           name: redis
-          resources: {}
+          resources:
+            limits:
+              cpu: 1
+              memory: 2Gi
+            requests:
+              cpu: 200Mi
+              memory: 400Mi
+          volumeMounts:
+            - mountPath: /data
+              name: db-data
+              subPath: redis
+      volumes:
+        - name: db-data
+          persistentVolumeClaim:
+            claimName: db-data
       restartPolicy: Always
-status: {}

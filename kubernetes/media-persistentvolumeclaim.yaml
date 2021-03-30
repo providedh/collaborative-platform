@@ -3,12 +3,12 @@ kind: PersistentVolumeClaim
 metadata:
   creationTimestamp: null
   labels:
-    io.kompose.service: elasticsearch-data-vol
-  name: elasticsearch-data-vol
+    io.kompose.service: media
+  name: media
 spec:
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 100Mi
+      storage: 30Gi
 status: {}

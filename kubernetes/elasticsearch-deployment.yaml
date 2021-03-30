@@ -41,14 +41,20 @@ spec:
           ports:
             - containerPort: 9200
             - containerPort: 9300
-          resources: {}
+          resources:
+            limits:
+              cpu: '1'
+              memory: 8Gi
+            requests:
+              cpu: 1
+              memory: 8Gi
           stdin: true
           volumeMounts:
             - mountPath: /usr/share/elasticsearch/data
-              name: elasticsearch-data-vol
+              name: db-data
+              subPath: elasticsearch
       restartPolicy: Always
       volumes:
-        - name: elasticsearch-data-vol
+        - name: db-data
           persistentVolumeClaim:
-            claimName: elasticsearch-data-vol
-status: {}
+            claimName: db-data

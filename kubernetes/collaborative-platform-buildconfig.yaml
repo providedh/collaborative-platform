@@ -1,17 +1,22 @@
 apiVersion: build.openshift.io/v1
 kind: BuildConfig
 metadata:
-  name: celery
+  labels:
+    app: collaborative-platform
+    app.kubernetes.io/component: collaborative-platform
+    app.kubernetes.io/instance: collaborative-platform
+  name: collaborative-platform
 spec:
+  nodeSelector: null
   output:
     to:
       kind: ImageStreamTag
-      name: 'celery:latest'
+      name: 'collaborative-platform:latest'
   postCommit: {}
   resources:
     limits:
-      cpu: '8'
-      memory: 8Gi
+      cpu: '4'
+      memory: 4Gi
     requests:
       cpu: '1'
       memory: 1Gi
@@ -25,7 +30,6 @@ spec:
     dockerStrategy:
       from:
         kind: ImageStreamTag
-        name: "python:3"
-        namespace: testing-providedh
-      dockerfilePath: kubernetes/celery/Dockerfile
+        name: 'python:3'
+        namespace: providedh
     type: Docker
