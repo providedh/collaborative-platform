@@ -9,6 +9,8 @@ RUN apt install -y --no-install-recommends binutils libproj-dev gdal-bin
 #    postgresql-$PG_MAJOR-postgis-$POSTGISV \
 #    postgresql-$PG_MAJOR-postgis-$POSTGISV-scripts \
 #    postgresql-server-dev-$PG_MAJOR
+ADD https://github.com/che0/uwping/releases/download/14.0/uwping /usr/local/bin/uwping
+RUN chmod +x /usr/local/bin/uwping
 
 WORKDIR /code
 COPY requirements.txt /code/
