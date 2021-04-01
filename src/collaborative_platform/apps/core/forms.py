@@ -1,8 +1,8 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
-# from captcha.fields import ReCaptchaField
-# from captcha.widgets import ReCaptchaV2Checkbox
+from captcha.fields import ReCaptchaField
+from captcha.widgets import ReCaptchaV2Checkbox
 
 
 class SignUpForm(UserCreationForm):
@@ -10,7 +10,7 @@ class SignUpForm(UserCreationForm):
     last_name = forms.CharField(max_length=255)
     email = forms.EmailField(max_length=255)
     agree_to_terms = forms.BooleanField()
-    # captcha = ReCaptchaField(widget=ReCaptchaV2Checkbox)
+    captcha = ReCaptchaField(widget=ReCaptchaV2Checkbox)
 
     class Meta:
         model = User
