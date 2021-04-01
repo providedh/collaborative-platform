@@ -1,6 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  annotations:
+    image.openshift.io/triggers: >-
+      [{"from":{"kind":"ImageStreamTag","name":"postgres:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"postgres\")].image"}]
   labels:
     app: postgres
   name: postgres

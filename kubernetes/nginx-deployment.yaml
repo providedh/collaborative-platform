@@ -1,6 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  annotations:
+    image.openshift.io/triggers: >-
+      [{"from":{"kind":"ImageStreamTag","name":"nginx:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"nginx\")].image"}]
   labels:
     app: nginx
   name: nginx

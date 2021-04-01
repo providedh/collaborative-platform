@@ -1,6 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  annotations:
+    image.openshift.io/triggers: >-
+      [{"from":{"kind":"ImageStreamTag","name":"collaborative-platform:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"collaborative-platform\")].image"}]
   labels:
     app: collaborative-platform
     app.kubernetes.io/component: collaborative-platform
