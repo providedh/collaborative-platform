@@ -22,6 +22,7 @@ class SignUpForm(UserCreationForm):
             'password1',
             'password2',
             'agree_to_terms',
+            'captcha'
         )
 
     # Modify arguments for form fields declared in SignUpForm declaration
