@@ -29,6 +29,30 @@ spec:
             docker-registry.default.svc:5000/providedh/collaborative-platform
           imagePullPolicy: IfNotPresent
           name: collaborative-platform
+          livenessProbe:
+            exec:
+              command:
+                - uwping
+                - '-expected_status'
+                - '301'
+                - 'uwsgi://localhost:8000/'
+            failureThreshold: 3
+            initialDelaySeconds: 120
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          readinessProbe:
+            exec:
+              command:
+                - uwping
+                - '-expected_status'
+                - '301'
+                - 'uwsgi://localhost:8000/'
+            failureThreshold: 3
+            initialDelaySeconds: 90
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
           ports:
             - containerPort: 8000
               protocol: TCP
