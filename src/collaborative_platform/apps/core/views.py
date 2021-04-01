@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render, redirect
 from social_django.models import UserSocialAuth
+from csp.decorators import csp_update
 
 from apps.index_and_search.models import User as ESUser
 from apps.views_decorators import objects_exists, static_file_exists
@@ -33,6 +34,7 @@ def index(request):  # type: (HttpRequest) -> HttpResponse
         return render(request, 'core/index.html', context)
 
 
+@csp_update(SCRIPT_SRC="'unsafe-inline'")
 def signup(request):  # type: (HttpRequest) -> HttpResponse
     if request.method == 'POST':
         form = SignUpForm(request.POST)
@@ -190,6 +192,7 @@ def static_docs(request, file_name):  # type: (HttpRequest, str) -> HttpResponse
             file_content = file.read()
 
         return HttpResponse(file_content, content_type='application/octet-stream')
+
 
 def fonts(request):  # type: (HttpRequest) -> HttpResponse
     return render(request, 'static-google-fonts.css', None, content_type='text/css')
