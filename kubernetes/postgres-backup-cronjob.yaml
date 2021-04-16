@@ -1,0 +1,59 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: postgres-backup
+spec:
+  schedule: "36 * * * *"
+  concurrencyPolicy: "Forbid"
+  startingDeadlineSeconds: 200
+  suspend: false
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            parent: "postgres-backup-cronjob"
+        spec:
+          containers:
+            - image: 'docker-registry.default.svc:5000/providedh/postgres:latest'
+              imagePullPolicy: Always
+              name: postgres-backup
+              resources:
+                limits:
+                  cpu: '1'
+                  memory: 2Gi
+                requests:
+                  cpu: 1
+                  memory: 1Gi
+              terminationMessagePath: /dev/termination-log
+              terminationMessagePolicy: File
+              envFrom:
+                - secretRef:
+                    name: postgres-config
+              volumeMounts:
+                - mountPath: /var/lib/postgresql/data/postgres
+                  name: db-data
+                  subPath: postgres
+                - mountPath: /keys
+                  name: secretkeys
+              env:
+                - name: PGDATA
+                  value: /var/lib/postgresql/data
+              command: ["bash", "-c"]
+              args: ["cd $PGDATA && pwd &&
+              pg_dumpall -U collaborative_platform -l collaborative_platform -h postgres > `date +\"%d-%m-%y\"`.bak &&
+              echo \"put `date +\"%d-%m-%y\"`.bak; quit\" > commands.txt &&
+              sftp -i /keys/id_rsa -b commands.txt providedh-hsm-account@@corylus.man.poznan.pl:ARCHIVE;
+              "]
+
+          restartPolicy: OnFailure
+          volumes:
+            - name: db-data
+              persistentVolumeClaim:
+                claimName: db-data
+            - name: secretkeys
+              secret:
+                defaultMode: 420
+                secretName: postgres-backup-key

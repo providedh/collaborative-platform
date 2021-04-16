@@ -6,6 +6,7 @@ RUN apt install -y --no-install-recommends \
     postgresql-$PG_MAJOR-postgis-$POSTGISV \
     postgresql-$PG_MAJOR-postgis-$POSTGISV-scripts \
     postgresql-server-dev-$PG_MAJOR
+RUN snap install sftpclient
 
 # add init script
 RUN mkdir -p /docker-entrypoint-initdb.d
