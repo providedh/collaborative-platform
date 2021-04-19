@@ -11,7 +11,5 @@ RUN apt install -y --no-install-recommends \
 RUN mkdir -p /docker-entrypoint-initdb.d
 COPY kubernetes/postgres/initdb-postgis.sh /docker-entrypoint-initdb.d/postgis.sh
 
-RUN useradd -r -u 1001 appuser
-USER appuser
-
+USER postgres
 EXPOSE 5432
