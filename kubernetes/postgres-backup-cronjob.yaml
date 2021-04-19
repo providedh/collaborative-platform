@@ -3,7 +3,7 @@ kind: CronJob
 metadata:
   name: postgres-backup
 spec:
-  schedule: "29 * * * *"
+  schedule: "08 * * * *"
   concurrencyPolicy: "Forbid"
   startingDeadlineSeconds: 200
   suspend: false
@@ -42,7 +42,7 @@ spec:
                 - name: PGDATA
                   value: /var/lib/postgresql/data
               command: ["bash", "-c"]
-              args: ["cd $PGDATA && pwd &&
+              args: ["cd $PGDATA && echo $USER &&
               pg_dumpall -U collaborative_platform -l collaborative_platform -h postgres > `date +\"%d-%m-%y\"`.bak &&
               echo \"put `date +\"%d-%m-%y\"`.bak; quit\" > commands.txt &&
               sftp -i /keys/id_rsa -b commands.txt providedh-hsm-account@@corylus.man.poznan.pl:ARCHIVE;
