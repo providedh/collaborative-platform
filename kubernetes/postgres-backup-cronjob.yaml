@@ -3,7 +3,7 @@ kind: CronJob
 metadata:
   name: postgres-backup
 spec:
-  schedule: "36 * * * *"
+  schedule: "15 * * * *"
   concurrencyPolicy: "Forbid"
   startingDeadlineSeconds: 200
   suspend: false
