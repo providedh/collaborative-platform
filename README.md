@@ -1,5 +1,8 @@
 # Collaborative Platform
 
+[1. Running Collaborative Platform for development with Docker](#1.-running-collaborative-platform-for-development-with-docker) <br>
+[2. Running Collaborative Platform for development without Docker](#2.-running-collaborative-platform-for-development-without-docker) <br>
+
 
 ## 1. Running Collaborative Platform for development with Docker
 
