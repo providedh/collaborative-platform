@@ -2,6 +2,9 @@
 
 [1. Running Collaborative Platform for development with Docker](#1-running-collaborative-platform-for-development-with-docker) <br>
 [2. Running Collaborative Platform for development without Docker](#2-running-collaborative-platform-for-development-without-docker) <br>
+[3. Running Collaborative Platform in production environment](#3-running-collaborative-platform-in-production-environment) <br>
+[4. Useful commands](#4-useful-commands) <br>
+[5. Common problems](#5-common-problems) <br>
 
 
 ## 1. Running Collaborative Platform for development with Docker
@@ -86,7 +89,9 @@ If not using pycharm you can use `docker-compose up` or more verbose
 docker-compose run web python src/collaborative_platform/manage.py runserver 0.0.0.0:8000
 ```
 
+
 ## 2. Running Collaborative Platform for development without Docker
+
 
 ## 3. Running Collaborative Platform in production environment
 
@@ -252,7 +257,7 @@ and like before, detach by pressing ctrl+a, ctrl+d.
 ### Congrats, your environment should be working now.
 
 
-## 4. Useful commands:
+## 4. Useful commands
 ```
 docker system prune -a
 docker volume prune
@@ -261,5 +266,6 @@ docker-compose run web python src/collaborative_platform/manage.py [migrate|make
 docker-compose run web python src/collaborative_platform/manage.py loaddata core_initial.json
 ```
 
-## 5. Common problems:
+
+## 5. Common problems
 Collect statics while updating production server, or else .js files will be out of date and annotator probably won't work!
