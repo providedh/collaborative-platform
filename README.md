@@ -4,7 +4,7 @@
 [2. Running Collaborative Platform for development without Docker](#2.-running-collaborative-platform-for-development-without-docker) <br>
 
 
-## 1 Running Collaborative Platform for development with Docker
+## 1. Running Collaborative Platform for development with Docker
 
 ### 1.0. Install & run docker, docker-compose and add yourself to docker group to allow executing docker command without sudo
 * Before installing any new packets, it is recommended to perform full system update  
