@@ -335,6 +335,14 @@ Load initial data to database:
 python manage.py loaddata core_initial.json
 ```
 
+## 2.10. Running application
+
+Run Django server:
+```
+python manage.py runserver
+```
+The running server is available at http://127.0.0.1:8000/
+
 
 ## 3. Running Collaborative Platform in production environment
 
