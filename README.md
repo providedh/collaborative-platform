@@ -227,6 +227,18 @@ Activate virtual environment:
 source /path/to/venvs/collaborative-platform/bin/activate
 ```
 
+### 2.6. Cloning the repository
+Go to target directory and clone repository:
+```
+cd /path/to/project/
+git clone https://github.com/providedh/collaborative-platform.git
+```
+
+Go to project directory:
+```
+cd collaborative_platform/
+```
+
 
 ## 3. Running Collaborative Platform in production environment
 
