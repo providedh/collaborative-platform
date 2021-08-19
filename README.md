@@ -138,12 +138,12 @@ Add a password for a new user:
 psql -c "alter user providedh_pg_user with encrypted password '<your password here>';"
 ```
 
-Add database permissions to the user:
+Add database permissions to a user:
 ```
 psql -c "grant all privileges on database providedh_db to providedh_pg_user;"
 ```
 
-Open the database:
+Open a database:
 ```
 psql providedh_db
 ```
@@ -153,18 +153,18 @@ Add the PostGIS extension:
 CREATE EXTENSION postgis;
 ```
 
-Close the database:
+Close a database:
 ```
 \q
 ```
 
-Switch to default user:
+Switch to a default user:
 ```
 exit
 ```
 
 ### 2.3. Redis installation
-Add a Redis repository (for Redis version 6):
+Add the Redis repository (for Redis version 6):
 ```
 sudo add-apt-repository ppa:chris-lea/redis-server
 ```
@@ -179,13 +179,13 @@ Install Redis:
 sudo apt-get install redis-server
 ```
 
-Enable Redis start on boot:
+Enable start of Redis on boot:
 ```
 sudo systemctl enable redis-server.service
 ```
 
 ### 2.4. Elasticsearch installation
-Add an Elasticsearch repository:
+Add the Elasticsearch repository:
 ```
 curl -fsSL https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
 echo "deb https://artifacts.elastic.co/packages/7.x/apt stable main" | sudo tee -a /etc/apt/sources.list.d/elastic-7.x.list
@@ -201,7 +201,7 @@ Install Elasticsearch:
 sudo apt-get install elasticsearch
 ```
 
-Enable Elasticsearch start on boot:
+Enable start of Elasticsearch on boot:
 ```
 sudo systemctl enable elasticsearch.service 
 ```
@@ -212,29 +212,29 @@ sudo systemctl start elasticsearch.service
 ```
 
 ### 2.5. Virtual environment creation
-Add required package:
+Add the required package:
 ```
 sudo apt-get install python3.8-venv
 ```
 
-Create virtual environment:
+Create a virtual environment:
 ```
 python3 -m venv /path/to/venvs/collaborative-platform/
 ```
 
-Activate virtual environment:
+Activate a virtual environment:
 ```
 source /path/to/venvs/collaborative-platform/bin/activate
 ```
 
 ### 2.6. Cloning the repository
-Go to target directory and clone repository:
+Go to a target directory and clone the repository:
 ```
 cd /path/to/project/
 git clone https://github.com/providedh/collaborative-platform.git
 ```
 
-Go to project directory:
+Go to the project directory:
 ```
 cd collaborative_platform/
 ```
@@ -261,7 +261,7 @@ python -m spacy download en_core_web_lg
 These settings apply to local development only. When deploying the application, adjust the settings according to 
 the requirements of the production environment.
 
-Make local copy of `settings.py` file
+Make local copy of `settings.py` file:
 ```
 cp src/collaborative_platform/collaborative_platform/settings_template.py src/collaborative_platform/collaborative_platform/settings.py
 ```
