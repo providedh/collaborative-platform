@@ -211,6 +211,22 @@ Start Elasticsearch:
 sudo systemctl start elasticsearch.service 
 ```
 
+### 2.5. Virtual environment creation
+Add required package:
+```
+sudo apt-get install python3.8-venv
+```
+
+Create virtual environment:
+```
+python3 -m venv /path/to/venvs/collaborative-platform/
+```
+
+Activate virtual environment:
+```
+source /path/to/venvs/collaborative-platform/bin/activate
+```
+
 
 ## 3. Running Collaborative Platform in production environment
 
