@@ -184,6 +184,32 @@ Enable Redis start on boot:
 sudo systemctl enable redis-server.service
 ```
 
+### 2.4. Elasticsearch installation
+Add an Elasticsearch repository:
+```
+curl -fsSL https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
+echo "deb https://artifacts.elastic.co/packages/7.x/apt stable main" | sudo tee -a /etc/apt/sources.list.d/elastic-7.x.list
+```
+
+Update the list of packages:
+```
+sudo apt-get update
+```
+
+Install Elasticsearch:
+```
+sudo apt-get install elasticsearch
+```
+
+Enable Elasticsearch start on boot:
+```
+sudo systemctl enable elasticsearch.service 
+```
+
+Start Elasticsearch:
+```
+sudo systemctl start elasticsearch.service 
+```
 
 
 ## 3. Running Collaborative Platform in production environment
