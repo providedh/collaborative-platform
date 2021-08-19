@@ -92,6 +92,30 @@ docker-compose run web python src/collaborative_platform/manage.py runserver 0.0
 
 ## 2. Running Collaborative Platform for development without Docker
 
+### 2.1. PostgreSQL installation
+Add a PostgreSQL repository (for PostGIS version 2.5):
+```
+sudo apt-get install gnupg2
+wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" | sudo tee /etc/apt/sources.list.d/pgdg.list
+```
+
+Update the list of packages:
+```
+sudo apt-get update
+```
+
+Install PostgreSQL with the PostGIS extension:
+```
+sudo apt-get install postgresql-12
+sudo apt-get install postgresql-12-postgis-2.5
+```
+
+Install the packages required by PostGIS:
+```
+sudo apt-get install binutils libproj-dev gdal-bin
+```
+
 
 ## 3. Running Collaborative Platform in production environment
 
