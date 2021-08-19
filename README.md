@@ -116,6 +116,52 @@ Install the packages required by PostGIS:
 sudo apt-get install binutils libproj-dev gdal-bin
 ```
 
+### 2.2. Database configuration
+Switch to a `postgres` user:
+```
+sudo su - postgres
+```
+
+Create a new user:
+```
+createuser providedh_pg_user
+```
+
+Create a new database:
+```
+createdb providedh_db
+```
+
+Add a password for a new user:
+```
+psql -c "alter user providedh_pg_user with encrypted password '<your password here>';"
+```
+
+Add database permissions to the user:
+```
+psql -c "grant all privileges on database providedh_db to providedh_pg_user;"
+```
+
+Open the database:
+```
+psql providedh_db
+```
+
+Add the PostGIS extension:
+```
+CREATE EXTENSION postgis;
+```
+
+Close the database:
+```
+\q
+```
+
+Switch to default user:
+```
+exit
+```
+
 
 ## 3. Running Collaborative Platform in production environment
 
