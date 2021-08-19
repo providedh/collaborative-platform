@@ -91,6 +91,7 @@ docker-compose run web python src/collaborative_platform/manage.py runserver 0.0
 
 
 ## 2. Running Collaborative Platform for development without Docker
+Based on Ubuntu 20.04 LTS.
 
 ### 2.1. PostgreSQL installation
 Add a PostgreSQL repository (for PostGIS version 2.5):
@@ -161,6 +162,28 @@ Switch to default user:
 ```
 exit
 ```
+
+### 2.3. Redis installation
+Add a Redis repository (for Redis version 6):
+```
+sudo add-apt-repository ppa:chris-lea/redis-server
+```
+
+Update the list of packages:
+```
+sudo apt-get update
+```
+
+Install Redis:
+```
+sudo apt-get install redis-server
+```
+
+Enable Redis start on boot:
+```
+sudo systemctl enable redis-server.service
+```
+
 
 
 ## 3. Running Collaborative Platform in production environment
