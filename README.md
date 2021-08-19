@@ -256,6 +256,63 @@ Download library for `spacy` module:
 python -m spacy download en_core_web_lg
 ```
 
+### 2.8. Setting up `settings.py` file
+
+These settings apply to local development only. When deploying the application, adjust the settings according to 
+the requirements of the production environment.
+
+Make local copy of `settings.py` file
+```
+cp src/collaborative_platform/collaborative_platform/settings_template.py src/collaborative_platform/collaborative_platform/settings.py
+```
+
+#### 2.8.1. In `settings.py` file:
+
+Turn on debugging:
+```
+DEBUG = True
+```
+
+Set up hosts:
+```
+ES_HOST = 'localhost'
+POSTGRES_HOST = 'localhost'
+REDIS_HOST = 'localhost'
+```
+
+Turn off (comment) csp middleware:
+```
+MIDDLEWARE = [
+    ...
+    # 'csp.middleware.CSPMiddleware',
+    ...
+]
+```
+
+Set up database access:
+```
+DATABASES = {
+    'default': {
+        ...
+        'NAME': 'providedh_db',
+        'USER': 'providedh_pg_user',
+        'PASSWORD': '<your password here>',
+        ...
+    }
+}
+```
+
+Turn off (comment) ReCaptcha keys:
+```
+# RECAPTCHA_PUBLIC_KEY = 'put_public_key_here'
+# RECAPTCHA_PRIVATE_KEY = 'put_private_key_here'
+```
+
+Add (uncomment) system check exception:
+```
+SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
+```
+
 
 ## 3. Running Collaborative Platform in production environment
 
