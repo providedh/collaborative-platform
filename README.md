@@ -239,6 +239,23 @@ Go to project directory:
 cd collaborative_platform/
 ```
 
+### 2.7. Dependencies installation
+Install required packages:
+```
+sudo apt-get install g++ python3-dev
+```
+
+Install dependencies:
+```
+pip install -r requirements.txt
+```
+Make sure there are no errors and all dependencies are installed correctly. If in doubt, you can run the command again.
+
+Download library for `spacy` module:
+```
+python -m spacy download en_core_web_lg
+```
+
 
 ## 3. Running Collaborative Platform in production environment
 
