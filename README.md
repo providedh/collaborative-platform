@@ -313,6 +313,28 @@ Add (uncomment) system check exception:
 SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
 ```
 
+## 2.9. Application initialization
+Go to source code directory:
+```
+cd src/collaborative_platform/
+```
+
+Create and apply migrations:
+```
+python manage.py makemigrations
+python manage.py migrate
+```
+
+Initialize Elasticsearch:
+```
+python manage.py shell -c "from apps.index_and_search.initialize import initialize; initialize()"
+```
+
+Load initial data to database:
+```
+python manage.py loaddata core_initial.json
+```
+
 
 ## 3. Running Collaborative Platform in production environment
 
