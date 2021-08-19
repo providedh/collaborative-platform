@@ -1,9 +1,9 @@
-# Running Collaborative Platform for development
->###### note: to run platform without docker, install postgres, redis and elasticsearch locally and set those to run on default ports. In settings.py change respective hosts to localhost and manually initialize postgres DB. Then set up virtualenv locally, and run migrations and ES initilaization just like in docker setup.
+# Collaborative Platform
 
-The recommended way:
 
-## 0. Install & run docker, docker-compose and add yourself to docker group to allow executing docker command without sudo
+## 1. Running Collaborative Platform for development with Docker
+
+### 1.0. Install & run docker, docker-compose and add yourself to docker group to allow executing docker command without sudo
 * Before installing any new packets, it is recommended to perform full system update  
 `$ yay -Syu`  
 and reboot, to load any changed kernel modules.  
@@ -19,13 +19,13 @@ $ sudo usermod -aG docker $USER
 ```
   then logout and login to get our permissions reevaluated.
   
-## 1. clone this repository and go to created directory
+### 1.1. clone this repository and go to created directory
 ```
 $ git clone https://github.com/providedh/collaborative-platform`
 $ cd collaborative-platform`
 ```
 
-## 2. prepare settings file
+### 1.2. prepare settings file
 ```
 cp src/collaborative_platform/collaborative_platform/settings.py_template src/collaborative_platform/collaborative_platform/settings.py
 ```
@@ -43,11 +43,11 @@ to disable captcha on register.
 
 it is advised to go trough the content of settings file and possibly tweak some settings, like media storage paths.
 
-## 3. go to project directory and build project
+### 1.3. go to project directory and build project
 ```docker-compose build```
 >note: this command has to be re-run after each change in `requirements.txt`
 
-## 4. (optional) open PyCharm and open the project in it
+### 1.4. (optional) open PyCharm and open the project in it
 * Open settings and go to Build, Execution, Deployment -> Docker
 * If there are no docker machines add one, default settings should prefer connecting by Unix socket, if not, select it.
 * Then go to File | Settings | Project: collaborative-platform | Project Interpreter
@@ -58,7 +58,7 @@ it is advised to go trough the content of settings file and possibly tweak some 
 
 Now we've configured interpreter, and after pycharm finishes it's processing we should be able to use configurations pulled from git.
 
-## 5. initialize databases
+### 1.5. initialize databases
 To initialize databases simply run following configurations in PyCharm in this exact order:
 ```
 makemigrations
@@ -75,7 +75,7 @@ docker-compose run web python src/collaborative_platform/manage.py shell -c "fro
 docker-compose run web python src/collaborative_platform/manage.py loaddata core_initial.json
 ```
 
-## 6. Done
+### 1.6. Done
 to run or debug project use `runserver 8000` configuration. There is also a `web` configuration included in git. It allows to run PyCharm docker extensions and get logs from all containers in those. It can be used to run (but not debug) project instead of `runserver 8000`.
 
 If not using pycharm you can use `docker-compose up` or more verbose 
@@ -83,15 +83,17 @@ If not using pycharm you can use `docker-compose up` or more verbose
 docker-compose run web python src/collaborative_platform/manage.py runserver 0.0.0.0:8000
 ```
 
-# Running Collaborative Platform in production environment
+## 2. Running Collaborative Platform for development without Docker
 
-## 1. copy this repository to a server on which the platform will run
+## 3. Running Collaborative Platform in production environment
+
+### 3.1. copy this repository to a server on which the platform will run
 ```git clone https://github.com/providedh/collaborative-platform```
 
-## 2. install pip
+### 3.2. install pip
 ```sudo apt update && sudo apt upgrade && sudo apt install python3-pip```
 
-## 3. install requirements via pip
+### 3.3. install requirements via pip
 ```
 cd collaborative-platform
 sudo pip3 install -r requirements.txt
@@ -99,7 +101,7 @@ sudo pip3 install uwsgi
 sudo pip3 install daphne
 ```
 
-## 4. install external packages
+### 3.4. install external packages
 ```
 sudo apt install postgresql
 sudo systemctl enable postgresql && sudo systemctl start postgresql
@@ -119,7 +121,7 @@ sudo apt install nginx
 sudo systemctl enable nginx && sudo systemctl start nginx
 ```
 
-## 5. create postgres database
+### 3.5. create postgres database
 ```
 sudo su postgres
 psql
@@ -130,7 +132,7 @@ GRANT ALL PRIVILEGES ON DATABASE collaborative_platform TO collaborative_platfor
 exit
 ```
 
-## 6. populate database with tables
+### 3.6. populate database with tables
 ```
 cd src/collaborative_platform
 python3 manage.py makemigrations
@@ -138,7 +140,7 @@ python3 manage.py migrate
 ```
 then connect to database and in table django_site fill first row with correct domain and name for instance of the server.
 
-## 7. initialize ElasticSearch indexes
+### 3.7. initialize ElasticSearch indexes
 ```
 python3 manage.py shell
 from apps.index_and_search.models import *
@@ -152,7 +154,7 @@ User.init()
 exit()
 ```
 
-## 8. in /etc/nginx/sites-enabled/ create file collaborative_platform_nginx.conf with following content:
+### 3.8. in /etc/nginx/sites-enabled/ create file collaborative_platform_nginx.conf with following content:
 ```
 upstream django {
     server unix:///home/ubuntu/collaborative-platform/src/collaborative_platform/collaborative_platform.sock;
@@ -224,14 +226,14 @@ restart nginx:
 sudo systemctl restart nginx
 ```
 
-## 9. prepare settings:
+### 3.9. prepare settings:
 At first copy settings template to same location byt without _template suffix:
 ```
 cp src/collaborative_platform/collaborative_platform/settings.py_template src/collaborative_platform/collaborative_platform/settings.py
 ```
 then fill settings file with keys to social media auth, credentials to database, and add domain to allowed_hosts. Set paths for files storage.
 
-## 10. run uwsgi and daphne:
+### 3.10. run uwsgi and daphne:
 go to src/collaborative_platform
 ```
 screen uwsgi --socket /home/ubuntu/collaborative-platform/src/collaborative_platform/collaborative_platform.sock --chmod-socket=666 --module collaborative_platform.wsgi
@@ -244,10 +246,10 @@ screen daphne -u collaborative_platform_websockets.sock collaborative_platform.a
 ```
 and like before, detach by pressing ctrl+a, ctrl+d.
 
-## Congrats, your environment should be working now.
+### Congrats, your environment should be working now.
 
 
-# Useful commands:
+## 4. Useful commands:
 ```
 docker system prune -a
 docker volume prune
@@ -256,5 +258,5 @@ docker-compose run web python src/collaborative_platform/manage.py [migrate|make
 docker-compose run web python src/collaborative_platform/manage.py loaddata core_initial.json
 ```
 
-# Common problems:
+## 5. Common problems:
 Collect statics while updating production server, or else .js files will be out of date and annotator probably won't work!
