@@ -29,8 +29,9 @@ urlpatterns = [
     path('api/vis/', include('apps.api_vis.urls_api')),
     path('stats/', include('apps.dataset_stats.urls')),
     path('dashboard/', include('apps.vis_dashboard.urls')),
-    path('disambiguator/', include('apps.disambiguator_ui.urls')),
     path('api/disambiguator/', include('apps.nn_disambiguator.urls_api')),
+    path('disambiguator/', include('apps.disambiguator_ui.urls')),
     path('overview/', include('apps.overview.urls')),
+    path('poetry_analysis/', include('apps.poetry_analysis.urls')),
     path('', include('apps.core.urls')),
 ]
