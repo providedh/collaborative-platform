@@ -12,6 +12,7 @@
 from channels.auth import AuthMiddlewareStack
 from channels.routing import ProtocolTypeRouter, URLRouter
 import apps.close_reading.routing
+import apps.poetry_analysis.routing
 from django.conf.urls import url
 
 application = ProtocolTypeRouter({
@@ -19,6 +20,7 @@ application = ProtocolTypeRouter({
     'websocket': AuthMiddlewareStack(
         URLRouter([
             url(r"^ws/close_reading/", apps.close_reading.routing.url_router),
+            url(r"^ws/poetry_analysis/", apps.poetry_analysis.routing.url_router),
         ])
     )
 })
