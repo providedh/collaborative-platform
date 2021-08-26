@@ -14,7 +14,6 @@ from apps.files_management.file_conversions.xml_tools import get_first_xpath_mat
 from apps.files_management.models import File
 from apps.projects.models import EntitySchema
 
-
 from collaborative_platform.settings import DEFAULT_ENTITIES, XML_NAMESPACES
 
 
