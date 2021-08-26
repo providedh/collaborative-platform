@@ -61,7 +61,7 @@ asgiref==3.2.10
 pandas
 tqdm
 
-#For Neural Networks
+# For Neural Networks
 geopy~=2.0.0
 editdistance~=0.5.3
 Fuzzy~=1.2.2
@@ -72,9 +72,12 @@ joblib
 timefhuman
 maya
 
-#For websockets serving
+# For websockets serving
 uvicorn[standard]
 gunicorn
 
 # Security policy
 django-csp==3.7
+
+# For poetry analysis
+rantanplan==0.6.0

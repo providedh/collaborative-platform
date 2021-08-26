@@ -34,7 +34,16 @@ class PoetryConsumer(WebsocketConsumer):
 
             self.accept()
 
-            response = 'First message from backend'
+            self.__file = File.objects.get(id=self.__file_id, deleted=False)
+            file_content = self.__file.get_rendered_content()
+
+            response = {
+                'status': 200,
+                'message': 'OK',
+                'file_content': file_content
+            }
+
+            response = json.dumps(response)
 
             self.send(text_data=response)
 
